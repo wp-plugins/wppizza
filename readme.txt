@@ -96,7 +96,11 @@ N/A
 
 == Screenshots ==
 
-1. frontend example - To see the plugin in action with different themes try it at <a href="http://www.wp-pizza.com/">www.wp-pizza.com</a> 
+
+To see the plugin in action with different themes try it at <a href="http://www.wp-pizza.com/">www.wp-pizza.com</a> 
+
+
+1. frontend example
 2. administration - widget
 3. administration - categories
 4. administration - menu item
