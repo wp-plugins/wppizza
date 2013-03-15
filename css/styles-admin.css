@@ -1,0 +1,45 @@
+
+#wppizza-settings #global{display:block;border:1px solid #CCC}
+#wppizza-settings .wppizza-settings-tab{display:none;border:1px solid #CCC;padding:5px}
+#wppizza-settings .nav-tab-wrapper{margin-bottom:0;border-bottom:none}
+
+
+#wppizza-settings .form-table th{width:400px;}
+#wppizza-settings #history .form-table th,#wppizza-settings #ingredients .form-table th,#wppizza-settings #meals .form-table th{width:5px;}
+#wppizza-settings .wppizza_order_details {width:350px;height:100px}
+
+.wppizza_option{display:block}
+
+.wppizza_weekday{min-width:100px;display:inline-block}
+.wppizza_img_placeholder{width:75px;height:75px;background:url('img/no_image.png');margin:3px auto}
+
+/******************
+	[meals]
+*******************/
+/*categories*/
+#wppizza_meals .wppizza_option{border:1px solid #CECECE;}
+#wppizza_meals .wppizza_meals_category{background:#DEDEDE}
+
+#wppizza_meals .wppizza-items{border-collapse: collapse;}
+#wppizza_meals .wppizza-items td{margin:0;padding:0 2px;vertical-align:top;line-height:22px}
+#wppizza_meals .wppizza-items textarea{width:100%;height:110px;}
+#wppizza_meals .wppizza-items input[type=file]{width:150px;}
+#wppizza_meals .wppizza-items label{display:inline-block;min-width:70px}
+#wppizza_meals .wppizza-items .wppizza-delete{float:right}
+
+
+.wppizza_label{min-width:150px;display:inline-block;}
+.wppizza-item-img{border-right:1px dotted #EFEFEF}
+/**this should be unique to wppizza->todo**/
+#the-list.ui-sortable>tr{cursor:move}
+
+/*******************
+	[metaboxes]
+********************/
+.wppizza-meta-label{float:left;min-width:125px;line-height:200%}
+
+/*******************
+	[generic]
+*********************/
+.widget .widget-inside p.wppizza-type{margin-bottom:0}
+.wppizza-red{color:#ff0000}
