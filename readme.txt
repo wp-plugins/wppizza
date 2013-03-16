@@ -16,9 +16,11 @@ A Restaurant Plugin (not only for Pizza). Maintain your Menu (multiple sizes, pr
 
 == Description ==
 
+- **Conceived for Pizza Delivery Businesses, but flexible enough to serve any restaurant type.**
+
 - Maintain your restaurant menu online and accept cash on delivery orders.
 
-- Set categories, multiple prices per item and descriptions. 
+- Set categories, multiple prices per item and descriptions.
 
 - Conceived for Pizza Delivery Businesses, but flexible enough to serve any type of restaurant.
 
@@ -28,9 +30,10 @@ A Restaurant Plugin (not only for Pizza). Maintain your Menu (multiple sizes, pr
 
 - Shortcode enabled. (see <a href='http://wordpress.org/extend/plugins/wppizza/faq/' target='_blank'>FAQ</a> for details)
 
-- **Conceived for Pizza Delivery Businesses, but flexible enough to serve any restaurant type.**
 
-** if you wish to allow your customers to add additional ingredients to any given menu item, have a look at the premium <a href='http://www.wp-pizza.com/' target='_blank'>"WPPizza Add Ingredients"</a> extension **
+**To see the plugin in action with different themes try it at <a href="http://www.wp-pizza.com/">www.wp-pizza.com</a>**
+
+**if you wish to allow your customers to add additional ingredients to any given menu item, have a look at the premium <a href='http://www.wp-pizza.com/' target='_blank'>"WPPizza Add Ingredients"</a> extension**
 
 == Installation ==
 
@@ -95,10 +98,6 @@ the same goes for the 3 example icons that come with this plugin as you might ha
 N/A  
 
 == Screenshots ==
-
-
-To see the plugin in action with different themes try it at <a href="http://www.wp-pizza.com/">www.wp-pizza.com</a> 
-
 
 1. frontend example
 2. administration - widget
