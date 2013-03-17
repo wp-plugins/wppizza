@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, order online, cash on delivery, multilingual
 Requires at least: PHP 5.2, WP 3.3 
 Tested up to: 3.5.1
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -22,18 +22,16 @@ A Restaurant Plugin (not only for Pizza). Maintain your Menu (multiple sizes, pr
 
 - Set categories, multiple prices per item and descriptions.
 
-- Conceived for Pizza Delivery Businesses, but flexible enough to serve any type of restaurant.
-
 - Multilingual Frontend (just update labels in admin settings page and/or widget as required)
 
 - Keeps track of your online orders.
 
-- Shortcode enabled. (see <a href='http://wordpress.org/extend/plugins/wppizza/faq/' target='_blank'>FAQ</a> for details)
+- Shortcode enabled. (see <a href='http://wordpress.org/extend/plugins/wppizza/faq/' >FAQ</a> for details)
 
 
 **To see the plugin in action with different themes try it at <a href="http://www.wp-pizza.com/">www.wp-pizza.com</a>**
 
-**if you wish to allow your customers to add additional ingredients to any given menu item, have a look at the premium <a href='http://www.wp-pizza.com/' target='_blank'>"WPPizza Add Ingredients"</a> extension**
+**if you wish to allow your customers to add additional ingredients to any given menu item, have a look at the premium <a href='http://www.wp-pizza.com/'>"WPPizza Add Ingredients"</a> extension**
 
 == Installation ==
 
@@ -45,7 +43,7 @@ Alternatively you can download and install WPPizza using the built in WordPress 
 3. You will find all configuration and menu options in your administration sidebar  
 
 
-** Things to do on first install**
+**Things to do on first install**
 
 although some defaults will be installed and set when first installing this plugin, **you will have to configure some things** to make it play nicely in your theme  
 Note: you might want to start with  Option 1 first, as you can always use Option 2 later
@@ -82,7 +80,7 @@ Note: you might want to start with  Option 1 first, as you can always use Option
 	Now you do not have to maintain any wppizza category pages, or navigation when adding new categories or menu items to wppizza as it's all taken care of automagically.
 
 **PS**: you might have to adjust the css to work within your theme.  
-see <a href='http://wordpress.org/extend/plugins/wppizza/faq/' target='_blank'>FAQ: "Can I edit the css ?"</a> for details  
+see <a href='http://wordpress.org/extend/plugins/wppizza/faq/'>FAQ: "Can I edit the css ?"</a> for details  
 
 
 **Uninstall**
@@ -106,8 +104,6 @@ N/A
 5. administration - order settings (one of many option screens)
 
 
-
-
 == Other Notes ==
 
 please note that the icons used in the demo installation are <a href="http://www.iconarchive.com/show/desktop-buffet-icons-by-aha-soft.html">iconarchive.com</a> icons and not for commercial use.  
@@ -116,6 +112,13 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 
 == Changelog ==
+
+1.0.2  
+* minor readme.txt updates  
+* enable screen info when first installing plugin  
+* moved screenshots out of plugin into repository assets directory
+* minor bugfixes
+ - 17th March 2013
 
 1.0.1  
 * minor readme.txt updates - 15th March 2013
@@ -166,7 +169,7 @@ Just don't display the shoppingcart anywhere. If you choose to do this, you migh
 
 = I'm using the plugin with xyz theme and it's all messed up  =
 
-first thing to try (if haven't done so already): re-save the pages WPPizza has created   
+first thing to try (if you haven't done so already): re-save the pages WPPizza has created   
 (I'm NOT talking about the WPPizza Categories and Menu Item Pages, but the pages that display a list of your item - typically a page that has somthing like [wppizza -some attributes-] on it)
 
 If that is still all, you might have to adjust the CSS (see 'Can I edit the css ?' above)

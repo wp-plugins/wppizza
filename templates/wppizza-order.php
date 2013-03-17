@@ -63,7 +63,7 @@
 			<?php } ?>
 			<?php if($elm['type']=='select'){?>
 				<select id="<?php echo $elm['key'] ?>" name="<?php echo $elm['key'] ?>" <?php echo !empty($elm['required'])?'required':'' ?>>			
-					<option>--------</option>
+					<option value="">--------</option>
 					<?php foreach($elm['value'] as $a=>$b){?>
 					<option value="<?php echo $a ?>"><?php echo $b ?></option>
 					<?php } ?>

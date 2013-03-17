@@ -9,7 +9,7 @@
 		$options['plugin_data']['empty_category_and_items'] = false;/*we dont really want to save these settings, just execute when true*/
 		
 
-		if(isset($input['plugin_data']['empty_category_and_items'])){
+		if(isset($input['plugin_data']['empty_category_and_items']) && $input['plugin_data']['empty_category_and_items']==1){
 			$this->wppizza_empty_taxonomy(!empty($input['plugin_data']['delete_attachments']) ? true : false, !empty($input['plugin_data']['truncate_orders']) ? true : false);
 		}
 		

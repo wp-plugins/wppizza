@@ -5,7 +5,7 @@ Description: Maintain your restaurant menu online and accept cash on delivery or
 Author: ollybach
 Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Author URI: http://www.wp-pizza.com
-Version: 1.0.1
+Version: 1.0.2
 License:
 
   Copyright 2012 ollybach (dev@wp-pizza.com)
@@ -58,7 +58,7 @@ class WPPizza extends WP_Widget {
 	********************************************************/
      function __construct() {
 		/**init constants***/
-		$this->pluginVersion='1.0.1';//increment in line with stable tag in readme and version above
+		$this->pluginVersion='1.0.2';//increment in line with stable tag in readme and version above
 	 	$this->pluginName="".WPPIZZA_NAME."";
 	 	$this->pluginSlug="".WPPIZZA_SLUG."";//set also in uninstall when deleting options
 		$this->pluginSlugCategoryTaxonomy="".WPPIZZA_TAXONOMY."";//also on uninstall delete wppizza_children as well as widget
@@ -108,6 +108,7 @@ class WPPizza extends WP_Widget {
     		add_action('admin_menu', array( $this, "register_admin_menu_pages" ) );
     		add_action('admin_init', array( $this, 'wppizza_admin_pages_init' ) );
     		add_action('admin_init', array( $this, 'wppizza_admin_metaboxes') );
+			add_action('admin_init', array( $this, 'wppizza_do_admin_notice'));/*if necessary,show admin info screens**/
 			/***enqueue backend scripts and styles***/
 			add_action('admin_enqueue_scripts', array( $this, 'wppizza_register_scripts_and_styles_admin'));
 			/*when deleting or creating categories*/
@@ -140,7 +141,7 @@ class WPPizza extends WP_Widget {
 		so if PHP version is lower then 5.2,
 		display an error message and deactivate the plugin]
 	********************************************************/
-	public function wppizza_check_plugin_requirements(){
+	function wppizza_check_plugin_requirements(){
 		if( version_compare( PHP_VERSION, '5.2', '<' )) {
 			require_once ABSPATH . '/wp-admin/includes/plugin.php';
 			deactivate_plugins( basename( __FILE__ ) );
@@ -164,9 +165,12 @@ class WPPizza extends WP_Widget {
 		[insert options and defaults on first install]
 	******************************************************/
 	public function wppizza_admin_options_init(){
+		
 		$options = $this->pluginOptions;
 		if($options==0){/*no options db entry->do stuff*/
 			$install_options=1;
+			/****set nag notice to 1 as its first install*******/
+			$this->pluginNagNotice=1;			
 			/**include and insert default options***/
 			require_once(WPPIZZA_PATH .'inc/admin.setup.default.options.inc.php');
 			/*insert $options;*/
@@ -191,6 +195,58 @@ class WPPizza extends WP_Widget {
 			}
 		}
 	}
+	/************************************************************************************
+		[admin notices: show and dismiss]
+	************************************************************************************/
+    function wppizza_do_admin_notice() {/*check if we need to show any notices i.e when set to 1 or on first install*/
+		if($this->pluginOptions['plugin_data']['nag_notice']!=0 || $this->pluginOptions==0){
+			add_action('admin_notices', array( $this, 'wppizza_install_notice') );
+			add_action('admin_head', array($this, 'wppizza_dismiss_notice_js') );
+			add_action('wp_ajax_wppizza_dismiss_notice', array($this, 'wppizza_dismiss_notice'));    
+    	}
+  	}
+
+	/* plugin admin screen notices/nags */
+    function wppizza_install_notice() {
+			/**get url to info screens**/    	
+   			$pluginInfoInstallationUrl = admin_url( 'plugin-install.php?tab=plugin-information&plugin='.WPPIZZA_SLUG.'&section=installation&TB_iframe=true&width=600&height=800');
+			$pluginInfoFaqUrl = admin_url( 'plugin-install.php?tab=plugin-information&plugin='.WPPIZZA_SLUG.'&section=faq&TB_iframe=true&width=600&height=800');
+
+			$pluginUpdatedNotice='';
+			$pluginUpdatedNotice.='<div id="message" class="updated wppizza_admin_notice" style="padding:20px;">';
+			$pluginUpdatedNotice.='<b>'.$this->pluginName.' Installed</b><br/><br/>';
+			/*set text depending on notice number*/
+			if($this->pluginOptions['plugin_data']['nag_notice']=='1' || $this->pluginNagNotice==1){
+				$pluginUpdatedNotice.='Thank you for installing '.WPPIZZA_NAME.' <br/>';
+				$pluginUpdatedNotice.='Please make sure to read the <a href="'.$pluginInfoInstallationUrl.'" class="thickbox">"Installation Instructions"</a> and <a href="'.$pluginInfoFaqUrl.'" class="thickbox">"FAQ"</a> ';
+				$pluginUpdatedNotice.='<br/>';
+			}
+			$pluginUpdatedNotice.='<br/><a href="#" onclick="wppizza_dismiss_notice(); return false;" class="button-primary">dismiss</a>';
+			$pluginUpdatedNotice.='</div>';
+			$pluginUpdatedNotice=__($pluginUpdatedNotice, $this->pluginLocale);
+			print"".$pluginUpdatedNotice."";
+    }	
+    function wppizza_dismiss_notice_js () {
+        $js="";
+        $js.="<script type='text/javascript' >".PHP_EOL."";
+        $js.="jQuery(document).ready(function($) {".PHP_EOL."";
+            $js.="wppizza_dismiss_notice = function () {".PHP_EOL."";
+	        	$js.="var data = {action: 'wppizza_dismiss_notice'};".PHP_EOL."";
+	        	// since wp2.8 ajaxurl is defined in admin header pointing to admin-ajax.php
+	        	$js.="jQuery.post(ajaxurl, data, function(response) {".PHP_EOL."";
+			        $js.="$('.wppizza_admin_notice').hide('slow');".PHP_EOL."";
+	        	$js.="});".PHP_EOL."";
+	        $js.="};".PHP_EOL."";
+        $js.="});".PHP_EOL."";
+        $js.="</script>".PHP_EOL."";
+        print"".$js;
+    }
+    public function wppizza_dismiss_notice() {
+    	$options = $this->pluginOptions;
+    	$options['plugin_data']['nag_notice']=0;
+    	update_option($this->pluginSlug,$options);
+        die();
+    }    
 	/*******************************************************
 		[register custom post type]
 	******************************************************/
@@ -830,7 +886,7 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 *		[empty custom posts]
 *
 *********************************************************/
-	public function wppizza_empty_taxonomy($deleteAttachments=false,$truncateOrders=false){
+	public function wppizza_empty_taxonomy($deleteAttachments=false,$truncateOrders=false){		
 		require_once(WPPIZZA_PATH .'inc/admin.empty.taxonomy.data.php');
 	}
 /*********************************************************
