@@ -12,7 +12,6 @@
 *	[$cart['order_value'] = contains subtotal, deliver charges, discounts and grand total]
 *	[$txt array= localized variables from settings->localization]
 *	[$formelements = form elements from settings->order form]
-*	[$ajaxRequest =  if form was requested via ajax, include headers, footers etc as we are replacing the whole page]
 *
 *********************************************************************************************************/
 ?>

@@ -27,6 +27,8 @@
 	if($options['layout']['hide_prices']){$hidePrices=1;}
 	/*check if we are showing cart icon*/
 	if($options['layout']['hide_cart_icon']){$hideCartIcon=' '.$post_type.'-no-cart';}else{$hideCartIcon='';}
+	/*check if we are showing currency next to item*/
+	if($options['layout']['hide_item_currency_symbol']){$hideCurrencySymbol=1;}	
 	/*check if online order has been enabled and if so , remove title and classes to disable adding to cart js*/
 	if($options['layout']['disable_online_order']){$priceClass=''; $priceTitle='';}else{$priceClass=' '.$post_type.'-add-to-cart'; $priceTitle=' title="'.$txt['add_to_cart']['lbl'].'"';}
 	
@@ -138,7 +140,9 @@
 	    		<div class='<?php echo $post_type ?>-article-price-lbl<?php echo $hideCartIcon?>'><?php echo $v['lbl']?></div>
 	   		</span>
 	   	<?php } ?>
+	   	<?php if(!isset($hideCurrencySymbol)){?>
 	   		<span class='<?php echo $post_type ?>-article-price-currency'><?php echo $currency?></span>
+	   	<?php } ?>
 		</div>
 <?php
 	}

@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, order online, cash on delivery, multilingual
 Requires at least: PHP 5.2, WP 3.3 
 Tested up to: 3.5.1
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -93,7 +93,7 @@ the same goes for the 3 example icons that come with this plugin as you might ha
 
 == Upgrade Notice ==
 
-N/A  
+Please Upgrade asap, as there was a bug that displayed default prices as opposed to the actual price per itme
 
 == Screenshots ==
 
@@ -113,11 +113,22 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 == Changelog ==
 
+1.0.3  
+* fixed bug that displayed default as opposed to actual prices
+* updated google library for timepicker when setting opening times  
+* readme.txt updates  
+* removed some obsolete functions and stripped tags when submitting an order  
+* removed "loading" string in div when waiting for order to be processed/sent (ajax spinner should be enough)  
+* added padding to div to pretty up thank you page  
+* added a lot more currencies (including not displaying any at all)  
+* added the ability to hide currency symbol next to items only  
+- 29th March 2013  
+
 1.0.2  
 * minor readme.txt updates  
 * enable screen info when first installing plugin  
-* moved screenshots out of plugin into repository assets directory
-* minor bugfixes
+* moved screenshots out of plugin into repository assets directory  
+* minor bugfixes  
  - 17th March 2013
 
 1.0.1  
@@ -172,9 +183,9 @@ Just don't display the shoppingcart anywhere. If you choose to do this, you migh
 first thing to try (if you haven't done so already): re-save the pages WPPizza has created   
 (I'm NOT talking about the WPPizza Categories and Menu Item Pages, but the pages that display a list of your item - typically a page that has somthing like [wppizza -some attributes-] on it)
 
-If that is still all, you might have to adjust the CSS (see 'Can I edit the css ?' above)
+If that still doesn't help, you might have to adjust the CSS (see 'Can I edit the css ?' above)
 
-Let m know what theme you are using and I'll have a look..  
+If you have problems, let me know what theme you are using and I'll have a look..  
 
 
 
@@ -238,6 +249,7 @@ Just make sure you copy the relevant template from wppizza/templates/ to your th
 
 = How can I submit a bug, ask for help or request a new feature? =
 
-Just leave a message on the <a href="http://wordpress.org/support/plugin/wppizza">wordpress forum</a> and I'll respond asap.  
-Alternatively just send an email to support[at]wp-pizza.com with as much info as you can give me
+	- leave a message on the <a href="http://wordpress.org/support/plugin/wppizza">wordpress forum</a> and I'll respond asap.  
+	- send an email to support[at]wp-pizza.com with as much info as you can give me or 
+	- use the "contact us" or "feature request" page on <a href="http://www.wp-pizza.com/">www.wp-pizza.com</a>
 

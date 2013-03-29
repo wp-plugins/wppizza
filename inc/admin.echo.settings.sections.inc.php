@@ -17,6 +17,9 @@
 		add_settings_field('placeholder_img', '<b>'.__('Display placeholder image when no image associated with meal item:', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'layout', 'layout', 'placeholder_img' );
 		add_settings_field('suppress_loop_headers', '<b>'.__('Globally suppress headers above list of menu items:', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'layout', 'layout', 'suppress_loop_headers' );
 		add_settings_field('hide_cart_icon', '<b>'.__('Hide cart icon next to prices:', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'layout', 'layout', 'hide_cart_icon' );
+		
+		add_settings_field('hide_item_currency_symbol', '<b>'.__('Hide currency symbol next to each menu item:', $this->pluginLocale).'</b><br/>'.__('won\'t affect cart, summaries or emails', $this->pluginLocale).'', array( $this, 'wppizza_admin_settings_input'), 'layout', 'layout', 'hide_item_currency_symbol' );
+		
 		add_settings_field('hide_prices', '<b>'.__('Hide prices altogether:', $this->pluginLocale).'</b><br/><span style="color:red">'.__('this will disable the adding of any item to the shoppingcart.', $this->pluginLocale).'</span><br/>'.__('Really only useful if you want to display your menu without offering online orders', $this->pluginLocale).'', array( $this, 'wppizza_admin_settings_input'), 'layout', 'layout', 'hide_prices' );
 		add_settings_field('disable_online_order', '<b>'.__('Completely disable online orders:', $this->pluginLocale).'</b><br/><span style="color:red">'.__('this will still display prices (unless set to be hidden above), but will disable shoppingcart and orderpage', $this->pluginLocale).'</span><br/>'.__('Useful if you want to display your menu and prices but without offering online orders.', $this->pluginLocale).'', array( $this, 'wppizza_admin_settings_input'), 'layout', 'layout', 'disable_online_order' );
 		
@@ -27,7 +30,7 @@
 
 		/**order**/
 		add_settings_section('order', __('Order Settings', $this->pluginLocale),  array( $this, 'wppizza_admin_page_text_header'), 'order');
-		add_settings_field('currency', '<b>'.__('Currency:', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'order', 'order', 'currency' );
+		add_settings_field('currency', '<b>'.__('Currency:', $this->pluginLocale).'</b><br/>'.__('set to --none-- to have no currency displayed anywhere', $this->pluginLocale).'', array( $this, 'wppizza_admin_settings_input'), 'order', 'order', 'currency' );
 		add_settings_field('orderpage', '<b>'.__('Order Page:', $this->pluginLocale).'</b><br/>'.__('(ensure the page includes [wppizza type="orderpage"] or the widget equivalent', $this->pluginLocale).'', array( $this, 'wppizza_admin_settings_input'), 'order', 'order', 'orderpage' );
 		add_settings_field('delivery', '<b>'.__('Delivery Charges:', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'order', 'order', 'delivery' );
 		add_settings_field('discounts', '<b>'.__('Discounts:', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'order', 'order', 'discounts' );

@@ -5,12 +5,121 @@
 	}
 	
 	function wppizza_currencies($selected='',$returnValue=null){
+		$items['---none---']='';
 		$items['USD']='$';
 		$items['GBP']='£';
 		$items['EUR']='€';
 		$items['CAD']='$';
 		$items['CHF']='CHF';
+		$items['ALL']='Lek';
+		$items['AFN']='&#1547;';
+		$items['ARS']='$';
+		$items['AWG']='ƒ';
+		$items['AUD']='$';
+		$items['AZN']='&#1084;';
+		$items['BSD']='$';
+		$items['BBD']='$';
+		$items['BYR']='p.';
+		$items['BZD']='BZ$';
+		$items['BMD']='$';
+		$items['BOB']='$b';
+		$items['BAM']='KM';
+		$items['BWP']='P';
+		$items['BGN']='&#1083;';
+		$items['BRL']='R$';
+		$items['BND']='$';
+		$items['KHR']='&#6107;';
+		$items['KYD']='$';
+		$items['CLP']='$';
+		$items['CNY']='¥';
+		$items['COP']='$';
 		$items['CRC']='¢';
+		$items['HRK']='kn';
+		$items['CUP']='&#8369;';
+		$items['CZK']='Kc';
+		$items['DKK']='kr';
+		$items['DOP']='RD$';
+		$items['XCD']='$';
+		$items['EGP']='£';
+		$items['SVC']='$';
+		$items['EEK']='kr';
+		$items['FKP']='£';
+		$items['FJD']='$';
+		$items['GHC']='¢';
+		$items['GIP']='£';
+		$items['GTQ']='Q';
+		$items['GGP']='£';
+		$items['GYD']='$';
+		$items['HNL']='L';
+		$items['HKD']='$';
+		$items['HUF']='Ft';
+		$items['ISK']='kr';
+		$items['IDR']='Rp';
+		$items['IRR']='&#65020;';
+		$items['IMP']='£';
+		$items['ILS']='ILS';
+		$items['JMD']='J$';
+		$items['JPY']='¥';
+		$items['JEP']='£';
+		$items['KZT']='&#1083;';
+		$items['KPW']='&#8361;';
+		$items['KRW']='&#8361;';
+		$items['KGS']='&#1083;';
+		$items['LAK']='&#8365;';
+		$items['LVL']='Ls';
+		$items['LBP']='£';
+		$items['LRD']='$';
+		$items['LTL']='Lt';
+		$items['MKD']='&#1076;';
+		$items['MYR']='&#82;';
+		$items['MUR']='&#8360;';
+		$items['MXN']='$';
+		$items['MNT']='&#8366;';
+		$items['MZN']='MT';
+		$items['NAD']='$';
+		$items['NPR']='&#8360;';
+		$items['ANG']='ƒ';
+		$items['NZD']='$';
+		$items['NIO']='C$';
+		$items['NGN']='&#8358;';
+		$items['KPW']='&#8361;';
+		$items['NOK']='kr';
+		$items['OMR']='&#65020;';
+		$items['PKR']='&#8360;';
+		$items['PAB']='B/.';
+		$items['PYG']='Gs';
+		$items['PEN']='S/.';
+		$items['PHP']='&#8369;';
+		$items['PLN']='zl';
+		$items['QAR']='&#65020;';
+		$items['RON']='lei';
+		$items['RUB']='&#1088;';
+		$items['SHP']='£';
+		$items['SAR']='&#65020;';
+		$items['RSD']='&#1044;';
+		$items['SCR']='&#8360;';
+		$items['SGD']='$';
+		$items['SBD']='$';
+		$items['SOS']='S';
+		$items['ZAR']='R';
+		$items['KRW']='&#8361;';
+		$items['LKR']='&#8360;';
+		$items['SEK']='kr';
+		$items['SRD']='$';
+		$items['SYP']='£';
+		$items['TWD']='NT$';
+		$items['THB']='&#3647;';
+		$items['TTD']='TT$';
+		$items['TRL']='£';
+		$items['TVD']='$';
+		$items['UAH']='&#8372;';
+		$items['UYU']='$U';
+		$items['UZS']='&#1083;';
+		$items['VEF']='Bs';
+		$items['VND']='&#8363;';
+		$items['YER']='&#65020;';
+		$items['ZWD']='Z$';
+				
 		if(!$returnValue){
 		ksort($items);
 	    foreach($items as $key=>$val){
@@ -57,7 +166,7 @@
 					$str.=' '.wpizza_format_weekday($consec[0],'%a').'';
 				}
 				if($open[0]==$open[1]){	
-					$str.=' '.$options['localization']['closed']['lbl'].'';
+					$str.=' '.$options['localization']['openinghours_closed']['lbl'].'';
 				}else{
 					$str.=' '.ltrim($open[0],0).'-'.ltrim($open[1],0).'';//loose leading zeros
 				}
@@ -366,7 +475,7 @@ function wppizza_order_summary($session,$options,$ajax=null){
 				}
 			}				
 		}
-		if($discountApply>0){
+		if(isset($discountApply) && $discountApply>0){
 			$discountLabel=$options['localization']['discount']['lbl'];
 			$discountValue=wppizza_output_format_float($discountApply);	
 		}
@@ -485,5 +594,39 @@ function wppizza_array_multisort($array, $cols){
 	        }
 	    }
 	    return $ret;
+}
+/***********************************************************************************
+	[ helper to return single dimension localization variables]
+	[ could also be used of course to return any 2 dimensional array as single dimension arr]
+	
+	localization variables tend to be organized like this:
+	'some_key'=>array(
+			'descr'=>__('some description', $this->pluginLocale),
+			'lbl'=>__('some label', $this->pluginLocale)
+	),
+		
+	so to access the lbl, one has to write something like
+	$txt=$this->pluginOptions
+	
+	echo $txt['localization']['some_key']['lbl']
+	or
+	echo $txt['localization']['some_key']['descr']
+	
+	or some such
+	with this helper you can write:
+	$txt=wppizza_output_localization_vars($this->pluginOptions['localization'],'lbl')
+	
+	echo $txt['some_key'];
+	a lot cleaner
+@ arr: two dimensional array
+@ key: which key to use as single dimention key value
+****************************************************************************/
+function wppizza_return_single_dimension_array($arr, $key='lbl'){
+	$array=array();
+	if(is_array($arr)){
+	foreach($arr as $k=>$v)	
+		$array[$k]=$v[$key];
+	}
+	return $array;
 }
 ?>

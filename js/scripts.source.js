@@ -63,7 +63,7 @@ jQuery(document).ready(function($){
 	$.validator.setDefaults({
 		submitHandler: function() {
 			var self=$('#wppizza-send-order');
-			 self.prepend('<div id="wppizza-loading">"loading"</div>');
+			 self.prepend('<div id="wppizza-loading"></div>');
 			 jQuery.post(wppizza.ajaxurl , {action :'wppizza_json',vars:{'type':'sendorder','data':self.serialize()}}, function(response) {
 				$('#wppizza-send-order #wppizza-loading').remove();
 				self.html('<div id="wppizza-order-received">'+response+'</div>');

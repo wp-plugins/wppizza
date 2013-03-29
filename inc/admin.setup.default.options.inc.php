@@ -312,6 +312,7 @@
 				'suppress_loop_headers' => false,
 				'hide_cart_icon' => false,
 				'hide_prices' => false,
+				'hide_item_currency_symbol' => false,
 				'disable_online_order' => false
 			),
 			'opening_times_standard'=>array(
@@ -477,7 +478,11 @@
 				'order_items'=>array(
 					'descr'=>__('Pricelabels (Sub)Totals: text before total sum of ITEMS in cart', $this->pluginLocale),
 					'lbl'=>__('your items', $this->pluginLocale)
-				)
+				),
+				'openinghours_closed'=>array(
+					'descr'=>__('Openinghours: text to display when shop is closed that day ', $this->pluginLocale),
+					'lbl'=>__('closed', $this->pluginLocale)
+				)					
 
 			)
 		);

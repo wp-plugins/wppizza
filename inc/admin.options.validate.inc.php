@@ -57,6 +57,7 @@
 			$options['layout']['style'] = wppizza_validate_alpha_only($input['layout']['style']);
 			$options['layout']['placeholder_img'] = !empty($input['layout']['placeholder_img']) ? true : false;
 			$options['layout']['hide_cart_icon'] = !empty($input['layout']['hide_cart_icon']) ? true : false;
+			$options['layout']['hide_item_currency_symbol'] = !empty($input['layout']['hide_item_currency_symbol']) ? true : false;
 			$options['layout']['hide_prices'] = !empty($input['layout']['hide_prices']) ? true : false;
 			$options['layout']['disable_online_order'] = !empty($input['layout']['disable_online_order']) ? true : false;
 		}

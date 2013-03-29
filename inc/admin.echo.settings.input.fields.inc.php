@@ -61,6 +61,9 @@ $options = $this->pluginOptions;
 			if($field=='hide_cart_icon'){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[layout][".$field."]' type='checkbox'  ". checked($options['layout'][$field],true,false)." value='1' />";
 			}
+			if($field=='hide_item_currency_symbol'){
+				echo "<input id='".$field."' name='".$this->pluginSlug."[layout][".$field."]' type='checkbox'  ". checked($options['layout'][$field],true,false)." value='1' />";
+			}			
 			if($field=='hide_prices'){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[layout][".$field."]' type='checkbox'  ". checked($options['layout'][$field],true,false)." value='1' />";
 			}
@@ -98,7 +101,7 @@ $options = $this->pluginOptions;
 			if($field=='currency'){
 				echo "<select name='".$this->pluginSlug."[order][".$field."]'>";
 				foreach(wppizza_currencies($options['order'][$field]) as $l=>$m){
-					echo "<option value='".$m['id']."' ".$m['selected'].">".$m['value']." - [".$m['id']."]</option>";
+					echo "<option value='".$m['id']."' ".$m['selected'].">[".$m['id']."] - ".$m['value']."</option>";
 				}
 				echo "</select>";
 			}
@@ -198,7 +201,8 @@ $options = $this->pluginOptions;
 			}
 
 			if($field=='order_email_to' || $field=='order_email_cc' || $field=='order_email_bcc'){//$field==order_sms => not implemented
-				echo "<input id='".$field."' name='".$this->pluginSlug."[order][".$field."]' size='30' type='text' value='".implode(",",$options['order'][$field])."' />";
+				if(is_array($options['order'][$field])){$val=implode(",",$options['order'][$field]);}else{$val='';}
+				echo "<input id='".$field."' name='".$this->pluginSlug."[order][".$field."]' size='30' type='text' value='".$val."' />";
 			}
 			if($field=='sizes'){
 				echo"<div id='wppizza_".$field."'>";
