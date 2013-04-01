@@ -182,7 +182,7 @@ if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='sendorder'){
 			$wpdb->hide_errors();
 			//$wpdb->print_error();
 			$wpdb->query( $wpdb->prepare( "INSERT INTO ".$wpdb->prefix . $this->pluginOrderTable." ( customer_details, order_details )VALUES ( %s, %s )", array($customer_details, $order)));
-			print"<p class='mailSuccess'><h1>".$options['localization']['thank_you']['lbl']."</h1><br/>".$options['localization']['thank_you_p']['lbl']."</p>";
+			print"<div class='mailSuccess'><h1>".$options['localization']['thank_you']['lbl']."</h1>".nl2br($options['localization']['thank_you_p']['lbl'])."</div>";
 			unset($_SESSION[$this->pluginSlug]);
 		}else{
 			$error = error_get_last();

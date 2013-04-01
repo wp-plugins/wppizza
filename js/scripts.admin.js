@@ -63,13 +63,21 @@ jQuery(document).ready(function($){
 		},'html').error(function(jqXHR, textStatus, errorThrown) {alert("error : " + errorThrown);});
 	});
 	/*******************************
+		[times closed - add new]
+	*******************************/
+	$(document).on('click', '#wppizza_add_times_closed_standard', function(e){
+		e.preventDefault();
+		jQuery.post(ajaxurl , {action :'wppizza_admin_json',vars:{'field':'times_closed_standard'}}, function(response) {
+			$('#wppizza_times_closed_standard_options').append(response);
+		},'html').error(function(jqXHR, textStatus, errorThrown) {alert("error : " + errorThrown);});
+	});
+	/*******************************
 	*	[size option - add new]
 	*******************************/
 	$(document).on('click', '#wppizza_add_sizes', function(e){
 		e.preventDefault();
 		var newKey = wpPizzaCreateNewKey('wppizza_sizes_options');
 			var newFields=parseInt($('#wppizza_add_sizes_fields').val());
-//alert(newKey+' '+newFields);
 			if(newFields>=1){
 				jQuery.post(ajaxurl , {action :'wppizza_admin_json',vars:{'field':'sizes','id':newKey,'newFields':newFields}}, function(response) {
 					var html=response;
@@ -77,18 +85,6 @@ jQuery(document).ready(function($){
 				},'html').error(function(jqXHR, textStatus, errorThrown) {alert("error : " + errorThrown);});
 			}
 	});
-	/*******************************
-	*	[ingredients - add new]
-	*******************************/
-	/*--> moved to add ingredients plugin end************/
-//	$(document).on('click', '#wppizza_add_ingredients', function(e){
-//		e.preventDefault();
-//		var newKey = wpPizzaCreateNewKey('wppizza_ingredients_options');
-//		jQuery.post(ajaxurl , {action :'wppizza_admin_json',vars:{'field':'ingredients','id':newKey}}, function(response) {
-//			$('#wppizza_ingredients_options').append(response);
-//		},'html').error(function(jqXHR, textStatus, errorThrown) {alert("error : " + errorThrown);});
-//	});
-	/*--> moved to add ingredients plugin end************/
 	/******************************
 	*	[additives - add new]
 	******************************/
@@ -142,10 +138,7 @@ jQuery(document).ready(function($){
 	*	[widget type has changed, show relevant option]
 	******************************/		
 	$(document).on('change', '.wppizza-select', function(e){
-		self=$(this);
-		
-//		alert(self.val());
-		
+		self=$(this);		
 		self.closest('div').find('.wppizza-selected>p').hide();
 		self.closest('div').find('.wppizza-selected>.wppizza-selected-'+self.val()+'').fadeIn();
 	});		

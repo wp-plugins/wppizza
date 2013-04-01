@@ -43,3 +43,8 @@
 *********************/
 .widget .widget-inside p.wppizza-type{margin-bottom:0}
 .wppizza-red{color:#ff0000}
+
+/*******************
+	[when using textarea in localization fields]
+*********************/
+.wppizza_localization_textarea{width:250px}

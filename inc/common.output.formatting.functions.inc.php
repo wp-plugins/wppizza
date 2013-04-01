@@ -227,7 +227,8 @@ return $output;
 }  	
 
 /**are we currntly open ?*/
-function wpizza_are_we_open($standard,$custom){
+function wpizza_are_we_open($standard,$custom,$breaks){
+	$serverTime=current_time('timestamp');
 	$currentlyOpen=0;//initialize as closed
 	$todayWday=date("w");
 	$d=date("d");
@@ -270,9 +271,38 @@ function wpizza_are_we_open($standard,$custom){
 			$openToday[]=array('start'=>$t['start'],'end'=>$t['end']);
 		}		
 	}	
-	/********now check if current time is in the $openToday array between start and end***/
+
+	/*********check if we have added some breaks/siestas whatever you want to call it***/
+	if(count($breaks)>0){
+		/**first check if today is a custom day and if we've set break times for it**/
+		if(isset($custom['date']) && in_array($todayDate,$custom['date']) ){
+			foreach($breaks as $k=>$v){
+				if($v['day']=='-1'){
+					$t=wpizza_get_opening_times($v['close_start'],$v['close_end'],$d,$m,$Y,'today');
+					if($t['start']<=$serverTime && $t['end']>=$serverTime){
+						$currentlyOpen=0;	
+						return $currentlyOpen;
+					}
+				}
+			}
+		}else{
+			/**its not a custom day, so check if we havea break set for this weekday**/
+			foreach($breaks as $k=>$v){
+				if($todayWday==$v['day']){
+					$t=wpizza_get_opening_times($v['close_start'],$v['close_end'],$d,$m,$Y,'today');
+					if($t['start']<=$serverTime && $t['end']>=$serverTime){
+						$currentlyOpen=0;
+						return $currentlyOpen;
+					}
+				}
+			}
+		
+		}
+	}
+			
+	/********we've done the siest/break check, now check if current time is in the $openToday array between start and end***/
 	foreach($openToday as $k=>$times){
-		if(time() >= $times['start'] && time() <= $times['end']){
+		if( $serverTime >= $times['start'] && $serverTime <= $times['end']){
 			$currentlyOpen=1;
 		return $currentlyOpen;	
 		}	
@@ -521,7 +551,7 @@ function wppizza_order_summary($session,$options,$ajax=null){
 	/****************************************************
 		[check if we are open]
 	****************************************************/
-	$isOpen=wpizza_are_we_open($options['opening_times_standard'],$options['opening_times_custom']);
+	$isOpen=wpizza_are_we_open($options['opening_times_standard'],$options['opening_times_custom'],$options['times_closed_standard']);
 	$summary['shopopen']=$isOpen;
 	$summary['button']='';
 	$summary['nocheckout']='';

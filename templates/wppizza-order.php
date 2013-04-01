@@ -64,7 +64,7 @@
 				<select id="<?php echo $elm['key'] ?>" name="<?php echo $elm['key'] ?>" <?php echo !empty($elm['required'])?'required':'' ?>>			
 					<option value="">--------</option>
 					<?php foreach($elm['value'] as $a=>$b){?>
-					<option value="<?php echo $a ?>"><?php echo $b ?></option>
+					<option value="<?php echo wppizza_validate_string($b) ?>"><?php echo $b ?></option>
 					<?php } ?>
 				</select>
 			<?php } ?>

@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, order online, cash on delivery, multilingual
 Requires at least: PHP 5.2, WP 3.3 
 Tested up to: 3.5.1
-Stable tag: 1.0.3
+Stable tag: 1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -93,7 +93,7 @@ the same goes for the 3 example icons that come with this plugin as you might ha
 
 == Upgrade Notice ==
 
-Please Upgrade asap, as there was a bug that displayed default prices as opposed to the actual price per itme
+N/A
 
 == Screenshots ==
 
@@ -113,6 +113,16 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 == Changelog ==
 
+
+1.1  
+* add ability to be closed for certain hours (i.e be open 2 or more times per day)  
+* made localization of thank you order page info html enabled textarea as opposed to plain text input  
+* BUGFIX missing currency symbol in total when adding items to cart
+* BUGFIX not being able to save "globally suppress headers" in layout option screen
+* BUGFIX timezone (DST) issue  
+* BUGFIX custom order form: when using selects only ids were submitted by email not the actual value set in comma separated value/array  
+- 1st April 2013  
+
 1.0.3  
 * fixed bug that displayed default as opposed to actual prices
 * updated google library for timepicker when setting opening times  
@@ -122,7 +132,7 @@ if you do wish to use any icon from this set commercially, please follow <a href
 * added padding to div to pretty up thank you page  
 * added a lot more currencies (including not displaying any at all)  
 * added the ability to hide currency symbol next to items only  
-- 29th March 2013  
+- 30th March 2013  
 
 1.0.2  
 * minor readme.txt updates  

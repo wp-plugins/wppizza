@@ -65,8 +65,8 @@
 #wppizza-loading{background:url('img/ajax-loader.gif') center center no-repeat;position: absolute;z-index: 1000;top:0;bottom:0;left: 0;right: 0;padding:0;margin:0;background-color:#FFFFFF;}
 
 
-#wppizza-order-received{width:100%;min-height:250px;border:1px dotted #CECECE;padding:20px}
-
+#wppizza-order-received{width:100%;min-height:250px;border:1px dotted #CECECE;}
+#wppizza-order-received>.mailSuccess{margin:20px}
 /*************************************************
 *
 *	final page before hitting send order button
@@ -74,7 +74,7 @@
 **************************************************/
 #wppizza-send-order{position:relative}
 #wppizza-send-order>fieldset{border:1px dotted #CECECE;padding:10px}
-#wppizza-send-order>fieldset>legend{margin:0 20px;padding:10px 20px;background-color:inherit;font-weight:600}
+#wppizza-send-order>fieldset>legend{margin:0 20px;padding:10px 20px;background-color:inherit;font-weight:600;width:auto;border:none}
 #wppizza-send-order>fieldset>label{display:block}
 #wppizza-send-order>fieldset>label.error{color:#FF0000;padding:0 0 5px 0;font-size:90%}
 #wppizza-send-order>fieldset>input,#wppizza-send-order>fieldset>select,#wppizza-send-order>fieldset>textarea{margin-bottom:3px;width:100%;min-width:100%;padding-left:0;padding-right:0;}

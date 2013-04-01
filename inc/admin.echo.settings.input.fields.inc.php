@@ -97,6 +97,20 @@ $options = $this->pluginOptions;
 				echo "<a href='#' id='wppizza_add_".$field."' class='button'>".__('add', $this->pluginLocale)."</a>";
 				echo"</div>";
 			}
+			
+			
+			if($field=='times_closed_standard'){
+				echo"<div id='wppizza_".$field."' >";
+				echo"<div id='wppizza_".$field."_options'>";
+				if(isset($options[$field]) && is_array($options[$field])){
+				foreach($options[$field] as $k=>$v){
+					echo"".$this->wppizza_admin_section_times_closed_standard($field,$k,$v);
+				}}
+				echo"</div>";
+				echo "<a href='#' id='wppizza_add_".$field."' class='button'>".__('add', $this->pluginLocale)."</a>";
+				echo"</div>";
+			}			
+			
 
 			if($field=='currency'){
 				echo "<select name='".$this->pluginSlug."[order][".$field."]'>";
@@ -227,12 +241,23 @@ $options = $this->pluginOptions;
 				echo"</div>";
 			}
 			if($field=='localization'){
+				$textArea=array('thank_you_p');/*tinymce textareas*/
 				echo"<div id='wppizza_".$field."'>";
 					echo"<div id='wppizza_".$field."_options'>";
 					asort($options[$field]);
 					foreach($options[$field] as $k=>$v){
+						if(in_array($k,$textArea)){
+							$editorId="".$this->pluginSlug."[".$field."][".$k."]";
+							echo"<br/>".$v['descr']."";
+							echo"<div style='width:500px;'>";
+							wp_editor( $v['lbl'], $editorId,array('teeny'=>1,'wpautop'=>false) );
+							echo"<br/></div>";
+							echo"<br/>";
+						//echo "<textarea name='".$this->pluginSlug."[".$field."][".$k."]' style='width:185px;height:150px'>".$v['lbl']."</textarea>";
+						}else{
 						echo "<input name='".$this->pluginSlug."[".$field."][".$k."]' size='30' type='text' value='".$v['lbl']."' />";
 						echo"".$v['descr']."<br/>";
+						}
 					}
 					echo"</div>";
 				echo"</div>";

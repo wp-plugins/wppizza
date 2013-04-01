@@ -70,17 +70,14 @@ if($_POST['vars']['field']=='sizeschanged' && $_POST['vars']['id']!='' && isset(
 if($_POST['vars']['field']=='additives' && $_POST['vars']['id']>=0){	
 	$output=$this->wppizza_admin_section_additives($_POST['vars']['field'],$_POST['vars']['id'],'');
 }
-/*--> moved to add ingredients plugin************/
-/**adding new ingredients**/ 
-//if($_POST['vars']['field']=='ingredients' && $_POST['vars']['id']>=0){
-//	$output=$this->wppizza_admin_section_ingredients($_POST['vars']['field'],$_POST['vars']['id'],'',$optionSizes);
-//}
-/*--> moved to add ingredients plugin end************/
 /**adding new custom opening time**/ 
 if($_POST['vars']['field']=='opening_times_custom'){
 	$output=$this->wppizza_admin_section_opening_times_custom($_POST['vars']['field']);
 }
-
+/**adding new times closed**/ 
+if($_POST['vars']['field']=='times_closed_standard'){
+	$output=$this->wppizza_admin_section_times_closed_standard($_POST['vars']['field']);
+}
 /**get orders**/ 
 if($_POST['vars']['field']=='get_orders'){
 	$output='';

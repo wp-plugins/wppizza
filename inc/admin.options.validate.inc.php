@@ -2,25 +2,25 @@
 
 	/**get previously saved options**/
 	$options = $this->pluginOptions;
-	
+
 		/**lets not forget static, uneditable options **/
 		$options['plugin_data']['version'] = $this->pluginVersion;
 		$options['plugin_data']['nag_notice'] = $this->pluginNagNotice;
 		$options['plugin_data']['empty_category_and_items'] = false;/*we dont really want to save these settings, just execute when true*/
-		
+
 
 		if(isset($input['plugin_data']['empty_category_and_items']) && $input['plugin_data']['empty_category_and_items']==1){
 			$this->wppizza_empty_taxonomy(!empty($input['plugin_data']['delete_attachments']) ? true : false, !empty($input['plugin_data']['truncate_orders']) ? true : false);
 		}
-		
+
 		/**maybe in the future**/
 //		if(isset($input['plugin_data']['install_sample_data'])){
 			//include(WPPIZZA_PATH .'inc/admin.sample.data.inc.php');
 			//$this->wppizza_empty_taxonomy(!empty($input['plugin_data']['delete_attachments']) ? true : false, !empty($input['plugin_data']['truncate_orders']) ? true : false);
-//		}		
-			
+//		}
+
 		/**validate global settings***/
-		if(isset($_POST[''.$this->pluginSlug.'_global'])){	
+		if(isset($_POST[''.$this->pluginSlug.'_global'])){
 			/**submitted options -> validate***/
 			$options['plugin_data']['js_in_footer'] = !empty($input['plugin_data']['js_in_footer']) ? true : false;
 		}
@@ -29,40 +29,41 @@
 		if(isset($input['plugin_data']['category_parent_page'])){
 			$options['plugin_data']['category_parent_page'] = !empty($input['plugin_data']['category_parent_page']) ? (int)$input['plugin_data']['category_parent_page'] : '';
 			//$options['plugin_data']['category_parent_page'] = wppizza_validate_alpha_only($input['plugin_data']['category_parent_page']);
-			
-			
+
+
 		}
 		if(isset($input['layout']['category_sort'])){
 			$options['layout']['category_sort']=$input['layout']['category_sort'];
-		}	
+		}
 		/*set number of items per loop. must be >= get_option('posts_per_page ')*/
 		if(isset($input['layout']['items_per_loop'])){
 			/*if minus=>set to -1**/
 			if(substr($input['layout']['items_per_loop'],0,1)=='-'){
-				$set='-1';	
+				$set='-1';
 			}else{/*else mk int**/
 				if((int)$input['layout']['items_per_loop']>=get_option('posts_per_page ')){
-					$set=(int)$input['layout']['items_per_loop'];		
+					$set=(int)$input['layout']['items_per_loop'];
 				}else{
 					$set=get_option('posts_per_page ');
 				}
 			}
-			
+
 			$options['layout']['items_per_loop']=$set;
 		}
-		
-					
-		if(isset($_POST[''.$this->pluginSlug.'_layout'])){	
+
+
+		if(isset($_POST[''.$this->pluginSlug.'_layout'])){
 			$options['layout']['include_css'] = !empty($input['layout']['include_css']) ? true : false;
 			$options['layout']['style'] = wppizza_validate_alpha_only($input['layout']['style']);
 			$options['layout']['placeholder_img'] = !empty($input['layout']['placeholder_img']) ? true : false;
+			$options['layout']['suppress_loop_headers'] = !empty($input['layout']['suppress_loop_headers']) ? true : false;
 			$options['layout']['hide_cart_icon'] = !empty($input['layout']['hide_cart_icon']) ? true : false;
 			$options['layout']['hide_item_currency_symbol'] = !empty($input['layout']['hide_item_currency_symbol']) ? true : false;
 			$options['layout']['hide_prices'] = !empty($input['layout']['hide_prices']) ? true : false;
 			$options['layout']['disable_online_order'] = !empty($input['layout']['disable_online_order']) ? true : false;
 		}
 		/**validate opening_times settings***/
-		if(isset($_POST[''.$this->pluginSlug.'_opening_times'])){		
+		if(isset($_POST[''.$this->pluginSlug.'_opening_times'])){
 			$options['opening_times_standard'] = array();//initialize array
 			ksort($input['opening_times_standard']);//just for consistency. not really necessary though
 			foreach($input['opening_times_standard'] as $k=>$v){
@@ -70,7 +71,7 @@
 				$options['opening_times_standard'][$k][$l]=wppizza_validate_24hourtime($m);
 				}
 			}
-	
+
 			$options['opening_times_custom'] = array();//initialize array
 			if(isset($input['opening_times_custom'])){
 			foreach($input['opening_times_custom'] as $k=>$v){
@@ -82,6 +83,19 @@
 					}
 				}
 			}}
+
+			$options['times_closed_standard'] = array();//initialize array
+			if(isset($input['times_closed_standard'])){
+				foreach($input['times_closed_standard'] as $k=>$v){
+					foreach($v as $l=>$m){
+						if($k=='day'){
+							$options['times_closed_standard'][$l][$k]=(int)$m;
+						}else{
+							$options['times_closed_standard'][$l][$k]=wppizza_validate_24hourtime($m);
+						}
+					}
+				}
+			}
 		}
 		/**validate order settings***/
 		if(isset($_POST[''.$this->pluginSlug.'_order'])){
@@ -140,9 +154,9 @@
 					$options['sizes'][$a][$c]['price']=wppizza_validate_float_only($d['price'],2);
 				}
 			}}
-		}	
+		}
 		/**validate additives ***/
-		if(isset($_POST[''.$this->pluginSlug.'_additives'])){	
+		if(isset($_POST[''.$this->pluginSlug.'_additives'])){
 			$options['additives'] = array();//initialize array
 			if(isset($input['additives'])){
 			foreach($input['additives'] as $a=>$b){
@@ -150,11 +164,13 @@
 			}}
 		}
 		/**validate localization ***/
-		if(isset($_POST[''.$this->pluginSlug.'_localization'])){	
+		if(isset($_POST[''.$this->pluginSlug.'_localization'])){
 			if(isset($input['localization'])){
+			$allowHtml=array('thank_you_p');/*array of items to allow html (such as tinymce textareas) */
 			foreach($input['localization'] as $a=>$b){
 				/*add new value , but keep desciption (as its not editable on frontend)*/
-				$options['localization'][$a]=array('descr'=>$options['localization'][$a]['descr'],'lbl'=>wppizza_validate_string($b));
-			}}			
+				if(in_array($a,$allowHtml)){$html=1;}else{$html=false;}
+				$options['localization'][$a]=array('descr'=>$options['localization'][$a]['descr'],'lbl'=>wppizza_validate_string($b,$html));
+			}}
 		}
 ?>

@@ -329,6 +329,8 @@
 				'open'=>array('17:00','17:00'),
 				'close'=>array('01:00','01:00')
 			),
+			'times_closed_standard'=>array(
+			),
 			'order'=>array(
 				'currency'=>'GBP',
 				'currency_symbol'=>'£',
@@ -360,13 +362,13 @@
 				'order_sms'=>''
 			),
 			'order_form'=>array(
-				0=>array('sort'=>0,'key'=>'cname','lbl'=>__('Name', $this->pluginLocale),'value'=>array(),'type'=>'text','enabled'=>true,'required'=>false),
-				1=>array('sort'=>1,'key'=>'cemail','lbl'=>__('Email', $this->pluginLocale),'value'=>array(),'type'=>'email','enabled'=>true,'required'=>false),
-				2=>array('sort'=>2,'key'=>'caddress','lbl'=>__('Address', $this->pluginLocale),'value'=>array(),'type'=>'textarea','enabled'=>true,'required'=>true),
-				3=>array('sort'=>3,'key'=>'ctel','lbl'=>__('Telephone', $this->pluginLocale),'value'=>array(),'type'=>'text','enabled'=>true,'required'=>true),
-				4=>array('sort'=>4,'key'=>'ccomments','lbl'=>__('Comments', $this->pluginLocale),'value'=>array(),'type'=>'textarea','enabled'=>true,'required'=>false),
-				5=>array('sort'=>5,'key'=>'ccustom1','lbl'=>__('Custom Field 1', $this->pluginLocale),'value'=>array(),'type'=>'text','enabled'=>false,'required'=>false),
-				6=>array('sort'=>6,'key'=>'ccustom2','lbl'=>__('Custom Field 2', $this->pluginLocale),'value'=>array(),'type'=>'text','enabled'=>false,'required'=>false)
+				0=>array('sort'=>0,'key'=>'cname','lbl'=>__('Name :', $this->pluginLocale),'value'=>array(),'type'=>'text','enabled'=>true,'required'=>false),
+				1=>array('sort'=>1,'key'=>'cemail','lbl'=>__('Email :', $this->pluginLocale),'value'=>array(),'type'=>'email','enabled'=>true,'required'=>false),
+				2=>array('sort'=>2,'key'=>'caddress','lbl'=>__('Address :', $this->pluginLocale),'value'=>array(),'type'=>'textarea','enabled'=>true,'required'=>true),
+				3=>array('sort'=>3,'key'=>'ctel','lbl'=>__('Telephone :', $this->pluginLocale),'value'=>array(),'type'=>'text','enabled'=>true,'required'=>true),
+				4=>array('sort'=>4,'key'=>'ccomments','lbl'=>__('Comments :', $this->pluginLocale),'value'=>array(),'type'=>'textarea','enabled'=>true,'required'=>false),
+				5=>array('sort'=>5,'key'=>'ccustom1','lbl'=>__('Custom Field 1 :', $this->pluginLocale),'value'=>array(),'type'=>'text','enabled'=>false,'required'=>false),
+				6=>array('sort'=>6,'key'=>'ccustom2','lbl'=>__('Custom Field 2 :', $this->pluginLocale),'value'=>array(),'type'=>'text','enabled'=>false,'required'=>false)
 			),
 			'sizes'=>$defaultSizes,
 			'additives'=>$defaultAdditives,

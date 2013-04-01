@@ -7,7 +7,7 @@
 			echo '<h4>'.__('Set Options as required', $this->pluginLocale).'</h4>';
 		}
 		if($v['id']=='opening_times'){
-			echo '<h4>'.__('Set your opening times. It will not be possible to place an order outside these times - USE 24 HOUR CLOCK. If you are closed on a given day set both times to be the same, if you are open 24 hours set times from 0:00 to 24:00', $this->pluginLocale).'</h4>';
+			echo '<h4>'.__('Set your opening times. It will not be possible to place an order outside these times - USE 24 HOUR CLOCK.', $this->pluginLocale).'<br/>'.__('If you are closed on a given day set both times to be the same, if you are open 24 hours set times from 0:00 to 24:00', $this->pluginLocale).'<br/>'.__('Ensure that the Wordpress timezone setting in Settings->Timezone is correct', $this->pluginLocale).'</h4>';
 		}
 		if($v['id']=='order'){
 			echo '<h4>'.__('Set currency, minimum delivery prices and email addresses', $this->pluginLocale).'</h4>';
