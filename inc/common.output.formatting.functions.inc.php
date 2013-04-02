@@ -1,6 +1,10 @@
 <?php
 	function wppizza_output_format_float($str,$type='price'){
-		if($type=='price'){$str=sprintf('%01.2f',$str);}
+		if($type=='price'){
+			
+			$str=number_format_i18n($str,2);
+			//$str=sprintf('%01.2f',$str);
+		}
 		return $str;
 	}
 	

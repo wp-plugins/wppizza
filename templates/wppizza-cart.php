@@ -14,13 +14,17 @@ if(isset($cart['innercartinfo'])){
 	$cartContents='<ul class="wppizza-cart-contents">';
 	foreach($cart['items'] as $k=>$item){
 		$cartContents.='<li class="wppizza-cart-item">';
-		$cartContents.='<span id="wppizza-cart-'.$k.'" class="wppizza-remove-from-cart" title="'.$txt['remove_from_cart']['lbl'].'">x</span>'.$item['count'].'x '.$item['name'].' <span class="wppizza-cart-item-size">'.$item['size'].'</span> <span class="wppizza-cart-item-price">'.$item['pricetotal'].' '.$cart['currency'].'</span>';
-		if(is_array($item['additionalinfo'])){
-			$cartContents.='<p class="wppizza-item-additional-info">';
+		$cartContents.='<span id="wppizza-cart-'.$k.'" class="wppizza-remove-from-cart" title="'.$txt['remove_from_cart']['lbl'].'">x</span>'.$item['count'].'x '.$item['name'].' ';
+		if($item['size']!=''){
+		$cartContents.='<span class="wppizza-cart-item-size">'.$item['size'].'</span> ';
+		}
+		$cartContents.='<span class="wppizza-cart-item-price">'.$item['pricetotal'].' '.$cart['currency'].'</span>';
+		if(is_array($item['additionalinfo']) && count($item['additionalinfo'])>0){
+			$cartContents.='<div class="wppizza-item-additional-info"><div class="wppizza-item-additional-info-icon"></div><div class="wppizza-item-additional-info-pad">'; 
 			foreach($item['additionalinfo'] as $addItem){
 				$cartContents.='<span>'.$addItem.'</span>';	
 			}
-			$cartContents.='</p>';
+			$cartContents.='</div></div>';
 		}
 		$cartContents.='</li>';
 	}

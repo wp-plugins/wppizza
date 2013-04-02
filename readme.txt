@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, order online, cash on delivery, multilingual
 Requires at least: PHP 5.2, WP 3.3 
 Tested up to: 3.5.1
-Stable tag: 1.1
+Stable tag: 1.1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -112,6 +112,13 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 
 == Changelog ==
+
+
+1.1.1  
+* localized number formatting  
+* added option to hide pricetier in frontend when there's only one
+* some css beautifications in cart  
+- 2nd April 2013  
 
 
 1.1  

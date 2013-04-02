@@ -31,11 +31,16 @@ if(isset($_POST['vars']['type']) && (($_POST['vars']['type']=='add' || $_POST['v
 		//$meta=get_post_meta($itemVars[1], $this->pluginSlug, true );
 		$itemName=get_the_title($itemVars[1]);
 		$groupId=$itemVars[1].'.'.$itemVars[3];//group items by id and size. ensure there's a seperator between (as 8 and 31 would otherwise be the same as 83 and 1. furthermore , dont use "-" as the js splits by this
-		$itemSizeName=$options['sizes'][$itemVars[2]][$itemVars[3]]['lbl'];
 		
 		/*get item set meta values to get price for this size**/
 		$meta_values = get_post_meta($itemVars[1],$this->pluginSlug,true);
 		$itemSizePrice=$meta_values['prices'][$itemVars[3]];
+		/**are we hiding pricetier name if only one available ?**/
+		if(count($meta_values['prices'])<=1 && $this->pluginOptions['layout']['hide_single_pricetier']==1){
+			$itemSizeName='';
+		}else{
+			$itemSizeName=$options['sizes'][$itemVars[2]][$itemVars[3]]['lbl'];
+		}
 		
 		/*add item to session array. adding lowercase name first to simplify sorting with asort**/
 		$_SESSION[$this->pluginSlug]['items'][$groupId][]=array('sortname'=>strtolower($itemName),'size'=>$itemVars[3],'price'=>$itemSizePrice,'sizename'=>$itemSizeName,'printname'=>$itemName,'id'=>$itemVars[1],'additionalinfo'=>'');

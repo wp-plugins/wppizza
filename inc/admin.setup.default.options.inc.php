@@ -313,6 +313,7 @@
 				'hide_cart_icon' => false,
 				'hide_prices' => false,
 				'hide_item_currency_symbol' => false,
+				'hide_single_pricetier' => false,
 				'disable_online_order' => false
 			),
 			'opening_times_standard'=>array(

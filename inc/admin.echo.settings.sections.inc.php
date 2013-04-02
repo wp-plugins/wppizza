@@ -20,6 +20,8 @@
 		
 		add_settings_field('hide_item_currency_symbol', '<b>'.__('Hide currency symbol next to each menu item:', $this->pluginLocale).'</b><br/>'.__('won\'t affect cart, summaries or emails', $this->pluginLocale).'', array( $this, 'wppizza_admin_settings_input'), 'layout', 'layout', 'hide_item_currency_symbol' );
 		
+		add_settings_field('hide_single_pricetier', '<b>'.__('Hide pricetier name and cart icon if item has only one size:', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'layout', 'layout', 'hide_single_pricetier' );
+		
 		add_settings_field('hide_prices', '<b>'.__('Hide prices altogether:', $this->pluginLocale).'</b><br/><span style="color:red">'.__('this will disable the adding of any item to the shoppingcart.', $this->pluginLocale).'</span><br/>'.__('Really only useful if you want to display your menu without offering online orders', $this->pluginLocale).'', array( $this, 'wppizza_admin_settings_input'), 'layout', 'layout', 'hide_prices' );
 		add_settings_field('disable_online_order', '<b>'.__('Completely disable online orders:', $this->pluginLocale).'</b><br/><span style="color:red">'.__('this will still display prices (unless set to be hidden above), but will disable shoppingcart and orderpage', $this->pluginLocale).'</span><br/>'.__('Useful if you want to display your menu and prices but without offering online orders.', $this->pluginLocale).'', array( $this, 'wppizza_admin_settings_input'), 'layout', 'layout', 'disable_online_order' );
 		

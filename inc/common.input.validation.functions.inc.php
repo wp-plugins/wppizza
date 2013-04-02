@@ -10,9 +10,22 @@
 /*****************************************************
 * Validates float
 * @str the input to check, @round [int] to round
+* save as float, regardless of what seperators/locale were used 
+* (also mainly to make it work with legacy versions of plugin)
 ******************************************************/
-	function wppizza_validate_float_only($str,$round=''){
-		$str=(float)preg_replace('/[^0-9.]*/','',$str);
+	function wppizza_validate_float_only($str,$round=''){		
+		$str=preg_replace('/[^0-9.,]*/','',$str);/*first get  rid of all chrs that should definitely not be in there*/
+		$str=str_replace(array('.',','),'#',$str);/*make string we can explode*/
+		$floatArray=explode('#',$str);/*explode so we know the last bit are decimals*/
+		$exLength=count($floatArray);
+		$str='';
+		for($i=0;$i<$exLength;$i++){
+			if($i>0 && $i==($exLength-1)){
+			$str.='.';//add decimal point if needed
+			}
+			$str.=''.$floatArray[$i].'';	
+		}		
+		$str=(float)$str;
 		if(is_int($round)){$str=round($str,$round);}
 		return $str;
 	}

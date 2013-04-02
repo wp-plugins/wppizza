@@ -25,6 +25,8 @@
 	}
 	/*check if we are showing prices*/
 	if($options['layout']['hide_prices']){$hidePrices=1;}
+	/*check if we are hiding pricetiers if there's only one*/
+	if($options['layout']['hide_single_pricetier']){$hidePricetier=1;}
 	/*check if we are showing cart icon*/
 	if($options['layout']['hide_cart_icon']){$hideCartIcon=' '.$post_type.'-no-cart';}else{$hideCartIcon='';}
 	/*check if we are showing currency next to item*/
@@ -137,7 +139,9 @@
 	   	<?php foreach($options['sizes'][$meta['sizes']] as $k=>$v){?>
 	   		<span id='<? echo $post_type."-".get_the_ID()."-".$meta['sizes']."-".$k ?>' class='<?php echo $post_type ?>-article-price <?php echo $priceClass ?>' <?php echo $priceTitle ?>'>
 	    		<span><? echo wppizza_output_format_float($meta['prices'][$k],'price')?></span>
+	    		<?php if(!isset($hidePricetier) || count($options['sizes'][$meta['sizes']])>1){ ?>
 	    		<div class='<?php echo $post_type ?>-article-price-lbl<?php echo $hideCartIcon?>'><?php echo $v['lbl']?></div>
+	   			<?php } ?>
 	   		</span>
 	   	<?php } ?>
 	   	<?php if(!isset($hideCurrencySymbol)){?>
