@@ -5,7 +5,7 @@ Description: Maintain your restaurant menu online and accept cash on delivery or
 Author: ollybach
 Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Author URI: http://www.wp-pizza.com
-Version: 1.1.1
+Version: 1.2
 License:
 
   Copyright 2012 ollybach (dev@wp-pizza.com)
@@ -58,7 +58,7 @@ class WPPizza extends WP_Widget {
 	********************************************************/
      function __construct() {
 		/**init constants***/
-		$this->pluginVersion='1.1.1';//increment in line with stable tag in readme and version above
+		$this->pluginVersion='1.2';//increment in line with stable tag in readme and version above
 	 	$this->pluginName="".WPPIZZA_NAME."";
 	 	$this->pluginSlug="".WPPIZZA_SLUG."";//set also in uninstall when deleting options
 		$this->pluginSlugCategoryTaxonomy="".WPPIZZA_TAXONOMY."";//also on uninstall delete wppizza_children as well as widget
@@ -165,12 +165,12 @@ class WPPizza extends WP_Widget {
 		[insert options and defaults on first install]
 	******************************************************/
 	public function wppizza_admin_options_init(){
-		
+
 		$options = $this->pluginOptions;
 		if($options==0){/*no options db entry->do stuff*/
 			$install_options=1;
 			/****set nag notice to 1 as its first install*******/
-			$this->pluginNagNotice=1;			
+			$this->pluginNagNotice=1;
 			/**include and insert default options***/
 			require_once(WPPIZZA_PATH .'inc/admin.setup.default.options.inc.php');
 			/*insert $options;*/
@@ -189,7 +189,7 @@ class WPPizza extends WP_Widget {
 				/**get default options***/
 				require_once(WPPIZZA_PATH .'inc/admin.setup.default.options.inc.php');
 				/**compare table options against default options and delete/add as required***/
-				require_once(WPPIZZA_PATH .'inc/admin.update.options.inc.php');			
+				require_once(WPPIZZA_PATH .'inc/admin.update.options.inc.php');
 				/**update options**/
 				update_option($this->pluginSlug, $update_options );
 			}
@@ -202,13 +202,13 @@ class WPPizza extends WP_Widget {
 		if($this->pluginOptions['plugin_data']['nag_notice']!=0 || $this->pluginOptions==0){
 			add_action('admin_notices', array( $this, 'wppizza_install_notice') );
 			add_action('admin_head', array($this, 'wppizza_dismiss_notice_js') );
-			add_action('wp_ajax_wppizza_dismiss_notice', array($this, 'wppizza_dismiss_notice'));    
+			add_action('wp_ajax_wppizza_dismiss_notice', array($this, 'wppizza_dismiss_notice'));
     	}
   	}
 
 	/* plugin admin screen notices/nags */
     function wppizza_install_notice() {
-			/**get url to info screens**/    	
+			/**get url to info screens**/
    			$pluginInfoInstallationUrl = admin_url( 'plugin-install.php?tab=plugin-information&plugin='.WPPIZZA_SLUG.'&section=installation&TB_iframe=true&width=600&height=800');
 			$pluginInfoFaqUrl = admin_url( 'plugin-install.php?tab=plugin-information&plugin='.WPPIZZA_SLUG.'&section=faq&TB_iframe=true&width=600&height=800');
 
@@ -225,7 +225,7 @@ class WPPizza extends WP_Widget {
 			$pluginUpdatedNotice.='</div>';
 			$pluginUpdatedNotice=__($pluginUpdatedNotice, $this->pluginLocale);
 			print"".$pluginUpdatedNotice."";
-    }	
+    }
     function wppizza_dismiss_notice_js () {
         $js="";
         $js.="<script type='text/javascript' >".PHP_EOL."";
@@ -246,7 +246,7 @@ class WPPizza extends WP_Widget {
     	$options['plugin_data']['nag_notice']=0;
     	update_option($this->pluginSlug,$options);
         die();
-    }    
+    }
 	/*******************************************************
 		[register custom post type]
 	******************************************************/
@@ -893,7 +893,7 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 *		[empty custom posts]
 *
 *********************************************************/
-	public function wppizza_empty_taxonomy($deleteAttachments=false,$truncateOrders=false){		
+	public function wppizza_empty_taxonomy($deleteAttachments=false,$truncateOrders=false){
 		require_once(WPPIZZA_PATH .'inc/admin.empty.taxonomy.data.php');
 	}
 /*********************************************************

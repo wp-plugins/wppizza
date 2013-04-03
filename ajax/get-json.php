@@ -88,20 +88,33 @@ if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='sendorder'){
 	/**currency***/
 	$currency=$cartContents['currency'];
 	/**now timespamp and date**/
-	$timestamp=time();
-	$nowdate=date("d-M-y H:i:s",$timestamp);
+	$timestamp=current_time('timestamp');
+	$nowdate=date("d-M-Y H:i:s",$timestamp);
 
 
 
 		/*********************************************************************
 			customer details
 		**********************************************************************/
-		$customer_details ="";
+		$customer_details ="".PHP_EOL.PHP_EOL;
 		$protectedKeys=array();
+		ksort($options['order_form']);
 		foreach($options['order_form'] as $k=>$v){
 			if(($v['enabled'])){
 				$protectedKeys[$v['key']]=1;
-				$customer_details .="".$v['lbl']." ".(strip_tags($params[$v['key']]))."".PHP_EOL;
+				
+				if($v['type']!='textarea'){/*pad non-textareas*/
+					$strPartLeft=''.$v['lbl'].'';
+					$spaces=45-strlen($strPartLeft);
+					$strPartRight=''.strip_tags($params[$v['key']]);
+				
+					$customer_details.=''.$strPartLeft.''.str_pad($strPartRight,$spaces," ",STR_PAD_LEFT).''.PHP_EOL;				
+				}else{
+					$customer_details.=PHP_EOL;
+					$customer_details.=''.$v['lbl'].PHP_EOL;
+					$customer_details.= wordwrap(strip_tags($params[$v['key']]), 72, "\n", true);
+					$customer_details.=PHP_EOL;
+				}
 			}
 		}
 
@@ -112,12 +125,17 @@ if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='sendorder'){
 			<input type="hidden" name="distinct_name[label]" value="some value"/>';
 			<input type="text" name="distinct_name[value]" value="some value"/>';
 			(make sure there are no clashes with other input fields)
+			ought to make this "classable" at some point anyway
 		**********************************************************************/
 		$i=0;
 		foreach($params as $k=>$v){
 			if(is_array($v) && isset($v['label']) && isset($v['value']) && !isset($protectedKeys[$k]) ){
 				if($i==0){$customer_details .=PHP_EOL;}/*add one empty line for readabilities sake*/
-				$customer_details .="".$v['label']." ".(strip_tags($v['value']))."".PHP_EOL;
+				$strPartLeft=''.$v['label'].'';
+				$spaces=45-strlen($strPartLeft);
+				$strPartRight=''.strip_tags($v['value']);
+				
+				$customer_details.=''.$strPartLeft.''.str_pad($strPartRight,$spaces," ",STR_PAD_LEFT).''.PHP_EOL;				
 			$i++;
 			}
 		}
@@ -126,13 +144,13 @@ if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='sendorder'){
 		/*****************************************************************************************
 			order details
 		****************************************************************************************/
-		$order=PHP_EOL."===============".$options['localization']['order_details']['lbl']."=================".PHP_EOL;
-		$order.="".$nowdate."".PHP_EOL.PHP_EOL;
+		$order=PHP_EOL."===============".$options['localization']['order_details']['lbl']."===========================".PHP_EOL;
+		$order.=PHP_EOL.$nowdate."".PHP_EOL.PHP_EOL;
 
 		foreach($cartContents['items'] as $k=>$v){
 			/*tabs dont seem to work reliably, so lets try to put some even space between order item and total**/
-			$strPartLeft=''.$v['count'].'x '.$v['name'].' '.$v['size'].' @ '.$currency.''.wppizza_output_format_float($v['price']).'';
-			$spaces=50-strlen($strPartLeft);
+			$strPartLeft=''.$v['count'].'x '.$v['name'].' '.$v['size'].'  '.$currency.''.wppizza_output_format_float($v['price']).'';
+			$spaces=55-strlen($strPartLeft);
 			$strPartRight=''.$currency.''.wppizza_output_format_float($v['pricetotal']).'';
 			$order.=''.$strPartLeft.''.str_pad($strPartRight,$spaces," ",STR_PAD_LEFT).''.PHP_EOL;
 			if(isset($v['additionalinfo']) && is_array($v['additionalinfo'])){
@@ -158,8 +176,8 @@ if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='sendorder'){
 		$order.=$cartContents['order_value']['total']['lbl'].': '.$currency.''.($cartContents['order_value']['total']['val']).PHP_EOL;
 
 
-		$order.=PHP_EOL.PHP_EOL;
-		$order.=PHP_EOL."===========================================".PHP_EOL;
+		$order.=PHP_EOL;
+		$order.=PHP_EOL."=====================================================".PHP_EOL;
 
 
 

@@ -285,8 +285,8 @@
 				[as we are updating the pugin, we use the options in table
 				as we are not adding any new pages and categories above]
 			**************************************************************************************/
-			$category_sort=$options['layout']['category_sort'];	
-			$defaultSizes=$options['sizes'];	
+			$category_sort=$options['layout']['category_sort'];
+			$defaultSizes=$options['sizes'];
 			$defaultAdditives=$options['additives'];
 			$orderPageId=$options['order']['orderpage'];
 		}
@@ -386,7 +386,7 @@
 				'alert_closed'=>array(
 					'descr'=>__('Menu Item: alert when trying to add to cart but shop is closed (only displayed when shoppingcart is displayed on page)', $this->pluginLocale),
 					'lbl'=>__('sorry, we are currently closed', $this->pluginLocale)
-				),					
+				),
 				'previous'=>array(
 					'descr'=>__('Menu Pagination : previous page', $this->pluginLocale),
 					'lbl'=>__('< previous', $this->pluginLocale)
@@ -427,7 +427,7 @@
 					'lbl'=>__('please enter the required information below', $this->pluginLocale)
 				),
 				'required_field'=>array(
-					'descr'=>__('Order Page: message when required field is missing', $this->pluginLocale),				
+					'descr'=>__('Order Page: message when required field is missing', $this->pluginLocale),
 					'lbl'=>__('this is a required field', $this->pluginLocale)
 				),
 				'thank_you'=>array(
@@ -454,7 +454,7 @@
 				),
 
 				'free_delivery_for_orders_of'=>array(
-					'descr'=>__('Label Info: i.e. "free delivery for orders over"...', $this->pluginLocale),				
+					'descr'=>__('Label Info: i.e. "free delivery for orders over"...', $this->pluginLocale),
 					'lbl'=>__('free delivery for orders over', $this->pluginLocale)
 				),
 				'minimum_order'=>array(
@@ -485,7 +485,7 @@
 				'openinghours_closed'=>array(
 					'descr'=>__('Openinghours: text to display when shop is closed that day ', $this->pluginLocale),
 					'lbl'=>__('closed', $this->pluginLocale)
-				)					
+				)
 
 			)
 		);

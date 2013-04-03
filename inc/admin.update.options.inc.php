@@ -17,7 +17,7 @@
 	/****************************************************************************
 	$update_options now holds the old options plus the added new defaults options
 	*****************************************************************************/
-	
+
 	/**********************************************
 		[now lets remove obsolete options]
 	***********************************************/
@@ -29,8 +29,8 @@
 	$arr1_flat = wppizza_flatten($update_options);
 	$arr2_flat = wppizza_flatten($removed_options);
 	/*get difference*/
-	$ret = array_diff_assoc($arr1_flat, $arr2_flat);	
-	
+	$ret = array_diff_assoc($arr1_flat, $arr2_flat);
+
 	/**unflatten->final options**/
 	$update_options = wppizza_inflate($ret);
 	/******************************************************************************************************
@@ -38,4 +38,27 @@
 	* $update_options now holds old options plus the added new defaults options minus the removed options
 	*
 	******************************************************************************************************/
+
+
+	/**override some options as we do NOT want to remove them*/
+	/*although the array is set above, it's empty, the dimensions of it are user generated and we do not want to loose these values when comparing / updating**/
+	/*if we however ever not use any of these options above, we can delete the relevant one here**/
+	if(isset($options['times_closed_standard'])){
+		$update_options['times_closed_standard']=$options['times_closed_standard'];
+	}
+	if(isset($options['opening_times_custom'])){
+		$update_options['opening_times_custom']=$options['opening_times_custom'];
+	}
+	if(isset($options['order']['order_email_to'])){
+		$update_options['order']['order_email_to']=$options['order']['order_email_to'];
+	}
+	if(isset($options['order']['order_email_bcc'])){
+		$update_options['order']['order_email_bcc']=$options['order']['order_email_bcc'];
+	}
+	if(isset($options['plugin_data']['category_parent_page'])){
+		$update_options['plugin_data']['category_parent_page']=$options['plugin_data']['category_parent_page'];
+	}
+	/*this will always be an empty array, so distinctly set it here as the comparison function above will stripi it**/
+	$update_options['order']['discounts']['none']=array();
+	ksort($update_options['order']['discounts']);/*to keep a consistant order*/
 ?>
