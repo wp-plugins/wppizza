@@ -55,6 +55,48 @@ $options = $this->pluginOptions;
 					}
 				echo "</select>";
 			}
+			
+
+			if($field=='add_to_cart_on_title_click' ){
+				echo "<input id='".$field."' name='".$this->pluginSlug."[layout][".$field."]' type='checkbox'  ". checked($options['layout'][$field],true,false)." value='1' />";
+			}
+
+			if($field=='opening_times_format'){
+				echo"<span class='wppizza_label'>".__('Hours', $this->pluginLocale)."</span>";
+				echo "<select name='".$this->pluginSlug."[".$field."][hour]' />";
+						echo"<option value='G' ".selected($options[$field]['hour'],"G",false).">".__('24-hour format without leading zeros', $this->pluginLocale)."</option>";
+						echo"<option value='g' ".selected($options[$field]['hour'],"g",false).">".__('12-hour format without leading zeros', $this->pluginLocale)."</option>";
+						echo"<option value='H' ".selected($options[$field]['hour'],"H",false).">".__('24-hour format with leading zeros', $this->pluginLocale)."</option>";
+						echo"<option value='h' ".selected($options[$field]['hour'],"h",false).">".__('12-hour format with leading zeros', $this->pluginLocale)."</option>";
+				echo "</select>";
+				echo "<br/>";
+				echo"<span class='wppizza_label'>".__('Separator', $this->pluginLocale)."</span>";
+				echo "<select name='".$this->pluginSlug."[".$field."][separator]' />";
+						echo"<option value='' ".selected($options[$field]['separator'],"",false).">".__('no seperator', $this->pluginLocale)."</option>";
+						echo"<option value='&nbsp;' ".selected($options[$field]['separator'],"&nbsp;",false).">".__('space', $this->pluginLocale)."</option>";
+						echo"<option value=':' ".selected($options[$field]['separator'],":",false).">:</option>";
+						echo"<option value='.' ".selected($options[$field]['separator'],".",false).">.</option>";
+						echo"<option value='-' ".selected($options[$field]['separator'],"-",false).">-</option>";
+						echo"<option value=';' ".selected($options[$field]['separator'],";",false).">;</option>";
+				echo "</select>";				
+				echo "<br/>";
+				echo"<span class='wppizza_label'>".__('Minutes', $this->pluginLocale)."</span>";
+				echo "<select name='".$this->pluginSlug."[".$field."][minute]' />";
+						echo"<option value='' ".selected($options[$field]['minute'],"",false).">".__('hide minutes', $this->pluginLocale)."</option>";
+						echo"<option value='i' ".selected($options[$field]['minute'],"i",false).">".__('show minutes', $this->pluginLocale)."</option>";
+				echo "</select>";
+				echo "<br/>";
+				echo"<span class='wppizza_label'>".__('Show AM/PM ?', $this->pluginLocale)."</span>";
+				echo "<select name='".$this->pluginSlug."[".$field."][ampm]' />";
+						echo"<option value='' ".selected($options[$field]['ampm'],"",false).">".__('do not show', $this->pluginLocale)."</option>";
+						echo"<option value='a' ".selected($options[$field]['ampm'],"a",false).">".__('lowercase', $this->pluginLocale)."</option>";
+						echo"<option value='A' ".selected($options[$field]['ampm'],"A",false).">".__('UPPERCASE', $this->pluginLocale)."</option>";
+						echo"<option value=' a' ".selected($options[$field]['ampm']," a",false).">".__('lowercase (with leading space)', $this->pluginLocale)."</option>";
+						echo"<option value=' A' ".selected($options[$field]['ampm']," A",false).">".__('UPPERCASE (width leading space)', $this->pluginLocale)."</option>";
+				echo "</select>";
+			}			
+			
+			
 			if($field=='placeholder_img'){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[layout][".$field."]' type='checkbox'  ". checked($options['layout'][$field],true,false)." value='1' />";
 			}

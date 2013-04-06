@@ -122,7 +122,8 @@
 .wppizza-article-price-lbl:after{content: url('img/cart-black-12-12.png');position: relative;top: 2px;margin-left: 2px;}
 /*hide cart icon if set in settings overriding above class*/
 .wppizza-no-cart:after{content:'' !important;}
-
+/*add cursor if we allow trigger by menu title*/
+.wppizza-trigger-click{cursor:pointer;}
 
 .wppizza-article-price-currency{font-size:160%;line-height:200%;margin:0 10px;}
 /***footnotes (additives etc)**/

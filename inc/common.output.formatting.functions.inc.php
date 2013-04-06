@@ -1,13 +1,13 @@
 <?php
 	function wppizza_output_format_float($str,$type='price'){
 		if($type=='price'){
-			
+
 			$str=number_format_i18n($str,2);
 			//$str=sprintf('%01.2f',$str);
 		}
 		return $str;
 	}
-	
+
 	function wppizza_currencies($selected='',$returnValue=null){
 		$items['---none---']='';
 		$items['USD']='$';
@@ -123,7 +123,7 @@
 		$items['VND']='&#8363;';
 		$items['YER']='&#65020;';
 		$items['ZWD']='Z$';
-				
+
 		if(!$returnValue){
 		ksort($items);
 	    foreach($items as $key=>$val){
@@ -131,18 +131,18 @@
 			$options[]=array('selected'=>''.$d.'','value'=>''.$val.'','id'=>''.$key.'');
 	    }}
 	    if($selected!='' && $returnValue){
-	    	$options=array('key'=>$selected,'val'=>$items[$selected]);	
+	    	$options=array('key'=>$selected,'val'=>$items[$selected]);
 	    }
 		return $options;
-	}	
-	/** * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+	}
+	/** * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 		a bit hackish mind you, but thank's any way to the website
 		that provided the original if i find it again, i insert the address here...
 	* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
 	function wppizza_frontendOpeningTimes($options){
 		$str='';
 		/**group identical opening times**/
-		foreach($options['opening_times_standard'] as $k=>$v){			
+		foreach($options['opening_times_standard'] as $k=>$v){
 			if($k==0){$k=7;}/*for sorting reasons , set sunday temporarily to 7 here**/
 			if(!isset($times[''.$v['open'].'|'.$v['close'].''])){
 				$times[''.$v['open'].'|'.$v['close'].'']=array();
@@ -158,7 +158,7 @@
 		}
 		/**sort by first day in array so we start with a monday regardless**/
 		asort($grouped);
-		foreach($grouped as $k=>$v){	
+		foreach($grouped as $k=>$v){
 			foreach(explode(",",$v['consecutivedays']) as $b=>$c){
 				$consec=explode("-",$c);
 				$open=explode("|",$k);
@@ -169,18 +169,37 @@
 				if(count($consec)==1){
 					$str.=' '.wpizza_format_weekday($consec[0],'%a').'';
 				}
-				if($open[0]==$open[1]){	
+				if($open[0]==$open[1]){
 					$str.=' '.$options['localization']['openinghours_closed']['lbl'].'';
 				}else{
-					$str.=' '.ltrim($open[0],0).'-'.ltrim($open[1],0).'';//loose leading zeros
+					$str.=' '.wpizza_format_time($open[0],$options['opening_times_format']).'-'.wpizza_format_time($open[1],$options['opening_times_format']).'';//loose leading zeros
 				}
 			}
 		}
 		return trim($str);
 	}
-	
+	/**format time output**/
+	function wpizza_format_time($time,$timeFormat){
+		if(!isset($timeFormat) || !is_array($timeFormat)){
+			$fHour='G';
+			$fSeparator=':';
+			$fMinute='i';
+			$fAMPM='';
+		}else{
+			$fHour=$timeFormat['hour'];
+			$fSeparator=$timeFormat['separator'];
+			$fMinute=$timeFormat['minute'];
+			$fAMPM=$timeFormat['ampm'];
+		}
+		$hm=explode(":",$time);
+		$t=mktime($hm[0],$hm[1],0,0,0,0);
+		$time=date(''.$fHour.''.$fSeparator.''.$fMinute.''.$fAMPM.'',$t);
+		
+	return $time;
+	}
+
 	/**makes a text representation out of int**/
-	function wpizza_format_weekday($int,$format ){	
+	function wpizza_format_weekday($int,$format ){
 		/*let's use static timestamps, no need to use the overhead of a function to generate really **/
 		$day[1]=946900800;//mon (3rd jan 2000 12:00)
 		$day[2]=946987200;//tue (4th jan 2000 12:00)
@@ -190,14 +209,14 @@
 		$day[6]=947332800;//sat (8th jan 2000 12:00)
 		$day[7]=947419200;//sun (9th jan 2000 12:00) if using 7 as sunday
 		$day[0]=947419200;//sun (9th jan 2000 12:00) if using 0 as sunday
-		
+
 		$wDayFormatted=strftime($format,$day[$int]);
-	
+
 		return $wDayFormatted;
 	}
 function wpizza_days_concat( Array $days ){
 
-    // Define all days of the week, st sun(0) to 7 
+    // Define all days of the week, st sun(0) to 7
     static $all_days = array('1', '2', '3', '4', '5', '6','7');
 
     // prepare our output
@@ -205,7 +224,7 @@ function wpizza_days_concat( Array $days ){
 
     // loop through all days of the week
     foreach ( $all_days as $i => $day ){
-        // if it is included, 
+        // if it is included,
         if ( in_array( $day, $days ) ){
             $output[] = $day;
         }else{/*if not*/
@@ -228,16 +247,16 @@ function wpizza_days_concat( Array $days ){
     $output = implode( ',', $output );
 
 return $output;
-}  	
+}
 
 /**are we currntly open ?*/
 function wpizza_are_we_open($standard,$custom,$breaks){
 	$serverTime=current_time('timestamp');
 	$currentlyOpen=0;//initialize as closed
-	$todayWday=date("w");
-	$d=date("d");
-	$m=date("m");
-	$Y=date("Y");	
+	$todayWday=date("w",$serverTime);
+	$d=date("d",$serverTime);
+	$m=date("m",$serverTime);
+	$Y=date("Y",$serverTime);
 	/**make sunday 7 instead of 0 to aid sorting**/
 	if($todayWday==0){$yesterdayWday=6;}else{$yesterdayWday=($todayWday-1);}
 	/**get the opening times today, as well as the spillover from yesterday
@@ -248,14 +267,14 @@ function wpizza_are_we_open($standard,$custom,$breaks){
 	$todayEndTime	= mktime(23, 59, 59, $m , $d, $Y);
 	$todayDate	= ''.$Y.'-'.$m.'-'.$d.'';
 	$yesterdayDate	= date("Y-m-d",mktime(12, 0, 0, $m , $d-1, $Y));
-	
+
 	/**now we first check if these dates have custom dates opening times****/
 	if(count($custom)>0){
 		$yesterdayCustom=array_search($yesterdayDate,$custom['date']);
 		$todayCustom=array_search($todayDate,$custom['date']);
 	}
 	/*if we have found dates in custom dates array,make start and end and use these**/
-	if(isset($yesterdayCustom) && $yesterdayCustom!==false){		
+	if(isset($yesterdayCustom) && $yesterdayCustom!==false){
 		$t=wpizza_get_opening_times($custom['open'][$yesterdayCustom],$custom['close'][$yesterdayCustom],$d,$m,$Y,'yesterday');
 		if($t){
 			$openToday[]=array('start'=>$t['start'],'end'=>$t['end']);
@@ -264,7 +283,7 @@ function wpizza_are_we_open($standard,$custom,$breaks){
 		$t=wpizza_get_opening_times($standard[$yesterdayWday]['open'],$standard[$yesterdayWday]['close'],$d,$m,$Y,'yesterday');
 		if($t){
 			$openToday[]=array('start'=>$t['start'],'end'=>$t['end']);
-		}		
+		}
 	}
 	if(isset($todayCustom) && $todayCustom!==false){
 		$t=wpizza_get_opening_times($custom['open'][$todayCustom],$custom['close'][$todayCustom],$d,$m,$Y,'today');
@@ -273,8 +292,8 @@ function wpizza_are_we_open($standard,$custom,$breaks){
 		$t=wpizza_get_opening_times($standard[$todayWday]['open'],$standard[$todayWday]['close'],$d,$m,$Y,'today');
 		if($t){
 			$openToday[]=array('start'=>$t['start'],'end'=>$t['end']);
-		}		
-	}	
+		}
+	}
 
 	/*********check if we have added some breaks/siestas whatever you want to call it***/
 	if(count($breaks)>0){
@@ -284,7 +303,7 @@ function wpizza_are_we_open($standard,$custom,$breaks){
 				if($v['day']=='-1'){
 					$t=wpizza_get_opening_times($v['close_start'],$v['close_end'],$d,$m,$Y,'today');
 					if($t['start']<=$serverTime && $t['end']>=$serverTime){
-						$currentlyOpen=0;	
+						$currentlyOpen=0;
 						return $currentlyOpen;
 					}
 				}
@@ -300,20 +319,19 @@ function wpizza_are_we_open($standard,$custom,$breaks){
 					}
 				}
 			}
-		
+
 		}
 	}
-			
-	/********we've done the siest/break check, now check if current time is in the $openToday array between start and end***/
+	/********we've done the siesta/break check, now check if current time is in the $openToday array between start and end***/
 	foreach($openToday as $k=>$times){
 		if( $serverTime >= $times['start'] && $serverTime <= $times['end']){
 			$currentlyOpen=1;
-		return $currentlyOpen;	
-		}	
+		return $currentlyOpen;
+		}
 	}
 
 	return $currentlyOpen;
-	
+
 }
 
 /* takes 01:45, 3:45 format, no seconds as currently not needed**/
@@ -325,11 +343,11 @@ function wpizza_get_opening_times($starttime,$endtime,$d,$m,$Y,$day='today'){
   if($starttime==$endtime) {
 	$openingtime=false;
  }
- 
+
  /*for easier comparison, change 00 in endtime hour to 24 if thats the case*/
  if((int)$end[0]==0){$end24=24;}else{$end24=$end[0];}
  /*compare. if start hour>end hour OR starthour==endhour AND startminute>endminute , opening times are crossing midnight**/
- if($start[0]>$end24 || ($start[0]==$end24 && $start[1]>$end[1])) {
+ if((int)$start[0]>$end24 ||  ($start[0]==$end[0] && $start[1]>$end[1])) {
  	$openingTimesCrossMidnight=1;
  }
  if(isset($openingTimesCrossMidnight)){
@@ -350,7 +368,7 @@ function wpizza_get_opening_times($starttime,$endtime,$d,$m,$Y,$day='today'){
 // 	if($day=='yesterday'){
 // 		$openingtime['start']=mktime(23,0,0,$m,$d,$Y);
 // 		$openingtime['end']=mktime(23,0,0,$m,$d,$Y);
-// 	}	
+// 	}
  }
 
 	return $openingtime;
@@ -444,7 +462,7 @@ function wppizza_order_summary($session,$options,$ajax=null){
 		foreach($groupitems as $v){
 			$cartItems[''.$groupid.''][]=array('sortname'=>$v['sortname'],'size'=>$v['size'],'sizename'=>$v['sizename'],'printname'=>$v['printname'],'price'=>$v['price'],'additionalinfo'=>$v['additionalinfo']);
 		}
-	}	
+	}
 	foreach($cartItems as $k=>$v){
 		$groupedItems[$k]=array('sortname'=>$cartItems[$k][0]['sortname'],'size'=>$cartItems[$k][0]['size'],'sizename'=>$cartItems[$k][0]['sizename'],'printname'=>$cartItems[$k][0]['printname'],'price'=>$cartItems[$k][0]['price'],'count'=>count($cartItems[$k]),'total'=>(count($cartItems[$k])*$cartItems[$k][0]['price']),'additionalinfo'=>$cartItems[$k][0]['additionalinfo'])	;
 	}
@@ -461,13 +479,13 @@ function wppizza_order_summary($session,$options,$ajax=null){
 	}
 	/**********************************
 		[discounts]
-	**********************************/	
+	**********************************/
 	/** no discount**/
 		$discountLabel='';
 		$discountValue='';
 		if($options['order']['discount_selected']=='none'){
 				$discountApply=0;
-		}	
+		}
 		/** percentage discount**/
 		if($options['order']['discount_selected']=='percentage'){
 			/**sort highest to lowest and check if it aplies, if it does, apply and stop loop (only want to appply one!**/
@@ -486,9 +504,9 @@ function wppizza_order_summary($session,$options,$ajax=null){
 				if($v['discount']>0){// && $v['min_total']>0
 				$summary['pricing_discounts'][]="".$options['localization']['spend']['lbl']." <span>".$options['order']['currency_symbol']."".wppizza_output_format_float($v['min_total'])."</span> ".$options['localization']['save']['lbl']." <span>".($v['discount'])."%</span>";
 				}
-			}				
-			
-		}	
+			}
+
+		}
 		/** value discount**/
 		if($options['order']['discount_selected']=='standard'){
 			/**sort highest to lowest and check if it aplies, if it does, apply and stop loop (only want to appply one!**/
@@ -501,17 +519,17 @@ function wppizza_order_summary($session,$options,$ajax=null){
 				break;
 				}
 			}
-			/**get all available discounts to display***/				
+			/**get all available discounts to display***/
 			sort($options['order']['discounts']['standard']['discounts']);
 			foreach($options['order']['discounts']['standard']['discounts'] as $k=>$v){
 				if($v['discount']>0){//&& $v['min_total']>0
 					$summary['pricing_discounts'][]="".$options['localization']['spend']['lbl']." <span>".$options['order']['currency_symbol']."".wppizza_output_format_float($v['min_total'])."</span> ".$options['localization']['save']['lbl']." <span>".wppizza_output_format_float($v['discount'])." ".$options['order']['currency_symbol']."</span>";
 				}
-			}				
+			}
 		}
 		if(isset($discountApply) && $discountApply>0){
 			$discountLabel=$options['localization']['discount']['lbl'];
-			$discountValue=wppizza_output_format_float($discountApply);	
+			$discountValue=wppizza_output_format_float($discountApply);
 		}
 
 			/**********************************
@@ -519,7 +537,7 @@ function wppizza_order_summary($session,$options,$ajax=null){
 			**********************************/
 			$deliveryLabel=$options['localization']['free_delivery']['lbl'];//initialize var
 			$deliveryCharges='';
-			
+
 			if($options['order']['delivery_selected']=='standard'){//standard
 				/**delivery settings to display with discount options somewhere*/
 				if($options['order']['delivery']['standard']['delivery_charge']>0){
@@ -529,7 +547,7 @@ function wppizza_order_summary($session,$options,$ajax=null){
 			}
 			if($options['order']['delivery_selected']=='minimum_total'){//minimum total
 				if($options['order']['delivery']['minimum_total']['deliver_below_total']){
-					if($session['total_price_items']<$options['order']['delivery']['minimum_total']['min_total']){	
+					if($session['total_price_items']<$options['order']['delivery']['minimum_total']['min_total']){
 						$deliveryLabel=$options['localization']['delivery_charges']['lbl'];
 						$deliveryCharges=wppizza_output_format_float($options['order']['delivery']['minimum_total']['min_total']-$session['total_price_items']);
 					}
@@ -538,12 +556,12 @@ function wppizza_order_summary($session,$options,$ajax=null){
 				if($options['order']['delivery']['minimum_total']['min_total']>0){
 					$summary['pricing_delivery']="".$options['localization']['free_delivery_for_orders_of']['lbl']." <span>".$options['order']['currency_symbol']."".wppizza_output_format_float($options['order']['delivery']['minimum_total']['min_total'])."</span>";
 				}else{
-					$summary['pricing_delivery']="".$options['localization']['free_delivery']['lbl']."";	
-				}				
+					$summary['pricing_delivery']="".$options['localization']['free_delivery']['lbl']."";
+				}
 			}
 
 
-	
+
 	/****************************************************
 		[get total order value]
 	****************************************************/
@@ -568,23 +586,23 @@ function wppizza_order_summary($session,$options,$ajax=null){
 		}
 		if(count($summary['items'])>0){//open and stuff in cart -> check min value reached in do/dont display button and info
 			/*deliver when set to always deliver,  minimum value has been reached, or fixed delivery charges*/
-			if(	
+			if(
 				(
 				$options['order']['delivery_selected']=='minimum_total' &&
 					(
 						$options['order']['delivery']['minimum_total']['deliver_below_total'] ||
 						(!$options['order']['delivery']['minimum_total']['deliver_below_total'] && $session['total_price_items']>=$options['order']['delivery']['minimum_total']['min_total'])
 					)
-				
-				) || 
+
+				) ||
 				$options['order']['delivery_selected']=='standard'
-	
+
 			){
 				if($options['order']['orderpage']){//go to page
-					//$str['button']=get_page_link($options['order']['orderpage']);						
+					//$str['button']=get_page_link($options['order']['orderpage']);
 					$summary['button']='<a href="'.get_page_link($options['order']['orderpage']).'">';
 					$summary['button'].='<input class="btn btn-primary" type="button" value="'.$options['localization']['place_your_order']['lbl'].'" />';
-					$summary['button'].='</a>';			
+					$summary['button'].='</a>';
 				}
 				/**too much hassle to make this work on every theme. better to make the user add [wppizza type=orderpage] to a dedicated page.**/
 //				else{//open ajax
@@ -592,9 +610,9 @@ function wppizza_order_summary($session,$options,$ajax=null){
 //				}
 			}else{
 			/*minimum order not reached*/
-				$summary['nocheckout']=''.$options['localization']['minimum_order']['lbl'].' '.wppizza_output_format_float($options['order']['delivery']['minimum_total']['min_total']).' '.$options['order']['currency_symbol'].'';	
+				$summary['nocheckout']=''.$options['localization']['minimum_order']['lbl'].' '.wppizza_output_format_float($options['order']['delivery']['minimum_total']['min_total']).' '.$options['order']['currency_symbol'].'';
 			}
-		
+
 		}
 
 
@@ -632,24 +650,24 @@ function wppizza_array_multisort($array, $cols){
 /***********************************************************************************
 	[ helper to return single dimension localization variables]
 	[ could also be used of course to return any 2 dimensional array as single dimension arr]
-	
+
 	localization variables tend to be organized like this:
 	'some_key'=>array(
 			'descr'=>__('some description', $this->pluginLocale),
 			'lbl'=>__('some label', $this->pluginLocale)
 	),
-		
+
 	so to access the lbl, one has to write something like
 	$txt=$this->pluginOptions
-	
+
 	echo $txt['localization']['some_key']['lbl']
 	or
 	echo $txt['localization']['some_key']['descr']
-	
+
 	or some such
 	with this helper you can write:
 	$txt=wppizza_output_localization_vars($this->pluginOptions['localization'],'lbl')
-	
+
 	echo $txt['some_key'];
 	a lot cleaner
 @ arr: two dimensional array
@@ -658,7 +676,7 @@ function wppizza_array_multisort($array, $cols){
 function wppizza_return_single_dimension_array($arr, $key='lbl'){
 	$array=array();
 	if(is_array($arr)){
-	foreach($arr as $k=>$v)	
+	foreach($arr as $k=>$v)
 		$array[$k]=$v[$key];
 	}
 	return $array;

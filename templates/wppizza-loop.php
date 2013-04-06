@@ -33,8 +33,8 @@
 	if($options['layout']['hide_item_currency_symbol']){$hideCurrencySymbol=1;}	
 	/*check if online order has been enabled and if so , remove title and classes to disable adding to cart js*/
 	if($options['layout']['disable_online_order']){$priceClass=''; $priceTitle='';}else{$priceClass=' '.$post_type.'-add-to-cart'; $priceTitle=' title="'.$txt['add_to_cart']['lbl'].'"';}
-	
-
+	/**add trigger adding to cart from title (h2) when there's only one pricetier***/
+	if($options['layout']['add_to_cart_on_title_click']){$clickTrigger=1;}
 
 
 	/****************************************************************
@@ -110,6 +110,20 @@
 	while ( $the_query->have_posts() ) : $the_query->the_post();
 	/*get meta data for this post**/
 	$meta=get_post_meta(get_the_ID(), $post_type, true );
+	$numberOfSizes=count($options['sizes'][$meta['sizes']]);
+	/**if selected in admin, make click on title add to cart or 
+	show alert when there are more than one size**/
+	$clickTriggerClass='';
+	$clickTriggerId='';
+	if(isset($clickTrigger)){
+	 	/*trigger add to cart**/
+	 	if($numberOfSizes==1){
+			$clickTriggerClass=' '.$post_type.'-trigger-click';
+			$clickTriggerId=' id="'.$post_type.'-article-'.get_the_ID().'-'.$meta['sizes'].'-0"';
+	 	}
+	 	/*more than one size available, show alert**/
+	 	if($numberOfSizes>1){$clickTriggerClass=' '.$post_type.'-trigger-choose';}
+	}
 ?>
 	<article id="post-<?php the_ID(); ?>" <?php post_class(array(''.$post_type.'-article','entry-content')); ?>>
 <?php
@@ -155,7 +169,7 @@
 **********************************************/
 ?>
 		<div class="<?php echo $post_type ?>-article-info">
-		<h2>
+		<h2<?php echo $clickTriggerId ?> class="<?php echo $post_type ?>-article-title<?php echo $clickTriggerClass ?>">
 			<?php the_title(); ?>
 			<?php if(count($meta['additives'])>0){?>
 				<sup class='<?php echo $post_type ?>-article-additives' title='<? echo $txt['contains_additives']['lbl'] ?>'>*

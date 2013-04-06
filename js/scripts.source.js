@@ -67,6 +67,33 @@ jQuery(document).ready(function($){
 			alert(wppizza.msg.closed);
 		});
 	}
+	/***********************************************
+	*
+	*	[if we are trying to add to cart by clicking on the title
+	*	but there's mor than one size to choose from, display alert]
+	*	[provided  there's a cart on page and we are open]
+	***********************************************/
+	if ($(".wppizza-open").length > 0 &&  $(".wppizza-cart").length > 0){
+		/*more than one size->choose alert*/
+		$(document).on('click', '.wppizza-trigger-choose', function(e){
+			alert(wppizza.msg.choosesize);
+		});
+		/*only one size, trigger click*/
+		$(document).on('click', '.wppizza-trigger-click', function(e){
+			/*just loose wppizza-article- from id*/
+			var ArticleId=this.id.substr(16);
+			/**make target id*/
+			target=$('#wppizza-'+ArticleId+'');
+			/*trigger*/
+			target.trigger('click');
+		});	
+	}
+	/***********************************************
+	*
+	*	[expand image on hover]
+	*
+	***********************************************/
+
 	/*******************************
 	*	[validate and submit order page]
 	*******************************/

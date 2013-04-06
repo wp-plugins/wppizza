@@ -5,7 +5,7 @@ Description: Maintain your restaurant menu online and accept cash on delivery or
 Author: ollybach
 Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Author URI: http://www.wp-pizza.com
-Version: 1.2
+Version: 1.2.2
 License:
 
   Copyright 2012 ollybach (dev@wp-pizza.com)
@@ -58,7 +58,7 @@ class WPPizza extends WP_Widget {
 	********************************************************/
      function __construct() {
 		/**init constants***/
-		$this->pluginVersion='1.2';//increment in line with stable tag in readme and version above
+		$this->pluginVersion='1.2.2';//increment in line with stable tag in readme and version above
 	 	$this->pluginName="".WPPIZZA_NAME."";
 	 	$this->pluginSlug="".WPPIZZA_SLUG."";//set also in uninstall when deleting options
 		$this->pluginSlugCategoryTaxonomy="".WPPIZZA_TAXONOMY."";//also on uninstall delete wppizza_children as well as widget
@@ -493,7 +493,12 @@ class WPPizza extends WP_Widget {
 
     /**localized js***/
 		wp_enqueue_script( $this->pluginSlug );
-		$localized_array = array( 'ajaxurl' =>admin_url('admin-ajax.php'),'validate_error'=>array('email'=>''.$options['localization']['required_field']['lbl'].'','required'=>''.$options['localization']['required_field']['lbl'].''),'msg'=>array('closed'=>''.$options['localization']['alert_closed']['lbl'].''));
+		$jsMessages=array();
+		$jsMessages['closed']=''.$options['localization']['alert_closed']['lbl'].'';
+		if($options['layout']['add_to_cart_on_title_click']){
+			$jsMessages['choosesize']=''.$options['localization']['alert_choose_size']['lbl'].'';
+		}
+		$localized_array = array( 'ajaxurl' =>admin_url('admin-ajax.php'),'validate_error'=>array('email'=>''.$options['localization']['required_field']['lbl'].'','required'=>''.$options['localization']['required_field']['lbl'].''),'msg'=>$jsMessages);
 		wp_localize_script( $this->pluginSlug,$this->pluginSlug, $localized_array );
     }
 /***********************************************************************************************

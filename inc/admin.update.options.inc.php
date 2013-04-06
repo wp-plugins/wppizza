@@ -41,7 +41,7 @@
 
 
 	/**override some options as we do NOT want to remove them*/
-	/*although the array is set above, it's empty, the dimensions of it are user generated and we do not want to loose these values when comparing / updating**/
+	/*although these arrays are set in defaultOptions, the default values are empty, as the dimensions of it are user generated and we do not want to loose these values when comparing / updating**/
 	/*if we however ever not use any of these options above, we can delete the relevant one here**/
 	if(isset($options['times_closed_standard'])){
 		$update_options['times_closed_standard']=$options['times_closed_standard'];
@@ -54,6 +54,9 @@
 	}
 	if(isset($options['order']['order_email_bcc'])){
 		$update_options['order']['order_email_bcc']=$options['order']['order_email_bcc'];
+	}
+	if(isset($options['order_form'])){
+		$update_options['order_form']=$options['order_form'];
 	}
 	if(isset($options['plugin_data']['category_parent_page'])){
 		$update_options['plugin_data']['category_parent_page']=$options['plugin_data']['category_parent_page'];

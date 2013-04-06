@@ -314,7 +314,8 @@
 				'hide_prices' => false,
 				'hide_item_currency_symbol' => false,
 				'hide_single_pricetier' => false,
-				'disable_online_order' => false
+				'disable_online_order' => false,
+				'add_to_cart_on_title_click' => false
 			),
 			'opening_times_standard'=>array(
 				0=>array('open'=>'14:30','close'=>'01:00'),
@@ -330,6 +331,12 @@
 				'open'=>array('17:00','17:00'),
 				'close'=>array('01:00','01:00')
 			),
+			'opening_times_format'=>array(
+				'hour'=>'G',
+				'separator'=>':',
+				'minute'=>'i',
+				'ampm'=>''
+			),				
 			'times_closed_standard'=>array(
 			),
 			'order'=>array(
@@ -387,6 +394,10 @@
 					'descr'=>__('Menu Item: alert when trying to add to cart but shop is closed (only displayed when shoppingcart is displayed on page)', $this->pluginLocale),
 					'lbl'=>__('sorry, we are currently closed', $this->pluginLocale)
 				),
+				'alert_choose_size'=>array(
+					'descr'=>__('Menu Item: alert when adding to cart by clicking on menu name but more than one size is available. (Only relevant if "Add item to cart on click of *item title* " is enabled)', $this->pluginLocale),
+					'lbl'=>__('please choose a size', $this->pluginLocale)
+				),					
 				'previous'=>array(
 					'descr'=>__('Menu Pagination : previous page', $this->pluginLocale),
 					'lbl'=>__('< previous', $this->pluginLocale)

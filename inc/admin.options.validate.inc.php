@@ -62,6 +62,12 @@
 			$options['layout']['hide_single_pricetier'] = !empty($input['layout']['hide_single_pricetier']) ? true : false;			
 			$options['layout']['hide_prices'] = !empty($input['layout']['hide_prices']) ? true : false;
 			$options['layout']['disable_online_order'] = !empty($input['layout']['disable_online_order']) ? true : false;
+			$options['layout']['add_to_cart_on_title_click'] = !empty($input['layout']['add_to_cart_on_title_click']) ? true : false;
+			$options['opening_times_format']['hour']=wppizza_validate_string($input['opening_times_format']['hour']);
+			$options['opening_times_format']['separator']=wppizza_validate_string($input['opening_times_format']['separator']);
+			$options['opening_times_format']['minute']=wppizza_validate_string($input['opening_times_format']['minute']);
+			$options['opening_times_format']['ampm']=wppizza_validate_string($input['opening_times_format']['ampm']);
+			
 		}
 		/**validate opening_times settings***/
 		if(isset($_POST[''.$this->pluginSlug.'_opening_times'])){
