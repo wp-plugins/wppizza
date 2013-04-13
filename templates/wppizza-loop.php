@@ -151,7 +151,7 @@
 ?>
 		<div id="<?php echo $post_type ?>-article-tiers-<?php echo get_the_ID()?>" class="<?php echo $post_type ?>-article-tiers">
 	   	<?php foreach($options['sizes'][$meta['sizes']] as $k=>$v){?>
-	   		<span id='<? echo $post_type."-".get_the_ID()."-".$meta['sizes']."-".$k ?>' class='<?php echo $post_type ?>-article-price <?php echo $priceClass ?>' <?php echo $priceTitle ?>'>
+	   		<span id='<? echo $post_type."-".get_the_ID()."-".$meta['sizes']."-".$k ?>' class='<?php echo $post_type ?>-article-price <?php echo $priceClass ?>' <?php echo $priceTitle ?>>
 	    		<span><? echo wppizza_output_format_float($meta['prices'][$k],'price')?></span>
 	    		<?php if(!isset($hidePricetier) || count($options['sizes'][$meta['sizes']])>1){ ?>
 	    		<div class='<?php echo $post_type ?>-article-price-lbl<?php echo $hideCartIcon?>'><?php echo $v['lbl']?></div>
