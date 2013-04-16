@@ -18,7 +18,7 @@
 	$str.="</select>";
 	$str.="<span class='wppizza_pricetiers'>";
 		foreach($meta_values['prices'] as $k=>$v){
-			$str.="<input name='".$this->pluginSlug."[prices][]' size='5' type='text' value='".wppizza_output_format_float($v,'price')."' />".$optionsCurrency."";
+			$str.="<input name='".$this->pluginSlug."[prices][]' size='5' type='text' value='".wppizza_output_format_price($v)."' />".$optionsCurrency."";
 	}
 	$str.="</span>";
 	$str.="</div>";

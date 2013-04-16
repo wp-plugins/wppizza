@@ -27,19 +27,19 @@ jQuery(document).ready(function($){
 					
 					/*addcurrency if discount applies**/
 					if(response.order_value.discount.val!=''){
-						$('.wppizza-cart-discount-value').html(response.currency+''+response.order_value.discount.val);
+						$('.wppizza-cart-discount-value').html(response.currency+' '+response.order_value.discount.val);
 					}else{
 						$('.wppizza-cart-discount-value').html(response.order_value.discount.val);	
 					}
 					$('.wppizza-cart-delivery-charges-label').html(response.order_value.delivery_charges.lbl);
 					/*addcurrency if its not free delivery**/
 					if(response.order_value.delivery_charges.val!=''){
-					$('.wppizza-cart-delivery-charges-value').html(response.currency+''+response.order_value.delivery_charges.val);
+					$('.wppizza-cart-delivery-charges-value').html(response.currency+' '+response.order_value.delivery_charges.val);
 					}else{
 					$('.wppizza-cart-delivery-charges-value').html(response.order_value.delivery_charges.val);
 					}
 					$('.wppizza-cart-total-label').html(response.order_value.total.lbl);
-					$('.wppizza-cart-total-value').html(response.currency+''+response.order_value.total.val);
+					$('.wppizza-cart-total-value').html(response.currency+' '+response.order_value.total.val);
 				}
 				if(response.nocheckout!='' || response.items.length==0){
 					$('.wppizza-cart-discount-label').html('');

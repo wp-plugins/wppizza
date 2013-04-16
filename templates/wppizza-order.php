@@ -34,7 +34,7 @@
 			<?php if($cart['order_value']['discount']['val']>0){?>
 				<li><?php echo $txt['discount']['lbl'] ?><span><?php echo $cart['currency'].' '.$cart['order_value']['discount']['val']; ?></span></li>
 			<?php } ?>
-			<?php if($cart['order_value']['delivery_charges']['val']>0){?>
+			<?php if($cart['order_value']['delivery_charges']['val']!='' ){?>
 				<li><?php echo $txt['delivery_charges']['lbl'] ?><span><?php echo $cart['currency'].' '.$cart['order_value']['delivery_charges']['val']; ?></span></li>
 			<?php }else{ ?>
 				<li><?php echo $txt['delivery_charges']['lbl'] ?><span><?php echo $txt['free_delivery']['lbl'] ?></span></li>

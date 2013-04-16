@@ -18,7 +18,7 @@ if(isset($cart['innercartinfo'])){
 		if($item['size']!=''){
 		$cartContents.='<span class="wppizza-cart-item-size">'.$item['size'].'</span> ';
 		}
-		$cartContents.='<span class="wppizza-cart-item-price">'.$item['pricetotal'].' '.$cart['currency'].'</span>';
+		$cartContents.='<span class="wppizza-cart-item-price">'.wppizza_output_format_price($item['pricetotal']).' '.$cart['currency'].'</span>';
 		if(is_array($item['additionalinfo']) && count($item['additionalinfo'])>0){
 			$cartContents.='<div class="wppizza-item-additional-info"><div class="wppizza-item-additional-info-icon"></div><div class="wppizza-item-additional-info-pad">'; 
 			foreach($item['additionalinfo'] as $addItem){
@@ -58,7 +58,7 @@ return;
 				</span>
 				<span class="wppizza-cart-total-items-value wppizza-cart-info-price">
 					<?php if(count($cart['items'])>0){?>
-						<?php if($cart['order_value']['total_price_items']['val']>0){echo $cart['currency'];} ?><?php echo $cart['order_value']['total_price_items']['val'] ?>
+						<?php if($cart['order_value']['total_price_items']['val']>0){echo $cart['currency'];} ?> <?php echo ($cart['order_value']['total_price_items']['val']) ?>
 					<?php } ?>
 				</span>
 			</span>
@@ -70,8 +70,8 @@ return;
 				</span>
 				<span class="wppizza-cart-discount-value wppizza-cart-info-price">
 					<?php if($cart['nocheckout']=='' && count($cart['items'])>0){?>
-					<?php if($cart['order_value']['discount']['val']>0){echo $cart['currency'];} ?><?php echo $cart['order_value']['discount']['val'] ?>
-					<?php } ?>
+					<?php if($cart['order_value']['discount']['val']>0){echo $cart['currency'];?> <?php echo ($cart['order_value']['discount']['val']) ?>
+					<?php }} ?>
 				</span>
 			</span>
 			<span>
@@ -82,8 +82,8 @@ return;
 				</span>
 				<span class="wppizza-cart-delivery-charges-value wppizza-cart-info-price">
 					<?php if($cart['nocheckout']=='' && count($cart['items'])>0){?>
-					<?php if($cart['order_value']['delivery_charges']['val']>0){echo $cart['currency'];} ?><?php echo $cart['order_value']['delivery_charges']['val'] ?>
-					<?php } ?>
+					<?php if($cart['order_value']['delivery_charges']['val']!=''){echo $cart['currency']; ?> <?php echo ($cart['order_value']['delivery_charges']['val']) ?>
+					<?php }} ?>
 				</span>
 			</span>
 			<span class="wppizza-cart-total">
@@ -94,7 +94,7 @@ return;
 				</span>
 				<span class="wppizza-cart-total-value wppizza-cart-info-price">
 					<?php if($cart['nocheckout']=='' && count($cart['items'])>0){?>
-					<?php if($cart['order_value']['total']['val']>0){echo $cart['currency'];} ?><?php echo $cart['order_value']['total']['val'] ?>
+					<?php if($cart['order_value']['total']['val']>0){echo $cart['currency'];} ?> <?php echo ($cart['order_value']['total']['val']) ?>
 					<?php } ?>
 				</span>
 			</span>

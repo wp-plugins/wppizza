@@ -149,9 +149,9 @@ if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='sendorder'){
 
 		foreach($cartContents['items'] as $k=>$v){
 			/*tabs dont seem to work reliably, so lets try to put some even space between order item and total**/
-			$strPartLeft=''.$v['count'].'x '.$v['name'].' '.$v['size'].'  '.$currency.''.wppizza_output_format_float($v['price']).'';
+			$strPartLeft=''.$v['count'].'x '.$v['name'].' '.$v['size'].'  '.$currency.' '.wppizza_output_format_price(wppizza_output_format_float($v['price'])).'';
 			$spaces=55-strlen($strPartLeft);
-			$strPartRight=''.$currency.''.wppizza_output_format_float($v['pricetotal']).'';
+			$strPartRight=''.$currency.' '.wppizza_output_format_price(wppizza_output_format_float($v['pricetotal'])).'';
 			$order.=''.$strPartLeft.''.str_pad($strPartRight,$spaces," ",STR_PAD_LEFT).''.PHP_EOL;
 			if(isset($v['additionalinfo']) && is_array($v['additionalinfo'])){
 				$addInfo=array();
@@ -163,17 +163,17 @@ if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='sendorder'){
 			}
 		}
 		$order.=PHP_EOL.PHP_EOL;
-		$order.=''.$cartContents['order_value']['total_price_items']['lbl'].': '.$currency.''.($cartContents['order_value']['total_price_items']['val']).PHP_EOL;
+		$order.=''.$cartContents['order_value']['total_price_items']['lbl'].': '.$currency.' '.($cartContents['order_value']['total_price_items']['val']).PHP_EOL;
 		if($cartContents['order_value']['discount']['val']>0){
-			$order.=''.$cartContents['order_value']['discount']['lbl'].': '.$currency.''.($cartContents['order_value']['discount']['val']).PHP_EOL;
+			$order.=''.$cartContents['order_value']['discount']['lbl'].': '.$currency.' '.($cartContents['order_value']['discount']['val']).PHP_EOL;
 		}
-		if($cartContents['order_value']['delivery_charges']['val']>0){
-			$order.=$cartContents['order_value']['delivery_charges']['lbl'].': '.$currency.''.($cartContents['order_value']['delivery_charges']['val']).PHP_EOL;
+		if($cartContents['order_value']['delivery_charges']['val']!=''){
+			$order.=$cartContents['order_value']['delivery_charges']['lbl'].': '.$currency.' '.($cartContents['order_value']['delivery_charges']['val']).PHP_EOL;
 		}else{
 			$order.=$cartContents['order_value']['delivery_charges']['lbl'].PHP_EOL;
 		}
 		$order.=PHP_EOL;
-		$order.=$cartContents['order_value']['total']['lbl'].': '.$currency.''.($cartContents['order_value']['total']['val']).PHP_EOL;
+		$order.=$cartContents['order_value']['total']['lbl'].': '.$currency.' '.($cartContents['order_value']['total']['val']).PHP_EOL;
 
 
 		$order.=PHP_EOL;
@@ -209,7 +209,7 @@ if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='sendorder'){
 			unset($_SESSION[$this->pluginSlug]);
 		}else{
 			$error = error_get_last();
-			print"<p class='mailError'>".print_r($error["message"])."</p>";
+			print"<p class='mailError'>".print_r($error["message"],true)."</p>";
 		}
 exit();
 }

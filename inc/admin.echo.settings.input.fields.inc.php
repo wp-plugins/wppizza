@@ -210,7 +210,7 @@ $options = $this->pluginOptions;
 					echo "<input name='".$this->pluginSlug."[order][delivery_selected]' type='radio' ". checked($options['order']['delivery_selected']==$k,true,false)." value='".$k."' />";
 					if($k=='minimum_total'){
 						echo"".__('Free delivery when total order value reaches', $this->pluginLocale).":";
-						echo"<input name='".$this->pluginSlug."[order][".$field."][minimum_total][min_total]' size='2' type='text' value='".wppizza_output_format_float($options['order'][$field]['minimum_total']['min_total'],'price')."' />";
+						echo"<input name='".$this->pluginSlug."[order][".$field."][minimum_total][min_total]' size='2' type='text' value='".wppizza_output_format_price($options['order'][$field]['minimum_total']['min_total'])."' />";
 						echo"<br />";
 						echo"<input name='".$this->pluginSlug."[order][".$field."][minimum_total][deliver_below_total]' type='checkbox' ". checked($v['deliver_below_total'],true,false)." value='1' />";
 						echo"".__('Deliver even when total order value is below minimum (the difference between total and "Minimum Total" above will be added to the Total as "Delivery Charges")', $this->pluginLocale)."";
@@ -219,7 +219,7 @@ $options = $this->pluginOptions;
 					}
 					if($k=='standard'){
 						echo"".__('Fixed Delivery Charges [added to order total]', $this->pluginLocale).":";
-						echo "<input name='".$this->pluginSlug."[order][".$field."][standard][delivery_charge]' size='2' type='text' value='".wppizza_output_format_float($options['order'][$field]['standard']['delivery_charge'],'price')."' />";
+						echo "<input name='".$this->pluginSlug."[order][".$field."][standard][delivery_charge]' size='2' type='text' value='".wppizza_output_format_price($options['order'][$field]['standard']['delivery_charge'])."' />";
 					}
 					echo "</span>";
 				}
@@ -236,9 +236,9 @@ $options = $this->pluginOptions;
 						echo"<br />";
 						foreach($v['discounts'] as $l=>$m){
 							echo"".__('If order total >', $this->pluginLocale).":";
-							echo"<input name='".$this->pluginSlug."[order][".$field."][".$k."][discounts][".$l."][min_total]' size='2' type='text' value='".wppizza_output_format_float($options['order'][$field][$k]['discounts'][$l]['min_total'],'price')."' />";
+							echo"<input name='".$this->pluginSlug."[order][".$field."][".$k."][discounts][".$l."][min_total]' size='2' type='text' value='".wppizza_output_format_price($options['order'][$field][$k]['discounts'][$l]['min_total'])."' />";
 							echo"".__('discount', $this->pluginLocale).":";
-							echo"<input name='".$this->pluginSlug."[order][".$field."][".$k."][discounts][".$l."][discount]' size='2' type='text' value='".wppizza_output_format_float($options['order'][$field][$k]['discounts'][$l]['discount'],'price')."' />";
+							echo"<input name='".$this->pluginSlug."[order][".$field."][".$k."][discounts][".$l."][discount]' size='2' type='text' value='".wppizza_output_format_price($options['order'][$field][$k]['discounts'][$l]['discount'])."' />";
 							echo"".__('percent', $this->pluginLocale)."";
 							echo"<br />";
 						}
@@ -248,9 +248,9 @@ $options = $this->pluginOptions;
 						echo"<br />";
 						foreach($v['discounts'] as $l=>$m){
 							echo"".__('If order total >', $this->pluginLocale).":";
-							echo"<input name='".$this->pluginSlug."[order][".$field."][".$k."][discounts][".$l."][min_total]' size='2' type='text' value='".wppizza_output_format_float($options['order'][$field][$k]['discounts'][$l]['min_total'],'price')."' />";
+							echo"<input name='".$this->pluginSlug."[order][".$field."][".$k."][discounts][".$l."][min_total]' size='2' type='text' value='".wppizza_output_format_price($options['order'][$field][$k]['discounts'][$l]['min_total'])."' />";
 							echo"".__('get', $this->pluginLocale).":";
-							echo"<input name='".$this->pluginSlug."[order][".$field."][".$k."][discounts][".$l."][discount]' size='2' type='text' value='".wppizza_output_format_float($options['order'][$field][$k]['discounts'][$l]['discount'],'price')."' />";
+							echo"<input name='".$this->pluginSlug."[order][".$field."][".$k."][discounts][".$l."][discount]' size='2' type='text' value='".wppizza_output_format_price($options['order'][$field][$k]['discounts'][$l]['discount'])."' />";
 							echo"".__('off', $this->pluginLocale)."";
 							echo"<br />";
 						}
