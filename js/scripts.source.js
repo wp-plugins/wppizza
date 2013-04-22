@@ -114,6 +114,16 @@ jQuery(document).ready(function($){
 	*******************************/
 	jQuery.extend(jQuery.validator.messages, {
     	required: wppizza.validate_error.required,
-    	email: wppizza.validate_error.email,
+    	email: wppizza.validate_error.email
 	});
+
+	/******************************
+	* Let's make IE7 IE8 happy
+	*******************************/
+	$(document).on('click', '.wppizza-cart-button>a', function(e){
+		e.preventDefault(); e.stopPropagation();
+        url=jQuery(this).attr("href");
+        window.location.href = url;
+	})
+
 })
