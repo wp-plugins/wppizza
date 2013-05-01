@@ -126,6 +126,7 @@
 .wppizza-trigger-click{cursor:pointer;}
 
 .wppizza-article-price-currency{font-size:160%;line-height:200%;margin:0 10px;}
+.wppizza-article-currency-left{float:left;}
 /***footnotes (additives etc)**/
 .wppizza-contains-additives{text-align:center;font-size:80%;margin:50px 0 0 0;}
 .wppizza-contains-additives>span{margin-right:10px}

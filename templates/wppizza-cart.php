@@ -18,7 +18,7 @@ if(isset($cart['innercartinfo'])){
 		if($item['size']!=''){
 		$cartContents.='<span class="wppizza-cart-item-size">'.$item['size'].'</span> ';
 		}
-		$cartContents.='<span class="wppizza-cart-item-price">'.wppizza_output_format_price($item['pricetotal']).' '.$cart['currency'].'</span>';
+		$cartContents.='<span class="wppizza-cart-item-price">'.wppizza_output_format_price($item['pricetotal'],$options['layout']['hide_decimals']).' '.$cart['currency'].'</span>';
 		if(is_array($item['additionalinfo']) && count($item['additionalinfo'])>0){
 			$cartContents.='<div class="wppizza-item-additional-info"><div class="wppizza-item-additional-info-icon"></div><div class="wppizza-item-additional-info-pad">'; 
 			foreach($item['additionalinfo'] as $addItem){

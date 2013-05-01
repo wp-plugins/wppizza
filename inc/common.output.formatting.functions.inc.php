@@ -7,9 +7,13 @@
 		return $str;
 	}
 	
-	function wppizza_output_format_price($str){
+	function wppizza_output_format_price($str,$hideDecimals=false){
 		if(trim($str)!=''){	
-			$str=number_format_i18n($str,2);
+			if($hideDecimals){
+				$str=number_format_i18n($str,0);
+			}else{
+				$str=number_format_i18n($str,2);	
+			}
 		}
 		return $str;
 	}		
@@ -458,7 +462,10 @@ function wppizza_order_summary($session,$options,$ajax=null){
 		[get currency]
 	****************************************************/
 	$summary['currency']=$options['order']['currency_symbol'];
-
+	/****************************************************
+		[hide decimals?]
+	****************************************************/
+	$optionsDecimals=$options['layout']['hide_decimals'];
 	/****************************************************
 		[get cart items as grouped array]
 	****************************************************/
@@ -511,7 +518,7 @@ function wppizza_order_summary($session,$options,$ajax=null){
 			sort($options['order']['discounts']['percentage']['discounts']);
 			foreach($options['order']['discounts']['percentage']['discounts'] as $k=>$v){
 				if($v['discount']>0){// && $v['min_total']>0
-				$summary['pricing_discounts'][]="".$options['localization']['spend']['lbl']." <span>".$options['order']['currency_symbol']."".wppizza_output_format_price($v['min_total'])."</span> ".$options['localization']['save']['lbl']." <span>".($v['discount'])."%</span>";
+				$summary['pricing_discounts'][]="".$options['localization']['spend']['lbl']." <span>".$options['order']['currency_symbol']."".wppizza_output_format_price($v['min_total'],$optionsDecimals)."</span> ".$options['localization']['save']['lbl']." <span>".($v['discount'])."%</span>";
 				}
 			}
 
@@ -532,14 +539,14 @@ function wppizza_order_summary($session,$options,$ajax=null){
 			sort($options['order']['discounts']['standard']['discounts']);
 			foreach($options['order']['discounts']['standard']['discounts'] as $k=>$v){
 				if($v['discount']>0){//&& $v['min_total']>0
-					$summary['pricing_discounts'][]="".$options['localization']['spend']['lbl']." <span>".$options['order']['currency_symbol']." ".wppizza_output_format_price($v['min_total'])."</span> ".$options['localization']['save']['lbl']." <span>".wppizza_output_format_float($v['discount'])." ".$options['order']['currency_symbol']."</span>";
+					$summary['pricing_discounts'][]="".$options['localization']['spend']['lbl']." <span>".$options['order']['currency_symbol']." ".wppizza_output_format_price($v['min_total'],$optionsDecimals)."</span> ".$options['localization']['save']['lbl']." <span>".wppizza_output_format_float($v['discount'])." ".$options['order']['currency_symbol']."</span>";
 				}
 			}
 		}
 		if(isset($discountApply) && $discountApply>0){
 			$discountLabel=$options['localization']['discount']['lbl'];
 			$discountValue=(wppizza_output_format_float($discountApply));
-			$discountValuePrint=wppizza_output_format_price($discountValue);
+			$discountValuePrint=wppizza_output_format_price($discountValue,$optionsDecimals);
 		}
 
 			/**********************************
@@ -564,7 +571,7 @@ function wppizza_order_summary($session,$options,$ajax=null){
 				}
 				/**delivery settings to display with discount options somewhere*/
 				if($options['order']['delivery']['minimum_total']['min_total']>0){
-					$summary['pricing_delivery']="".$options['localization']['free_delivery_for_orders_of']['lbl']." <span>".$options['order']['currency_symbol']." ".wppizza_output_format_price($options['order']['delivery']['minimum_total']['min_total'])."</span>";
+					$summary['pricing_delivery']="".$options['localization']['free_delivery_for_orders_of']['lbl']." <span>".$options['order']['currency_symbol']." ".wppizza_output_format_price($options['order']['delivery']['minimum_total']['min_total'],$optionsDecimals)."</span>";
 				}else{
 					$summary['pricing_delivery']="".$options['localization']['free_delivery']['lbl']."";
 				}
@@ -576,7 +583,7 @@ function wppizza_order_summary($session,$options,$ajax=null){
 		[get total order value]
 	****************************************************/
 	$totalOrder=$session['total_price_items']-(float)$discountValue+(float)$deliveryCharges;
-	$summary['order_value']=array('total_price_items'=>array('lbl'=>$options['localization']['order_items']['lbl'],'val'=>wppizza_output_format_price(wppizza_output_format_float($session['total_price_items']))),'delivery_charges'=>array('lbl'=>$deliveryLabel,'val'=>wppizza_output_format_price($deliveryCharges)),'discount'=>array('lbl'=>$discountLabel,'val'=>$discountValuePrint),'total'=>array('lbl'=>$options['localization']['order_total']['lbl'],'val'=>wppizza_output_format_price(wppizza_output_format_float($totalOrder))));
+	$summary['order_value']=array('total_price_items'=>array('lbl'=>$options['localization']['order_items']['lbl'],'val'=>wppizza_output_format_price(wppizza_output_format_float($session['total_price_items']),$optionsDecimals)),'delivery_charges'=>array('lbl'=>$deliveryLabel,'val'=>wppizza_output_format_price($deliveryCharges,$optionsDecimals)),'discount'=>array('lbl'=>$discountLabel,'val'=>$discountValuePrint),'total'=>array('lbl'=>$options['localization']['order_total']['lbl'],'val'=>wppizza_output_format_price(wppizza_output_format_float($totalOrder),$optionsDecimals)));
 	//$summary['items_single']=$session['items'];
 
 
@@ -620,7 +627,7 @@ function wppizza_order_summary($session,$options,$ajax=null){
 //				}
 			}else{
 			/*minimum order not reached*/
-				$summary['nocheckout']=''.$options['localization']['minimum_order']['lbl'].' '.wppizza_output_format_price($options['order']['delivery']['minimum_total']['min_total']).' '.$options['order']['currency_symbol'].'';
+				$summary['nocheckout']=''.$options['localization']['minimum_order']['lbl'].' '.wppizza_output_format_price($options['order']['delivery']['minimum_total']['min_total'],$optionsDecimals).' '.$options['order']['currency_symbol'].'';
 			}
 
 		}
@@ -690,5 +697,30 @@ function wppizza_return_single_dimension_array($arr, $key='lbl'){
 		$array[$k]=$v[$key];
 	}
 	return $array;
+}
+
+/****************************************************************************
+	[decode entities in send order email plaintext]
+****************************************************************************/
+function wppizza_email_decode_entities($str,$charset){
+		
+		$supportedCharsets=array('iso-8859-1','iso-8859-5','iso-8859-15','utf-8','cp866','cp1251','cp1252','koi8-r','big5','gb2312','big5-hkscs','shift_jis','euc-jp','macroman');
+		if(in_array(strtolower($charset),$supportedCharsets)){
+			$charset=$charset;
+		}else{
+			$charset='UTF-8';
+		}
+   		$str= html_entity_decode($str,ENT_QUOTES,"".$charset."");////".get_bloginfo('charset')." #NOTE: UTF-8 does not work!
+    	$str= preg_replace('/&#(\d+);/me',"chr(\\1)",$str); //#decimal notation
+	    $str= preg_replace('/&#x([a-f0-9]+);/mei',"chr(0x\\1)",$str);  //#hex notation
+
+	return $str;
+}
+/****************************************************************************
+	[convert entities in send order email when sending html]
+****************************************************************************/
+function wppizza_email_html_entities($str){
+	$str = htmlentities($str, ENT_QUOTES, mb_internal_encoding());
+	return $str;
 }
 ?>

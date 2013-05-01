@@ -17,6 +17,7 @@
 	/***********get plugin options **************/
 	$options=get_option(WPPIZZA_SLUG);
 	$currency=$options['order']['currency_symbol'];//put currency into a shorter variable. just easier to deal with further down
+	$optionsDecimals=$options['layout']['hide_decimals'];
 	$txt=$options['localization'];/**put localization vars into a shorter variable
 	
 	/**check if we have set the headers to be suppressed in wppizza->settings->layout**/
@@ -25,6 +26,8 @@
 	}
 	/*check if we are showing prices*/
 	if($options['layout']['hide_prices']){$hidePrices=1;}
+	/*check currency to left of price*/
+	if($options['layout']['currency_symbol_left']){$currencyLeft=1;}
 	/*check if we are hiding pricetiers if there's only one*/
 	if($options['layout']['hide_single_pricetier']){$hidePricetier=1;}
 	/*check if we are showing cart icon*/
@@ -150,17 +153,25 @@
 	if(!isset($hidePrices)){
 ?>
 		<div id="<?php echo $post_type ?>-article-tiers-<?php echo get_the_ID()?>" class="<?php echo $post_type ?>-article-tiers">
+
+	   	<?php if(!isset($hideCurrencySymbol) && isset($currencyLeft)){?>
+	   		<span class='<?php echo $post_type ?>-article-price-currency <?php echo $post_type ?>-article-currency-left'><?php echo $currency ?></span>
+	   	<?php } ?>
+
+
 	   	<?php foreach($options['sizes'][$meta['sizes']] as $k=>$v){?>
 	   		<span id='<? echo $post_type."-".get_the_ID()."-".$meta['sizes']."-".$k ?>' class='<?php echo $post_type ?>-article-price <?php echo $priceClass ?>' <?php echo $priceTitle ?>>
-	    		<span><? echo wppizza_output_format_price($meta['prices'][$k])?></span>
+	    		<span><?php if($options['layout']['show_currency_with_price']==1){echo $currency." ";} ?><?php echo wppizza_output_format_price($meta['prices'][$k],$optionsDecimals)?><?php if($options['layout']['show_currency_with_price']==2){echo " ".$currency;} ?></span>
 	    		<?php if(!isset($hidePricetier) || count($options['sizes'][$meta['sizes']])>1){ ?>
 	    		<div class='<?php echo $post_type ?>-article-price-lbl<?php echo $hideCartIcon?>'><?php echo $v['lbl']?></div>
 	   			<?php } ?>
 	   		</span>
 	   	<?php } ?>
-	   	<?php if(!isset($hideCurrencySymbol)){?>
-	   		<span class='<?php echo $post_type ?>-article-price-currency'><?php echo $currency?></span>
+
+	   	<?php if(!isset($hideCurrencySymbol) && !isset($currencyLeft)){?>
+	   		<span class='<?php echo $post_type ?>-article-price-currency'><?php echo $currency ?></span>
 	   	<?php } ?>
+
 		</div>
 <?php
 	}

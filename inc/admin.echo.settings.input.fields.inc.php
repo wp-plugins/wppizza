@@ -4,13 +4,23 @@ $options = $this->pluginOptions;
 
 	$optionInUse=wppizza_options_in_use();//outputs an array $arr=array(['sizes']=>array(),['additives']=>array());
 	$optionSizes=wppizza_sizes_available($options['sizes']);//outputs an array $arr=array(['lbl']=>array(),['prices']=>array());
+	$optionsDecimals=$options['layout']['hide_decimals'];
 
 			if($field=='version'){
 				echo "{$options['plugin_data'][$field]}";
 			}
 			if($field=='js_in_footer'){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[plugin_data][".$field."]' type='checkbox'  ". checked($options['plugin_data'][$field],true,false)." value='1' />";
-			}
+			}			
+			
+			if($field=='mail_type'){
+				//echo "<input id='".$field."' name='".$this->pluginSlug."[".$field."]' type='checkbox'  ". checked($options['plugin_data'][$field],true,false)." value='1' />";
+				echo "<select name='".$this->pluginSlug."[plugin_data][".$field."]' />";
+					echo"<option value='mail' ".selected($options['plugin_data'][$field],"mail",false).">".__('default [uses mail]', $this->pluginLocale)."</option>";
+					echo"<option value='wp_mail' ".selected($options['plugin_data'][$field],"wp_mail",false).">".__('Wordpress Mail Function [uses wp_mail]', $this->pluginLocale)."</option>";
+					echo"<option value='phpmailer' ".selected($options['plugin_data'][$field],"phpmailer",false).">".__('HTML and Plaintext [uses PHPMailer]', $this->pluginLocale)."</option>";
+				echo "</select>";
+			}			
 			if($field=='category_parent_page'){
 				/*get all pages**/
 				$pages=get_pages(array('post_type'=> 'page','echo'=>0,'title_li'=>''));
@@ -45,6 +55,19 @@ $options = $this->pluginOptions;
 			if($field=='include_css' ){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[layout][".$field."]' type='checkbox'  ". checked($options['layout'][$field],true,false)." value='1' />";
 			}
+			if($field=='hide_decimals' ){
+				echo "<input id='".$field."' name='".$this->pluginSlug."[layout][".$field."]' type='checkbox'  ". checked($options['layout'][$field],true,false)." value='1' />";
+			}			
+			if($field=='show_currency_with_price'){
+				echo "".__('do not show', $this->pluginLocale)."<input id='".$field."' name='".$this->pluginSlug."[layout][".$field."]' type='radio'  ".checked($options['layout'][$field],0,false)." value='0' /> ";
+				echo "".__('on left', $this->pluginLocale)."<input id='".$field."' name='".$this->pluginSlug."[layout][".$field."]' type='radio'  ".checked($options['layout'][$field],1,false)." value='1' />";
+				echo "".__('on right', $this->pluginLocale)."<input id='".$field."' name='".$this->pluginSlug."[layout][".$field."]' type='radio'  ".checked($options['layout'][$field],2,false)." value='2' />";
+			}					
+
+			if($field=='currency_symbol_left'){
+				echo "<input id='".$field."' name='".$this->pluginSlug."[layout][".$field."]' type='checkbox'  ". checked($options['layout'][$field],true,false)." value='1' />";
+			}					
+			
 			if($field=='items_per_loop' ){
 				echo "<input name='".$this->pluginSlug."[layout][".$field."]' size='2' type='text'  value='{$options['layout'][$field]}' />";
 			}			
@@ -210,7 +233,7 @@ $options = $this->pluginOptions;
 					echo "<input name='".$this->pluginSlug."[order][delivery_selected]' type='radio' ". checked($options['order']['delivery_selected']==$k,true,false)." value='".$k."' />";
 					if($k=='minimum_total'){
 						echo"".__('Free delivery when total order value reaches', $this->pluginLocale).":";
-						echo"<input name='".$this->pluginSlug."[order][".$field."][minimum_total][min_total]' size='2' type='text' value='".wppizza_output_format_price($options['order'][$field]['minimum_total']['min_total'])."' />";
+						echo"<input name='".$this->pluginSlug."[order][".$field."][minimum_total][min_total]' size='2' type='text' value='".wppizza_output_format_price($options['order'][$field]['minimum_total']['min_total'],$optionsDecimals)."' />";
 						echo"<br />";
 						echo"<input name='".$this->pluginSlug."[order][".$field."][minimum_total][deliver_below_total]' type='checkbox' ". checked($v['deliver_below_total'],true,false)." value='1' />";
 						echo"".__('Deliver even when total order value is below minimum (the difference between total and "Minimum Total" above will be added to the Total as "Delivery Charges")', $this->pluginLocale)."";
@@ -219,7 +242,7 @@ $options = $this->pluginOptions;
 					}
 					if($k=='standard'){
 						echo"".__('Fixed Delivery Charges [added to order total]', $this->pluginLocale).":";
-						echo "<input name='".$this->pluginSlug."[order][".$field."][standard][delivery_charge]' size='2' type='text' value='".wppizza_output_format_price($options['order'][$field]['standard']['delivery_charge'])."' />";
+						echo "<input name='".$this->pluginSlug."[order][".$field."][standard][delivery_charge]' size='2' type='text' value='".wppizza_output_format_price($options['order'][$field]['standard']['delivery_charge'],$optionsDecimals)."' />";
 					}
 					echo "</span>";
 				}
@@ -236,9 +259,9 @@ $options = $this->pluginOptions;
 						echo"<br />";
 						foreach($v['discounts'] as $l=>$m){
 							echo"".__('If order total >', $this->pluginLocale).":";
-							echo"<input name='".$this->pluginSlug."[order][".$field."][".$k."][discounts][".$l."][min_total]' size='2' type='text' value='".wppizza_output_format_price($options['order'][$field][$k]['discounts'][$l]['min_total'])."' />";
+							echo"<input name='".$this->pluginSlug."[order][".$field."][".$k."][discounts][".$l."][min_total]' size='2' type='text' value='".wppizza_output_format_price($options['order'][$field][$k]['discounts'][$l]['min_total'],$optionsDecimals)."' />";
 							echo"".__('discount', $this->pluginLocale).":";
-							echo"<input name='".$this->pluginSlug."[order][".$field."][".$k."][discounts][".$l."][discount]' size='2' type='text' value='".wppizza_output_format_price($options['order'][$field][$k]['discounts'][$l]['discount'])."' />";
+							echo"<input name='".$this->pluginSlug."[order][".$field."][".$k."][discounts][".$l."][discount]' size='2' type='text' value='".wppizza_output_format_price($options['order'][$field][$k]['discounts'][$l]['discount'],$optionsDecimals)."' />";
 							echo"".__('percent', $this->pluginLocale)."";
 							echo"<br />";
 						}
@@ -248,9 +271,9 @@ $options = $this->pluginOptions;
 						echo"<br />";
 						foreach($v['discounts'] as $l=>$m){
 							echo"".__('If order total >', $this->pluginLocale).":";
-							echo"<input name='".$this->pluginSlug."[order][".$field."][".$k."][discounts][".$l."][min_total]' size='2' type='text' value='".wppizza_output_format_price($options['order'][$field][$k]['discounts'][$l]['min_total'])."' />";
+							echo"<input name='".$this->pluginSlug."[order][".$field."][".$k."][discounts][".$l."][min_total]' size='2' type='text' value='".wppizza_output_format_price($options['order'][$field][$k]['discounts'][$l]['min_total'],$optionsDecimals)."' />";
 							echo"".__('get', $this->pluginLocale).":";
-							echo"<input name='".$this->pluginSlug."[order][".$field."][".$k."][discounts][".$l."][discount]' size='2' type='text' value='".wppizza_output_format_price($options['order'][$field][$k]['discounts'][$l]['discount'])."' />";
+							echo"<input name='".$this->pluginSlug."[order][".$field."][".$k."][discounts][".$l."][discount]' size='2' type='text' value='".wppizza_output_format_price($options['order'][$field][$k]['discounts'][$l]['discount'],$optionsDecimals)."' />";
 							echo"".__('off', $this->pluginLocale)."";
 							echo"<br />";
 						}

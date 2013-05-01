@@ -299,6 +299,7 @@
 			'plugin_data'=>array(
 				'version' => $this->pluginVersion,
 				'js_in_footer' => false,
+				'mail_type' => 'mail',
 				'category_parent_page' => array(),
 				'empty_category_and_items' => false,
 				'nag_notice' => $this->pluginNagNotice
@@ -315,7 +316,10 @@
 				'hide_item_currency_symbol' => false,
 				'hide_single_pricetier' => false,
 				'disable_online_order' => false,
-				'add_to_cart_on_title_click' => false
+				'add_to_cart_on_title_click' => false,
+				'hide_decimals' => false,
+				'show_currency_with_price' => 0,
+				'currency_symbol_left' => false
 			),
 			'opening_times_standard'=>array(
 				0=>array('open'=>'14:30','close'=>'01:00'),

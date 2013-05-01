@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, order online, cash on delivery, multilingual
 Requires at least: PHP 5.2, WP 3.3 
 Tested up to: 3.5.1
-Stable tag: 1.2.4
+Stable tag: 1.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -112,6 +112,12 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 
 == Changelog ==
+
+1.3  
+* Added Layout option (display currency symbols directly next to prices left/right/none)   
+* Added Layout option (display main big currency symbols next to menu item left/right/none )   
+* Added Email Send Options (mail / wp_mail / phpmailer with templates)   
+- 1st May 2013 
 
 1.2.4  
 * BUGFIX IE7 and IE8 did not go to the order page when clicking button at bottom of cart   

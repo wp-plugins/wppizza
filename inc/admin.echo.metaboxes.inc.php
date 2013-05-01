@@ -2,6 +2,7 @@
 	$options = $this->pluginOptions;
 	$optionsSizes =wppizza_sizes_available($options['sizes']);
 	$optionsCurrency =$options['order']['currency_symbol'];
+	$optionsDecimals =$options['layout']['hide_decimals']
 	$meta_values = get_post_meta($meta_options->ID, $this->pluginSlug);
 	$meta_values = $meta_values[0];
 
@@ -18,7 +19,7 @@
 	$str.="</select>";
 	$str.="<span class='wppizza_pricetiers'>";
 		foreach($meta_values['prices'] as $k=>$v){
-			$str.="<input name='".$this->pluginSlug."[prices][]' size='5' type='text' value='".wppizza_output_format_price($v)."' />".$optionsCurrency."";
+			$str.="<input name='".$this->pluginSlug."[prices][]' size='5' type='text' value='".wppizza_output_format_price($v,$optionsDecimals)."' />".$optionsCurrency."";
 	}
 	$str.="</span>";
 	$str.="</div>";
