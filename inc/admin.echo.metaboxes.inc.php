@@ -2,7 +2,7 @@
 	$options = $this->pluginOptions;
 	$optionsSizes =wppizza_sizes_available($options['sizes']);
 	$optionsCurrency =$options['order']['currency_symbol'];
-	$optionsDecimals =$options['layout']['hide_decimals']
+	$optionsDecimals =$options['layout']['hide_decimals'];
 	$meta_values = get_post_meta($meta_options->ID, $this->pluginSlug);
 	$meta_values = $meta_values[0];
 
