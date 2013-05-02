@@ -5,7 +5,7 @@ Description: Maintain your restaurant menu online and accept cash on delivery or
 Author: ollybach
 Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Author URI: http://www.wp-pizza.com
-Version: 1.3.1.1
+Version: 1.3.1.2
 License:
 
   Copyright 2012 ollybach (dev@wp-pizza.com)
@@ -58,7 +58,7 @@ class WPPizza extends WP_Widget {
 	********************************************************/
      function __construct() {
 		/**init constants***/
-		$this->pluginVersion='1.3.1.1';//increment in line with stable tag in readme and version above
+		$this->pluginVersion='1.3.1.2';//increment in line with stable tag in readme and version above
 	 	$this->pluginName="".WPPIZZA_NAME."";
 	 	$this->pluginSlug="".WPPIZZA_SLUG."";//set also in uninstall when deleting options
 		$this->pluginSlugCategoryTaxonomy="".WPPIZZA_TAXONOMY."";//also on uninstall delete wppizza_children as well as widget
@@ -509,11 +509,10 @@ class WPPizza extends WP_Widget {
 *
 ************************************************************************************************/
 public function register_admin_menu_pages() {
-	// Check if user can access to the plugin
-	if (!current_user_can('administrator')){
-		wp_die( __('You do not have sufficient permissions to access this page !') );
+	// Check if user hass access to the plugin settings
+	if (current_user_can('administrator')){
+		require_once(WPPIZZA_PATH .'inc/admin.echo.register.submenu.pages.inc.php');
 	}
-	require_once(WPPIZZA_PATH .'inc/admin.echo.register.submenu.pages.inc.php');
 }
 function wppizza_admin_pages_init(){
 	require_once(WPPIZZA_PATH .'inc/admin.echo.settings.sections.inc.php');

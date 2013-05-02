@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, order online, cash on delivery, multilingual
 Requires at least: PHP 5.2, WP 3.3 
 Tested up to: 3.5.1
-Stable tag: 1.3.1.1
+Stable tag: 1.3.1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -113,7 +113,11 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 == Changelog ==
 
-1.3.1.1  
+1.3.1.2 
+* BUGFIX fixed error that stopped non-administrators accessing the backend   
+- 2nd May 2013 
+
+1.3.1.1 
 * BUGFIX fixed parse error (introduced in 1.3) in metaboxes that stopped these being available   
 - 2nd May 2013 
 
