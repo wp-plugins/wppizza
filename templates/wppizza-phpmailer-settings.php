@@ -12,6 +12,7 @@
 //$mail->IsSMTP(); // uncomment if you want the class to use SMTP and set accordingly below
 
 try {
+	$mail->CharSet = ''.$blogCharset.'';
 	/*if you want to use smtp set as required below**/
 	/*settings here are for using gmail . adjust as needed **/
 	
@@ -47,7 +48,8 @@ try {
 	
 	/**the html**/
 	$mail->MsgHTML($orderHtml);
-	//$mail->AltBody = print_r($options['order'],true); // optional - MsgHTML will create an alternate automatically
+	$mail->AltBody = $order; // optional - MsgHTML will create an alternate automatically
+	
 
 	$mail->Send();
 	$mailSent='phpmailer';

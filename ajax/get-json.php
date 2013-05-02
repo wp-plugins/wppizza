@@ -233,6 +233,7 @@ if($options['plugin_data']['mail_type']=='phpmailer'){
 		/**now decode any funny entities**/
 		$order=wppizza_email_decode_entities($order,$blogCharset);
 
+
 		/**********************************************************************************************************
 			[send email]
 		**********************************************************************************************************/
