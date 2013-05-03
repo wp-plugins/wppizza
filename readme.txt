@@ -113,7 +113,7 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 == Changelog ==
 
-1.3.1.2 
+1.3.2 
 * BUGFIX fixed error messed up category sorting when using drag and drop whilst displaying fewer than all categories  
 - 3rd May 2013 
 
