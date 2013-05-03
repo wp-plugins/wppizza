@@ -17,7 +17,8 @@ if($_POST['vars']['field']=='cat_sort'){
 
 	$order = explode(',', $_POST['vars']['order']);
 	$sorter = 0;
-	$newOptions['layout']['category_sort']=array();
+	/**we want all saved ones first as we might not display all on the screen**/
+	$newOptions['layout']['category_sort']=$options['layout']['category_sort'];
 	/**first parent categories**/
 	foreach ($order as $id) {
 		$key=(int)str_replace("tag-","",$id);
