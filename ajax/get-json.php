@@ -238,20 +238,24 @@ if($options['plugin_data']['mail_type']=='phpmailer'){
 			[send email]
 		**********************************************************************************************************/
 		$recipient = implode(",",$options['order']['order_email_to']);
+		$recipientName =wppizza_validate_string($params['cname']);
+		if(count($options['order']['order_email_bcc'])>0){
+			$recipientsBcc=implode(",",$options['order']['order_email_bcc']);
+		}
 		$subjectPrefix = ''.get_bloginfo().': ';
 		$subject = ''.$options['localization']['your_order']['lbl'].' '.$nowdate.'';
 		$message ="".$customer_details.PHP_EOL.$order.PHP_EOL ;
-
+		$phpVersion=phpversion();
 
 		/************use default mail function****************/
 		if($options['plugin_data']['mail_type']=='mail'){
-			$header = 'From: '.wppizza_validate_string($params['cname']).'<'.$fromEmails[0].'>' . PHP_EOL.
+			$header = 'From: '.$recipientName.'<'.$fromEmails[0].'>' . PHP_EOL.
 			'Reply-To: '.$fromEmails[0].'' . PHP_EOL .
-			'X-Mailer: PHP/' . phpversion();
+			'X-Mailer: PHP/' . $phpVersion;
 			$header .= PHP_EOL;
 			$header .= 'Cc: '.$fromEmails[0].'' . PHP_EOL;
 			if(count($options['order']['order_email_bcc'])>0){
-			$header .= 'Bcc: '.implode(",",$options['order']['order_email_bcc']).'' . PHP_EOL;
+			$header .= 'Bcc: '.$recipientsBcc.'' . PHP_EOL;
 			}
 
 			$header .= 'MIME-Version: 1.0' . PHP_EOL;
@@ -268,10 +272,10 @@ if($options['plugin_data']['mail_type']=='phpmailer'){
 		/************use wp mail****************/
 		if($options['plugin_data']['mail_type']=='wp_mail'){
 			$wpMailHeaders=array();
-			$wpMailHeaders[] = 'From: '.wppizza_validate_string($params['cname']).'<'.$fromEmails[0].'>';
+			$wpMailHeaders[] = 'From: '.$recipientName.'<'.$fromEmails[0].'>';
 			$wpMailHeaders[] = 'Cc: '.$fromEmails[0].'';
 			if(count($options['order']['order_email_bcc'])>0){
-				$wpMailHeaders[]= 'Bcc: '.implode(",",$options['order']['order_email_bcc']).'';
+				$wpMailHeaders[]= 'Bcc: '.$recipientsBcc.'';
 			}
 			$wpMailHeaders[] = 'Reply-To: '.$fromEmails[0].'';
 			if(@wp_mail($recipient, $subjectPrefix.$subject, $message, $wpMailHeaders)) {

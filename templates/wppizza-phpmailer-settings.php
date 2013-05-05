@@ -31,12 +31,12 @@ try {
 	}
 	/**any bcc's set in options ?**/
 	if(count($options['order']['order_email_bcc'])>0){
-		$mail->AddBCC("".implode(",",$options['order']['order_email_bcc'])."");
+		$mail->AddBCC("".$recipientsBcc."");
 	}
 	
 	/**who the order is from. (if given)**/
 	if($fromEmails[0]!=''){
-		$fromName=wppizza_validate_string($params['cname']);
+		$fromName=$recipientName;
 		if($fromName==''){$fromName='----';}	//if we want, we could set $fromName=get_bloginfo() for example if no name was given...
 		$mail->SetFrom(''.$fromEmails[0].'',''.$fromName.'');
 		$mail->AddReplyTo(''.$fromEmails[0].'', ''.$fromName.'');
