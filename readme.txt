@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, order online, cash on delivery, multilingual
 Requires at least: PHP 5.2, WP 3.3 
 Tested up to: 3.5.1
-Stable tag: 1.3.2.1
+Stable tag: 1.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -112,6 +112,15 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 
 == Changelog ==
+
+1.4  
+* BUGFIX fixed ac ouple of short open tags  
+* Multisite: add option to distinguish between cart contents when using subdirectories  
+* Moved from using plugin bundled phpmailer - introduced in 1.3 to send HTML mails - to using phpmailer that comes with WP  
+* added option to set delivery charges on a per item basis  
+* added touchstart to click events in js  
+* updated readme  
+- 10th May 2013  
 
 1.3.2.1  
 * BUGFIX fixed some STRICT "variables should be passed by reference" errors  
@@ -248,13 +257,22 @@ Just don't display the shoppingcart anywhere. If you choose to do this, you migh
 first thing to try (if you haven't done so already): re-save the pages WPPizza has created   
 (I'm NOT talking about the WPPizza Categories and Menu Item Pages, but the pages that display a list of your item - typically a page that has somthing like [wppizza -some attributes-] on it)
 
+make sure your theme (or one of your plugins) does not use an old version of jQuery (some themes/plugins override the version that comes bundled with wordpress - no, i don't know either why they would do that)  
+
 If that still doesn't help, you might have to adjust the CSS (see 'Can I edit the css ?' above)
 
 If you have problems, let me know what theme you are using and I'll have a look..  
 
 
+= can i send html emails ? =  
 
-= What are the available shortcodes ? =
+yup.  
+go to wppizza->settings and change "Select Type of Mail Delivery" to "HTML and plaintext"  
+if you do , you probably want to edit the html template. To do so, move "wppizza-order-html-email.php" from the wppizza template directory to your theme folder and edit as required  
+if you want to use smtp, do thet same with "wppizza-phpmailer-settings.php"  
+
+
+= What are the available shortcodes ? =  
 
 in case where you cannot or do not want to use a widget, here are the corresponding shortcodes:
 	

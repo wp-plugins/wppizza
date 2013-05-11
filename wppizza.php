@@ -5,7 +5,7 @@ Description: Maintain your restaurant menu online and accept cash on delivery or
 Author: ollybach
 Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Author URI: http://www.wp-pizza.com
-Version: 1.3.2.1
+Version: 1.4
 License:
 
   Copyright 2012 ollybach (dev@wp-pizza.com)
@@ -47,6 +47,7 @@ class WPPizza extends WP_Widget {
 	private $pluginLocale;
 	private $pluginOptions;
 	private $pluginNagNotice;
+	private $pluginSession;
 
 
 	/********************************************************
@@ -58,7 +59,7 @@ class WPPizza extends WP_Widget {
 	********************************************************/
      function __construct() {
 		/**init constants***/
-		$this->pluginVersion='1.3.2.1';//increment in line with stable tag in readme and version above
+		$this->pluginVersion='1.4';//increment in line with stable tag in readme and version above
 	 	$this->pluginName="".WPPIZZA_NAME."";
 	 	$this->pluginSlug="".WPPIZZA_SLUG."";//set also in uninstall when deleting options
 		$this->pluginSlugCategoryTaxonomy="".WPPIZZA_TAXONOMY."";//also on uninstall delete wppizza_children as well as widget
@@ -66,6 +67,13 @@ class WPPizza extends WP_Widget {
 		$this->pluginLocale="".WPPIZZA_LOCALE."";
 		$this->pluginOptions = get_option(WPPIZZA_SLUG,0);
 		$this->pluginNagNotice=0;//default off->for use in updates to this plugin
+		/**set session per blogid when multisite and enabled to avoid having same cart contents between different network sites*/
+		if(is_multisite() && $this->pluginOptions['plugin_data']['wp_multisite_session_per_site']){
+			global $blog_id;
+			$this->pluginSession=$this->pluginSlug.''.$blog_id; 
+		}else{
+			$this->pluginSession=$this->pluginSlug;	
+		}
 
     	//classname and description
         $widget_opts = array (
@@ -154,11 +162,11 @@ class WPPizza extends WP_Widget {
 	function wppizza_init_sessions() {
 	    if (!session_id()) {session_start();}
 	    /*initialize if not set*/
-	    if(!isset($_SESSION[$this->pluginSlug])){
+	    if(!isset($_SESSION[$this->pluginSession])){
 	    	/*holds items in cart*/
-	    	$_SESSION[$this->pluginSlug]['items']=array();
+	    	$_SESSION[$this->pluginSession]['items']=array();
 	    	/*gross sum of all items in cart,before discounts etc*/
-	    	$_SESSION[$this->pluginSlug]['total_price_items']=0;
+	    	$_SESSION[$this->pluginSession]['total_price_items']=0;
 	    }
 	}
 	/*******************************************************
@@ -605,7 +613,6 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 		require(WPPIZZA_PATH.'ajax/get-json.php');
 		die();
 	}
-
 /***********************************************************************************************
 *
 *
@@ -809,7 +816,7 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 			}
 			/**variables to use in template**/
 			$options = $this->pluginOptions;
-			$cart=wppizza_order_summary($_SESSION[$this->pluginSlug],$options);
+			$cart=wppizza_order_summary($_SESSION[$this->pluginSession],$options);
 			/**txt variables from settings->localization*/
 			$txt = $options['localization'];/*put all text varibles into something easier to deal with**/
 
@@ -847,7 +854,7 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 		if($type=='orderpage'){
 			/*******get the variables***/
 			$options = $this->pluginOptions;
-			$cart=wppizza_order_summary($_SESSION[$this->pluginSlug],$options);
+			$cart=wppizza_order_summary($_SESSION[$this->pluginSession],$options);
 			/**txt variables from settings->localization*/
 			$txt = $options['localization'];
 			/**formelements from settings->order form*/
@@ -919,7 +926,6 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 		}
 		return $pages;
 	}
-
 /*********************************************************************************
 *
 *	[changes wppizza custom sort order query to display category navigation in the right order]

@@ -302,6 +302,7 @@
 				'mail_type' => 'mail',
 				'category_parent_page' => array(),
 				'empty_category_and_items' => false,
+				'wp_multisite_session_per_site' => false,
 				'nag_notice' => $this->pluginNagNotice
 			),
 			'layout'=>array(
@@ -340,7 +341,7 @@
 				'separator'=>':',
 				'minute'=>'i',
 				'ampm'=>''
-			),				
+			),
 			'times_closed_standard'=>array(
 			),
 			'order'=>array(
@@ -352,7 +353,8 @@
 				'discount_selected'=>'none',
 				'delivery'=>array(
 					'minimum_total'=>array('min_total'=>'7.5','deliver_below_total'=>true),
-					'standard'=>array('delivery_charge'=>'7.5')
+					'standard'=>array('delivery_charge'=>'7.5'),
+					'per_item'=>array('delivery_charge_per_item'=>'0','delivery_per_item_free'=>'50')
 				),
 				'discounts'=>array(
 					'none'=>array(),
@@ -401,7 +403,7 @@
 				'alert_choose_size'=>array(
 					'descr'=>__('Menu Item: alert when adding to cart by clicking on menu name but more than one size is available. (Only relevant if "Add item to cart on click of *item title* " is enabled)', $this->pluginLocale),
 					'lbl'=>__('please choose a size', $this->pluginLocale)
-				),					
+				),
 				'previous'=>array(
 					'descr'=>__('Menu Pagination : previous page', $this->pluginLocale),
 					'lbl'=>__('< previous', $this->pluginLocale)
@@ -427,7 +429,6 @@
 					'descr'=>__('Shoppingcart: text of button in cart to proceed to order page', $this->pluginLocale),
 					'lbl'=>__('place your order', $this->pluginLocale)
 				),
-
 
 				'your_order'=>array(
 					'descr'=>__('Order Page: label above itemised order', $this->pluginLocale),
@@ -482,8 +483,12 @@
 					'lbl'=>__('free delivery', $this->pluginLocale)
 				),
 				'delivery_charges'=>array(
-					'descr'=>__('Pricelabels (Sub)Totals: text delivery charges (if applicable)', $this->pluginLocale),
+					'descr'=>__('Pricelabels (Sub)Totals: text delivery charges - when set to "Fixed" or "Free delivery over" (if applicable)', $this->pluginLocale),
 					'lbl'=>__('delivery charges', $this->pluginLocale)
+				),
+				'delivery_charges_per_item'=>array(
+					'descr'=>__('Pricelabels (Sub)Totals: text delivery when set to "Delivery Charges per item" (if applicable)', $this->pluginLocale),
+					'lbl'=>__('delivery charges per item', $this->pluginLocale)
 				),
 				'discount'=>array(
 					'descr'=>__('Pricelabels (Sub)Totals: text before sum of discounts applied(if any)', $this->pluginLocale),

@@ -48,7 +48,7 @@ try {
 	
 	/**the html**/
 	$mail->MsgHTML($orderHtml);
-	$mail->AltBody = $order; // optional - MsgHTML will create an alternate automatically
+	$mail->AltBody = $order; // optional - MsgHTML will create an alternate automatically, however this has been prettied up a little for this plugin. If you must, feel free to comment this line out though
 	
 
 	$mail->Send();

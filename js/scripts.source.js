@@ -3,7 +3,7 @@ jQuery(document).ready(function($){
 	*	[add to cart / remove from cart]
 	*******************************/
 	if ($(".wppizza-open").length > 0){//first check if shopping cart exists on page and that we are open
-		$(document).on('click', '.wppizza-add-to-cart,.wppizza-remove-from-cart,.wppizza-cart-refresh', function(e){
+		$(document).on('click touchstart', '.wppizza-add-to-cart,.wppizza-remove-from-cart,.wppizza-cart-refresh', function(e){
 			e.preventDefault();
 
 		var self=$(this);
@@ -63,7 +63,7 @@ jQuery(document).ready(function($){
 	*
 	***********************************************/
 	if ($(".wppizza-open").length == 0 &&  $(".wppizza-cart").length > 0){
-		$(document).on('click', '.wppizza-add-to-cart', function(e){
+		$(document).on('click touchstart', '.wppizza-add-to-cart', function(e){
 			alert(wppizza.msg.closed);
 		});
 	}
@@ -75,11 +75,11 @@ jQuery(document).ready(function($){
 	***********************************************/
 	if ($(".wppizza-open").length > 0 &&  $(".wppizza-cart").length > 0){
 		/*more than one size->choose alert*/
-		$(document).on('click', '.wppizza-trigger-choose', function(e){
+		$(document).on('click touchstart', '.wppizza-trigger-choose', function(e){
 			alert(wppizza.msg.choosesize);
 		});
 		/*only one size, trigger click*/
-		$(document).on('click', '.wppizza-trigger-click', function(e){
+		$(document).on('click touchstart', '.wppizza-trigger-click', function(e){
 			/*just loose wppizza-article- from id*/
 			var ArticleId=this.id.substr(16);
 			/**make target id*/
@@ -120,7 +120,7 @@ jQuery(document).ready(function($){
 	/******************************
 	* Let's make IE7 IE8 happy
 	*******************************/
-	$(document).on('click', '.wppizza-cart-button>a', function(e){
+	$(document).on('click touchstart', '.wppizza-cart-button>a', function(e){
 		e.preventDefault(); e.stopPropagation();
         url=jQuery(this).attr("href");
         window.location.href = url;

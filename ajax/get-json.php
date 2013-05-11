@@ -6,7 +6,7 @@ if(!defined('DOING_AJAX') || !DOING_AJAX){
   exit; //just for good measure
 }
 /**testing variables ****************************/
-//unset($_SESSION[$this->pluginSlug]);
+//unset($_SESSION[$this->pluginSession]);
 //sleep(2);//when testing jquery fadeins etc
 /******************************************/
 $options=$this->pluginOptions;
@@ -43,29 +43,29 @@ if(isset($_POST['vars']['type']) && (($_POST['vars']['type']=='add' || $_POST['v
 		}
 
 		/*add item to session array. adding lowercase name first to simplify sorting with asort**/
-		$_SESSION[$this->pluginSlug]['items'][$groupId][]=array('sortname'=>strtolower($itemName),'size'=>$itemVars[3],'price'=>$itemSizePrice,'sizename'=>$itemSizeName,'printname'=>$itemName,'id'=>$itemVars[1],'additionalinfo'=>'');
+		$_SESSION[$this->pluginSession]['items'][$groupId][]=array('sortname'=>strtolower($itemName),'size'=>$itemVars[3],'price'=>$itemSizePrice,'sizename'=>$itemSizeName,'printname'=>$itemName,'id'=>$itemVars[1],'additionalinfo'=>'');
 	}
 	/**remove from cart -> just unset**/
 	if($_POST['vars']['type']=='remove'){
 		/**explode and get last in array (the id)**/
 		$groupId=end(explode("-",$_POST['vars']['id']));
-		end($_SESSION[$this->pluginSlug]['items'][$groupId]);
-		$last=key($_SESSION[$this->pluginSlug]['items'][$groupId]);
-		unset($_SESSION[$this->pluginSlug]['items'][$groupId][$last]);
+		end($_SESSION[$this->pluginSession]['items'][$groupId]);
+		$last=key($_SESSION[$this->pluginSession]['items'][$groupId]);
+		unset($_SESSION[$this->pluginSession]['items'][$groupId][$last]);
 		/*if there are 0x this ingredient, unset completely**/
-		if(count($_SESSION[$this->pluginSlug]['items'][$groupId])==0){
-			unset($_SESSION[$this->pluginSlug]['items'][$groupId]);
+		if(count($_SESSION[$this->pluginSession]['items'][$groupId])==0){
+			unset($_SESSION[$this->pluginSession]['items'][$groupId]);
 		}
 	}
 
 	/*total price*/
-	foreach($_SESSION[$this->pluginSlug]['items'] as $group){
+	foreach($_SESSION[$this->pluginSession]['items'] as $group){
 		foreach($group as $v){
 			$itemprice[]=$v['price'];
 		}
 	}
-	$_SESSION[$this->pluginSlug]['total_price_items']=array_sum($itemprice);
-	print"".json_encode(wppizza_order_summary($_SESSION[$this->pluginSlug],$options,true))."";
+	$_SESSION[$this->pluginSession]['total_price_items']=array_sum($itemprice);
+	print"".json_encode(wppizza_order_summary($_SESSION[$this->pluginSession],$options,true))."";
 	exit();
 }
 /***************************************************************
@@ -84,7 +84,7 @@ if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='sendorder'){
 	/*lets check the emails again and use only the first one below if someone tried to put an array in**/
 	$fromEmails=wppizza_validate_email_array($params['cemail']);
 	/**cart contents**/
-	$cartContents=wppizza_order_summary($_SESSION[$this->pluginSlug],$options);
+	$cartContents=wppizza_order_summary($_SESSION[$this->pluginSession],$options);
 	/**currency***/
 	$currency=$cartContents['currency'];
 	/**now timespamp and date**/
@@ -288,7 +288,7 @@ if($options['plugin_data']['mail_type']=='phpmailer'){
 
 		/************use phpmailer mail function****************/
 		if($options['plugin_data']['mail_type']=='phpmailer'){
-			require_once (WPPIZZA_PATH.'classes/phpmailer/class.phpmailer.php');
+			require_once ABSPATH . WPINC . '/class-phpmailer.php';
 			$mail = new PHPMailer(true);
 			/*returns $orderHtml*/
 			$orderHtml='';
@@ -313,7 +313,7 @@ if($options['plugin_data']['mail_type']=='phpmailer'){
 			//$wpdb->print_error();
 			$wpdb->query( $wpdb->prepare( "INSERT INTO ".$wpdb->prefix . $this->pluginOrderTable." ( customer_details, order_details )VALUES ( %s, %s )", array($customer_details, $order)));
 			print"<div class='mailSuccess'><h1>".$options['localization']['thank_you']['lbl']."</h1>".nl2br($options['localization']['thank_you_p']['lbl'])."</div>";
-			unset($_SESSION[$this->pluginSlug]);
+			unset($_SESSION[$this->pluginSession]);
 		}
 		/***mail sending error -> show error***/
 		if(isset($mailError)){

@@ -23,6 +23,7 @@
 		if(isset($_POST[''.$this->pluginSlug.'_global'])){
 			/**submitted options -> validate***/
 			$options['plugin_data']['js_in_footer'] = !empty($input['plugin_data']['js_in_footer']) ? true : false;
+			$options['plugin_data']['wp_multisite_session_per_site'] = !empty($input['plugin_data']['wp_multisite_session_per_site']) ? true : false;
 			$options['plugin_data']['mail_type'] = wppizza_validate_alpha_only($input['plugin_data']['mail_type']);
 		}
 

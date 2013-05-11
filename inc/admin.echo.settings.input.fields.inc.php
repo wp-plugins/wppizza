@@ -11,8 +11,10 @@ $options = $this->pluginOptions;
 			}
 			if($field=='js_in_footer'){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[plugin_data][".$field."]' type='checkbox'  ". checked($options['plugin_data'][$field],true,false)." value='1' />";
-			}			
-			
+			}
+			if($field=='wp_multisite_session_per_site'){
+				echo "<input id='".$field."' name='".$this->pluginSlug."[plugin_data][".$field."]' type='checkbox'  ". checked($options['plugin_data'][$field],true,false)." value='1' />";
+			}
 			if($field=='mail_type'){
 				//echo "<input id='".$field."' name='".$this->pluginSlug."[".$field."]' type='checkbox'  ". checked($options['plugin_data'][$field],true,false)." value='1' />";
 				echo "<select name='".$this->pluginSlug."[plugin_data][".$field."]' />";
@@ -20,7 +22,7 @@ $options = $this->pluginOptions;
 					echo"<option value='wp_mail' ".selected($options['plugin_data'][$field],"wp_mail",false).">".__('Wordpress Mail Function [uses wp_mail]', $this->pluginLocale)."</option>";
 					echo"<option value='phpmailer' ".selected($options['plugin_data'][$field],"phpmailer",false).">".__('HTML and Plaintext [uses PHPMailer]', $this->pluginLocale)."</option>";
 				echo "</select>";
-			}			
+			}
 			if($field=='category_parent_page'){
 				/*get all pages**/
 				$pages=get_pages(array('post_type'=> 'page','echo'=>0,'title_li'=>''));
@@ -57,20 +59,20 @@ $options = $this->pluginOptions;
 			}
 			if($field=='hide_decimals' ){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[layout][".$field."]' type='checkbox'  ". checked($options['layout'][$field],true,false)." value='1' />";
-			}			
+			}
 			if($field=='show_currency_with_price'){
 				echo "".__('do not show', $this->pluginLocale)."<input id='".$field."' name='".$this->pluginSlug."[layout][".$field."]' type='radio'  ".checked($options['layout'][$field],0,false)." value='0' /> ";
 				echo "".__('on left', $this->pluginLocale)."<input id='".$field."' name='".$this->pluginSlug."[layout][".$field."]' type='radio'  ".checked($options['layout'][$field],1,false)." value='1' />";
 				echo "".__('on right', $this->pluginLocale)."<input id='".$field."' name='".$this->pluginSlug."[layout][".$field."]' type='radio'  ".checked($options['layout'][$field],2,false)." value='2' />";
-			}					
+			}
 
 			if($field=='currency_symbol_left'){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[layout][".$field."]' type='checkbox'  ". checked($options['layout'][$field],true,false)." value='1' />";
-			}					
-			
+			}
+
 			if($field=='items_per_loop' ){
 				echo "<input name='".$this->pluginSlug."[layout][".$field."]' size='2' type='text'  value='{$options['layout'][$field]}' />";
-			}			
+			}
 			if($field=='style'){
 				echo "<select name='".$this->pluginSlug."[layout][".$field."]' />";
 					foreach(wppizza_public_styles($options['layout'][$field]) as $k=>$v){
@@ -78,7 +80,7 @@ $options = $this->pluginOptions;
 					}
 				echo "</select>";
 			}
-			
+
 
 			if($field=='add_to_cart_on_title_click' ){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[layout][".$field."]' type='checkbox'  ". checked($options['layout'][$field],true,false)." value='1' />";
@@ -101,7 +103,7 @@ $options = $this->pluginOptions;
 						echo"<option value='.' ".selected($options[$field]['separator'],".",false).">.</option>";
 						echo"<option value='-' ".selected($options[$field]['separator'],"-",false).">-</option>";
 						echo"<option value=';' ".selected($options[$field]['separator'],";",false).">;</option>";
-				echo "</select>";				
+				echo "</select>";
 				echo "<br/>";
 				echo"<span class='wppizza_label'>".__('Minutes', $this->pluginLocale)."</span>";
 				echo "<select name='".$this->pluginSlug."[".$field."][minute]' />";
@@ -117,9 +119,9 @@ $options = $this->pluginOptions;
 						echo"<option value=' a' ".selected($options[$field]['ampm']," a",false).">".__('lowercase (with leading space)', $this->pluginLocale)."</option>";
 						echo"<option value=' A' ".selected($options[$field]['ampm']," A",false).">".__('UPPERCASE (width leading space)', $this->pluginLocale)."</option>";
 				echo "</select>";
-			}			
-			
-			
+			}
+
+
 			if($field=='placeholder_img'){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[layout][".$field."]' type='checkbox'  ". checked($options['layout'][$field],true,false)." value='1' />";
 			}
@@ -128,16 +130,16 @@ $options = $this->pluginOptions;
 			}
 			if($field=='hide_item_currency_symbol'){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[layout][".$field."]' type='checkbox'  ". checked($options['layout'][$field],true,false)." value='1' />";
-			}			
+			}
 			if($field=='hide_single_pricetier'){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[layout][".$field."]' type='checkbox'  ". checked($options['layout'][$field],true,false)." value='1' />";
-			}			
+			}
 			if($field=='hide_prices'){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[layout][".$field."]' type='checkbox'  ". checked($options['layout'][$field],true,false)." value='1' />";
 			}
 			if($field=='disable_online_order'){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[layout][".$field."]' type='checkbox'  ". checked($options['layout'][$field],true,false)." value='1' />";
-			}			
+			}
 			if($field=='suppress_loop_headers'){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[layout][".$field."]' type='checkbox'  ". checked($options['layout'][$field],true,false)." value='1' />";
 			}
@@ -165,8 +167,8 @@ $options = $this->pluginOptions;
 				echo "<a href='#' id='wppizza_add_".$field."' class='button'>".__('add', $this->pluginLocale)."</a>";
 				echo"</div>";
 			}
-			
-			
+
+
 			if($field=='times_closed_standard'){
 				echo"<div id='wppizza_".$field."' >";
 				echo"<div id='wppizza_".$field."_options'>";
@@ -177,8 +179,8 @@ $options = $this->pluginOptions;
 				echo"</div>";
 				echo "<a href='#' id='wppizza_add_".$field."' class='button'>".__('add', $this->pluginLocale)."</a>";
 				echo"</div>";
-			}			
-			
+			}
+
 
 			if($field=='currency'){
 				echo "<select name='".$this->pluginSlug."[order][".$field."]'>";
@@ -244,8 +246,18 @@ $options = $this->pluginOptions;
 						echo"".__('Fixed Delivery Charges [added to order total]', $this->pluginLocale).":";
 						echo "<input name='".$this->pluginSlug."[order][".$field."][standard][delivery_charge]' size='2' type='text' value='".wppizza_output_format_price($options['order'][$field]['standard']['delivery_charge'],$optionsDecimals)."' />";
 					}
+					if($k=='per_item'){
+						echo"".__('Delivery Charges per item', $this->pluginLocale).":";
+						echo "<input name='".$this->pluginSlug."[order][".$field."][per_item][delivery_charge_per_item]' size='2' type='text' value='".wppizza_output_format_price($options['order'][$field]['per_item']['delivery_charge_per_item'],$optionsDecimals)."' />";
+						echo" ".__('Do not apply delivery charges when total order value reaches ', $this->pluginLocale).":";
+						echo"<input name='".$this->pluginSlug."[order][".$field."][per_item][delivery_per_item_free]' size='2' type='text' value='".wppizza_output_format_price($options['order'][$field]['per_item']['delivery_per_item_free'],$optionsDecimals)."' />";
+						echo" ".__('[set to 0 to always apply charges per item]', $this->pluginLocale)."";
+					}
 					echo "</span>";
 				}
+			}
+			if($field=='delivery_per_item'){
+				echo"<input name='".$this->pluginSlug."[order][".$field."]' size='2' type='text' value='".wppizza_output_format_price($options['order'][$field],$optionsDecimals)."' />";
 			}
 			if($field=='discounts'){
 				foreach($options['order'][$field] as $k=>$v){

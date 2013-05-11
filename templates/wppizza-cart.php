@@ -110,6 +110,9 @@ return;
 		<?php }}?>
 		<?php if(isset($cart['pricing_delivery'])){?>
 			<li><?php echo $cart['pricing_delivery'] ?></li>
+			<?php if(isset($cart['pricing_delivery_per_item_free'])){?>
+			<li><?php echo $cart['pricing_delivery_per_item_free'] ?></li>
+			<?php }?>
 		<?php }?>
 	</ul>
 <?php } ?>

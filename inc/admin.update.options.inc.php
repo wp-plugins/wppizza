@@ -12,8 +12,13 @@
 	$added_options=wppizza_compare_options($defaultOptions,$options);
 	/*get array of new default options when updating plugin*/
 	$update_options=wppizza_merge_options($added_options,$options);
+	
 	/*distinctly set plugin version*/
 	$update_options['plugin_data']['version']=$this->pluginVersion;
+	/*add delivery charges per item if it does not exist yet (as wppizza_merge_options -> wppizza_traverse_list only looks for first dimansion in array. should maybe be made recursive one day though.....)*/
+	if(!isset($options['order']['delivery']['per_item'])){
+		$update_options['order']['delivery']['per_item']=$defaultOptions['order']['delivery']['per_item'];
+	}	
 	/****************************************************************************
 	$update_options now holds the old options plus the added new defaults options
 	*****************************************************************************/
@@ -61,7 +66,8 @@
 	if(isset($options['plugin_data']['category_parent_page'])){
 		$update_options['plugin_data']['category_parent_page']=$options['plugin_data']['category_parent_page'];
 	}
-	/*this will always be an empty array, so distinctly set it here as the comparison function above will stripi it**/
+	/*this will always be an empty array (discounts set to "none"), so distinctly set it here as the comparison function above will strip it as it's empty**/
 	$update_options['order']['discounts']['none']=array();
 	ksort($update_options['order']['discounts']);/*to keep a consistant order*/
+
 ?>

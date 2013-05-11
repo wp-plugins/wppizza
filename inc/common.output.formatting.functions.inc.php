@@ -6,19 +6,19 @@
 		}
 		return $str;
 	}
-	
+
 	function wppizza_output_format_price($str,$hideDecimals=false){
-		if(trim($str)!=''){	
+		if(trim($str)!=''){
 			if($hideDecimals){
 				$str=number_format_i18n($str,0);
 			}else{
-				$str=number_format_i18n($str,2);	
+				$str=number_format_i18n($str,2);
 			}
 		}
 		return $str;
-	}		
-	
-	
+	}
+
+
 
 	function wppizza_currencies($selected='',$returnValue=null){
 		$items['---none---']='';
@@ -206,7 +206,7 @@
 		$hm=explode(":",$time);
 		$t=mktime($hm[0],$hm[1],0,0,0,0);
 		$time=date(''.$fHour.''.$fSeparator.''.$fMinute.''.$fAMPM.'',$t);
-		
+
 	return $time;
 	}
 
@@ -470,11 +470,13 @@ function wppizza_order_summary($session,$options,$ajax=null){
 		[get cart items as grouped array]
 	****************************************************/
 	$cartItems=array();//ini array
+	$cartItemsCount=0;//count all items
 	$groupedItems=array();//ini array
 	$summary['items']=array();//ini array
 	/**lets group items by id and sizes***/
 	foreach($session['items'] as $groupid=>$groupitems){
 		foreach($groupitems as $v){
+			$cartItemsCount++;
 			$cartItems[''.$groupid.''][]=array('sortname'=>$v['sortname'],'size'=>$v['size'],'sizename'=>$v['sizename'],'printname'=>$v['printname'],'price'=>$v['price'],'additionalinfo'=>$v['additionalinfo']);
 		}
 	}
@@ -555,7 +557,7 @@ function wppizza_order_summary($session,$options,$ajax=null){
 			$deliveryLabel=$options['localization']['free_delivery']['lbl'];//initialize var
 			$deliveryCharges='';
 
-			if($options['order']['delivery_selected']=='standard'){//standard
+			if($options['order']['delivery_selected']=='standard'){//standard (i.e. fixed delivery charges)
 				/**delivery settings to display with discount options somewhere*/
 				if($options['order']['delivery']['standard']['delivery_charge']>0){
 					$deliveryLabel=$options['localization']['delivery_charges']['lbl'];
@@ -578,6 +580,38 @@ function wppizza_order_summary($session,$options,$ajax=null){
 			}
 
 
+
+			if($options['order']['delivery_selected']=='per_item'){/*delivery charges on a per item basis*/
+				/**free delivery isset>0**/
+				if($options['order']['delivery']['per_item']['delivery_per_item_free']>0){
+					/*value not reached for free delivery*/
+					if($session['total_price_items']<$options['order']['delivery']['per_item']['delivery_per_item_free']){
+						/*number of items*deliverycharges per item*/
+						if($cartItemsCount>0){
+							$deliveryCharges=wppizza_output_format_float($cartItemsCount*$options['order']['delivery']['per_item']['delivery_charge_per_item']);
+						}
+					}
+				}else{/*no free delivery set (i.e set to 0)*/
+					/*number of items*deliverycharges per item*/
+					if($cartItemsCount>0){
+						$deliveryCharges=wppizza_output_format_float($cartItemsCount*$options['order']['delivery']['per_item']['delivery_charge_per_item']);
+					}
+				}
+				/*label next to delivery charges if>0 otherwise default above->free*/
+				if($deliveryCharges>0){
+					$deliveryLabel=$options['localization']['delivery_charges']['lbl'];
+				}
+
+
+				/**delivery settings to display with discount options somewhere*/
+				if($options['order']['delivery']['per_item']['delivery_per_item_free']>0){
+					$summary['pricing_delivery']="".$options['localization']['delivery_charges_per_item']['lbl']." <span>".$options['order']['currency_symbol']." ".wppizza_output_format_price($options['order']['delivery']['per_item']['delivery_charge_per_item'],$optionsDecimals)."</span>";
+					$summary['pricing_delivery_per_item_free']="".$options['localization']['free_delivery_for_orders_of']['lbl']." <span>".$options['order']['currency_symbol']." ".wppizza_output_format_price($options['order']['delivery']['per_item']['delivery_per_item_free'],$optionsDecimals)."</span>";
+				}else{
+					$summary['pricing_delivery']="".$options['localization']['delivery_charges_per_item']['lbl']." <span>".$options['order']['currency_symbol']." ".wppizza_output_format_price($options['order']['delivery']['per_item']['delivery_charge_per_item'],$optionsDecimals)."</span>";
+				}
+
+			}
 
 	/****************************************************
 		[get total order value]
@@ -612,7 +646,8 @@ function wppizza_order_summary($session,$options,$ajax=null){
 					)
 
 				) ||
-				$options['order']['delivery_selected']=='standard'
+				$options['order']['delivery_selected']=='standard' ||
+				$options['order']['delivery_selected']=='per_item'
 
 			){
 				if($options['order']['orderpage']){//go to page
@@ -626,7 +661,7 @@ function wppizza_order_summary($session,$options,$ajax=null){
 //					$summary['button']='<input type="button" value="'.$options['localization']['place_your_order']['lbl'].'" class="wppizza-order-page"/>';
 //				}
 			}else{
-			/*minimum order not reached*/
+			/*minimum order not reached. only applies when "Deliver even when total order value is below minimum" is NOT checked and the corresponding option(radio) has been selected*/
 				$summary['nocheckout']=''.$options['localization']['minimum_order']['lbl'].' '.wppizza_output_format_price($options['order']['delivery']['minimum_total']['min_total'],$optionsDecimals).' '.$options['order']['currency_symbol'].'';
 			}
 
@@ -703,7 +738,7 @@ function wppizza_return_single_dimension_array($arr, $key='lbl'){
 	[decode entities in send order email plaintext]
 ****************************************************************************/
 function wppizza_email_decode_entities($str,$charset){
-		
+
 		$supportedCharsets=array('iso-8859-1','iso-8859-5','iso-8859-15','utf-8','cp866','cp1251','cp1252','koi8-r','big5','gb2312','big5-hkscs','shift_jis','euc-jp','macroman');
 		if(in_array(strtolower($charset),$supportedCharsets)){
 			$charset=$charset;

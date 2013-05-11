@@ -160,7 +160,7 @@
 
 
 	   	<?php foreach($options['sizes'][$meta['sizes']] as $k=>$v){?>
-	   		<span id='<? echo $post_type."-".get_the_ID()."-".$meta['sizes']."-".$k ?>' class='<?php echo $post_type ?>-article-price <?php echo $priceClass ?>' <?php echo $priceTitle ?>>
+	   		<span id='<?php echo $post_type."-".get_the_ID()."-".$meta['sizes']."-".$k ?>' class='<?php echo $post_type ?>-article-price <?php echo $priceClass ?>' <?php echo $priceTitle ?>>
 	    		<span><?php if($options['layout']['show_currency_with_price']==1){echo $currency." ";} ?><?php echo wppizza_output_format_price($meta['prices'][$k],$optionsDecimals)?><?php if($options['layout']['show_currency_with_price']==2){echo " ".$currency;} ?></span>
 	    		<?php if(!isset($hidePricetier) || count($options['sizes'][$meta['sizes']])>1){ ?>
 	    		<div class='<?php echo $post_type ?>-article-price-lbl<?php echo $hideCartIcon?>'><?php echo $v['lbl']?></div>
@@ -183,7 +183,7 @@
 		<h2<?php echo $clickTriggerId ?> class="<?php echo $post_type ?>-article-title<?php echo $clickTriggerClass ?>">
 			<?php the_title(); ?>
 			<?php if(count($meta['additives'])>0){?>
-				<sup class='<?php echo $post_type ?>-article-additives' title='<? echo $txt['contains_additives']['lbl'] ?>'>*
+				<sup class='<?php echo $post_type ?>-article-additives' title='<?php echo $txt['contains_additives']['lbl'] ?>'>*
 	    		<?php foreach($meta['additives'] as $k=>$v){ $additivesOnPage=true; ?>
 	    			(<?php echo $k ?>)
 	    		<?php } ?>
