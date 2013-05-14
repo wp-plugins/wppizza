@@ -66,7 +66,7 @@ $orderHtml.='<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "htt
 
 /**********************************************************
 
-	[order summaries - sum of items, discount, delivery, total]
+	[order summaries - sum of items, discount, delivery, total, self pickup if selected]
 
 ***********************************************************/
 
@@ -78,7 +78,7 @@ $orderHtml.='<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "htt
 		$orderHtml.=PHP_EOL.'				<tr><td style="padding:0 5px;">'.$order_summary['discount']['label'].'</td><td>'.$order_summary['discount']['currency'].' '.$order_summary['discount']['price'].'</td></tr>';
 		}
 
-		/**delivery costs (if free, price and currency will be empty)**/
+		/**delivery costs (if free or self pickup, price and currency will be empty)**/
 		if(isset($order_summary['delivery'])){
 		$orderHtml.=PHP_EOL.'				<tr><td style="padding:0 5px;">'.$order_summary['delivery']['label'].'</td><td>'.$order_summary['delivery']['currency'].' '.$order_summary['delivery']['price'].'</td></tr>';
 		}
@@ -89,8 +89,10 @@ $orderHtml.='<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "htt
 		/**total**/
 		$orderHtml.=PHP_EOL.'				<tr><td style="padding:5px;font-weight:600">'.$order_summary['total']['label'].'</td><td style="font-weight:600">'.$order_summary['total']['currency'].' '.$order_summary['total']['price'].'</td></tr>';
 
-
-
+		/**self pickup if selected. new in version 1.4.1**/
+		if(isset($order_summary['self_pickup'])){
+		$orderHtml.=PHP_EOL.'				<tr><td style="padding:10px 5px;font-weight:600;color:#ff3333" colspan="2">'.$order_summary['self_pickup']['label'].'</td></tr>';
+		}
 
 
 /**********************************************************

@@ -351,6 +351,9 @@
 				'orderpage_exclude'=>true,
 				'delivery_selected'=>'minimum_total',
 				'discount_selected'=>'none',
+				'order_pickup' => false,
+				'order_pickup_alert' => false,
+				'order_pickup_display_location' => 1,
 				'delivery'=>array(
 					'minimum_total'=>array('min_total'=>'7.5','deliver_below_total'=>true),
 					'standard'=>array('delivery_charge'=>'7.5'),
@@ -429,7 +432,18 @@
 					'descr'=>__('Shoppingcart: text of button in cart to proceed to order page', $this->pluginLocale),
 					'lbl'=>__('place your order', $this->pluginLocale)
 				),
-
+				'order_self_pickup'=>array(
+					'descr'=>__('Shoppingcart - Self Pickup: text next to self pickup checkbox (if enabled)', $this->pluginLocale),
+					'lbl'=>__('I would like to pickup the order myself', $this->pluginLocale)
+				),
+				'order_self_pickup_cart'=>array(
+					'descr'=>__('Shoppingcart - Self Pickup: text under total value (if selected by customer)', $this->pluginLocale),
+					'lbl'=>__('Delivery: pickup', $this->pluginLocale)
+				),
+				'order_self_pickup_cart_js'=>array(
+					'descr'=>__('Shoppingcart - Self Pickup: javascript alert when customer selects self pickup (if enabled)', $this->pluginLocale),
+					'lbl'=>__('You have chosen to pickup the order yourself. This order will not be delivered. Please allow 30 min. for us to prepare your order.', $this->pluginLocale)
+				),
 				'your_order'=>array(
 					'descr'=>__('Order Page: label above itemised order', $this->pluginLocale),
 					'lbl'=>__('your order', $this->pluginLocale)
@@ -441,6 +455,10 @@
 				'order_form_legend'=>array(
 					'descr'=>__('Order Page: label above personal info', $this->pluginLocale),
 					'lbl'=>__('please enter the required information below', $this->pluginLocale)
+				),
+				'order_page_self_pickup'=>array(
+					'descr'=>__('Order Page - Self Pickup: text on order page to highlight self pickup (if appplicable)', $this->pluginLocale),
+					'lbl'=>__('Note: you have chosen to pickup the order yourself. This order will not be delivered. Please allow 30 min. for us to prepare your order.', $this->pluginLocale)
 				),
 				'required_field'=>array(
 					'descr'=>__('Order Page: message when required field is missing', $this->pluginLocale),

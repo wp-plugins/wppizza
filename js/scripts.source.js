@@ -69,6 +69,29 @@ jQuery(document).ready(function($){
 	}
 	/***********************************************
 	*
+	*	[customer selects self pickup , session gets set via ajax
+	*	reload page to reflect delivery charges....
+	*	only relevant if there's a shoppingcart on page]
+	*
+	***********************************************/	
+	if ($(".wppizza-open").length > 0 &&  $(".wppizza-cart").length > 0){
+		$(document).on('click touchstart', '#wppizza-order-pickup-sel,#wppizza-order-pickup-js', function(e){
+			var self=$(this);
+			var selfValue=self.is(':checked');			
+			/*js alert if enabled*/
+			if(self.attr('id')=='wppizza-order-pickup-js' && selfValue==true){
+				alert(wppizza.msg.pickup);
+			}
+			jQuery.post(wppizza.ajaxurl , {action :'wppizza_json',vars:{'type':'order-pickup','value':selfValue}}, function(response) { 
+	
+//console.log(response);
+				window.location.href=window.location.href;/*make sure page gest reloaded without confirm*/
+				
+			},'text').error(function(jqXHR, textStatus, errorThrown) {alert("error : " + errorThrown);console.log(jqXHR.responseText);});
+		});	
+	}
+	/***********************************************
+	*
 	*	[if we are trying to add to cart by clicking on the title
 	*	but there's mor than one size to choose from, display alert]
 	*	[provided  there's a cart on page and we are open]

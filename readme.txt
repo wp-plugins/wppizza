@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, order online, cash on delivery, multilingual
 Requires at least: PHP 5.2, WP 3.3 
 Tested up to: 3.5.1
-Stable tag: 1.4
+Stable tag: 1.4.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -112,6 +112,13 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 
 == Changelog ==
+
+1.4.1  
+* added option for customer to select self-pickup instead of delivery (results in no delivery charges)   
+* changed templates(wppizza-cart.php/wppizza-order.php/wppizza-order-html-email.php) and css(wppizza-default.css) to account for self-pickup   
+* added ability to keep main plugin css to reflect future additions etc and only overwrite the required line by copying wppizza-custom.css to theme directory    
+* added some comments about IE legend css in css file   
+- 14th May 2013  
 
 1.4  
 * BUGFIX fixed ac ouple of short open tags  
@@ -220,6 +227,7 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 although the css has been written so that it works with many themes out of the box (see www.wp-pizza.com - all themes use the same default stylesheet) you might want to adjust some things here and there to work with your theme (especially if you want to support older browsers).  
 if you do, copy the wppizza/css/wppizza-default.css to your theme directory (so it does not get overwritten by future updates of the plugin) and edit as required  
+alternatively (and possibly better as any future updates to the main css will still be reflected), just copy wppizza-custom.css to your theme directory and only overwrite the styles you need to override. (this file will be read AFTER the main default.css) 
 
 
 = Can I use this plugin when I am not using english on my site ? =

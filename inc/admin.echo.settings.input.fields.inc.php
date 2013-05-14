@@ -259,6 +259,17 @@ $options = $this->pluginOptions;
 			if($field=='delivery_per_item'){
 				echo"<input name='".$this->pluginSlug."[order][".$field."]' size='2' type='text' value='".wppizza_output_format_price($options['order'][$field],$optionsDecimals)."' />";
 			}
+			if($field=='order_pickup'){
+				echo "<input id='".$field."' name='".$this->pluginSlug."[order][".$field."]' type='checkbox'  ". checked($options['order'][$field],true,false)." value='1' /> ".__('tick to enable', $this->pluginLocale)."";
+				echo "<br/><input id='order_pickup_alert' name='".$this->pluginSlug."[order][order_pickup_alert]' type='checkbox'  ". checked($options['order']['order_pickup_alert'],true,false)." value='1' /> ".__('enable javascript alert when user selects self pickup (set corresponding text in localization)', $this->pluginLocale)."";
+			}
+			if($field=='order_pickup_display_location'){
+				echo "".__('under cart only', $this->pluginLocale)."<input id='".$field."' name='".$this->pluginSlug."[order][".$field."]' type='radio'  ".checked($options['order'][$field],1,false)." value='1' /> ";
+				echo "".__('on order page only', $this->pluginLocale)."<input id='".$field."' name='".$this->pluginSlug."[order][".$field."]' type='radio'  ".checked($options['order'][$field],2,false)." value='2' /> ";
+				echo "".__('both', $this->pluginLocale)."<input id='".$field."' name='".$this->pluginSlug."[order][".$field."]' type='radio'  ".checked($options['order'][$field],3,false)." value='3' />";
+			}
+
+
 			if($field=='discounts'){
 				foreach($options['order'][$field] as $k=>$v){
 					echo "<span class='wppizza_option'>";

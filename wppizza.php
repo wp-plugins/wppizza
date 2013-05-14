@@ -5,7 +5,7 @@ Description: Maintain your restaurant menu online and accept cash on delivery or
 Author: ollybach
 Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Author URI: http://www.wp-pizza.com
-Version: 1.4
+Version: 1.4.1
 License:
 
   Copyright 2012 ollybach (dev@wp-pizza.com)
@@ -59,7 +59,7 @@ class WPPizza extends WP_Widget {
 	********************************************************/
      function __construct() {
 		/**init constants***/
-		$this->pluginVersion='1.4';//increment in line with stable tag in readme and version above
+		$this->pluginVersion='1.4.1';//increment in line with stable tag in readme and version above
 	 	$this->pluginName="".WPPIZZA_NAME."";
 	 	$this->pluginSlug="".WPPIZZA_SLUG."";//set also in uninstall when deleting options
 		$this->pluginSlugCategoryTaxonomy="".WPPIZZA_TAXONOMY."";//also on uninstall delete wppizza_children as well as widget
@@ -70,9 +70,9 @@ class WPPizza extends WP_Widget {
 		/**set session per blogid when multisite and enabled to avoid having same cart contents between different network sites*/
 		if(is_multisite() && $this->pluginOptions['plugin_data']['wp_multisite_session_per_site']){
 			global $blog_id;
-			$this->pluginSession=$this->pluginSlug.''.$blog_id; 
+			$this->pluginSession=$this->pluginSlug.''.$blog_id;
 		}else{
-			$this->pluginSession=$this->pluginSlug;	
+			$this->pluginSession=$this->pluginSlug;
 		}
 
     	//classname and description
@@ -194,10 +194,15 @@ class WPPizza extends WP_Widget {
 			//$forceUpdate=1;
 			/**update  options if installed version < current version***/
 			if( version_compare( $options['plugin_data']['version'], 	$this->pluginVersion, '<' ) || isset($forceUpdate)) {
+
 				/**get default options***/
 				require_once(WPPIZZA_PATH .'inc/admin.setup.default.options.inc.php');
 				/**compare table options against default options and delete/add as required***/
 				require_once(WPPIZZA_PATH .'inc/admin.update.options.inc.php');
+
+				/**set nag notice for 1.4.1 if plugin has been updated (as opposed to fresh install)***/
+				if($this->pluginVersion=='1.4.1'){$update_options['plugin_data']['nag_notice']=$this->pluginVersion;}
+
 				/**update options**/
 				update_option($this->pluginSlug, $update_options );
 			}
@@ -222,13 +227,25 @@ class WPPizza extends WP_Widget {
 
 			$pluginUpdatedNotice='';
 			$pluginUpdatedNotice.='<div id="message" class="updated wppizza_admin_notice" style="padding:20px;">';
-			$pluginUpdatedNotice.='<b>'.$this->pluginName.' Installed</b><br/><br/>';
 			/*set text depending on notice number*/
 			if($this->pluginOptions['plugin_data']['nag_notice']=='1' || $this->pluginNagNotice==1){
+				$pluginUpdatedNotice.='<b>'.$this->pluginName.' Installed</b><br/><br/>';
 				$pluginUpdatedNotice.='Thank you for installing '.WPPIZZA_NAME.' <br/>';
 				$pluginUpdatedNotice.='Please make sure to read the <a href="'.$pluginInfoInstallationUrl.'" class="thickbox">"Installation Instructions"</a> and <a href="'.$pluginInfoFaqUrl.'" class="thickbox">"FAQ"</a> ';
 				$pluginUpdatedNotice.='<br/>';
 			}
+
+			if($this->pluginOptions['plugin_data']['nag_notice']=='1.4.1'){
+				$pluginUpdatedNotice.='<b>Update Notice '.WPPIZZA_NAME.' '.$this->pluginVersion.':</b> <br/>';
+				$pluginUpdatedNotice.='<b>An option to allow the customer to choose self pickup of the order has been added which in turn required a few changes to the following templates/css files.</b>';
+				$pluginUpdatedNotice.='<ul><li style="margin:0 5px">templates/wppizza-cart.php</li><li style="margin:0 5px">templates/wppizza-cart.php</li><li style="margin:0 5px">templates/wppizza-order-html-email.php</li><li style="margin:0 5px">css/wppizza-default.css</li></ul>';
+				$pluginUpdatedNotice.='<b>If you chosen to enable this option AND have copied any of the above files to your own theme directory, please update those files accordingly.</b><br/>';
+				$pluginUpdatedNotice.='(the files have been marked to make identification of the changes easier, but please test things (orderpage, cart, and sent emails) when using your own edited templates/css)';
+				$pluginUpdatedNotice.='<br/>';
+				$pluginUpdatedNotice.='<b>CSS: Instead of copying the whole wppizza-default.css to your theme, you can also now just copy wppizza-custom.css to your theme directory to only override the styles you need without loosing the styles or any future updates of the main css file.</b>';
+				$pluginUpdatedNotice.='<br/>';
+			}
+
 			$pluginUpdatedNotice.='<br/><a href="#" onclick="wppizza_dismiss_notice(); return false;" class="button-primary">dismiss</a>';
 			$pluginUpdatedNotice.='</div>';
 			$pluginUpdatedNotice=__($pluginUpdatedNotice, $this->pluginLocale);
@@ -491,6 +508,12 @@ class WPPizza extends WP_Widget {
 			wp_register_style($this->pluginSlug, plugins_url( 'css/wppizza-'.$options['layout']['style'].'.css', __FILE__ ), array(), $this->pluginVersion);
 			}
 			wp_enqueue_style($this->pluginSlug);
+
+			/**if we want to keep all the original css (including future changes) but only want to overwrite some lines , add wppizza-custom.css to your template directory*/
+			if (file_exists( get_template_directory() . '/wppizza-custom.css')){
+				wp_register_style($this->pluginSlug.'-custom', get_template_directory_uri().'/wppizza-custom.css', array(''.$this->pluginSlug.''), $this->pluginVersion);
+				wp_enqueue_style($this->pluginSlug.'-custom');
+			}
 		}
 
 		/**js***/
@@ -506,6 +529,10 @@ class WPPizza extends WP_Widget {
 		if($options['layout']['add_to_cart_on_title_click']){
 			$jsMessages['choosesize']=''.$options['localization']['alert_choose_size']['lbl'].'';
 		}
+		if($options['order']['order_pickup'] && $options['order']['order_pickup_alert'] ){
+			$jsMessages['pickup']=''.$options['localization']['order_self_pickup_cart_js']['lbl'].'';
+		}
+
 		$localized_array = array( 'ajaxurl' =>admin_url('admin-ajax.php'),'validate_error'=>array('email'=>''.$options['localization']['required_field']['lbl'].'','required'=>''.$options['localization']['required_field']['lbl'].''),'msg'=>$jsMessages);
 		wp_localize_script( $this->pluginSlug,$this->pluginSlug, $localized_array );
     }

@@ -10,10 +10,10 @@
 /*****************************************************
 * Validates float
 * @str the input to check, @round [int] to round
-* save as float, regardless of what seperators/locale were used 
+* save as float, regardless of what seperators/locale were used
 * (also mainly to make it work with legacy versions of plugin)
 ******************************************************/
-	function wppizza_validate_float_only($str,$round=''){		
+	function wppizza_validate_float_only($str,$round=''){
 		$str=preg_replace('/[^0-9.,]*/','',$str);/*first get  rid of all chrs that should definitely not be in there*/
 		$str=str_replace(array('.',','),'#',$str);/*make string we can explode*/
 		$floatArray=explode('#',$str);/*explode so we know the last bit are decimals*/
@@ -23,8 +23,8 @@
 			if($i>0 && $i==($exLength-1)){
 			$str.='.';//add decimal point if needed
 			}
-			$str.=''.$floatArray[$i].'';	
-		}		
+			$str.=''.$floatArray[$i].'';
+		}
 		$str=(float)$str;
 		if(is_int($round)){$str=round($str,$round);}
 		return $str;
@@ -74,7 +74,7 @@
 /*****************************************************
 * return comma seperated string as array
 * @str the input to check
-******************************************************/	
+******************************************************/
 	function wppizza_strtoarray($str){
 		$str=explode(",",$str);
 		$array=array();
@@ -82,11 +82,11 @@
 			$array[]=wppizza_validate_string($s);
 		}
 		return $array;
-	}	
+	}
 /*****************************************************
 * check and return comma seperated string of EMAILS as array
 * @str the input to check
-******************************************************/	
+******************************************************/
 	function wppizza_validate_email_array($str){
 		$str=explode(",",$str);
 		$email=array();
@@ -96,13 +96,13 @@
 				$email[]=$s;
 			}
 		}
-	
+
 		return $email;
 	}
 /*****************************************************
 * check format of email
 * @email the email to check
-******************************************************/	
+******************************************************/
 	function wppizza_validEmail($email){
 	   $isValid = true;
 	   $atIndex = strrpos($email, "@");
@@ -142,7 +142,7 @@
 	   return $isValid;
 	}
 /*****************************************************
-* validate and convert characters in string  using internal wordpress functions 
+* validate and convert characters in string  using internal wordpress functions
 * @str the string to check, @htmlAllowed  whether or not html should be stripped
 ******************************************************/
 	function wppizza_validate_string($str,$htmlAllowed=false) {
@@ -152,7 +152,7 @@
 		}
 		return $str;
 	}
-	
+
 
 /*****************************************************
 * return new default options when updating plugin
@@ -160,7 +160,7 @@
 * of options that are not yet in option table or are not used anymore
 * used on plugin update
 * @a1=>comparison array 1 , @a2=>comparison array 2
-******************************************************/	
+******************************************************/
 function wppizza_compare_options ($a1, $a2) {
     $r = array();
     if(is_array(($a1))){
@@ -182,25 +182,25 @@ function wppizza_compare_options ($a1, $a2) {
 *
 * merge current with new options
 *
-******************************************************/	
+******************************************************/
 function wppizza_merge_options ($list1, $list2) {
   $final_array = array();
   $final_array = wppizza_traverse_list($list1, $final_array);
   $final_array = wppizza_traverse_list($list2, $final_array);
   return $final_array;
-}   
+}
 
 function wppizza_traverse_list($list,$output){
   foreach (array_keys($list) as $key){
     if (array_key_exists($key, $output)){
       foreach ($list[$key] as $k=>$item ){
         $output[$key][$k] = $item;
-      }  
+      }
       arsort($output[$key]);
     }
     else{
       $output[$key] = $list[$key];
-    }  
+    }
   }
   return $output;
 }

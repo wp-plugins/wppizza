@@ -601,8 +601,6 @@ function wppizza_order_summary($session,$options,$ajax=null){
 				if($deliveryCharges>0){
 					$deliveryLabel=$options['localization']['delivery_charges']['lbl'];
 				}
-
-
 				/**delivery settings to display with discount options somewhere*/
 				if($options['order']['delivery']['per_item']['delivery_per_item_free']>0){
 					$summary['pricing_delivery']="".$options['localization']['delivery_charges_per_item']['lbl']." <span>".$options['order']['currency_symbol']." ".wppizza_output_format_price($options['order']['delivery']['per_item']['delivery_charge_per_item'],$optionsDecimals)."</span>";
@@ -613,11 +611,46 @@ function wppizza_order_summary($session,$options,$ajax=null){
 
 			}
 
+			/***admin enabled self pickup on the frontend**/
+			if($options['order']['order_pickup']){
+				$summary['self_pickup_enabled']=1;
+				$summary['order_self_pickup']=$options['localization']['order_self_pickup']['lbl'];
+				$summary['order_self_pickup_cart']=$options['localization']['order_self_pickup_cart']['lbl'];
+				$summary['order_page_self_pickup']=$options['localization']['order_page_self_pickup']['lbl'];
+
+				/*check where we want to display self pickup checkbox*/
+				if($options['order']['order_pickup_display_location']==1 || $options['order']['order_pickup_display_location']==3){
+					$summary['self_pickup_cart']=1;
+				}
+				if($options['order']['order_pickup_display_location']==2 || $options['order']['order_pickup_display_location']==3){
+					$summary['self_pickup_order_page']=1;
+				}
+				$summary['selfPickup']=0;/*default off*/
+				/*customer chose self pickup. set appropriate values in cart*/
+				if(isset($session['selfPickup'])){
+					$summary['selfPickup']=1;/*indicate that self pcikup chosen*/
+					$deliveryCharges=0;/*set delivery charges to 0*/
+				}
+				/**set id for checkbox to see if we have enabled js alerts**/
+				if($options['order']['order_pickup_alert']){
+					$summary['selfPickupId']='wppizza-order-pickup-js';
+				}else{
+					$summary['selfPickupId']='wppizza-order-pickup-sel';
+				}
+			}
+
+
 	/****************************************************
 		[get total order value]
 	****************************************************/
 	$totalOrder=$session['total_price_items']-(float)$discountValue+(float)$deliveryCharges;
-	$summary['order_value']=array('total_price_items'=>array('lbl'=>$options['localization']['order_items']['lbl'],'val'=>wppizza_output_format_price(wppizza_output_format_float($session['total_price_items']),$optionsDecimals)),'delivery_charges'=>array('lbl'=>$deliveryLabel,'val'=>wppizza_output_format_price($deliveryCharges,$optionsDecimals)),'discount'=>array('lbl'=>$discountLabel,'val'=>$discountValuePrint),'total'=>array('lbl'=>$options['localization']['order_total']['lbl'],'val'=>wppizza_output_format_price(wppizza_output_format_float($totalOrder),$optionsDecimals)));
+	/**if customer chose self pickup, display only label that states self pickup . no need for value**/
+	//if(isset($noDeliveryValue)){
+	//	$deliveryValue='';
+	//}else{
+		$deliveryValue=wppizza_output_format_price($deliveryCharges,$optionsDecimals);
+	//}
+	$summary['order_value']=array('total_price_items'=>array('lbl'=>$options['localization']['order_items']['lbl'],'val'=>wppizza_output_format_price(wppizza_output_format_float($session['total_price_items']),$optionsDecimals)),'delivery_charges'=>array('lbl'=>$deliveryLabel,'val'=>$deliveryValue),'discount'=>array('lbl'=>$discountLabel,'val'=>$discountValuePrint),'total'=>array('lbl'=>$options['localization']['order_total']['lbl'],'val'=>wppizza_output_format_price(wppizza_output_format_float($totalOrder),$optionsDecimals)));
 	//$summary['items_single']=$session['items'];
 
 

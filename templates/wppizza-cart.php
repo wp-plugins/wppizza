@@ -9,7 +9,7 @@
  *******************************************************/
 $cartContents='';
 if(isset($cart['innercartinfo'])){
-	$cartContents='<p>'.$cart['innercartinfo'].'</p>';	
+	$cartContents='<p>'.$cart['innercartinfo'].'</p>';
 }else{
 	$cartContents='<ul class="wppizza-cart-contents">';
 	foreach($cart['items'] as $k=>$item){
@@ -20,18 +20,18 @@ if(isset($cart['innercartinfo'])){
 		}
 		$cartContents.='<span class="wppizza-cart-item-price">'.wppizza_output_format_price($item['pricetotal'],$options['layout']['hide_decimals']).' '.$cart['currency'].'</span>';
 		if(is_array($item['additionalinfo']) && count($item['additionalinfo'])>0){
-			$cartContents.='<div class="wppizza-item-additional-info"><div class="wppizza-item-additional-info-icon"></div><div class="wppizza-item-additional-info-pad">'; 
+			$cartContents.='<div class="wppizza-item-additional-info"><div class="wppizza-item-additional-info-icon"></div><div class="wppizza-item-additional-info-pad">';
 			foreach($item['additionalinfo'] as $addItem){
-				$cartContents.='<span>'.$addItem.'</span>';	
+				$cartContents.='<span>'.$addItem.'</span>';
 			}
 			$cartContents.='</div></div>';
 		}
 		$cartContents.='</li>';
 	}
-	$cartContents.='</ul>';	
+	$cartContents.='</ul>';
 }
 /******************************************************
-	[request was made via ajax, when adding item, so only return item html] 
+	[request was made via ajax, when adding item, so only return item html]
 ******************************************************/
 if(isset($request) && $request=='ajax'){
 	echo $cartContents;
@@ -45,6 +45,8 @@ return;
 	<?php if($cart['shopopen']==1){ /*make sure that we are open*/ ?>
 	<input type='hidden' class='wppizza-open' name='wppizza-open' />
 	<?php } ?>
+
+
 	<div class="wppizza-order">
 	<?php echo $cartContents ?>
 	</div>
@@ -74,6 +76,7 @@ return;
 					<?php }} ?>
 				</span>
 			</span>
+			<?php if(!isset($cart['self_pickup_enabled']) || $cart['selfPickup']==0){ /*not selfpickup : conditional added/changed in v1.4.1*/ ?>
 			<span>
 				<span class="wppizza-cart-delivery-charges-label">
 					<?php if($cart['nocheckout']=='' && count($cart['items'])>0){?>
@@ -86,6 +89,7 @@ return;
 					<?php }} ?>
 				</span>
 			</span>
+			<?php } ?>
 			<span class="wppizza-cart-total">
 				<span class="wppizza-cart-total-label">
 					<?php if($cart['nocheckout']=='' && count($cart['items'])>0){?>
@@ -98,13 +102,26 @@ return;
 					<?php } ?>
 				</span>
 			</span>
-	
+			<?php if($cart['nocheckout']=='' && isset($cart['self_pickup_enabled']) && $cart['selfPickup']==1	){ /*selfpickup enabled and selected : added/changed in v1.4.1**/ ?>
+			<span id="wppizza-cart-self-pickup">
+				<?php echo ($cart['order_self_pickup_cart']) ?>
+			</span>
+			<?php } ?>
+
+
 		<div class="wppizza-cart-button"><?php echo $cart['button'] ?></div>
-	
+
 	</div>
 </div>
+<?php if(isset($cart['self_pickup_enabled']) && isset($cart['self_pickup_cart'])){ /*allow self pickup and display in cart: added in v1.4.1**/ ?>
+	<div class="wppizza-order-pickup-choice">
+	<label><input type='checkbox' id='<?php echo $cart['selfPickupId'] ?>' name='wppizza-order-pickup' value='1' <?php checked($cart['selfPickup'],1,true) ?> /><?php echo $cart['order_self_pickup'] ?></label>
+	</div>
+<?php } ?>
+
+
 <?php if(isset($orderinfo)){ ?>
-	<ul id="wppizza-orders-info" <?php if(isset($cartStyle['width'])){echo $cartStyle['width'];}?>>	
+	<ul id="wppizza-orders-info" <?php if(isset($cartStyle['width'])){echo $cartStyle['width'];}?>>
 		<?php if(isset($cart['pricing_discounts'])){foreach($cart['pricing_discounts'] as $discounts){?>
 			<li><?php echo $discounts ?></li>
 		<?php }}?>

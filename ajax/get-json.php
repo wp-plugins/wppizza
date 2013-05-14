@@ -71,6 +71,23 @@ if(isset($_POST['vars']['type']) && (($_POST['vars']['type']=='add' || $_POST['v
 /***************************************************************
 *
 *
+*	[set self pickup]
+*
+*
+***************************************************************/
+if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='order-pickup'){
+	if($_POST['vars']['value']=='true'){
+		$_SESSION[$this->pluginSession]['selfPickup']=1;
+	}else{
+		if(isset($_SESSION[$this->pluginSession]['selfPickup'])){
+			unset($_SESSION[$this->pluginSession]['selfPickup']);
+		}
+	}
+exit();
+}
+/***************************************************************
+*
+*
 *	[send the order]
 *
 *
@@ -118,12 +135,11 @@ if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='sendorder'){
 					$customer_details.= wordwrap(strip_tags($params[$v['key']]), 72, "\n", true);
 					$customer_details.=PHP_EOL;
 				}
-/**html emails**/
-/**stick into array for use in html emails**/
-if($options['plugin_data']['mail_type']=='phpmailer'){
-	$customer_details_array[]=array('label'=>wppizza_email_html_entities($v['lbl']),'value'=>wppizza_email_html_entities($params[$v['key']]));
-}
-
+				/**html emails**/
+				/**stick into array for use in html emails**/
+				if($options['plugin_data']['mail_type']=='phpmailer'){
+					$customer_details_array[]=array('label'=>wppizza_email_html_entities($v['lbl']),'value'=>wppizza_email_html_entities($params[$v['key']]));
+				}
 			}
 		}
 
@@ -146,11 +162,11 @@ if($options['plugin_data']['mail_type']=='phpmailer'){
 
 				$customer_details.=''.$strPartLeft.''.str_pad($strPartRight,$spaces," ",STR_PAD_LEFT).''.PHP_EOL;
 
-/**html emails**/
-/**stick into array for use in html emails**/
-if($options['plugin_data']['mail_type']=='phpmailer'){
-	$customer_details_array[]=array('label'=>wppizza_email_decode_entities($v['label'],$blogCharset),'value'=>wppizza_email_decode_entities($strPartRight,$blogCharset));
-}
+				/**html emails**/
+				/**stick into array for use in html emails**/
+				if($options['plugin_data']['mail_type']=='phpmailer'){
+					$customer_details_array[]=array('label'=>wppizza_email_decode_entities($v['label'],$blogCharset),'value'=>wppizza_email_decode_entities($strPartRight,$blogCharset));
+				}
 			$i++;
 			}
 		}
@@ -178,56 +194,74 @@ if($options['plugin_data']['mail_type']=='phpmailer'){
 				$order.="   ".implode(", ",$addInfo);
 				$order.=PHP_EOL.PHP_EOL;
 			}
-/**html emails**/
-if($options['plugin_data']['mail_type']=='phpmailer'){
-	if(isset($v['additionalinfo']) && is_array($v['additionalinfo'])){
-		$addInfoHtml=wppizza_email_html_entities(implode(", ",$addInfo));
-	}else{
-		$addInfoHtml='';
-	}
-	$order_items[]=array('label'=>wppizza_email_html_entities($strPartLeft),'value'=>wppizza_email_html_entities($strPartRight),'additional_info'=>$addInfoHtml);
-}
+			/**html emails**/
+			if($options['plugin_data']['mail_type']=='phpmailer'){
+				if(isset($v['additionalinfo']) && is_array($v['additionalinfo'])){
+					$addInfoHtml=wppizza_email_html_entities(implode(", ",$addInfo));
+				}else{
+					$addInfoHtml='';
+				}
+				$order_items[]=array('label'=>wppizza_email_html_entities($strPartLeft),'value'=>wppizza_email_html_entities($strPartRight),'additional_info'=>$addInfoHtml);
+			}
 
 		}
 		$order.=PHP_EOL.PHP_EOL;
 		$order.=''.$cartContents['order_value']['total_price_items']['lbl'].': '.$currency.' '.($cartContents['order_value']['total_price_items']['val']).PHP_EOL;
-/**html emails**/
-if($options['plugin_data']['mail_type']=='phpmailer'){
-	$order_summary['cartitems']=array('label'=>wppizza_email_html_entities($cartContents['order_value']['total_price_items']['lbl']),'price'=>$cartContents['order_value']['total_price_items']['val'],'currency'=>$currency );
-}
+		/**html emails**/
+		if($options['plugin_data']['mail_type']=='phpmailer'){
+			$order_summary['cartitems']=array('label'=>wppizza_email_html_entities($cartContents['order_value']['total_price_items']['lbl']),'price'=>$cartContents['order_value']['total_price_items']['val'],'currency'=>$currency );
+		}
 
 		if($cartContents['order_value']['discount']['val']>0){
 			$order.=''.$cartContents['order_value']['discount']['lbl'].': '.$currency.' '.($cartContents['order_value']['discount']['val']).PHP_EOL;
-/**html emails**/
-if($options['plugin_data']['mail_type']=='phpmailer'){
-	$order_summary['discount']=array('label'=>wppizza_email_html_entities($cartContents['order_value']['discount']['lbl']),'price'=>$cartContents['order_value']['discount']['val'],'currency'=>$currency );
-}
+			/**html emails**/
+			if($options['plugin_data']['mail_type']=='phpmailer'){
+				$order_summary['discount']=array('label'=>wppizza_email_html_entities($cartContents['order_value']['discount']['lbl']),'price'=>$cartContents['order_value']['discount']['val'],'currency'=>$currency );
+			}
+		}
+		/**********************************************************
+			[delivery charges - no self pickup enabled or selected]
+		**********************************************************/
+		if(!isset($cartContents['selfPickup']) || $cartContents['selfPickup']==0){
+			if($cartContents['order_value']['delivery_charges']['val']!=''){
+				$order.=$cartContents['order_value']['delivery_charges']['lbl'].': '.$currency.' '.($cartContents['order_value']['delivery_charges']['val']).PHP_EOL;
+				/**html emails**/
+				if($options['plugin_data']['mail_type']=='phpmailer'){
+					$order_summary['delivery']=array('label'=>wppizza_email_html_entities($cartContents['order_value']['delivery_charges']['lbl']),'price'=>$cartContents['order_value']['delivery_charges']['val'],'currency'=>$currency );
+				}
+			}else{
+				$order.=$cartContents['order_value']['delivery_charges']['lbl'].PHP_EOL;
+				/**html emails**/
+				if($options['plugin_data']['mail_type']=='phpmailer'){
+					$order_summary['delivery']=array('label'=>wppizza_email_html_entities($cartContents['order_value']['delivery_charges']['lbl']),'price'=>'','currency'=>'' );
+				}
+			}
 		}
 
-		if($cartContents['order_value']['delivery_charges']['val']!=''){
-			$order.=$cartContents['order_value']['delivery_charges']['lbl'].': '.$currency.' '.($cartContents['order_value']['delivery_charges']['val']).PHP_EOL;
-/**html emails**/
-if($options['plugin_data']['mail_type']=='phpmailer'){
-	$order_summary['delivery']=array('label'=>wppizza_email_html_entities($cartContents['order_value']['delivery_charges']['lbl']),'price'=>$cartContents['order_value']['delivery_charges']['val'],'currency'=>$currency );
-}
-
-		}else{
-			$order.=$cartContents['order_value']['delivery_charges']['lbl'].PHP_EOL;
-/**html emails**/
-if($options['plugin_data']['mail_type']=='phpmailer'){
-	$order_summary['delivery']=array('label'=>wppizza_email_html_entities($cartContents['order_value']['delivery_charges']['lbl']),'price'=>'','currency'=>'' );
-}
-		}
+		/**********************************************************
+			[order total]
+		**********************************************************/
 		$order.=PHP_EOL;
 		$order.=$cartContents['order_value']['total']['lbl'].': '.$currency.' '.($cartContents['order_value']['total']['val']).PHP_EOL;
-
-/**html emails**/
-if($options['plugin_data']['mail_type']=='phpmailer'){
-	$order_summary['total']=array('label'=>wppizza_email_html_entities($cartContents['order_value']['total']['lbl']),'price'=>$cartContents['order_value']['total']['val'],'currency'=>$currency );
-}
-
-
+		/**html emails**/
+		if($options['plugin_data']['mail_type']=='phpmailer'){
+			$order_summary['total']=array('label'=>wppizza_email_html_entities($cartContents['order_value']['total']['lbl']),'price'=>$cartContents['order_value']['total']['val'],'currency'=>$currency );
+		}
 		$order.=PHP_EOL;
+
+
+		/****************************************************
+			[self pickup - enabled and selected]
+		****************************************************/
+		if(isset($cartContents['selfPickup']) && $cartContents['selfPickup']==1){
+			$order.=PHP_EOL.wordwrap(strip_tags($cartContents['order_page_self_pickup']), 72, "\n", true).PHP_EOL;
+			/**html emails**/
+			if($options['plugin_data']['mail_type']=='phpmailer'){
+				$order_summary['self_pickup']=array('label'=>wppizza_email_html_entities($cartContents['order_page_self_pickup']),'price'=>'','currency'=>'' );
+			}
+		}
+
+
 		$order.=PHP_EOL."=====================================================".PHP_EOL;
 
 		/**now decode any funny entities**/
