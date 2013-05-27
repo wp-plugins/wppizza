@@ -71,10 +71,10 @@ jQuery(document).ready(function($){
 	*
 	*	[customer selects self pickup , session gets set via ajax
 	*	reload page to reflect delivery charges....
-	*	only relevant if there's a shoppingcart on page]
+	*	only relevant if there's a shoppingcart or orderpage on page]
 	*
 	***********************************************/	
-	if ($(".wppizza-open").length > 0 &&  $(".wppizza-cart").length > 0){
+	if (($(".wppizza-open").length > 0 &&  $(".wppizza-cart").length > 0) || $("#wppizza-send-order").length>0){
 		$(document).on('click touchstart', '#wppizza-order-pickup-sel,#wppizza-order-pickup-js', function(e){
 			var self=$(this);
 			var selfValue=self.is(':checked');			
