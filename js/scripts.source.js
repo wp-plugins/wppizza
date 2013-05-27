@@ -145,7 +145,7 @@ jQuery(document).ready(function($){
 	*******************************/
 	$(document).on('click touchstart', '.wppizza-cart-button>a', function(e){
 		e.preventDefault(); e.stopPropagation();
-        url=jQuery(this).attr("href");
+        var url=jQuery(this).attr("href");
         window.location.href = url;
 	})
 

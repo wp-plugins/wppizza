@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, order online, cash on delivery, multilingual
 Requires at least: PHP 5.2, WP 3.3 
 Tested up to: 3.5.1
-Stable tag: 1.4.1
+Stable tag: 1.4.1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -113,12 +113,16 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 == Changelog ==
 
+1.4.1.1  
+* BUGFIX fixed orderpage not refreshing when switching between self-pickup and delivery  
+- 27th May 2013  
+
+
 1.4.1  
 * added option for customer to select self-pickup instead of delivery (results in no delivery charges)   
 * changed templates(wppizza-cart.php/wppizza-order.php/wppizza-order-html-email.php) and css(wppizza-default.css) to account for self-pickup   
 * added ability to keep main plugin css to reflect future additions etc and only overwrite the required line by copying wppizza-custom.css to theme directory    
 * added some comments about IE legend css in css file   
-- 14th May 2013  
 
 1.4  
 * BUGFIX fixed ac ouple of short open tags  
