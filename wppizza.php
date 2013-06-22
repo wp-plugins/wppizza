@@ -5,7 +5,7 @@ Description: Maintain your restaurant menu online and accept cash on delivery or
 Author: ollybach
 Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Author URI: http://www.wp-pizza.com
-Version: 1.4.1.1
+Version: 1.4.1.2
 License:
 
   Copyright 2012 ollybach (dev@wp-pizza.com)
@@ -59,7 +59,7 @@ class WPPizza extends WP_Widget {
 	********************************************************/
      function __construct() {
 		/**init constants***/
-		$this->pluginVersion='1.4.1.1';//increment in line with stable tag in readme and version above
+		$this->pluginVersion='1.4.1.2';//increment in line with stable tag in readme and version above
 	 	$this->pluginName="".WPPIZZA_NAME."";
 	 	$this->pluginSlug="".WPPIZZA_SLUG."";//set also in uninstall when deleting options
 		$this->pluginSlugCategoryTaxonomy="".WPPIZZA_TAXONOMY."";//also on uninstall delete wppizza_children as well as widget
@@ -200,8 +200,8 @@ class WPPizza extends WP_Widget {
 				/**compare table options against default options and delete/add as required***/
 				require_once(WPPIZZA_PATH .'inc/admin.update.options.inc.php');
 
-				/**set nag notice for 1.4.1 if plugin has been updated (as opposed to fresh install)***/
-				if($this->pluginVersion=='1.4.1'){$update_options['plugin_data']['nag_notice']=$this->pluginVersion;}
+				/**set nag notice for 1.4.1.2 if plugin has been updated (as opposed to fresh install)***/
+				if($this->pluginVersion=='1.4.1.2'){$update_options['plugin_data']['nag_notice']=$this->pluginVersion;}
 
 				/**update options**/
 				update_option($this->pluginSlug, $update_options );
@@ -226,13 +226,17 @@ class WPPizza extends WP_Widget {
 			$pluginInfoFaqUrl = admin_url( 'plugin-install.php?tab=plugin-information&plugin='.WPPIZZA_SLUG.'&section=faq&TB_iframe=true&width=600&height=800');
 
 			$pluginUpdatedNotice='';
-			$pluginUpdatedNotice.='<div id="message" class="updated wppizza_admin_notice" style="padding:20px;">';
+			$pluginUpdatedNotice.='<div id="message" class="error wppizza_admin_notice" style="padding:20px;">';
 			/*set text depending on notice number*/
 			if($this->pluginOptions['plugin_data']['nag_notice']=='1' || $this->pluginNagNotice==1){
 				$pluginUpdatedNotice.='<b>'.$this->pluginName.' Installed</b><br/><br/>';
 				$pluginUpdatedNotice.='Thank you for installing '.WPPIZZA_NAME.' <br/>';
 				$pluginUpdatedNotice.='Please make sure to read the <a href="'.$pluginInfoInstallationUrl.'" class="thickbox">"Installation Instructions"</a> and <a href="'.$pluginInfoFaqUrl.'" class="thickbox">"FAQ"</a> ';
-				$pluginUpdatedNotice.='<br/>';
+				$pluginUpdatedNotice.='<br/><br/>';
+				$pluginUpdatedNotice.='<span style="color:red"><b>AS YOU SEEM TO HAVE JUST INSTALLED THIS PLUGIN, PLEASE UPDATE TO VERSION 2.0 <a href="http://www.wp-pizza.com/file-repository/">AVAILABLE HERE</a> BEFORE CUSTOMISING ANY TEMPLATES AND/OR CSS FILES</b></span>';
+				$pluginUpdatedNotice.='<br/>Feel free to wait for the updated version on wordpress if you do not intend - yet - to customise any templates/css';
+				$pluginUpdatedNotice.='<br/><br/>NOTE:To enable/give previous installations time to prepare for the update to 2.0 (as possible customisations might have to be adjusted), <b>availability of Version 2.0 in the Wordpress Repository has deliberately been delayed by a few days</b><br/>';
+				
 			}
 
 			if($this->pluginOptions['plugin_data']['nag_notice']=='1.4.1'){
@@ -245,6 +249,37 @@ class WPPizza extends WP_Widget {
 				$pluginUpdatedNotice.='<b>CSS: Instead of copying the whole wppizza-default.css to your theme, you can also now just copy wppizza-custom.css to your theme directory to only override the styles you need without loosing the styles or any future updates of the main css file.</b>';
 				$pluginUpdatedNotice.='<br/>';
 			}
+
+			if($this->pluginOptions['plugin_data']['nag_notice']=='1.4.1.2'){
+				$pluginUpdatedNotice.='<b>ADVANCE WARNING = READ BELOW. AFFECTS UPCOMING VERSION 2.0 ONLY. Below changes should NOT be made to this version:</b><br/><br/>';				
+				$pluginUpdatedNotice.='To aid current and future development and extensions of this plugin as well as taking advantage of some additional options that have been added, the <b>upcoming version 2.0 of '.WPPIZZA_NAME.'</b> will have had significant changes made to the coding !!!';
+				$pluginUpdatedNotice.='<br/><br/>';
+				$pluginUpdatedNotice.='To allow you to prepare for this I will make version 2.0 available <a href="http://www.wp-pizza.com/file-repository/">HERE</a> for a week or so before copying it to the wordpress repository.';
+				$pluginUpdatedNotice.='<br/><br/>';
+				$pluginUpdatedNotice.='<b>DO NOT UPDATE TO VERSION 2.0 UNTIL YOU HAVE MADE ANY REQUIRED CHANGES BELOW.</b> (If you are not using any customised files you should be just fine, update to version 2.0 as normal and can ignore all of this) ';
+				$pluginUpdatedNotice.='<br/><br/>';
+				$pluginUpdatedNotice.='<b>IF</b> you are using customised versions of the following files (i.e you have copied any of these files to your theme directory) <b>you will have to</b> update them as marked below (changes are marked in the relevant files).';	
+				$pluginUpdatedNotice.='<br/><br/>';
+				$pluginUpdatedNotice.='<b>Affected Files and priorty of having to change your customised versions</b> <span style="color:red">(only if you are using customised versions of these files in your theme directory of course)</span>: ';
+				$pluginUpdatedNotice.='<blockquote>';
+					$pluginUpdatedNotice.='<b>wppizza-order.php</b> [UPDATE REQUIRED]:<br/>you <b>MUST</b> update any customised version (if used). Changes in this file are marked with "NEW IN VERSION" ';
+						$pluginUpdatedNotice.='<br/><br/>';
+					$pluginUpdatedNotice.='<b>wppizza-phpmailer-settings.php</b> [UPDATE REQUIRED IF USING PHPMAILER]:<br/><b>IF</b> you are using a customised version of this <b>AND</b> are using phpmailer to send the emails this plugin generates, you MUST update your customised version according to the file find in the templates/ directory ';
+				$pluginUpdatedNotice.='<br/><br/>';
+					$pluginUpdatedNotice.='<b>wppizza-cart.php</b> [OPTIONAL].<br/><b>However</b>, if you want to take advantage of charging tax on items or enable self pickup (with or without offering discounts) etc , you\'ll have to update your customised version. (search for "CONDITIONAL ADDED/CHANGED" in the file to find any changes made)';
+				$pluginUpdatedNotice.='<br/><br/>';
+					$pluginUpdatedNotice.='<b>wppizza-order-html-email.php.</b>[OPTIONAL].<br/><b>However</b>, if you want to take advantage of charging tax on items or enable self pickup (with or without offering discounts) etc , you\'ll have to update your customised version. (search for "NEW IN VERSION " to see changes)';
+				$pluginUpdatedNotice.='<br/><br/>';
+					$pluginUpdatedNotice.='<b>wppizza-default.css</b><br/>[not strictly required, <b>but probably a good idea</b>]. changes are marked with "NEW IN VERSION"';
+				$pluginUpdatedNotice.='</blockquote>';
+				
+				$pluginUpdatedNotice.='<br/>';
+				$pluginUpdatedNotice.='Sorry about all this. Just had to be done. I hope the above is clear, but if you have any questions mail me at dev[at]wp-pizza.com ';
+				$pluginUpdatedNotice.='<br/>';
+				
+			}
+
+
 
 			$pluginUpdatedNotice.='<br/><a href="#" onclick="wppizza_dismiss_notice(); return false;" class="button-primary">dismiss</a>';
 			$pluginUpdatedNotice.='</div>';
@@ -959,7 +994,9 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 *
 *********************************************************************************/
 	function wppizza_term_filter($pieces){
-		$sort=implode(",",array_keys($this->pluginOptions['layout']['category_sort']));
+		$cat=$this->pluginOptions['layout']['category_sort'];
+		asort($cat);
+		$sort=implode(",",array_keys($cat));
 		/*customise order by clause*/
 		$pieces['orderby'] = 'ORDER BY FIELD(t.term_id,'.$sort.')';
 	return $pieces;
