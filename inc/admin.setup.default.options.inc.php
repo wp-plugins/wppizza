@@ -308,6 +308,7 @@
 			'layout'=>array(
 				'category_sort' => $category_sort,
 				'include_css' => true,
+				'css_priority' => 11,
 				'style' => 'default',
 				'placeholder_img' => true,
 				'items_per_loop' => '-1',
@@ -353,6 +354,7 @@
 				'discount_selected'=>'none',
 				'order_pickup' => false,
 				'order_pickup_alert' => false,
+				'order_pickup_discount' => 0,
 				'order_pickup_display_location' => 1,
 				'delivery'=>array(
 					'minimum_total'=>array('min_total'=>'7.5','deliver_below_total'=>true),
@@ -374,6 +376,7 @@
 						)
 					)
 				),
+				'item_tax'=>0,
 				'order_email_to'=>array(''.get_option('admin_email').''),
 				'order_email_bcc'=>array(),
 				'order_sms'=>''
@@ -386,6 +389,12 @@
 				4=>array('sort'=>4,'key'=>'ccomments','lbl'=>__('Comments :', $this->pluginLocale),'value'=>array(),'type'=>'textarea','enabled'=>true,'required'=>false),
 				5=>array('sort'=>5,'key'=>'ccustom1','lbl'=>__('Custom Field 1 :', $this->pluginLocale),'value'=>array(),'type'=>'text','enabled'=>false,'required'=>false),
 				6=>array('sort'=>6,'key'=>'ccustom2','lbl'=>__('Custom Field 2 :', $this->pluginLocale),'value'=>array(),'type'=>'text','enabled'=>false,'required'=>false)
+			),
+			'gateways'=>array(
+				'gateway_selected'=>array('COD'=>true),
+				'gateway_select_as_dropdown'=>false,
+				'gateway_select_label'=>__('Please select your payment method:', $this->pluginLocale),
+				'gateway_showorder_on_thankyou'=>false
 			),
 			'sizes'=>$defaultSizes,
 			'additives'=>$defaultAdditives,
@@ -512,6 +521,10 @@
 					'descr'=>__('Pricelabels (Sub)Totals: text before sum of discounts applied(if any)', $this->pluginLocale),
 					'lbl'=>__('discount', $this->pluginLocale)
 				),
+				'item_tax_total'=>array(
+					'descr'=>__('Pricelabels (Sub)Totals: text before sum of tax applied to all items(if >0)', $this->pluginLocale),
+					'lbl'=>__('Sales Tax', $this->pluginLocale)
+				),					
 				'order_total'=>array(
 					'descr'=>__('Pricelabels (Sub)Totals: text before total sum of ORDER', $this->pluginLocale),
 					'lbl'=>__('total', $this->pluginLocale)

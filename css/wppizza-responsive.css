@@ -42,14 +42,12 @@
 
 
 /**items in cart -> if the button below is quite big and makes the whole info spill into the cart contents, increase "bottom" size of .wppizza-order and adjust ".wppizza-cart" height **/
-/*NEW IN VERSION 2.0: changed bottom:100px to 108px to allow space for tax*/
 .wppizza-order{position:absolute;bottom:108px;top:0px;left:0;right:0;margin:0;border-bottom:1px dotted #999999;overflow:auto;}/*change bottom to allow more/less space for button*/
 .wppizza-order>p{text-align:center;}
 .wppizza-order>ul.wppizza-cart-contents{margin: 0 !important;padding: 0 !important;list-style: none;width:auto;}
 .wppizza-order>ul.wppizza-cart-contents>.wppizza-cart-item {text-align:left;background: none !important; margin:0 auto !important; padding:2px 0 !important;clear:both;border-bottom:1px dotted #DEDEDE;overflow:auto;font-size:90%;width:99%;line-height:110%}
 .wppizza-order>ul.wppizza-cart-contents>.wppizza-cart-item:before {content:'';}
 .wppizza-order>ul.wppizza-cart-contents>.wppizza-cart-item:after {content:'';}
-
 /*lets also try to remove before and after if in sidebar*/
 #sidebar .wppizza-order>ul.wppizza-cart-contents>.wppizza-cart-item:before {content:'';}
 #sidebar .wppizza-order>ul.wppizza-cart-contents>.wppizza-cart-item:after {content:'';}
@@ -81,7 +79,7 @@
 .wppizza-cart-info .wppizza-cart-info-price{float:right;font-size:100%}
 .wppizza-cart-info .wppizza-cart-total{font-weight:600}
 
-/**-----NEW IN VERSION 2.0----***/
+/**-----new in version 1.5----***/
 .wppizza-cart-info .wppizza-cart-tax{border-top:1px dotted #CECECE}
 
 
@@ -116,22 +114,13 @@
 #wppizza-cart-contents>ul>li{margin:0;line-height:130%;clear:both}
 #wppizza-cart-contents>ul>li>span{float:right}
 
-
 #wppizza-cart-subtotals{list-style:none;}
 #wppizza-cart-subtotals>li{margin-left:15px;line-height:130%}
 #wppizza-cart-subtotals>li.wppizza-order-discount{border-bottom:1px dotted #CECECE;}
 #wppizza-cart-total{font-weight:600;border-top:1px solid #CECECE;margin-top:10px;padding-top:3px;line-height:130%}
 
-/*NEW IN VERSION 2.1*/
-#wppizza-cart-contents.wppizza-cart-thankyou{padding:0;margin:15px auto;width:95%;border:none;}/*if displaying order on thank you page*/
-#wppizza-transaction-head{font-weight:bold;border-bottom:1px dotted #CECECE;}
-#wppizza-transaction-time{font-size:90%}/*if displaying order on thank you page*/
-#wppizza-transaction-id{}/*if displaying order on thank you page*/
-
-.wppizza-item-additionalinfo{padding-left:15px;padding-bottom:5px;font-size:90%}/*[additional info for ordered items on "order page" and "thank you" page (if enabled)]*/
-.wppizza-item-additionalinfo:before{content:'+ ';}/*[additional info for ordered items on "order page" and "thank you" page (if enabled)]*/
-/*END NEW IN VERSION 2.1*/
-
+.wppizza-item-additionalinfo{padding-left:15px;padding-bottom:5px;font-size:90%}/*[ordered items additional info "order page" NEW IN VERSION 2.1]*/
+.wppizza-item-additionalinfo:before{content:'+ ';}/*[ordered items additional info "order page" NEW IN VERSION 2.1]*/
 /************************
 *
 *	[menu items]
@@ -147,8 +136,10 @@
 .wppizza-article-img .wppizza-article-img-thumb,.wppizza-article-img .wppizza-article-img-placeholder{padding:5px;margin:3px 10px 0 0 !important;border:1px dotted #CECECE;}
 .wppizza-article-img-placeholder{width:75px;height:75px;background:url('img/no_image.png') center center no-repeat;}
 .wppizza-article-img .wppizza-article-img-thumb{width:auto;max-width:none !important}
+/****title*****/
+h2.wppizza-article-title{padding-bottom:0;margin:0}
 /****info/txt/*****/
-.wppizza-article-info{}
+.wppizza-article-info{clear:right}
 .wppizza-article-info h2,.wppizza-article-info h3{display:inline;display:inline-block;padding-bottom:0;margin:0}
 .wppizza-article-additives{font-size:60%;margin:0 5px}
 /****prices and labels*****/
@@ -180,7 +171,7 @@
 
 /************************
 *
-*	[gateway items/buttons/selections in "order page" NEW IN VERSION 2.0]
+*	[gateway items/buttons/selections in "order page" NEW IN VERSION 1.5]
 *
 ************************/
 .wppizza-gateways{margin:5px 0}

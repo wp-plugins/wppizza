@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, order online, cash on delivery, multilingual
 Requires at least: PHP 5.2, WP 3.3 
 Tested up to: 3.5.1
-Stable tag: 1.4.1.2
+Stable tag: 2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -113,9 +113,33 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 == Changelog ==
 
-1.4.1.2  
-* Advance notice warning for Version 2.0
+2.1
+* added option to display order details on "thankyou" page  
+* made some more variables translatable via po/mo files  
+* moved localization description out of the option table as it really doesnt belong there (which in turn makes it translatable via mo/po files)  
+* minor readme update  
+- 1st July 2013  
+
+
+2.0
+* quite a major re-write   
+* added destinct gateway page/options (default COD) as class to enable (future)additions of other gateway extensions 
+* added distinct class to "send order" button on orderpage  
+* updated/changed following files/templates to work with the classes "wppizza-order.php / wppizza-cart.php / wppizza-order-html-email.php / wppizza-phpmailer-settings.php / css/wppizza-default.css"  
+* NOTE: if you are using customised versions of the above you MUST update these. (ESPECIALLY   wppizza-order.php and  wppizza-phpmailer-settings.php)
+* added option to charge tax on sales  
+* added option to apply discount to self-pickup of order  
+* wppizza_orders table changed to store and retrieve gateway variables and hashes and to be able to distinguish which gateway was used if(and which) user - if logged in - ordered etc  
+* autofill orderpage emails and name if user is logged in  
+* added responsive layout option  
+* BUGFIX categories were not displaying in the right order when using widget/shortcode to display category navigation  
+* BUGFIX bcc's not sending when using phpmailer  
 - 21st June 2013  
+
+
+1.4.1.2    
+* added warning regarding changes in upcoming release  
+
 
 1.4.1.1  
 * BUGFIX fixed orderpage not refreshing when switching between self-pickup and delivery  
@@ -127,6 +151,7 @@ if you do wish to use any icon from this set commercially, please follow <a href
 * changed templates(wppizza-cart.php/wppizza-order.php/wppizza-order-html-email.php) and css(wppizza-default.css) to account for self-pickup   
 * added ability to keep main plugin css to reflect future additions etc and only overwrite the required line by copying wppizza-custom.css to theme directory    
 * added some comments about IE legend css in css file   
+- 14th May 2013  
 
 1.4  
 * BUGFIX fixed ac ouple of short open tags  
@@ -235,7 +260,7 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 although the css has been written so that it works with many themes out of the box (see www.wp-pizza.com - all themes use the same default stylesheet) you might want to adjust some things here and there to work with your theme (especially if you want to support older browsers).  
 if you do, copy the wppizza/css/wppizza-default.css to your theme directory (so it does not get overwritten by future updates of the plugin) and edit as required  
-alternatively (and possibly better as any future updates to the main css will still be reflected), just copy wppizza-custom.css to your theme directory and only overwrite the styles you need to override. (this file will be read AFTER the main default.css) 
+alternatively *(and possibly better as any future updates to the main css will still be reflected)*, just copy wppizza-custom.css to your theme directory and only overwrite the styles you need to override. (this file will be read AFTER the main default.css). "Include css" has to be enabled for this to apply  
 
 
 = Can I use this plugin when I am not using english on my site ? =
@@ -265,7 +290,8 @@ alternatively, add " add_theme_support( 'post-thumbnails'); " (without the quote
 
 Sure.  
 Just don't display the shoppingcart anywhere. If you choose to do this, you might also want to delete any orderpage you might have (as there's nothing to order).  
-
+alternatively, if you still want to show the cart (to show combined prices/taxes/discounts) but want to disable ordering, you could copy wppizza-custom.css to your them directory and add ".wppizza-cart-button{display:none}" without the quotes to it  
+you would still probably want to delete/hide your order page or at least disable all your gateways  
 
 
 = I'm using the plugin with xyz theme and it's all messed up  =
@@ -345,6 +371,11 @@ in case where you cannot or do not want to use a widget, here are the correspond
 Sure, if you want.  
 Just make sure you copy the relevant template from wppizza/templates/ to your theme directory and edit those so you dont loose your edits when the plugin gets updated. Make sure to read the comments in the relevant files.
 
+
+= How do the orders get to my restaurant ? =
+
+by email.  
+if you need them to be sent by fax for example you will have to look into integrating your orders with a fax2email gateway. (search for it on your favourite search engine)   
 
 = How can I submit a bug, ask for help or request a new feature? =
 

@@ -25,6 +25,10 @@
 			//currently not in use
 			//echo '<h4>'.__('', $this->pluginLocale).'</h4>';
 		}		
+		if($v['id']=='gateways'){
+			//currently not in use
+			//echo '<h4>'.__('', $this->pluginLocale).'</h4>';
+		}			
 		if($v['id']=='history'){
 			//currently not in use
 			//echo '<h4>'.__('', $this->pluginLocale).'</h4>';

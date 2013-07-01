@@ -13,7 +13,7 @@ if(!defined('WP_UNINSTALL_PLUGIN') ){
 }
 global $wpdb;
 // Define plugin options, custom post types and custom taxonomies to remove.
-$opt = array('wppizza');
+$opt = array('wppizza','wppizza_gateway_cod','widget_wppizza');
 $cpt = array('wppizza');
 $tax = array(array('taxonomy'=>'wppizza_menu', 'object_type'=>'wppizza'));
 

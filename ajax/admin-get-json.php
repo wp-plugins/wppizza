@@ -84,12 +84,13 @@ if($_POST['vars']['field']=='get_orders'){
 	$output='';
 	global $wpdb;
 	if($_POST['vars']['limit']>0){$limit=' limit 0,'.$_POST['vars']['limit'].'';}else{$limit='';}
-	$allOrders = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix . $this->pluginOrderTable." ORDER BY id DESC ".$limit." ");
+	$allOrders = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix . $this->pluginOrderTable." WHERE payment_status IN ('COD','COMPLETED') ORDER BY id DESC ".$limit." ");
 	if(is_array($allOrders) && count($allOrders)>0){
+		$output.="<div>".__('Note: deleting an order will <b>ONLY</b> delete it from the database table. It will <b>NOT</b> issue any refunds, cancel the order, send emails etc.', $this->pluginLocale)."</div>";
 		$output.="<table>";
-			$output.="<tr>";
+			$output.="<tr class='wppizza-orders-head'>";
 				$output.="<td>";
-					$output.="".__('Date', $this->pluginLocale)."";
+					$output.="".__('Order', $this->pluginLocale)."";
 				$output.="</td>";
 				$output.="<td>";
 					$output.="".__('Customer Details', $this->pluginLocale)."";
@@ -97,28 +98,47 @@ if($_POST['vars']['field']=='get_orders'){
 				$output.="<td>";
 					$output.="".__('Order Details', $this->pluginLocale)."";
 				$output.="</td>";
+				$output.="<td>";
+					$output.="";
+				$output.="</td>";				
 			$output.="</tr>";
 
 			foreach ( $allOrders as $orders ){
 				$output.="<tr>";
-					$output.="<td>";
+					$output.="<td style='white-space:nowrap'>";
 						$output.= date("d-M-Y H:i:s",strtotime($orders->order_date));
+						if($orders->initiator!=''){
+							$output.="<br/>Payment By: ". $orders->initiator ."";
+						}
+						if($orders->transaction_id!=''){
+							$output.="<br/>ID: ". $orders->transaction_id ."";
+						}
 					$output.="</td>";
 					$output.="<td>";
-						$output.="<textarea class='wppizza_order_details'>". $orders->customer_details ."</textarea>";
+						$output.="<textarea class='wppizza_order_customer_details'>". $orders->customer_details ."</textarea>";
 					$output.="</td>";
 					$output.="<td>";
 						$output.="<textarea class='wppizza_order_details'>". $orders->order_details ."</textarea>";
 					$output.="</td>";
+					$output.="<td>";
+						$output.="<a href='#' id='wppizza_order_".$orders->id."' class='wppizza_order_delete'>".__('delete', $this->pluginLocale)."</a>";
+					$output.="</td>";					
 				$output.="</tr>";
 			}
 		$output.="</table>";
-		$output.="</div>";
-		$output.="</div>";
 	}else{
 		$output.="<h1 style='text-align:center'>".__('no orders yet :(', $this->pluginLocale)."</h1>";
 	}
 }
+
+/**delete order**/ 
+if($_POST['vars']['field']=='delete_orders'){
+	global $wpdb;
+	$res=$wpdb->query( $wpdb->prepare( "DELETE FROM ".$wpdb->prefix . $this->pluginOrderTable." WHERE id=%s ",$_POST['vars']['ordId']));
+	$output.="".__('order deleted', $this->pluginLocale)."";	
+}
+
+
 print"".$output."";
 exit();
 ?>

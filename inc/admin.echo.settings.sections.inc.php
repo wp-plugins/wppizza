@@ -11,6 +11,11 @@
 		add_settings_field('wp_multisite_session_per_site', '<b>'.__('Multisite Only:', $this->pluginLocale).'</b><br/>'.__('Set cart contents and order on a per site basis when using subdirectories. This has no effect/relevance when there\'s no multisite setup or using different domains per site on the network.', $this->pluginLocale).'', array( $this, 'wppizza_admin_settings_input'), 'global', 'global', 'wp_multisite_session_per_site' );
 		add_settings_field('category_parent_page', ''.__('<b>Permalinks:<br/>(only used and relevant when using widget or shortcode to display wppizza category navigation !!!)<br/><span style="color:red">when changing this setting, you MUST re-save your permalink settings</span></b><br/>(page cannot be used as static post page (wp settings) or have any children', $this->pluginLocale).'', array( $this, 'wppizza_admin_settings_input'), 'global', 'global', 'category_parent_page' );
 
+		/**gateways settings**/
+		add_settings_section('gateways', __('Gateways Settings', $this->pluginLocale),  array( $this, 'wppizza_admin_page_text_header'), 'gateways');
+		add_settings_field('gateways', '<b>'.__('Set Gateway Options:', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'gateways', 'gateways', 'gateways' );
+
+
 		/**layout settings**/
 		add_settings_section('layout', __('Layout Settings', $this->pluginLocale),  array( $this, 'wppizza_admin_page_text_header'), 'layout');
 		add_settings_field('include_css', '<b>'.__('Include CSS:', $this->pluginLocale).'</b><br/>'.__('include frontend css that came with this plugin (untick if you want to provide your own styles somewhere else)', $this->pluginLocale).'', array( $this, 'wppizza_admin_settings_input'), 'layout', 'layout', 'include_css' );
@@ -40,6 +45,7 @@
 		add_settings_field('currency', '<b>'.__('Currency:', $this->pluginLocale).'</b><br/>'.__('set to --none-- to have no currency displayed anywhere', $this->pluginLocale).'', array( $this, 'wppizza_admin_settings_input'), 'order', 'order', 'currency' );
 		add_settings_field('orderpage', '<b>'.__('Order Page:', $this->pluginLocale).'</b><br/>'.__('ensure the page includes [wppizza type="orderpage"] or the widget equivalent. <b>You might also want to consider NOT displaying the shopping cart on this page</b> (although it won\'t break things)', $this->pluginLocale).'', array( $this, 'wppizza_admin_settings_input'), 'order', 'order', 'orderpage' );
 		add_settings_field('delivery', '<b>'.__('Delivery Charges:', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'order', 'order', 'delivery' );
+		add_settings_field('item_tax', '<b>'.__('(Sales)Tax applied to items in cart [in % - 0 to disable]:', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'order', 'order', 'item_tax' );
 		add_settings_field('order_pickup', '<b>'.__('Allow order pickup by customer:', $this->pluginLocale).'</b><br />'.__('Customer can choose to pickup the order him/herself. No delivery charges will be applied if customer chooses to do so.', $this->pluginLocale).'', array( $this, 'wppizza_admin_settings_input'), 'order', 'order', 'order_pickup' );
 		add_settings_field('order_pickup_display_location', '<b>'.__('Where would you like to display the checkbox to let customer select self pickup of order ?', $this->pluginLocale).'</b> '.__('[if enabled above]', $this->pluginLocale).'', array( $this, 'wppizza_admin_settings_input'), 'order', 'order', 'order_pickup_display_location' );
 		add_settings_field('discounts', '<b>'.__('Discounts:', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'order', 'order', 'discounts' );

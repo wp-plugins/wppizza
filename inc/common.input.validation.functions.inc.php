@@ -84,6 +84,18 @@
 		return $array;
 	}
 /*****************************************************
+* return array
+* @arr the input array to validate
+* @callback the function to use for validating each arr item
+******************************************************/
+	function wppizza_validate_array($arr=array(),$callback='wppizza_validate_alpha_only'){
+		$array=array();
+		foreach($arr as $k=>$s){
+			$array[''.$callback($k).'']=''.$callback($s).'';
+		}
+		return $array;
+	}	
+/*****************************************************
 * check and return comma seperated string of EMAILS as array
 * @str the input to check
 ******************************************************/

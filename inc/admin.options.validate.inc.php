@@ -1,11 +1,11 @@
 <?php
-
 	/**get previously saved options**/
 	$options = $this->pluginOptions;
 
+
 		/**lets not forget static, uneditable options **/
 		$options['plugin_data']['version'] = $this->pluginVersion;
-		$options['plugin_data']['nag_notice'] = isset($input['plugin_data']['nag_notice']) ? $input['plugin_data']['nag_notice'] : $this->pluginNagNotice;
+		$options['plugin_data']['nag_notice'] = isset($input['plugin_data']['nag_notice']) ? $input['plugin_data']['nag_notice'] : $options['plugin_data']['nag_notice'];
 		$options['plugin_data']['empty_category_and_items'] = false;/*we dont really want to save these settings, just execute when true*/
 
 
@@ -56,6 +56,7 @@
 
 		if(isset($_POST[''.$this->pluginSlug.'_layout'])){
 			$options['layout']['include_css'] = !empty($input['layout']['include_css']) ? true : false;
+			$options['layout']['css_priority'] = wppizza_validate_int_only($input['layout']['css_priority']);
 			$options['layout']['hide_decimals'] = !empty($input['layout']['hide_decimals']) ? true : false;
 			$options['layout']['style'] = wppizza_validate_alpha_only($input['layout']['style']);
 			$options['layout']['placeholder_img'] = !empty($input['layout']['placeholder_img']) ? true : false;
@@ -67,10 +68,7 @@
 			$options['layout']['disable_online_order'] = !empty($input['layout']['disable_online_order']) ? true : false;
 			$options['layout']['add_to_cart_on_title_click'] = !empty($input['layout']['add_to_cart_on_title_click']) ? true : false;
 			$options['layout']['currency_symbol_left'] = !empty($input['layout']['currency_symbol_left']) ? true : false;
-
 			$options['layout']['show_currency_with_price'] = wppizza_validate_int_only($input['layout']['show_currency_with_price']);
-
-
 
 			$options['opening_times_format']['hour']=wppizza_validate_string($input['opening_times_format']['hour']);
 			$options['opening_times_format']['separator']=wppizza_validate_string($input['opening_times_format']['separator']);
@@ -123,6 +121,7 @@
 			$options['order']['orderpage_exclude']=!empty($input['order']['orderpage_exclude']) ? true : false;
 			$options['order']['order_pickup']=!empty($input['order']['order_pickup']) ? true : false;
 			$options['order']['order_pickup_alert']=!empty($input['order']['order_pickup_alert']) ? true : false;
+			$options['order']['order_pickup_discount']=wppizza_validate_float_only($input['order']['order_pickup_discount']);
 
 			$options['order']['order_pickup_display_location'] = wppizza_validate_int_only($input['order']['order_pickup_display_location']);
 
@@ -150,6 +149,9 @@
 					}
 				}
 			}
+
+			$options['order']['item_tax']=wppizza_validate_float_only($input['order']['item_tax']);
+
 			$options['order']['order_email_to'] = wppizza_validate_email_array($input['order']['order_email_to']);
 			$options['order']['order_email_bcc'] = wppizza_validate_email_array($input['order']['order_email_bcc']);
 		}
@@ -191,7 +193,55 @@
 			foreach($input['localization'] as $a=>$b){
 				/*add new value , but keep desciption (as its not editable on frontend)*/
 				if(in_array($a,$allowHtml)){$html=1;}else{$html=false;}
-				$options['localization'][$a]=array('descr'=>$options['localization'][$a]['descr'],'lbl'=>wppizza_validate_string($b,$html));
+				$options['localization'][$a]=array('lbl'=>wppizza_validate_string($b,$html)); 
 			}}
+		}
+
+		/**update gateways**/
+		if(isset($_POST[''.$this->pluginSlug.'_gateways'])){
+
+			$options['gateways']['gateway_select_as_dropdown']=!empty($input['gateways']['gateway_select_as_dropdown'])? true : false;
+			$options['gateways']['gateway_showorder_on_thankyou']=!empty($input['gateways']['gateway_showorder_on_thankyou'])? true : false;
+			$options['gateways']['gateway_select_label']=wppizza_validate_string($input['gateways']['gateway_select_label']);
+
+			/**sort selected gateway*/
+			asort($input['gateways']['gateway_order']);
+
+			$options['gateways']['gateway_selected']=array();
+			foreach($input['gateways']['gateway_order'] as $gw=>$sort){
+				$options['gateways']['gateway_selected'][$gw]=!empty($input['gateways']['gateway_selected'][$gw])? true : false;
+			}
+
+			/**selected gateway*/
+			$gateways=$this->wppizza_get_registered_gateways();
+
+			foreach($gateways as $k=>$v){
+			//if(is_array($v['gatewaySettings']) && count($v['gatewaySettings'])>0)
+				$updateGatewayOptions=array();
+				foreach($v['gatewaySettings'] as $l=>$m){
+					/*validate value according to callback*/
+					if(isset($input['gateways'][$v['gatewayOptionsName']][$m['key']])){
+						if($m['validateCallback']!=''){
+							if(is_array($m['validateCallback'])){
+								$val=$m['validateCallback'][0]($input['gateways'][$v['gatewayOptionsName']][$m['key']],$m['validateCallback'][1]);
+							}else{
+								$val=$m['validateCallback']($input['gateways'][$v['gatewayOptionsName']][$m['key']]);
+							}
+						}else{
+							/*no callback defined*/
+							$val=$input['gateways'][$v['gatewayOptionsName']][$m['key']];
+						}
+					}else{
+						$val='';
+					}
+					$updateGatewayOptions[$m['key']]=$val;
+				}
+
+					$lbl=wppizza_validate_string($input['gateways'][$v['gatewayOptionsName']]['gateway_label']);
+				$updateGatewayOptions['gateway_label']=!empty($lbl) ? $lbl : $v['gatewayName'];
+				$updateGatewayOptions['gateway_info']=wppizza_validate_string($input['gateways'][$v['gatewayOptionsName']]['gateway_info']);
+
+				update_option($v['gatewayOptionsName'],$updateGatewayOptions);
+			}
 		}
 ?>

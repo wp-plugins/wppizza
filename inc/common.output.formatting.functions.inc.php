@@ -419,6 +419,7 @@ function wppizza_days(){
 *********************************************************/
 function wppizza_public_styles($selected=''){
 	$items['default']=__('Default', WPPIZZA_LOCALE);
+	$items['responsive']=__('Responsive [Experimental]', WPPIZZA_LOCALE);	
     foreach($items as $key=>$val){
     	if($key==$selected){$d=' selected="selected"';}else{$d='';}
 		$options[]=array('selected'=>''.$d.'','value'=>''.$val.'','id'=>''.$key.'');
@@ -462,6 +463,7 @@ function wppizza_order_summary($session,$options,$ajax=null){
 		[get currency]
 	****************************************************/
 	$summary['currency']=$options['order']['currency_symbol'];
+	$summary['currencyiso']=$options['order']['currency'];
 	/****************************************************
 		[hide decimals?]
 	****************************************************/
@@ -545,6 +547,12 @@ function wppizza_order_summary($session,$options,$ajax=null){
 				}
 			}
 		}
+		/***self pickup discount added to other discounts (if any)**/
+		if($options['order']['order_pickup_discount']>0 && isset($session['selfPickup']) ){
+			$discountApply=$discountApply+($session['total_price_items']/100*$options['order']['order_pickup_discount']);
+		}
+		
+
 		if(isset($discountApply) && $discountApply>0){
 			$discountLabel=$options['localization']['discount']['lbl'];
 			$discountValue=(wppizza_output_format_float($discountApply));
@@ -611,7 +619,9 @@ function wppizza_order_summary($session,$options,$ajax=null){
 
 			}
 
-			/***admin enabled self pickup on the frontend**/
+			/*******************************************
+			*	admin enabled self pickup on the frontend
+			******************************************/
 			if($options['order']['order_pickup']){
 				$summary['self_pickup_enabled']=1;
 				$summary['order_self_pickup']=$options['localization']['order_self_pickup']['lbl'];
@@ -640,17 +650,44 @@ function wppizza_order_summary($session,$options,$ajax=null){
 			}
 
 
+
+			/****************************************************
+				[tax on sum of all items BEFORE discounts. cuurently not in use]
+			****************************************************/
+			//	$summary['total_items_tax']=wppizza_round_up($session['total_items_tax'],2);
+
+			/****************************************************
+				[item tax AFTER discounts]
+			****************************************************/
+			$itemTax=0;
+			if($options['order']['item_tax']>0){
+				$summary['tax_enabled']=1;
+				$totalSales=$session['total_price_items']-(float)$discountValue;
+				/*round up decimals**/
+				$itemTax=wppizza_round_up($totalSales/100*$options['order']['item_tax'],2);
+			}
+			
+			
+			
+			
+			
+//			$itemTax=0;
+//			if($session['total_item_tax']>0){
+//				$itemTax=$session['total_item_tax'];	
+//			}
+
+			
 	/****************************************************
 		[get total order value]
 	****************************************************/
-	$totalOrder=$session['total_price_items']-(float)$discountValue+(float)$deliveryCharges;
+	$totalOrder=$session['total_price_items']-(float)$discountValue+(float)$deliveryCharges+(float)$itemTax;
 	/**if customer chose self pickup, display only label that states self pickup . no need for value**/
 	//if(isset($noDeliveryValue)){
 	//	$deliveryValue='';
 	//}else{
 		$deliveryValue=wppizza_output_format_price($deliveryCharges,$optionsDecimals);
 	//}
-	$summary['order_value']=array('total_price_items'=>array('lbl'=>$options['localization']['order_items']['lbl'],'val'=>wppizza_output_format_price(wppizza_output_format_float($session['total_price_items']),$optionsDecimals)),'delivery_charges'=>array('lbl'=>$deliveryLabel,'val'=>$deliveryValue),'discount'=>array('lbl'=>$discountLabel,'val'=>$discountValuePrint),'total'=>array('lbl'=>$options['localization']['order_total']['lbl'],'val'=>wppizza_output_format_price(wppizza_output_format_float($totalOrder),$optionsDecimals)));
+	$summary['order_value']=array('item_tax'=>array('lbl'=>$options['localization']['item_tax_total']['lbl'],'val'=>wppizza_output_format_price($itemTax,$optionsDecimals)),'total_price_items'=>array('lbl'=>$options['localization']['order_items']['lbl'],'val'=>wppizza_output_format_price(wppizza_output_format_float($session['total_price_items']),$optionsDecimals)),'delivery_charges'=>array('lbl'=>$deliveryLabel,'val'=>$deliveryValue),'discount'=>array('lbl'=>$discountLabel,'val'=>$discountValuePrint),'total'=>array('lbl'=>$options['localization']['order_total']['lbl'],'val'=>wppizza_output_format_price(wppizza_output_format_float($totalOrder),$optionsDecimals)));
 	//$summary['items_single']=$session['items'];
 
 
@@ -790,5 +827,29 @@ function wppizza_email_decode_entities($str,$charset){
 function wppizza_email_html_entities($str){
 	$str = htmlentities($str, ENT_QUOTES, mb_internal_encoding());
 	return $str;
+}
+/****************************************************************************
+	[output formfields depending on type]
+****************************************************************************/
+function wppizza_echo_formfield($type='text',$id='',$name='',$value='',$placeholder='',$options=''){
+	//$ff='';
+	if($type=='text' || $type=='email'){
+		echo'<input type="'.$type.'" id="'.$id.'" name="'.$name.'" value="'.$value.'"  size="40" placeholder="'.$placeholder.'" />';	
+	}
+	if($type=='checkbox' || $type=='radio'){
+		echo'<input type="'.$type.'" id="'.$id.'" name="'.$name.'" value="1" '.$value.'/>';	 
+	}		
+	if($type=='textarea'){
+		echo'<textarea id="'.$id.'" name="'.$name.'">'.$value.'</textarea>';
+	}
+	if($type=='texteditor'){
+		echo'<div style="width:550px">';
+		wp_editor( $value, $name,array('teeny'=>1,'wpautop'=>false,'media_buttons'=>false) );
+		echo'</div>';
+	}
+	if($type=='select'){
+		echo''.$options;
+	}
+//	return $ff;
 }
 ?>

@@ -178,5 +178,27 @@ jQuery(document).ready(function($){
 			$('#wppizza_history_orders').html(response);
 		},'html').error(function(jqXHR, textStatus, errorThrown) {alert("error : " + errorThrown);});
 	});
+	/******************************
+	*	[delete orders]
+	******************************/	
+	$(document).on('click', '.wppizza_order_delete', function(e){
+		e.preventDefault();
+		if(!confirm('are you sure ?')){ return false;}
+		var self=$(this);
+		var ordId=self.attr('id').split("_").pop(-1);
+		jQuery.post(ajaxurl , {action :'wppizza_admin_json',vars:{'field':'delete_orders','ordId':ordId}}, function(response) {
+			alert(response);
+			self.closest('tr').empty().remove();
+		},'html').error(function(jqXHR, textStatus, errorThrown) {alert("error : " + errorThrown);});
+	});	
+	/*****************************
+	*	[show gateway settings option]
+	*****************************/
+	$(document).on('click', '.wppizza-gateway-show-options', function(e){
+		//alert('alarm');
+		var self=$(this);
+		$('.wppizza-gateway-settings').slideUp();
+		self.closest('.wppizza-gateway').find('.wppizza-gateway-settings').slideDown();
+	});	
 
 })

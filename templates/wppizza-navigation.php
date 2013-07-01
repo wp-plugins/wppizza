@@ -1,6 +1,8 @@
 <?php
 /*
 	Template for displaying WPPizza Category Navigation
+	unless you want to wrap the whole thing in a div or something
+	I would suggest you leave it alone......
 */
 ?>
 <?php

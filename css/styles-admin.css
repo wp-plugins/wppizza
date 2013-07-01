@@ -6,7 +6,7 @@
 
 #wppizza-settings .form-table th{width:400px;}
 #wppizza-settings #history .form-table th,#wppizza-settings #ingredients .form-table th,#wppizza-settings #meals .form-table th{width:5px;}
-#wppizza-settings .wppizza_order_details {width:350px;height:100px}
+
 
 .wppizza_option{display:block}
 
@@ -48,3 +48,31 @@
 	[when using textarea in localization fields]
 *********************/
 .wppizza_localization_textarea{width:250px}
+
+/*******************
+	[order history table]
+*********************/
+.wppizza-history-wrap .form-table th{display:none}
+#wppizza_history{background:#EFEFEF;border:1px solid #999999;margin-bottom:10px;padding:5px}
+#wppizza_history_orders>table{border:1px solid #999999;margin-bottom:10px}
+#wppizza_history_orders .wppizza-orders-head{background-color:#CECECE}
+#wppizza_history_orders tr:nth-child(odd){background:#EFEFEF;}
+#wppizza_history_orders tr:nth-child(even){background:#FFFFFF;}
+#wppizza-settings .wppizza_order_customer_details{height:100px;min-width:300px}
+#wppizza-settings .wppizza_order_details {width:390px !important;height:100px}
+/******************
+	[gateways]
+*******************/
+.wppizza-gateway-show-options{float:right;cursor:pointer;color:blue;font-size:110%;padding:0 5px}
+/*initialize settings hidden*/
+.wppizza-gateway-settings{display:none}
+#wppizza_gateways_options>div,#wppizza_gateways_options>div>div,.wppizza-gateway-settings>div{overflow:auto;margin-bottom:5px;padding:5px;} 
+#wppizza_gateways_options>div{padding:2px;}
+.wppizza-gateway-settings>div{border-bottom:1px dotted #CECECE;}
+#wppizza_gateways_options .wppizza-gateway-head{background-color:#CECECE}
+#wppizza_gateways_options label {display:block;float:left; width:200px;padding:2px;font-weight:bold;font-size:110%}
+#wppizza_gateways_options textarea {width:235px;height:75px}
+#wppizza_gateways_options .wp-editor-tools{margin-top:15px;}
+#wppizza_gateways_options .wp-editor-container{background:#FFFFFF}
+#wppizza_gateways_options .wp-editor-container textarea{width:100%}
+#wppizza_gateways_options .wppizza-gateway{background:#EFEFEF;border:1px solid #999999;margin-bottom:10px}

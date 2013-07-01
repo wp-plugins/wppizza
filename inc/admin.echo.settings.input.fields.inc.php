@@ -56,6 +56,10 @@ $options = $this->pluginOptions;
 			}
 			if($field=='include_css' ){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[layout][".$field."]' type='checkbox'  ". checked($options['layout'][$field],true,false)." value='1' />";
+				echo "<input name='".$this->pluginSlug."[layout][css_priority]' size='2' type='text'  value='{$options['layout']['css_priority']}' />";
+				echo "".__('Stylesheet Priority', $this->pluginLocale)."";
+				echo "<br/>".__('By default, the stylesheet will be loaded AFTER the main theme stylesheet (which should have a priority of "10"). If you experience strange behaviour or layout issues (in conjunction with other plugins for example), you can try adjusting this priority here (the bigger the number, the later it gets loaded).', $this->pluginLocale)."";
+				
 			}
 			if($field=='hide_decimals' ){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[layout][".$field."]' type='checkbox'  ". checked($options['layout'][$field],true,false)." value='1' />";
@@ -261,6 +265,9 @@ $options = $this->pluginOptions;
 			}
 			if($field=='order_pickup'){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[order][".$field."]' type='checkbox'  ". checked($options['order'][$field],true,false)." value='1' /> ".__('tick to enable', $this->pluginLocale)."";
+				
+				echo "<br/>".__('Discount for self-pickup ?', $this->pluginLocale)." <input id='order_pickup_discount' name='".$this->pluginSlug."[order][order_pickup_discount]' size='2' type='text' value='".wppizza_output_format_price($options['order']['order_pickup_discount'])."' /> ".__('in % - 0 to disable', $this->pluginLocale)."";
+				
 				echo "<br/><input id='order_pickup_alert' name='".$this->pluginSlug."[order][order_pickup_alert]' type='checkbox'  ". checked($options['order']['order_pickup_alert'],true,false)." value='1' /> ".__('enable javascript alert when user selects self pickup (set corresponding text in localization)', $this->pluginLocale)."";
 			}
 			if($field=='order_pickup_display_location'){
@@ -309,6 +316,9 @@ $options = $this->pluginOptions;
 				if(is_array($options['order'][$field])){$val=implode(",",$options['order'][$field]);}else{$val='';}
 				echo "<input id='".$field."' name='".$this->pluginSlug."[order][".$field."]' size='30' type='text' value='".$val."' />";
 			}
+			if($field=='item_tax'){
+				echo "<input id='".$field."' name='".$this->pluginSlug."[order][".$field."]' size='2' type='text' value='".wppizza_output_format_price($options['order'][$field])."' />%";
+			}			
 			if($field=='sizes'){
 				echo"<div id='wppizza_".$field."'>";
 				echo"<div id='wppizza_".$field."_options'>";
@@ -331,12 +341,49 @@ $options = $this->pluginOptions;
 					echo "<a href='#' id='wppizza_add_".$field."' class='button'>".__('add', $this->pluginLocale)."</a>";
 				echo"</div>";
 			}
+			
+			if($field=='gateways'){
+				echo"<div id='wppizza_".$field."'>";
+				
+				echo"<div id='wppizza_".$field."_options'>";
+					echo"<div>"; 
+						echo"<input name='".$this->pluginSlug."[gateways][gateway_select_as_dropdown]' type='checkbox'  ". checked($options['gateways']['gateway_select_as_dropdown'],true,false)." value='1' />";
+						echo" <b>".__('Display Gateway choices as dropdowns instead of buttons', $this->pluginLocale)."</b> ".__('[only applicable if more than one gateway installed, activated and enabled]', $this->pluginLocale)."";
+					echo"</div>";
+				
+					echo"<div>";
+						echo"<b>".__('Label:', $this->pluginLocale)."</b> ";
+						echo"<input name='".$this->pluginSlug."[gateways][gateway_select_label]' type='text' size='50' value='". $options['gateways']['gateway_select_label']."' />";
+						echo"<br/>".__('by default displayed above if choices are displayed as full width buttons, next to if dropdown. edit css as required', $this->pluginLocale)." ".__('[only applicable if more than one gateway installed, activated and enabled]', $this->pluginLocale)."";
+					echo"</div>";
+						
+					echo"<div>"; 
+						echo"<input name='".$this->pluginSlug."[gateways][gateway_showorder_on_thankyou]' type='checkbox'  ". checked($options['gateways']['gateway_showorder_on_thankyou'],true,false)." value='1' />";
+						echo" <b>".__('Show Order Details on "Thank You" page (Y/N)', $this->pluginLocale)."</b> ".__('Will add any order details after your thank you text on successful order', $this->pluginLocale)."";
+					echo"</div>";						
+						
+						
+						
+						
+						$this->wppizza_admin_section_gateways($field,$options[$field]);
+					echo"</div>";
+				echo"</div>";				
+			}
 			if($field=='localization'){
+				/**to get descriptions include default options**/
+				require_once(WPPIZZA_PATH .'inc/admin.setup.default.options.inc.php');
+				/**add description to array**/
+				$localizeOptions=array();
+				foreach($defaultOptions['localization'] as $k=>$v){
+					$localizeOptions[$k]['descr']=$v['descr'];
+					$localizeOptions[$k]['lbl']=$options[$field][$k]['lbl'];
+				}
+
 				$textArea=array('thank_you_p');/*tinymce textareas*/
 				echo"<div id='wppizza_".$field."'>";
 					echo"<div id='wppizza_".$field."_options'>";
-					asort($options[$field]);
-					foreach($options[$field] as $k=>$v){
+					asort($localizeOptions);
+					foreach($localizeOptions as $k=>$v){
 						if(in_array($k,$textArea)){
 							$editorId="".$this->pluginSlug."[".$field."][".$k."]";
 							echo"<br/>".$v['descr']."";
@@ -355,7 +402,7 @@ $options = $this->pluginOptions;
 			}
 			if($field=='history'){
 				echo"<div id='wppizza_".$field."'>";
-					echo "<a href='#' id='".$field."_get_orders'>".__('show most recent orders', $this->pluginLocale)."</a>";
+					echo "<a href='#' id='".$field."_get_orders'>".__('show most recent *confirmed* orders', $this->pluginLocale)."</a>";
 					echo " ".__('maximum results [0 to show all]', $this->pluginLocale)."<input id='".$field."_orders_limit' size='5' type='text' value='20' />";
 				echo"</div>";
 				echo"<div id='wppizza_".$field."_orders'></div>";

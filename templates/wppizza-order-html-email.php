@@ -66,18 +66,23 @@ $orderHtml.='<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "htt
 
 /**********************************************************
 
-	[order summaries - sum of items, discount, delivery, total, self pickup if selected]
+	[order summaries - sum of items, discount, delivery, total, tax, self pickup if selected]
 
 ***********************************************************/
 
 		/**cart items summary**/
-		$orderHtml.=PHP_EOL.'				<tr><td style="padding:0 5px;">'.$order_summary['cartitems']['label'].'</td><td>'.$order_summary['cartitems']['currency'].' '.$order_summary['cartitems']['price'].'</td></tr>';
+		$orderHtml.=PHP_EOL.'				<tr><td style="padding:0 5px;">'.$order_summary['cartitems']['label'].'</td><td>'.$currency.' '.$order_summary['cartitems']['price'].'</td></tr>';
 
 		/**if discounts applied**/
 		if(isset($order_summary['discount'])){
-		$orderHtml.=PHP_EOL.'				<tr><td style="padding:0 5px;">'.$order_summary['discount']['label'].'</td><td>'.$order_summary['discount']['currency'].' '.$order_summary['discount']['price'].'</td></tr>';
+		$orderHtml.=PHP_EOL.'				<tr><td style="padding:0 5px;">'.$order_summary['discount']['label'].'</td><td>-'.$currency.' '.$order_summary['discount']['price'].'</td></tr>';
 		}
 
+		/**if items are taxed -> NEW IN VERSION 2.0**/
+		if(isset($order_summary['item_tax'])){
+		$orderHtml.=PHP_EOL.'				<tr><td style="padding:0 5px;">'.$order_summary['item_tax']['label'].'</td><td>'.$currency.' '.$order_summary['item_tax']['price'].'</td></tr>';
+		}
+		
 		/**delivery costs (if free or self pickup, price and currency will be empty)**/
 		if(isset($order_summary['delivery'])){
 		$orderHtml.=PHP_EOL.'				<tr><td style="padding:0 5px;">'.$order_summary['delivery']['label'].'</td><td>'.$order_summary['delivery']['currency'].' '.$order_summary['delivery']['price'].'</td></tr>';
@@ -87,9 +92,9 @@ $orderHtml.='<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "htt
 		$orderHtml.=PHP_EOL.'				<tr><td colspan="2" style="padding:0;border-bottom:1px dotted #CECECE;">&nbsp;</td></tr>';
 
 		/**total**/
-		$orderHtml.=PHP_EOL.'				<tr><td style="padding:5px;font-weight:600">'.$order_summary['total']['label'].'</td><td style="font-weight:600">'.$order_summary['total']['currency'].' '.$order_summary['total']['price'].'</td></tr>';
+		$orderHtml.=PHP_EOL.'				<tr><td style="padding:5px;font-weight:600">'.$order_summary['total']['label'].'</td><td style="font-weight:600">'.$currency.' '.$order_summary['total']['price'].'</td></tr>';
 
-		/**self pickup if selected. new in version 1.4.1**/
+		/**self pickup if selected. NEW IN VERSION 1.4.1**/
 		if(isset($order_summary['self_pickup'])){
 		$orderHtml.=PHP_EOL.'				<tr><td style="padding:10px 5px;font-weight:600;color:#ff3333" colspan="2">'.$order_summary['self_pickup']['label'].'</td></tr>';
 		}

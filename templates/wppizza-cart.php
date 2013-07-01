@@ -46,13 +46,16 @@ return;
 	<input type='hidden' class='wppizza-open' name='wppizza-open' />
 	<?php } ?>
 
-
+<?php
+/*testing things*/
+//print_r($cart);
+?>
 	<div class="wppizza-order">
 	<?php echo $cartContents ?>
 	</div>
 	<div class="wppizza-cart-info">
 			<div class="wppizza-cart-nocheckout"><?php echo $cart['nocheckout'] ?></div>
-			<span>
+			<span class="wppizza-cart-total-items">
 				<span class="wppizza-cart-total-items-label">
 					<?php if(count($cart['items'])>0){?>
 						<?php echo $cart['order_value']['total_price_items']['lbl'] ?>
@@ -64,7 +67,8 @@ return;
 					<?php } ?>
 				</span>
 			</span>
-			<span>
+			
+			<span class="wppizza-cart-discount">
 				<span class="wppizza-cart-discount-label">
 					<?php if($cart['nocheckout']=='' && count($cart['items'])>0){?>
 					<?php echo $cart['order_value']['discount']['lbl'] ?>
@@ -72,12 +76,28 @@ return;
 				</span>
 				<span class="wppizza-cart-discount-value wppizza-cart-info-price">
 					<?php if($cart['nocheckout']=='' && count($cart['items'])>0){?>
-					<?php if($cart['order_value']['discount']['val']>0){echo $cart['currency'];?> <?php echo ($cart['order_value']['discount']['val']) ?>
+					<?php if($cart['order_value']['discount']['val']>0){echo '<span class="wppizza-minus"></span>'.$cart['currency'];?> <?php echo ($cart['order_value']['discount']['val']) ?>
 					<?php }} ?>
 				</span>
 			</span>
-			<?php if(!isset($cart['self_pickup_enabled']) || $cart['selfPickup']==0){ /*not selfpickup : conditional added/changed in v1.4.1*/ ?>
-			<span>
+			
+			<?php if(isset($cart['tax_enabled'])){ /*SUM SALES TAX : CONDITIONAL ADDED/CHANGED IN VERSION 2.0*/ ?>
+			<span class="wppizza-cart-tax">
+				<span class="wppizza-cart-tax-label">
+					<?php if($cart['nocheckout']=='' && count($cart['items'])>0){?>
+					<?php echo $cart['order_value']['item_tax']['lbl'] ?>
+					<?php } ?>				
+				</span>
+				<span class="wppizza-cart-tax-value wppizza-cart-info-price">
+					<?php if($cart['nocheckout']=='' && count($cart['items'])>0){?>
+					<?php if($cart['order_value']['item_tax']['val']>0){echo $cart['currency'];} ?> <?php echo ($cart['order_value']['item_tax']['val']) ?>
+					<?php } ?>				
+				</span>
+			</span>			
+			<?php } ?>
+			
+			<?php if(!isset($cart['self_pickup_enabled']) || $cart['selfPickup']==0){ /*NOT SELFPICKUP : CONDITIONAL ADDED/CHANGED IN Version 1.4.1*/ ?>
+			<span class="wppizza-cart-delivery">
 				<span class="wppizza-cart-delivery-charges-label">
 					<?php if($cart['nocheckout']=='' && count($cart['items'])>0){?>
 					<?php echo $cart['order_value']['delivery_charges']['lbl'] ?>
@@ -90,6 +110,7 @@ return;
 				</span>
 			</span>
 			<?php } ?>
+						
 			<span class="wppizza-cart-total">
 				<span class="wppizza-cart-total-label">
 					<?php if($cart['nocheckout']=='' && count($cart['items'])>0){?>
@@ -102,7 +123,7 @@ return;
 					<?php } ?>
 				</span>
 			</span>
-			<?php if($cart['nocheckout']=='' && isset($cart['self_pickup_enabled']) && $cart['selfPickup']==1	){ /*selfpickup enabled and selected : added/changed in v1.4.1**/ ?>
+			<?php if($cart['nocheckout']=='' && isset($cart['self_pickup_enabled']) && $cart['selfPickup']==1	){ /*SELFPICKUP ENABLED AND SELECTED : ADDED/CHANGED IN V1.4.1**/ ?>
 			<span id="wppizza-cart-self-pickup">
 				<?php echo ($cart['order_self_pickup_cart']) ?>
 			</span>
@@ -113,7 +134,7 @@ return;
 
 	</div>
 </div>
-<?php if(isset($cart['self_pickup_enabled']) && isset($cart['self_pickup_cart'])){ /*allow self pickup and display in cart: added in v1.4.1**/ ?>
+<?php if(isset($cart['self_pickup_enabled']) && isset($cart['self_pickup_cart'])){ /*ALLOW SELF PICKUP AND DISPLAY IN CART: ADDED/CHANGED IN V1.4.1**/ ?>
 	<div class="wppizza-order-pickup-choice">
 	<label><input type='checkbox' id='<?php echo $cart['selfPickupId'] ?>' name='wppizza-order-pickup' value='1' <?php checked($cart['selfPickup'],1,true) ?> /><?php echo $cart['order_self_pickup'] ?></label>
 	</div>
