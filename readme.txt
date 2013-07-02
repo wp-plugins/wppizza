@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, order online, cash on delivery, multilingual
 Requires at least: PHP 5.2, WP 3.3 
 Tested up to: 3.5.1
-Stable tag: 2.1
+Stable tag: 2.1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -113,11 +113,15 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 == Changelog ==
 
+2.1.1
+* BUGFIX Weekdays in oredering times were not localized  
+- 2nd July 2013  
+
+
 2.1
 * added option to display order details on "thankyou" page  
 * made some more variables translatable via po/mo files  
 * moved localization description out of the option table as it really doesnt belong there (which in turn makes it translatable via mo/po files)  
-* minor readme update  
 - 1st July 2013  
 
 
@@ -376,6 +380,16 @@ Just make sure you copy the relevant template from wppizza/templates/ to your th
 
 by email.  
 if you need them to be sent by fax for example you will have to look into integrating your orders with a fax2email gateway. (search for it on your favourite search engine)   
+
+
+= Where do I set the images for any particular menu item? =
+
+just use the "featured image" for a menu item  
+if you do not have this options it's either hidden (go to "screen options" at the top of the page to enable/show it) or your theme does not have thumbnails enabled (tell the author about it. not my fault)
+if the auther doesnt want to or cannot do anything about it, you can also just put the following code at the bottom of your themes function file (before the closing ?> )
+	
+	add_theme_support('post-thumbnails');
+	  
 
 = How can I submit a bug, ask for help or request a new feature? =
 

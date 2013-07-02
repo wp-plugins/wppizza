@@ -176,10 +176,10 @@
 				$open=explode("|",$k);
 				if(count($consec)==2){
 					if(($consec[0]+1)==$consec[1]){$seperator=',';}else{$seperator='-';}
-					$str.=' '.wpizza_format_weekday($consec[0],'%a').''.$seperator.''.wpizza_format_weekday($consec[1],'%a').'';
+					$str.=' '.wpizza_format_weekday($consec[0],'D').''.$seperator.''.wpizza_format_weekday($consec[1],'D').'';
 				}
 				if(count($consec)==1){
-					$str.=' '.wpizza_format_weekday($consec[0],'%a').'';
+					$str.=' '.wpizza_format_weekday($consec[0],'D').'';
 				}
 				if($open[0]==$open[1]){
 					$str.=' '.$options['localization']['openinghours_closed']['lbl'].'';
@@ -222,7 +222,8 @@
 		$day[7]=947419200;//sun (9th jan 2000 12:00) if using 7 as sunday
 		$day[0]=947419200;//sun (9th jan 2000 12:00) if using 0 as sunday
 
-		$wDayFormatted=strftime($format,$day[$int]);
+		//$wDayFormatted=strftime($format,$day[$int]);
+		$wDayFormatted=date_i18n($format,$day[$int]);
 
 		return $wDayFormatted;
 	}
