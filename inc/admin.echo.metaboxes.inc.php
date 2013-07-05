@@ -24,27 +24,18 @@
 	$str.="</span>";
 	$str.="</div>";
 		
-	/*->*** which additives in item ***/
-	$str.="<div class='".$this->pluginSlug."_option'>";
-	$str.="<div class='wppizza-meta-label'>".__('contains additives', $this->pluginLocale).":</div> ";
-	asort($options['additives']);//sort but keep index
-	foreach($options['additives']  as $s=>$o){
-		$str.="<label class='button'>";
-		$str.="<input name='".$this->pluginSlug."[additives][".$s."]' size='5' type='checkbox' ". checked(in_array($s,$meta_values['additives']),true,false)." value='".$s."' /> ".$o."";
-		$str.="</label>";			
+	if(isset($options['additives']) && is_array($options['additives']) && count($options['additives'])>0){
+		/*->*** which additives in item ***/
+		$str.="<div class='".$this->pluginSlug."_option'>";
+		$str.="<div class='wppizza-meta-label'>".__('contains additives', $this->pluginLocale).":</div> ";
+		asort($options['additives']);//sort but keep index
+		foreach($options['additives']  as $s=>$o){
+			$str.="<label class='button'>";
+			$str.="<input name='".$this->pluginSlug."[additives][".$s."]' size='5' type='checkbox' ". checked(in_array($s,$meta_values['additives']),true,false)." value='".$s."' /> ".$o."";
+			$str.="</label>";			
+		}
+		$str.="</div>";
 	}
-	$str.="</div>";
 
-/*--> moved to add ingredients plugin ************/
-	/*->***  enable addition of ingredients by customer on/off***/
-//	$str.="<div class='".$this->pluginSlug."_option'>";
-//	$str.="<label>";
-//	$str.="".__('allow customers to add additional ingredients to this item ?', $this->pluginLocale).": ";
-//	$str.="<span class='button'>";
-//	$str.="<input name='".$this->pluginSlug."[add_ingredients]' type='checkbox' ". checked($meta_values['add_ingredients'],true,false)." value='1' />";				
-//	$str.="</span>";
-//	$str.="</label>";
-//	$str.="</div>";
-/*--> moved to add ingredients plugin end************/
 	print"".$str;
 ?>
