@@ -15,7 +15,7 @@ if (!class_exists( 'WPPizza' ) ) {return ;}
 		/**settings of gateway variables. required function, but can return empty array**/
 		function gateway_settings($optionsOnly=false) {
 				$gatewaySettings=array();
-			return $gwSettings;
+			return $gatewaySettings;
 		}
 	}
 ?>
