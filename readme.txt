@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, order online, cash on delivery, multilingual
 Requires at least: PHP 5.2, WP 3.3 
 Tested up to: 3.5.1
-Stable tag: 2.1.3
+Stable tag: 2.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -112,6 +112,13 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 
 == Changelog ==
+
+2.2
+* eliminated some php notices  
+* add ability to extend send email class  
+* changed Bulgarian Currency Symbol  
+* prettied up some css in admin  
+- 13th July 2013  
 
 2.1.3
 * eliminated some more php notices in cod gateway class    
@@ -311,7 +318,7 @@ you would still probably want to delete/hide your order page or at least disable
 first thing to try (if you haven't done so already): re-save the pages WPPizza has created   
 (I'm NOT talking about the WPPizza Categories and Menu Item Pages, but the pages that display a list of your item - typically a page that has somthing like [wppizza -some attributes-] on it)
 
-make sure your theme (or one of your plugins) does not use an old version of jQuery (some themes/plugins override the version that comes bundled with wordpress - no, i don't know either why they would do that)  
+**make sure your theme (or one of your plugins) does not use an old version of jQuery (some themes/plugins override the version that comes bundled with wordpress - no, i don't know either why they would do that)**  
 
 If that still doesn't help, you might have to adjust the CSS (see 'Can I edit the css ?' above)
 

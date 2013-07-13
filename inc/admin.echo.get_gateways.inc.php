@@ -8,12 +8,12 @@
 		print"<div class='wppizza-gateway'>";
 			
 			/***gateway enabled on  frontend**/
-			print"<div class='wppizza-gateway-head'>";
+			print"<div class='wppizza-gateway-head button'>";
 			print"<label>".$gw['gatewayName']."</label>";
 			print"<input name='".$this->pluginSlug."[".$field."][gateway_selected][".$gw['ident']."]' type='checkbox'  value='1' ".checked($gw['enabled'],true,false)." /> ";
 			print"".__('enabled Y/N',$this->pluginLocale)."";
 			
-			print"<span class='wppizza-gateway-show-options'>".__('show options',$this->pluginLocale)."</span>";
+			print"<span class='wppizza-gateway-show-options button'>".__('show options',$this->pluginLocale)."</span>";
 			print"</div>";
 			
 			print"<div class='wppizza-gateway-settings'>";

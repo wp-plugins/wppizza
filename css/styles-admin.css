@@ -69,10 +69,12 @@
 #wppizza_gateways_options>div,#wppizza_gateways_options>div>div,.wppizza-gateway-settings>div{overflow:auto;margin-bottom:5px;padding:5px;} 
 #wppizza_gateways_options>div{padding:2px;}
 .wppizza-gateway-settings>div{border-bottom:1px dotted #CECECE;}
-#wppizza_gateways_options .wppizza-gateway-head{background-color:#CECECE}
-#wppizza_gateways_options label {display:block;float:left; width:200px;padding:2px;font-weight:bold;font-size:110%}
+#wppizza_gateways_options .wppizza-gateway-head.button{width:100%;line-height:40px;height:45px;padding:0 10px;margin:0;border-color:#CECECE}
+#wppizza_gateways_options .wppizza-gateway-head .wppizza-gateway-show-options{margin-top:10px}
+
+#wppizza_gateways_options label {display:block;float:left; width:200px;padding:0;margin:0;font-weight:bold;font-size:110%}
 #wppizza_gateways_options textarea {width:235px;height:75px}
 #wppizza_gateways_options .wp-editor-tools{margin-top:15px;}
 #wppizza_gateways_options .wp-editor-container{background:#FFFFFF}
 #wppizza_gateways_options .wp-editor-container textarea{width:100%}
-#wppizza_gateways_options .wppizza-gateway{background:#EFEFEF;border:1px solid #999999;margin-bottom:10px}
+#wppizza_gateways_options .wppizza-gateway{background:#FCFCFC;border:1px solid #ECECEC;margin-bottom:10px;padding:0}

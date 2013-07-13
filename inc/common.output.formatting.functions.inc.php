@@ -41,7 +41,7 @@
 		$items['BOB']='$b';
 		$items['BAM']='KM';
 		$items['BWP']='P';
-		$items['BGN']='&#1083;';
+		$items['BGN']='&#1083;B';
 		$items['BRL']='R$';
 		$items['BND']='$';
 		$items['KHR']='&#6107;';
@@ -420,7 +420,7 @@ function wppizza_days(){
 *********************************************************/
 function wppizza_public_styles($selected=''){
 	$items['default']=__('Default', WPPIZZA_LOCALE);
-	$items['responsive']=__('Responsive [Experimental]', WPPIZZA_LOCALE);	
+	$items['responsive']=__('Responsive [Experimental]', WPPIZZA_LOCALE);
     foreach($items as $key=>$val){
     	if($key==$selected){$d=' selected="selected"';}else{$d='';}
 		$options[]=array('selected'=>''.$d.'','value'=>''.$val.'','id'=>''.$key.'');
@@ -552,7 +552,7 @@ function wppizza_order_summary($session,$options,$ajax=null){
 		if($options['order']['order_pickup_discount']>0 && isset($session['selfPickup']) ){
 			$discountApply=$discountApply+($session['total_price_items']/100*$options['order']['order_pickup_discount']);
 		}
-		
+
 
 		if(isset($discountApply) && $discountApply>0){
 			$discountLabel=$options['localization']['discount']['lbl'];
@@ -650,8 +650,6 @@ function wppizza_order_summary($session,$options,$ajax=null){
 				}
 			}
 
-
-
 			/****************************************************
 				[tax on sum of all items BEFORE discounts. cuurently not in use]
 			****************************************************/
@@ -667,30 +665,20 @@ function wppizza_order_summary($session,$options,$ajax=null){
 				/*round up decimals**/
 				$itemTax=wppizza_round_up($totalSales/100*$options['order']['item_tax'],2);
 			}
-			
-			
-			
-			
-			
+
 //			$itemTax=0;
 //			if($session['total_item_tax']>0){
-//				$itemTax=$session['total_item_tax'];	
+//				$itemTax=$session['total_item_tax'];
 //			}
 
-			
+
 	/****************************************************
 		[get total order value]
 	****************************************************/
 	$totalOrder=$session['total_price_items']-(float)$discountValue+(float)$deliveryCharges+(float)$itemTax;
 	/**if customer chose self pickup, display only label that states self pickup . no need for value**/
-	//if(isset($noDeliveryValue)){
-	//	$deliveryValue='';
-	//}else{
-		$deliveryValue=wppizza_output_format_price($deliveryCharges,$optionsDecimals);
-	//}
+	$deliveryValue=wppizza_output_format_price($deliveryCharges,$optionsDecimals);
 	$summary['order_value']=array('item_tax'=>array('lbl'=>$options['localization']['item_tax_total']['lbl'],'val'=>wppizza_output_format_price($itemTax,$optionsDecimals)),'total_price_items'=>array('lbl'=>$options['localization']['order_items']['lbl'],'val'=>wppizza_output_format_price(wppizza_output_format_float($session['total_price_items']),$optionsDecimals)),'delivery_charges'=>array('lbl'=>$deliveryLabel,'val'=>$deliveryValue),'discount'=>array('lbl'=>$discountLabel,'val'=>$discountValuePrint),'total'=>array('lbl'=>$options['localization']['order_total']['lbl'],'val'=>wppizza_output_format_price(wppizza_output_format_float($totalOrder),$optionsDecimals)));
-	//$summary['items_single']=$session['items'];
-
 
 	/****************************************************
 		[check if we are open]
@@ -735,13 +723,8 @@ function wppizza_order_summary($session,$options,$ajax=null){
 			/*minimum order not reached. only applies when "Deliver even when total order value is below minimum" is NOT checked and the corresponding option(radio) has been selected*/
 				$summary['nocheckout']=''.$options['localization']['minimum_order']['lbl'].' '.wppizza_output_format_price($options['order']['delivery']['minimum_total']['min_total'],$optionsDecimals).' '.$options['order']['currency_symbol'].'';
 			}
-
 		}
-
-
 	}
-
-
 return $summary;
 }
 /***************************************************
@@ -835,11 +818,11 @@ function wppizza_email_html_entities($str){
 function wppizza_echo_formfield($type='text',$id='',$name='',$value='',$placeholder='',$options=''){
 	//$ff='';
 	if($type=='text' || $type=='email'){
-		echo'<input type="'.$type.'" id="'.$id.'" name="'.$name.'" value="'.$value.'"  size="40" placeholder="'.$placeholder.'" />';	
+		echo'<input type="'.$type.'" id="'.$id.'" name="'.$name.'" value="'.$value.'"  size="40" placeholder="'.$placeholder.'" />';
 	}
 	if($type=='checkbox' || $type=='radio'){
-		echo'<input type="'.$type.'" id="'.$id.'" name="'.$name.'" value="1" '.$value.'/>';	 
-	}		
+		echo'<input type="'.$type.'" id="'.$id.'" name="'.$name.'" value="1" '.$value.'/>';
+	}
 	if($type=='textarea'){
 		echo'<textarea id="'.$id.'" name="'.$name.'">'.$value.'</textarea>';
 	}
@@ -851,6 +834,5 @@ function wppizza_echo_formfield($type='text',$id='',$name='',$value='',$placehol
 	if($type=='select'){
 		echo''.$options;
 	}
-//	return $ff;
 }
 ?>

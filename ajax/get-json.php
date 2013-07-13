@@ -1,5 +1,5 @@
 <?php
-//error_reporting(0);
+error_reporting(0);
 if(!defined('DOING_AJAX') || !DOING_AJAX){
 	header('HTTP/1.0 400 Bad Request', true, 400);
 	print"you cannot call this script directly";
@@ -147,7 +147,7 @@ if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='sendorder'){
 	*
 	********************************************************************/
 	$output=$sendEmail->wppizza_order_results($mailResults);
-//unset($_SESSION[$this->pluginSession]);
+	unset($_SESSION[$this->pluginSession]);
 	print"".$output."";
 exit();
 }

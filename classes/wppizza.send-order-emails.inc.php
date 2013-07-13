@@ -1,10 +1,15 @@
 <?php
 if (!class_exists( 'WPPizza' ) ) {return;}
 
-	class WPPIZZA_SEND_ORDER_EMAILS extends WPPizza {
+	class WPPIZZA_SEND_ORDER_EMAILS extends WPPIZZA_ACTIONS {
 
 		function __construct() {
 			parent::__construct();
+
+
+			$this->wppizza_order_emails_extend();
+
+
 			/**blog charset*/
 			$this->blogCharset=get_bloginfo('charset');
 			/**timestamp the order*/
@@ -12,6 +17,7 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 			/**set shop name and email*/
 			$this->orderShopName 	='';
 			$this->orderShopEmail 	=$this->pluginOptions['order']['order_email_to'][0];
+
 			/**who to bcc the order to*/
 			$this->orderShopBcc 	=$this->pluginOptions['order']['order_email_bcc'];
 
@@ -26,7 +32,28 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 			$this->subjectPrefix =  ''.get_bloginfo().': ';
 			$this->subject = ''.$this->pluginOptions['localization']['your_order']['lbl'].'';
 			$this->subjectSuffix =' '.$this->orderTimestamp.'';
+
+
 		}
+		/***************************************************************
+			[allow some extension classes to allow to modify variables]
+			class must start with 'WPPIZZA_ORDER_EMAILS_EXTEND_'
+		***************************************************************/
+		function wppizza_order_emails_extend(){
+			$allClasses=get_declared_classes();
+			$wppizzaOrderExtend=array();
+			foreach ($allClasses AS $oe=>$class){
+				$chkStr=substr($class,0,28);
+				if($chkStr=='WPPIZZA_ORDER_EMAILS_EXTEND_'){
+					$wppizzaOrderExtend[$oe]=new $class;
+					foreach($wppizzaOrderExtend[$oe] as $k=>$v){
+						$this->$k=$v;
+					}
+				}
+			}
+			return ;
+		}
+
 
 		function wppizza_order_construct_email(){
 

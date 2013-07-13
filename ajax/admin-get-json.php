@@ -1,5 +1,5 @@
 <?php
-//error_reporting(0);
+error_reporting(0);
 if(!defined('DOING_AJAX') || !DOING_AJAX){
 	header('HTTP/1.0 400 Bad Request', true, 400);
 	print"you cannot call this script directly";
@@ -137,8 +137,6 @@ if($_POST['vars']['field']=='delete_orders'){
 	$res=$wpdb->query( $wpdb->prepare( "DELETE FROM ".$wpdb->prefix . $this->pluginOrderTable." WHERE id=%s ",$_POST['vars']['ordId']));
 	$output.="".__('order deleted', $this->pluginLocale)."";	
 }
-
-
 print"".$output."";
 exit();
 ?>

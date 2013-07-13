@@ -1,6 +1,6 @@
 <?php
 if (!class_exists( 'WPPizza' ) ) {return ;}
-class WPPIZZA_GATEWAYS extends WPPizza {
+class WPPIZZA_GATEWAYS extends WPPIZZA {
 
 	protected $pluginGateways;
 
@@ -160,7 +160,7 @@ class WPPIZZA_GATEWAYS extends WPPizza {
 		$gatewayOrder['discount']=$cartDetails['order_value']['discount']['val'];
 		$gatewayOrder['item_tax']=$cartDetails['order_value']['item_tax']['val'];
 		$gatewayOrder['delivery_charges']=$cartDetails['order_value']['delivery_charges']['val'];
-		$gatewayOrder['selfPickup']=$cartDetails['selfPickup'];
+		$gatewayOrder['selfPickup']=!empty($cartDetails['selfPickup']) ? 1 : 0;
 		$gatewayOrder['total']=$cartDetails['order_value']['total']['val'];
 
 

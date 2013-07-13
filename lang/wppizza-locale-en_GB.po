@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WPPizza\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-01 14:10-0000\n"
-"PO-Revision-Date: 2013-07-01 14:10-0000\n"
+"POT-Creation-Date: 2013-07-12 23:47-0000\n"
+"PO-Revision-Date: 2013-07-12 23:47-0000\n"
 "Last-Translator: ollybach <dev@1000db.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -19,27 +19,27 @@ msgstr ""
 msgid "A Pizza Restaurant Plugin"
 msgstr "A Pizza Restaurant Plugin"
 
-#: ../wppizza.php:123
+#: ../wppizza.php:124
 msgid "Shoppingcart"
 msgstr "Shoppingcart"
 
-#: ../wppizza.php:140
+#: ../wppizza.php:141
 msgid "Category Page"
 msgstr "Category Page"
 
-#: ../wppizza.php:141
+#: ../wppizza.php:142
 msgid "Navigation"
 msgstr "Navigation"
 
-#: ../wppizza.php:142
+#: ../wppizza.php:143
 msgid "Cart"
 msgstr "Cart"
 
-#: ../wppizza.php:143
+#: ../wppizza.php:144
 msgid "Orderpage"
 msgstr "Orderpage"
 
-#: ../wppizza.php:144
+#: ../wppizza.php:145
 msgid "Openingtimes"
 msgstr "Openingtimes"
 
@@ -78,7 +78,7 @@ msgstr "no orders yet :("
 msgid "order deleted"
 msgstr "order deleted"
 
-#: ../classes/wppizza.actions.inc.php:82
+#: ../classes/wppizza.actions.inc.php:80
 msgid ""
 "WPPizza requires the server on which your site resides to be running PHP 5.2 "
 "or higher. As of version 3.2, WordPress itself will also <a href=\"http://"
@@ -92,111 +92,111 @@ msgstr ""
 "a>. You should get in touch with your web hosting provider and ask them to "
 "update PHP.<br /><br /><a href=\""
 
-#: ../classes/wppizza.actions.inc.php:265
+#: ../classes/wppizza.actions.inc.php:263
 msgid "Set Item Options"
 msgstr "Set Item Options"
 
-#: ../classes/wppizza.actions.inc.php:554
+#: ../classes/wppizza.actions.inc.php:549
 msgid "Nothing here"
 msgstr "Nothing here"
 
-#: ../classes/wppizza.actions.inc.php:669
+#: ../classes/wppizza.actions.inc.php:664
 msgid "Menu Items"
 msgstr "Menu Items"
 
-#: ../classes/wppizza.actions.inc.php:670
+#: ../classes/wppizza.actions.inc.php:665
 msgid "WPPizza Menu Item"
 msgstr "WPPizza Menu Item"
 
-#: ../classes/wppizza.actions.inc.php:671
+#: ../classes/wppizza.actions.inc.php:666
 msgid "Add New"
 msgstr "Add New"
 
-#: ../classes/wppizza.actions.inc.php:672
+#: ../classes/wppizza.actions.inc.php:667
 msgid "Add New Menu Item"
 msgstr "Add New Menu Item"
 
-#: ../classes/wppizza.actions.inc.php:673
+#: ../classes/wppizza.actions.inc.php:668
 msgid "Edit"
 msgstr "Edit"
 
-#: ../classes/wppizza.actions.inc.php:674
+#: ../classes/wppizza.actions.inc.php:669
 msgid "Edit Menu Item"
 msgstr "Edit Menu Item"
 
-#: ../classes/wppizza.actions.inc.php:675
+#: ../classes/wppizza.actions.inc.php:670
 msgid "New Menu Item"
 msgstr "New Menu Item"
 
-#: ../classes/wppizza.actions.inc.php:676
+#: ../classes/wppizza.actions.inc.php:671
 msgid "All Menu Items"
 msgstr "All Menu Items"
 
-#: ../classes/wppizza.actions.inc.php:677
+#: ../classes/wppizza.actions.inc.php:672
 msgid "View"
 msgstr "View"
 
-#: ../classes/wppizza.actions.inc.php:678
+#: ../classes/wppizza.actions.inc.php:673
 msgid "View Menu Items"
 msgstr "View Menu Items"
 
-#: ../classes/wppizza.actions.inc.php:679
+#: ../classes/wppizza.actions.inc.php:674
 msgid "Search Menu Items"
 msgstr "Search Menu Items"
 
-#: ../classes/wppizza.actions.inc.php:680
+#: ../classes/wppizza.actions.inc.php:675
 msgid "No items found"
 msgstr "No items found"
 
-#: ../classes/wppizza.actions.inc.php:681
+#: ../classes/wppizza.actions.inc.php:676
 msgid "No items found in the Trash"
 msgstr "No items found in the Trash"
 
-#: ../classes/wppizza.actions.inc.php:687
+#: ../classes/wppizza.actions.inc.php:682
 msgid "Holds "
 msgstr "Holds "
 
-#: ../classes/wppizza.actions.inc.php:722
+#: ../classes/wppizza.actions.inc.php:716
 msgid "WPPizza Categories"
 msgstr "WPPizza Categories"
 
-#: ../classes/wppizza.actions.inc.php:723
+#: ../classes/wppizza.actions.inc.php:717
 msgid "Category"
 msgstr "Category"
 
-#: ../classes/wppizza.actions.inc.php:724
+#: ../classes/wppizza.actions.inc.php:718
 msgid "Search Categories"
 msgstr "Search Categories"
 
-#: ../classes/wppizza.actions.inc.php:725
+#: ../classes/wppizza.actions.inc.php:719
 msgid "All Categories"
 msgstr "All Categories"
 
-#: ../classes/wppizza.actions.inc.php:726
+#: ../classes/wppizza.actions.inc.php:720
 msgid "Parent Category"
 msgstr "Parent Category"
 
-#: ../classes/wppizza.actions.inc.php:727
+#: ../classes/wppizza.actions.inc.php:721
 msgid "Parent Category:"
 msgstr "Parent Category:"
 
-#: ../classes/wppizza.actions.inc.php:728
+#: ../classes/wppizza.actions.inc.php:722
 msgid "Edit Category"
 msgstr "Edit Category"
 
-#: ../classes/wppizza.actions.inc.php:729
+#: ../classes/wppizza.actions.inc.php:723
 msgid "Update Category"
 msgstr "Update Category"
 
-#: ../classes/wppizza.actions.inc.php:730
+#: ../classes/wppizza.actions.inc.php:724
 msgid "Add New Category"
 msgstr "Add New Category"
 
-#: ../classes/wppizza.actions.inc.php:731
+#: ../classes/wppizza.actions.inc.php:725
 msgid "New Category Name"
 msgstr "New Category Name"
 
-#: ../classes/wppizza.actions.inc.php:732
+#: ../classes/wppizza.actions.inc.php:726
 msgid "Categories"
 msgstr "Categories"
 
@@ -342,7 +342,7 @@ msgstr "Thank you, much appreciated."
 msgid "pricetier and prices"
 msgstr "pricetier and prices"
 
-#: ../inc/admin.echo.metaboxes.inc.php:29
+#: ../inc/admin.echo.metaboxes.inc.php:30
 #: ../inc/admin.setup.default.options.inc.php:405
 msgid "contains additives"
 msgstr "contains additives"
@@ -1760,39 +1760,39 @@ msgstr "Openinghours: text to display when shop is closed that day "
 msgid "closed"
 msgstr "closed"
 
-#: ../inc/common.output.formatting.functions.inc.php:407
+#: ../inc/common.output.formatting.functions.inc.php:408
 msgid "Mondays"
 msgstr "Mondays"
 
-#: ../inc/common.output.formatting.functions.inc.php:408
+#: ../inc/common.output.formatting.functions.inc.php:409
 msgid "Tuesdays"
 msgstr "Tuesdays"
 
-#: ../inc/common.output.formatting.functions.inc.php:409
+#: ../inc/common.output.formatting.functions.inc.php:410
 msgid "Wednesdays"
 msgstr "Wednesdays"
 
-#: ../inc/common.output.formatting.functions.inc.php:410
+#: ../inc/common.output.formatting.functions.inc.php:411
 msgid "Thursdays"
 msgstr "Thursdays"
 
-#: ../inc/common.output.formatting.functions.inc.php:411
+#: ../inc/common.output.formatting.functions.inc.php:412
 msgid "Fridays"
 msgstr "Fridays"
 
-#: ../inc/common.output.formatting.functions.inc.php:412
+#: ../inc/common.output.formatting.functions.inc.php:413
 msgid "Saturdays"
 msgstr "Saturdays"
 
-#: ../inc/common.output.formatting.functions.inc.php:413
+#: ../inc/common.output.formatting.functions.inc.php:414
 msgid "Sundays"
 msgstr "Sundays"
 
-#: ../inc/common.output.formatting.functions.inc.php:421
+#: ../inc/common.output.formatting.functions.inc.php:422
 msgid "Default"
 msgstr "Default"
 
-#: ../inc/common.output.formatting.functions.inc.php:422
+#: ../inc/common.output.formatting.functions.inc.php:423
 msgid "Responsive [Experimental]"
 msgstr "Responsive [Experimental]"
 

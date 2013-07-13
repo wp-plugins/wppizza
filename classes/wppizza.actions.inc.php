@@ -1,9 +1,9 @@
 <?php
 if (!class_exists( 'WPPizza' ) ) {return ;}
-class WPPIZZA_ACTIONS extends WPPizza {
-
+class WPPIZZA_ACTIONS extends WPPIZZA {
       function __construct() {
-    		parent::__construct();
+    	parent::__construct();
+
 		/************************************************************************
 			[runs in front AND backend]
 		*************************************************************************/
@@ -60,9 +60,7 @@ class WPPIZZA_ACTIONS extends WPPizza {
 		add_action('wp_ajax_wppizza_admin_json', array(&$this,'wppizza_admin_json') );
 		add_action('wp_ajax_wppizza_json', array(&$this,'wppizza_json') );// non logged in users
 		add_action('wp_ajax_nopriv_wppizza_json', array(&$this,'wppizza_json') );
-
       }
-
 /***********************************************************************************************
 *
 *
@@ -116,7 +114,7 @@ class WPPIZZA_ACTIONS extends WPPizza {
 
 				/**compare currently installed options vs this vesrion**/
 				if(	version_compare( $options['plugin_data']['version'], '2.0', '<' )){$update_options['plugin_data']['nag_notice']=$this->pluginVersion;}
-				
+
 				/**update options**/
 				update_option($this->pluginSlug, $update_options );
 
@@ -160,7 +158,7 @@ class WPPIZZA_ACTIONS extends WPPizza {
 				$pluginUpdatedNotice.='<b>IMPORTANT: if you have customised and copied any of the following templates/files to your theme directory, read on below, as you MIGHT have to update them !!!</b>';
 				$pluginUpdatedNotice.='<br/><span style="color:red"><b>(IF you are not using any customised files you should be just fine and can ignore all of this)</b></span>';
 				$pluginUpdatedNotice.='<br/><blockquote>templates/wppizza-order.php<br/>templates/wppizza-phpmailer-settings.php<br/>templates/wppizza-cart.php<br/>templates/wppizza-order-html-email.php<br/>css/wppizza-default.css</blockquote><br/>';
-				$pluginUpdatedNotice.='<span style="color:red"><b>IF</b></span> you are using customised versions of the following files (i.e you have copied any of these files to your theme directory) <b>you will have to</b> update them as marked below (changes are marked in the relevant files).';	
+				$pluginUpdatedNotice.='<span style="color:red"><b>IF</b></span> you are using customised versions of the following files (i.e you have copied any of these files to your theme directory) <b>you will have to</b> update them as marked below (changes are marked in the relevant files).';
 				$pluginUpdatedNotice.='<br/><br/>';
 				$pluginUpdatedNotice.='<b>Affected Files and priorty of having to change your customised versions</b> <span style="color:red">(only if you are using customised versions of these files in your theme directory of course)</span>: ';
 				$pluginUpdatedNotice.='<blockquote>';
@@ -392,9 +390,9 @@ private function wppizza_admin_section_additives($field,$k,$v,$optionInUse=null)
 private function wppizza_admin_section_gateways($field,$options){
 	require(WPPIZZA_PATH .'inc/admin.echo.get_gateways.inc.php');
 }
-/***********************************************
-	[get registered gateways]
-***********************************************/
+/**************************************************************
+	[get registered gateways. must start with WPPIZZA_GATEWAY_]
+**************************************************************/
 function wppizza_get_registered_gateways() {
 	$paymentGateways = array();
 	$gatewayDetails=$this->pluginOptions['gateways']['gateway_selected'];
@@ -432,6 +430,7 @@ function wppizza_get_registered_gateways() {
 	}
 	return $paymentGateways;
 }
+
 /*********************************************************
 		[available sizes of meal items]
 *********************************************************/
@@ -460,8 +459,6 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 		require(WPPIZZA_PATH.'ajax/get-json.php');
 		die();
 	}
-
-
 /***********************************************************************************************
 *
 * 	[shortcode functions]
@@ -487,7 +484,6 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
     * [see header of template for details]
     ******************************************************/
 	public function wppizza_include_shortcode_template($type,$atts=null){
-
 		/***************************************
 			[include category loop template]
 		***************************************/
@@ -515,7 +511,6 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 			if(isset($atts['showadditives'])){
 				$showadditives=$atts['showadditives'];
 			}
-
 
 			$query_var=''.$query->slug.'';
 			/*set template style if !default*/
@@ -716,7 +711,6 @@ public function wppizza_require_common_input_validation_functions(){
 			$sel_category_parent['post_name']=$this->pluginSlugCategoryTaxonomy;
 		}
 
-
 		  // Add new taxonomy, make it hierarchical (like categories)
 		  $labels = array(
 		    'name' => _x( 'WPPizza Categories', 'taxonomy general name' ),
@@ -801,7 +795,6 @@ public function wppizza_require_common_input_validation_functions(){
 		}
 		return $template_path;
 	}
-
 
 /***********************************************************************************************
 *
