@@ -111,6 +111,18 @@ if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='sendorder'){
 	*****************************************/
 	$params = array();
 	parse_str($_POST['vars']['data'], $params);
+	/*****************************************
+		[get the order]
+	*****************************************/
+	global $wpdb;
+	$orderId=false;
+	$order = $wpdb->get_row("SELECT id,payment_status FROM ".$wpdb->prefix . $this->pluginOrderTable." WHERE hash='".$params['wppizza_hash']."' ");
+	if($order){
+		$orderId=$order->id;
+		$orderStatus=$order->payment_status;
+	}
+
+
 	/***********************************************************
 		[set name and email of the the person that is ordering]
 	***********************************************************/
@@ -129,15 +141,57 @@ if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='sendorder'){
 	/***create html and plaintext emails ****/
 	$sendEmail->orderMessage=$sendEmail->wppizza_order_construct_email();
 
+
 	/************************************************************
-	*
-	*	[send the emails returns array
+	*	[provided we have a valid order id AND its set
+	*	to INITIALIZE send the emails and update db]
+	*	returns array
 	*	['status']->true/false
 	*	['error']->''/msg
 	*	['mailer']->mail function name
 	*
 	************************************************************/
-	$mailResults=$sendEmail->wppizza_order_send_email();
+	/*default errors**/
+	$mailResults['error']=__('Sorry, we could not find this order.',$this->pluginLocale);
+	$mailResults['mailer']='Error'; /**just so we dont have an abandoned colon**/
+	if($orderId){
+		if($orderStatus=='INITIALIZED'){
+			$updateDb=true;
+			$mailResults=$sendEmail->wppizza_order_send_email();
+		}else{
+			$mailResults['error']=__('This order has already been processed',$this->pluginLocale);
+		}
+	}
+	/***update order******/
+	if(isset($updateDb)){
+		$now=time();
+		$thisOrderTransactionId='COD'.$now.$orderId.'';
+		$orderDetails=$sendEmail->orderMessage;
+		if($mailResults['status']){
+			$mailSent='Y';
+			$mailError='';
+			$paymentStatus='COMPLETED';
+			$transactionDetails=''.serialize($orderDetails).'';
+		}else{
+			$mailSent='N';
+			$mailError=serialize($mailResults['error']);
+			$paymentStatus='FAILED';
+			$transactionDetails=__('FAILED: Sending of Mail Failed',$this->pluginLocale);
+		}
+		/*update order**/
+		$wpdb->query("UPDATE ".$wpdb->prefix . $this->pluginOrderTable." SET
+		transaction_id='".$thisOrderTransactionId."',
+		transaction_details='".$transactionDetails."',
+		customer_details='".$orderDetails['customer_details']."',
+		order_details='".$orderDetails['order_details']."',
+		customer_ini='".serialize($params)."',
+		mail_construct='".serialize($sendEmail->orderMessage)."',
+		payment_status='".$paymentStatus."',
+		mail_sent='".$mailSent."',
+		mail_error='".$mailError."'
+		WHERE id='".$orderId."' ");
+	}
+
 
 	/********************************************************************
 	*
@@ -146,8 +200,8 @@ if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='sendorder'){
 	*	or justs displays error]
 	*
 	********************************************************************/
-	$output=$sendEmail->wppizza_order_results($mailResults);
-	unset($_SESSION[$this->pluginSession]);
+	$output=$sendEmail->wppizza_order_results($mailResults,$orderId);
+
 	print"".$output."";
 exit();
 }

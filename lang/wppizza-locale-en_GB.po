@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WPPizza\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-12 23:47-0000\n"
-"PO-Revision-Date: 2013-07-12 23:47-0000\n"
+"POT-Creation-Date: 2013-07-24 10:06-0000\n"
+"PO-Revision-Date: 2013-07-24 10:06-0000\n"
 "Last-Translator: ollybach <dev@1000db.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -77,6 +77,18 @@ msgstr "no orders yet :("
 #: ../ajax/admin-get-json.php:138
 msgid "order deleted"
 msgstr "order deleted"
+
+#: ../ajax/get-json.php:155
+msgid "Sorry, we could not find this order."
+msgstr "Sorry, we could not find this order."
+
+#: ../ajax/get-json.php:162
+msgid "This order has already been processed"
+msgstr "This order has already been processed"
+
+#: ../ajax/get-json.php:179
+msgid "FAILED: Sending of Mail Failed"
+msgstr "FAILED: Sending of Mail Failed"
 
 #: ../classes/wppizza.actions.inc.php:80
 msgid ""
@@ -213,30 +225,30 @@ msgstr "enabled Y/N"
 msgid "show options"
 msgstr "show options"
 
-#: ../inc/admin.echo.get_gateways.inc.php:23
+#: ../inc/admin.echo.get_gateways.inc.php:30
 msgid "Frontend display order"
 msgstr "Frontend display order"
 
-#: ../inc/admin.echo.get_gateways.inc.php:32
+#: ../inc/admin.echo.get_gateways.inc.php:39
 msgid "Frontend Label"
 msgstr "Frontend Label"
 
-#: ../inc/admin.echo.get_gateways.inc.php:34
+#: ../inc/admin.echo.get_gateways.inc.php:41
 msgid "displays"
 msgstr "displays"
 
-#: ../inc/admin.echo.get_gateways.inc.php:34
+#: ../inc/admin.echo.get_gateways.inc.php:41
 msgid "if Empty"
 msgstr "if Empty"
 
-#: ../inc/admin.echo.get_gateways.inc.php:35
 #: ../inc/admin.echo.get_gateways.inc.php:42
+#: ../inc/admin.echo.get_gateways.inc.php:49
 msgid ""
 "only displayed if more than one gateway installed, activated and enabled"
 msgstr ""
 "only displayed if more than one gateway installed, activated and enabled"
 
-#: ../inc/admin.echo.get_gateways.inc.php:40
+#: ../inc/admin.echo.get_gateways.inc.php:47
 msgid "Frontend: Additional Plugin Information"
 msgstr "Frontend: Additional Plugin Information"
 

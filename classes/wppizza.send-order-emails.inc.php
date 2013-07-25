@@ -6,9 +6,7 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 		function __construct() {
 			parent::__construct();
 
-
 			$this->wppizza_order_emails_extend();
-
 
 			/**blog charset*/
 			$this->blogCharset=get_bloginfo('charset');
@@ -357,107 +355,90 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 		/********************************************************************************************
 		*
 		*
-		*	[this function is only useful when using COD Payments as nothing will be added to the DB
-		*	to check against before emails are being sent]
+		*	[ORDER BY COD/Ajax]
 		*
 		*
 		********************************************************************************************/
-		function wppizza_order_results($response){
+		function wppizza_order_results($mailResults,$orderId){
 			$output='';
-			/***successfully sent-> insert order into db and empty session***/
-			if($response['status']){
-				$mailSent='Y';
+			/***successfully sent***/
+			if(isset($mailResults['status'])){
 				$output="<div class='mailSuccess'><h1>".$this->pluginOptions['localization']['thank_you']['lbl']."</h1>".nl2br($this->pluginOptions['localization']['thank_you_p']['lbl'])."</div>";
+				$output.=$this->gateway_order_on_thankyou($orderId);
+				$this->wppizza_unset_cart();
 			}
-			/***mail sending error -> show error***/
-			if(!$response['status']){
-				$mailSent='N';
-				$output="<p class='mailError'>".$response['mailer'].": ".print_r($response['error'],true)."</p>";
-			}
-
-			/***save to db if mail sent**/
-			if($mailSent=='Y'){
-			global $wpdb,$current_user;
-			get_currentuserinfo();
-				$now=time();
-				$thisOrderTransactionId='cod-'.$now.'';
-				$wpdb->hide_errors();
-				//$wpdb->print_error();
-				$wpdb->query( $wpdb->prepare( "INSERT INTO ".$wpdb->prefix . $this->pluginOrderTable." (
-					wp_user_id,
-					customer_details,
-					order_details,
-					payment_status,
-					initiator,
-					transaction_id,
-					mail_sent
-					)VALUES (%s, %s, %s, %s, %s, %s, %s)", array(
-					$current_user->ID,
-					$this->orderMessage['customer_details'],
-					$this->orderMessage['order_details'],
-					'COD',
-					'COD',
-					''.$thisOrderTransactionId.'',
-					$mailSent
-					)));
-
-
-				/**************************************************
-				*	output order details to thank you page if set
-				***************************************************/
-				if($this->pluginOptions['gateways']['gateway_showorder_on_thankyou']){
-
-					$order = new WPPIZZA_GATEWAYS;
-					$thisOrderDetails=$order->wppizza_gateway_order_details(array('time'=>$now));
-					$thisCustomerDetails=$this->orderPostVars;
-
-						/*organize vars to make them easier to use in template**/
-						$order=array();
-						/*transaction id*/
-						$order['transaction_id']=$thisOrderTransactionId;
-						$order['transaction_date_time']="".date_i18n(get_option('date_format'),$thisOrderDetails['time'])." ".date_i18n(get_option('time_format'),$thisOrderDetails['time'])."";
-
-						/*order globals*/
-						$order['currency']=$thisOrderDetails['currency'];
-						$order['currencyiso']=$thisOrderDetails['currencyiso'];
-
-						/*order items*/
-						$items=$thisOrderDetails['item'];
-
-						/*order summary*/
-						$summary['total_price_items']=$thisOrderDetails['total_price_items'];
-						$summary['discount']=$thisOrderDetails['discount'];
-						$summary['item_tax']=$thisOrderDetails['item_tax'];
-						$summary['delivery_charges']=$thisOrderDetails['delivery_charges'];
-						$summary['total_price_items']=$thisOrderDetails['total_price_items'];
-						$summary['selfPickup']=$thisOrderDetails['selfPickup'];
-						$summary['total']=$thisOrderDetails['total'];
-
-
-						/*customer details*/
-						$customer=$thisCustomerDetails;
-						$customerlbl=array();
-						foreach($this->pluginOptions['order_form'] as $k=>$v){
-							$customerlbl[$v['key']]=$v['lbl'];
-						}
-
-						$orderlbl=array();
-						foreach($this->pluginOptions['localization'] as $k=>$v){
-							$orderlbl[$k]=$v['lbl'];
-						}
-
-						ob_start();
-						/*include template if copied to theme directory and enabled, otherwise use default**/
-						if (file_exists( get_template_directory() . '/wppizza-cod-show-order.php')){
-							include(get_template_directory() . '/wppizza-cod-show-order.php');
-						}else{
-							include(WPPIZZA_PATH.'templates/wppizza-cod-show-order.php');
-						}
-						$output .= ob_get_clean();
-				}
-			unset($_SESSION[$this->pluginSession]);
+			/***mail sending error or transaction already processes -> show error***/
+			if(!isset($mailResults['status'])){
+				$output="<p class='mailError'>".$mailResults['mailer'].": ".print_r($mailResults['error'],true)."</p>";
 			}
 		return $output;
 		}
+
+
+	/******************************************************************
+	*
+	*	[show order details to thank you page if set ]
+	*	[$order = object or id]
+	******************************************************************/
+	function gateway_order_on_thankyou($res){
+		$output='';
+		/**check if we are displaying the order on the thank you page**/
+		if($this->pluginOptions['gateways']['gateway_showorder_on_thankyou']){
+			/*if we are only passing the id, try and get the order from the db first**/
+			if(!is_object($res) && is_numeric($res)){
+				global $wpdb;
+				$res = $wpdb->get_row("SELECT id,transaction_id,order_ini,customer_ini FROM ".$wpdb->prefix . $this->pluginOrderTable." WHERE id='".$res."' ");
+			}
+
+			$thisOrderTransactionId=$res->transaction_id;
+			$thisOrderDetails=unserialize($res->order_ini);
+			$thisCustomerDetails=unserialize($res->customer_ini);
+
+			/*organize vars to make them easier to use in template**/
+			$order=array();
+			/*transaction id*/
+			$order['transaction_id']=$thisOrderTransactionId;
+			$order['transaction_date_time']="".date_i18n(get_option('date_format'),$thisOrderDetails['time'])." ".date_i18n(get_option('time_format'),$thisOrderDetails['time'])."";
+
+			/*order globals*/
+			$order['currency']=$thisOrderDetails['currency'];
+			$order['currencyiso']=$thisOrderDetails['currencyiso'];
+
+			/*order items*/
+			$items=$thisOrderDetails['item'];
+
+			/*order summary*/
+			$summary['total_price_items']=$thisOrderDetails['total_price_items'];
+			$summary['discount']=$thisOrderDetails['discount'];
+			$summary['item_tax']=$thisOrderDetails['item_tax'];
+			$summary['delivery_charges']=$thisOrderDetails['delivery_charges'];
+			$summary['total_price_items']=$thisOrderDetails['total_price_items'];
+			$summary['selfPickup']=$thisOrderDetails['selfPickup'];
+			$summary['total']=$thisOrderDetails['total'];
+
+			/*customer details*/
+			//print_r($thisCustomerDetails);
+			$customer=$thisCustomerDetails;
+			$customerlbl=array();
+			foreach($this->pluginOptions['order_form'] as $k=>$v){
+				$customerlbl[$v['key']]=$v['lbl'];
+			}
+
+			$orderlbl=array();
+			foreach($this->pluginOptions['localization'] as $k=>$v){
+				$orderlbl[$k]=$v['lbl'];
+			}
+			/*if template copied to theme directory , use that one otherwise use default**/
+			ob_start();
+			if (file_exists( get_template_directory() . '/wppizza-show-order.php')){
+				include(get_template_directory() . '/wppizza-show-order.php');
+			}else{
+				include(WPPIZZA_PATH.'templates/wppizza-show-order.php');
+			}
+			$output .= ob_get_clean();
+		}
+
+		return $output;
 	}
+}
 ?>

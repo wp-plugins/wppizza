@@ -35,7 +35,13 @@
 	}
 /***************navigation*************************************************************************/
 	if($instance['type']=='navigation'){
-		$widgetOutput.= do_shortcode('['.$this->pluginSlug.' type="'.$instance['type'].'"]');	
+		
+		$wdgArgs[]='type="'.$instance['type'].'"';
+		
+		if($instance['navterm']!=''){
+			$wdgArgs[]='parent="'.$instance['navterm'].'"';	
+		}
+		$widgetOutput.= do_shortcode('['.$this->pluginSlug.' '.implode(" ",$wdgArgs).']');	
 	}
 /***************openingtimes***********************************************************************/
 	if($instance['type']=='openingtimes'){

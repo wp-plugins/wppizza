@@ -191,6 +191,18 @@ jQuery(document).ready(function($){
 			self.closest('tr').empty().remove();
 		},'html').error(function(jqXHR, textStatus, errorThrown) {alert("error : " + errorThrown);});
 	});	
+	/******************************
+	*	[delete abandoned orders]
+	******************************/	
+	$(document).on('click', '#wppizza_order_abandoned_delete', function(e){
+		e.preventDefault();
+		if(!confirm('are you sure ?')){ return false;}
+		var days=$('#wppizza_order_days_delete').val();
+		var failed=$('#wppizza_order_failed_delete').is(':checked');
+		jQuery.post(ajaxurl , {action :'wppizza_admin_json',vars:{'field':'delete_abandoned_orders','days':days,'failed':failed}}, function(response) {
+			alert(response);
+		},'html').error(function(jqXHR, textStatus, errorThrown) {alert("error : " + errorThrown);});
+	});		
 	/*****************************
 	*	[show gateway settings option]
 	*****************************/

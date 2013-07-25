@@ -41,6 +41,7 @@ $sql="CREATE TABLE ".$wpdb->prefix . $this->pluginOrderTable." (
 	mail_error TEXT NULL,
 	PRIMARY KEY  (id),
 	KEY hash (hash),
+	KEY wp_user_id (wp_user_id),
 	KEY payment_status (payment_status),
 	KEY transaction_id (transaction_id),
 	KEY ident (hash,payment_status,initiator),

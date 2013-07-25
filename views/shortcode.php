@@ -20,7 +20,8 @@ return $markup;
 		possible attributes:
 		type='navigation' 		(required [str])
 	 	title='some title' 		(optional[str]: will render as h2 as first element in cart elemnt if set)
-	example: 		[wppizza type='navigation' title='some title']
+	 	parent='slug-name' 			(optionsl [str]): only show child categories of this slug
+	example: 		[wppizza type='navigation' title='some title' parent='slug-name']
 **********************************************/
 if($type=='navigation'){
 	ob_start();

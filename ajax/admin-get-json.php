@@ -12,7 +12,7 @@ $optionSizes=wppizza_sizes_available($options['sizes']);//outputs an array $arr=
 
 $output='';
 
-/**save sorted categories**/ 
+/**save sorted categories**/
 if($_POST['vars']['field']=='cat_sort'){
 
 	$order = explode(',', $_POST['vars']['order']);
@@ -22,7 +22,7 @@ if($_POST['vars']['field']=='cat_sort'){
 	/**first parent categories**/
 	foreach ($order as $id) {
 		$key=(int)str_replace("tag-","",$id);
-		$category = get_term_by( 'id', $key, $this->pluginSlugCategoryTaxonomy);		
+		$category = get_term_by( 'id', $key, $this->pluginSlugCategoryTaxonomy);
 		/*only saving the sort of the parent categories**/
 		if($category->parent==0){
 			$newOptions['layout']['category_sort'][(int)$key]=$sorter;
@@ -32,54 +32,54 @@ if($_POST['vars']['field']=='cat_sort'){
 	/**the child categories, maybe we will need them at some point **/
 	foreach ($order as $id) {
 		$key=(int)str_replace("tag-","",$id);
-		$category = get_term_by( 'id', $key, $this->pluginSlugCategoryTaxonomy);		
+		$category = get_term_by( 'id', $key, $this->pluginSlugCategoryTaxonomy);
 		/*only saving the sort of the parent categories**/
 		if($category->parent>0){
 			$newOptions['layout']['category_sort'][(int)$key]=$sorter;
 			$sorter++;
 		}
 	}
-	update_option( $this->pluginSlug, $newOptions );	
+	update_option( $this->pluginSlug, $newOptions );
 die(1);
 }
 
 
-/**adding a new meal category->add column selection**/ 
+/**adding a new meal category->add column selection**/
 if($_POST['vars']['field']=='meals' && !isset($_POST['vars']['item']) && $_POST['vars']['id']>=0){
-	$output=$this->wppizza_admin_section_category($_POST['vars']['field'],$_POST['vars']['id']);	
+	$output=$this->wppizza_admin_section_category($_POST['vars']['field'],$_POST['vars']['id']);
 }
-/**adding a new meal to category**/ 
+/**adding a new meal to category**/
 if($_POST['vars']['field']=='meals' && isset($_POST['vars']['item']) && $_POST['vars']['id']>=0 && $_POST['vars']['newKey']>=0){
 	$output=$this->wppizza_admin_section_category_item($_POST['vars']['field'],$_POST['vars']['id'],false,$_POST['vars']['newKey'],false,$options);
 }
 
-/**adding new size selection options**/ 
-if($_POST['vars']['field']=='sizes' && $_POST['vars']['id']>=0 && isset($_POST['vars']['newFields']) && $_POST['vars']['newFields']>0){	
+/**adding new size selection options**/
+if($_POST['vars']['field']=='sizes' && $_POST['vars']['id']>=0 && isset($_POST['vars']['newFields']) && $_POST['vars']['newFields']>0){
 	$output=$this->wppizza_admin_section_sizes($_POST['vars']['field'],$_POST['vars']['id'],$_POST['vars']['newFields']);
 }
-/**prize tier selection has been changed->add relevant price options input fields**/ 
+/**prize tier selection has been changed->add relevant price options input fields**/
 if($_POST['vars']['field']=='sizeschanged' && $_POST['vars']['id']!='' && isset($_POST['vars']['inpname']) &&  $_POST['vars']['inpname']!=''){
 	$output='';
 	if(is_array($options['sizes'][$_POST['vars']['id']])){
 		foreach($options['sizes'][$_POST['vars']['id']] as $a=>$b){
 			/*if we change the ingredient pricetire, do not use default prices , but just empty**/
-			if(isset($_POST['vars']['classId']) && $_POST['vars']['classId']=='ingredients'){$price='';}else{$price=$b['price'];}			
+			if(isset($_POST['vars']['classId']) && $_POST['vars']['classId']=='ingredients'){$price='';}else{$price=$b['price'];}
 			$output.="<input name='".$_POST['vars']['inpname']."[prices][]' type='text' size='5' value='".$price."'>";
 	}}
 }
-/**adding new additive**/ 
-if($_POST['vars']['field']=='additives' && $_POST['vars']['id']>=0){	
+/**adding new additive**/
+if($_POST['vars']['field']=='additives' && $_POST['vars']['id']>=0){
 	$output=$this->wppizza_admin_section_additives($_POST['vars']['field'],$_POST['vars']['id'],'');
 }
-/**adding new custom opening time**/ 
+/**adding new custom opening time**/
 if($_POST['vars']['field']=='opening_times_custom'){
 	$output=$this->wppizza_admin_section_opening_times_custom($_POST['vars']['field']);
 }
-/**adding new times closed**/ 
+/**adding new times closed**/
 if($_POST['vars']['field']=='times_closed_standard'){
 	$output=$this->wppizza_admin_section_times_closed_standard($_POST['vars']['field']);
 }
-/**get orders**/ 
+/**get orders**/
 if($_POST['vars']['field']=='get_orders'){
 	$output='';
 	global $wpdb;
@@ -100,7 +100,7 @@ if($_POST['vars']['field']=='get_orders'){
 				$output.="</td>";
 				$output.="<td>";
 					$output.="";
-				$output.="</td>";				
+				$output.="</td>";
 			$output.="</tr>";
 
 			foreach ( $allOrders as $orders ){
@@ -122,7 +122,7 @@ if($_POST['vars']['field']=='get_orders'){
 					$output.="</td>";
 					$output.="<td>";
 						$output.="<a href='#' id='wppizza_order_".$orders->id."' class='wppizza_order_delete'>".__('delete', $this->pluginLocale)."</a>";
-					$output.="</td>";					
+					$output.="</td>";
 				$output.="</tr>";
 			}
 		$output.="</table>";
@@ -131,11 +131,29 @@ if($_POST['vars']['field']=='get_orders'){
 	}
 }
 
-/**delete order**/ 
+/**delete order**/
 if($_POST['vars']['field']=='delete_orders'){
 	global $wpdb;
 	$res=$wpdb->query( $wpdb->prepare( "DELETE FROM ".$wpdb->prefix . $this->pluginOrderTable." WHERE id=%s ",$_POST['vars']['ordId']));
-	$output.="".__('order deleted', $this->pluginLocale)."";	
+	$output.="".__('order deleted', $this->pluginLocale)."";
+}
+
+/**delete abandoned  orders**/
+if($_POST['vars']['field']=='delete_abandoned_orders'){
+	global $wpdb;
+	$days=0;
+	if((int)$_POST['vars']['days']>=1){
+		$days=(int)$_POST['vars']['days'];
+	}
+	/**do or dont delete all non completed orders**/
+		$pStatusQuery=" IN ('INITIALIZED','CANCELLED')";
+	if($_POST['vars']['failed']=='true'){
+		$pStatusQuery=" NOT IN ('COMPLETED','PENDING')";
+	}
+	$sql="DELETE FROM ".$wpdb->prefix . $this->pluginOrderTable." WHERE order_date < TIMESTAMPADD(DAY,-".$days.",NOW()) AND payment_status ".$pStatusQuery."";
+	$res=$wpdb->query( $wpdb->prepare($sql));
+	$output.="".__('Done', $this->pluginLocale)."";
+
 }
 print"".$output."";
 exit();

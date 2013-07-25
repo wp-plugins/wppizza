@@ -1,7 +1,7 @@
 <?php
  /*
  *
- *	Template: WPPizza COD Gateway "Thank you" page Order Details
+ *	Template: WPPizza Gateway "Thank you" page Order Details
  *
  *	if enabled, this will display the order details on the thank you page
  *	after a transaction has been successfuly processed
@@ -17,16 +17,20 @@
  *  $orderlbl=> array of localized vars
  */
 ?>
+<?php
+	/**do somthing if you want (like print order button or something)**/
+	do_action('wppizza_show_order_before');
+?>
 <div id="wppizza-cart-contents" class="wppizza-cart-thankyou">
 
 <?php	/**header with time and transaction id**/ ?>
-	<div id="wppizza-transaction-head"><?php echo $orderlbl['your_order'] ?> - <span id="wppizza-transaction-id">[<?php echo $order['transaction_id'] ?>]</span></div>
+	<div id="wppizza-transaction-head"><?php echo $orderlbl['your_order'] ?> - <span id="wppizza-transaction-id">[<?php echo $order['transaction_id'] ?>]</span><?php do_action('wppizza_show_order_head');/*do something*/ ?></div>
 	<div id="wppizza-transaction-time"><?php echo $order['transaction_date_time'] ?><br/><br/></div>
 
 
 
 <?php	/**customer details**/ 	?>
-<?php if(isset($customer)){ ?>
+<?php if(isset($customer) && is_array($customer)){ ?>
 	<ul id="wppizza-customer-details">
 	<?php foreach($customer as $k=>$v){ if (isset($customerlbl[$k])) {?>
 		<li><label><?php echo $customerlbl[$k] ?></label> <?php echo $v ?></li>
@@ -77,3 +81,7 @@
 		<?php } ?>
 	</ul>
 </div>
+<?php
+	/**do somthing if you want (like print order button or something)**/
+	do_action('wppizza_show_order_after');
+?>

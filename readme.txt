@@ -3,10 +3,10 @@ Contributors: ollybach
 Donate link: http://www.wp-pizza.com/
 Author URI: http://www.wp-pizza.com
 Plugin URI: http://wordpress.org/extend/plugins/wppizza/
-Tags: pizza, restaurant, order online, cash on delivery, multilingual
+Tags: pizza, restaurant, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.2, WP 3.3 
-Tested up to: 3.5.1
-Stable tag: 2.2
+Tested up to: 3.5.2
+Stable tag: 2.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -113,34 +113,48 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 == Changelog ==
 
-2.2
-* eliminated some php notices  
+2.3  
+* eliminated some more php notices when not displaying any currency symbols  
+* moved some common functions out of individual gateway classes to shared wppizza_gateway class to be able to re-use them  
+* changed template name wppizza-cod-show-order.php to wppizza-show-order.php as it can be used for all gateways  
+* all initialized orders will be stored in db (it used to be that cod orders were only inserted when completed)  
+* put index on order table wp_user_id column  
+* added loading div when redirecting to gateway  
+* added option to delete abandoned/cancelled orders older than 1+ days from db  
+* added actions that can be used when displaying order in thank you page (such as a print button for example)  
+* added option to navigation/navigation widget to only show subcategories of a given category  
+* BUGFIX js displayed "null" (instead of it being empty) in cart when adding/removing items and not displaying currency symbol  
+
+- 24th July 2013  
+
+2.2  
+* eliminated some more php notices  
 * add ability to extend send email class  
 * changed Bulgarian Currency Symbol  
 * prettied up some css in admin  
 - 13th July 2013  
 
-2.1.3
+2.1.3  
 * eliminated some more php notices in cod gateway class    
 - 8th July 2013  
 
-2.1.2
+2.1.2  
 * eliminated some (inconsequential) php warnings when no additives were defined  
 - 5th July 2013  
 
-2.1.1
+2.1.1  
 * BUGFIX Weekdays in oredering times were not localized  
 - 2nd July 2013  
 
 
-2.1
+2.1  
 * added option to display order details on "thankyou" page  
 * made some more variables translatable via po/mo files  
 * moved localization description out of the option table as it really doesnt belong there (which in turn makes it translatable via mo/po files)  
 - 1st July 2013  
 
 
-2.0
+2.0  
 * quite a major re-write   
 * added destinct gateway page/options (default COD) as class to enable (future)additions of other gateway extensions 
 * added distinct class to "send order" button on orderpage  
@@ -318,7 +332,7 @@ you would still probably want to delete/hide your order page or at least disable
 first thing to try (if you haven't done so already): re-save the pages WPPizza has created   
 (I'm NOT talking about the WPPizza Categories and Menu Item Pages, but the pages that display a list of your item - typically a page that has somthing like [wppizza -some attributes-] on it)
 
-**make sure your theme (or one of your plugins) does not use an old version of jQuery (some themes/plugins override the version that comes bundled with wordpress - no, i don't know either why they would do that)**  
+make sure your theme (or one of your plugins) does not use an old version of jQuery (some themes/plugins override the version that comes bundled with wordpress - no, i don't know either why they would do that)  
 
 If that still doesn't help, you might have to adjust the CSS (see 'Can I edit the css ?' above)
 

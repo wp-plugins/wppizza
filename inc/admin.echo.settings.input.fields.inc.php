@@ -402,10 +402,28 @@ $options = $this->pluginOptions;
 			}
 			if($field=='history'){
 				echo"<div id='wppizza_".$field."'>";
-					echo "<a href='#' id='".$field."_get_orders'>".__('show most recent *confirmed* orders', $this->pluginLocale)."</a>";
-					echo " ".__('maximum results [0 to show all]', $this->pluginLocale)."<input id='".$field."_orders_limit' size='5' type='text' value='20' />";
+				
+
+					echo"<div id='wppizza_".$field."_search' class='button'>";
+						echo "<a href='#' id='".$field."_get_orders' class='button'>".__('show most recent *confirmed* orders', $this->pluginLocale)."</a>";
+						echo " ".__('maximum results [0 to show all]', $this->pluginLocale)."<input id='".$field."_orders_limit' size='5' type='text' value='20' />";
+					echo"</div>";
+					echo"<div id='wppizza_".$field."_orders'></div>";
+				
+
+					echo"<div id='wppizza_".$field."_clear'>"; 
+						echo" <b>".__('Delete abandoned/cancelled orders from database older than', $this->pluginLocale)."</b> ";
+						echo"<input id='wppizza_order_days_delete' type='text' size='2' value='7' />";
+						echo" <b>".__('Days (minimum:1)', $this->pluginLocale)."</b> ";
+						echo"<input id='wppizza_order_failed_delete' type='checkbox' value='1' />";
+						echo" <b>".__('delete failed, tampered or otherwise invalid entries too.', $this->pluginLocale)."</b> ";
+						echo"<br/><span id='wppizza_order_abandoned_delete' class='button'>".__('go', $this->pluginLocale)."</span>";
+						echo"<br/>".__('As soon as cutomers go to the order page an order will be initialized and stored in the db to be checked against when going through with the purchase to make sure nothing has been tampered with. However, not every customer will actually go through with the purchase which leaves this initialised order orphaned in the db.Click the "ok" button to clean your db of these entries (it will NOT affect any completed or pending orders)', $this->pluginLocale)."";
+						echo"<br/><span style='color:red'>".__('Note: This will delete these entries PERMANENTLY from the db and is not reversable.', $this->pluginLocale)."</style>";
+					echo"</div>";				
+				
 				echo"</div>";
-				echo"<div id='wppizza_".$field."_orders'></div>";
+				
 			}
 	}
 ?>

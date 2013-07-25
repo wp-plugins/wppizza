@@ -463,8 +463,8 @@ function wppizza_order_summary($session,$options,$ajax=null){
 	/****************************************************
 		[get currency]
 	****************************************************/
-	$summary['currency']=$options['order']['currency_symbol'];
-	$summary['currencyiso']=$options['order']['currency'];
+	$summary['currency']=''.$options['order']['currency_symbol'].'';
+	$summary['currencyiso']=''.$options['order']['currency'].'';
 	/****************************************************
 		[hide decimals?]
 	****************************************************/
@@ -822,6 +822,13 @@ function wppizza_echo_formfield($type='text',$id='',$name='',$value='',$placehol
 	}
 	if($type=='checkbox' || $type=='radio'){
 		echo'<input type="'.$type.'" id="'.$id.'" name="'.$name.'" value="1" '.$value.'/>';
+	}
+
+	if($type=='checkboxmulti'){
+		if(isset($options) && is_array($options)){
+		foreach($options as $k=>$v){
+			echo'<input type="checkbox" id="'.$id.'_'.$v.'" name="'.$name.'['.$v.']" value="'.$v.'" '.checked(in_array($v,$value),true,false).'/> '.$v.'&nbsp;&nbsp;&nbsp;';
+		}}
 	}
 	if($type=='textarea'){
 		echo'<textarea id="'.$id.'" name="'.$name.'">'.$value.'</textarea>';

@@ -493,6 +493,7 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 			/*select first category if none selected->used when using shortcode without category*/
 			if(!isset($atts['category'])){
 				$termSort=$options['layout']['category_sort'];
+				asort($termSort);
 				reset($termSort);
 				$firstTermId=key($termSort);
 				/*get slug and taxonomy from id*/
@@ -536,6 +537,13 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 		***************************************/
 		if($type=='navigation'){
 			extract(shortcode_atts(array('title' => ''), $atts));
+			$child_of=0;
+			if(isset($atts['parent'])){
+				$query=get_term_by('slug',$atts['parent'],$this->pluginSlugCategoryTaxonomy);
+				if($query){
+					$child_of=$query->term_id;
+				}
+			}
 			$post_type=$this->pluginSlug;
 			$args = array(
 			  'taxonomy'     => $this->pluginSlugCategoryTaxonomy,
@@ -545,7 +553,7 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 			  'hierarchical' => 1,      // 1 for yes, 0 for no
 			  'title_li'     => $title,
 			  'depth '     	 => 0,
-			  'child_of'     => 0,
+			  'child_of'     => $child_of,
 			  'show_option_none'   => __('Nothing here'),
 			  'hide_empty'   => 1,
 			  'echo'   => 0				// keep as variable
@@ -749,7 +757,16 @@ public function wppizza_require_common_input_validation_functions(){
 	    	$_SESSION[$this->pluginSession]['total_price_items']=0;
 	    }
 	}
-
+	/*******************************************************
+		[empty cart session]
+	******************************************************/
+	function wppizza_unset_cart() {
+	 	if (!session_id()) {session_start();}
+	    /*holds items in cart*/
+	    $_SESSION[$this->pluginSession]['items']=array();
+	    /*gross sum of all items in cart,before discounts etc*/
+	    $_SESSION[$this->pluginSession]['total_price_items']=0;
+	}
 /*********************************************************
 *
 *	[include send order emails class]
@@ -891,8 +908,10 @@ public function wppizza_require_common_input_validation_functions(){
 			$options = $this->pluginOptions;
 			$termArray=array();
 			foreach($terms as $k=>$term){
+				if(is_object($term)){
 				$key=$options['layout']['category_sort'][$term->term_id];
 				$termArray[$key]=$term;
+				}
 			}
 			ksort($termArray);
 			return	$termArray;

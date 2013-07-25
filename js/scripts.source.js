@@ -152,7 +152,9 @@ jQuery(document).ready(function($){
 					},'html').error(function(jqXHR, textStatus, errorThrown) {$('#wppizza-send-order #wppizza-loading').remove();alert("error : " + errorThrown);console.log(jqXHR.responseText);});
 					return false;
 				}else{
-					form.submit();
+					var self=$('#wppizza-send-order');
+					self.prepend('<div id="wppizza-loading" style="opacity:0.8;"></div>');
+					form.submit();					
 				}
 			}
 		})

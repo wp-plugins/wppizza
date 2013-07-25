@@ -115,7 +115,7 @@
 		if(isset($_POST[''.$this->pluginSlug.'_order'])){
 			$options['order'] = array();//initialize array
 			$options['order']['currency'] = strtoupper(wppizza_validate_letters_only($input['order']['currency'],3));//validation a bit overkill, but then again, why not
-				$displayCurrency=wppizza_currencies($options['order']['currency'],true);
+				$displayCurrency=wppizza_currencies($input['order']['currency'],true);
 			$options['order']['currency_symbol'] = $displayCurrency['val'];
 			$options['order']['orderpage'] = !empty($input['order']['orderpage']) ? (int)$input['order']['orderpage'] : false;
 			$options['order']['orderpage_exclude']=!empty($input['order']['orderpage_exclude']) ? true : false;
@@ -193,7 +193,7 @@
 			foreach($input['localization'] as $a=>$b){
 				/*add new value , but keep desciption (as its not editable on frontend)*/
 				if(in_array($a,$allowHtml)){$html=1;}else{$html=false;}
-				$options['localization'][$a]=array('lbl'=>wppizza_validate_string($b,$html)); 
+				$options['localization'][$a]=array('lbl'=>wppizza_validate_string($b,$html));
 			}}
 		}
 

@@ -14,6 +14,7 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 		if(!is_admin()){
 			add_action('init', array( $this, 'wppizza_instanciate_gateways_frontend'));
 			add_action('init', array( $this, 'wppizza_do_gateways'));/**output available gateway choices on order page**/
+			add_action('init', array($this,'wppizza_gateway_initialize_order'));/*initialize oder into db */
 		}
 		/************************************************************************
 			[runs only in backend]
@@ -27,13 +28,6 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 		add_action('wppizza_choose_gateway', array( $this, 'wppizza_choose_gateway'));
 	}
 
-	function wppizza_unset_cart() {
-	 	if (!session_id()) {session_start();}
-	    /*holds items in cart*/
-	    $_SESSION[$this->pluginSession]['items']=array();
-	    /*gross sum of all items in cart,before discounts etc*/
-	    $_SESSION[$this->pluginSession]['total_price_items']=0;
-	}
 
 	function wppizza_load_gateways_admin() {
 		$allClasses=get_declared_classes();
@@ -69,62 +63,62 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 		$selectLabel=$this->pluginOptions['gateways']['gateway_select_label'];
 		$enabledGateways=$this->pluginGateways;
 		if(count($enabledGateways)>0){
-		/**display choice of more than one**/
-		if(count($enabledGateways)>1){
-			print"<div class='wppizza-gateways'>";
-				/**as dropdown**/
-				if($displayAsDropdown){
-					print"<label class='wppizza-gw-label'>".$selectLabel."</label>";
-					print"<select name='wppizza-gateway' /> ";
-					$i=0;
-					foreach($enabledGateways as $key=>$gw){
-						$key=strtolower($key);
-						print"<option value='".$key."' />";
-							print"".empty($gw->gatewayOptions['gateway_label']) ? $gw->gatewayName : $gw->gatewayOptions['gateway_label'] ." ";
-						print"</option>";
-					$i++;
+			/**display choice of more than one**/
+			if(count($enabledGateways)>1){
+				print"<div class='wppizza-gateways'>";
+					/**as dropdown**/
+					if($displayAsDropdown){
+						print"<label class='wppizza-gw-label'>".$selectLabel."</label>";
+						print"<select name='wppizza-gateway' /> ";
+						$i=0;
+						foreach($enabledGateways as $key=>$gw){
+							$key=strtolower($key);
+							print"<option value='".$key."' />";
+								print"".empty($gw->gatewayOptions['gateway_label']) ? $gw->gatewayName : $gw->gatewayOptions['gateway_label'] ." ";
+							print"</option>";
+						$i++;
+						}
+						print"</select>";
+					}else{
+						print"<label class='wppizza-gw-label'>".$selectLabel."</label>";
+						$i=0;
+						foreach($enabledGateways as $key=>$gw){
+							$key=strtolower($key);
+							print"<div id='wppizza-gw-".$key."' class='wppizza-gw-button button'>";
+								print"<label>";
+								print"<input type='radio' name='wppizza-gateway' id='wppizza-gateway-".$key."' value='".$key."' ".checked($i,0,false)."/> ";
+								print"".!empty($gw->gatewayImage) ? $gw->gatewayImage : '' ." ";
+								print"".empty($gw->gatewayOptions['gateway_label']) ? $gw->gatewayName : $gw->gatewayOptions['gateway_label'] ." ";
+								print"</label>";
+								print"".!empty($gw->gatewayOptions['gateway_info']) ? '<span class="wppizza-gateway-addinfo">'.$gw->gatewayOptions['gateway_info'].'</span>' : '' ." ";
+							print"</div>";
+						$i++;
+						}
 					}
-					print"</select>";
-				}else{
-					print"<label class='wppizza-gw-label'>".$selectLabel."</label>";
-					$i=0;
-					foreach($enabledGateways as $key=>$gw){
-						$key=strtolower($key);
-						print"<div id='wppizza-gw-".$key."' class='wppizza-gw-button button'>";
-							print"<label>";
-							print"<input type='radio' name='wppizza-gateway' id='wppizza-gateway-".$key."' value='".$key."' ".checked($i,0,false)."/> ";
-							print"".!empty($gw->gatewayImage) ? $gw->gatewayImage : '' ." ";
-							print"".empty($gw->gatewayOptions['gateway_label']) ? $gw->gatewayName : $gw->gatewayOptions['gateway_label'] ." ";
-							print"</label>";
-							print"".!empty($gw->gatewayOptions['gateway_info']) ? '<span class="wppizza-gateway-addinfo">'.$gw->gatewayOptions['gateway_info'].'</span>' : '' ." ";
-						print"</div>";
-					$i++;
-					}
-				}
-			print"</div>";
-			echo $this->wppizza_gateway_standard_button();
-		}
+				print"</div>";
+				echo $this->wppizza_gateway_standard_button();
+			}
 
-		/**only one gateway just display button and add hidden field**/
-		if(count($enabledGateways)==1){
-			foreach($enabledGateways as $key=>$gw){
-				$key=strtolower($key);
-				/**add hidden value so the ajax call knows whether its cod or anything else*/
-				print"<input type='hidden' name='wppizza-gateway' id='wppizza-gateway-".$key."' value='".$key."' /> ";
-				/**if this method has not been defined in class or is empty, display standard button**/
-				if(method_exists($gw,'gateway_button') && $gw->gateway_button()!=''){
-					echo $gw->gateway_button();
-				}else{
-					echo $this->wppizza_gateway_standard_button();
+			/**only one gateway just display button and add hidden field**/
+			if(count($enabledGateways)==1){
+				foreach($enabledGateways as $key=>$gw){
+					$key=strtolower($key);
+					/**add hidden value so the ajax call knows whether its cod or anything else*/
+					print"<input type='hidden' name='wppizza-gateway' id='wppizza-gateway-".$key."' value='".$key."' /> ";
+					/**if this method has not been defined in class or is empty, display standard button**/
+					if(method_exists($gw,'gateway_button') && $gw->gateway_button()!=''){
+						echo $gw->gateway_button();
+					}else{
+						echo $this->wppizza_gateway_standard_button();
+					}
 				}
 			}
 		}
-		}
 	}
-/***********************************************
-[standard "send order" button if not defined or empty in class]
- MUST have class=wppizza-ordernow]
-***********************************************/
+	/***********************************************
+	[standard "send order" button if not defined or empty in class]
+	 MUST have class=wppizza-ordernow]
+	***********************************************/
 	function wppizza_gateway_standard_button() {
 		$standardButton='<input class="submit wppizza-ordernow" type="submit" style="display:block" value="'.$this->pluginOptions['localization']['send_order']['lbl'].'" />';
 		return $standardButton;
@@ -220,5 +214,78 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 		}
 
 	}}
+	/************************************************************************************************
+	*
+	*	[initialize an order on order page with hash etc so we can later compare via ipn, 
+	*	provided at least one gateway is available and we are not just returning to site via cancel ]
+	*
+	************************************************************************************************/
+	function wppizza_gateway_initialize_order(){
+		if(count($this->pluginGateways)>0){
+			add_action('wppizza_choose_gateway', array($this,'gateway_set_order_details'),1,10);
+			add_action('wppizza_choose_gateway', array($this,'gateway_db_initialize_order'),1,11);
+			add_action('wppizza_choose_gateway', array($this, 'gateway_form_fields'),1,12);
+		}
+	}
+	/********************************************************************
+	*
+	*	[returns order details and a hash made from those details,
+	*	to store and check against later.
+	*	additional variables added by sending array to this function
+	*	(in this case  a timestamp) to make the order unique]
+	*
+	********************************************************************/
+	function gateway_set_order_details(){
+		/*In case microtime is available use it*/
+		if(function_exists('microtime')){
+			$timestamp=microtime(true);
+		}else{
+			$timestamp=time();
+		}
+		$this->gatewayOrderDetails=$this->wppizza_gateway_order_details(array('time'=>$timestamp));
+	}
+	/******************************************************************
+	*
+	*	[initialize/insert order in db when going to order page ]
+	*
+	******************************************************************/
+	function gateway_db_initialize_order() {
+		global $wpdb,$current_user;
+		get_currentuserinfo();
+		$wpdb->hide_errors();
+		$wpdb->query( $wpdb->prepare( "INSERT INTO ".$wpdb->prefix . $this->pluginOrderTable." ( wp_user_id, hash, order_ini, payment_status )VALUES ( %s, %s, %s , %s )", array($current_user->ID, $this->gatewayOrderDetails['hash'], $this->gatewayOrderDetails['order_ini'],'INITIALIZED')));
+	}
+	/******************************************************************
+	*
+	*	[add hash formfield to check against when sending to gateway]
+	*
+	******************************************************************/
+	function gateway_form_fields(){
+		$formFields='';
+		$formFields='<input type="hidden" name="wppizza_hash" value="'.$this->gatewayOrderDetails['hash'].'" />';
+		print $formFields;
+	}
+	/******************************************************************
+	*
+	*	[output order on thank you page]
+	*
+	******************************************************************/
+	function gateway_order_on_thankyou($id){
+		$orderEmails=new WPPIZZA_SEND_ORDER_EMAILS;
+		$orderDetails=$orderEmails->gateway_order_on_thankyou($id);
+		return	$orderDetails;
+	}
+	/******************************************************************
+	*
+	*	[output order on thank you page]
+	*
+	******************************************************************/
+	function gateway_unset_cart() {
+	 	if (!session_id()) {session_start();}
+	    /*holds items in cart*/
+	    $_SESSION[$this->pluginSession]['items']=array();
+	    /*gross sum of all items in cart,before discounts etc*/
+	    $_SESSION[$this->pluginSession]['total_price_items']=0;
+	}
 }
 ?>

@@ -18,6 +18,7 @@
     
     $type  = isset($instance['type']) ? esc_attr($instance['type']) : '';
   	$term  = isset($instance['term']) ? esc_attr($instance['term']) : '';
+  	$navterm  = isset($instance['navterm']) ? esc_attr($instance['navterm']) : '';
   	//$openingtimes = $instance['openingtimes'] ? 'checked="checked"' : '';
   	$openingtimes = checked($instance['openingtimes'],true,false);
   	//$orderinfo = $instance['orderinfo'] ? 'checked="checked"' : '';
@@ -50,6 +51,15 @@
 
 
 		    <p class="<?php echo $this->pluginSlug; ?>-selected-navigation" <?php if($type=='navigation'){echo "style='display:block'";}else{echo "style='display:none'";} ?>>
+				<?php
+				$allterms = get_terms( $this->pluginSlugCategoryTaxonomy, array('hide_empty' => 0) );
+				?>
+		        <select id="<?php echo $this->get_field_id( 'navterm' ); ?>" class="widefat" name="<?php echo $this->get_field_name( 'navterm' ); ?>">
+		        	<option value="" <?php selected('',$navterm,true) ?>><?php _e("All Categories [default]", $this->pluginLocale); ?></option>
+		        <?php foreach($allterms as $theterm){ ?>
+		        	<option value="<?php echo $theterm->slug; ?>" <?php selected($theterm->slug,$navterm,true) ?>><?php echo $theterm->name; ?></option>
+		        <?php } ?>
+		        </select><br/>		        
 		        <small style="color:blue"><?php _e("Please refer to <a href='http://wordpress.org/extend/plugins/wppizza/faq/' target='_blank'>FAQ</a> when using the widget (or shortcode) to display the navigation", $this->pluginLocale); ?></small>
 			</p>
 
@@ -78,10 +88,7 @@
 		        	<option value="0" <?php selected('0',$showadditives,true) ?>><?php _e("Force Hide", $this->pluginLocale); ?></option>
 		        	<option value="1" <?php selected('1',$showadditives,true) ?>><?php _e("Force Show", $this->pluginLocale); ?></option>
 		        </select><br/>
-		        
-		        
-		        
-		        
+
 		    	<input class="checkbox" type="checkbox" id="<?php echo $this->get_field_id('noheader'); ?>" name="<?php echo $this->get_field_name('noheader'); ?>" <?php echo $noheader; ?> value="1" />
 		    	<label for="<?php echo $this->get_field_id( 'noheader' ); ?>"><?php _e("Suppress Category Header ?", $this->pluginLocale); ?></label>
 
