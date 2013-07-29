@@ -20,7 +20,6 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 			/*class to send order emails used via ajax too so must be avialable from bckend too*/
 			add_action('init', array( $this, 'wppizza_send_order_emails'));
 
-
 		/************************************************************************
 			[runs only for frontend]
 		*************************************************************************/
@@ -104,6 +103,7 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 				 - DEVELOPMENT PURPOSES ONLY when adding/deleting default options.
 			**************************************************************************************/
 			//$forceUpdate=1;
+			//$install_options=1;
 			/**update  options if installed version < current version***/
 			if( version_compare( $options['plugin_data']['version'], 	$this->pluginVersion, '<' ) || isset($forceUpdate)) {
 
@@ -113,7 +113,7 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 				require_once(WPPIZZA_PATH .'inc/admin.update.options.inc.php');
 
 				/**compare currently installed options vs this vesrion**/
-				if(	version_compare( $options['plugin_data']['version'], '2.0', '<' )){$update_options['plugin_data']['nag_notice']=$this->pluginVersion;}
+				if(	version_compare( $options['plugin_data']['version'], '2.0', '<' )){$update_options['plugin_data']['nag_notice']='2.1';}
 
 				/**update options**/
 				update_option($this->pluginSlug, $update_options );
@@ -513,7 +513,11 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 				$showadditives=$atts['showadditives'];
 			}
 
+//var_dump($query->slug);
+//exit();
+			if($query){
 			$query_var=''.$query->slug.'';
+			}
 			/*set template style if !default*/
 			$loStyle='';
 			if($options['layout']['style']!='default'){

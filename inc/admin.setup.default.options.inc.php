@@ -179,58 +179,61 @@
 								  )
 								);
 
-								/*insert item into category*/
-								$j=0;
-								foreach($defaultItems[$k] as $iKey=>$items){
-									$item = array(
-									  'post_title'    	=> wp_strip_all_tags( $items['title'] ),
-									  'post_content'  	=> $loremIpsum[$items['descr']],
-									  'post_type'     	=> $this->pluginSlug,
-									  'post_status'   	=> 'publish',
-									  'menu_order'	  	=> $j,
-									  'comment_status'	=> 'closed',
-									  'ping_status'		=> 'closed',
-									  'post_category' 	=> array($term['term_id']),
-									  'tax_input'      	=> array(''.$this->pluginSlugCategoryTaxonomy.'' => array($term['term_id']))
-									);
-									//					  'post_author'   => 1, ? needed ?
-									$post_id=wp_insert_post($item);
-									/**add meta boxes values**/
-									$metaId=update_post_meta($post_id, ''.$this->pluginSlug.'', $items['meta']) ;
-
-									/*add thumbnail/featured image if set and available**/
-									if($items['featuredimage']!='' && is_file(WPPIZZA_PATH.'img/'.$items['featuredimage'].'')){
-										$image_data = file_get_contents(WPPIZZA_URL.'img/'.$items['featuredimage']);
-										$filename = basename($items['featuredimage']);
-
-										if(wp_mkdir_p($upload_dir['path'])){
-				    						$file = $upload_dir['path'] . '/' . $filename;
-										}else{
-				    						$file = $upload_dir['basedir'] . '/' . $filename;
-										}
-										file_put_contents($file, $image_data);
-										$wp_filetype = wp_check_filetype($filename, null );
-										$attachment = array(
-										    'post_mime_type' => $wp_filetype['type'],
-										    'guid' => $upload_dir['url'] . '/' .  $filename ,
-										    'post_title' => sanitize_file_name($filename),
-										    'post_content' => '',
-										    'post_status' => 'inherit'
+								if ( is_wp_error($term) ) {
+									echo $term->get_error_message();
+								}else{
+									/*insert item into category*/
+									$j=0;
+									foreach($defaultItems[$k] as $iKey=>$items){
+										$item = array(
+									  	'post_title'    	=> wp_strip_all_tags( $items['title'] ),
+									  	'post_content'  	=> $loremIpsum[$items['descr']],
+									  	'post_type'     	=> $this->pluginSlug,
+									  	'post_status'   	=> 'publish',
+									  	'menu_order'	  	=> $j,
+									  	'comment_status'	=> 'closed',
+									  	'ping_status'		=> 'closed',
+									  	'post_category' 	=> array($term['term_id']),
+									  	'tax_input'      	=> array(''.$this->pluginSlugCategoryTaxonomy.'' => array($term['term_id']))
 										);
-										$attach_id = wp_insert_attachment( $attachment, $file, $post_id );
-										require_once(ABSPATH . 'wp-admin/includes/image.php');
-										$attach_data = wp_generate_attachment_metadata( $attach_id, $file );
-										wp_update_attachment_metadata( $attach_id, $attach_data );
+										//					  'post_author'   => 1, ? needed ?
+										$post_id=wp_insert_post($item);
+										/**add meta boxes values**/
+										$metaId=update_post_meta($post_id, ''.$this->pluginSlug.'', $items['meta']) ;
+	
+										/*add thumbnail/featured image if set and available**/
+										if($items['featuredimage']!='' && is_file(WPPIZZA_PATH.'img/'.$items['featuredimage'].'')){
+											$image_data = file_get_contents(WPPIZZA_URL.'img/'.$items['featuredimage']);
+											$filename = basename($items['featuredimage']);
+	
+											if(wp_mkdir_p($upload_dir['path'])){
+					    						$file = $upload_dir['path'] . '/' . $filename;
+											}else{
+					    						$file = $upload_dir['basedir'] . '/' . $filename;
+											}
+											file_put_contents($file, $image_data);
+											$wp_filetype = wp_check_filetype($filename, null );
+											$attachment = array(
+											   	'post_mime_type' => $wp_filetype['type'],
+										    	'guid' => $upload_dir['url'] . '/' .  $filename ,
+										    	'post_title' => sanitize_file_name($filename),
+										    	'post_content' => '',
+										    	'post_status' => 'inherit'
+											);
+											$attach_id = wp_insert_attachment( $attachment, $file, $post_id );
+											require_once(ABSPATH . 'wp-admin/includes/image.php');
+											$attach_data = wp_generate_attachment_metadata( $attach_id, $file );
+											wp_update_attachment_metadata( $attach_id, $attach_data );
 
-										set_post_thumbnail( $post_id, $attach_id );
+											set_post_thumbnail( $post_id, $attach_id );
+										}
+
+									$j++;
 									}
-
-								$j++;
-								}
-								/*add term id to category sort array to be inserted into options table below*/
-								$category_sort[$term['term_id']]=$i;
-							$i++;
-							}
+									/*add term id to category sort array to be inserted into options table below*/
+									$category_sort[$term['term_id']]=$i;
+								$i++;
+							}}
 
 
 						/**********************************************

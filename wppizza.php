@@ -5,7 +5,7 @@ Description: Maintain your restaurant menu online and accept cash on delivery or
 Author: ollybach
 Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Author URI: http://www.wp-pizza.com
-Version: 2.3
+Version: 2.3.1
 License:
 
   Copyright 2012 ollybach (dev@wp-pizza.com)
@@ -63,7 +63,7 @@ class WPPizza extends WP_Widget {
 ********************************************************/
  function __construct() {
 	/**init constants***/
-	$this->pluginVersion='2.3';//increment in line with stable tag in readme and version above
+	$this->pluginVersion='2.3.1';//increment in line with stable tag in readme and version above
  	$this->pluginName="".WPPIZZA_NAME."";
  	$this->pluginSlug="".WPPIZZA_SLUG."";//set also in uninstall when deleting options
 	$this->pluginSlugCategoryTaxonomy="".WPPIZZA_TAXONOMY."";//also on uninstall delete wppizza_children as well as widget
@@ -80,7 +80,7 @@ class WPPizza extends WP_Widget {
 		$this->pluginSession=$this->pluginSlug;
 	}
 
-	//classname and description
+	/*classname and description*/
     $widget_opts = array (
         'classname' => WPPIZZA_CLASS,
         'description' => __('A Pizza Restaurant Plugin', $this->pluginLocale)
@@ -88,7 +88,9 @@ class WPPizza extends WP_Widget {
 
     $this->WP_Widget(false, $name=$this->pluginName, $widget_opts);
     load_plugin_textdomain($this->pluginLocale, false, dirname(plugin_basename( __FILE__ ) ) . '/lang' );
-
+    
+    /**allow overwriting of pluginVars in seperate class*/
+    add_action('init', array( $this, 'wppizza_extend'),1);
 }
 
 /*****************************************************************************************************************
@@ -145,6 +147,24 @@ class WPPizza extends WP_Widget {
 			$items['openingtimes']=__('Openingtimes', $this->pluginLocale);
 		return $items;
 	}
+	/*******************************************************
+     *
+     *	[EXTEND : class must start with WPPIZZA_EXTEND_]
+     *
+     ******************************************************/	
+	function wppizza_extend() {
+		$allClasses=get_declared_classes();
+		$wppizzaExtend=array();
+		foreach ($allClasses AS $oe=>$class){
+			$chkStr=substr($class,0,15);
+			if($chkStr=='WPPIZZA_EXTEND_'){
+				$wppizzaExtend[$oe]=new $class;
+				foreach($wppizzaExtend[$oe] as $k=>$v){
+					$this->$k=$v;
+				}
+			}
+		}
+	}	
 }
 /*=======================================================================================*/
 /*=========================load actions and gateways class===============================*/

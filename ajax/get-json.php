@@ -141,7 +141,6 @@ if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='sendorder'){
 	/***create html and plaintext emails ****/
 	$sendEmail->orderMessage=$sendEmail->wppizza_order_construct_email();
 
-
 	/************************************************************
 	*	[provided we have a valid order id AND its set
 	*	to INITIALIZE send the emails and update db]

@@ -90,7 +90,7 @@
  *
  ********************************************/
 ?>
-<?php if(!isset($noheader)){ /*exclude header if set*/?>
+<?php if(!isset($noheader) && $termDetails){ /*exclude header if set*/?>
 	<header class="page-header entry-header <?php echo $post_type ?>-header">
 		<h1 class="page-title entry-title <?php echo $post_type ?>-title"><?php echo $termDetails->name ?></h1>
 		<?php if ( $termDetails->description!='' ) :?>

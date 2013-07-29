@@ -11,7 +11,10 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 			/**blog charset*/
 			$this->blogCharset=get_bloginfo('charset');
 			/**timestamp the order*/
-			$this->orderTimestamp =date("d-M-Y H:i:s", current_time('timestamp'));
+			$currentTime= current_time('timestamp');
+			//$this->orderTimestamp =date("d-M-Y H:i:s", current_time('timestamp'));
+			$this->orderTimestamp ="".date_i18n(get_option('date_format'),$currentTime)." ".date_i18n(get_option('time_format'),$currentTime)."";
+			
 			/**set shop name and email*/
 			$this->orderShopName 	='';
 			$this->orderShopEmail 	=$this->pluginOptions['order']['order_email_to'][0];
@@ -27,11 +30,20 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 			$this->orderPostVars	=$_POST;
 
 			/**subject vars for email subject**/
-			$this->subjectPrefix =  ''.get_bloginfo().': ';
-			$this->subject = ''.$this->pluginOptions['localization']['your_order']['lbl'].'';
-			$this->subjectSuffix =' '.$this->orderTimestamp.'';
+			$this->subjectPrefix 	=	''.get_bloginfo().': ';
+			$this->subject 			=	''.$this->pluginOptions['localization']['your_order']['lbl'].' ';
+			$this->subjectSuffix 	=	''.$this->orderTimestamp.'';
 
+			/** overwrite subject vars for email subject**/
+			if (file_exists( get_template_directory() . '/wppizza-order-email-subject.php')){
+				/**copy to template directory to keep settings**/
+				include(get_template_directory() . '/wppizza-order-email-subject.php');
+			}else{
+				include(WPPIZZA_PATH.'templates/wppizza-order-email-subject.php');
+			}
 
+			/* we also need any overrides by extensions in the mmain class to be used here**/
+			$this->wppizza_extend();
 		}
 		/***************************************************************
 			[allow some extension classes to allow to modify variables]

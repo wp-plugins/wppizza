@@ -51,7 +51,6 @@
 	}else{
 		$termSlug=get_query_var( WPPIZZA_TAXONOMY );
 	}
-
 	/*************************************************************
 	now lets get term descriptions , names etc
 	only needs to run when noheader is not set though
@@ -59,6 +58,7 @@
 	if(!isset($noheader)){
 		$termDetails = get_term_by( 'slug', $termSlug, WPPIZZA_TAXONOMY);
 	}
+
 	/*************************************************************	
 	build and run the query
 	*************************************************************/
@@ -90,7 +90,7 @@
  * 
  ********************************************/
 ?>
-<?php if(!isset($noheader)){ /*exclude header if set*/?>
+<?php if(!isset($noheader) && $termDetails){ /*exclude header if set*/?>
 	<header class="page-header entry-header <?php echo $post_type ?>-header">
 		<h1 class="page-title entry-title <?php echo $post_type ?>-title"><?php echo $termDetails->name ?></h1>
 		<?php if ( $termDetails->description!='' ) :?>

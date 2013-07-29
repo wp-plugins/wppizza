@@ -66,6 +66,9 @@
 	if(isset($options['plugin_data']['category_parent_page'])){
 		$update_options['plugin_data']['category_parent_page']=$options['plugin_data']['category_parent_page'];
 	}
+	if(isset($options['gateways']['gateway_selected'])){
+		$update_options['gateways']['gateway_selected']=$options['gateways']['gateway_selected'];
+	}	
 	/*this will always be an empty array (discounts set to "none"), so distinctly set it here as the comparison function above will strip it as it's empty**/
 	$update_options['order']['discounts']['none']=array();
 	ksort($update_options['order']['discounts']);/*to keep a consistant order*/

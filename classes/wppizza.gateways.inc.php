@@ -1,7 +1,6 @@
 <?php
 if (!class_exists( 'WPPizza' ) ) {return ;}
 class WPPIZZA_GATEWAYS extends WPPIZZA {
-
 	protected $pluginGateways;
 
 	function __construct() {
@@ -23,11 +22,9 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 		add_action('admin_init', array( $this, 'wppizza_load_gateways_admin'));
 	}
 
-
 	function wppizza_do_gateways() {
 		add_action('wppizza_choose_gateway', array( $this, 'wppizza_choose_gateway'));
 	}
-
 
 	function wppizza_load_gateways_admin() {
 		$allClasses=get_declared_classes();
@@ -42,12 +39,13 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 	function wppizza_instanciate_gateways_frontend() {
 		/**get the selected gateway and associated classname*/
 		$wppizzaGateway=array();
+		if(isset($this->pluginOptions['gateways']['gateway_selected']) && is_array($this->pluginOptions['gateways']['gateway_selected'])){
 		foreach($this->pluginOptions['gateways']['gateway_selected'] as $gw=>$enbld){
 			if($enbld){/**only add enabled gateways**/
 				$gatewayClass="WPPIZZA_GATEWAY_".strtoupper($gw);
 				$wppizzaGateway[$gw]=new $gatewayClass;
 			}
-		}
+		}}
 		$this->pluginGateways=$wppizzaGateway;
 	}
 /***********************************************
@@ -123,13 +121,13 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 		$standardButton='<input class="submit wppizza-ordernow" type="submit" style="display:block" value="'.$this->pluginOptions['localization']['send_order']['lbl'].'" />';
 		return $standardButton;
 	}
-/***********************************************
-*
-*	[array of items, tax, delivery charges etc]
-*	[(can be) used when creating/storing hash etc in
-*	in db for paymant gatways]
-*
-***********************************************/
+	/***********************************************
+	*
+	*	[array of items, tax, delivery charges etc]
+	*	[(can be) used when creating/storing hash etc in
+	*	in db for paymant gatways]
+	*
+	***********************************************/
 	function wppizza_gateway_order_details($addVars=array()) {
 		$gatewayOrder=array();
 		$cartDetails=wppizza_order_summary($_SESSION[$this->pluginSession],$this->pluginOptions);
@@ -156,7 +154,6 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 		$gatewayOrder['delivery_charges']=$cartDetails['order_value']['delivery_charges']['val'];
 		$gatewayOrder['selfPickup']=!empty($cartDetails['selfPickup']) ? 1 : 0;
 		$gatewayOrder['total']=$cartDetails['order_value']['total']['val'];
-
 
 		/**add any additional variables are set we want to pass/hash*/
 		foreach($addVars as $k=>$v){
@@ -216,15 +213,15 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 	}}
 	/************************************************************************************************
 	*
-	*	[initialize an order on order page with hash etc so we can later compare via ipn, 
+	*	[initialize an order on order page with hash etc so we can later compare via ipn,
 	*	provided at least one gateway is available and we are not just returning to site via cancel ]
 	*
 	************************************************************************************************/
 	function wppizza_gateway_initialize_order(){
 		if(count($this->pluginGateways)>0){
-			add_action('wppizza_choose_gateway', array($this,'gateway_set_order_details'),1,10);
-			add_action('wppizza_choose_gateway', array($this,'gateway_db_initialize_order'),1,11);
-			add_action('wppizza_choose_gateway', array($this, 'gateway_form_fields'),1,12);
+			add_action('wppizza_choose_gateway', array($this,'gateway_set_order_details'));
+			add_action('wppizza_choose_gateway', array($this,'gateway_db_initialize_order'));
+			add_action('wppizza_choose_gateway', array($this, 'gateway_form_fields'));
 		}
 	}
 	/********************************************************************
