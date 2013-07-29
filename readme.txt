@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.2, WP 3.3 
 Tested up to: 3.5.2
-Stable tag: 2.3.1
+Stable tag: 2.3.1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -114,12 +114,17 @@ if you do wish to use any icon from this set commercially, please follow <a href
 == Changelog ==
 
 
+2.3.1.1
+* set multisite checkbox as being selected by default as chances are every site in the network has different settings/belong to a different restaurant   
+
+
 2.3.1  
 * email subject now changeable/customisable (see template wppizza-order-email-subject.php)  
 * eliminate fatal error when plugin is re-installed without properly uninstalling it first (why would you do that anyway though ? oh well...)  
 * BUGFIX when empty delete all categories was selected, only non empty categories were deleted  
 * BUGFIX when using shortcode [wppizza category='non-existing-cat'] with a non-existing category, errors were thrown on page instead of just a blank page without menu items  
 - 29th July 2013  
+
 
 
 2.3  

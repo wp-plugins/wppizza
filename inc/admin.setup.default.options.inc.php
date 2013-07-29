@@ -305,7 +305,7 @@
 				'mail_type' => 'mail',
 				'category_parent_page' => array(),
 				'empty_category_and_items' => false,
-				'wp_multisite_session_per_site' => false,
+				'wp_multisite_session_per_site' => true,
 				'nag_notice' => $this->pluginNagNotice
 			),
 			'layout'=>array(
