@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.2, WP 3.3 
 Tested up to: 3.5.2
-Stable tag: 2.3.1.1
+Stable tag: 2.3.1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -113,6 +113,9 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 == Changelog ==
 
+
+2.3.1.2
+* made error when committing 2.3.1.1. no other changes made  
 
 2.3.1.1
 * set multisite checkbox as being selected by default as chances are every site in the network has different settings/belong to a different restaurant   
