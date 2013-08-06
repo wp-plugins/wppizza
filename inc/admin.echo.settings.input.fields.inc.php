@@ -406,7 +406,12 @@ $options = $this->pluginOptions;
 
 					echo"<div id='wppizza_".$field."_search' class='button'>";
 						echo "<a href='#' id='".$field."_get_orders' class='button'>".__('show most recent *confirmed* orders', $this->pluginLocale)."</a>";
-						echo " ".__('maximum results [0 to show all]', $this->pluginLocale)."<input id='".$field."_orders_limit' size='5' type='text' value='20' />";
+						echo " ".__('maximum results [0 to show all]', $this->pluginLocale)."<input id='".$field."_orders_limit' size='3' type='text' value='20' />";
+						echo "<span style='float:right;margin-right:50px'>";
+						echo " ".__('poll for new orders every', $this->pluginLocale)."<input id='".$field."_orders_poll_interval' size='2' type='text' value='30' />".__('seconds', $this->pluginLocale)."";
+						echo "<span class='button'><input id='".$field."_orders_poll_enabled' type='checkbox' value='1' />".__('on/off', $this->pluginLocale)."</span>";
+								echo "<span id='wppizza-orders-polling'></span>";
+						echo "</span>";
 					echo"</div>";
 					echo"<div id='wppizza_".$field."_orders'></div>";
 				

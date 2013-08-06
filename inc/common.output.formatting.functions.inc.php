@@ -18,7 +18,10 @@
 		return $str;
 	}
 
-
+	function wppizza_custom_order_status(){
+		$orderStatus=array('NEW','ACKNOWLEDGED','ON_HOLD','PROCESSED','DELIVERED','REJECTED','OTHER');
+		return $orderStatus;
+	}
 
 	function wppizza_currencies($selected='',$returnValue=null){
 		$items['---none---']='';
@@ -445,8 +448,12 @@ function wppizza_options_in_use(){
 	foreach($posts as $k=>$p){
 		//get the meta you need form each post
 		$itemMeta=get_post_meta($p,WPPIZZA_SLUG);
-		$usedAdditives[] =implode(",",$itemMeta[0]['additives']);
-		$usedSizes[] =$itemMeta[0]['sizes'];
+		if(isset($itemMeta[0]['additives']) && is_array($itemMeta[0]['additives']) && count($itemMeta[0]['additives'])>0){
+			$usedAdditives[] =implode(",",$itemMeta[0]['additives']);
+		}
+		if(isset($itemMeta[0]['sizes'])){
+			$usedSizes[] =$itemMeta[0]['sizes'];
+		}
 	}
 	$optionsInUse['sizes']=array_unique($usedSizes);
 	$optionsInUse['additives']=array_filter(array_unique(explode(",",implode(",",$usedAdditives))), 'strlen');

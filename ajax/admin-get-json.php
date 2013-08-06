@@ -5,6 +5,9 @@ if(!defined('DOING_AJAX') || !DOING_AJAX){
 	print"you cannot call this script directly";
   exit; //just for good measure
 }
+/**testing variables ****************************/
+//sleep(2);//when testing jquery fadeins etc
+/******************************************/
 /**********set header********************/
 //header('Content-type: application/json');
 $options=$this->pluginOptions;
@@ -79,6 +82,7 @@ if($_POST['vars']['field']=='opening_times_custom'){
 if($_POST['vars']['field']=='times_closed_standard'){
 	$output=$this->wppizza_admin_section_times_closed_standard($_POST['vars']['field']);
 }
+
 /**get orders**/
 if($_POST['vars']['field']=='get_orders'){
 	$output='';
@@ -87,6 +91,7 @@ if($_POST['vars']['field']=='get_orders'){
 	$allOrders = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix . $this->pluginOrderTable." WHERE payment_status IN ('COD','COMPLETED') ORDER BY id DESC ".$limit." ");
 	if(is_array($allOrders) && count($allOrders)>0){
 		$output.="<div>".__('Note: deleting an order will <b>ONLY</b> delete it from the database table. It will <b>NOT</b> issue any refunds, cancel the order, send emails etc.', $this->pluginLocale)."</div>";
+		$output.="<div style='color:red'>".__('"Status" is solely for your internal reference. Updating/changing the value will have no other effects but might help you to identify which orders have not been processed.', $this->pluginLocale)."</div>";
 		$output.="<table>";
 			$output.="<tr class='wppizza-orders-head'>";
 				$output.="<td>";
@@ -103,8 +108,10 @@ if($_POST['vars']['field']=='get_orders'){
 				$output.="</td>";
 			$output.="</tr>";
 
+
+			$customOrderStatus=wppizza_custom_order_status();
 			foreach ( $allOrders as $orders ){
-				$output.="<tr>";
+				$output.="<tr class='wppizza-ord-status-".strtolower($orders->order_status)."'>";
 					$output.="<td style='white-space:nowrap'>";
 						$output.= date("d-M-Y H:i:s",strtotime($orders->order_date));
 						if($orders->initiator!=''){
@@ -113,6 +120,13 @@ if($_POST['vars']['field']=='get_orders'){
 						if($orders->transaction_id!=''){
 							$output.="<br/>ID: ". $orders->transaction_id ."";
 						}
+						$output.="<br/>";
+						$output.="".__('Status', $this->pluginLocale)."";
+						$output.="<select id='wppizza_order_status-".$orders->id."' name='wppizza_order_status-".$orders->id."' class='wppizza_order_status'>";
+							foreach($customOrderStatus as $s){
+								$output.="<option value='".$s."' ".selected($orders->order_status,$s,false).">".__($s, $this->pluginLocale)."</option>";	
+							}
+						$output.="</select>";	
 					$output.="</td>";
 					$output.="<td>";
 						$output.="<textarea class='wppizza_order_customer_details'>". $orders->customer_details ."</textarea>";
@@ -130,7 +144,12 @@ if($_POST['vars']['field']=='get_orders'){
 		$output.="<h1 style='text-align:center'>".__('no orders yet :(', $this->pluginLocale)."</h1>";
 	}
 }
-
+/**update order status**/
+if($_POST['vars']['field']=='orderstatuschange' && isset($_POST['vars']['id']) && $_POST['vars']['id']>=0){
+	global $wpdb;
+	$res=$wpdb->query("UPDATE ".$wpdb->prefix . $this->pluginOrderTable." SET order_status='".$_POST['vars']['selVal']."' WHERE id=".$_POST['vars']['id']." ");
+	$output="".print_r($res,true)."";
+}
 /**delete order**/
 if($_POST['vars']['field']=='delete_orders'){
 	global $wpdb;

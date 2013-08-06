@@ -168,6 +168,43 @@ jQuery(document).ready(function($){
 		e.preventDefault();
 		$(this).closest('span').remove();
 	});
+	/*****************************
+	*	[poll orders]
+	*****************************/
+	var pollObj=$('#history_orders_poll_enabled');	
+	if(pollObj.length>0){
+		var pollingInterval=$('#history_orders_poll_interval').val();
+		var pollOrdersInterval=setInterval(function(){pollOrders()},(pollingInterval*1000));
+	}
+	/*****************************
+	*	[change poll interval]
+	*****************************/	
+	$(document).on('change', '#history_orders_poll_interval', function(e){
+		var pollingInterval=$(this).val();
+		clearInterval(pollOrdersInterval);		
+		pollOrdersInterval=setInterval(function(){pollOrders()},(pollingInterval*1000));
+	});	
+	/*****************************
+	*	[do poll if enabled]
+	*****************************/
+	var pollOrders=function(){
+	if($('#history_orders_poll_enabled').is(':checked')){
+		$('#wppizza-orders-polling').addClass('wppizza-load');
+		var triggerTarget=$('#history_get_orders');
+		triggerTarget.trigger('click');
+	}}	
+	/*****************************
+	*	[update order status]
+	*****************************/
+	$(document).on('change', '.wppizza_order_status', function(e){
+		var self=$(this);
+		var selId=self.attr('id').split("-").pop(-1);
+		var selVal=self.val();
+		var selClass=selVal.toLowerCase();
+		jQuery.post(ajaxurl , {action :'wppizza_admin_json',vars:{'field':'orderstatuschange','id':selId,'selVal':selVal}}, function(response) {
+			self.closest('tr').removeClass().addClass('wppizza-ord-status-'+selClass+'');
+		},'html').error(function(jqXHR, textStatus, errorThrown) {alert("error : " + errorThrown);});				
+	});	
 	/******************************
 	*	[show orders]
 	******************************/	
@@ -176,6 +213,7 @@ jQuery(document).ready(function($){
 		var limit=$('#history_orders_limit').val();
 		jQuery.post(ajaxurl , {action :'wppizza_admin_json',vars:{'field':'get_orders','limit':limit}}, function(response) {
 			$('#wppizza_history_orders').html(response);
+			$('#wppizza-orders-polling').removeClass();
 		},'html').error(function(jqXHR, textStatus, errorThrown) {alert("error : " + errorThrown);});
 	});
 	/******************************

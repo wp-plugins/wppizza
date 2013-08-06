@@ -38,7 +38,7 @@
 *********************/
 .widget .widget-inside p.wppizza-type{margin-bottom:0}
 .wppizza-red{color:#ff0000}
-
+.wppizza-load{background:url('img/progress.gif') center center no-repeat transparent;}
 /*******************
 	[when using textarea in localization fields]
 *********************/
@@ -56,6 +56,8 @@
 #wppizza-settings .wppizza_order_customer_details{height:100px;min-width:300px}
 #wppizza-settings .wppizza_order_details {width:390px !important;height:100px}
 #wppizza_history_clear{border:1px solid #EFEFEF;padding:5px}
+.wppizza-ord-status-new{background-color:#FBEC5D !important}
+#wppizza-orders-polling{width:50px;height:35px;position:absolute;right:30px;margin-top:2px}
 /******************
 	[gateways]
 *******************/

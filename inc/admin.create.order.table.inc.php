@@ -22,12 +22,16 @@ if($wpdb->get_var("SHOW TABLES LIKE '$table_name'") == $table_name) {
 	}
 }
 /**create and alter table via dbDelta**/
+$dbOrderStatus="'".implode("','",wppizza_custom_order_status())."'";
+
+
 $sql="CREATE TABLE ".$wpdb->prefix . $this->pluginOrderTable." (
 	id INT(10) NOT NULL AUTO_INCREMENT,
 	wp_user_id INT(10) NOT NULL DEFAULT '0',
 	order_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	customer_details TEXT NULL,
 	order_details TEXT NULL,
+	order_status ENUM($dbOrderStatus) NOT NULL DEFAULT 'NEW',
 	hash VARCHAR(64) NULL DEFAULT NULL,
 	order_ini TEXT NULL,
 	customer_ini TEXT NULL,
