@@ -14,7 +14,7 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 			$currentTime= current_time('timestamp');
 			//$this->orderTimestamp =date("d-M-Y H:i:s", current_time('timestamp'));
 			$this->orderTimestamp ="".date_i18n(get_option('date_format'),$currentTime)." ".date_i18n(get_option('time_format'),$currentTime)."";
-			
+
 			/**set shop name and email*/
 			$this->orderShopName 	='';
 			$this->orderShopEmail 	=$this->pluginOptions['order']['order_email_to'][0];
@@ -33,14 +33,6 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 			$this->subjectPrefix 	=	''.get_bloginfo().': ';
 			$this->subject 			=	''.$this->pluginOptions['localization']['your_order']['lbl'].' ';
 			$this->subjectSuffix 	=	''.$this->orderTimestamp.'';
-
-			/** overwrite subject vars for email subject**/
-			if (file_exists( get_template_directory() . '/wppizza-order-email-subject.php')){
-				/**copy to template directory to keep settings**/
-				include(get_template_directory() . '/wppizza-order-email-subject.php');
-			}else{
-				include(WPPIZZA_PATH.'templates/wppizza-order-email-subject.php');
-			}
 
 			/* we also need any overrides by extensions in the mmain class to be used here**/
 			$this->wppizza_extend();
@@ -64,196 +56,279 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 			return ;
 		}
 
+		/*****************************************************************************************************************************
+		*
+		*	[construct plaintext and html email from fields in db]
+		*
+		*****************************************************************************************************************************/
+		function wppizza_wordwrap_indent($str){
+			$str=str_replace(PHP_EOL,"".PHP_EOL."     ",$str);
+			return $str;
 
-		function wppizza_order_construct_email(){
+		}
 
-			/**cart contents**/
-			$cartContents=wppizza_order_summary($_SESSION[$this->pluginSession],$this->pluginOptions);
-			/**easier to handle if we put this into its own var**/
-			$currency=$cartContents['currency'];
+		function wppizza_order_email($orderid){
+			global $wpdb;
+			$res = $wpdb->get_row("SELECT * FROM ".$wpdb->prefix . $this->pluginOrderTable." WHERE id='".$orderid."' ");
 
+			/*initialize vars**/
+			$email=array();
 			$email['plaintext']='';
 			$email['html']=array();
 
-			/*********************************************************************
-				customer details from order page
-			**********************************************************************/
-			$customer_details ="".PHP_EOL.PHP_EOL;
-			$customer_details_array =array();
-			$protectedKeys=array();
-			ksort($this->pluginOptions['order_form']);
-			foreach($this->pluginOptions['order_form'] as $k=>$v){
-				if(($v['enabled'])){
-					/**protect this key, so no other extension uses it below*/
-					$protectedKeys[$v['key']]=1;
+			if($res){
+				/*********************************************************************
+				*
+				*
+				*	customer details : posted and stored variables from order page
+				*
+				*
+				**********************************************************************/
+				$pOptions=$this->pluginOptions;
+				$cDetails=maybe_unserialize($res->customer_ini);
 
-					if($v['type']!='textarea'){/*pad non-textareas*/
-						$strPartLeft=''.$v['lbl'].'';
-						$spaces=45-strlen($strPartLeft);
-						$strPartRight=''.strip_tags($this->orderPostVars[$v['key']]);
+				/*********************************************
+				*
+				*	[posted input fields of this plugin]
+				*
+				*********************************************/
+				$email['plaintext']['customer_details']="";//".PHP_EOL.PHP_EOL
+				/**protect these keys, so no other extension uses it*/
+				$protectedKeys=array();
+				foreach($this->pluginOptions['order_form'] as $k=>$v){
+					$protectedKeys[$v['key']]=$v;
+				}
 
-						$customer_details.=''.$strPartLeft.''.str_pad($strPartRight,$spaces," ",STR_PAD_LEFT).''.PHP_EOL;
-					}else{
-						$customer_details.=PHP_EOL;
-						$customer_details.=''.$v['lbl'].PHP_EOL;
-						$customer_details.= wordwrap(strip_tags($this->orderPostVars[$v['key']]), 72, "\n", true);
-						$customer_details.=PHP_EOL;
+				$i=0;
+				foreach($cDetails as $k=>$v){
+					/*****default input fields of this plugin*****/
+					if(isset($protectedKeys[$k])){
+						/**plaintext**/
+						if($protectedKeys[$k]['type']!='textarea'){/* non-textareas*/
+							$strPartLeft=''.$protectedKeys[$k]['lbl'].'';
+							$spaces=45-strlen($strPartLeft);
+							$strPartRight=''.wp_kses($cDetails[$k],array());
+							$email['plaintext']['customer_details'].=''.$strPartLeft.''.str_pad($strPartRight,$spaces," ",STR_PAD_LEFT).''.PHP_EOL;
+						}else{
+							$email['plaintext']['customer_details'].=''.$protectedKeys[$k]['lbl'].PHP_EOL;
+							$email['plaintext']['customer_details'].='     '.$this->wppizza_wordwrap_indent(wordwrap(wp_kses($cDetails[$k],array()), 72, PHP_EOL, true));
+							$email['plaintext']['customer_details'].=PHP_EOL.PHP_EOL;
+
+						}
+						/**html -> stick into array for use in html emails**/
+						if($this->pluginOptions['plugin_data']['mail_type']=='phpmailer'){
+							if($protectedKeys[$k]['type']!='textarea'){/* non-textareas*/
+								$cDetValHtml=wppizza_email_html_entities($cDetails[$k]);
+							}else{
+								$cDetValHtml='<div class="wppizza-order-textarea">'.nl2br(wppizza_email_html_entities($cDetails[$k])).'</div>';
+							}
+							$email['html']['customer_details'][]=array('label'=>wppizza_email_html_entities($protectedKeys[$k]['lbl']),'value'=>$cDetValHtml);
+						}
 					}
-				/**html emails**/
-				/**stick into array for use in html emails**/
-				if($this->pluginOptions['plugin_data']['mail_type']=='phpmailer'){
-					$customer_details_array[]=array('label'=>wppizza_email_html_entities($v['lbl']),'value'=>wppizza_email_html_entities($this->orderPostVars[$v['key']]));
-				}
-				}
-			}
 
-			/*********************************************************************
-				if another plugin/extension wants to add field value pairs, make sure
-				its an array having [label] and [value] to display in email
-				i.e:
-				<input type="hidden" name="distinct_name[label]" value="some value"/>';
-				<input type="text" name="distinct_name[value]" value="some value"/>';
-				(make sure there are no clashes with other input fields)
-				ought to make this "classable" at some point anyway
-			**********************************************************************/
-			$i=0;
-			foreach($this->orderPostVars as $k=>$v){
-				if(is_array($v) && isset($v['label']) && isset($v['value']) && !isset($protectedKeys[$k]) ){
-					if($i==0){$customer_details .=PHP_EOL;}/*add one empty line for readabilities sake*/
-					$strPartLeft=''.$v['label'].'';
-					$spaces=45-strlen($strPartLeft);
-					$strPartRight=''.strip_tags($v['value']);
+					/*********************************************************************
+						if another plugin/extension wants to add field value pairs, make sure
+						its an array having [label] and [value] to display in email
+						i.e:
+						<input type="hidden" name="distinct_name[label]" value="some value"/>';
+						<input type="text" name="distinct_name[value]" value="some value"/>';
+						(make sure there are no clashes with other input fields)
+						ought to make this "classable" at some point anyway
+					**********************************************************************/
+					if(!isset($protectedKeys[$k])){
+						if(is_array($v) && isset($v['label']) && isset($v['value']) && !isset($protectedKeys[$k]) ){
+							//if($i==0){
+							//	$email['plaintext']['customer_details'] .=PHP_EOL;/*add one empty line for readabilities sake*/
+							//}
+							$strPartLeft=''.$v['label'].'';
+							$spaces=45-strlen($strPartLeft);
+							$strPartRight=''.wp_kses($v['value'],array());
 
-					$customer_details.=''.$strPartLeft.''.str_pad($strPartRight,$spaces," ",STR_PAD_LEFT).''.PHP_EOL;
+							$email['plaintext']['customer_details'].=''.$strPartLeft.''.str_pad($strPartRight,$spaces," ",STR_PAD_LEFT).''.PHP_EOL;
 
-					/**html emails**/
-					/**stick into array for use in html emails**/
-					if($this->pluginOptions['plugin_data']['mail_type']=='phpmailer'){
-						$customer_details_array[]=array('label'=>wppizza_email_decode_entities($v['label'],$this->blogCharset),'value'=>wppizza_email_decode_entities($strPartRight,$this->blogCharset));
+							/**html emails**/
+							/**stick into array for use in html emails**/
+							if($this->pluginOptions['plugin_data']['mail_type']=='phpmailer'){
+								$email['html']['customer_details'][]=array('label'=>wppizza_email_decode_entities($v['label'],$this->blogCharset),'value'=>wppizza_email_decode_entities($strPartRight,$this->blogCharset));
+							}
+						$i++;
+						}
 					}
-				$i++;
 				}
-			}
+				/*****************************************************************************************
+				*
+				*
+				*	[order details]
+				*
+				*
+				****************************************************************************************/
+				$oDetails=maybe_unserialize($res->order_ini);
+				$email['plaintext']['order']=PHP_EOL."===========".$this->pluginOptions['localization']['order_details']['lbl']."============".PHP_EOL.PHP_EOL;
+				$email['plaintext']['order'].=$this->orderTimestamp."".PHP_EOL;
+				$email['plaintext']['order'].="".$this->pluginOptions['localization']['order_paid_by']['lbl']." ".$res->initiator." (".$res->transaction_id.") ".PHP_EOL;
+				$email['plaintext']['order'].=PHP_EOL.PHP_EOL;
 
-			/*****************************************************************************************
-				order details
-			****************************************************************************************/
-			$order=PHP_EOL."==============".$this->pluginOptions['localization']['order_details']['lbl']."=========================".PHP_EOL;
-			$order.=PHP_EOL.$this->orderTimestamp."".PHP_EOL.PHP_EOL;
-			$order_items =array();
-			$order_summary =array();
-
-			foreach($cartContents['items'] as $k=>$v){
-				/*tabs dont seem to work reliably, so lets try to put some even space between order item and total**/
-				$strPartLeft=''.$v['count'].'x '.$v['name'].' '.$v['size'].'  '.$currency.' '.wppizza_output_format_price(wppizza_output_format_float($v['price']),$this->pluginOptions['layout']['hide_decimals']).'';
-				$spaces=55-strlen($strPartLeft);
-				$strPartRight=''.$currency.' '.wppizza_output_format_price(wppizza_output_format_float($v['pricetotal']),$this->pluginOptions['layout']['hide_decimals']).'';
-				$order.=''.$strPartLeft.''.str_pad($strPartRight,$spaces," ",STR_PAD_LEFT).''.PHP_EOL;
-				if(isset($v['additionalinfo']) && is_array($v['additionalinfo'])){
+				foreach($oDetails['item'] as $k=>$v){
+					/*tabs dont seem to work reliably, so lets try to put some even space between order item and total**/
+					$strPartLeft=''.$v['quantity'].'x '.$v['name'].' '.$v['size'].'  '.$oDetails['currency'].' '.wppizza_output_format_price(wppizza_output_format_float($v['price']),$this->pluginOptions['layout']['hide_decimals']).'';
+					$spaces=55-strlen($strPartLeft);
+					$strPartRight=''.$oDetails['currency'].' '.wppizza_output_format_price(wppizza_output_format_float($v['pricetotal']),$this->pluginOptions['layout']['hide_decimals']).'';
+					$email['plaintext']['order'].=''.$strPartLeft.''.str_pad($strPartRight,$spaces," ",STR_PAD_LEFT).''.PHP_EOL;
+					
 					$addInfo=array();
-					foreach($v['additionalinfo'] as $additionalInfo){
-						$addInfo[]=''.$additionalInfo.'';
+					/*if its a (non empty) array**/
+					if(isset($v['additionalInfo']) && is_array($v['additionalInfo']) && count($v['additionalInfo'])>0){
+						foreach($v['additionalInfo'] as $additionalInfo){
+							$addInfo[]=''.$additionalInfo.'';
+						}
 					}
-					$order.="   ".implode(", ",$addInfo);
-					$order.=PHP_EOL.PHP_EOL;
+					/*if its a (non empty) string**/
+					if(isset($v['additionalInfo']) && !is_array($v['additionalInfo']) && $v['additionalInfo']!=''){
+						$addInfo[]=''.$v['additionalInfo'].'';
+					}
+					
+					/**append additional info to item if set**/
+					if(count($addInfo)>0){
+						$email['plaintext']['order'].="   ".implode(", ",$addInfo);
+						$email['plaintext']['order'].=PHP_EOL.PHP_EOL;
+					}
+					/**html emails**/
+					if($this->pluginOptions['plugin_data']['mail_type']=='phpmailer'){
+						if(count($addInfo)>0){
+							$addInfoHtml=wppizza_email_html_entities(implode(", ",$addInfo));
+						}else{
+							$addInfoHtml='';
+						}
+						$email['html']['order_items'][]=array('label'=>wppizza_email_html_entities($strPartLeft),'value'=>wppizza_email_html_entities($strPartRight),'additional_info'=>$addInfoHtml);
+					}
+
 				}
+				$email['plaintext']['order'].=PHP_EOL.PHP_EOL;
+				$email['plaintext']['order'].=''.$pOptions['localization']['order_items']['lbl'].': '.$oDetails['currency'].' '.$oDetails['total_price_items'].PHP_EOL;
+
 				/**html emails**/
 				if($this->pluginOptions['plugin_data']['mail_type']=='phpmailer'){
-					if(isset($v['additionalinfo']) && is_array($v['additionalinfo'])){
-						$addInfoHtml=wppizza_email_html_entities(implode(", ",$addInfo));
+					$email['html']['order_summary']['cartitems']=array('label'=>wppizza_email_html_entities($pOptions['localization']['order_items']['lbl']),'price'=>$oDetails['total_price_items'],'currency'=>$oDetails['currency'] );
+				}
+
+				if($oDetails['discount']>0){
+					$email['plaintext']['order'].=''.$pOptions['localization']['discount']['lbl'].': - '.$oDetails['currency'].' '.($oDetails['discount']).PHP_EOL;
+					/**html emails**/
+					if($this->pluginOptions['plugin_data']['mail_type']=='phpmailer'){
+						$email['html']['order_summary']['discount']=array('label'=>wppizza_email_html_entities($pOptions['localization']['discount']['lbl']),'price'=>$oDetails['discount'],'currency'=>$oDetails['currency'] );
+					}
+				}
+				/**********************************************************
+				*
+				*	[item tax]
+				*
+				**********************************************************/
+				if($oDetails['item_tax']>0){
+					$email['plaintext']['order'].=$pOptions['localization']['item_tax_total']['lbl'].': '.$oDetails['currency'].' '.($oDetails['item_tax']).PHP_EOL;
+						/**html emails**/
+						if($this->pluginOptions['plugin_data']['mail_type']=='phpmailer'){
+							$email['html']['order_summary']['item_tax']=array('label'=>wppizza_email_html_entities($pOptions['localization']['item_tax_total']['lbl']),'price'=>$oDetails['item_tax'],'currency'=>$oDetails['currency'] );
+						}
+				}
+				/**********************************************************
+				*
+				*	[delivery charges - no self pickup enabled or selected]
+				*
+				**********************************************************/
+				if(!isset($oDetails['selfPickup']) || $oDetails['selfPickup']==0){
+					if($oDetails['delivery_charges']!=''){
+						$email['plaintext']['order'].=$pOptions['localization']['delivery_charges']['lbl'].': '.$oDetails['currency'].' '.($oDetails['delivery_charges']).PHP_EOL;
+						/**html emails**/
+						if($this->pluginOptions['plugin_data']['mail_type']=='phpmailer'){
+							$email['html']['order_summary']['delivery']=array('label'=>wppizza_email_html_entities($pOptions['localization']['delivery_charges']['lbl']),'price'=>$oDetails['delivery_charges'],'currency'=>$oDetails['currency'] );
+						}
 					}else{
-						$addInfoHtml='';
+						$email['plaintext']['order'].=$pOptions['localization']['free_delivery']['lbl'].PHP_EOL;
+						/**html emails**/
+						if($this->pluginOptions['plugin_data']['mail_type']=='phpmailer'){
+							$email['html']['order_summary']['delivery']=array('label'=>wppizza_email_html_entities($pOptions['localization']['free_delivery']['lbl']),'price'=>'','currency'=>'' );
+						}
 					}
-					$order_items[]=array('label'=>wppizza_email_html_entities($strPartLeft),'value'=>wppizza_email_html_entities($strPartRight),'additional_info'=>$addInfoHtml);
 				}
-
-			}
-			$order.=PHP_EOL.PHP_EOL;
-			$order.=''.$cartContents['order_value']['total_price_items']['lbl'].': '.$currency.' '.($cartContents['order_value']['total_price_items']['val']).PHP_EOL;
-
-			/**html emails**/
-			if($this->pluginOptions['plugin_data']['mail_type']=='phpmailer'){
-				$order_summary['cartitems']=array('label'=>wppizza_email_html_entities($cartContents['order_value']['total_price_items']['lbl']),'price'=>$cartContents['order_value']['total_price_items']['val'],'currency'=>$currency );
-			}
-
-			if($cartContents['order_value']['discount']['val']>0){
-				$order.=''.$cartContents['order_value']['discount']['lbl'].': - '.$currency.' '.($cartContents['order_value']['discount']['val']).PHP_EOL;
+				/**********************************************************
+					[order total]
+				**********************************************************/
+				$email['plaintext']['order'].=PHP_EOL;
+				$email['plaintext']['order'].=$pOptions['localization']['order_total']['lbl'].': '.$oDetails['currency'].' '.($oDetails['total']).PHP_EOL;
 				/**html emails**/
 				if($this->pluginOptions['plugin_data']['mail_type']=='phpmailer'){
-					$order_summary['discount']=array('label'=>wppizza_email_html_entities($cartContents['order_value']['discount']['lbl']),'price'=>$cartContents['order_value']['discount']['val'],'currency'=>$currency );
+					$email['html']['order_summary']['total']=array('label'=>wppizza_email_html_entities($pOptions['localization']['order_total']['lbl']),'price'=>$oDetails['total'],'currency'=>$oDetails['currency'] );
 				}
-			}
+				$email['plaintext']['order'].=PHP_EOL;
 
-			/**********************************************************
-				[item tax]
-			**********************************************************/
-			if($cartContents['order_value']['item_tax']['val']>0){
-				$order.=$cartContents['order_value']['item_tax']['lbl'].': '.$currency.' '.($cartContents['order_value']['item_tax']['val']).PHP_EOL;
+				/****************************************************
+					[self pickup - enabled and selected]
+				****************************************************/
+				if(isset($oDetails['selfPickup']) && $oDetails['selfPickup']==1){
+					$email['plaintext']['order'].=PHP_EOL.wordwrap(strip_tags($pOptions['localization']['order_page_self_pickup']['lbl']), 72, "\n", true).PHP_EOL;
 					/**html emails**/
 					if($this->pluginOptions['plugin_data']['mail_type']=='phpmailer'){
-						$order_summary['item_tax']=array('label'=>wppizza_email_html_entities($cartContents['order_value']['item_tax']['lbl']),'price'=>$cartContents['order_value']['item_tax']['val'],'currency'=>$currency );
-					}
-			}
-
-			/**********************************************************
-				[delivery charges - no self pickup enabled or selected]
-			**********************************************************/
-			if(!isset($cartContents['selfPickup']) || $cartContents['selfPickup']==0){
-				if($cartContents['order_value']['delivery_charges']['val']!=''){
-					$order.=$cartContents['order_value']['delivery_charges']['lbl'].': '.$currency.' '.($cartContents['order_value']['delivery_charges']['val']).PHP_EOL;
-					/**html emails**/
-					if($this->pluginOptions['plugin_data']['mail_type']=='phpmailer'){
-						$order_summary['delivery']=array('label'=>wppizza_email_html_entities($cartContents['order_value']['delivery_charges']['lbl']),'price'=>$cartContents['order_value']['delivery_charges']['val'],'currency'=>$currency );
-					}
-				}else{
-					$order.=$cartContents['order_value']['delivery_charges']['lbl'].PHP_EOL;
-					/**html emails**/
-					if($this->pluginOptions['plugin_data']['mail_type']=='phpmailer'){
-						$order_summary['delivery']=array('label'=>wppizza_email_html_entities($cartContents['order_value']['delivery_charges']['lbl']),'price'=>'','currency'=>'' );
+						$email['html']['order_summary']['self_pickup']=array('label'=>wppizza_email_html_entities($pOptions['localization']['order_page_self_pickup']['lbl']),'price'=>'','currency'=>'' );
 					}
 				}
+
+				$email['plaintext']['order'].=PHP_EOL."====================================================".PHP_EOL;
+				$email['plaintext']['order'].=PHP_EOL."".$pOptions['localization']['order_email_footer']['lbl']."".PHP_EOL;
+
+				/**now decode any funny entities**/
+				$email['plaintext']['order']=wppizza_email_decode_entities($email['plaintext']['order'],$this->blogCharset);
+
+				/***********************************************************************************************
+				*
+				*
+				*	[now lets set the relevant class vars]
+				*
+				*
+				***********************************************************************************************/
+
+					/**********************************************
+						[all db vals - maybe useful at some point in the future]
+					************************************************/
+					$this->orderResults=$res;
+					/***********************************************
+						[set currency etc]
+					************************************************/
+					$this->orderCurrency=$oDetails['currency'];
+					$this->orderTransactionId=$res->transaction_id;
+					$this->orderGatewayUsed=$res->initiator;
+					/***********************************************
+						[set plaintext emails]
+					************************************************/
+					$this->orderMessage['plaintext']="".PHP_EOL.PHP_EOL.$email['plaintext']['customer_details'].PHP_EOL.$email['plaintext']['order'].PHP_EOL ;
+					/***********************************************
+						[set html emails if set ]
+					************************************************/
+					$this->orderMessage['html']=$email['html'];
+
+					/***********************************************
+						[customer and order details to be saved in db and displayed in history]
+					************************************************/
+					$this->customerDetails=$email['plaintext']['customer_details'];
+					$this->orderDetails=$email['plaintext']['order'];
+					/***********************************************************
+						[set name and email of the the person that is ordering]
+					***********************************************************/
+					$recipientName =!empty($cDetails['cname']) ? wppizza_validate_string($cDetails['cname']) : '';
+					$fromEmails=!empty($cDetails['cemail']) ? wppizza_validate_email_array($cDetails['cemail']) : '';
+					$this->orderClientName=$recipientName;
+					$this->orderClientEmail=$fromEmails[0];
+
+					/***********************************************
+						[overwrite subject vars for email subject]
+					************************************************/
+					if (file_exists( get_template_directory() . '/wppizza-order-email-subject.php')){
+						/**copy to template directory to keep settings**/
+						include(get_template_directory() . '/wppizza-order-email-subject.php');
+					}else{
+						include(WPPIZZA_PATH.'templates/wppizza-order-email-subject.php');
+					}
 			}
-
-			/**********************************************************
-				[order total]
-			**********************************************************/
-			$order.=PHP_EOL;
-			$order.=$cartContents['order_value']['total']['lbl'].': '.$currency.' '.($cartContents['order_value']['total']['val']).PHP_EOL;
-			/**html emails**/
-			if($this->pluginOptions['plugin_data']['mail_type']=='phpmailer'){
-				$order_summary['total']=array('label'=>wppizza_email_html_entities($cartContents['order_value']['total']['lbl']),'price'=>$cartContents['order_value']['total']['val'],'currency'=>$currency );
-			}
-			$order.=PHP_EOL;
-
-
-			/****************************************************
-				[self pickup - enabled and selected]
-			****************************************************/
-			if(isset($cartContents['selfPickup']) && $cartContents['selfPickup']==1){
-				$order.=PHP_EOL.wordwrap(strip_tags($cartContents['order_page_self_pickup']), 72, "\n", true).PHP_EOL;
-				/**html emails**/
-				if($this->pluginOptions['plugin_data']['mail_type']=='phpmailer'){
-					$order_summary['self_pickup']=array('label'=>wppizza_email_html_entities($cartContents['order_page_self_pickup']),'price'=>'','currency'=>'' );
-				}
-			}
-
-
-			$order.=PHP_EOL."====================================================".PHP_EOL;
-
-			/**now decode any funny entities**/
-			$order=wppizza_email_decode_entities($order,$this->blogCharset);
-
-
-			$email['plaintext']="".$customer_details.PHP_EOL.$order.PHP_EOL ;
-			$email['customer_details']=$customer_details;
-			$email['order_details']=$order;
-
-			$email['html']['customer_details']=$customer_details_array;
-			$email['html']['order_items']=$order_items;
-			$email['html']['order_summary']=$order_summary;
-			$email['currency']=$currency;
-
-			return $email;
+			return;
 		}
 
 		/*****************************************************************************************************************************
@@ -264,7 +339,11 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 		*	[if false, will return error message and var[mailer] to indicate which function was used]
 		*
 		*****************************************************************************************************************************/
-		function wppizza_order_send_email(){
+		function wppizza_order_send_email($orderid=false){
+
+			/***create/set email html and plaintext strings***/
+			$this->wppizza_order_email($orderid);
+
 			$phpVersion=phpversion();
 
 			/**send order using mail**/
@@ -338,23 +417,37 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 				*	we create some static vars here which
 				*	also makes it a bit easier/obvious to edit the template
 				***********************************************************************/
-				$nowdate=$this->orderTimestamp;
-
 				$mail = new PHPMailer(true);
 				/**to be used in html template**/
+				$nowdate=$this->orderTimestamp;
+				$transactionId=$this->orderTransactionId;
+				$gatewayUsed=$this->orderGatewayUsed;
 				$customer_details_array=$this->orderMessage['html']['customer_details'];
 				$order_items=$this->orderMessage['html']['order_items'];
 				$order_summary=$this->orderMessage['html']['order_summary'];
-				$order_summary=$this->orderMessage['html']['order_summary'];
-				$currency=$this->orderMessage['currency'];
+				$currency=$this->orderCurrency;
+				/***get localization vars**/
+				foreach($options['localization'] as $k=>$v){
+					$orderLabel[$k]=$v['lbl'];	
+					
+				}
 
 				/*return $orderHtml*/
 				$orderHtml='';
+				/*for legacy reasons, someone might use an old template in their theme directory***/
 				if (file_exists( get_template_directory() . '/wppizza-order-html-email.php')){
 					require_once(get_template_directory_uri().'/wppizza-order-html-email.php');
-				}else{
-					require_once(WPPIZZA_PATH.'templates/wppizza-order-html-email.php');
 				}
+				elseif(file_exists( get_template_directory() . '/wppizza-order-email-html.php')){
+					ob_start();
+					require_once(get_template_directory_uri().'/wppizza-order-email-html.php');
+					$orderHtml = ob_get_clean();
+				}else{
+					ob_start();
+					require_once(WPPIZZA_PATH.'templates/wppizza-order-email-html.php');
+					$orderHtml = ob_get_clean();
+				}
+				/**set phpmailer settings**/
 				if (file_exists( get_template_directory() . '/wppizza-phpmailer-settings.php')){
 					require_once(get_template_directory_uri().'/wppizza-phpmailer-settings.php');
 				}else{
@@ -399,7 +492,7 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 			/*if we are only passing the id, try and get the order from the db first**/
 			if(!is_object($res) && is_numeric($res)){
 				global $wpdb;
-				$res = $wpdb->get_row("SELECT id,transaction_id,order_ini,customer_ini FROM ".$wpdb->prefix . $this->pluginOrderTable." WHERE id='".$res."' ");
+				$res = $wpdb->get_row("SELECT id,transaction_id,order_ini,customer_ini,initiator FROM ".$wpdb->prefix . $this->pluginOrderTable." WHERE id='".$res."' ");
 			}
 
 			$thisOrderTransactionId=$res->transaction_id;
@@ -411,6 +504,8 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 			/*transaction id*/
 			$order['transaction_id']=$thisOrderTransactionId;
 			$order['transaction_date_time']="".date_i18n(get_option('date_format'),$thisOrderDetails['time'])." ".date_i18n(get_option('time_format'),$thisOrderDetails['time'])."";
+			/**paid by**/
+			$order['gatewayUsed']=$res->initiator;
 
 			/*order globals*/
 			$order['currency']=$thisOrderDetails['currency'];
@@ -428,14 +523,28 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 			$summary['selfPickup']=$thisOrderDetails['selfPickup'];
 			$summary['total']=$thisOrderDetails['total'];
 
-			/*customer details*/
-			//print_r($thisCustomerDetails);
-			$customer=$thisCustomerDetails;
+			/**customer details**/
+			$customer=array();
 			$customerlbl=array();
+			$protectedKeys=array();
 			foreach($this->pluginOptions['order_form'] as $k=>$v){
-				$customerlbl[$v['key']]=$v['lbl'];
+				$protectedKeys[$v['key']]=$v;
 			}
-
+			foreach($thisCustomerDetails as $k=>$v){
+				/*****default input fields of this plugin*****/
+				if(isset($protectedKeys[$k])){
+					$customerlbl[$k]=$protectedKeys[$k]['lbl'];
+					if($protectedKeys[$k]['type']!='textarea'){
+						$customer[$k]=$v;
+					}else{
+						$customer[$k]='<div class="wppizza-order-textarea">'.nl2br($v).'</div>';
+					}
+				}
+				if(!isset($protectedKeys[$k]) && is_array($v) && isset($v['label']) && isset($v['value'])){
+					$customer[''.$v['label'].'']=$v['value'];
+					$customerlbl[''.$v['label'].'']=$v['label'];
+				}
+			}
 			$orderlbl=array();
 			foreach($this->pluginOptions['localization'] as $k=>$v){
 				$orderlbl[$k]=$v['lbl'];

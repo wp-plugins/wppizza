@@ -126,7 +126,10 @@
 #wppizza-cart-contents.wppizza-cart-thankyou{padding:0;margin:15px auto;width:95%;border:none;}/*if displaying order on thank you page*/
 #wppizza-transaction-head{font-weight:bold;border-bottom:1px dotted #CECECE;}
 #wppizza-transaction-time{font-size:90%}/*if displaying order on thank you page*/
-#wppizza-transaction-id{}/*if displaying order on thank you page*/
+#wppizza-transaction-id{float:right;font-size:80%;font-weight:normal}/*if displaying order on thank you page*/
+.wppizza-cart-thankyou .wppizza-order-textarea{margin-left:20px}/*any textarea displayed in order on thank you page*/
+
+
 
 .wppizza-item-additionalinfo{padding-left:15px;padding-bottom:5px;font-size:90%}/*[additional info for ordered items on "order page" and "thank you" page (if enabled)]*/
 .wppizza-item-additionalinfo:before{content:'+ ';}/*[additional info for ordered items on "order page" and "thank you" page (if enabled)]*/

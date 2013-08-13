@@ -415,7 +415,7 @@ $options = $this->pluginOptions;
 					echo"</div>";
 					echo"<div id='wppizza_".$field."_orders'></div>";
 				
-
+				if (current_user_can('manage_options')){
 					echo"<div id='wppizza_".$field."_clear'>"; 
 						echo" <b>".__('Delete abandoned/cancelled orders from database older than', $this->pluginLocale)."</b> ";
 						echo"<input id='wppizza_order_days_delete' type='text' size='2' value='7' />";
@@ -426,7 +426,7 @@ $options = $this->pluginOptions;
 						echo"<br/>".__('As soon as cutomers go to the order page an order will be initialized and stored in the db to be checked against when going through with the purchase to make sure nothing has been tampered with. However, not every customer will actually go through with the purchase which leaves this initialised order orphaned in the db.Click the "ok" button to clean your db of these entries (it will NOT affect any completed or pending orders)', $this->pluginLocale)."";
 						echo"<br/><span style='color:red'>".__('Note: This will delete these entries PERMANENTLY from the db and is not reversable.', $this->pluginLocale)."</style>";
 					echo"</div>";				
-				
+				}
 				echo"</div>";
 				
 			}

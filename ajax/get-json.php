@@ -122,24 +122,10 @@ if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='sendorder'){
 		$orderStatus=$order->payment_status;
 	}
 
-
-	/***********************************************************
-		[set name and email of the the person that is ordering]
-	***********************************************************/
-	$recipientName =wppizza_validate_string($params['cname']);
-	$fromEmails=wppizza_validate_email_array($params['cemail']);
-
 	/********************************************
 		[new send order email class]
 	********************************************/
 	$sendEmail=new WPPIZZA_SEND_ORDER_EMAILS;
-	/** set email and name of the person that is ordering*/
-	$sendEmail->orderClientName=$recipientName;
-	$sendEmail->orderClientEmail=$fromEmails[0];
-	/***get/set posted variables****/
-	$sendEmail->orderPostVars=$params;
-	/***create html and plaintext emails ****/
-	$sendEmail->orderMessage=$sendEmail->wppizza_order_construct_email();
 
 	/************************************************************
 	*	[provided we have a valid order id AND its set
@@ -155,22 +141,34 @@ if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='sendorder'){
 	$mailResults['mailer']='Error'; /**just so we dont have an abandoned colon**/
 	if($orderId){
 		if($orderStatus=='INITIALIZED'){
+			
+			/**update the db**/
+			$now=time();
+			$thisOrderTransactionId='COD'.$now.$orderId.'';
+		
+			$wpdb->query("UPDATE ".$wpdb->prefix . $this->pluginOrderTable." SET
+			transaction_id='".$thisOrderTransactionId."',
+			customer_ini='".wppizza_sanitize_post_vars($params)."' 
+			WHERE id='".$orderId."' ");			
+
+
+			/**send the email***/
+			$mailResults=$sendEmail->wppizza_order_send_email($orderId);
+
+			/**update again to see if mail was sent successfully**/
 			$updateDb=true;
-			$mailResults=$sendEmail->wppizza_order_send_email();
+			
 		}else{
 			$mailResults['error']=__('This order has already been processed',$this->pluginLocale);
 		}
 	}
 	/***update order******/
 	if(isset($updateDb)){
-		$now=time();
-		$thisOrderTransactionId='COD'.$now.$orderId.'';
-		$orderDetails=$sendEmail->orderMessage;
 		if($mailResults['status']){
 			$mailSent='Y';
 			$mailError='';
 			$paymentStatus='COMPLETED';
-			$transactionDetails=''.serialize($orderDetails).'';
+			$transactionDetails=__('SUCCESS',$this->pluginLocale);
 		}else{
 			$mailSent='N';
 			$mailError=serialize($mailResults['error']);
@@ -179,15 +177,12 @@ if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='sendorder'){
 		}
 		/*update order**/
 		$wpdb->query("UPDATE ".$wpdb->prefix . $this->pluginOrderTable." SET
-		transaction_id='".$thisOrderTransactionId."',
 		transaction_details='".$transactionDetails."',
-		customer_details='".$orderDetails['customer_details']."',
-		order_details='".$orderDetails['order_details']."',
-		customer_ini='".serialize($params)."',
-		mail_construct='".serialize($sendEmail->orderMessage)."',
 		payment_status='".$paymentStatus."',
+		customer_details='".$sendEmail->customerDetails."',
+		order_details='".$sendEmail->orderDetails."',			
 		mail_sent='".$mailSent."',
-		mail_error='".$mailError."'
+		mail_error='".$mailError."' 
 		WHERE id='".$orderId."' ");
 	}
 

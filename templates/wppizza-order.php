@@ -81,26 +81,32 @@ get_currentuserinfo();
 	<?php if(count($cart['items'])>0){/*make sure there's stuff to order***/?>
 	<fieldset>
 		<legend><?php echo $txt['order_form_legend']['lbl'] ?></legend>
-		<?php foreach($formelements as $elm){if($elm['enabled']){?>
-			<label for="<?php echo $elm['key'] ?>"><?php echo $elm['lbl'] ?><?php echo !empty($elm['required'])?'*':'' ?></label>
-			<?php if($elm['type']=='text'){ ?>
-				<input id="<?php echo $elm['key'] ?>" name="<?php echo $elm['key'] ?>" type="text" value="<?php echo $elm['key']=='cname' ? $current_user->user_firstname : '' /*NEW IN VERSION 2.0*/ ?> <?php echo $elm['key']=='cname' ? $current_user->user_lastname : '' /*NEW IN VERSION 2.0*/ ?>" <?php echo !empty($elm['required'])?'required':'' ?>/>
+		<?php foreach($formelements as $elmKey=>$elm){?>
+		<?php
+			/*NEW IN VERSION 2.4 */
+			do_action('wppizza_order_before_field_'.$elmKey.'');
+		?>			
+			<?php if($elm['enabled']){?>
+				<label for="<?php echo $elm['key'] ?>"><?php echo $elm['lbl'] ?><?php echo !empty($elm['required'])?'*':'' ?></label>
+				<?php if($elm['type']=='text'){ ?>
+					<input id="<?php echo $elm['key'] ?>" name="<?php echo $elm['key'] ?>" type="text" value="<?php echo $elm['key']=='cname' ? $current_user->user_firstname : '' /*NEW IN VERSION 2.0*/ ?> <?php echo $elm['key']=='cname' ? $current_user->user_lastname : '' /*NEW IN VERSION 2.0*/ ?>" <?php echo !empty($elm['required'])?'required':'' ?>/>
+				<?php } ?>
+				<?php if($elm['type']=='email'){?>
+					<input id="<?php echo $elm['key'] ?>" name="<?php echo $elm['key'] ?>" type="email" value="<?php echo $current_user->user_email /*NEW IN VERSION 2.0*/ ?>" <?php echo !empty($elm['required'])?'required':'' ?>/>
+				<?php } ?>
+				<?php if($elm['type']=='textarea'){?>
+					<textarea id="<?php echo $elm['key'] ?>" name="<?php echo $elm['key'] ?>" <?php echo !empty($elm['required'])?'required':'' ?>></textarea>
+				<?php } ?>
+				<?php if($elm['type']=='select'){?>
+					<select id="<?php echo $elm['key'] ?>" name="<?php echo $elm['key'] ?>" <?php echo !empty($elm['required'])?'required':'' ?>>
+						<option value="">--------</option>
+						<?php foreach($elm['value'] as $a=>$b){?>
+						<option value="<?php echo wppizza_validate_string($b) ?>"><?php echo $b ?></option>
+						<?php } ?>
+					</select>
+				<?php } ?>
 			<?php } ?>
-			<?php if($elm['type']=='email'){?>
-				<input id="<?php echo $elm['key'] ?>" name="<?php echo $elm['key'] ?>" type="email" value="<?php echo $current_user->user_email /*NEW IN VERSION 2.0*/ ?>" <?php echo !empty($elm['required'])?'required':'' ?>/>
-			<?php } ?>
-			<?php if($elm['type']=='textarea'){?>
-				<textarea id="<?php echo $elm['key'] ?>" name="<?php echo $elm['key'] ?>" <?php echo !empty($elm['required'])?'required':'' ?>></textarea>
-			<?php } ?>
-			<?php if($elm['type']=='select'){?>
-				<select id="<?php echo $elm['key'] ?>" name="<?php echo $elm['key'] ?>" <?php echo !empty($elm['required'])?'required':'' ?>>
-					<option value="">--------</option>
-					<?php foreach($elm['value'] as $a=>$b){?>
-					<option value="<?php echo wppizza_validate_string($b) ?>"><?php echo $b ?></option>
-					<?php } ?>
-				</select>
-			<?php } ?>
-		<?php }}?>
+		<?php } ?>
 		<?php
 			/*NEW IN VERSION 2.0 => FOR FUTURE USE*/
 			do_action('wppizza_gateway_choice_before');

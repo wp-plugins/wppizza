@@ -489,7 +489,14 @@
 					'descr'=>__('Order Email: label for order details', $this->pluginLocale),
 					'lbl'=>__('order details', $this->pluginLocale)
 				),
-
+				'order_paid_by'=>array(
+					'descr'=>__('Order Email: label to identify how the order was paid for', $this->pluginLocale),
+					'lbl'=>__('Paid By:', $this->pluginLocale)
+				),
+				'order_email_footer'=>array(
+					'descr'=>__('Order Email: Text you would like to display at the end of emails after everything else.', $this->pluginLocale),
+					'lbl'=>''
+				),					
 				'spend'=>array(
 					'descr'=>__('Label Discount (Spend): i.e "spend" 50.00 save 10.00', $this->pluginLocale),
 					'lbl'=>__('spend', $this->pluginLocale)

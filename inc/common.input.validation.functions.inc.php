@@ -153,6 +153,19 @@
 	   }
 	   return $isValid;
 	}
+
+/*****************************************************
+* sanitize all costomer order page post vars
+* returns serialized value no html etc
+******************************************************/
+	function wppizza_sanitize_post_vars($array) {
+		$saneArray=array();
+		foreach($array as $k=>$v){
+			$saneArray[wp_kses($k,array())]=wp_kses($v,array());
+		}	
+		return serialize($saneArray);
+	}
+
 /*****************************************************
 * validate and convert characters in string  using internal wordpress functions
 * @str the string to check, @htmlAllowed  whether or not html should be stripped

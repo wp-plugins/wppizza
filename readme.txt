@@ -3,10 +3,10 @@ Contributors: ollybach
 Donate link: http://www.wp-pizza.com/
 Author URI: http://www.wp-pizza.com
 Plugin URI: http://wordpress.org/extend/plugins/wppizza/
-Tags: pizza, restaurant, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
+Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.2, WP 3.3 
-Tested up to: 3.5.2
-Stable tag: 2.3.2
+Tested up to: 3.6
+Stable tag: 2.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -32,6 +32,8 @@ A Restaurant Plugin (not only for Pizza). Maintain your Menu (multiple sizes, pr
 **To see the plugin in action with different themes try it at <a href="http://www.wp-pizza.com/">www.wp-pizza.com</a>**
 
 **if you wish to allow your customers to add additional ingredients to any given menu item, have a look at the premium <a href='http://www.wp-pizza.com/'>"WPPizza Add Ingredients"</a> extension**
+
+**gateways available to process credit card payments  instead of just cash on delivery at <a href='http://www.wp-pizza.com/'>www.wp-pizza.com</a>** 
 
 == Installation ==
 
@@ -93,7 +95,9 @@ the same goes for the 3 example icons that come with this plugin as you might ha
 
 == Upgrade Notice ==
 
-N/A
+Please update to version 2.4+ as there were some possible security flaws in previous versions  
+
+
 
 == Screenshots ==
 
@@ -113,16 +117,30 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 == Changelog ==
 
-2.3.2
+2.4  
+* changed email handling to make it more consistant and easier to use in gateways   
+* added transaction id's as well as gateway that was used to emails being sent (html and plaintext)  
+* added localization variable/text to be displayed in footer of emails (if set)  
+* changed email html templates to use ob_start instead of variables (although old customised templates will still work)  
+* added a bit more information to wppizza-order-email-subject template  
+* formatted submitted textarea fields more appropriatly for html email template   
+* added action to each form field in order page  
+* allow editor role to see order history and edit status (but not delete any order, that can only be done by admin role)  
+* BUGFIX added minus sign to discount in cart when item has been added via ajax  
+* SECURITY FIX regarding post variables    
+* SECURITY FIX which might have allowed (with a lot of effort mind you and only if logged in) to change SOME variables of the plugin without having sufficient privileges   
+13th Aug 2013  
+
+2.3.2  
 * added polling interval to order history  
 * eliminated some php notices that might occur in some rare circumstances  
 6th Aug 2013  
 
 
-2.3.1.2
+2.3.1.2  
 * made error when committing 2.3.1.1. no other changes made  
 
-2.3.1.1
+2.3.1.1  
 * set multisite checkbox as being selected by default as chances are every site in the network has different settings/belong to a different restaurant   
 
 

@@ -24,8 +24,8 @@
 <div id="wppizza-cart-contents" class="wppizza-cart-thankyou">
 
 <?php	/**header with time and transaction id**/ ?>
-	<div id="wppizza-transaction-head"><?php echo $orderlbl['your_order'] ?> - <span id="wppizza-transaction-id">[<?php echo $order['transaction_id'] ?>]</span><?php do_action('wppizza_show_order_head');/*do something*/ ?></div>
-	<div id="wppizza-transaction-time"><?php echo $order['transaction_date_time'] ?><br/><br/></div>
+	<div id="wppizza-transaction-head"><?php echo $orderlbl['your_order'] ?>  <span id="wppizza-transaction-id"><?php echo $orderlbl['order_paid_by'] ?> <?php echo $order['gatewayUsed']; ?> [<?php echo $order['transaction_id'] ?>]</span><?php do_action('wppizza_show_order_head');/*do something*/ ?></div>
+	<div id="wppizza-transaction-time"><?php echo $order['transaction_date_time'] ?> <br/><br/></div>
 
 
 

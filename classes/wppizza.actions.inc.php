@@ -314,9 +314,9 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 ************************************************************************************************/
 public function register_admin_menu_pages() {
 	// Check if user hass access to the plugin settings
-	if (current_user_can('administrator')){
+//	if (current_user_can('administrator')){
 		require_once(WPPIZZA_PATH .'inc/admin.echo.register.submenu.pages.inc.php');
-	}
+//	}
 }
 function wppizza_admin_pages_init(){
 	require_once(WPPIZZA_PATH .'inc/admin.echo.settings.sections.inc.php');

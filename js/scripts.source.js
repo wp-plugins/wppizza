@@ -28,7 +28,7 @@ jQuery(document).ready(function($){
 
 					/*addcurrency if discount applies**/
 					if(response.order_value.discount.val!=''){
-						$('.wppizza-cart-discount-value').html(response.currency+' '+response.order_value.discount.val);
+						$('.wppizza-cart-discount-value').html('<span class="wppizza-minus"></span>'+response.currency+' '+response.order_value.discount.val);
 					}else{
 						$('.wppizza-cart-discount-value').html(response.order_value.discount.val);
 					}
