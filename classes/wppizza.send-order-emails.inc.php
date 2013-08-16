@@ -11,9 +11,9 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 			/**blog charset*/
 			$this->blogCharset=get_bloginfo('charset');
 			/**timestamp the order*/
-			$currentTime= current_time('timestamp');
+			$this->currentTime= current_time('timestamp');
 			//$this->orderTimestamp =date("d-M-Y H:i:s", current_time('timestamp'));
-			$this->orderTimestamp ="".date_i18n(get_option('date_format'),$currentTime)." ".date_i18n(get_option('time_format'),$currentTime)."";
+			$this->orderTimestamp ="".date_i18n(get_option('date_format'),$this->currentTime)." ".date_i18n(get_option('time_format'),$this->currentTime)."";			
 
 			/**set shop name and email*/
 			$this->orderShopName 	='';
@@ -327,6 +327,15 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 					}else{
 						include(WPPIZZA_PATH.'templates/wppizza-order-email-subject.php');
 					}
+					
+					/**update db entry with the current time timestamp of when the order was actually send**/
+					$orderDate=date('Y-m-d H:i:s',$this->currentTime);
+					$order_ini=$oDetails;
+					$order_ini['time']=$this->currentTime;
+					
+					$wpdb->query("UPDATE ".$wpdb->prefix . $this->pluginOrderTable." SET order_date='".$orderDate."',order_ini='".serialize($order_ini)."' WHERE id='".$orderid."' ");					
+					
+					
 			}
 			return;
 		}
