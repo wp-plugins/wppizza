@@ -308,8 +308,8 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 					/***********************************************
 						[customer and order details to be saved in db and displayed in history]
 					************************************************/
-					$this->customerDetails=$email['plaintext']['customer_details'];
-					$this->orderDetails=$email['plaintext']['order'];
+					$this->customerDetails=mysql_real_escape_string($email['plaintext']['customer_details']);
+					$this->orderDetails=mysql_real_escape_string($email['plaintext']['order']);
 					/***********************************************************
 						[set name and email of the the person that is ordering]
 					***********************************************************/
@@ -317,7 +317,7 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 					$fromEmails=!empty($cDetails['cemail']) ? wppizza_validate_email_array($cDetails['cemail']) : '';
 					$this->orderClientName=$recipientName;
 					$this->orderClientEmail=$fromEmails[0];
-
+					
 					/***********************************************
 						[overwrite subject vars for email subject]
 					************************************************/
@@ -333,7 +333,7 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 					$order_ini=$oDetails;
 					$order_ini['time']=$this->currentTime;
 					
-					$wpdb->query("UPDATE ".$wpdb->prefix . $this->pluginOrderTable." SET order_date='".$orderDate."',order_ini='".serialize($order_ini)."' WHERE id='".$orderid."' ");					
+					$wpdb->query("UPDATE ".$wpdb->prefix . $this->pluginOrderTable." SET order_date='".$orderDate."',order_ini='".mysql_real_escape_string(serialize($order_ini))."' WHERE id='".$orderid."' ");					
 					
 					
 			}
@@ -352,15 +352,24 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 
 			/***create/set email html and plaintext strings***/
 			$this->wppizza_order_email($orderid);
-
+			/*avoid some strict notices**/
 			$phpVersion=phpversion();
+			/*overwrite from and from name with static values if set**/
+			$orderFromName=$this->orderClientName;
+			$orderFromEmail=$this->orderClientEmail;
+			if($this->pluginOptions['order']['order_email_from_name']!=''){
+				$orderFromName=$this->pluginOptions['order']['order_email_from_name'];	
+			}
+			if($this->pluginOptions['order']['order_email_from']!=''){
+				$orderFromEmail=$this->pluginOptions['order']['order_email_from'];	
+			}			
 
 			/**send order using mail**/
 			if($this->pluginOptions['plugin_data']['mail_type']=='mail'){
 				/************set headers*************/
 				$header = '';
-				if($this->orderClientEmail!=''){
-					$header .= 'From: '.$this->orderClientName.'<'.$this->orderClientEmail.'>' . PHP_EOL.
+				if($orderFromEmail!=''){
+					$header .= 'From: '.$orderFromName.'<'.$orderFromEmail.'>' . PHP_EOL.
 					'Reply-To: '.$this->orderClientEmail.'' . PHP_EOL .
 					'X-Mailer: PHP/' . $phpVersion;
 					$header .= PHP_EOL;
@@ -391,8 +400,8 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 			if($this->pluginOptions['plugin_data']['mail_type']=='wp_mail'){
 				/************set headers*************/
 				$wpMailHeaders=array();
-				if($this->orderClientEmail!=''){
-					$wpMailHeaders[] = 'From: '.$this->orderClientName.'<'.$this->orderClientEmail.'>';
+				if($orderFromEmail!=''){
+					$wpMailHeaders[] = 'From: '.$orderFromName.'<'.$orderFromEmail.'>';
 					$wpMailHeaders[] = 'Cc: '.$this->orderClientEmail.'';
 				}else{
 					$wpMailHeaders[] = 'From: --------<>';
@@ -456,6 +465,11 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 					require_once(WPPIZZA_PATH.'templates/wppizza-order-email-html.php');
 					$orderHtml = ob_get_clean();
 				}
+				
+				
+				/*decode entities es required***/
+				$orderHtml=wppizza_email_decode_entities($orderHtml,$this->blogCharset);
+				
 				/**set phpmailer settings**/
 				if (file_exists( get_template_directory() . '/wppizza-phpmailer-settings.php')){
 					require_once(get_template_directory_uri().'/wppizza-phpmailer-settings.php');

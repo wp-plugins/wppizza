@@ -54,7 +54,7 @@
 #sidebar .wppizza-order>ul.wppizza-cart-contents>.wppizza-cart-item:before {content:'';}
 #sidebar .wppizza-order>ul.wppizza-cart-contents>.wppizza-cart-item:after {content:'';}
 
-.wppizza-order>ul.wppizza-cart-contents>.wppizza-cart-item>.wppizza-remove-from-cart{font-family: Verdana;float:left;text-align:center;cursor:pointer;border:1px solid #CECECE;background:#EFEFEF;padding:0 0 0 0;margin:0 3px 2px 0;font-size:11px;line-height:11px;display:block;height:13px;width:13px;color:#666666}
+.wppizza-order>ul.wppizza-cart-contents>.wppizza-cart-item>.wppizza-remove-from-cart{font-family: Verdana;float:left;text-align:center;cursor:pointer;border:1px solid #CECECE;background:#EFEFEF;padding:0;margin:0 3px 2px 0;font-size:11px;line-height:11px;display:block;height:14px;width:14px;color:#666666}
 
 .wppizza-order>ul.wppizza-cart-contents>.wppizza-cart-item>.wppizza-cart-item-price{float:right;margin-right:3px;}
 .wppizza-order>ul.wppizza-cart-contents>.wppizza-cart-item>.wppizza-cart-item-size{font-size:80%}
@@ -131,8 +131,8 @@
 
 
 
-.wppizza-item-additionalinfo{padding-left:15px;padding-bottom:5px;font-size:90%}/*[additional info for ordered items on "order page" and "thank you" page (if enabled)]*/
-.wppizza-item-additionalinfo:before{content:'+ ';}/*[additional info for ordered items on "order page" and "thank you" page (if enabled)]*/
+.wppizza-item-additionalinfo{padding-left:25px;padding-bottom:5px;font-size:90%}/*[additional info for ordered items on "order page" and "thank you" page (if enabled)]*/
+.wppizza-item-additionalinfo:before{content:'+ ';margin-left:-10px;}/*[additional info for ordered items on "order page" and "thank you" page (if enabled)]*/
 /*END NEW IN VERSION 2.1*/
 
 /************************

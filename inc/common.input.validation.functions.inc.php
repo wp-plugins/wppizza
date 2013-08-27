@@ -163,7 +163,7 @@
 		foreach($array as $k=>$v){
 			$saneArray[wp_kses($k,array())]=wp_kses($v,array());
 		}	
-		return serialize($saneArray);
+		return mysql_real_escape_string(serialize($saneArray));
 	}
 
 /*****************************************************

@@ -51,6 +51,8 @@
 		add_settings_field('discounts', '<b>'.__('Discounts:', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'order', 'order', 'discounts' );
 		add_settings_field('order_email_to', '<b>'.__('Which email address should any orders be sent to [separated by comma if multiple]:', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'order', 'order', 'order_email_to' );
 		add_settings_field('order_email_bcc', '<b>'.__('If you would like to BCC order emails add these here [separated by comma if multiple]:', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'order', 'order', 'order_email_bcc' );
+		add_settings_field('order_email_from', '<b>'.__('If you want to set a static "From" email address set it here, otherwise leave blank . All emails will appear to have been sent from this address. (Some fax gateways for example require a distinct FROM email address). However, the customers email address will still be stored in the db/order history if entered', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'order', 'order', 'order_email_from' );
+		add_settings_field('order_email_from_name', '<b>'.__('Instead of using the customers name - if enabled/entered in the order form fields - you can set a static name here (usuful in conjunction with any "From" email address set above).', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'order', 'order', 'order_email_from_name' );
 
 		/**order form**/
 		add_settings_section('order_form', __('Order Form', $this->pluginLocale),  array( $this, 'wppizza_admin_page_text_header'), 'order_form');

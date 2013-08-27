@@ -33,13 +33,17 @@ try {
 		}
 	}
 	
-	/**who the order is from. (if given)**/
-	if($this->orderClientEmail!=''){
-		$fromName=trim($this->orderClientName); 
-		if($fromName==''){$fromName='----';}	//if we want, we could set $fromName=get_bloginfo() for example if no name was given...
-		$mail->SetFrom(''.$this->orderClientEmail.'',''.$fromName.'');
-		$mail->AddReplyTo(''.$this->orderClientEmail.'', ''.$fromName.'');
-		$mail->AddCC(''.$this->orderClientEmail.'',''.$fromName.'');
+	/**who the order is from. (if given). might be statically set**/
+	if($orderFromEmail!=''){
+		$fromName=trim($orderFromName); 
+		if($fromName==''){$fromName='----';}
+		$replyToCCName=trim($this->orderClientName); 
+		if($replyToCCName==''){$replyToCCName='----';}	//if we want, we could set $fromName=get_bloginfo() for example if no name was given...		
+		
+		
+		$mail->SetFrom(''.$orderFromEmail.'',''.$fromName.'');/*by default, these are the customer submitted name/email. However these might also be statically set in order settings*/
+		$mail->AddReplyTo(''.$this->orderClientEmail.'', ''.$replyToCCName.'');
+		$mail->AddCC(''.$this->orderClientEmail.'',''.$replyToCCName.'');
 	}
 	/**the subject**/
 	$mail->Subject = '' . $this->subjectPrefix . $this->subject .  $this->subjectSuffix . '';

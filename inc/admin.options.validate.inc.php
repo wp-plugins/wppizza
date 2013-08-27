@@ -154,6 +154,9 @@
 
 			$options['order']['order_email_to'] = wppizza_validate_email_array($input['order']['order_email_to']);
 			$options['order']['order_email_bcc'] = wppizza_validate_email_array($input['order']['order_email_bcc']);
+			$emailFrom=wppizza_validate_email_array($input['order']['order_email_from']);/*validated as array but we only store the first value as string*/
+			$options['order']['order_email_from'] = !empty($emailFrom[0]) ? ''.$emailFrom[0].'' : '' ;
+			$options['order']['order_email_from_name'] = wppizza_validate_string($input['order']['order_email_from_name']);
 		}
 		/**validate order form***/
 		if(isset($_POST[''.$this->pluginSlug.'_order_form'])){

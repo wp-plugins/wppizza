@@ -145,7 +145,7 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 			if(is_array($v['additionalinfo']) && count($v['additionalinfo'])>0){foreach($v['additionalinfo'] as $additionalInfo){
 				$addInfo[]=''.$additionalInfo.'';
 			}}
-			$gatewayOrder['item'][$k]['additionalInfo']=implode(", ",$addInfo);
+			$gatewayOrder['item'][$k]['additionalInfo']=implode("",$addInfo);
 		}
 
 		$gatewayOrder['total_price_items']=$cartDetails['order_value']['total_price_items']['val'];

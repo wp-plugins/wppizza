@@ -312,10 +312,19 @@ $options = $this->pluginOptions;
 				}
 			}
 
-			if($field=='order_email_to' || $field=='order_email_cc' || $field=='order_email_bcc'){//$field==order_sms => not implemented
+			if($field=='order_email_to' || $field=='order_email_cc' || $field=='order_email_bcc' ){//$field==order_sms => not implemented
 				if(is_array($options['order'][$field])){$val=implode(",",$options['order'][$field]);}else{$val='';}
 				echo "<input id='".$field."' name='".$this->pluginSlug."[order][".$field."]' size='30' type='text' value='".$val."' />";
 			}
+			
+			if($field=='order_email_from'){
+				echo "<input id='".$field."' name='".$this->pluginSlug."[order][".$field."]' size='30' type='text' value='".$options['order'][$field]."' />";
+			}
+			if($field=='order_email_from_name'){
+				echo "<input id='".$field."' name='".$this->pluginSlug."[order][".$field."]' size='30' type='text' value='".$options['order'][$field]."' />";
+			}			
+			
+			
 			if($field=='item_tax'){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[order][".$field."]' size='2' type='text' value='".wppizza_output_format_price($options['order'][$field])."' />%";
 			}			
