@@ -15,10 +15,12 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 *	$this->orderTransactionId : returns transaction id of this order.
 *	$this->orderGatewayUsed : returns whichever gateway was used (COD, Paypal, Omnikassa etc etc).
 *	$this->orderResults: the whole kitchen sink as object if none of the above is sufficient. use as needed.
+*
+*	note: using function wppizza_email_decode_entities ensures encoded apostrophies and such are displayed properly in subject line
 ********************************************************************************************************/    	
 /*
-	$this->subjectPrefix 	=	''.get_bloginfo().': ';
-	$this->subject 		= 	''.$this->pluginOptions['localization']['your_order']['lbl'].' ';
+	$this->subjectPrefix 	=	''.wppizza_email_decode_entities(get_bloginfo()).' ';
+	$this->subject 		= 	''.wppizza_email_decode_entities($this->pluginOptions['localization']['your_order']['lbl']).' ';
 	$this->subjectSuffix 	=	''.$this->orderTimestamp.'';
 */
 ?>

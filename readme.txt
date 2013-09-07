@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.2, WP 3.3 
 Tested up to: 3.6
-Stable tag: 2.4.2
+Stable tag: 2.4.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -116,6 +116,15 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 
 == Changelog ==
+
+
+2.4.3  
+* Added "AddAttachment" comment/placeholder  in templates/wppizza-phpmailer-settings.php (might be necessary for some email2fax gateways)   
+* added entity decoding function to subject line in emails (in case encoded apostrophies etc are being used)  
+* BUGFIX templates/wppizza-order-email-html.php ( wppizza-order-html-email.php : legacy version) as well as templates/wppizza-phpmailer-settings.php were included uing uri instead of absolute path when using a custom version in theme directory  
+* BUGFIX Fixed short php opening tag in templates/wppizza-phpmailer-settings.php  
+6th Sep 2013  
+
 
 2.4.2  
 * corrected some html email character encoding for non-standard characters  

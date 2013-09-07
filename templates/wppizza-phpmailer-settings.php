@@ -1,4 +1,4 @@
-<?
+<?php
 /*************************************************************************************************
 *
 *	WPPizza PHPMailer Settings
@@ -51,6 +51,20 @@ try {
 	/**the html**/
 	$mail->MsgHTML($orderHtml);
 	$mail->AltBody = $this->orderMessage['plaintext']; // optional - MsgHTML will create an alternate automatically, however this has been prettied up a little for this plugin. If you must, feel free to comment this line out though
+
+
+	/*****in case you want to use an attachment*****************
+	*
+	*	[uncomment and edit lines below to point to your image or any ather attachment you migh want to add to email]
+	*
+	*******************************************************/
+	//$mailAttachment='/absolute/path/to/your/image.jpg';
+	//if(isset($mailAttachment) && $mailAttachment!=''){
+	//	$mail->AddAttachment($mailAttachment);
+	//}
+
+
+
 	/**send the mail**/
 	$mail->Send();
 	

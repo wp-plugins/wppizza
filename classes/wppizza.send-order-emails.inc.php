@@ -30,8 +30,8 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 			$this->orderPostVars	=$_POST;
 
 			/**subject vars for email subject**/
-			$this->subjectPrefix 	=	''.get_bloginfo().': ';
-			$this->subject 			=	''.$this->pluginOptions['localization']['your_order']['lbl'].' ';
+			$this->subjectPrefix 	=	wppizza_email_decode_entities(get_bloginfo(),$this->blogCharset).': ';
+			$this->subject 			=	wppizza_email_decode_entities(''.$this->pluginOptions['localization']['your_order']['lbl'].'',$this->blogCharset).' ';
 			$this->subjectSuffix 	=	''.$this->orderTimestamp.'';
 
 			/* we also need any overrides by extensions in the mmain class to be used here**/
@@ -454,11 +454,11 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 				$orderHtml='';
 				/*for legacy reasons, someone might use an old template in their theme directory***/
 				if (file_exists( get_template_directory() . '/wppizza-order-html-email.php')){
-					require_once(get_template_directory_uri().'/wppizza-order-html-email.php');
+					require_once(get_template_directory().'/wppizza-order-html-email.php');
 				}
 				elseif(file_exists( get_template_directory() . '/wppizza-order-email-html.php')){
 					ob_start();
-					require_once(get_template_directory_uri().'/wppizza-order-email-html.php');
+					require_once(get_template_directory().'/wppizza-order-email-html.php');
 					$orderHtml = ob_get_clean();
 				}else{
 					ob_start();
@@ -472,7 +472,7 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 				
 				/**set phpmailer settings**/
 				if (file_exists( get_template_directory() . '/wppizza-phpmailer-settings.php')){
-					require_once(get_template_directory_uri().'/wppizza-phpmailer-settings.php');
+					require_once(get_template_directory().'/wppizza-phpmailer-settings.php');
 				}else{
 					require_once(WPPIZZA_PATH.'templates/wppizza-phpmailer-settings.php');
 				}
