@@ -152,6 +152,8 @@
 			}
 
 			$options['order']['item_tax']=wppizza_validate_float_only($input['order']['item_tax']);
+			$options['order']['shipping_tax'] = !empty($input['order']['shipping_tax']) ? true : false;
+			
 
 			$options['order']['order_email_to'] = wppizza_validate_email_array($input['order']['order_email_to']);
 			$options['order']['order_email_bcc'] = wppizza_validate_email_array($input['order']['order_email_bcc']);

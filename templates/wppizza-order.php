@@ -49,7 +49,7 @@ get_currentuserinfo();
 				<li class="wppizza-order-discount"><?php echo $txt['discount']['lbl'] ?><span><span class="wppizza-minus"></span><?php echo $cart['currency'].' '.$cart['order_value']['discount']['val']; ?></span></li>
 			<?php } ?>
 
-			<?php if($cart['order_value']['item_tax']['val']>0){/*item/sales tax applies  NEW IN VERSION 2.0*/ ?>
+			<?php if($cart['order_value']['item_tax']['val']>0 && $cart['tax_applied']=='items_only'){/*item/sales tax applies (items only)  NEW IN VERSION 2.0/2.5 */ ?>
 				<li class="wppizza-order-item-tax"><?php echo $txt['item_tax_total']['lbl'] ?><span><?php echo $cart['currency'].' '.$cart['order_value']['item_tax']['val']; ?></span></li>
 			<?php } ?>
 			
@@ -60,6 +60,11 @@ get_currentuserinfo();
 					<li class="wppizza-order-pickup"><?php echo $txt['delivery_charges']['lbl'] ?><span><?php echo $txt['free_delivery']['lbl'] ?></span></li>
 				<?php } ?>
 			<?php } ?>
+			
+			<?php if($cart['order_value']['item_tax']['val']>0 && $cart['tax_applied']=='items_and_shipping'){/*item/sales tax applied to items AND shipping  NEW IN VERSION 2.0 / 2.5*/ ?>
+				<li class="wppizza-order-item-tax"><?php echo $txt['item_tax_total']['lbl'] ?><span><?php echo $cart['currency'].' '.$cart['order_value']['item_tax']['val']; ?></span></li>
+			<?php } ?>			
+			
 				<li id="wppizza-cart-total"><?php echo $txt['order_total']['lbl'] ?><span><?php echo $cart['currency'].' '.$cart['order_value']['total']['val']; ?></span></li>
 
 			<?php if(isset($cart['self_pickup_enabled']) &&  $cart['selfPickup']==1){ /*self pickup conditional-> no delivery charges : NEW IN VERSION 1.4.1**/ ?>

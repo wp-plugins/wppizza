@@ -381,6 +381,7 @@
 					)
 				),
 				'item_tax'=>0,
+				'shipping_tax'=>false,
 				'order_email_to'=>array(''.get_option('admin_email').''),
 				'order_email_bcc'=>array(),
 				'order_email_from'=>'',

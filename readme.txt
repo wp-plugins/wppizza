@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.2, WP 3.3 
 Tested up to: 3.6.1
-Stable tag: 2.5
+Stable tag: 2.5.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -118,6 +118,12 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 
 == Changelog ==
+
+
+2.5.1  
+* allow tax to be applied to delivery/shipping too  
+2nd October 2013  
+
 
 2.5  
 * made plugin frontend wpml compatible (tested with WP 3.6 , WPML Multilingual CMS Version 2.9.2, WPML String Translation Version 1.8.2 and WPML Translation Management Version 1.7.2, but should work with any reasonably recent wpml version(s) )     

@@ -99,7 +99,7 @@ return;
 				</span>
 			</span>
 			
-			<?php if(isset($cart['tax_enabled'])){ /*SUM SALES TAX : CONDITIONAL ADDED/CHANGED IN VERSION 2.0*/ ?>
+			<?php if(isset($cart['tax_enabled']) && $cart['tax_applied']=='items_only'){ /*SUM SALES TAX - ITEMS ONLY: CONDITIONAL ADDED/CHANGED IN VERSION 2.0 and 2.5*/ ?>
 			<span class="wppizza-cart-tax">
 				<span class="wppizza-cart-tax-label">
 					<?php if($cart['nocheckout']=='' && count($cart['items'])>0){?>
@@ -128,6 +128,21 @@ return;
 				</span>
 			</span>
 			<?php } ?>
+						
+			<?php if(isset($cart['tax_enabled']) && $cart['tax_applied']=='items_and_shipping'){ /*SUM TAX - applied to items AND shipping: CONDITIONAL ADDED/CHANGED IN VERSION 2.0 and 2.5*/ ?>
+			<span class="wppizza-cart-tax">
+				<span class="wppizza-cart-tax-label">
+					<?php if($cart['nocheckout']=='' && count($cart['items'])>0){?>
+					<?php echo $cart['order_value']['item_tax']['lbl'] ?>
+					<?php } ?>				
+				</span>
+				<span class="wppizza-cart-tax-value wppizza-cart-info-price">
+					<?php if($cart['nocheckout']=='' && count($cart['items'])>0){?>
+					<?php if($cart['order_value']['item_tax']['val']>0){echo $cart['currency'];} ?> <?php echo ($cart['order_value']['item_tax']['val']) ?>
+					<?php } ?>				
+				</span>
+			</span>			
+			<?php } ?>						
 						
 			<span class="wppizza-cart-total">
 				<span class="wppizza-cart-total-label">

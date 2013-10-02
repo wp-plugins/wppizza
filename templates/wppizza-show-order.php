@@ -62,7 +62,7 @@
 			<li class="wppizza-order-discount"><?php echo $orderlbl['discount'] ?><span><span class="wppizza-minus"></span><?php echo $order['currency'].' '.$summary['discount']; ?></span></li>
 		<?php } ?>
 
-		<?php if($summary['item_tax']>0){/*tax*/ ?>
+		<?php if($summary['item_tax']>0 && $summary['tax_applied']=='items_only' ){/*tax appplied to items only*/ ?>
 			<li class="wppizza-order-item-tax"><?php echo $orderlbl['item_tax_total'] ?><span><?php echo $order['currency'].' '.$summary['item_tax']; ?></span></li>
 		<?php } ?>
 
@@ -73,7 +73,11 @@
 				<li class="wppizza-order-pickup"><?php echo $orderlbl['delivery_charges'] ?><span><?php echo $orderlbl['free_delivery'] ?></span></li>
 			<?php } ?>
 		<?php } ?>
-
+	
+		<?php if($summary['item_tax']>0 && $summary['tax_applied']=='items_and_shipping' ){/*tax appplied to items_and_shipping */ ?>
+			<li class="wppizza-order-item-tax"><?php echo $orderlbl['item_tax_total'] ?><span><?php echo $order['currency'].' '.$summary['item_tax']; ?></span></li>
+		<?php } ?>
+		
 			<li id="wppizza-cart-total"><?php echo $orderlbl['order_total'] ?><span><?php echo $order['currency'].' '.$summary['total']; ?></span></li>
 
 		<?php if(isset($summary['selfPickup']) &&  $summary['selfPickup']==1){ /*self pickup conditional-> no delivery charges : NEW IN VERSION 1.4.1**/ ?>

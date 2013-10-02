@@ -687,17 +687,20 @@ function wppizza_order_summary($session,$options,$ajax=null){
 				[item tax AFTER discounts]
 			****************************************************/
 			$itemTax=0;
+			$summary['tax_applied']='items_only';
 			if($options['order']['item_tax']>0){
 				$summary['tax_enabled']=1;
 				$totalSales=$session['total_price_items']-(float)$discountValue;
 				/*round up decimals**/
 				$itemTax=wppizza_round_up($totalSales/100*$options['order']['item_tax'],2);
 			}
-
-//			$itemTax=0;
-//			if($session['total_item_tax']>0){
-//				$itemTax=$session['total_item_tax'];
-//			}
+			/****************************************************
+				[add tax to shipping too]
+			****************************************************/
+			if($options['order']['shipping_tax'] && $deliveryCharges!='' && (int)$deliveryCharges>0){
+				$summary['tax_applied']='items_and_shipping';
+				$itemTax=wppizza_round_up(($totalSales+$deliveryCharges)/100*$options['order']['item_tax'],2);
+			}
 
 
 	/****************************************************

@@ -174,9 +174,9 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 					$wppizzaEmailOrderSummary['discount']=array('label'=>($pOptions['localization']['discount']['lbl']),'price'=>$oDetails['discount'],'currency'=>$oDetails['currency'] );
 				}
 				/**********************************************************
-				*	[item tax]
+				*	[item tax - tax applied to items only]
 				**********************************************************/
-				if($oDetails['item_tax']>0){
+				if($oDetails['item_tax']>0 && !($pOptions['order']['shipping_tax'])){
 					$wppizzaEmailOrderSummary['item_tax']=array('label'=>($pOptions['localization']['item_tax_total']['lbl']),'price'=>$oDetails['item_tax'],'currency'=>$oDetails['currency'] );
 				}
 				/**********************************************************
@@ -189,6 +189,12 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 						$wppizzaEmailOrderSummary['delivery']=array('label'=>($pOptions['localization']['free_delivery']['lbl']),'price'=>'','currency'=>'' );
 					}
 				}
+				/**********************************************************
+				*	[item tax - tax applied to items only]
+				**********************************************************/
+				if($oDetails['item_tax']>0 && $pOptions['order']['shipping_tax']){
+					$wppizzaEmailOrderSummary['item_tax']=array('label'=>($pOptions['localization']['item_tax_total']['lbl']),'price'=>$oDetails['item_tax'],'currency'=>$oDetails['currency'] );
+				}				
 				/**********************************************************
 					[order total]
 				**********************************************************/
@@ -449,6 +455,11 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 				$order_items=$this->orderMessage['html']['order_items'];
 				$order_items = apply_filters('wppizza_filter_order_items_html', $order_items,'additional_info');
 				$order_summary=$this->orderMessage['html']['order_summary'];
+				$order_summary['tax_applied']='items_only';
+				if($this->pluginOptions['order']['shipping_tax']){
+					$order_summary['tax_applied']='items_and_shipping';
+				}				
+				
 
 
 				/*return $orderHtml*/
@@ -595,7 +606,11 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 			$summary['total_price_items']=$thisOrderDetails['total_price_items'];
 			$summary['selfPickup']=$thisOrderDetails['selfPickup'];
 			$summary['total']=$thisOrderDetails['total'];
-
+			$summary['tax_applied']='items_only';
+			if($this->pluginOptions['order']['shipping_tax']){
+				$summary['tax_applied']='items_and_shipping';
+			}
+			
 			/***********************************************
 				[if template copied to theme directory use
 				that one otherwise use default]

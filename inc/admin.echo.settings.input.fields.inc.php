@@ -330,6 +330,9 @@ $options = $this->pluginOptions;
 
 			if($field=='item_tax'){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[order][".$field."]' size='2' type='text' value='".wppizza_output_format_price($options['order'][$field])."' />%";
+				echo"<br/>";
+				echo"<input name='".$this->pluginSlug."[order][shipping_tax]' type='checkbox'  ". checked($options['order']['shipping_tax'],true,false)." value='1' />";
+				echo" ".__('apply tax to delivery/shipping  too', $this->pluginLocale)."";
 			}
 			if($field=='sizes'){
 				echo"<div id='wppizza_".$field."'>";
