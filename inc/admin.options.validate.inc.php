@@ -69,6 +69,7 @@
 			$options['layout']['add_to_cart_on_title_click'] = !empty($input['layout']['add_to_cart_on_title_click']) ? true : false;
 			$options['layout']['currency_symbol_left'] = !empty($input['layout']['currency_symbol_left']) ? true : false;
 			$options['layout']['show_currency_with_price'] = wppizza_validate_int_only($input['layout']['show_currency_with_price']);
+			$options['layout']['cart_increase'] = !empty($input['layout']['cart_increase']) ? true : false;
 
 			$options['opening_times_format']['hour']=wppizza_validate_string($input['opening_times_format']['hour']);
 			$options['opening_times_format']['separator']=wppizza_validate_string($input['opening_times_format']['separator']);

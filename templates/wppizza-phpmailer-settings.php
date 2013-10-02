@@ -21,6 +21,14 @@ try {
   	//$mail->Port       = 465;                   // set the SMTP port for the GMAIL server
   	//$mail->Username   = "yourusername@gmail.com";  // GMAIL username
   	//$mail->Password   = "yourpassword";            // GMAIL password
+  	
+  	/**if you want, you can also try setting the following***/ 
+	//$mail->Priority = 1;//Priority : For most clients expecting the Priority header: 1 = High, 2 = Medium, 3 = Low
+	//$mail->AddCustomHeader("X-MSMail-Priority: High"); //MS Outlook custom header May set to "Urgent" or "Highest" rather than "High"
+	//$mail->AddCustomHeader("X-MimeOLE" , "Produced By Microsoft MimeOLE V6.00.2800.1441"); 
+	//$mail->AddCustomHeader("X-Mailer" , "Microsoft Office Outlook, Build 11.0.5510"); // Faking Outlook Header     	
+  	
+  	
 
 	/**who to send the order to**/
 	foreach($this->pluginOptions['order']['order_email_to'] as $k=>$v){

@@ -2,17 +2,45 @@ jQuery(document).ready(function($){
 	/*******************************
 	*	[add to cart / remove from cart]
 	*******************************/
-	$(document).on('click touchstart', '.wppizza-add-to-cart,.wppizza-remove-from-cart,.wppizza-cart-refresh', function(e){
+	/**only allow integers in cart increase/decrease**/
+	$('.wppizza-cart-incr').keyup(function () { 
+    	this.value = this.value.replace(/[^0-9]/g,'');
+	});
+	
+	/**run defined functions after cart refresh**/
+	var wppizzaCartRefreshed = (function(functionArray) {
+		if(functionArray.length>0){
+			for(i=0;i<functionArray.length;i++){
+				var func = new Function("term", "return " + functionArray[i] + "(term);");
+				func();
+			}
+		}
+	});
+	
+	$(document).on('click touchstart', '.wppizza-add-to-cart,.wppizza-remove-from-cart,.wppizza-cart-refresh,.wppizza-cart-increment', function(e){
 		if ($(".wppizza-open").length > 0){//first check if shopping cart exists on page and that we are open
 			e.preventDefault();
 
 		var self=$(this);
+		var cartButton=$('.wppizza-cart-button input,.wppizza-cart-button>a');
+		cartButton.attr("disabled", "true");/*disable place order button*/
+		var itemCount=1;		
+		
 		if(self.hasClass('wppizza-add-to-cart')){type='add';}
 		if(self.hasClass('wppizza-remove-from-cart')){type='remove';}
 		if(self.hasClass('wppizza-cart-refresh')){type='refresh';}
+		if(self.hasClass('wppizza-cart-increment')){
+			var itemCount=self.closest('li').find('.wppizza-cart-incr').val();
+			if(itemCount==0){
+				type='remove';
+			}else{
+				type='increment';  
+			}
+		}
+		
 			self.fadeOut(100).fadeIn(400);
 			$('.wppizza-order').prepend('<div id="wppizza-loading"></div>');
-			jQuery.post(wppizza.ajaxurl , {action :'wppizza_json',vars:{'type':type,'id':self.attr('id')}}, function(response) {
+			jQuery.post(wppizza.ajaxurl , {action :'wppizza_json',vars:{'type':type,'id':self.attr('id'),'itemCount':itemCount}}, function(response) {
 
 				/*show items in cart*/
 				$('.wppizza-order').html(response.itemsajax);
@@ -61,6 +89,11 @@ jQuery(document).ready(function($){
 				$('.wppizza-cart-total-items-label').html('');
 				$('.wppizza-cart-total-items-value').html('');
 				}
+				
+				cartButton.removeAttr("disabled");/*re-enable place order button*/
+				
+				wppizzaCartRefreshed(wppizza.funcCartRefr);
+				
 			},'json').error(function(jqXHR, textStatus, errorThrown) {alert("error : " + errorThrown);console.log(jqXHR.responseText);$('.wppizza-order #wppizza-loading').remove();});
 		}});
 

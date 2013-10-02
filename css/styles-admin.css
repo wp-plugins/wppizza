@@ -43,6 +43,10 @@
 	[when using textarea in localization fields]
 *********************/
 .wppizza_localization_textarea{width:250px}
+#wppizza_localization_options>div{border:1px solid #AAAAAA;margin-bottom:5px}
+#wppizza_localization_options>div:nth-child(even){background:#FEFEFE;}
+#wppizza_localization_options>div:nth-child(odd){background:#EFEFEF;}
+
 
 /*******************
 	[order history]
@@ -64,7 +68,7 @@
 .wppizza-gateway-show-options{float:right;cursor:pointer;color:blue;font-size:110%;padding:0 5px}
 /*initialize settings hidden*/
 .wppizza-gateway-settings{display:none}
-#wppizza_gateways_options>div,#wppizza_gateways_options>div>div,.wppizza-gateway-settings>div{overflow:auto;margin-bottom:5px;padding:5px;} 
+#wppizza_gateways_options>div,#wppizza_gateways_options>div>div,.wppizza-gateway-settings>div{overflow:auto;margin-bottom:5px;padding:5px;}
 #wppizza_gateways_options>div{padding:2px;}
 .wppizza-gateway-settings>div{border-bottom:1px dotted #CECECE;}
 #wppizza_gateways_options .wppizza-gateway-head.button{width:100%;line-height:40px;height:45px;padding:0 10px;margin:0;border-color:#CECECE}

@@ -135,35 +135,46 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 		$gatewayOrder['currencyiso']=$cartDetails['currencyiso'];
 		$gatewayOrder['currency']=$cartDetails['currency'];
 		foreach($cartDetails['items'] as $k=>$v){
+			$gatewayOrder['item'][$k]['postId']=''.$v['postId'].'';
 			$gatewayOrder['item'][$k]['name']=''.$v['name'].'';
 			$gatewayOrder['item'][$k]['size']=''.$v['size'].'';
-			$gatewayOrder['item'][$k]['quantity']=''.$v['count'].'';
-			$gatewayOrder['item'][$k]['price']=''.$v['price'].'';
-			$gatewayOrder['item'][$k]['pricetotal']=''.$v['pricetotal'].'';
+			$gatewayOrder['item'][$k]['count']=''.$v['count'].'';
+			$gatewayOrder['item'][$k]['quantity']=''.$v['count'].'';/*legacy some customised templates may use this*/
+			$gatewayOrder['item'][$k]['price']=''.wppizza_validate_float_only($v['price']).'';
+			$gatewayOrder['item'][$k]['pricetotal']=''.wppizza_validate_float_only($v['pricetotal']).'';
+			$gatewayOrder['item'][$k]['categories']=$v['categories'];
 			/**add any additional info to name*/
 			$addInfo=array();
 			if(is_array($v['additionalinfo']) && count($v['additionalinfo'])>0){foreach($v['additionalinfo'] as $additionalInfo){
 				$addInfo[]=''.$additionalInfo.'';
 			}}
-			$gatewayOrder['item'][$k]['additionalInfo']=implode("",$addInfo);
+			//$gatewayOrder['item'][$k]['additionalinfo']=implode("",$addInfo);
+			$gatewayOrder['item'][$k]['additionalinfo']=$addInfo;
+			$gatewayOrder['item'][$k]['additionalInfo']=implode(" ",$addInfo);/*legacy paypal and order thank you page (note upper case I)*/
+			$gatewayOrder['item'][$k]['extend']=$v['extend'];
 		}
 
-		$gatewayOrder['total_price_items']=$cartDetails['order_value']['total_price_items']['val'];
-		$gatewayOrder['discount']=$cartDetails['order_value']['discount']['val'];
-		$gatewayOrder['item_tax']=$cartDetails['order_value']['item_tax']['val'];
-		$gatewayOrder['delivery_charges']=$cartDetails['order_value']['delivery_charges']['val'];
+		$gatewayOrder['total_price_items']=wppizza_validate_float_only($cartDetails['order_value']['total_price_items']['val']);
+		$gatewayOrder['discount']=wppizza_validate_float_only($cartDetails['order_value']['discount']['val']);
+		$gatewayOrder['item_tax']=wppizza_validate_float_only($cartDetails['order_value']['item_tax']['val']);
+
+		$gatewayOrder['delivery_charges']=!empty($cartDetails['order_value']['delivery_charges']['val']) ? wppizza_validate_float_only($cartDetails['order_value']['delivery_charges']['val']) : '';
 		$gatewayOrder['selfPickup']=!empty($cartDetails['selfPickup']) ? 1 : 0;
-		$gatewayOrder['total']=$cartDetails['order_value']['total']['val'];
+		$gatewayOrder['total']=wppizza_validate_float_only($cartDetails['order_value']['total']['val']);
 
 		/**add any additional variables are set we want to pass/hash*/
 		foreach($addVars as $k=>$v){
 			$gatewayOrder[$k]=$v;
 		}
 
+		/*sanitize it . actually already done elsewhere, butu leave it here for the moment*/
+		//$gatewayOrder = apply_filters('wppizza_filter_sanitize_order', $gatewayOrder);
+
 		/*****created and return checkable hash**/
 		$cartHash=wppizza_mkHash($gatewayOrder);/*make unique hash*/
 		$gatewayOrder['hash']=$cartHash['hash'];/*add hash to array*/
 		$gatewayOrder['order_ini']=$cartHash['order_ini'];/*add orig hash string to array*/
+
 
 		return $gatewayOrder;
 	}

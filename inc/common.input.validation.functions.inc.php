@@ -94,7 +94,7 @@
 			$array[''.$callback($k).'']=''.$callback($s).'';
 		}
 		return $array;
-	}	
+	}
 /*****************************************************
 * check and return comma seperated string of EMAILS as array
 * @str the input to check
@@ -158,13 +158,21 @@
 * sanitize all costomer order page post vars
 * returns serialized value no html etc
 ******************************************************/
-	function wppizza_sanitize_post_vars($array) {
-		$saneArray=array();
-		foreach($array as $k=>$v){
-			$saneArray[wp_kses($k,array())]=wp_kses($v,array());
-		}	
-		return mysql_real_escape_string(serialize($saneArray));
+	function wppizza_sanitize_post_vars_recursive(&$str) {
+		$str=stripslashes($str);
+		$str=wppizza_email_decode_entities($str,get_bloginfo('charset'));
+		$str=wp_kses($str,array());
+		$str=wppizza_email_html_entities($str);
 	}
+
+	function wppizza_sanitize_post_vars($arr){
+		if(is_array($arr)){
+			array_walk_recursive($arr,'wppizza_sanitize_post_vars_recursive');
+		}
+		return mysql_real_escape_string(serialize($arr));
+	}
+
+
 
 /*****************************************************
 * validate and convert characters in string  using internal wordpress functions
@@ -276,4 +284,23 @@ function wppizza_inflate($arr, $divider_char = "/") {
     }
     return $ret;
 }
+/**for legacy reasons in paypal gateway, we also have this here.*/
+/**either we move the one from actions here or we move this one into actions we'll see*/
+/**or use the wppizza_sanitize_post_vars above*****/
+	function wppizza_filter_sanitize_post_vars_recursive(&$val,$key){
+		$val=stripslashes($val);
+		/**let's first decode all already encode ones to not double encode**/
+		$val=wppizza_email_decode_entities($val,get_bloginfo('charset'));
+		/**strip things**/
+		$val=wp_kses($val,array());
+		/*now entitize the lot again*/
+		$val=wppizza_email_html_entities($val);
+	}
+
+	function wppizza_filter_sanitize_post_vars($arr){
+		if(is_array($arr)){
+			array_walk_recursive($arr,'wppizza_filter_sanitize_post_vars_recursive');
+		}
+		return mysql_real_escape_string(serialize($arr));
+	}
 ?>

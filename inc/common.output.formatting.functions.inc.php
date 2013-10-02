@@ -9,12 +9,25 @@
 
 	function wppizza_output_format_price($str,$hideDecimals=false){
 		if(trim($str)!=''){
-			if($hideDecimals){
+			
+			/*lagacy reasons when already using wppizza_output_format_price in customised cart template**/
+			$sstr=substr($str,-3,1);
+			if($sstr==','){
+				$str=str_replace(array(',','.'),'',$str);
+				$str = substr_replace($str, '.', -2, 0);				
+			}
+			/***************************************************/			
+
+			if($hideDecimals){				
 				$str=number_format_i18n($str,0);
 			}else{
 				$str=number_format_i18n($str,2);
 			}
 		}
+		return $str;
+	}
+	function wppizza_wordwrap_indent($str){
+		$str=str_replace(PHP_EOL,"".PHP_EOL."     ",$str);
 		return $str;
 	}
 
@@ -487,17 +500,25 @@ function wppizza_order_summary($session,$options,$ajax=null){
 	foreach($session['items'] as $groupid=>$groupitems){
 		foreach($groupitems as $v){
 			$cartItemsCount++;
-			$cartItems[''.$groupid.''][]=array('sortname'=>$v['sortname'],'size'=>$v['size'],'sizename'=>$v['sizename'],'printname'=>$v['printname'],'price'=>$v['price'],'additionalinfo'=>$v['additionalinfo']);
+			/**really only for legacy reasons, future versions will only have extend key**/
+			if(!isset($v['additionalinfo'])){$v['additionalinfo']=array();}
+			if(!isset($v['extend'])){$v['extend']=array();}
+			$cartItems[''.$groupid.''][]=array('sortname'=>$v['sortname'],'size'=>$v['size'],'sizename'=>$v['sizename'],'printname'=>$v['printname'],'price'=>$v['price'],'additionalinfo'=>$v['additionalinfo'],'extend'=>$v['extend'],'postId'=>$v['id']);
 		}
 	}
 	foreach($cartItems as $k=>$v){
-		$groupedItems[$k]=array('sortname'=>$cartItems[$k][0]['sortname'],'size'=>$cartItems[$k][0]['size'],'sizename'=>$cartItems[$k][0]['sizename'],'printname'=>$cartItems[$k][0]['printname'],'price'=>$cartItems[$k][0]['price'],'count'=>count($cartItems[$k]),'total'=>(count($cartItems[$k])*$cartItems[$k][0]['price']),'additionalinfo'=>$cartItems[$k][0]['additionalinfo'])	;
+		$groupedItems[$k]=array('sortname'=>$cartItems[$k][0]['sortname'],'size'=>$cartItems[$k][0]['size'],'sizename'=>$cartItems[$k][0]['sizename'],'printname'=>$cartItems[$k][0]['printname'],'price'=>$cartItems[$k][0]['price'],'count'=>count($cartItems[$k]),'total'=>(count($cartItems[$k])*$cartItems[$k][0]['price']),'additionalinfo'=>$cartItems[$k][0]['additionalinfo'],'extend'=>$cartItems[$k][0]['extend'],'postId'=>$cartItems[$k][0]['postId'])	;
 	}
 	asort($groupedItems);
 	/**output items sorted by name and size**/
 	foreach($groupedItems as $k=>$v){
-		$summary['items'][$k]=array('name'=>$v['printname'],'count'=>$v['count'],'size'=>$v['sizename'],'price'=>wppizza_output_format_float($v['price']),'pricetotal'=>wppizza_output_format_float($v['total']),'additionalinfo'=>$v['additionalinfo']);
+		/*get categories**/
+		$catObj = get_the_terms($v['postId'], WPPIZZA_TAXONOMY);
+		$catArray=json_decode(json_encode($catObj), true);
+		$summary['items'][$k]=array('name'=>$v['printname'],'count'=>$v['count'],'size'=>$v['sizename'],'price'=>wppizza_output_format_price($v['price'],$optionsDecimals),'pricetotal'=>wppizza_output_format_price($v['total'],$optionsDecimals),'categories'=>$catArray,'additionalinfo'=>$v['additionalinfo'],'extend'=>$v['extend'],'postId'=>$v['postId']);
 	}
+
+
 	/****************************************************
 		[if ajax request get items from template to keep formatting consistent]
 	****************************************************/
@@ -732,6 +753,10 @@ function wppizza_order_summary($session,$options,$ajax=null){
 			}
 		}
 	}
+	/**enable increase/decrese in cart**/
+	if($options['layout']['cart_increase']){
+		$summary['increase_decrease']=1;
+	}	
 return $summary;
 }
 /***************************************************
@@ -798,7 +823,7 @@ function wppizza_return_single_dimension_array($arr, $key='lbl'){
 /****************************************************************************
 	[decode entities in send order email plaintext]
 ****************************************************************************/
-function wppizza_email_decode_entities($str,$charset){
+function wppizza_email_decode_entities($str,$charset,$decodeNCRs=true){
 
 		$supportedCharsets=array('iso-8859-1','iso-8859-5','iso-8859-15','utf-8','cp866','cp1251','cp1252','koi8-r','big5','gb2312','big5-hkscs','shift_jis','euc-jp','macroman');
 		if(in_array(strtolower($charset),$supportedCharsets)){
@@ -806,9 +831,11 @@ function wppizza_email_decode_entities($str,$charset){
 		}else{
 			$charset='UTF-8';
 		}
-   		$str= html_entity_decode($str,ENT_QUOTES,"".$charset."");////".get_bloginfo('charset')." #NOTE: UTF-8 does not work!
-    	$str= preg_replace('/&#(\d+);/me',"chr(\\1)",$str); //#decimal notation
-	    $str= preg_replace('/&#x([a-f0-9]+);/mei',"chr(0x\\1)",$str);  //#hex notation
+		if($decodeNCRs){
+   			$str= html_entity_decode($str,ENT_QUOTES,"".$charset."");////".get_bloginfo('charset')." #NOTE: UTF-8 does not work!
+    		$str= preg_replace('/&#(\d+);/me',"chr(\\1)",$str); //#decimal notation
+	    	$str= preg_replace('/&#x([a-f0-9]+);/mei',"chr(0x\\1)",$str);  //#hex notation
+		}
 
 	return $str;
 }

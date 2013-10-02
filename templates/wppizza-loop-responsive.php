@@ -78,6 +78,9 @@
 		'orderby'=>'menu_order',
 		'order'=>'ASC'
 	);
+	/**new in version 2.5. currenly used to display single posts***/
+	$args = apply_filters('wppizza_filter_loop', $args);
+	/**execute query**/	
 	$the_query = new WP_Query( $args );
 ?>
 <?php
@@ -111,8 +114,36 @@
  ********************************************/
 	/* Start the Loop */
 	while ( $the_query->have_posts() ) : $the_query->the_post();
+	/**changed / added in 2.5***/
+	/**changed to not run function multiple times unnecessarily -> replaced all other get_the_ID() further down**/
+	$postId=get_the_ID();
+	/**get permalink*****/
+	$permalink = get_permalink( $postId );
 	/*get meta data for this post**/
-	$meta=get_post_meta(get_the_ID(), $post_type, true );
+	$meta=get_post_meta($postId, $post_type, true );
+
+	/**added in 2.5 to enable messing around with output below if required***/
+	$meta = apply_filters('wppizza_filter_loop_meta', $meta, $postId);
+
+	/***********************************************************
+	*
+	*	if you want to display categories for example , uncomment
+	*	the following and put it in the loop where required
+	*
+	************************************************************/
+//		$terms = get_the_terms($postId, WPPIZZA_TAXONOMY);
+//		/*example what to do with it. edit as required***/
+//		$categoryNames='';
+//		if ($terms && ! is_wp_error($terms)){
+//			$term_category=array();
+//			foreach ($terms as $term) {
+//				$term_category[]= $term->name;
+//			}
+//			$categoryNames = implode(" / ",$term_category);
+//		}
+//		/*now output $categoryNames somewhere***/
+
+	/**end changed / added in 2.5***/
 	$numberOfSizes=count($options['sizes'][$meta['sizes']]);
 	/**if selected in admin, make click on title add to cart or
 	show alert when there are more than one size**/
@@ -122,7 +153,7 @@
 	 	/*trigger add to cart**/
 	 	if($numberOfSizes==1){
 			$clickTriggerClass=' '.$post_type.'-trigger-click';
-			$clickTriggerId=' id="'.$post_type.'-article-'.get_the_ID().'-'.$meta['sizes'].'-0"';
+			$clickTriggerId=' id="'.$post_type.'-article-'.$postId.'-'.$meta['sizes'].'-0"';
 	 	}
 	 	/*more than one size available, show alert**/
 	 	if($numberOfSizes>1){$clickTriggerClass=' '.$post_type.'-trigger-choose';}
@@ -171,7 +202,7 @@
 <?php
 	if(!isset($hidePrices)){
 ?>
-		<div id="<?php echo $post_type ?>-article-tiers-<?php echo get_the_ID()?>" class="<?php echo $post_type ?>-article-tiers">
+		<div id="<?php echo $post_type ?>-article-tiers-<?php echo $postId ?>" class="<?php echo $post_type ?>-article-tiers">
 
 	   	<?php if(!isset($hideCurrencySymbol) && isset($currencyLeft)){?>
 	   		<span class='<?php echo $post_type ?>-article-price-currency <?php echo $post_type ?>-article-currency-left'><?php echo $currency ?></span>
@@ -179,7 +210,7 @@
 
 
 	   	<?php foreach($options['sizes'][$meta['sizes']] as $k=>$v){?>
-	   		<span id='<?php echo $post_type."-".get_the_ID()."-".$meta['sizes']."-".$k ?>' class='<?php echo $post_type ?>-article-price <?php echo $priceClass ?>' <?php echo $priceTitle ?>>
+	   		<span id='<?php echo $post_type."-".$postId."-".$meta['sizes']."-".$k ?>' class='<?php echo $post_type ?>-article-price <?php echo $priceClass ?>' <?php echo $priceTitle ?>>
 	    		<span><?php if($options['layout']['show_currency_with_price']==1){echo $currency." ";} ?><?php echo wppizza_output_format_price($meta['prices'][$k],$optionsDecimals)?><?php if($options['layout']['show_currency_with_price']==2){echo " ".$currency;} ?></span>
 	    		<?php if(!isset($hidePricetier) || count($options['sizes'][$meta['sizes']])>1){ ?>
 	    		<div class='<?php echo $post_type ?>-article-price-lbl<?php echo $hideCartIcon?>'><?php echo $v['lbl']?></div>
@@ -205,11 +236,20 @@
 
 	</div>
 <?php
+/*************************************************
+	[comments box - if single item view and enabled of course]
+**************************************************/
+if(is_single()){	
+	comments_template( '', true ); 
+}
+?>
+<?php
 /*********************************************
 		[article end]
 **********************************************/
 ?>
 	</article>
+	
 <?php endwhile;	?>
 <?php
 /********************************************
@@ -231,7 +271,7 @@ if(isset($additivesOnPage) || (isset($showadditives) && $showadditives==1)){
 /*************************************************
 	[pagination - no need to display empty divs]
 **************************************************/
-if($the_query->max_num_pages>1){
+if(!is_single() && $the_query->max_num_pages>1){
 ?>
 <div class="navigation">
   <div class="alignleft"><?php previous_posts_link(''.$txt['previous']['lbl'].'') ?></div>

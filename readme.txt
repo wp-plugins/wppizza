@@ -5,12 +5,12 @@ Author URI: http://www.wp-pizza.com
 Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.2, WP 3.3 
-Tested up to: 3.6
-Stable tag: 2.4.3
+Tested up to: 3.6.1
+Stable tag: 2.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-A Restaurant Plugin (not only for Pizza). Maintain your Menu (multiple sizes, prices, categories). Accept COD online orders. Multilingual.
+A Restaurant Plugin (not only for Pizza). Maintain your Menu (multiple sizes, prices, categories). Accept COD online orders. Multisite, Multilingual, WPML compatible.
 
 
 
@@ -22,7 +22,9 @@ A Restaurant Plugin (not only for Pizza). Maintain your Menu (multiple sizes, pr
 
 - Set categories, multiple prices per item and descriptions.
 
-- Multilingual Frontend (just update labels in admin settings page and/or widget as required)
+- Multilingual Frontend (just update labels in admin settings page and/or widget as required). WPML compatible.
+
+- Multisite enabled
 
 - Keeps track of your online orders.
 
@@ -116,6 +118,29 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 
 == Changelog ==
+
+2.5  
+* made plugin frontend wpml compatible (tested with WP 3.6 , WPML Multilingual CMS Version 2.9.2, WPML String Translation Version 1.8.2 and WPML Translation Management Version 1.7.2, but should work with any reasonably recent wpml version(s) )     
+* Dutch translation added (thank you Jelmer)  - (1 string still in english. Will be updated when available)  
+* more consistant handling of localized number formatting throughout the plugin  
+* added option to enable increase/decrease of items in cart (enable/disable in wppizza->layout) and respective css  
+* added 4 more custom order form fields  
+* added template for plaintext emails  
+* added print order button in history  
+* added category (name etc) to items array that can be used in email templates for each item  
+* added filter/ability to use loop so it can be used for single posts too (see notes in templates/wppizza-single.php for how to do that to make it play nicely with your theme)  
+* added various other filters for order items and metadata  
+* added option to use customised admin css in theme directory  (either use wppizza-admin-custom.css in theme directory to load original and overwrite only some declarations or copy wppizza-admin.css to overwrite all)    
+* prettied up localization page somewhat  
+* prettied up remove button in cart  
+* added admin js error checking to have at least one meal size option set  
+* js disable (and re-enable) 'place order' button in cart when/while updating cart  
+* added filter for localized javascript variables for other extensions to hook into  
+* added javascript function for extensions to hook into after cart has been refreshed (in conjunction with above)  
+* other minor improvements and tidy-ups  
+* TODO -> more consistency in encoding and decoding of entities  
+1st October 2013  
+
 
 
 2.4.3  

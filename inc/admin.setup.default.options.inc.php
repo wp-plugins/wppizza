@@ -324,7 +324,8 @@
 				'add_to_cart_on_title_click' => false,
 				'hide_decimals' => false,
 				'show_currency_with_price' => 0,
-				'currency_symbol_left' => false
+				'currency_symbol_left' => false,
+				'cart_increase' => false
 			),
 			'opening_times_standard'=>array(
 				0=>array('open'=>'14:30','close'=>'01:00'),
@@ -393,7 +394,11 @@
 				3=>array('sort'=>3,'key'=>'ctel','lbl'=>__('Telephone :', $this->pluginLocale),'value'=>array(),'type'=>'text','enabled'=>true,'required'=>true),
 				4=>array('sort'=>4,'key'=>'ccomments','lbl'=>__('Comments :', $this->pluginLocale),'value'=>array(),'type'=>'textarea','enabled'=>true,'required'=>false),
 				5=>array('sort'=>5,'key'=>'ccustom1','lbl'=>__('Custom Field 1 :', $this->pluginLocale),'value'=>array(),'type'=>'text','enabled'=>false,'required'=>false),
-				6=>array('sort'=>6,'key'=>'ccustom2','lbl'=>__('Custom Field 2 :', $this->pluginLocale),'value'=>array(),'type'=>'text','enabled'=>false,'required'=>false)
+				6=>array('sort'=>6,'key'=>'ccustom2','lbl'=>__('Custom Field 2 :', $this->pluginLocale),'value'=>array(),'type'=>'text','enabled'=>false,'required'=>false),
+				7=>array('sort'=>7,'key'=>'ccustom3','lbl'=>__('Custom Field 3 :', $this->pluginLocale),'value'=>array(),'type'=>'text','enabled'=>false,'required'=>false),
+				8=>array('sort'=>8,'key'=>'ccustom4','lbl'=>__('Custom Field 4 :', $this->pluginLocale),'value'=>array(),'type'=>'text','enabled'=>false,'required'=>false),
+				9=>array('sort'=>9,'key'=>'ccustom5','lbl'=>__('Custom Field 5 :', $this->pluginLocale),'value'=>array(),'type'=>'text','enabled'=>false,'required'=>false),
+				10=>array('sort'=>10,'key'=>'ccustom6','lbl'=>__('Custom Field 6 :', $this->pluginLocale),'value'=>array(),'type'=>'text','enabled'=>false,'required'=>false)
 			),
 			'gateways'=>array(
 				'gateway_selected'=>array('COD'=>true),
@@ -471,7 +476,7 @@
 					'lbl'=>__('please enter the required information below', $this->pluginLocale)
 				),
 				'order_page_self_pickup'=>array(
-					'descr'=>__('Order Page - Self Pickup: text on order page to highlight self pickup (if appplicable)', $this->pluginLocale),
+					'descr'=>__('Order Page - Self Pickup: text on order page to highlight self pickup (if applicable)', $this->pluginLocale),
 					'lbl'=>__('Note: you have chosen to pickup the order yourself. This order will not be delivered. Please allow 30 min. for us to prepare your order.', $this->pluginLocale)
 				),
 				'required_field'=>array(
@@ -518,31 +523,31 @@
 				),
 
 				'free_delivery'=>array(
-					'descr'=>__('Pricelabels (Sub)Totals: text to display when free delivery applies', $this->pluginLocale),
+					'descr'=>__('Price Labels (Sub)Totals: text to display when free delivery applies', $this->pluginLocale),
 					'lbl'=>__('free delivery', $this->pluginLocale)
 				),
 				'delivery_charges'=>array(
-					'descr'=>__('Pricelabels (Sub)Totals: text delivery charges - when set to "Fixed" or "Free delivery over" (if applicable)', $this->pluginLocale),
+					'descr'=>__('Price Labels (Sub)Totals: text delivery charges - when set to "Fixed" or "Free delivery over" (if applicable)', $this->pluginLocale),
 					'lbl'=>__('delivery charges', $this->pluginLocale)
 				),
 				'delivery_charges_per_item'=>array(
-					'descr'=>__('Pricelabels (Sub)Totals: text delivery when set to "Delivery Charges per item" (if applicable)', $this->pluginLocale),
+					'descr'=>__('Price Labels (Sub)Totals: text delivery when set to "Delivery Charges per item" (if applicable)', $this->pluginLocale),
 					'lbl'=>__('delivery charges per item', $this->pluginLocale)
 				),
 				'discount'=>array(
-					'descr'=>__('Pricelabels (Sub)Totals: text before sum of discounts applied(if any)', $this->pluginLocale),
+					'descr'=>__('Price Labels (Sub)Totals: text before sum of discounts applied(if any)', $this->pluginLocale),
 					'lbl'=>__('discount', $this->pluginLocale)
 				),
 				'item_tax_total'=>array(
-					'descr'=>__('Pricelabels (Sub)Totals: text before sum of tax applied to all items(if >0)', $this->pluginLocale),
+					'descr'=>__('Price Labels (Sub)Totals: text before sum of tax applied to all items(if > 0)', $this->pluginLocale),
 					'lbl'=>__('Sales Tax', $this->pluginLocale)
 				),					
 				'order_total'=>array(
-					'descr'=>__('Pricelabels (Sub)Totals: text before total sum of ORDER', $this->pluginLocale),
+					'descr'=>__('Price Labels (Sub)Totals: text before total sum of ORDER', $this->pluginLocale),
 					'lbl'=>__('total', $this->pluginLocale)
 				),
 				'order_items'=>array(
-					'descr'=>__('Pricelabels (Sub)Totals: text before total sum of ITEMS in cart', $this->pluginLocale),
+					'descr'=>__('Price Labels (Sub)Totals: text before total sum of ITEMS in cart', $this->pluginLocale),
 					'lbl'=>__('your items', $this->pluginLocale)
 				),
 				'openinghours_closed'=>array(

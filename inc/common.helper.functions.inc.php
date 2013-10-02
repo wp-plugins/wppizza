@@ -28,7 +28,7 @@ function wppizza_round_up ( $value, $precision ) {
 	
 	
 /******************************* find path to wp-load.php or any other wp file above current directory under document root****************************/
-/** this is probaly not very useful ever as one will need to find the path before this has been loaded****/
+/** this is probably not very useful ever as one will need to find the path before this has been loaded****/
 function wppizza_get_wp_config_path($file){
     $base = dirname(__FILE__);
     $base = str_replace("\\", "/", $base);

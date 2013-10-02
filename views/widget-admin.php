@@ -64,7 +64,7 @@
 			</p>
 
 		    <p class="<?php echo $this->pluginSlug; ?>-selected-orderpage" <?php if($type=='orderpage'){echo "style='display:block'";}else{echo "style='display:none'";} ?>>
-		        <small style="color:blue"><?php _e("You probaly want to create a dedicated orderpage with the following shortcode instead [wppizza type='orderpage'].", $this->pluginLocale); ?></small>
+		        <small style="color:blue"><?php _e("You probably want to create a dedicated orderpage with the following shortcode instead [wppizza type='orderpage'].", $this->pluginLocale); ?></small>
 			</p>
 
 		    <p class="<?php echo $this->pluginSlug; ?>-selected-openingtimes" <?php if($type=='openingtimes'){echo "style='display:block'";}else{echo "style='display:none'";} ?>>

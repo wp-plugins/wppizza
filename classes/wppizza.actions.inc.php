@@ -20,14 +20,33 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 			/*class to send order emails used via ajax too so must be avialable from bckend too*/
 			add_action('init', array( $this, 'wppizza_send_order_emails'));
 
+			/***************
+				[make user defined localizations strings wpml compatible]
+			***************/
+    		add_action('init', array( $this, 'wppizza_wpml_localization'),15);
+			/***************
+				[filters]
+			***************/
+			/**sanitize db input vars**/
+			add_filter('wppizza_filter_sanitize_order', array( $this, 'wppizza_filter_sanitize_order'),10,1);
+			add_filter('wppizza_filter_sanitize_post_vars', array( $this, 'wppizza_filter_sanitize_post_vars'),10,1);
+			add_filter('wppizza_filter_order_summary', array( $this, 'wppizza_filter_order_summary_legacy'),10,1);
+
+
 		/************************************************************************
 			[runs only for frontend]
 		*************************************************************************/
 		if(!is_admin()){
 			/***enqueue frontend scripts and styles***/
 			add_action('wp_enqueue_scripts', array( $this, 'wppizza_register_scripts_and_styles'),$this->pluginOptions['layout']['css_priority']);
+
+			/***************
+				[filters]
+			***************/
 			/*include template**/
 			add_filter('template_include', array( $this,'wppizza_include_template'), 1 );
+			/***use loop for single post***/
+			add_filter('wppizza_filter_loop', array( $this, 'wppizza_filter_loop'));
 			/***exclude selected order page from navigation */
 			add_filter('get_pages', array(&$this,'wppizza_exclude_order_page_from_navigation'));
 		}
@@ -478,7 +497,6 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 		die();//needed !!!
 	}
 
-
     /*****************************************************
     * include relevant template depending on shortcode
     * [see header of template for details]
@@ -513,8 +531,6 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 				$showadditives=$atts['showadditives'];
 			}
 
-//var_dump($query->slug);
-//exit();
 			if($query){
 			$query_var=''.$query->slug.'';
 			}
@@ -587,6 +603,7 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 			/**variables to use in template**/
 			$options = $this->pluginOptions;
 			$cart=wppizza_order_summary($_SESSION[$this->pluginSession],$options);
+			$cart = apply_filters('wppizza_filter_order_summary', $cart);
 			/**txt variables from settings->localization*/
 			$txt = $options['localization'];/*put all text varibles into something easier to deal with**/
 
@@ -625,6 +642,7 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 			/*******get the variables***/
 			$options = $this->pluginOptions;
 			$cart=wppizza_order_summary($_SESSION[$this->pluginSession],$options);
+			$cart = apply_filters('wppizza_filter_order_summary', $cart);
 			/**txt variables from settings->localization*/
 			$txt = $options['localization'];
 			/**formelements from settings->order form*/
@@ -698,7 +716,7 @@ public function wppizza_require_common_input_validation_functions(){
 				'menu_icon'		=> plugins_url( 'img/pizza_16.png', $this->pluginPath ),
 				'has_archive'   => false,
 				'hierarchical'	=> false,
-				'supports'      => array( 'title', 'editor', 'author','thumbnail','page-attributes'),
+				'supports'      => array( 'title', 'editor', 'author','thumbnail','page-attributes','comments'),
 				'taxonomies'    => array('')
 			);
 			register_post_type( $this->pluginSlug, $args );
@@ -816,7 +834,23 @@ public function wppizza_require_common_input_validation_functions(){
 		}
 		return $template_path;
 	}
-
+    /*****************************************************
+     * Use loop template when displying SINGLE ITEMS in custom post type category
+     * [see header of templates/wppizza-single.php for details]
+     ******************************************************/
+	function wppizza_filter_loop($args){
+		global $post;
+		if(is_single()){
+			$catTerms = get_the_terms($post->ID, WPPIZZA_TAXONOMY);
+			if ( $catTerms && ! is_wp_error( $catTerms ) ){
+				$firstCat=reset($catTerms);
+				$args['tax_query'][0]['terms']=$firstCat->slug;
+			}
+			$args['posts_per_page']=1;
+			$args['max_num_pages']=-1;
+		}
+		return $args;
+	}
 /***********************************************************************************************
 *
 *
@@ -830,9 +864,21 @@ public function wppizza_require_common_input_validation_functions(){
     public function wppizza_register_scripts_and_styles_admin($hook) {
         if(is_admin()) {// && ($hook=='settings_page_'.$this->pluginSlug || $hook=='widgets.php')
             /**css**/
-				wp_register_style($this->pluginSlug, plugins_url( 'css/styles-admin.css',$this->pluginPath), array(), $this->pluginVersion);
+            	if (file_exists( get_template_directory() . '/wppizza-admin.css')){
+					/**copy stylesheet to template directory to keep settings**/
+					wp_register_style($this->pluginSlug.'-admin', get_template_directory_uri().'/wppizza-admin.css', array(), $this->pluginVersion);
+            	}else{
+					wp_register_style($this->pluginSlug.'-admin', plugins_url( 'css/styles-admin.css',$this->pluginPath), array(), $this->pluginVersion);
+            	}
+				/**if we want to keep all the original css (including future changes) but only want to overwrite some lines , add wppizza-admin-custom.css to your template directory*/
+				if (file_exists( get_template_directory() . '/wppizza-admin-custom.css')){
+					wp_register_style($this->pluginSlug.'-admin-custom', get_template_directory_uri().'/wppizza-admin-custom.css', array(''.$this->pluginSlug.'-admin'), $this->pluginVersion);
+					wp_enqueue_style($this->pluginSlug.'-admin-custom');
+				}
+				/**for timepicker etc*/
 				wp_enqueue_style('jquery-style', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.1/themes/smoothness/jquery-ui.css');
- 				wp_enqueue_style($this->pluginSlug);
+ 				wp_enqueue_style($this->pluginSlug.'-admin');
+
       		/**js***/
       			wp_enqueue_script('jquery-ui-sortable');
             	wp_enqueue_script('jquery-ui-datepicker');
@@ -847,7 +893,9 @@ public function wppizza_require_common_input_validation_functions(){
 	***************/
     public function wppizza_register_scripts_and_styles($hook) {
 		$options = $this->pluginOptions;
-    	/**css**/
+    	/**************
+    		css
+    	**************/
 		if($options['layout']['include_css']){
 			if (file_exists( get_template_directory() . '/wppizza-'.$options['layout']['style'].'.css')){
 			/**copy stylesheet to template directory to keep settings**/
@@ -864,13 +912,15 @@ public function wppizza_require_common_input_validation_functions(){
 			}
 		}
 
-		/**js***/
+		/****************
+			js
+		****************/
     	wp_register_script($this->pluginSlug.'-validate', plugins_url( 'js/jquery.validate.min.js', $this->pluginPath ), array($this->pluginSlug), $this->pluginVersion ,true);
     	wp_enqueue_script($this->pluginSlug.'-validate');
     	wp_register_script($this->pluginSlug, plugins_url( 'js/scripts.min.js', $this->pluginPath ), array('jquery'), $this->pluginVersion ,$options['plugin_data']['js_in_footer']);
     	wp_enqueue_script($this->pluginSlug);
 
-    /**localized js***/
+    	/**localized js***/
 		wp_enqueue_script( $this->pluginSlug );
 		$jsMessages=array();
 		$jsMessages['closed']=''.$options['localization']['alert_closed']['lbl'].'';
@@ -880,9 +930,16 @@ public function wppizza_require_common_input_validation_functions(){
 		if($options['order']['order_pickup'] && $options['order']['order_pickup_alert'] ){
 			$jsMessages['pickup']=''.$options['localization']['order_self_pickup_cart_js']['lbl'].'';
 		}
+		/*add functions (names) to run when cart has been refreshed**/
+		$jsCartRefreshCompleteFunctions['functionsCartRefresh']=array();
+		$jsCartRefreshCompleteFunctions['functionsCartRefresh'] = apply_filters('wppizza_filter_js_cart_refresh_functions', $jsCartRefreshCompleteFunctions['functionsCartRefresh']);
+		/**allow adding of veriables for extending plugins**/
+		$jsExtend['jsExtend']=array();
+		$jsExtend['jsExtend'] = apply_filters('wppizza_filter_js_extend', $jsExtend['jsExtend']);
 
-		$localized_array = array( 'ajaxurl' =>admin_url('admin-ajax.php'),'validate_error'=>array('email'=>''.$options['localization']['required_field']['lbl'].'','required'=>''.$options['localization']['required_field']['lbl'].''),'msg'=>$jsMessages);
+		$localized_array = array( 'ajaxurl' =>admin_url('admin-ajax.php'),'validate_error'=>array('email'=>''.$options['localization']['required_field']['lbl'].'','required'=>''.$options['localization']['required_field']['lbl'].''),'msg'=>$jsMessages,'funcCartRefr'=>$jsCartRefreshCompleteFunctions['functionsCartRefresh'],'extend'=>$jsExtend['jsExtend']);
 		wp_localize_script( $this->pluginSlug,$this->pluginSlug, $localized_array );
+
     }
 /*********************************************************
 *
@@ -955,6 +1012,277 @@ public function wppizza_require_common_input_validation_functions(){
 		$pieces['orderby'] = 'ORDER BY FIELD(t.term_id,'.$sort.')';
 	return $pieces;
 	}
+/*********************************************************************************
+*
+*	[filter legacy: as we might still be using additional info in templates]
+*	make extend array into addinfo array
+*
+*********************************************************************************/
+	function wppizza_filter_order_summary_legacy($orderItems){
+		foreach($orderItems['items'] as $k=>$oItem){
+			/**extend key has priority over additional info (legacy)*/
+			if(isset($oItem['extend']) && count($oItem['extend'])>0){
+				$orderItems['items'][$k]['additionalinfo']=$oItem['extend'];
+				unset($orderItems['items'][$k]['extend']);
+			}
 
+
+		}
+		return $orderItems;
+	}
+
+/*********************************************************************************
+*
+*	[filter: sanitize whats going into the db]
+*
+*********************************************************************************/
+	function wppizza_filter_sanitize_order_recursive(&$val,$key){
+		/**let's first decode all already encode ones to not double encode**/
+		$val=wppizza_email_decode_entities($val,$this->blogCharset);
+		/*now entitize the lot again*/
+		$val=wppizza_email_html_entities($val);
+	}
+	function wppizza_filter_sanitize_order($arr){
+		array_walk_recursive($arr,array($this,'wppizza_filter_sanitize_order_recursive'));
+		return $arr;
+	}
+
+
+	function wppizza_filter_sanitize_post_vars_recursive(&$val,$key){
+		$val=stripslashes($val);
+		/**let's first decode all already encode ones to not double encode**/
+		$val=wppizza_email_decode_entities($val,$this->blogCharset);
+		/**strip things**/
+		$val=wp_kses($val,array());
+		/*now entitize the lot again*/
+		$val=wppizza_email_html_entities($val);
+	}
+
+	function wppizza_filter_sanitize_post_vars($arr){
+		if(is_array($arr)){
+			array_walk_recursive($arr,array($this,'wppizza_filter_sanitize_post_vars_recursive'));
+		}
+		return $arr;
+	}
+/*********************************************************************************
+*
+*	[filter: order details returned from db]
+*
+*********************************************************************************/
+/*seems to run 2x ?! need to find out why that is reasonably soon*/
+
+	function wppizza_filter_order_db_return($oDetails){
+		$orderDetails=$oDetails;
+		//$orderDetails['items']=array();
+		foreach($oDetails['item'] as $k=>$v){
+			$orderDetails['item'][$k]['postId']=$v['postId'];
+			$orderDetails['item'][$k]['count']=$v['count'];
+			$orderDetails['item'][$k]['quantity']=$v['count'];/*legacy*/
+			$orderDetails['item'][$k]['name']=$v['name'];
+			$orderDetails['item'][$k]['size']=$v['size'];
+			$orderDetails['item'][$k]['price']=wppizza_output_format_price($v['price'],$this->pluginOptions['layout']['hide_decimals']);
+			$orderDetails['item'][$k]['pricetotal']=wppizza_output_format_price($v['pricetotal'],$this->pluginOptions['layout']['hide_decimals']);
+			$orderDetails['item'][$k]['categories']=$v['categories'];
+			$orderDetails['item'][$k]['additionalinfo']=$v['additionalinfo'];
+			$orderDetails['item'][$k]['extend']=$v['extend'];
+		}
+
+
+		$orderDetails['total_price_items']=wppizza_output_format_price($oDetails['total_price_items'],$this->pluginOptions['layout']['hide_decimals']);
+		$orderDetails['discount']=wppizza_output_format_price($oDetails['discount'],$this->pluginOptions['layout']['hide_decimals']);
+		$orderDetails['item_tax']=wppizza_output_format_price($oDetails['item_tax'],$this->pluginOptions['layout']['hide_decimals']);
+
+		$orderDetails['delivery_charges']=!empty($oDetails['delivery_charges']) ? wppizza_output_format_price($oDetails['delivery_charges'],$this->pluginOptions['layout']['hide_decimals']) : '';
+		$orderDetails['selfPickup']=!empty($oDetails['selfPickup']) ? 1 : 0;
+		$orderDetails['total']=wppizza_output_format_price($oDetails['total'],$this->pluginOptions['layout']['hide_decimals']);
+
+	return $orderDetails;
+	}
+/*********************************************************************************
+*
+*	[filter plaintext customer / order details converting array to string when returned from db]
+*	[as everything that gets stored in the db is entitized, we need to un-entitize stuff
+*	that gets returned from the db and make a string out of it]
+*********************************************************************************/
+/*seems to run 2x too ?! need to find out why that is reasonably soon*/
+	function wppizza_filter_customer_details_to_plaintext($customerDetails){
+		if(is_array($customerDetails)){
+				$pad=74;
+				$customerDetailsString='';
+				foreach($customerDetails as $k=>$v){
+					/*non-textarea*/
+					if($v['type']!='textarea'){
+						$strPartLeft=''.wppizza_email_decode_entities($v['label'],$this->blogCharset).'';
+						$spaces=$pad-strlen($strPartLeft);
+						$strPartRight=''.wppizza_email_decode_entities($v['value'],$this->blogCharset);
+						/**add to string**/
+						$customerDetailsString.=''.$strPartLeft.''.str_pad($strPartRight,$spaces," ",STR_PAD_LEFT).''.PHP_EOL;
+					}
+					/**textareas, nl and indent*/
+					if($v['type']=='textarea'){
+						/**add to string**/
+						$customerDetailsString.=''.wppizza_email_decode_entities($v['label'],$this->blogCharset).PHP_EOL;
+						if($v['value']!=''){
+							$customerDetailsString.='     '.wppizza_wordwrap_indent(wordwrap(wppizza_email_decode_entities($v['value'],$this->blogCharset), $pad, PHP_EOL, true));
+							$customerDetailsString.=PHP_EOL.PHP_EOL;
+						}
+					}
+				}
+			return $customerDetailsString;
+		}else{
+			return $customerDetails;
+		}
+	}
+
+
+	function wppizza_filter_order_items_to_plaintext($orderItems){
+		if(is_array($orderItems)){
+			$pad=74;
+			/**set originals**/
+			$oItems=$orderItems;
+
+			/*override/entitydecode individual keys as required**/
+			foreach($orderItems as $k=>$v){
+				$oItems[$k]['name']=wppizza_email_decode_entities($v['name'],$this->blogCharset);
+				$oItems[$k]['label']=wppizza_email_decode_entities($v['label'],$this->blogCharset);
+				$oItems[$k]['value']=wppizza_email_decode_entities($v['value'],$this->blogCharset);
+				if(isset($v['categories']) && is_array($v['categories'])){
+				foreach($v['categories'] as $catId=>$cat){
+					$oItems[$k]['categories'][$catId]['name']=wppizza_email_decode_entities($cat['name'],$this->blogCharset);
+					$oItems[$k]['categories'][$catId]['description']=wppizza_email_decode_entities($cat['description'],$this->blogCharset);
+				}}
+				/**decoded string add spaces to front***/
+				$oItems[$k]['additional_info']='   '.wppizza_email_decode_entities(''.$v['addinfo']['txt'].'',$this->blogCharset).PHP_EOL;
+
+				/**now unset vars we dont need anymore**/
+				unset($oItems[$k]['additionalinfo']);
+				unset($oItems[$k]['extend']);
+				unset($oItems[$k]['additionalInfo']);
+				unset($oItems[$k]['addinfo']);
+
+
+			}
+			return $oItems;
+		}
+	}
+
+
+	function wppizza_filter_order_items_html($orderItems,$returnKey){
+
+		/**set originals**/
+		$oItems=$orderItems;
+		if(isset($orderItems) && is_array($orderItems)){
+		foreach($orderItems as $k=>$v){
+			/**unset vars we dont need anymore**/
+			unset($oItems[$k]['additionalinfo']);
+			unset($oItems[$k]['extend']);
+			unset($oItems[$k]['additionalInfo']);
+			/**return additional info html with set returnKey (whatever is used in template*/
+			$oItems[$k][''.$returnKey.'']=''.$v['addinfo']['html'].'';
+			/**now unset addinfo var as we dont need it anymore**/
+			unset($oItems[$k]['addinfo']);
+		}}
+		return $oItems;
+	}
+	
+	
+	
+	
+	function wppizza_filter_customer_details_html($cDetails){
+		if(isset($cDetails) && is_array($cDetails)){
+		foreach($cDetails as $k=>$v){
+			if($v['type']=='textarea'){
+				$cDetails[$k]['value']='<div class="wppizza-order-textarea">'.nl2br($v['value']).'</div>';
+			
+			}
+		}}
+		return	$cDetails;
+	}	
+	
+	function wppizza_filter_order_summary_to_plaintext($orderSummary){
+		if(is_array($orderSummary)){
+				$pad=74;
+				$orderSummaryString='';
+				foreach($orderSummary as $k=>$v){
+						if($k=='self_pickup'){
+							$strPartLeft=PHP_EOL.wordwrap(strip_tags(wppizza_email_decode_entities($v['label'],$this->blogCharset)), $pad, "\n", true).PHP_EOL;
+						}else{
+							$strPartLeft=''.wppizza_email_decode_entities($v['label'],$this->blogCharset).'';
+						}
+						$spaces=$pad-strlen($strPartLeft);
+						$strPartRight=wppizza_email_decode_entities(''.$v['currency'].' '.$v['price'].'',$this->blogCharset);
+						/**add to string**/
+						$orderSummaryString.=''.$strPartLeft.''.str_pad($strPartRight,$spaces," ",STR_PAD_LEFT).''.PHP_EOL;
+				}
+				/**decode entities for plaintext**/
+			return $orderSummaryString;
+		}else{
+			return $orderSummary;
+		}
+	}
+
+	function wppizza_filter_order_additional_info($orderItems){
+		foreach($orderItems as $k=>$oItems){
+			/*legacy => will be deprecated. it should all be in [extend] as array***/
+			if(isset($oItems['additionalinfo']) && is_array($oItems['additionalinfo'])){
+				$orderItems[$k]['addinfo']['html']=implode(", ",$oItems['additionalinfo']);
+				$orderItems[$k]['addinfo']['txt']=wppizza_email_decode_entities(implode(", ",$oItems['additionalinfo']),$this->blogCharset);
+			}
+		}
+		return $orderItems;
+	}
+
+/*******************************************************
+*
+*	[WPML : make user defined strings wpml compatible]
+*
+******************************************************/
+	function wppizza_wpml_localization(){
+		if(function_exists('icl_translate')) {
+			/**localization**/
+			foreach($this->pluginOptions['localization'] as $k=>$arr){
+				$this->pluginOptions['localization'][$k]['lbl'] = icl_translate(WPPIZZA_SLUG,''. $k.'', $arr['lbl']);
+			}
+			/**additives**/
+			foreach($this->pluginOptions['additives'] as $k=>$str){
+				$this->pluginOptions['additives'][$k] = icl_translate(WPPIZZA_SLUG,'additives_'. $k.'', $str);
+			}
+			/**sizes**/
+			foreach($this->pluginOptions['sizes'] as $k=>$arr){
+				foreach($arr as $sKey=>$sArr){
+					$this->pluginOptions['sizes'][$k][$sKey]['lbl'] = icl_translate(WPPIZZA_SLUG,'sizes_'. $k.'_'.$sKey.'', $sArr['lbl']);
+				}
+			}
+			/**gateway**/
+			$this->pluginOptions['gateways']['gateway_select_label'] = icl_translate(WPPIZZA_SLUG,'gateway_select_label', $this->pluginOptions['gateways']['gateway_select_label']);
+			$registerdGateways=$this->wppizza_get_registered_gateways();
+			foreach($registerdGateways as $k=>$regGw){
+				$regGw['gatewayName'] = icl_translate(WPPIZZA_SLUG.'_gateways',''.strtolower($regGw['ident']).'_ident', $regGw['gatewayName']);
+				if(isset($regGw['gatewayOptions']) && is_array($regGw['gatewayOptions'])){
+					foreach($regGw['gatewayOptions'] as $g=>$gwOption){
+						if(is_string($gwOption) && $gwOption!=''){
+							$regGw['gatewayOptions'][$g] =__($gwOption, $this->pluginLocale);
+							$regGw['gatewayOptions'][$g] = icl_translate(WPPIZZA_SLUG.'_gateways',''.strtolower($regGw['ident']).'_'. $g.'', $regGw['gatewayOptions'][$g]);
+						}
+					}
+				}
+			}
+			/**order_form**/
+			foreach($this->pluginOptions['order_form'] as $k=>$arr){
+				$this->pluginOptions['order_form'][$k]['lbl'] = icl_translate(WPPIZZA_SLUG,'order_form_'. $k.'', $arr['lbl']);
+			}
+			/**order**/
+			$this->pluginOptions['order']['order_email_from'] = icl_translate(WPPIZZA_SLUG,'order_email_from', $this->pluginOptions['order']['order_email_from']);
+			$this->pluginOptions['order']['order_email_from_name'] = icl_translate(WPPIZZA_SLUG,'order_email_from_name', $this->pluginOptions['order']['order_email_from_name']);
+			/**order email to **/
+			foreach($this->pluginOptions['order']['order_email_to'] as $k=>$arr){
+				$this->pluginOptions['order']['order_email_to'][$k] = icl_translate(WPPIZZA_SLUG,'order_email_to_'.$k.'', $arr);
+			}
+			/**order email bcc **/
+			foreach($this->pluginOptions['order']['order_email_bcc'] as $k=>$arr){
+				$this->pluginOptions['order']['order_email_bcc'][$k] = icl_translate(WPPIZZA_SLUG,'order_email_bcc_'. $k.'', $arr);
+			}
+		}
+	}
 }
 ?>

@@ -166,6 +166,15 @@ jQuery(document).ready(function($){
 	*****************************/
 	$(document).on('click', '.wppizza-delete', function(e){
 		e.preventDefault();
+		var self=$(this);
+		/**we must have at least one size option**/
+		if(self.hasClass('sizes')){
+			var noOfSizes=$('#wppizza_sizes_options>span').length;
+			if(noOfSizes<=1){
+				alert('Sorry, at least one size option must be defined');
+				return;	
+			}
+		}
 		$(this).closest('span').remove();
 	});
 	/*****************************

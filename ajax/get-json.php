@@ -18,8 +18,13 @@ $options=$this->pluginOptions;
 *
 *
 ***************************************************************/
-if(isset($_POST['vars']['type']) && (($_POST['vars']['type']=='add' || $_POST['vars']['type']=='remove') && $_POST['vars']['id']!='')||  $_POST['vars']['type']=='refresh'){
+if(isset($_POST['vars']['type']) && (($_POST['vars']['type']=='add' || $_POST['vars']['type']=='remove' || $_POST['vars']['type']=='increment') && $_POST['vars']['id']!='')||  $_POST['vars']['type']=='refresh'){
 
+	/**set count as int*********/
+	$itemCount=1;
+	if(isset($_POST['vars']['itemCount'])){
+	$itemCount=(int)$_POST['vars']['itemCount'];
+	}
 	/**initialize price array***/
 	$itemprice=array();
 	/**********set header********************/
@@ -43,8 +48,22 @@ if(isset($_POST['vars']['type']) && (($_POST['vars']['type']=='add' || $_POST['v
 		}
 
 		/*add item to session array. adding lowercase name first to simplify sorting with asort**/
-		$_SESSION[$this->pluginSession]['items'][$groupId][]=array('sortname'=>strtolower($itemName),'size'=>$itemVars[3],'price'=>$itemSizePrice,'sizename'=>$itemSizeName,'printname'=>$itemName,'id'=>$itemVars[1],'additionalinfo'=>'');
+		$_SESSION[$this->pluginSession]['items'][$groupId][]=array('sortname'=>strtolower($itemName),'size'=>$itemVars[3],'price'=>$itemSizePrice,'sizename'=>$itemSizeName,'printname'=>$itemName,'id'=>$itemVars[1]);
 	}
+
+	/**increment when using textbox**/
+	if($_POST['vars']['type']=='increment'){
+		$groupSel=explode("-",$_POST['vars']['id']);
+		$groupId=$groupSel[2];
+		$setGroup=$_SESSION[$this->pluginSession]['items'][$groupId][0];
+		unset($_SESSION[$this->pluginSession]['items'][$groupId]);
+		/**reset from scratch**/
+		for($i=0;$i<$itemCount;$i++){
+			$_SESSION[$this->pluginSession]['items'][$groupId][]=$setGroup;
+		}
+	}
+
+
 	/**remove from cart -> just unset**/
 	if($_POST['vars']['type']=='remove'){
 		/**explode and get last in array (the id)**/
@@ -53,7 +72,7 @@ if(isset($_POST['vars']['type']) && (($_POST['vars']['type']=='add' || $_POST['v
 		$last=key($_SESSION[$this->pluginSession]['items'][$groupId]);
 		unset($_SESSION[$this->pluginSession]['items'][$groupId][$last]);
 		/*if there are 0x this ingredient, unset completely**/
-		if(count($_SESSION[$this->pluginSession]['items'][$groupId])==0){
+		if(count($_SESSION[$this->pluginSession]['items'][$groupId])==0 || $itemCount==0){
 			unset($_SESSION[$this->pluginSession]['items'][$groupId]);
 		}
 	}
@@ -141,15 +160,18 @@ if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='sendorder'){
 	$mailResults['mailer']='Error'; /**just so we dont have an abandoned colon**/
 	if($orderId){
 		if($orderStatus=='INITIALIZED'){
-			
+
 			/**update the db**/
 			$now=time();
 			$thisOrderTransactionId='COD'.$now.$orderId.'';
-		
+			$thisOrderPostVars = apply_filters('wppizza_filter_sanitize_post_vars', $params);
+			$thisOrderPostVars=mysql_real_escape_string(serialize($thisOrderPostVars));
+
+
 			$wpdb->query("UPDATE ".$wpdb->prefix . $this->pluginOrderTable." SET
 			transaction_id='".$thisOrderTransactionId."',
-			customer_ini='".wppizza_sanitize_post_vars($params)."' 
-			WHERE id='".$orderId."' ");			
+			customer_ini='".$thisOrderPostVars."'
+			WHERE id='".$orderId."' ");
 
 
 			/**send the email***/
@@ -157,7 +179,7 @@ if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='sendorder'){
 
 			/**update again to see if mail was sent successfully**/
 			$updateDb=true;
-			
+
 		}else{
 			$mailResults['error']=__('This order has already been processed',$this->pluginLocale);
 		}
@@ -180,9 +202,9 @@ if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='sendorder'){
 		transaction_details='".$transactionDetails."',
 		payment_status='".$paymentStatus."',
 		customer_details='".$sendEmail->customerDetails."',
-		order_details='".$sendEmail->orderDetails."',			
+		order_details='".$sendEmail->orderDetails."',
 		mail_sent='".$mailSent."',
-		mail_error='".$mailError."' 
+		mail_error='".$mailError."'
 		WHERE id='".$orderId."' ");
 	}
 

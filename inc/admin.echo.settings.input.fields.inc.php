@@ -59,7 +59,7 @@ $options = $this->pluginOptions;
 				echo "<input name='".$this->pluginSlug."[layout][css_priority]' size='2' type='text'  value='{$options['layout']['css_priority']}' />";
 				echo "".__('Stylesheet Priority', $this->pluginLocale)."";
 				echo "<br/>".__('By default, the stylesheet will be loaded AFTER the main theme stylesheet (which should have a priority of "10"). If you experience strange behaviour or layout issues (in conjunction with other plugins for example), you can try adjusting this priority here (the bigger the number, the later it gets loaded).', $this->pluginLocale)."";
-				
+
 			}
 			if($field=='hide_decimals' ){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[layout][".$field."]' type='checkbox'  ". checked($options['layout'][$field],true,false)." value='1' />";
@@ -71,6 +71,9 @@ $options = $this->pluginOptions;
 			}
 
 			if($field=='currency_symbol_left'){
+				echo "<input id='".$field."' name='".$this->pluginSlug."[layout][".$field."]' type='checkbox'  ". checked($options['layout'][$field],true,false)." value='1' />";
+			}
+			if($field=='cart_increase'){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[layout][".$field."]' type='checkbox'  ". checked($options['layout'][$field],true,false)." value='1' />";
 			}
 
@@ -265,9 +268,9 @@ $options = $this->pluginOptions;
 			}
 			if($field=='order_pickup'){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[order][".$field."]' type='checkbox'  ". checked($options['order'][$field],true,false)." value='1' /> ".__('tick to enable', $this->pluginLocale)."";
-				
+
 				echo "<br/>".__('Discount for self-pickup ?', $this->pluginLocale)." <input id='order_pickup_discount' name='".$this->pluginSlug."[order][order_pickup_discount]' size='2' type='text' value='".wppizza_output_format_price($options['order']['order_pickup_discount'])."' /> ".__('in % - 0 to disable', $this->pluginLocale)."";
-				
+
 				echo "<br/><input id='order_pickup_alert' name='".$this->pluginSlug."[order][order_pickup_alert]' type='checkbox'  ". checked($options['order']['order_pickup_alert'],true,false)." value='1' /> ".__('enable javascript alert when user selects self pickup (set corresponding text in localization)', $this->pluginLocale)."";
 			}
 			if($field=='order_pickup_display_location'){
@@ -316,18 +319,18 @@ $options = $this->pluginOptions;
 				if(is_array($options['order'][$field])){$val=implode(",",$options['order'][$field]);}else{$val='';}
 				echo "<input id='".$field."' name='".$this->pluginSlug."[order][".$field."]' size='30' type='text' value='".$val."' />";
 			}
-			
+
 			if($field=='order_email_from'){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[order][".$field."]' size='30' type='text' value='".$options['order'][$field]."' />";
 			}
 			if($field=='order_email_from_name'){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[order][".$field."]' size='30' type='text' value='".$options['order'][$field]."' />";
-			}			
-			
-			
+			}
+
+
 			if($field=='item_tax'){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[order][".$field."]' size='2' type='text' value='".wppizza_output_format_price($options['order'][$field])."' />%";
-			}			
+			}
 			if($field=='sizes'){
 				echo"<div id='wppizza_".$field."'>";
 				echo"<div id='wppizza_".$field."_options'>";
@@ -350,33 +353,33 @@ $options = $this->pluginOptions;
 					echo "<a href='#' id='wppizza_add_".$field."' class='button'>".__('add', $this->pluginLocale)."</a>";
 				echo"</div>";
 			}
-			
+
 			if($field=='gateways'){
 				echo"<div id='wppizza_".$field."'>";
-				
+
 				echo"<div id='wppizza_".$field."_options'>";
-					echo"<div>"; 
+					echo"<div>";
 						echo"<input name='".$this->pluginSlug."[gateways][gateway_select_as_dropdown]' type='checkbox'  ". checked($options['gateways']['gateway_select_as_dropdown'],true,false)." value='1' />";
 						echo" <b>".__('Display Gateway choices as dropdowns instead of buttons', $this->pluginLocale)."</b> ".__('[only applicable if more than one gateway installed, activated and enabled]', $this->pluginLocale)."";
 					echo"</div>";
-				
+
 					echo"<div>";
 						echo"<b>".__('Label:', $this->pluginLocale)."</b> ";
 						echo"<input name='".$this->pluginSlug."[gateways][gateway_select_label]' type='text' size='50' value='". $options['gateways']['gateway_select_label']."' />";
 						echo"<br/>".__('by default displayed above if choices are displayed as full width buttons, next to if dropdown. edit css as required', $this->pluginLocale)." ".__('[only applicable if more than one gateway installed, activated and enabled]', $this->pluginLocale)."";
 					echo"</div>";
-						
-					echo"<div>"; 
+
+					echo"<div>";
 						echo"<input name='".$this->pluginSlug."[gateways][gateway_showorder_on_thankyou]' type='checkbox'  ". checked($options['gateways']['gateway_showorder_on_thankyou'],true,false)." value='1' />";
 						echo" <b>".__('Show Order Details on "Thank You" page (Y/N)', $this->pluginLocale)."</b> ".__('Will add any order details after your thank you text on successful order', $this->pluginLocale)."";
-					echo"</div>";						
-						
-						
-						
-						
+					echo"</div>";
+
+
+
+
 						$this->wppizza_admin_section_gateways($field,$options[$field]);
 					echo"</div>";
-				echo"</div>";				
+				echo"</div>";
 			}
 			if($field=='localization'){
 				/**to get descriptions include default options**/
@@ -392,7 +395,10 @@ $options = $this->pluginOptions;
 				echo"<div id='wppizza_".$field."'>";
 					echo"<div id='wppizza_".$field."_options'>";
 					asort($localizeOptions);
+					$bgStyle=array(0,4,10,11,14,21,28);
+					$i=0;
 					foreach($localizeOptions as $k=>$v){
+					if(in_array($i,$bgStyle)){echo'<div>';}
 						if(in_array($k,$textArea)){
 							$editorId="".$this->pluginSlug."[".$field."][".$k."]";
 							echo"<br/>".$v['descr']."";
@@ -405,13 +411,14 @@ $options = $this->pluginOptions;
 						echo "<input name='".$this->pluginSlug."[".$field."][".$k."]' size='30' type='text' value='".$v['lbl']."' />";
 						echo"".$v['descr']."<br/>";
 						}
+					$i++;
+					if(in_array($i,$bgStyle)){echo'</div>';}
 					}
 					echo"</div>";
 				echo"</div>";
 			}
 			if($field=='history'){
 				echo"<div id='wppizza_".$field."'>";
-				
 
 					echo"<div id='wppizza_".$field."_search' class='button'>";
 						echo "<a href='#' id='".$field."_get_orders' class='button'>".__('show most recent *confirmed* orders', $this->pluginLocale)."</a>";
@@ -423,21 +430,21 @@ $options = $this->pluginOptions;
 						echo "</span>";
 					echo"</div>";
 					echo"<div id='wppizza_".$field."_orders'></div>";
-				
+
 				if (current_user_can('manage_options')){
-					echo"<div id='wppizza_".$field."_clear'>"; 
+					echo"<div id='wppizza_".$field."_clear'>";
 						echo" <b>".__('Delete abandoned/cancelled orders from database older than', $this->pluginLocale)."</b> ";
 						echo"<input id='wppizza_order_days_delete' type='text' size='2' value='7' />";
-						echo" <b>".__('Days (minimum:1)', $this->pluginLocale)."</b> ";
+						echo" <b>".__('Days (minimum: 1)', $this->pluginLocale)."</b> ";
 						echo"<input id='wppizza_order_failed_delete' type='checkbox' value='1' />";
 						echo" <b>".__('delete failed, tampered or otherwise invalid entries too.', $this->pluginLocale)."</b> ";
 						echo"<br/><span id='wppizza_order_abandoned_delete' class='button'>".__('go', $this->pluginLocale)."</span>";
-						echo"<br/>".__('As soon as cutomers go to the order page an order will be initialized and stored in the db to be checked against when going through with the purchase to make sure nothing has been tampered with. However, not every customer will actually go through with the purchase which leaves this initialised order orphaned in the db.Click the "ok" button to clean your db of these entries (it will NOT affect any completed or pending orders)', $this->pluginLocale)."";
+						echo"<br/>".__('As soon as customers go to the order page an order will be initialized and stored in the db to be checked against when going through with the purchase to make sure nothing has been tampered with. However, not every customer will actually go through with the purchase which leaves this initialised order orphaned in the db.Click the "ok" button to clean your db of these entries (it will NOT affect any completed or pending orders)', $this->pluginLocale)."";
 						echo"<br/><span style='color:red'>".__('Note: This will delete these entries PERMANENTLY from the db and is not reversable.', $this->pluginLocale)."</style>";
-					echo"</div>";				
+					echo"</div>";
 				}
 				echo"</div>";
-				
+
 			}
 	}
 ?>

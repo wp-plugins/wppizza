@@ -10,6 +10,7 @@
 		[check and add newly added default options]
 	***********************************************/
 	$added_options=wppizza_compare_options($defaultOptions,$options);
+		
 	/*get array of new default options when updating plugin*/
 	$update_options=wppizza_merge_options($added_options,$options);
 
@@ -38,6 +39,9 @@
 
 	/**unflatten->final options**/
 	$update_options = wppizza_inflate($ret);
+
+
+
 	/******************************************************************************************************
 	*
 	* $update_options now holds old options plus the added new defaults options minus the removed options
@@ -61,7 +65,7 @@
 		$update_options['order']['order_email_bcc']=$options['order']['order_email_bcc'];
 	}
 	if(isset($options['order_form'])){
-		$update_options['order_form']=$options['order_form'];
+		$update_options['order_form']=$update_options['order_form'];
 	}
 	if(isset($options['plugin_data']['category_parent_page'])){
 		$update_options['plugin_data']['category_parent_page']=$options['plugin_data']['category_parent_page'];
@@ -72,5 +76,4 @@
 	/*this will always be an empty array (discounts set to "none"), so distinctly set it here as the comparison function above will strip it as it's empty**/
 	$update_options['order']['discounts']['none']=array();
 	ksort($update_options['order']['discounts']);/*to keep a consistant order*/
-
 ?>

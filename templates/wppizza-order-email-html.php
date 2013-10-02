@@ -3,7 +3,7 @@
 *
 *
 *	WPPizza - Html Email Template
-*	Note: do not use divs, stylesheets or  <style></style> declarations 
+*	Note: do not use divs, stylesheets or  <style></style> declarations
 *	many email clients either don't understand/render divs and/or strip any tags from the email
 *	tables are definitely your best bet.....
 *
@@ -12,9 +12,9 @@
 /*
 	to keep things consistant and easier to manage, let's put at least some colors etc into variables
 	obviously you can change override things as required
-	make sure you do not end up with values like background:; or any other invalid styles, 
-	as gmail - for example - will strip the whole style declaration  
-	
+	make sure you do not end up with values like background:; or any other invalid styles,
+	as gmail - for example - will strip the whole style declaration
+
 */
 $pageBackgroundColor='#FFFFFF';
 $fontSize='14px';
@@ -26,7 +26,7 @@ $vLinkColor='#21759B';
 
 $mailBackgroundColor='#F4F3F4';
 $mailHeaderBackgroundColor='#21759B';
-$mailHeaderBackgroundImage="";//something like: background:url('http://www.domain.com/logo.png') 10px 10px no-repeat; 
+$mailHeaderBackgroundImage="";//something like: background:url('http://www.domain.com/logo.png') 10px 10px no-repeat;
 $mailHeaderTextColour='#FFFFFF';
 $mailBorder='border: 1px dotted #CECECE';
 $mailDivider='padding:0;border-top:1px dotted #CECECE;';
@@ -73,7 +73,7 @@ $mailPadding['10x5']='padding:10px 5px';
 
 ************************************************/
 ?>
-							<tr><td colspan="2" style="<?php echo $mailPadding['20x0x0x15'] ?>"><?php echo $orderLabel['order_details']; ?></td></tr> 
+							<tr><td colspan="2" style="<?php echo $mailPadding['20x0x0x15'] ?>"><?php echo $orderLabel['order_details']; ?></td></tr>
 							<tr><td colspan="2" style="<?php echo $mailPadding['2x0x0x15'] ?>"><?php echo $nowdate; ?></td></tr>
 							<tr><td colspan="2" style="<?php echo $mailPadding['2x0x0x15'] ?>"><?php echo $orderLabel['order_paid_by']; ?> <?php echo $gatewayUsed; ?> (<?php echo $transactionId; ?>)</td></tr>
 							<tr><td colspan="2" style="<?php echo $mailDivider ?>">&nbsp;</td></tr><?php /*add devider**/ ?>
@@ -141,7 +141,7 @@ $mailPadding['10x5']='padding:10px 5px';
 		<?php if(isset($order_summary['self_pickup'])){?>
 							<tr><td style="<?php echo $mailPadding['10x5'] ?>;font-weight:600;color:#ff3333" colspan="2"><?php echo $order_summary['self_pickup']['label']; ?></td></tr>
 		<?php } ?>
-		
+
 <?php
 /**********************************************************
 
@@ -151,9 +151,9 @@ $mailPadding['10x5']='padding:10px 5px';
 ?>
 <?php
 if(trim($orderLabel['order_email_footer'])!=''){
-?>		
+?>
 		<?php /*add devider**/ ?>
-							<tr><td colspan="2" style="<?php echo $mailDivider ?>">&nbsp;</td></tr>		
+							<tr><td colspan="2" style="<?php echo $mailDivider ?>">&nbsp;</td></tr>
 		<tr><td colspan="2" style="<?php echo $mailPadding['2x15'] ?>; font-size:90%"><?php echo $orderLabel['order_email_footer']; ?></td></tr>
 <?php } ?>
 <?php

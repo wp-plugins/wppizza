@@ -14,11 +14,29 @@ if(isset($cart['innercartinfo'])){
 	$cartContents='<ul class="wppizza-cart-contents">';
 	foreach($cart['items'] as $k=>$item){
 		$cartContents.='<li class="wppizza-cart-item">';
-		$cartContents.='<span id="wppizza-cart-'.$k.'" class="wppizza-remove-from-cart" title="'.$txt['remove_from_cart']['lbl'].'">x</span>'.$item['count'].'x '.$item['name'].' ';
+		
+		
+		/********CHANGES IN 2.5, *****alloow increase/decrease changed 2.5*************/
+		if(isset($cart['increase_decrease'])){
+			$cartContents.="<input type='text' size=3 class='wppizza-cart-incr' name='wppizza-cart-incr' value='".$item['count']."'>";
+			$cartContents.='<span id="wppizza-cart-'.$k.'" class="wppizza-cart-increment" title="">&#10003;</span>';
+		}else{
+			$cartContents.='<span id="wppizza-cart-'.$k.'" class="wppizza-remove-from-cart" title="'.$txt['remove_from_cart']['lbl'].'">x</span>';
+		}		
+		$cartContents.=''.$item['count'].'x '.$item['name'].' ';
+		/***************************************************************/
+		
 		if($item['size']!=''){
 		$cartContents.='<span class="wppizza-cart-item-size">'.$item['size'].'</span> ';
 		}
-		$cartContents.='<span class="wppizza-cart-item-price">'.wppizza_output_format_price($item['pricetotal'],$options['layout']['hide_decimals']).' '.$cart['currency'].'</span>';
+		/*****************************************
+			CHANGES IN 2.5, 
+			changed	wppizza_output_format_price($item['pricetotal'],$options['layout']['hide_decimals']);
+			to just $item['pricetotal']
+		***********************************/
+		
+		 
+		$cartContents.='<span class="wppizza-cart-item-price">'.$item['pricetotal'].' '.$cart['currency'].'</span>';
 		if(is_array($item['additionalinfo']) && count($item['additionalinfo'])>0){
 			$cartContents.='<div class="wppizza-item-additional-info"><div class="wppizza-item-additional-info-icon"></div><div class="wppizza-item-additional-info-pad">';
 			foreach($item['additionalinfo'] as $addItem){

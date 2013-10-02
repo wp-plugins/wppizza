@@ -5,7 +5,7 @@ Description: Maintain your restaurant menu online and accept cash on delivery or
 Author: ollybach
 Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Author URI: http://www.wp-pizza.com
-Version: 2.4.3
+Version: 2.5
 License:
 
   Copyright 2012 ollybach (dev@wp-pizza.com)
@@ -63,7 +63,7 @@ class WPPizza extends WP_Widget {
 ********************************************************/
  function __construct() {
 	/**init constants***/
-	$this->pluginVersion='2.4.3';//increment in line with stable tag in readme and version above
+	$this->pluginVersion='2.5';//increment in line with stable tag in readme and version above
  	$this->pluginName="".WPPIZZA_NAME."";
  	$this->pluginSlug="".WPPIZZA_SLUG."";//set also in uninstall when deleting options
 	$this->pluginSlugCategoryTaxonomy="".WPPIZZA_TAXONOMY."";//also on uninstall delete wppizza_children as well as widget
@@ -72,6 +72,10 @@ class WPPizza extends WP_Widget {
 	$this->pluginOptions = get_option(WPPIZZA_SLUG,0);
 	$this->pluginNagNotice=0;//default off->for use in updates to this plugin
 	$this->pluginPath=__FILE__;//default off->for use in updates to this plugin
+	/**blog charset*/
+	$this->blogCharset=get_bloginfo('charset');
+	
+	
 	/**set session per blogid when multisite and enabled to avoid having same cart contents between different network sites*/
 	if(is_multisite() && $this->pluginOptions['plugin_data']['wp_multisite_session_per_site']){
 		global $blog_id;
