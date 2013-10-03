@@ -290,6 +290,7 @@
 			**************************************************************************************/
 			$category_sort=$options['layout']['category_sort'];
 			$defaultSizes=$options['sizes'];
+			if(!isset($options['additives'])){$options['additives']=array();}
 			$defaultAdditives=$options['additives'];
 			$orderPageId=$options['order']['orderpage'];
 		}

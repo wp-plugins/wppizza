@@ -348,10 +348,11 @@ $options = $this->pluginOptions;
 			if($field=='additives'){
 				echo"<div id='wppizza_".$field."'>";
 					echo"<div id='wppizza_".$field."_options'>";
+					if(isset($options[$field]) && is_array($options[$field])){
 					asort($options[$field]);//sort but keep index
 					foreach($options[$field] as $k=>$v){
 						echo"".$this->wppizza_admin_section_additives($field,$k,$options[$field][$k],$optionInUse);
-					}
+					}}
 					echo"</div>";
 					echo "<a href='#' id='wppizza_add_".$field."' class='button'>".__('add', $this->pluginLocale)."</a>";
 				echo"</div>";

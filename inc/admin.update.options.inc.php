@@ -1,4 +1,5 @@
 <?php
+
 	/****************************************************
 	*
 	*	[insert new default options into options table]
@@ -10,9 +11,11 @@
 		[check and add newly added default options]
 	***********************************************/
 	$added_options=wppizza_compare_options($defaultOptions,$options);
-		
+
+
 	/*get array of new default options when updating plugin*/
 	$update_options=wppizza_merge_options($added_options,$options);
+
 
 	/*distinctly set plugin version*/
 	$update_options['plugin_data']['version']=$this->pluginVersion;
@@ -66,14 +69,22 @@
 	}
 	if(isset($options['order_form'])){
 		$update_options['order_form']=$update_options['order_form'];
+		/*lets not loose select options in order form**/
+		foreach($update_options['order_form'] as $k=>$oForm){
+			$update_options['order_form'][$k]['value']=array();
+			if(isset($options['order_form'][$k]['value'])){
+				$update_options['order_form'][$k]['value']=$options['order_form'][$k]['value'];
+			}
+		}
 	}
 	if(isset($options['plugin_data']['category_parent_page'])){
 		$update_options['plugin_data']['category_parent_page']=$options['plugin_data']['category_parent_page'];
 	}
 	if(isset($options['gateways']['gateway_selected'])){
 		$update_options['gateways']['gateway_selected']=$options['gateways']['gateway_selected'];
-	}	
+	}
 	/*this will always be an empty array (discounts set to "none"), so distinctly set it here as the comparison function above will strip it as it's empty**/
 	$update_options['order']['discounts']['none']=array();
 	ksort($update_options['order']['discounts']);/*to keep a consistant order*/
+
 ?>
