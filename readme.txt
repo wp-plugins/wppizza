@@ -6,11 +6,11 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.2, WP 3.3 
 Tested up to: 3.6.1
-Stable tag: 2.5.2
+Stable tag: 2.5.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-A Restaurant Plugin (not only for Pizza). Maintain your Menu (multiple sizes, prices, categories). Accept COD online orders. Multisite, Multilingual, WPML compatible.
+A Restaurant Plugin (not only for Pizza). Maintain your Menu (sizes, prices, categories). Accept COD orders. Multisite, Multilingual, WPML compatible.
 
 
 
@@ -118,6 +118,12 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 
 == Changelog ==
+
+2.5.3    
+* updated dutch translation.  
+* added option to set minimum order value before any delivery will be offered (free or paid)  
+9th October 2013  
+
 
 2.5.2  
 * eliminated some notices when updating plugin.  

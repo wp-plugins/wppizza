@@ -241,20 +241,20 @@ $options = $this->pluginOptions;
 					echo "<span class='wppizza_option'>";
 					echo "<input name='".$this->pluginSlug."[order][delivery_selected]' type='radio' ". checked($options['order']['delivery_selected']==$k,true,false)." value='".$k."' />";
 					if($k=='minimum_total'){
-						echo"".__('Free delivery when total order value reaches', $this->pluginLocale).":";
+						echo" ".__('Free delivery when total order value reaches', $this->pluginLocale).":";
 						echo"<input name='".$this->pluginSlug."[order][".$field."][minimum_total][min_total]' size='2' type='text' value='".wppizza_output_format_price($options['order'][$field]['minimum_total']['min_total'],$optionsDecimals)."' />";
 						echo"<br />";
 						echo"<input name='".$this->pluginSlug."[order][".$field."][minimum_total][deliver_below_total]' type='checkbox' ". checked($v['deliver_below_total'],true,false)." value='1' />";
-						echo"".__('Deliver even when total order value is below minimum (the difference between total and "Minimum Total" above will be added to the Total as "Delivery Charges")', $this->pluginLocale)."";
+						echo" ".__('Deliver even when total order value is below minimum (the difference between total and "Minimum Total" above will be added to the Total as "Delivery Charges")', $this->pluginLocale)."";
 						echo"<br />";
-						echo"".__('(If this is not selected and the total order is below the set value above, the customer will not be able to submit the order to you)', $this->pluginLocale)."";
+						echo" ".__('(If this is not selected and the total order is below the set value above, the customer will not be able to submit the order to you)', $this->pluginLocale)."";
 					}
 					if($k=='standard'){
-						echo"".__('Fixed Delivery Charges [added to order total]', $this->pluginLocale).":";
+						echo" ".__('Fixed Delivery Charges [added to order total]', $this->pluginLocale).":";
 						echo "<input name='".$this->pluginSlug."[order][".$field."][standard][delivery_charge]' size='2' type='text' value='".wppizza_output_format_price($options['order'][$field]['standard']['delivery_charge'],$optionsDecimals)."' />";
 					}
 					if($k=='per_item'){
-						echo"".__('Delivery Charges per item', $this->pluginLocale).":";
+						echo" ".__('Delivery Charges per item', $this->pluginLocale).":";
 						echo "<input name='".$this->pluginSlug."[order][".$field."][per_item][delivery_charge_per_item]' size='2' type='text' value='".wppizza_output_format_price($options['order'][$field]['per_item']['delivery_charge_per_item'],$optionsDecimals)."' />";
 						echo" ".__('Do not apply delivery charges when total order value reaches ', $this->pluginLocale).":";
 						echo"<input name='".$this->pluginSlug."[order][".$field."][per_item][delivery_per_item_free]' size='2' type='text' value='".wppizza_output_format_price($options['order'][$field]['per_item']['delivery_per_item_free'],$optionsDecimals)."' />";
@@ -262,10 +262,22 @@ $options = $this->pluginOptions;
 					}
 					echo "</span>";
 				}
+
+
+				/**min order for delivery**/
+				echo "<span class='wppizza_option'>";
+				echo"<input name='".$this->pluginSlug."[order][order_min_for_delivery]' size='2' type='text' value='".wppizza_output_format_price($options['order']['order_min_for_delivery'],$optionsDecimals)."' />";
+				echo" ".__('minimum order value to offer delivery [will disable "place order" button in cart and order page until set order value (before any discounts etc) has been reached. 0 to disable. Customer can still choose "self-pickup" (if enabled).]', $this->pluginLocale)."<br />";
+				echo" <em>".__('probably most useful with "Fixed" / "Per Item" delivery charges or when "Deliver even when total order value is below...etc" is checked]', $this->pluginLocale)."</em>";
+				echo "</span>";
+
+
 			}
+			/**I don't think this actually in use anywhere ?!**/
 			if($field=='delivery_per_item'){
 				echo"<input name='".$this->pluginSlug."[order][".$field."]' size='2' type='text' value='".wppizza_output_format_price($options['order'][$field],$optionsDecimals)."' />";
 			}
+
 			if($field=='order_pickup'){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[order][".$field."]' type='checkbox'  ". checked($options['order'][$field],true,false)." value='1' /> ".__('tick to enable', $this->pluginLocale)."";
 
@@ -399,7 +411,7 @@ $options = $this->pluginOptions;
 				echo"<div id='wppizza_".$field."'>";
 					echo"<div id='wppizza_".$field."_options'>";
 					asort($localizeOptions);
-					$bgStyle=array(0,4,10,11,14,21,28);
+					$bgStyle=array(0,5,11,12,15,22,29);
 					$i=0;
 					foreach($localizeOptions as $k=>$v){
 					if(in_array($i,$bgStyle)){echo'<div>';}

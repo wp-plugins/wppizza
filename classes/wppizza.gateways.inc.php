@@ -118,7 +118,12 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 	 MUST have class=wppizza-ordernow]
 	***********************************************/
 	function wppizza_gateway_standard_button() {
-		$standardButton='<input class="submit wppizza-ordernow" type="submit" style="display:block" value="'.$this->pluginOptions['localization']['send_order']['lbl'].'" />';
+		$cart=wppizza_order_summary($_SESSION[$this->pluginSession],$this->pluginOptions);
+		if($cart['nocheckout']!=''){
+			$standardButton='<div class="wppizza-order-nocheckout">'.$cart['nocheckout'].'</div>';
+		}else{		
+			$standardButton='<input class="submit wppizza-ordernow" type="submit" style="display:block" value="'.$this->pluginOptions['localization']['send_order']['lbl'].'" />';
+		}
 		return $standardButton;
 	}
 	/***********************************************

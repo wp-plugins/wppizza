@@ -144,6 +144,7 @@
 .wppizza-cart-info .wppizza-cart-info-price{float:right;font-size:100%}
 .wppizza-cart-info .wppizza-cart-total{font-weight:600}
 
+
 /**-----NEW IN VERSION 2.0----***/
 .wppizza-cart-info .wppizza-cart-tax{border-top:1px dotted #CECECE}
 
@@ -177,6 +178,8 @@
 #wppizza-send-order>fieldset>label.error{color:#FF0000;padding:0 0 5px 0;font-size:90%}
 #wppizza-send-order>fieldset>input,#wppizza-send-order>fieldset>select,#wppizza-send-order>fieldset>textarea{margin-bottom:3px;width:100%;min-width:100%;padding-left:0;padding-right:0;}
 #wppizza-send-order>fieldset>textarea{height:75px}
+/**order page -> nocheckout (instead of send order button) as minimum values etc have not been reached NEW 2.5.3*/
+#wppizza-send-order>fieldset>.wppizza-order-nocheckout{color:red;text-align:center;line-height:30px}
 
 #wppizza-cart-contents{border:1px dotted #CECECE;padding:10px;}
 #wppizza-cart-contents>ul{margin:0 0 10px 0 ;padding:0;list-style-position:inside}
@@ -188,6 +191,9 @@
 #wppizza-cart-subtotals>li{margin-left:15px;line-height:130%}
 #wppizza-cart-subtotals>li.wppizza-order-discount{border-bottom:1px dotted #CECECE;}
 #wppizza-cart-total{font-weight:600;border-top:1px solid #CECECE;margin-top:10px;padding-top:3px;line-height:130%}
+
+
+
 
 /*NEW IN VERSION 2.1*/
 #wppizza-cart-contents.wppizza-cart-thankyou{padding:0;margin:15px auto;width:95%;border:none;}/*if displaying order on thank you page*/

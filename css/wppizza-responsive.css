@@ -171,6 +171,8 @@
 #wppizza-send-order>fieldset>label.error{color:#FF0000;padding:0 0 5px 0;font-size:90%}
 #wppizza-send-order>fieldset>input,#wppizza-send-order>fieldset>select,#wppizza-send-order>fieldset>textarea{margin-bottom:3px;width:100%;min-width:100%;padding-left:0;padding-right:0;}
 #wppizza-send-order>fieldset>textarea{height:75px}
+/**order page -> nocheckout (instead of send order button) as minimum values etc have not been reached NEW 2.5.3*/
+#wppizza-send-order>fieldset>.wppizza-order-nocheckout{color:red;text-align:center;line-height:30px}
 
 #wppizza-cart-contents{border:1px dotted #CECECE;padding:10px;}
 #wppizza-cart-contents>ul{margin:0 0 10px 0 ;padding:0;list-style-position:inside}

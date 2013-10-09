@@ -360,6 +360,7 @@
 				'order_pickup' => false,
 				'order_pickup_alert' => false,
 				'order_pickup_discount' => 0,
+				'order_min_for_delivery' => 0,
 				'order_pickup_display_location' => 1,
 				'delivery'=>array(
 					'minimum_total'=>array('min_total'=>'7.5','deliver_below_total'=>true),
@@ -523,7 +524,10 @@
 					'descr'=>__('Label Info: required minimum order value (displayed if applicable)', $this->pluginLocale),
 					'lbl'=>__('minimum order', $this->pluginLocale)
 				),
-
+				'minimum_order_delivery'=>array(
+					'descr'=>__('Label Info: required minimum order value for delivery (displayed if applicable)', $this->pluginLocale),
+					'lbl'=>__('minimum order for delivery', $this->pluginLocale)
+				),
 				'free_delivery'=>array(
 					'descr'=>__('Price Labels (Sub)Totals: text to display when free delivery applies', $this->pluginLocale),
 					'lbl'=>__('free delivery', $this->pluginLocale)

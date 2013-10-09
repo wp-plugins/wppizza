@@ -123,6 +123,7 @@
 			$options['order']['order_pickup']=!empty($input['order']['order_pickup']) ? true : false;
 			$options['order']['order_pickup_alert']=!empty($input['order']['order_pickup_alert']) ? true : false;
 			$options['order']['order_pickup_discount']=wppizza_validate_float_only($input['order']['order_pickup_discount']);
+			$options['order']['order_min_for_delivery']=wppizza_validate_float_only($input['order']['order_min_for_delivery']);
 
 			$options['order']['order_pickup_display_location'] = wppizza_validate_int_only($input['order']['order_pickup_display_location']);
 
