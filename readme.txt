@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.2, WP 3.3 
 Tested up to: 3.6.1
-Stable tag: 2.5.3
+Stable tag: 2.5.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -119,9 +119,15 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 == Changelog ==
 
+2.5.4
+* re-added print order button in history which was accidentally ommitted again in previous versions)  
+* added option to grant access to pages depending on role   
+* moved option to clean up the order history database to dedicated "tools" page   
+11th October 2013  
+
 2.5.3    
 * updated dutch translation.  
-* added option to set minimum order value before any delivery will be offered (free or paid)  
+* option to set minimum order value before any delivery will be offered (free or paid)  
 9th October 2013  
 
 

@@ -6,6 +6,7 @@ $options = $this->pluginOptions;
 	$optionSizes=wppizza_sizes_available($options['sizes']);//outputs an array $arr=array(['lbl']=>array(),['prices']=>array());
 	$optionsDecimals=$options['layout']['hide_decimals'];
 
+
 			if($field=='version'){
 				echo "{$options['plugin_data'][$field]}";
 			}
@@ -433,6 +434,41 @@ $options = $this->pluginOptions;
 					echo"</div>";
 				echo"</div>";
 			}
+			
+			
+			if($field=='access'){
+				global $current_user,$user_level,$wp_roles;
+				echo"<div id='wppizza_".$field."'>";
+					echo"<b>".__('Set the roles that are allowed to access these pages', $this->pluginLocale)."</b>";
+					echo"<br />".__('Menu Items and Categories are accessible just like "normal" posts', $this->pluginLocale)."";
+					$roles=get_editable_roles();/*only get roles user is allowed to edit**/
+
+					/*do not display current users role (otherwise he can screw his own access) or levels higher than current*/
+					if(is_array($current_user->roles)){
+					foreach($current_user->roles as $curRoles){
+						if(isset($roles[$curRoles])){
+							unset($roles[$curRoles]);
+						}
+					}}
+					
+					$access=$this->wppizza_set_capabilities();
+					foreach($roles as $roleName=>$v){
+						
+						$userRole = get_role($roleName);
+							echo"<div class='wppizza-access'>";
+							echo"<input type='hidden' name='".$this->pluginSlug."[admin_access_caps][".$roleName."]' value='".$roleName."'>";
+							echo"<ul>";
+							print"<li style='width:150px'><b>".$roleName.":</b></li>";
+								foreach($access as $aKey=>$aArray){
+									echo"<li><input name='".$this->pluginSlug."[admin_access_caps][".$roleName."][".$aArray['cap']."]' type='checkbox'  ". checked(isset($userRole->capabilities[$aArray['cap']]),true,false)." value='".$aArray['cap']."' /> ".$aArray['name']."<br/></li>";//". checked($options['plugin_data']['access_level'],true,false)."
+								}
+							echo"</ul>";
+							echo"</div>";
+					}
+				echo"</div>";
+			}			
+			
+			
 			if($field=='history'){
 				echo"<div id='wppizza_".$field."'>";
 
@@ -447,7 +483,11 @@ $options = $this->pluginOptions;
 					echo"</div>";
 					echo"<div id='wppizza_".$field."_orders'></div>";
 
-				if (current_user_can('manage_options')){
+				echo"</div>";
+
+			}
+			if($field=='tools'){
+				echo"<div id='wppizza_".$field."'>";
 					echo"<div id='wppizza_".$field."_clear'>";
 						echo" <b>".__('Delete abandoned/cancelled orders from database older than', $this->pluginLocale)."</b> ";
 						echo"<input id='wppizza_order_days_delete' type='text' size='2' value='7' />";
@@ -458,9 +498,8 @@ $options = $this->pluginOptions;
 						echo"<br/>".__('As soon as customers go to the order page an order will be initialized and stored in the db to be checked against when going through with the purchase to make sure nothing has been tampered with. However, not every customer will actually go through with the purchase which leaves this initialised order orphaned in the db.Click the "ok" button to clean your db of these entries (it will NOT affect any completed or pending orders)', $this->pluginLocale)."";
 						echo"<br/><span style='color:red'>".__('Note: This will delete these entries PERMANENTLY from the db and is not reversable.', $this->pluginLocale)."</style>";
 					echo"</div>";
-				}
 				echo"</div>";
-
-			}
+			}			
+			
 	}
 ?>

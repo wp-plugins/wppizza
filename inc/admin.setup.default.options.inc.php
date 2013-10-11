@@ -200,12 +200,12 @@
 										$post_id=wp_insert_post($item);
 										/**add meta boxes values**/
 										$metaId=update_post_meta($post_id, ''.$this->pluginSlug.'', $items['meta']) ;
-	
+
 										/*add thumbnail/featured image if set and available**/
 										if($items['featuredimage']!='' && is_file(WPPIZZA_PATH.'img/'.$items['featuredimage'].'')){
 											$image_data = file_get_contents(WPPIZZA_URL.'img/'.$items['featuredimage']);
 											$filename = basename($items['featuredimage']);
-	
+
 											if(wp_mkdir_p($upload_dir['path'])){
 					    						$file = $upload_dir['path'] . '/' . $filename;
 											}else{
@@ -506,7 +506,7 @@
 				'order_email_footer'=>array(
 					'descr'=>__('Order Email: Text you would like to display at the end of emails after everything else.', $this->pluginLocale),
 					'lbl'=>''
-				),					
+				),
 				'spend'=>array(
 					'descr'=>__('Label Discount (Spend): i.e "spend" 50.00 save 10.00', $this->pluginLocale),
 					'lbl'=>__('spend', $this->pluginLocale)
@@ -547,7 +547,7 @@
 				'item_tax_total'=>array(
 					'descr'=>__('Price Labels (Sub)Totals: text before sum of tax applied to all items(if > 0)', $this->pluginLocale),
 					'lbl'=>__('Sales Tax', $this->pluginLocale)
-				),					
+				),
 				'order_total'=>array(
 					'descr'=>__('Price Labels (Sub)Totals: text before total sum of ORDER', $this->pluginLocale),
 					'lbl'=>__('total', $this->pluginLocale)
@@ -563,4 +563,40 @@
 
 			)
 		);
+
+/********************************************************
+	[set initial admin access to plugin pages/tabs]
+********************************************************/
+	/**********************
+		if the default cap vars have never been set before, do it now (one time only)
+		essentially, every user role that has manage_options caps will get all cpas for this
+		plugin added to start off with, after which they can be edited in the acees rights tab
+		(provided the user has access to that tab of course)
+	**********************/
+	if(!isset($options['admin_access_caps'])){
+		global $wp_roles;
+		$wppizzaCaps=$this->wppizza_set_capabilities();
+
+		/*get all roles that have manage_options capabilities**/
+		$defaultAdmins=array();
+		foreach($wp_roles->roles as $rName=>$rVal){
+			if(isset($rVal['capabilities']['manage_options'])){
+				$defaultAdmins[$rName]=$rName;
+			}
+		}
+		/**foreach of these, add all capabilities**/
+		$setCaps=array();
+		foreach($defaultAdmins as $k=>$roleName){
+			$userRole = get_role($roleName);
+			foreach($wppizzaCaps as $akey=>$aVal){
+				$setCaps[$k][]=$aVal['cap'];
+				$userRole->add_cap( ''.$aVal['cap'].'' );
+			}
+		}
+		/**set a variable so we do not overwrite it in future updates*/
+		/*might as well save the role->caps array. might come in handy one day**/
+		$defaultOptions['admin_access_caps']=$setCaps;
+	}else{
+		$defaultOptions['admin_access_caps']=$options['admin_access_caps'];
+	}
 ?>

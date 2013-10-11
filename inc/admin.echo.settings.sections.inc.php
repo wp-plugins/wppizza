@@ -74,4 +74,12 @@
 		/**order history**/
 		add_settings_section('history', __('Order History', $this->pluginLocale),  array( $this, 'wppizza_admin_page_text_header'), 'history');
 		add_settings_field('history', '', array( $this, 'wppizza_admin_settings_input'), 'history', 'history', 'history' );
+		/**access rights**/
+		add_settings_section('access', __('Access Rights', $this->pluginLocale),  array( $this, 'wppizza_admin_page_text_header'), 'access');
+		add_settings_field('access', '', array( $this, 'wppizza_admin_settings_input'), 'access', 'access', 'access' );
+
+		/**tools**/
+		add_settings_section('tools', __('Miscellaneous Tools', $this->pluginLocale),  array( $this, 'wppizza_admin_page_text_header'), 'tools');
+		add_settings_field('tools', '', array( $this, 'wppizza_admin_settings_input'), 'tools', 'tools', 'tools' );
+
 ?>

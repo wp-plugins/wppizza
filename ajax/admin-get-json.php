@@ -18,11 +18,10 @@ $output='';
 /*****************************************************************************************************************
 *
 *
-*	[functions only   "current_user_can('manage_options')" is allowed to execute - i.e Admin]
+*
 *
 *
 *****************************************************************************************************************/
-if (current_user_can('manage_options')){
 	/*****************************************************
 		[adding new additive]
 	*****************************************************/
@@ -49,16 +48,16 @@ if (current_user_can('manage_options')){
 		}
 
 	/*****************************************************
-		[order history
+		[order history -> delete order]
 	*****************************************************/
-	/**delete order**/
 	if($_POST['vars']['field']=='delete_orders'){
 		global $wpdb;
 		$res=$wpdb->query( $wpdb->prepare( "DELETE FROM ".$wpdb->prefix . $this->pluginOrderTable." WHERE id=%s ",$_POST['vars']['ordId']));
 		$output.="".__('order deleted', $this->pluginLocale)."";
 	}
-
-	/**delete abandoned  orders**/
+	/*****************************************************
+		[order history -> delete abandoned orders]
+	*****************************************************/
 	if($_POST['vars']['field']=='delete_abandoned_orders'){
 		global $wpdb;
 		$days=0;
@@ -74,15 +73,6 @@ if (current_user_can('manage_options')){
 		$res=$wpdb->query( $wpdb->prepare($sql));
 		$output.="".__('Done', $this->pluginLocale)."";
 	}
-}
-/*****************************************************************************************************************
-*
-*
-*	[functions only   "current_user_can('read_private_pages')" is allowed to execute - i.e Editor and above]
-*
-*
-*****************************************************************************************************************/
-if (current_user_can('read_private_pages')){
 
 	/******************************************************
 		[save sorted categories]
@@ -128,8 +118,6 @@ if (current_user_can('read_private_pages')){
 	if($_POST['vars']['field']=='meals' && isset($_POST['vars']['item']) && $_POST['vars']['id']>=0 && $_POST['vars']['newKey']>=0){
 		$output=$this->wppizza_admin_section_category_item($_POST['vars']['field'],$_POST['vars']['id'],false,$_POST['vars']['newKey'],false,$options);
 	}
-
-
 	/*****************************************************
 		[order history]
 	*****************************************************/
@@ -141,7 +129,7 @@ if (current_user_can('read_private_pages')){
 		$allOrders = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix . $this->pluginOrderTable." WHERE payment_status IN ('COD','COMPLETED') ORDER BY id DESC ".$limit." ");
 		if(is_array($allOrders) && count($allOrders)>0){
 			/*admin only*/
-			if (current_user_can('manage_options')){
+			if (current_user_can('wppizza_cap_delete_order')){
 				$output.="<div>".__('Note: deleting an order will <b>ONLY</b> delete it from the database table. It will <b>NOT</b> issue any refunds, cancel the order, send emails etc.', $this->pluginLocale)."</div>";
 			}
 			$output.="<div style='color:red'>".__('"Status" is solely for your internal reference. Updating/changing the value will have no other effects but might help you to identify which orders have not been processed.', $this->pluginLocale)."</div>";
@@ -156,12 +144,9 @@ if (current_user_can('read_private_pages')){
 					$output.="<td>";
 						$output.="".__('Order Details', $this->pluginLocale)."";
 					$output.="</td>";
-			/*admin only*/
-			if (current_user_can('manage_options')){
 					$output.="<td>";
 						$output.="";
 					$output.="</td>";
-			}
 				$output.="</tr>";
 
 
@@ -185,17 +170,21 @@ if (current_user_can('read_private_pages')){
 							$output.="</select>";
 						$output.="</td>";
 						$output.="<td>";
-							$output.="<textarea class='wppizza_order_customer_details'>". $orders->customer_details ."</textarea>";
+							$output.="<textarea id='wppizza_order_customer_details_".$orders->id."' class='wppizza_order_customer_details'>". $orders->customer_details ."</textarea>";
 						$output.="</td>";
 						$output.="<td>";
-							$output.="<textarea class='wppizza_order_details'>". $orders->order_details ."</textarea>";
+							$output.="<textarea id='wppizza_order_details_".$orders->id."' class='wppizza_order_details'>". $orders->order_details ."</textarea>";
 						$output.="</td>";
-					/*admin only*/
-					if (current_user_can('manage_options')){
 						$output.="<td>";
-							$output.="<a href='#' id='wppizza_order_".$orders->id."' class='wppizza_order_delete'>".__('delete', $this->pluginLocale)."</a>";
+							/*admin only*/
+							if (current_user_can('wppizza_cap_delete_order')){
+								$output.="<a href='#' id='wppizza_order_".$orders->id."' class='wppizza_order_delete'>".__('delete', $this->pluginLocale)."</a>";
+								$output.="<br/>";
+							}
+							/*print order*/
+							$output.="<a href='#'  id='wppizza-print-order-".$orders->id."' class='wppizza-print-order button'>".__('print order', $this->pluginLocale)."</a>";
+
 						$output.="</td>";
-					}
 					$output.="</tr>";
 				}
 			$output.="</table>";
@@ -203,32 +192,14 @@ if (current_user_can('read_private_pages')){
 			$output.="<h1 style='text-align:center'>".__('no orders yet :(', $this->pluginLocale)."</h1>";
 		}
 	}
-	/**update order status**/
+	/********************************************
+		[order history -> update order status]
+	********************************************/
 	if($_POST['vars']['field']=='orderstatuschange' && isset($_POST['vars']['id']) && $_POST['vars']['id']>=0){
 		global $wpdb;
 		$res=$wpdb->query("UPDATE ".$wpdb->prefix . $this->pluginOrderTable." SET order_status='".$_POST['vars']['selVal']."' WHERE id=".$_POST['vars']['id']." ");
 		$output="".print_r($res,true)."";
 	}
-}
-/*****************************************************************************************************************
-*
-*
-*	[functions only   "current_user_can('publish_posts')" is allowed to execute - i.e author and above]
-*
-*
-*****************************************************************************************************************/
-if (current_user_can('publish_posts')){
-
-
-}
-/*****************************************************************************************************************
-*
-*
-*	[functions only   "current_user_can('edit_posts')" is allowed to execute - i.e contributor and above]
-*
-*
-*****************************************************************************************************************/
-if (current_user_can('edit_posts')){
 	/******************************************************
 		[prize tier selection has been changed->add relevant price options input fields]
 	******************************************************/
@@ -241,18 +212,7 @@ if (current_user_can('edit_posts')){
 				$output.="<input name='".$_POST['vars']['inpname']."[prices][]' type='text' size='5' value='".$price."'>";
 		}}
 	}
-}
-/*****************************************************************************************************************
-*
-*
-*	[functions only   "current_user_can('read')" is allowed to execute - i.e subscriber and above]
-*
-*
-*****************************************************************************************************************/
-if (current_user_can('read')){
 
-
-}
 
 print"".$output."";
 exit();

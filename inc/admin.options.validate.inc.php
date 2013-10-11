@@ -204,6 +204,30 @@
 			}}
 		}
 
+		/*******************************
+		*
+		*	[access level]
+		*
+		*******************************/
+		if(isset($_POST['wppizza_access'])){
+			$access=$this->wppizza_set_capabilities();
+			//$roles=get_editable_roles();/*only get roles user is allowed to edit**/
+			foreach($input['admin_access_caps'] as $roleName=>$v){
+				$userRole = get_role($roleName);
+				
+				foreach($access as $akey=>$aVal){
+					/**not checked, but previously selected->remove capability**/
+					if(isset($userRole->capabilities[$aVal['cap']]) && ( !is_array($input['admin_access_caps'][$roleName]) || !isset($input['admin_access_caps'][$roleName][$aVal['cap']]))){
+						$userRole->remove_cap( ''.$aVal['cap'].'' );
+					}
+					/**checked and NOT previously selected->add capability*/
+					if(is_array($input['admin_access_caps'][$roleName]) && isset($input['admin_access_caps'][$roleName][$aVal['cap']]) && !isset($userRole->capabilities[$aVal['cap']])){
+						$userRole->add_cap( ''.$aVal['cap'].'' );
+					}
+				}
+			}
+		}
+
 		/**update gateways**/
 		if(isset($_POST[''.$this->pluginSlug.'_gateways'])){
 

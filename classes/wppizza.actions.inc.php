@@ -355,6 +355,12 @@ public function admin_manage_meal_sizes(){
 public function admin_manage_order_history(){
 	require_once(WPPIZZA_PATH .'inc/admin.echo.manage_order_history.inc.php');
 }
+public function admin_manage_tools(){
+	require_once(WPPIZZA_PATH .'inc/admin.echo.manage_tools.inc.php');
+}
+public function admin_manage_access_Rights(){
+	require_once(WPPIZZA_PATH .'inc/admin.echo.manage_access_rights.inc.php');
+}
 public function admin_manage_layout(){
 	require_once(WPPIZZA_PATH .'inc/admin.echo.manage_layout.inc.php');
 }
@@ -375,6 +381,46 @@ public function admin_manage_gateways(){
 }
 public function wppizza_admin_settings_input($field='') {
 	require(WPPIZZA_PATH .'inc/admin.echo.settings.input.fields.inc.php');
+}
+/*********************************************************
+*
+*		[array of wp capabilities]
+*
+*********************************************************/
+function wppizza_set_capabilities($get_user_caps=false){
+	$tabs['settings']=array('name'=>__('Settings',$this->pluginLocale),'cap'=>'wppizza_cap_settings');
+	$tabs['order-settings']=array('name'=>__('Order Settings',$this->pluginLocale),'cap'=>'wppizza_cap_order_settings');
+	$tabs['gateways']=array('name'=>__('Gateways',$this->pluginLocale),'cap'=>'wppizza_cap_gateways');
+	$tabs['order-form-settings']=array('name'=>__('Order Form Settings',$this->pluginLocale),'cap'=>'wppizza_cap_order_form_settings');
+	$tabs['opening-times']=array('name'=>__('Opening Times',$this->pluginLocale),'cap'=>'wppizza_cap_opening_times');
+	$tabs['meal-sizes']=array('name'=>__('Meal Sizes',$this->pluginLocale),'cap'=>'wppizza_cap_meal_sizes');
+	$tabs['additives']=array('name'=>__('Additives',$this->pluginLocale),'cap'=>'wppizza_cap_additives');
+	$tabs['layout']=array('name'=>__('Layout',$this->pluginLocale),'cap'=>'wppizza_cap_layout');
+	$tabs['localization']=array('name'=>__('Localization',$this->pluginLocale),'cap'=>'wppizza_cap_localization');
+	$tabs['order-history']=array('name'=>__('Order History',$this->pluginLocale),'cap'=>'wppizza_cap_order_history');
+	$tabs['access']=array('name'=>__('Access Rights',$this->pluginLocale),'cap'=>'wppizza_cap_access');
+	$tabs['tools']=array('name'=>__('Tools',$this->pluginLocale),'cap'=>'wppizza_cap_tools');
+	$tabs['delete-order']=array('name'=>__('Delete Orders',$this->pluginLocale),'cap'=>'wppizza_cap_delete_order');
+
+
+	if($get_user_caps){
+		global $current_user;
+		$usercaps=array();
+		$capUnique=array();/*dont need to have the same thing multiple times*/
+		/*user can have more than one role**/
+		foreach($current_user->roles as $roleName){
+			$userRole = get_role($roleName);
+			foreach($tabs as $tab=>$v){
+				if(isset($userRole->capabilities[$v['cap']]) && !isset($capUnique[$v['cap']])){
+					$usercaps[]=array('tab'=>$tab,'cap'=>$v['cap'],'name'=>$v['name']);
+					$capUnique[$v['cap']]=1;
+				}
+			}
+		}
+		return $usercaps;
+	}
+
+	return $tabs;
 }
 /*********************************************************
 *

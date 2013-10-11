@@ -80,3 +80,20 @@
 #wppizza_gateways_options .wp-editor-container{background:#FFFFFF}
 #wppizza_gateways_options .wp-editor-container textarea{width:100%}
 #wppizza_gateways_options .wppizza-gateway{background:#FCFCFC;border:1px solid #ECECEC;margin-bottom:10px;padding:0}
+
+/******************
+	[access rights]
+*******************/
+#wppizza-settings.wppizza-access-wrap>form>table>tbody>tr>th{width:100px;}
+.wppizza-access{overflow:auto;}
+.wppizza-access>ul{display:block;}
+.wppizza-access>ul>li{display:inline;list-style: none;float:left;padding-right:10px}
+/******************
+	[tools]
+*******************/
+#wppizza-settings.wppizza-tools-wrap>form>table>tbody>tr>th{display:none}
+#wppizza-settings.wppizza-tools-wrap>form>table>tbody>tr>td{border:1px solid #ECECEC;}
+/******************
+	[localization]
+*******************/
+#wppizza-settings.wppizza-localization-wrap>form>table>tbody>tr>th{width:100px;}

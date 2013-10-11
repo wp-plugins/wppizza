@@ -27,6 +27,41 @@ jQuery(document).ready(function($){
 
 		return newKey;
 	}
+	/******************************
+	* print order history
+	*******************************/
+	$(document).on('click touchstart', '.wppizza-print-order', function(e){
+			e.preventDefault();
+			var ordId=$(this).attr('id').split("-").pop(-1);
+            //Get the value of textareas
+            var order=$('#wppizza_order_details_'+ordId+'').val();
+            var customer=$('#wppizza_order_customer_details_'+ordId+'').val();
+
+            //store HTML of current whole page in variable
+            var currentPage = document.body.innerHTML;
+
+            //Re-create the page HTML with required info only
+            document.body.innerHTML =
+              "<html><head><title></title></head><body>" +
+              wppizzaNl2br(customer) + wppizzaNl2br(order) +"</body></html>";
+
+            //Print Page
+            window.print();
+
+            //Restore orignal HTML
+            document.body.innerHTML = currentPage;
+
+	});
+	/**nl2br when printing*/
+	var wppizzaNl2br =function(str, is_xhtml) {
+		var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br />' : '<br>';
+		/**nl2br*/
+		var printFormatted=(str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1'+ breakTag +'$2');
+		/**format any 2 spaces as nbsp to keep formatting*/
+		printFormatted=printFormatted.replace(/\s{2}/g, '&nbsp;&nbsp;');
+
+		return printFormatted;
+	}	
 	/*******************************
 	*	[time picker]
 	*******************************/
