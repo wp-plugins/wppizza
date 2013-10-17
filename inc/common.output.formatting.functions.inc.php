@@ -89,7 +89,7 @@
 		$items['IDR']='Rp';
 		$items['IRR']='&#65020;';
 		$items['IMP']='£';
-		$items['ILS']='ILS';
+		$items['ILS']='&#8362;';
 		$items['JMD']='J$';
 		$items['JPY']='¥';
 		$items['JEP']='£';
