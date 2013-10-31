@@ -5,8 +5,8 @@ Author URI: http://www.wp-pizza.com
 Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.2, WP 3.3 
-Tested up to: 3.6.1
-Stable tag: 2.5.4.1
+Tested up to: 3.7.1
+Stable tag: 2.5.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -118,6 +118,15 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 
 == Changelog ==
+
+2.5.5
+* fixed Bulgarian [BGN] Currency Symbol    
+* added Italien Translation   
+* added Hebrew Translation   
+* updated po/mo files   
+* allow change of WPPizza name in Admin (just add "define('WPPIZZA_NAME', 'The Name You Want');" to your wp-config.php) 
+* allow change of WPPizza Menu Icon in Admin (just add "define('WPPIZZA_MENU_ICON', 'http://path/to/icon.png');" to your wp-config.php) 
+31st October 2013  
 
 2.5.4.1
 * added shekel sign (&#8362; instead of ILS) to ILS currency  

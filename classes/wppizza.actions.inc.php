@@ -759,7 +759,7 @@ public function wppizza_require_common_input_validation_functions(){
 				'show_ui'		=> true,
 				'public'        => true,
 				'menu_position' => 100,
-				'menu_icon'		=> plugins_url( 'img/pizza_16.png', $this->pluginPath ),
+				'menu_icon'		=> defined('WPPIZZA_MENU_ICON') ? WPPIZZA_MENU_ICON : plugins_url( 'img/pizza_16.png', $this->pluginPath ),
 				'has_archive'   => false,
 				'hierarchical'	=> false,
 				'supports'      => array( 'title', 'editor', 'author','thumbnail','page-attributes','comments'),

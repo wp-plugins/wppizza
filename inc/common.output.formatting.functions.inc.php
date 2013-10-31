@@ -57,7 +57,7 @@
 		$items['BOB']='$b';
 		$items['BAM']='KM';
 		$items['BWP']='P';
-		$items['BGN']='&#1083;B';
+		$items['BGN']='&#1083;&#1074;';
 		$items['BRL']='R$';
 		$items['BND']='$';
 		$items['KHR']='&#6107;';
