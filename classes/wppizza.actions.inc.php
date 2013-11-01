@@ -950,21 +950,47 @@ public function wppizza_require_common_input_validation_functions(){
 			wp_register_style($this->pluginSlug, plugins_url( 'css/wppizza-'.$options['layout']['style'].'.css', $this->pluginPath ), array(), $this->pluginVersion);
 			}
 			wp_enqueue_style($this->pluginSlug);
+		}
 
+		/**pretty photo css**/
+		if($options['layout']['prettyPhoto']){
+			wp_register_style($this->pluginSlug.'-prettyPhoto', plugins_url( 'css/wppizza-prettyPhoto.css', $this->pluginPath ), array(), $this->pluginVersion);
+			wp_enqueue_style($this->pluginSlug.'-prettyPhoto');
+		}
+		
+		if($options['layout']['include_css']){
 			/**if we want to keep all the original css (including future changes) but only want to overwrite some lines , add wppizza-custom.css to your template directory*/
 			if (file_exists( get_template_directory() . '/wppizza-custom.css')){
 				wp_register_style($this->pluginSlug.'-custom', get_template_directory_uri().'/wppizza-custom.css', array(''.$this->pluginSlug.''), $this->pluginVersion);
 				wp_enqueue_style($this->pluginSlug.'-custom');
 			}
 		}
+		
 
+		
 		/****************
 			js
 		****************/
-    	wp_register_script($this->pluginSlug.'-validate', plugins_url( 'js/jquery.validate.min.js', $this->pluginPath ), array($this->pluginSlug), $this->pluginVersion ,true);
-    	wp_enqueue_script($this->pluginSlug.'-validate');
     	wp_register_script($this->pluginSlug, plugins_url( 'js/scripts.min.js', $this->pluginPath ), array('jquery'), $this->pluginVersion ,$options['plugin_data']['js_in_footer']);
     	wp_enqueue_script($this->pluginSlug);
+    	
+    	wp_register_script($this->pluginSlug.'-validate', plugins_url( 'js/jquery.validate.min.js', $this->pluginPath ), array($this->pluginSlug), $this->pluginVersion ,$options['plugin_data']['js_in_footer']);
+    	wp_enqueue_script($this->pluginSlug.'-validate');    	
+    	
+    	
+    	/**pretty photo**/
+    	if($options['layout']['prettyPhoto']){
+    		wp_register_script($this->pluginSlug.'-prettyPhoto', plugins_url( 'js/jquery.prettyPhoto.js', $this->pluginPath ), array('jquery'), $this->pluginVersion ,$options['plugin_data']['js_in_footer']);
+    		wp_enqueue_script($this->pluginSlug.'-prettyPhoto');
+    		/**copy js to template directory to edit settings (theme etc)**/ 
+    		if (file_exists( get_template_directory() . '/wppizza.prettyPhoto.custom.js')){	
+	    		wp_register_script($this->pluginSlug.'-ppCustom', get_template_directory_uri().'/wppizza.prettyPhoto.custom.js', array('jquery'), $this->pluginVersion ,$options['plugin_data']['js_in_footer']);
+    		}else{
+	    		wp_register_script($this->pluginSlug.'-ppCustom', plugins_url( 'js/wppizza.prettyPhoto.custom.js.php?t='.$options['layout']['prettyPhotoStyle'].'', $this->pluginPath ), array('jquery'), $this->pluginVersion ,$options['plugin_data']['js_in_footer']);	
+    		}
+    		wp_enqueue_script($this->pluginSlug.'-ppCustom');     	
+    	}
+    	
 
     	/**localized js***/
 		wp_enqueue_script( $this->pluginSlug );

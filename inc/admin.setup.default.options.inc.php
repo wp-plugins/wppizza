@@ -326,7 +326,9 @@
 				'hide_decimals' => false,
 				'show_currency_with_price' => 0,
 				'currency_symbol_left' => false,
-				'cart_increase' => false
+				'cart_increase' => false,
+				'prettyPhoto' => false,
+				'prettyPhotoStyle' => 'pp_default'
 			),
 			'opening_times_standard'=>array(
 				0=>array('open'=>'14:30','close'=>'01:00'),

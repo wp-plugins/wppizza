@@ -117,6 +117,8 @@
 	/**changed / added in 2.5***/
 	/**changed to not run function multiple times unnecessarily -> replaced all other get_the_ID() further down**/
 	$postId=get_the_ID();
+	/***new in 2.5.6 ->prettyPhoto (store get_the_title() in var so we can use it multiple times without running function more than once **/
+	$postTitle=get_the_title();	
 	/**get permalink*****/
 	$permalink = get_permalink( $postId );
 	/*get meta data for this post**/
@@ -166,7 +168,7 @@
 **************************************************/
 ?>
 			<h2<?php echo $clickTriggerId ?> class="<?php echo $post_type ?>-article-title<?php echo $clickTriggerClass ?>">
-			<?php the_title(); ?>
+			<?php echo $postTitle ?>
 			<?php if(count($meta['additives'])>0){?>
 				<sup class='<?php echo $post_type ?>-article-additives' title='<?php echo $txt['contains_additives']['lbl'] ?>'>*
 	    		<?php foreach($meta['additives'] as $k=>$v){ $additivesOnPage=true; ?>
@@ -182,7 +184,20 @@
 ?>
 		<?php if(has_post_thumbnail()) {?>
 			<div class="<?php echo $post_type ?>-article-img">
-			<?php the_post_thumbnail( 'thumbnail', array('class' => ''.$post_type.'-article-img-thumb')); ?>
+			<?php
+			/**new in 2.5.6 ->prettyPhoto if enabled**/
+			if($options['layout']['prettyPhoto']){
+				$full_image_data = wp_get_attachment_image_src(get_post_thumbnail_id(), 'full' );
+				print'<a href="'.$full_image_data[0].'" rel="wppizzaPrettyPhoto" title="'.$postTitle.'">';
+			}
+			?>			
+			<?php the_post_thumbnail( 'thumbnail', array('class' => ''.$post_type.'-article-img-thumb', 'title'=>$postTitle)); ?>
+			<?php
+			/**new in 2.5.6 ->prettyPhoto if enabled**/
+			if($options['layout']['prettyPhoto']){
+				print"</a>";
+			}
+			?>			
 			</div>
 		<?php
 			}else{

@@ -133,6 +133,24 @@ $options = $this->pluginOptions;
 			if($field=='placeholder_img'){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[layout][".$field."]' type='checkbox'  ". checked($options['layout'][$field],true,false)." value='1' />";
 			}
+			if($field=='prettyPhoto' ){
+				echo "<input id='".$field."' name='".$this->pluginSlug."[layout][".$field."]' type='checkbox'  ". checked($options['layout'][$field],true,false)." value='1' />";
+			}			
+			if($field=='prettyPhotoStyle'){
+				echo "<select name='".$this->pluginSlug."[layout][".$field."]'>";
+					echo "<option value='pp_default' ".selected($options['layout'][$field],"pp_default",false).">default</option>";
+					echo "<option value='light_rounded' ".selected($options['layout'][$field],"light_rounded",false).">light rounded</option>";
+					echo "<option value='dark_rounded' ".selected($options['layout'][$field],"dark_rounded",false).">dark rounded</option>";
+					echo "<option value='light_square' ".selected($options['layout'][$field],"light_square",false).">light square</option>";
+					echo "<option value='dark_square' ".selected($options['layout'][$field],"dark_square",false).">dark square</option>";
+					echo "<option value='facebook' ".selected($options['layout'][$field],"facebook",false).">facebook</option>";
+				echo "</select>";
+				echo' '.__('see wppizza.prettyPhoto.custom.js.php if you want to adjust prettyPhoto options', $this->pluginLocale).'';
+			}			
+			
+			
+			
+			
 			if($field=='hide_cart_icon'){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[layout][".$field."]' type='checkbox'  ". checked($options['layout'][$field],true,false)." value='1' />";
 			}

@@ -24,6 +24,8 @@
 		add_settings_field('opening_times_format', '<b>'.__('Format of openingtimes (if displayed):', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'layout', 'layout', 'opening_times_format' );
 		add_settings_field('add_to_cart_on_title_click', '<b>'.__('Add item to cart on click of *item title* if there is only one pricetier for a menu item:', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'layout', 'layout', 'add_to_cart_on_title_click' );
 		add_settings_field('placeholder_img', '<b>'.__('Display placeholder image when no image associated with meal item:', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'layout', 'layout', 'placeholder_img' );
+		add_settings_field('prettyPhoto', '<b>'.__('Enable prettyPhoto (Lightbox Clone) on menu item images', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'layout', 'layout', 'prettyPhoto' );
+		add_settings_field('prettyPhotoStyle', '<b>'.__('Set prettyPhoto Style', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'layout', 'layout', 'prettyPhotoStyle' );
 		add_settings_field('suppress_loop_headers', '<b>'.__('Globally suppress headers above list of menu items:', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'layout', 'layout', 'suppress_loop_headers' );
 		add_settings_field('hide_cart_icon', '<b>'.__('Hide cart icon next to prices:', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'layout', 'layout', 'hide_cart_icon' );
 		add_settings_field('show_currency_with_price', '<b>'.__('Show a currency symbol directly next to each price', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'layout', 'layout', 'show_currency_with_price' );
@@ -34,6 +36,10 @@
 		add_settings_field('hide_decimals', '<b>'.__('Don\'t show decimals:', $this->pluginLocale).'</b><br/>'.__('[prices will be rounded if necessary]', $this->pluginLocale).'', array( $this, 'wppizza_admin_settings_input'), 'layout', 'layout', 'hide_decimals' );
 		add_settings_field('cart_increase', '<b>'.__('Enable increase/decrease of items in cart via input field/textbox', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'layout', 'layout', 'cart_increase' );
 		add_settings_field('disable_online_order', '<b>'.__('Completely disable online orders:', $this->pluginLocale).'</b><br/><span style="color:red">'.__('this will still display prices (unless set to be hidden above), but will disable shoppingcart and orderpage', $this->pluginLocale).'</span><br/>'.__('Useful if you want to display your menu and prices but without offering online orders.', $this->pluginLocale).'', array( $this, 'wppizza_admin_settings_input'), 'layout', 'layout', 'disable_online_order' );
+
+		
+		
+		
 
 		/**opening times**/
 		add_settings_section('opening_times', __('Opening Times', $this->pluginLocale),  array( $this, 'wppizza_admin_page_text_header'), 'opening_times');
