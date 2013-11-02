@@ -20,6 +20,7 @@ jQuery(document).ready(function($){
 	$(document).on('click touchstart', '.wppizza-add-to-cart,.wppizza-remove-from-cart,.wppizza-cart-refresh,.wppizza-cart-increment', function(e){
 		if ($(".wppizza-open").length > 0){//first check if shopping cart exists on page and that we are open
 			e.preventDefault();
+			e.stopPropagation();
 
 		var self=$(this);
 		var cartButton=$('.wppizza-cart-button input,.wppizza-cart-button>a');

@@ -285,6 +285,11 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 		require_once(WPPIZZA_PATH .'inc/admin.echo.metaboxes.inc.php');
 	}
 	function wppizza_admin_save_metaboxes($item_id, $item_details ) {
+
+		/** bypass, when doing "quickedit" (ajax) and /or "bulk edit"  as it will otherwsie loose all meta info (i.e prices, additives etc)!!!***/
+		if ( defined('DOING_AJAX') || isset($_GET['bulk_edit'])){return;}
+		
+		
 		/**bypass the below when activating plugin as we are installing the default items on first activation via wp_insert_post()**/
 		if(!isset($_GET['activate'])){
 			/***as this function gets called when creating a new page, we will also insert some default values (as $_POST will be empty)**/
