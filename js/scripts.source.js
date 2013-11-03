@@ -1,4 +1,28 @@
+var wppizzaClickEvent='click';
+
 jQuery(document).ready(function($){
+	/*******************************************************
+	*	[detect browser supported events
+	*	and use touchstart if click is not supported
+	*	avoids double trigger as using 'click touchstart'
+	*	appears to trigger twice (at least in jQuery 1.10) 
+	*******************************************************/	
+	var wppizzaCheckEventSupport = function(eventName){
+    	var el = document.createElement('div');
+    	eventName = 'on' + eventName;
+    	var isSupported = (eventName in el);
+    	if (!isSupported) {
+      		el.setAttribute(eventName, 'return;');
+      		isSupported = typeof el[eventName] == 'function';
+    	}
+    	el = null;
+    	var bindEvent='click';/*default click*/
+    	if(!isSupported){
+    		bindEvent='touchstart';	/*if browser does not support click, use touchstart*/
+    	}
+    	return bindEvent;
+  	}
+  	wppizzaClickEvent=wppizzaCheckEventSupport("click");
 	/*******************************
 	*	[add to cart / remove from cart]
 	*******************************/
@@ -17,7 +41,7 @@ jQuery(document).ready(function($){
 		}
 	});
 	
-	$(document).on('click touchstart', '.wppizza-add-to-cart,.wppizza-remove-from-cart,.wppizza-cart-refresh,.wppizza-cart-increment', function(e){
+	$(document).on(''+wppizzaClickEvent+'', '.wppizza-add-to-cart,.wppizza-remove-from-cart,.wppizza-cart-refresh,.wppizza-cart-increment', function(e){
 		if ($(".wppizza-open").length > 0){//first check if shopping cart exists on page and that we are open
 			e.preventDefault();
 			e.stopPropagation();
@@ -104,7 +128,7 @@ jQuery(document).ready(function($){
 	*	but we are currently closed, display alert]
 	*
 	***********************************************/
-	$(document).on('click touchstart', '.wppizza-add-to-cart', function(e){
+	$(document).on(''+wppizzaClickEvent+'', '.wppizza-add-to-cart', function(e){
 		if ($(".wppizza-open").length == 0 &&  $(".wppizza-cart").length > 0){
 			alert(wppizza.msg.closed);
 	}});
@@ -116,7 +140,7 @@ jQuery(document).ready(function($){
 	*	only relevant if there's a shoppingcart or orderpage on page]
 	*
 	***********************************************/
-	$(document).on('click touchstart', '#wppizza-order-pickup-sel,#wppizza-order-pickup-js', function(e){
+	$(document).on(''+wppizzaClickEvent+'', '#wppizza-order-pickup-sel,#wppizza-order-pickup-js', function(e){
 		if (($(".wppizza-open").length > 0 &&  $(".wppizza-cart").length > 0) || $("#wppizza-send-order").length>0){
 			var self=$(this);
 			var selfValue=self.is(':checked');
@@ -135,12 +159,12 @@ jQuery(document).ready(function($){
 	*	[provided  there's a cart on page and we are open]
 	***********************************************/
 	/*more than one size->choose alert*/
-	$(document).on('click touchstart', '.wppizza-trigger-choose', function(e){
+	$(document).on(''+wppizzaClickEvent+'', '.wppizza-trigger-choose', function(e){
 		if ($(".wppizza-open").length > 0 &&  $(".wppizza-cart").length > 0){
 			alert(wppizza.msg.choosesize);
 	}});
 	/*only one size, trigger click*/
-	$(document).on('click touchstart', '.wppizza-trigger-click', function(e){
+	$(document).on(''+wppizzaClickEvent+'', '.wppizza-trigger-click', function(e){
 		if ($(".wppizza-open").length > 0 &&  $(".wppizza-cart").length > 0){
 			/*just loose wppizza-article- from id*/
 			var ArticleId=this.id.substr(16);
@@ -161,7 +185,7 @@ jQuery(document).ready(function($){
 	*	gateway could be either by dropdown,
 	*	radio, or if only one, hidden elm
 	*******************************************/
-	$(document).on('click touchstart', '.wppizza-ordernow', function(e){		
+	$(document).on(''+wppizzaClickEvent+'', '.wppizza-ordernow', function(e){		
 		$("#wppizza-send-order").validate({
 			submitHandler: function(form) {
 				if($("input[name='wppizza-gateway']").length>0){
@@ -204,7 +228,7 @@ jQuery(document).ready(function($){
 	/******************************
 	* Let's make IE7 IE8 happy
 	*******************************/
-	$(document).on('click touchstart', '.wppizza-cart-button>a', function(e){
+	$(document).on(''+wppizzaClickEvent+'', '.wppizza-cart-button>a', function(e){
 		e.preventDefault(); e.stopPropagation();
         var url=jQuery(this).attr("href");
         window.location.href = url;

@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.2, WP 3.3 
 Tested up to: 3.7.1
-Stable tag: 2.5.7
+Stable tag: 2.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -97,7 +97,7 @@ the same goes for the 3 example icons that come with this plugin as you might ha
 
 == Upgrade Notice ==
 
-Please update to version 2.5.7+ asap as metadata might get lost when using *quickedit/bulkedit* in wppizza custom post type
+Please update to version 2.5.7+ asap as metadata might get lost when using *quickedit* in wppizza custom post type
 (if you are currently using wppizza <2.4 you should definitely update to the latest version as there were also some security flaws in version <2.4)
 
 
@@ -119,6 +119,11 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 
 == Changelog ==
+
+2.6  
+*  some themes/jQuery combinations may have double triggered adding to cart clicks on some mobile devices, so the javascript functions have been amended to address this issue  
+3rd November 2013  
+
 
 2.5.7  
 * BUGFIX: plugin lost metadata when using quickedit/bulkedit in custom post type  
