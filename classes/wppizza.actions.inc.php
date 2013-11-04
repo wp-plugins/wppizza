@@ -758,19 +758,25 @@ public function wppizza_require_common_input_validation_functions(){
 			'parent_item_colon'  => '',
 			'menu_name'          => ''.$this->pluginName.''
 		);
-			$args = array(
-				'labels'        => $labels,
-				'description'   => __( 'Holds '.$this->pluginName.' menu items data', $this->pluginLocale),
-				'show_ui'		=> true,
-				'public'        => true,
-				'menu_position' => 100,
-				'menu_icon'		=> defined('WPPIZZA_MENU_ICON') ? WPPIZZA_MENU_ICON : plugins_url( 'img/pizza_16.png', $this->pluginPath ),
-				'has_archive'   => false,
-				'hierarchical'	=> false,
-				'supports'      => array( 'title', 'editor', 'author','thumbnail','page-attributes','comments'),
-				'taxonomies'    => array('')
-			);
-			register_post_type( $this->pluginSlug, $args );
+		/**add a filter to labels if you want to...**/
+		$labels = apply_filters('wppizza_cpt_lbls', $labels);		
+		
+		$args = array(
+			'labels'        => $labels,
+			'description'   => sprintf( __( 'Holds %1$s  menu items data', $this->pluginLocale ), $this->pluginName ),
+			'show_ui'		=> true,
+			'public'        => true,
+			'menu_position' => 100,
+			'menu_icon'		=> defined('WPPIZZA_MENU_ICON') ? WPPIZZA_MENU_ICON : plugins_url( 'img/pizza_16.png', $this->pluginPath ),
+			'has_archive'   => false,
+			'hierarchical'	=> false,
+			'supports'      => array( 'title', 'editor', 'author','thumbnail','page-attributes','comments'),
+			'taxonomies'    => array('') /* 'post_tag' for example*/
+		);
+		/**add a filter to arguments if you want to**/
+		$args = apply_filters('wppizza_cpt_args', $args);
+		
+		register_post_type( $this->pluginSlug, $args );
 	}
 	/*******************************************************
 		[register taxonomy + taxonomy related functions]

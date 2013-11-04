@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.2, WP 3.3 
 Tested up to: 3.7.1
-Stable tag: 2.6
+Stable tag: 2.6.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -119,6 +119,12 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 
 == Changelog ==
+
+2.6.1  
+* added filter to cpt labels and arguments ('wppizza_cpt_lbls' and 'wppizza_cpt_args' respectively if you want to use it)   
+* minor lng fix
+4th November 2013  
+
 
 2.6  
 *  some themes/jQuery combinations may have double triggered adding to cart clicks on some mobile devices, so the javascript functions have been amended to address this issue  
@@ -434,7 +440,7 @@ if you do wish to use any icon from this set commercially, please follow <a href
 = Can I edit the css ? =
 
 although the css has been written so that it works with many themes out of the box (see www.wp-pizza.com - all themes use the same default stylesheet) you might want to adjust some things here and there to work with your theme (especially if you want to support older browsers).  
-if you do, copy the wppizza/css/wppizza-default.css to your theme directory (so it does not get overwritten by future updates of the plugin) and edit as required  
+if you do, copy the wppizza/css/wppizza-default.css (or wppizza/css/wppizza-responsive.css if using the responsive style) to your theme directory (so it does not get overwritten by future updates of the plugin) and edit as required  
 alternatively *(and possibly better as any future updates to the main css will still be reflected)*, just copy wppizza-custom.css to your theme directory and only overwrite the styles you need to override. (this file will be read AFTER the main default.css). "Include css" has to be enabled for this to apply  
 
 
