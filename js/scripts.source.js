@@ -16,13 +16,13 @@ jQuery(document).ready(function($){
       		isSupported = typeof el[eventName] == 'function';
     	}
     	el = null;
-    	var bindEvent='click';/*default click*/
+    	var bindEvent='touchstart';/*default touchstart*/
     	if(!isSupported){
-    		bindEvent='touchstart';	/*if browser does not support click, use touchstart*/
+    		bindEvent='click';	/*if browser does not support touchstart, use click*/
     	}
     	return bindEvent;
   	}
-  	wppizzaClickEvent=wppizzaCheckEventSupport("click");
+  	wppizzaClickEvent=wppizzaCheckEventSupport("touchstart");
 	/*******************************
 	*	[add to cart / remove from cart]
 	*******************************/
