@@ -5,9 +5,17 @@ jQuery(document).ready(function($){
 	*	[detect browser supported events
 	*	and use touchstart if click is not supported
 	*	avoids double trigger as using 'click touchstart'
-	*	appears to trigger twice (at least in jQuery 1.10) 
+	*	appears to trigger twice in Android devices
 	*******************************************************/	
+
 	var wppizzaCheckEventSupport = function(eventName){
+    	
+    	/*iSomething understands click, but doesnt want to do things with it so lets force touchstsrt*/
+    	if((navigator.userAgent.match(/iPhone/i)) || (navigator.userAgent.match(/iPad/i)) || (navigator.userAgent.match(/iPod/i))) {
+   			var bindEvent='touchstart';/*default to touchstart for iCrap*/
+   			return bindEvent;
+		}
+
     	var el = document.createElement('div');
     	eventName = 'on' + eventName;
     	var isSupported = (eventName in el);
@@ -16,13 +24,14 @@ jQuery(document).ready(function($){
       		isSupported = typeof el[eventName] == 'function';
     	}
     	el = null;
-    	var bindEvent='touchstart';/*default touchstart*/
+    	var bindEvent='click';/*default touchstart*/
     	if(!isSupported){
-    		bindEvent='click';	/*if browser does not support touchstart, use click*/
+    		bindEvent='touchstart';	/*if browser does not support touchstart, use click*/
     	}
     	return bindEvent;
   	}
-  	wppizzaClickEvent=wppizzaCheckEventSupport("touchstart");
+  	wppizzaClickEvent=wppizzaCheckEventSupport("click");
+  	
 	/*******************************
 	*	[add to cart / remove from cart]
 	*******************************/
