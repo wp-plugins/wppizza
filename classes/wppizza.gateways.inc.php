@@ -71,7 +71,17 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 						$i=0;
 						foreach($enabledGateways as $key=>$gw){
 							$key=strtolower($key);
-							print"<option value='".$key."' />";
+							/*******************************************************************************
+								if we want to submit directly via ajax (other than cod which does this anyway), 
+								without sending to any gateway (lets say bacs or something) 
+								check if $this->gatewaySubmit isset and set to ajax and add class as required
+								so we can identify this
+							********************************************************************************/
+							$gwAddClass='';
+							if(isset($gw->gatewayTypeSubmit) && $gw->gatewayTypeSubmit=='ajax'){
+								$gwAddClass=' class="wppizzaGwAjaxSubmit"';	
+							}							
+							print"<option value='".$key."' ".$gwAddClass." />";
 								print"".empty($gw->gatewayOptions['gateway_label']) ? $gw->gatewayName : $gw->gatewayOptions['gateway_label'] ." ";
 							print"</option>";
 						$i++;
@@ -82,9 +92,19 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 						$i=0;
 						foreach($enabledGateways as $key=>$gw){
 							$key=strtolower($key);
+							/*******************************************************************************
+								if we want to submit directly via ajax (other than cod which does this anyway), 
+								without sending to any gateway (lets say bacs or something) 
+								check if $this->gatewaySubmit isset and set to ajax and add class as required
+								so we can identify this
+							********************************************************************************/
+							$gwAddClass='';
+							if(isset($gw->gatewayTypeSubmit) && $gw->gatewayTypeSubmit=='ajax'){
+								$gwAddClass=' class="wppizzaGwAjaxSubmit"';	
+							}
 							print"<div id='wppizza-gw-".$key."' class='wppizza-gw-button button'>";
 								print"<label>";
-								print"<input type='radio' name='wppizza-gateway' id='wppizza-gateway-".$key."' value='".$key."' ".checked($i,0,false)."/> ";
+								print"<input type='radio' name='wppizza-gateway' id='wppizza-gateway-".$key."' ".$gwAddClass." value='".$key."' ".checked($i,0,false)."/> ";
 								print"".!empty($gw->gatewayImage) ? $gw->gatewayImage : '' ." ";
 								print"".empty($gw->gatewayOptions['gateway_label']) ? $gw->gatewayName : $gw->gatewayOptions['gateway_label'] ." ";
 								print"</label>";
@@ -101,8 +121,18 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 			if(count($enabledGateways)==1){
 				foreach($enabledGateways as $key=>$gw){
 					$key=strtolower($key);
+					/*******************************************************************************
+						if we want to submit directly via ajax (other than cod which does this anyway), 
+						without sending to any gateway (lets say bacs or something) 
+						check if $this->gatewaySubmit isset and set to ajax and add class as required
+						so we can identify this
+					********************************************************************************/
+					$gwAddClass='';
+					if(isset($gw->gatewayTypeSubmit) && $gw->gatewayTypeSubmit=='ajax'){
+						$gwAddClass=' class="wppizzaGwAjaxSubmit"';	
+					}					
 					/**add hidden value so the ajax call knows whether its cod or anything else*/
-					print"<input type='hidden' name='wppizza-gateway' id='wppizza-gateway-".$key."' value='".$key."' /> ";
+					print"<input type='hidden' name='wppizza-gateway' id='wppizza-gateway-".$key."' ".$gwAddClass." value='".$key."' /> ";
 					/**if this method has not been defined in class or is empty, display standard button**/
 					if(method_exists($gw,'gateway_button') && $gw->gateway_button()!=''){
 						echo $gw->gateway_button();

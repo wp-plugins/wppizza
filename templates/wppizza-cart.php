@@ -59,7 +59,7 @@ return;
 <?php if(isset($openingTimes)){ ?>
 	<div class="wppizza-opening-hours"<?php if(isset($cartStyle['width'])){echo $cartStyle['width'];}?>><?php echo $openingTimes ?></div>
 <?php } ?>
-<div class="wppizza-cart"<?php if(isset($cartStyle['cart'])){echo $cartStyle['cart'];}?>>
+<div class="wppizza-cart <?php echo $stickycart; ?>"<?php if(isset($cartStyle['cart'])){echo $cartStyle['cart'];}?>>
 	<?php if($cart['shopopen']==1){ /*make sure that we are open*/ ?>
 	<input type='hidden' class='wppizza-open' name='wppizza-open' />
 	<?php } ?>

@@ -168,6 +168,26 @@ $output='';
 									$output.="<option value='".$s."' ".selected($orders->order_status,$s,false).">".__($s, $this->pluginLocale)."</option>";
 								}
 							$output.="</select>";
+							
+							
+							//$output.="<br/>";
+							//$output.="<a href='javascript:void()' id='wppizza_order_reject'>".__('Reject with email to customer', $this->pluginLocale)."</a>";
+							//$output.="<span id='wppizza_order_rejected-".$orders->id."'>";
+							//$output.="</span>";							
+							
+							
+							$output.="<br/>";	
+							$output.="".__('Last Status Update', $this->pluginLocale).":<br />";
+							$output.="<span id='wppizza_order_update-".$orders->id."'>";
+							if($orders->order_update!='0000-00-00 00:00:00'){
+								$output.= date("d-M-Y H:i:s",strtotime($orders->order_update));
+							}else{
+								$output.= date("d-M-Y H:i:s",strtotime($orders->order_date));	
+							}
+							$output.="</span>";
+							
+							
+							
 						$output.="</td>";
 						$output.="<td>";
 							$output.="<textarea id='wppizza_order_customer_details_".$orders->id."' class='wppizza_order_customer_details'>". $orders->customer_details ."</textarea>";
@@ -197,8 +217,10 @@ $output='';
 	********************************************/
 	if($_POST['vars']['field']=='orderstatuschange' && isset($_POST['vars']['id']) && $_POST['vars']['id']>=0){
 		global $wpdb;
-		$res=$wpdb->query("UPDATE ".$wpdb->prefix . $this->pluginOrderTable." SET order_status='".$_POST['vars']['selVal']."' WHERE id=".$_POST['vars']['id']." ");
-		$output="".print_r($res,true)."";
+		$res=$wpdb->query("UPDATE ".$wpdb->prefix . $this->pluginOrderTable." SET order_status='".$_POST['vars']['selVal']."',order_update=NULL WHERE id=".$_POST['vars']['id']." ");
+		$thisOrder = $wpdb->get_results("SELECT order_update FROM ".$wpdb->prefix . $this->pluginOrderTable." WHERE id=".$_POST['vars']['id']."");
+		
+		$output= date("d-M-Y H:i:s",strtotime($thisOrder[0]->order_update));
 	}
 	/******************************************************
 		[prize tier selection has been changed->add relevant price options input fields]

@@ -31,7 +31,30 @@ jQuery(document).ready(function($){
     	return bindEvent;
   	}
   	wppizzaClickEvent=wppizzaCheckEventSupport("click");
-  	
+
+
+	/*******************************
+	*	[keep cart static on page when scrolling]
+	*******************************/
+    var wppizzaCartStickyElm=$('.wppizza-cart-sticky');
+    if(wppizzaCartStickyElm.length>0){
+    	$.each(wppizzaCartStickyElm,function(i,v){
+	    	var self=$(this);
+    		var wppizzaCartOffset = self.offset(); 
+    		var wppizzaCartWidth = self.width(); 
+    		var wppizzaCartParentWidth = self.parent().width();    
+    		$(window).scroll(function () {    
+		        var scrollTop = $(window).scrollTop(); 
+        		// check the visible top of the browser     
+        		if (wppizzaCartOffset.top<scrollTop) {
+            		self.width(wppizzaCartWidth).addClass('wppizza-cart-fixed');            		
+        		} else {
+		            self.width(wppizzaCartWidth).removeClass('wppizza-cart-fixed');   
+        		}
+    		}); 
+	    });
+    }
+
 	/*******************************
 	*	[add to cart / remove from cart]
 	*******************************/
@@ -180,7 +203,7 @@ jQuery(document).ready(function($){
 			/**make target id*/
 			target=$('#wppizza-'+ArticleId+'');
 			/*trigger*/
-			target.trigger('click');
+			target.trigger(''+wppizzaClickEvent+'');
 	}});
 
 	/***********************************************
@@ -197,6 +220,8 @@ jQuery(document).ready(function($){
 	$(document).on(''+wppizzaClickEvent+'', '.wppizza-ordernow', function(e){		
 		$("#wppizza-send-order").validate({
 			submitHandler: function(form) {
+				var hasClassAjax=false;
+				
 				if($("input[name='wppizza-gateway']").length>0){
 					var elm = $("input[name='wppizza-gateway']");
 					if(elm.is(':radio')){
@@ -204,13 +229,15 @@ jQuery(document).ready(function($){
 					}else{
 						var selected = elm;
 					}
+					hasClassAjax=selected.hasClass("wppizzaGwAjaxSubmit");
 				}else{
 					var selected = $("select[name='wppizza-gateway']");
+					hasClassAjax=("select[name='wppizza-gateway'] option:selected").hasClass("wppizzaGwAjaxSubmit")
 				}
 				var currVal = selected.val();
-	
-				/**cod->transmit form via ajax*/
-				if(currVal=='cod'){
+
+				/**cod->transmit form via ajax if cod or forced by gw settings (i.e $this->gatewayTypeSubmit = 'ajax')*/
+				if(currVal=='cod' || hasClassAjax){				
 					var self=$('#wppizza-send-order');
 					self.prepend('<div id="wppizza-loading"></div>');
 					jQuery.post(wppizza.ajaxurl , {action :'wppizza_json',vars:{'type':'sendorder','data':self.serialize()}}, function(response) {

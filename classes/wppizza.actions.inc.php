@@ -666,6 +666,13 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 			if(isset($style['width'])){
 				$cartStyle['width']=' style="'.$style['width'].'"';
 			}
+			/**make cart sticky**/
+			$stickycart='';
+			if(isset($atts['stickycart'])){
+				$stickycart='wppizza-cart-sticky';
+			}
+			
+			
 			/**dsiaply order info like discounts and delivery costs**/
 			if(isset($atts['orderinfo'])){
 				$orderinfo=true;

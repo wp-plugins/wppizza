@@ -29,6 +29,7 @@ $sql="CREATE TABLE ".$wpdb->prefix . $this->pluginOrderTable." (
 	id INT(10) NOT NULL AUTO_INCREMENT,
 	wp_user_id INT(10) NOT NULL DEFAULT '0',
 	order_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	order_update TIMESTAMP,
 	customer_details TEXT NULL,
 	order_details TEXT NULL,
 	order_status ENUM($dbOrderStatus) NOT NULL DEFAULT 'NEW',

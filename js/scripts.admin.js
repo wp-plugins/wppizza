@@ -247,6 +247,7 @@ jQuery(document).ready(function($){
 		var selClass=selVal.toLowerCase();
 		jQuery.post(ajaxurl , {action :'wppizza_admin_json',vars:{'field':'orderstatuschange','id':selId,'selVal':selVal}}, function(response) {
 			self.closest('tr').removeClass().addClass('wppizza-ord-status-'+selClass+'');
+			$('#wppizza_order_update-'+selId).html(response);
 		},'html').error(function(jqXHR, textStatus, errorThrown) {alert("error : " + errorThrown);});				
 	});	
 	/******************************

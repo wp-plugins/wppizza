@@ -21,6 +21,10 @@
   	$navterm  = isset($instance['navterm']) ? esc_attr($instance['navterm']) : '';
   	//$openingtimes = $instance['openingtimes'] ? 'checked="checked"' : '';
   	$openingtimes = checked($instance['openingtimes'],true,false);
+  	//$stickycart = checked($instance['stickycart'],true,false);
+  	
+  	$stickycart = !empty($instance['stickycart']) ? true : false;
+  	
   	//$orderinfo = $instance['orderinfo'] ? 'checked="checked"' : '';
   	$orderinfo = checked($instance['orderinfo'],true,false);
   	$width = $instance['width'] ?  esc_attr($instance['width']) : '';
@@ -95,6 +99,9 @@
 			</p>
 	
 			<p class="<?php echo $this->pluginSlug; ?>-selected-cart" <?php if($type=='cart'){echo "style='display:block'";}else{echo "style='display:none'";} ?>>
+		    	<input class="checkbox" type="checkbox" id="<?php echo $this->get_field_id('stickycart'); ?>" name="<?php echo $this->get_field_name('stickycart'); ?>" <?php checked($stickycart,true,true) ?> value="1" />
+		    	<label for="<?php echo $this->get_field_id( 'stickycart' ); ?>"><?php _e("Cart visible on page when scrolling ?", $this->pluginLocale); ?></label><br/>
+		    	
 		    	<input class="checkbox" type="checkbox" id="<?php echo $this->get_field_id('openingtimes'); ?>" name="<?php echo $this->get_field_name('openingtimes'); ?>" <?php echo $openingtimes; ?> value="1" />
 		    	<label for="<?php echo $this->get_field_id( 'openingtimes' ); ?>"><?php _e("Display Openingtimes ?", $this->pluginLocale); ?></label><br/>
 		    	

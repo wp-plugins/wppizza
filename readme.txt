@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.2, WP 3.3 
 Tested up to: 3.7.1
-Stable tag: 2.6.3
+Stable tag: 2.6.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -119,6 +119,14 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 
 == Changelog ==
+
+2.6.4    
+* added checkbox to cartwidget to keep cart visible on page when scrolling  
+* added order last status update to order history
+* minor css additions to avoid possible linebreaks between prices and currency symbols  
+* minor admin css additions/edits for gateway page and order history page    
+* added ability (and template) to use internal ajax order submit if one wants to add another 'cod' like gateway i.e without going through external processing (bacs or cheque for instance. see included zip in "wppizza/add-ons" for example).   
+6th November 2013  
 
 2.6.3  
 * 2.6.2 fixed iThing but broke Android instead (what can i say)....this should work on both now   
@@ -449,7 +457,7 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 although the css has been written so that it works with many themes out of the box (see www.wp-pizza.com - all themes use the same default stylesheet) you might want to adjust some things here and there to work with your theme (especially if you want to support older browsers).  
 if you do, copy the wppizza/css/wppizza-default.css (or wppizza/css/wppizza-responsive.css if using the responsive style) to your theme directory (so it does not get overwritten by future updates of the plugin) and edit as required  
-alternatively *(and possibly better as any future updates to the main css will still be reflected)*, just copy wppizza-custom.css to your theme directory and only overwrite the styles you need to override. (this file will be read AFTER the main default.css). "Include css" has to be enabled for this to apply  
+**alternatively *(and possibly better as any future updates to the main css will still be reflected)*, just copy wppizza-custom.css to your theme directory and only overwrite the styles you need to override.** (this file will be read AFTER the main default.css). "Include css" has to be enabled for this to apply  
 
 
 = Can I use this plugin when I am not using english on my site ? =
@@ -538,6 +546,7 @@ in case where you cannot or do not want to use a widget, here are the correspond
 
 	attributes:  
 	- type='cart' 			(required [str])  
+ 	- stickycart='1' 		(optional[bool]: anything. if its defined the cart will always be in viewpoint even when scrolling)  
  	- openingtimes='1' 		(optional[bool]: anything. if its defined openingtimes get displayed above cart)  
  	- orderinfo=1				(optional[bool]: anything. if its defined order info (discounts free delivery etc) get displayed below cart)  
  	- width='200px' 			(optional[str]: value in px or % -> defaults to 100%) (although < 150px is probably bad)  
@@ -574,6 +583,12 @@ if you do not have this options it's either hidden (go to "screen options" at th
 if the auther doesnt want to or cannot do anything about it, you can also just put the following code at the bottom of your themes function file (before the closing ?> )
 	
 	add_theme_support('post-thumbnails');
+
+
+= My shop doesn't do Pizzas, how do I change the name and icon in the administration panel ? =
+
+* to change the name (i.e WPPizza) just add "define('WPPIZZA_NAME', 'The Name You Want');" to your wp-config.php 
+* to change the WPPizza Menu Icon in Admin Panel next to the Name just add "define('WPPIZZA_MENU_ICON', 'http://path/to/icon.png');" to your wp-config.php 
 	  
 
 = How can I submit a bug, ask for help or request a new feature? =

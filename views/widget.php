@@ -18,6 +18,9 @@
 		if(isset( $instance['openingtimes']) && $instance['openingtimes']!=''){
 			$wdgArgs[]='openingtimes="1"';	
 		}
+		if(isset( $instance['stickycart']) && $instance['stickycart']!=''){
+			$wdgArgs[]='stickycart="1"';	
+		}		
 		if(isset( $instance['orderinfo']) && $instance['orderinfo']!=''){
 			$wdgArgs[]='orderinfo="1"';	
 		}

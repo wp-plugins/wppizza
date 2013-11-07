@@ -4,6 +4,7 @@
 *
 ***********************/
 .wppizza-cart{height:250px;position: relative;z-index: 999;left: 0;right: 0;padding:0;margin:0;background-color:inherit;border: 1px solid #ccc;}
+.wppizza-cart-fixed{height:250px;position:fixed;top:10px;left:auto;right:auto;background-color:#FEFEFE;}/**-----added in version 2.6.4----***/
 /*opening hours top/bottom*/
 
 .wppizza-opening-hours{text-align:center}
@@ -83,7 +84,7 @@
     filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
 }
 
-.wppizza-order>ul.wppizza-cart-contents>.wppizza-cart-item>.wppizza-cart-item-price{float:right;margin-right:3px;}
+.wppizza-order>ul.wppizza-cart-contents>.wppizza-cart-item>.wppizza-cart-item-price{float:right;margin-right:3px;white-space:nowrap}
 .wppizza-order>ul.wppizza-cart-contents>.wppizza-cart-item>.wppizza-cart-item-size{font-size:80%}
 .wppizza-order>ul.wppizza-cart-contents>.wppizza-cart-item>.wppizza-cart-item-size:before{content: '[';}
 .wppizza-order>ul.wppizza-cart-contents>.wppizza-cart-item>.wppizza-cart-item-size:after{content: ']';}
@@ -139,7 +140,7 @@
 .wppizza-cart-info{position:absolute;bottom:0;left:5px;right:5px;margin:0;padding:0;line-height:120%;font-size:90%}
 .wppizza-cart-info>.wppizza-cart-nocheckout{color:red;text-align:center;line-height:30px}
 .wppizza-cart-info>span{display:block;text-align:left}
-.wppizza-cart-info .wppizza-cart-info-price{float:right;font-size:100%}
+.wppizza-cart-info .wppizza-cart-info-price{float:right;font-size:100%;white-space:nowrap}
 .wppizza-cart-info .wppizza-cart-total{font-weight:600}
 
 /**-----new in version 1.5----***/
@@ -183,6 +184,8 @@
 #wppizza-cart-subtotals>li{margin-left:15px;line-height:130%}
 #wppizza-cart-subtotals>li.wppizza-order-discount{border-bottom:1px dotted #CECECE;}
 #wppizza-cart-total{font-weight:600;border-top:1px solid #CECECE;margin-top:10px;padding-top:3px;line-height:130%}
+#wppizza-cart-total>span{white-space:nowrap}
+
 /*NEW IN VERSION 2.1*/
 #wppizza-cart-contents.wppizza-cart-thankyou{padding:0;margin:15px auto;width:95%;border:none;}/*if displaying order on thank you page*/
 #wppizza-transaction-head{font-weight:bold;border-bottom:1px dotted #CECECE;}
