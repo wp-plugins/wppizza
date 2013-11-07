@@ -163,13 +163,16 @@ if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='sendorder'){
 
 			/**update the db**/
 			$now=time();
-			$thisOrderTransactionId='COD'.$now.$orderId.'';
+			//$thisOrderTransactionId='COD'.$now.$orderId.'';
 			$thisOrderPostVars = apply_filters('wppizza_filter_sanitize_post_vars', $params);
+			$gatewayUsed=strtoupper($thisOrderPostVars['wppizza-gateway']);
 			$thisOrderPostVars=mysql_real_escape_string(serialize($thisOrderPostVars));
+			$thisOrderTransactionId=$gatewayUsed.$now.$orderId.'';
 
 
 			$wpdb->query("UPDATE ".$wpdb->prefix . $this->pluginOrderTable." SET
 			transaction_id='".$thisOrderTransactionId."',
+			initiator='".$gatewayUsed."',
 			customer_ini='".$thisOrderPostVars."'
 			WHERE id='".$orderId."' ");
 

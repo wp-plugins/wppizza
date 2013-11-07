@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WPPizza v2.5.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-11-04 19:02-0000\n"
-"PO-Revision-Date: 2013-11-04 19:02-0000\n"
+"POT-Creation-Date: 2013-11-07 16:37-0000\n"
+"PO-Revision-Date: 2013-11-07 16:37-0000\n"
 "Last-Translator: ollybach <dev@1000db.com>\n"
 "Language-Team: Yair - Halev.sites <halev.sites@gmail.com>\n"
 "Language: he_IL\n"
@@ -103,8 +103,12 @@ msgstr "פרטי הזמנה"
 msgid "Status"
 msgstr "סטטוס"
 
+#: ajax/admin-get-json.php:180
+msgid "Last Status Update"
+msgstr "Last Status Update"
+
 # @ wppizza-locale
-#: ajax/admin-get-json.php:181 inc/admin.echo.get_additives.inc.php:7
+#: ajax/admin-get-json.php:201 inc/admin.echo.get_additives.inc.php:7
 #: inc/admin.echo.get_mealsizes.inc.php:31
 #: inc/admin.echo.get_openingtimes.inc.php:14
 #: inc/admin.echo.get_timesclosed.inc.php:22
@@ -112,12 +116,12 @@ msgid "delete"
 msgstr "למחוק"
 
 # @ wppizza-locale
-#: ajax/admin-get-json.php:185
+#: ajax/admin-get-json.php:205
 msgid "print order"
 msgstr "הדפס הזמנה"
 
 # @ wppizza-locale
-#: ajax/admin-get-json.php:192
+#: ajax/admin-get-json.php:212
 msgid "no orders yet :("
 msgstr "אין הזמנות עדיין: ("
 
@@ -127,17 +131,17 @@ msgid "Sorry, we could not find this order."
 msgstr "מצטער, לא הצלחתי למצוא את הזמנה זו."
 
 # @ wppizza-locale
-#: ajax/get-json.php:184
+#: ajax/get-json.php:187
 msgid "This order has already been processed"
 msgstr "ההזמנה עדיין בעיבוד"
 
 # @ wppizza-locale
-#: ajax/get-json.php:193
+#: ajax/get-json.php:196
 msgid "SUCCESS"
 msgstr "הצלחה"
 
 # @ wppizza-locale
-#: ajax/get-json.php:198
+#: ajax/get-json.php:201
 msgid "FAILED: Sending of Mail Failed"
 msgstr "נכשל: שליחת הדואר נכשלה"
 
@@ -248,129 +252,129 @@ msgid "Nothing here"
 msgstr "דבר לא נמצא כאן"
 
 # @ wppizza-locale
-#: classes/wppizza.actions.inc.php:745
+#: classes/wppizza.actions.inc.php:752
 msgid "Menu Items"
 msgstr "פריטי תפריט"
 
 # @ wppizza-locale
-#: classes/wppizza.actions.inc.php:746
+#: classes/wppizza.actions.inc.php:753
 msgid "WPPizza Menu Item"
 msgstr "פריט תפריט WPPizza"
 
 # @ wppizza-locale
-#: classes/wppizza.actions.inc.php:747
+#: classes/wppizza.actions.inc.php:754
 msgid "Add New"
 msgstr "הוסף חדש"
 
 # @ wppizza-locale
-#: classes/wppizza.actions.inc.php:748
+#: classes/wppizza.actions.inc.php:755
 msgid "Add New Menu Item"
 msgstr "הוסף פריט תפריט חדש"
 
 # @ wppizza-locale
-#: classes/wppizza.actions.inc.php:749
+#: classes/wppizza.actions.inc.php:756
 msgid "Edit"
 msgstr "לערוך"
 
 # @ wppizza-locale
-#: classes/wppizza.actions.inc.php:750
+#: classes/wppizza.actions.inc.php:757
 msgid "Edit Menu Item"
 msgstr "עריכת פריט תפריט"
 
 # @ wppizza-locale
-#: classes/wppizza.actions.inc.php:751
+#: classes/wppizza.actions.inc.php:758
 msgid "New Menu Item"
 msgstr "פריט תפריט חדש"
 
 # @ wppizza-locale
-#: classes/wppizza.actions.inc.php:752
+#: classes/wppizza.actions.inc.php:759
 msgid "All Menu Items"
 msgstr "כל פריטי התפריט"
 
 # @ wppizza-locale
-#: classes/wppizza.actions.inc.php:753
+#: classes/wppizza.actions.inc.php:760
 msgid "View"
 msgstr "לצפות"
 
 # @ wppizza-locale
-#: classes/wppizza.actions.inc.php:754
+#: classes/wppizza.actions.inc.php:761
 msgid "View Menu Items"
 msgstr "צפה בפריטי תפריט"
 
 # @ wppizza-locale
-#: classes/wppizza.actions.inc.php:755
+#: classes/wppizza.actions.inc.php:762
 msgid "Search Menu Items"
 msgstr "חיפוש פריטי תפריט "
 
 # @ wppizza-locale
-#: classes/wppizza.actions.inc.php:756
+#: classes/wppizza.actions.inc.php:763
 msgid "No items found"
 msgstr "לא נמצאו פריטים"
 
 # @ wppizza-locale
-#: classes/wppizza.actions.inc.php:757
+#: classes/wppizza.actions.inc.php:764
 msgid "No items found in the Trash"
 msgstr "פריטים לא נמצאו בפח האשפה"
 
-#: classes/wppizza.actions.inc.php:766
+#: classes/wppizza.actions.inc.php:773
 #, php-format
 msgid "Holds %1$s  menu items data"
 msgstr "Holds %1$s  menu items data"
 
 # @ default
-#: classes/wppizza.actions.inc.php:803
+#: classes/wppizza.actions.inc.php:810
 msgctxt "taxonomy general name"
 msgid "WPPizza Categories"
 msgstr "קטגוריות WPPizza "
 
 # @ default
-#: classes/wppizza.actions.inc.php:804
+#: classes/wppizza.actions.inc.php:811
 msgctxt "taxonomy singular name"
 msgid "Category"
 msgstr "קטגוריה"
 
 # @ default
-#: classes/wppizza.actions.inc.php:805
+#: classes/wppizza.actions.inc.php:812
 msgid "Search Categories"
 msgstr "חיפוש קטגוריות"
 
 # @ default
-#: classes/wppizza.actions.inc.php:806
+#: classes/wppizza.actions.inc.php:813
 msgid "All Categories"
 msgstr "כל הקטגוריות"
 
 # @ default
-#: classes/wppizza.actions.inc.php:807
+#: classes/wppizza.actions.inc.php:814
 msgid "Parent Category"
 msgstr "קטגורית הורה"
 
 # @ default
-#: classes/wppizza.actions.inc.php:808
+#: classes/wppizza.actions.inc.php:815
 msgid "Parent Category:"
 msgstr "קטגוריית הורה:"
 
 # @ default
-#: classes/wppizza.actions.inc.php:809
+#: classes/wppizza.actions.inc.php:816
 msgid "Edit Category"
 msgstr "ערוך קטגוריה"
 
 # @ default
-#: classes/wppizza.actions.inc.php:810
+#: classes/wppizza.actions.inc.php:817
 msgid "Update Category"
 msgstr "עדכן קטגוריה"
 
 # @ default
-#: classes/wppizza.actions.inc.php:811
+#: classes/wppizza.actions.inc.php:818
 msgid "Add New Category"
 msgstr "הוסף קטגוריה חדשה"
 
 # @ default
-#: classes/wppizza.actions.inc.php:812
+#: classes/wppizza.actions.inc.php:819
 msgid "New Category Name"
 msgstr "הוסף שם קטגוריה"
 
 # @ default
-#: classes/wppizza.actions.inc.php:813
+#: classes/wppizza.actions.inc.php:820
 msgid "Categories"
 msgstr "קטגוריות"
 
@@ -381,44 +385,44 @@ msgid "in use"
 msgstr "בשימוש"
 
 # @ wppizza-locale
-#: inc/admin.echo.get_gateways.inc.php:14
+#: inc/admin.echo.get_gateways.inc.php:15
 msgid "enabled Y/N"
 msgstr "מופעל כן/לא"
 
 # @ wppizza-locale
-#: inc/admin.echo.get_gateways.inc.php:16
+#: inc/admin.echo.get_gateways.inc.php:17
 msgid "show options"
 msgstr "הצג אפשרויות"
 
 # @ wppizza-locale
-#: inc/admin.echo.get_gateways.inc.php:30
+#: inc/admin.echo.get_gateways.inc.php:31
 msgid "Frontend display order"
 msgstr "תצוגת הזמנות קדמית"
 
 # @ wppizza-locale
-#: inc/admin.echo.get_gateways.inc.php:39
+#: inc/admin.echo.get_gateways.inc.php:40
 msgid "Frontend Label"
 msgstr "תווית קדמית"
 
 # @ wppizza-locale
-#: inc/admin.echo.get_gateways.inc.php:41
+#: inc/admin.echo.get_gateways.inc.php:42
 msgid "displays"
 msgstr "תצוגות"
 
 # @ wppizza-locale
-#: inc/admin.echo.get_gateways.inc.php:41
+#: inc/admin.echo.get_gateways.inc.php:42
 msgid "if Empty"
 msgstr "אם ריק"
 
 # @ wppizza-locale
-#: inc/admin.echo.get_gateways.inc.php:42
-#: inc/admin.echo.get_gateways.inc.php:49
+#: inc/admin.echo.get_gateways.inc.php:43
+#: inc/admin.echo.get_gateways.inc.php:50
 msgid ""
 "only displayed if more than one gateway installed, activated and enabled"
 msgstr "מוצג רק אם הותקן שער תשלום אחד או יותר, מופעל ומאופשר"
 
 # @ wppizza-locale
-#: inc/admin.echo.get_gateways.inc.php:47
+#: inc/admin.echo.get_gateways.inc.php:48
 msgid "Frontend: Additional Plugin Information"
 msgstr "ממשק קדמי: מידע נוסף תוסף"
 
@@ -1037,52 +1041,52 @@ msgid "Menu Items and Categories are accessible just like \"normal\" posts"
 msgstr "פריטי תפריט קטגוריות ונגישים בדיוק כמו פוסטים &quot;נורמלים&quot;"
 
 # @ wppizza-locale
-#: inc/admin.echo.settings.input.fields.inc.php:494
+#: inc/admin.echo.settings.input.fields.inc.php:495
 msgid "show most recent *confirmed* orders"
 msgstr "להציג הזמנות *שאושרו* האחרונות"
 
 # @ wppizza-locale
-#: inc/admin.echo.settings.input.fields.inc.php:495
+#: inc/admin.echo.settings.input.fields.inc.php:496
 msgid "maximum results [0 to show all]"
 msgstr "תוצאות מרביות [0 להציג הכל]"
 
 # @ wppizza-locale
-#: inc/admin.echo.settings.input.fields.inc.php:497
+#: inc/admin.echo.settings.input.fields.inc.php:499
 msgid "poll for new orders every"
 msgstr "סקר עבור הזמנות חדשות בכל"
 
 # @ wppizza-locale
-#: inc/admin.echo.settings.input.fields.inc.php:497
+#: inc/admin.echo.settings.input.fields.inc.php:499
 msgid "seconds"
 msgstr "שניות"
 
 # @ wppizza-locale
-#: inc/admin.echo.settings.input.fields.inc.php:498
+#: inc/admin.echo.settings.input.fields.inc.php:500
 msgid "on/off"
 msgstr "הפעלה / כיבוי"
 
 # @ wppizza-locale
-#: inc/admin.echo.settings.input.fields.inc.php:510
+#: inc/admin.echo.settings.input.fields.inc.php:512
 msgid "Delete abandoned/cancelled orders from database older than"
 msgstr "למחוק הזמנות נטושות / מבוטלות ממסד הנתונים אם ישנות יותר מ"
 
 # @ wppizza-locale
-#: inc/admin.echo.settings.input.fields.inc.php:512
+#: inc/admin.echo.settings.input.fields.inc.php:514
 msgid "Days (minimum: 1)"
 msgstr "ימים (מינימום: 1)"
 
 # @ wppizza-locale
-#: inc/admin.echo.settings.input.fields.inc.php:514
+#: inc/admin.echo.settings.input.fields.inc.php:516
 msgid "delete failed, tampered or otherwise invalid entries too."
 msgstr "למחוק אם נכשלו, או ערכים אחרים לא חוקיים."
 
 # @ wppizza-locale
-#: inc/admin.echo.settings.input.fields.inc.php:515
+#: inc/admin.echo.settings.input.fields.inc.php:517
 msgid "go"
 msgstr "עבור"
 
 # @ wppizza-locale
-#: inc/admin.echo.settings.input.fields.inc.php:516
+#: inc/admin.echo.settings.input.fields.inc.php:518
 msgid ""
 "As soon as customers go to the order page an order will be initialized and "
 "stored in the db to be checked against when going through with the purchase "
@@ -1097,7 +1101,7 @@ msgstr ""
 "ערכים אלה (זה לא ישפיע על כל הזמנות שהושלמו או תלויות ועומדות)"
 
 # @ wppizza-locale
-#: inc/admin.echo.settings.input.fields.inc.php:517
+#: inc/admin.echo.settings.input.fields.inc.php:519
 msgid ""
 "Note: This will delete these entries PERMANENTLY from the db and is not "
 "reversable."
@@ -2463,27 +2467,27 @@ msgid "Responsive [Experimental]"
 msgstr "מותאם [ניסיון]"
 
 # @ wppizza-locale
-#: views/widget-admin.php:34
+#: views/widget-admin.php:38
 msgid "Widget Title"
 msgstr "וידגט הכותרת"
 
 # @ wppizza-locale
-#: views/widget-admin.php:38
+#: views/widget-admin.php:42
 msgid "Suppress Title ?"
 msgstr "לחץ את הכותרת?"
 
 # @ wppizza-locale
-#: views/widget-admin.php:43
+#: views/widget-admin.php:47
 msgid "Widget Type"
 msgstr "סוג וידגט "
 
 # @ wppizza-locale
-#: views/widget-admin.php:58
+#: views/widget-admin.php:62
 msgid "All Categories [default]"
 msgstr "כל הקטגוריות [ברירת מחדל]"
 
 # @ wppizza-locale
-#: views/widget-admin.php:63
+#: views/widget-admin.php:67
 msgid ""
 "Please refer to <a href='http://wordpress.org/extend/plugins/wppizza/faq/' "
 "target='_blank'>FAQ</a> when using the widget (or shortcode) to display the "
@@ -2494,7 +2498,7 @@ msgstr ""
 "את הניווט"
 
 # @ wppizza-locale
-#: views/widget-admin.php:67
+#: views/widget-admin.php:71
 msgid ""
 "You probably want to create a dedicated orderpage with the following "
 "shortcode instead [wppizza type='orderpage']."
@@ -2503,7 +2507,7 @@ msgstr ""
 "type='orderpage']."
 
 # @ wppizza-locale
-#: views/widget-admin.php:71
+#: views/widget-admin.php:75
 msgid ""
 "Displays openingtimes set in wppizza->settings->openingtimes. shortcode "
 "[wppizza type='openingtimes']"
@@ -2512,63 +2516,67 @@ msgstr ""
 "type='openingtimes']."
 
 # @ wppizza-locale
-#: views/widget-admin.php:79
+#: views/widget-admin.php:83
 msgid "First Category [default]"
 msgstr "קטגוריה ראשונה [ברירת מחדל]"
 
 # @ wppizza-locale
-#: views/widget-admin.php:85
+#: views/widget-admin.php:89
 msgid "Show Additives List at bottom of page ?"
 msgstr "הצג רשימת תוספות בחלק תחתון של דף?"
 
 # @ wppizza-locale
-#: views/widget-admin.php:87
+#: views/widget-admin.php:91
 msgid "Auto [default]"
 msgstr "אוטומטי [ברירת מחדל]"
 
 # @ wppizza-locale
-#: views/widget-admin.php:88
+#: views/widget-admin.php:92
 msgid "Force Hide"
 msgstr "לכפות הסתרה"
 
 # @ wppizza-locale
-#: views/widget-admin.php:89
+#: views/widget-admin.php:93
 msgid "Force Show"
 msgstr "לכפות הצגה"
 
 # @ wppizza-locale
-#: views/widget-admin.php:93
+#: views/widget-admin.php:97
 msgid "Suppress Category Header ?"
 msgstr "ללחוץ את כותרת קטגוריה?"
 
+#: views/widget-admin.php:103
+msgid "Cart visible on page when scrolling ?"
+msgstr "Cart visible on page when scrolling ?"
+
 # @ wppizza-locale
-#: views/widget-admin.php:99
+#: views/widget-admin.php:106
 msgid "Display Openingtimes ?"
 msgstr "להציג שעות פתיחה?"
 
 # @ wppizza-locale
-#: views/widget-admin.php:102
+#: views/widget-admin.php:109
 msgid "Display Order Info ?"
 msgstr "תצוגת מידע הזמנה?"
 
 # @ wppizza-locale
-#: views/widget-admin.php:105
+#: views/widget-admin.php:112
 #, fuzzy, php-format
 msgid "Width [% or px]"
 msgstr "רוחב [% או px]"
 
 # @ wppizza-locale
-#: views/widget-admin.php:106
+#: views/widget-admin.php:113
 msgid "i.e. 200px or 85% - defaults to 100% if left blank"
 msgstr "כלומר 200px או 85% - ברירת מחדל הם 100%, אם נשאר ריק "
 
 # @ wppizza-locale
-#: views/widget-admin.php:110
+#: views/widget-admin.php:117
 msgid "Height [Integer]"
 msgstr "גובה [מספר שלם]"
 
 # @ wppizza-locale
-#: views/widget-admin.php:111
+#: views/widget-admin.php:118
 msgid "css defaults to 250px if left blank"
 msgstr "ברירת מחדל ב-CSS כדי 250px אם נשאר ריק "
 
