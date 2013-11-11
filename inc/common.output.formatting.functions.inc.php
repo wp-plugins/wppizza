@@ -9,16 +9,16 @@
 
 	function wppizza_output_format_price($str,$hideDecimals=false){
 		if(trim($str)!=''){
-			
+
 			/*lagacy reasons when already using wppizza_output_format_price in customised cart template**/
 			$sstr=substr($str,-3,1);
 			if($sstr==','){
 				$str=str_replace(array(',','.'),'',$str);
-				$str = substr_replace($str, '.', -2, 0);				
+				$str = substr_replace($str, '.', -2, 0);
 			}
-			/***************************************************/			
+			/***************************************************/
 
-			if($hideDecimals){				
+			if($hideDecimals){
 				$str=number_format_i18n($str,0);
 			}else{
 				$str=number_format_i18n($str,2);
@@ -429,7 +429,7 @@ function wppizza_days(){
 	$items['6']=__('Saturdays', WPPIZZA_LOCALE);
 	$items['0']=__('Sundays', WPPIZZA_LOCALE);
 
-		return $items;
+	return $items;
 }
 /*********************************************************
 	[chosen style options]
@@ -503,11 +503,12 @@ function wppizza_order_summary($session,$options,$ajax=null){
 			/**really only for legacy reasons, future versions will only have extend key**/
 			if(!isset($v['additionalinfo'])){$v['additionalinfo']=array();}
 			if(!isset($v['extend'])){$v['extend']=array();}
-			$cartItems[''.$groupid.''][]=array('sortname'=>$v['sortname'],'size'=>$v['size'],'sizename'=>$v['sizename'],'printname'=>$v['printname'],'price'=>$v['price'],'additionalinfo'=>$v['additionalinfo'],'extend'=>$v['extend'],'postId'=>$v['id']);
+			if(!isset($v['extenddata'])){$v['extenddata']=array();}
+			$cartItems[''.$groupid.''][]=array('sortname'=>$v['sortname'],'size'=>$v['size'],'sizename'=>$v['sizename'],'printname'=>$v['printname'],'price'=>$v['price'],'additionalinfo'=>$v['additionalinfo'],'extend'=>$v['extend'],'extenddata'=>$v['extenddata'],'postId'=>$v['id']);
 		}
 	}
 	foreach($cartItems as $k=>$v){
-		$groupedItems[$k]=array('sortname'=>$cartItems[$k][0]['sortname'],'size'=>$cartItems[$k][0]['size'],'sizename'=>$cartItems[$k][0]['sizename'],'printname'=>$cartItems[$k][0]['printname'],'price'=>$cartItems[$k][0]['price'],'count'=>count($cartItems[$k]),'total'=>(count($cartItems[$k])*$cartItems[$k][0]['price']),'additionalinfo'=>$cartItems[$k][0]['additionalinfo'],'extend'=>$cartItems[$k][0]['extend'],'postId'=>$cartItems[$k][0]['postId'])	;
+		$groupedItems[$k]=array('sortname'=>$cartItems[$k][0]['sortname'],'size'=>$cartItems[$k][0]['size'],'sizename'=>$cartItems[$k][0]['sizename'],'printname'=>$cartItems[$k][0]['printname'],'price'=>$cartItems[$k][0]['price'],'count'=>count($cartItems[$k]),'total'=>(count($cartItems[$k])*$cartItems[$k][0]['price']),'additionalinfo'=>$cartItems[$k][0]['additionalinfo'],'extend'=>$cartItems[$k][0]['extend'],'extenddata'=>$cartItems[$k][0]['extenddata'],'postId'=>$cartItems[$k][0]['postId'])	;
 	}
 	asort($groupedItems);
 	/**output items sorted by name and size**/
@@ -515,7 +516,7 @@ function wppizza_order_summary($session,$options,$ajax=null){
 		/*get categories**/
 		$catObj = get_the_terms($v['postId'], WPPIZZA_TAXONOMY);
 		$catArray=json_decode(json_encode($catObj), true);
-		$summary['items'][$k]=array('name'=>$v['printname'],'count'=>$v['count'],'size'=>$v['sizename'],'price'=>wppizza_output_format_price($v['price'],$optionsDecimals),'pricetotal'=>wppizza_output_format_price($v['total'],$optionsDecimals),'categories'=>$catArray,'additionalinfo'=>$v['additionalinfo'],'extend'=>$v['extend'],'postId'=>$v['postId']);
+		$summary['items'][$k]=array('name'=>$v['printname'],'count'=>$v['count'],'size'=>$v['sizename'],'price'=>wppizza_output_format_price($v['price'],$optionsDecimals),'pricetotal'=>wppizza_output_format_price($v['total'],$optionsDecimals),'categories'=>$catArray,'additionalinfo'=>$v['additionalinfo'],'extend'=>$v['extend'],'extenddata'=>$v['extenddata'],'postId'=>$v['postId']);
 	}
 
 
@@ -647,7 +648,7 @@ function wppizza_order_summary($session,$options,$ajax=null){
 				}
 
 			}
-			
+
 			/*******************************************
 			*	admin enabled self pickup on the frontend
 			******************************************/
@@ -681,7 +682,7 @@ function wppizza_order_summary($session,$options,$ajax=null){
 
 			/**minimum order value set but not reached***/
 			if($options['order']['order_min_for_delivery']>0 && $options['order']['order_min_for_delivery']>$session['total_price_items'] && !($summary['selfPickup'])){
-				$placeOrderDisabled=true;	
+				$placeOrderDisabled=true;
 				$options['order']['delivery']['minimum_total']['min_total']=$options['order']['order_min_for_delivery'];
 				$options['localization']['minimum_order']['lbl']=$options['localization']['minimum_order_delivery']['lbl'];
 			}
@@ -745,7 +746,7 @@ function wppizza_order_summary($session,$options,$ajax=null){
 								$options['order']['delivery']['minimum_total']['deliver_below_total'] ||
 								(!$options['order']['delivery']['minimum_total']['deliver_below_total'] && $session['total_price_items']>=$options['order']['delivery']['minimum_total']['min_total'])
 							)
-		
+
 						) ||
 						$options['order']['delivery_selected']=='standard' ||
 						$options['order']['delivery_selected']=='per_item'
@@ -756,31 +757,23 @@ function wppizza_order_summary($session,$options,$ajax=null){
 					$summary['button']='<a href="'.get_page_link($options['order']['orderpage']).'">';
 					$summary['button'].='<input class="btn btn-primary" type="button" value="'.$options['localization']['place_your_order']['lbl'].'" />';
 					$summary['button'].='</a>';
-					
-					
 
-					
-					
 				}
-				/**too much hassle to make this work on every theme. better to make the user add [wppizza type=orderpage] to a dedicated page.**/
-//				else{//open ajax
-//					$summary['button']='<input type="button" value="'.$options['localization']['place_your_order']['lbl'].'" class="wppizza-order-page"/>';
-//				}
 			}else{
 			/*minimum order not reached. only applies when "Deliver even when total order value is below minimum" is NOT checked and the corresponding option(radio) has been selected*/
 				$summary['nocheckout']=''.$options['localization']['minimum_order']['lbl'].' '.wppizza_output_format_price($options['order']['delivery']['minimum_total']['min_total'],$optionsDecimals).' '.$options['order']['currency_symbol'].'';
 			}
 		}
-	
+
 	//	if($placeOrderDisabled){
 	//		$summary['nocheckout']=''.$options['localization']['minimum_order']['lbl'].' '.wppizza_output_format_price($options['order']['delivery']['minimum_total']['min_total'],$optionsDecimals).' '.$options['order']['currency_symbol'].'';
 	//	}
-	
+
 	}
 	/**enable increase/decrese in cart**/
 	if($options['layout']['cart_increase']){
 		$summary['increase_decrease']=1;
-	}	
+	}
 return $summary;
 }
 /***************************************************

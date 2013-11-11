@@ -72,15 +72,15 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 						foreach($enabledGateways as $key=>$gw){
 							$key=strtolower($key);
 							/*******************************************************************************
-								if we want to submit directly via ajax (other than cod which does this anyway), 
-								without sending to any gateway (lets say bacs or something) 
+								if we want to submit directly via ajax (other than cod which does this anyway),
+								without sending to any gateway (lets say bacs or something)
 								check if $this->gatewaySubmit isset and set to ajax and add class as required
 								so we can identify this
 							********************************************************************************/
 							$gwAddClass='';
 							if(isset($gw->gatewayTypeSubmit) && $gw->gatewayTypeSubmit=='ajax'){
-								$gwAddClass=' class="wppizzaGwAjaxSubmit"';	
-							}							
+								$gwAddClass=' class="wppizzaGwAjaxSubmit"';
+							}
 							print"<option value='".$key."' ".$gwAddClass." />";
 								print"".empty($gw->gatewayOptions['gateway_label']) ? $gw->gatewayName : $gw->gatewayOptions['gateway_label'] ." ";
 							print"</option>";
@@ -93,14 +93,14 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 						foreach($enabledGateways as $key=>$gw){
 							$key=strtolower($key);
 							/*******************************************************************************
-								if we want to submit directly via ajax (other than cod which does this anyway), 
-								without sending to any gateway (lets say bacs or something) 
+								if we want to submit directly via ajax (other than cod which does this anyway),
+								without sending to any gateway (lets say bacs or something)
 								check if $this->gatewaySubmit isset and set to ajax and add class as required
 								so we can identify this
 							********************************************************************************/
 							$gwAddClass='';
 							if(isset($gw->gatewayTypeSubmit) && $gw->gatewayTypeSubmit=='ajax'){
-								$gwAddClass=' class="wppizzaGwAjaxSubmit"';	
+								$gwAddClass=' class="wppizzaGwAjaxSubmit"';
 							}
 							print"<div id='wppizza-gw-".$key."' class='wppizza-gw-button button'>";
 								print"<label>";
@@ -122,15 +122,15 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 				foreach($enabledGateways as $key=>$gw){
 					$key=strtolower($key);
 					/*******************************************************************************
-						if we want to submit directly via ajax (other than cod which does this anyway), 
-						without sending to any gateway (lets say bacs or something) 
+						if we want to submit directly via ajax (other than cod which does this anyway),
+						without sending to any gateway (lets say bacs or something)
 						check if $this->gatewaySubmit isset and set to ajax and add class as required
 						so we can identify this
 					********************************************************************************/
 					$gwAddClass='';
 					if(isset($gw->gatewayTypeSubmit) && $gw->gatewayTypeSubmit=='ajax'){
-						$gwAddClass=' class="wppizzaGwAjaxSubmit"';	
-					}					
+						$gwAddClass=' class="wppizzaGwAjaxSubmit"';
+					}
 					/**add hidden value so the ajax call knows whether its cod or anything else*/
 					print"<input type='hidden' name='wppizza-gateway' id='wppizza-gateway-".$key."' ".$gwAddClass." value='".$key."' /> ";
 					/**if this method has not been defined in class or is empty, display standard button**/
@@ -151,7 +151,7 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 		$cart=wppizza_order_summary($_SESSION[$this->pluginSession],$this->pluginOptions);
 		if($cart['nocheckout']!=''){
 			$standardButton='<div class="wppizza-order-nocheckout">'.$cart['nocheckout'].'</div>';
-		}else{		
+		}else{
 			$standardButton='<input class="submit wppizza-ordernow" type="submit" style="display:block" value="'.$this->pluginOptions['localization']['send_order']['lbl'].'" />';
 		}
 		return $standardButton;
@@ -187,6 +187,7 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 			$gatewayOrder['item'][$k]['additionalinfo']=$addInfo;
 			$gatewayOrder['item'][$k]['additionalInfo']=implode(" ",$addInfo);/*legacy paypal and order thank you page (note upper case I)*/
 			$gatewayOrder['item'][$k]['extend']=$v['extend'];
+			$gatewayOrder['item'][$k]['extenddata']=$v['extenddata'];/**to store data (keys, id's count, prices  etc) in the db to maybe retrieve later, put it in this key**/
 		}
 
 		$gatewayOrder['total_price_items']=wppizza_validate_float_only($cartDetails['order_value']['total_price_items']['val']);
@@ -202,14 +203,10 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 			$gatewayOrder[$k]=$v;
 		}
 
-		/*sanitize it . actually already done elsewhere, butu leave it here for the moment*/
-		//$gatewayOrder = apply_filters('wppizza_filter_sanitize_order', $gatewayOrder);
-
 		/*****created and return checkable hash**/
 		$cartHash=wppizza_mkHash($gatewayOrder);/*make unique hash*/
 		$gatewayOrder['hash']=$cartHash['hash'];/*add hash to array*/
 		$gatewayOrder['order_ini']=$cartHash['order_ini'];/*add orig hash string to array*/
-
 
 		return $gatewayOrder;
 	}
