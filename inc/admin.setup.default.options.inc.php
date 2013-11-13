@@ -365,7 +365,7 @@
 				'order_min_for_delivery' => 0,
 				'order_pickup_display_location' => 1,
 				'delivery'=>array(
-					'minimum_total'=>array('min_total'=>'7.5','deliver_below_total'=>true),
+					'minimum_total'=>array('min_total'=>'7.5','deliver_below_total'=>true,'deliverycharges_below_total'=>'0'),
 					'standard'=>array('delivery_charge'=>'7.5'),
 					'per_item'=>array('delivery_charge_per_item'=>'0','delivery_per_item_free'=>'50')
 				),

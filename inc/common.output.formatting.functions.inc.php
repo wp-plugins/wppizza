@@ -609,6 +609,14 @@ function wppizza_order_summary($session,$options,$ajax=null){
 						$deliveryCharges=wppizza_output_format_float($options['order']['delivery']['minimum_total']['min_total']-$session['total_price_items']);
 					}
 				}
+				/**fixed price set if below free delivery: overrides "deliver_below_total" **/
+				if($options['order']['delivery']['minimum_total']['deliverycharges_below_total']>0){
+					if($session['total_price_items']<$options['order']['delivery']['minimum_total']['min_total']){
+						$deliveryLabel=$options['localization']['delivery_charges']['lbl'];
+						$deliveryCharges=wppizza_output_format_float($options['order']['delivery']['minimum_total']['deliverycharges_below_total']);
+					}
+				}
+				
 				/**delivery settings to display with discount options somewhere*/
 				if($options['order']['delivery']['minimum_total']['min_total']>0){
 					$summary['pricing_delivery']="".$options['localization']['free_delivery_for_orders_of']['lbl']." <span>".$options['order']['currency_symbol']." ".wppizza_output_format_price($options['order']['delivery']['minimum_total']['min_total'],$optionsDecimals)."</span>";

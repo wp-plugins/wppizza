@@ -23,6 +23,10 @@
 	if(!isset($options['order']['delivery']['per_item'])){
 		$update_options['order']['delivery']['per_item']=$defaultOptions['order']['delivery']['per_item'];
 	}
+	if(!isset($options['order']['delivery']['minimum_total']['deliverycharges_below_total'])){
+		$update_options['order']['delivery']['minimum_total']['deliverycharges_below_total']=$defaultOptions['order']['delivery']['minimum_total']['deliverycharges_below_total'];
+	}
+		
 	/****************************************************************************
 	$update_options now holds the old options plus the added new defaults options
 	*****************************************************************************/

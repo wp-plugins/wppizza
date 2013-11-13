@@ -59,10 +59,15 @@ jQuery(document).ready(function($){
 	*	[add to cart / remove from cart]
 	*******************************/
 	/**only allow integers in cart increase/decrease**/
-	$('.wppizza-cart-incr').keyup(function () { 
-    	this.value = this.value.replace(/[^0-9]/g,'');
-	});
+	$(document).on('keyup', '.wppizza-cart-incr', function(e){
+		this.value = this.value.replace(/[^0-9]/g,'');
+		/**when using textbox in cart to incr/decr allow enter as well as clicking on button */
+		if(e.keyCode == 13){
+			$(this).closest('li').find('.wppizza-cart-increment').trigger(''+wppizzaClickEvent+'');
+		}
+	})
 	
+
 	/**run defined functions after cart refresh**/
 	var wppizzaCartRefreshed = (function(functionArray) {
 		if(functionArray.length>0){
@@ -187,7 +192,7 @@ jQuery(document).ready(function($){
 	/***********************************************
 	*
 	*	[if we are trying to add to cart by clicking on the title
-	*	but there's mor than one size to choose from, display alert]
+	*	but there's more than one size to choose from, display alert]
 	*	[provided  there's a cart on page and we are open]
 	***********************************************/
 	/*more than one size->choose alert*/

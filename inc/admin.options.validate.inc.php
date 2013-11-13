@@ -140,6 +140,7 @@
 				}
 				if($k=='minimum_total'){
 					$options['order']['delivery'][$k]['deliver_below_total']=!empty($input['order']['delivery'][$k]['deliver_below_total']) ? true : false;
+					$options['order']['delivery'][$k]['deliverycharges_below_total']=wppizza_validate_float_only($input['order']['delivery'][$k]['deliverycharges_below_total']);					
 				}
 			}
 			$options['order']['discounts'] = array();//initialize array
