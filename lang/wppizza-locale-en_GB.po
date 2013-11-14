@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WPPizza\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-11-14 11:07-0000\n"
-"PO-Revision-Date: 2013-11-14 11:07-0000\n"
+"POT-Creation-Date: 2013-11-14 21:10-0000\n"
+"PO-Revision-Date: 2013-11-14 21:10-0000\n"
 "Last-Translator: ollybach <dev@1000db.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -658,8 +658,8 @@ msgstr ""
 
 #: ../inc/admin.echo.settings.input.fields.inc.php:193
 #: ../inc/admin.echo.settings.input.fields.inc.php:206
-#: ../inc/admin.echo.settings.input.fields.inc.php:402
-#: ../inc/admin.echo.settings.input.fields.inc.php:415
+#: ../inc/admin.echo.settings.input.fields.inc.php:407
+#: ../inc/admin.echo.settings.input.fields.inc.php:420
 msgid "add"
 msgstr "add"
 
@@ -684,68 +684,72 @@ msgid "Required"
 msgstr "Required"
 
 #: ../inc/admin.echo.settings.input.fields.inc.php:227
+msgid "Prefill [if known]"
+msgstr "Prefill [if known]"
+
+#: ../inc/admin.echo.settings.input.fields.inc.php:227
 msgid "Type"
 msgstr "Type"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:249
+#: ../inc/admin.echo.settings.input.fields.inc.php:251
 msgid "seperate multiple with comma"
 msgstr "seperate multiple with comma"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:263
+#: ../inc/admin.echo.settings.input.fields.inc.php:268
 msgid "Free delivery when total order value reaches"
 msgstr "Free delivery when total order value reaches"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:267
-msgid ""
-"Deliver even when total order value is below minimum (the difference between "
-"total and \"Minimum Total\" above will be added to the Total as \"Delivery "
-"Charges\")"
-msgstr ""
-"Deliver even when total order value is below minimum (the difference between "
-"total and \"Minimum Total\" above will be added to the Total as \"Delivery "
-"Charges\")"
-
-#: ../inc/admin.echo.settings.input.fields.inc.php:269
-msgid ""
-"(If this is not selected and the total order is below the set value above, "
-"the customer will not be able to submit the order to you)"
-msgstr ""
-"(If this is not selected and the total order is below the set value above, "
-"the customer will not be able to submit the order to you)"
-
 #: ../inc/admin.echo.settings.input.fields.inc.php:272
 msgid ""
-"Fixed Delivery charges if order has not reached total for free delivery [0 "
-"to disable]"
+"Deliver even when total order value is below minimum (the difference between "
+"total and \"Minimum Total\" above will be added to the Total as \"Delivery "
+"Charges\")"
 msgstr ""
-"Fixed Delivery charges if order has not reached total for free delivery [0 "
-"to disable]"
+"Deliver even when total order value is below minimum (the difference between "
+"total and \"Minimum Total\" above will be added to the Total as \"Delivery "
+"Charges\")"
 
 #: ../inc/admin.echo.settings.input.fields.inc.php:274
 msgid ""
+"(If this is not selected and the total order is below the set value above, "
+"the customer will not be able to submit the order to you)"
+msgstr ""
+"(If this is not selected and the total order is below the set value above, "
+"the customer will not be able to submit the order to you)"
+
+#: ../inc/admin.echo.settings.input.fields.inc.php:277
+msgid ""
+"Fixed Delivery charges if order has not reached total for free delivery [0 "
+"to disable]"
+msgstr ""
+"Fixed Delivery charges if order has not reached total for free delivery [0 "
+"to disable]"
+
+#: ../inc/admin.echo.settings.input.fields.inc.php:279
+msgid ""
 "if set (i.e. not 0) \"Deliver even when total order value is below minimum\" "
 "must be checked for this to have any effect"
 msgstr ""
 "if set (i.e. not 0) \"Deliver even when total order value is below minimum\" "
 "must be checked for this to have any effect"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:279
+#: ../inc/admin.echo.settings.input.fields.inc.php:284
 msgid "Fixed Delivery Charges [added to order total]"
 msgstr "Fixed Delivery Charges [added to order total]"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:284
+#: ../inc/admin.echo.settings.input.fields.inc.php:289
 msgid "Delivery Charges per item"
 msgstr "Delivery Charges per item"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:287
+#: ../inc/admin.echo.settings.input.fields.inc.php:292
 msgid "Do not apply delivery charges when total order value reaches "
 msgstr "Do not apply delivery charges when total order value reaches "
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:289
+#: ../inc/admin.echo.settings.input.fields.inc.php:294
 msgid "[set to 0 to always apply charges per item]"
 msgstr "[set to 0 to always apply charges per item]"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:299
+#: ../inc/admin.echo.settings.input.fields.inc.php:304
 msgid ""
 "minimum order value to offer delivery [will disable \"place order\" button "
 "in cart and order page until set order value (before any discounts etc) has "
@@ -756,22 +760,22 @@ msgstr ""
 "in cart and order page until set order value (before any discounts etc) has "
 "been reached. 0 to disable. Customer can still choose \"self-pickup\" (if "
 "enabled).]"
-
-#: ../inc/admin.echo.settings.input.fields.inc.php:300
-msgid ""
-"probably most useful with \"Fixed\" / \"Per Item\" delivery charges or when "
-"\"Deliver even when total order value is below...etc\" is checked]"
-msgstr ""
-"probably most useful with \"Fixed\" / \"Per Item\" delivery charges or when "
-"\"Deliver even when total order value is below...etc\" is checked]"
 
 #: ../inc/admin.echo.settings.input.fields.inc.php:305
 msgid ""
+"probably most useful with \"Fixed\" / \"Per Item\" delivery charges or when "
+"\"Deliver even when total order value is below...etc\" is checked]"
+msgstr ""
+"probably most useful with \"Fixed\" / \"Per Item\" delivery charges or when "
+"\"Deliver even when total order value is below...etc\" is checked]"
+
+#: ../inc/admin.echo.settings.input.fields.inc.php:310
+msgid ""
 "<b>Exclude</b> following menu items when calculating if free delivery applies"
 msgstr ""
 "<b>Exclude</b> following menu items when calculating if free delivery applies"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:306
+#: ../inc/admin.echo.settings.input.fields.inc.php:311
 msgid ""
 "For example: you might want to offer free delivery only when total order of "
 "*meals* exceeds the set free delivery amount. In this case, exclude all your "
@@ -781,23 +785,23 @@ msgstr ""
 "*meals* exceeds the set free delivery amount. In this case, exclude all your "
 "*drinks and non-meals* by selecting those below."
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:318
+#: ../inc/admin.echo.settings.input.fields.inc.php:323
 msgid "Ctrl+Click to select multiple"
 msgstr "Ctrl+Click to select multiple"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:328
+#: ../inc/admin.echo.settings.input.fields.inc.php:333
 msgid "tick to enable"
 msgstr "tick to enable"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:330
+#: ../inc/admin.echo.settings.input.fields.inc.php:335
 msgid "Discount for self-pickup ?"
 msgstr "Discount for self-pickup ?"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:330
+#: ../inc/admin.echo.settings.input.fields.inc.php:335
 msgid "in % - 0 to disable"
 msgstr "in % - 0 to disable"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:332
+#: ../inc/admin.echo.settings.input.fields.inc.php:337
 msgid ""
 "enable javascript alert when user selects self pickup (set corresponding "
 "text in localization)"
@@ -805,76 +809,76 @@ msgstr ""
 "enable javascript alert when user selects self pickup (set corresponding "
 "text in localization)"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:335
+#: ../inc/admin.echo.settings.input.fields.inc.php:340
 msgid "under cart only"
 msgstr "under cart only"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:336
+#: ../inc/admin.echo.settings.input.fields.inc.php:341
 msgid "on order page only"
 msgstr "on order page only"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:337
+#: ../inc/admin.echo.settings.input.fields.inc.php:342
 msgid "both"
 msgstr "both"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:346
+#: ../inc/admin.echo.settings.input.fields.inc.php:351
 msgid "No Discounts"
 msgstr "No Discounts"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:349
+#: ../inc/admin.echo.settings.input.fields.inc.php:354
 msgid "Percentage Discount"
 msgstr "Percentage Discount"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:352
-#: ../inc/admin.echo.settings.input.fields.inc.php:364
+#: ../inc/admin.echo.settings.input.fields.inc.php:357
+#: ../inc/admin.echo.settings.input.fields.inc.php:369
 msgid "If order total >"
 msgstr "If order total >"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:354
+#: ../inc/admin.echo.settings.input.fields.inc.php:359
 #: ../inc/admin.setup.default.options.inc.php:548
 msgid "discount"
 msgstr "discount"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:356
+#: ../inc/admin.echo.settings.input.fields.inc.php:361
 msgid "percent"
 msgstr "percent"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:361
+#: ../inc/admin.echo.settings.input.fields.inc.php:366
 msgid "Standard Discount [money off]"
 msgstr "Standard Discount [money off]"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:366
+#: ../inc/admin.echo.settings.input.fields.inc.php:371
 msgid "get"
 msgstr "get"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:368
+#: ../inc/admin.echo.settings.input.fields.inc.php:373
 msgid "off"
 msgstr "off"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:393
+#: ../inc/admin.echo.settings.input.fields.inc.php:398
 msgid "apply tax to delivery/shipping  too"
 msgstr "apply tax to delivery/shipping  too"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:403
+#: ../inc/admin.echo.settings.input.fields.inc.php:408
 msgid "how many size option fields ?"
 msgstr "how many size option fields ?"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:425
+#: ../inc/admin.echo.settings.input.fields.inc.php:430
 msgid "Display Gateway choices as dropdowns instead of buttons"
 msgstr "Display Gateway choices as dropdowns instead of buttons"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:425
-#: ../inc/admin.echo.settings.input.fields.inc.php:431
+#: ../inc/admin.echo.settings.input.fields.inc.php:430
+#: ../inc/admin.echo.settings.input.fields.inc.php:436
 msgid ""
 "[only applicable if more than one gateway installed, activated and enabled]"
 msgstr ""
 "[only applicable if more than one gateway installed, activated and enabled]"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:429
+#: ../inc/admin.echo.settings.input.fields.inc.php:434
 msgid "Label:"
 msgstr "Label:"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:431
+#: ../inc/admin.echo.settings.input.fields.inc.php:436
 msgid ""
 "by default displayed above if choices are displayed as full width buttons, "
 "next to if dropdown. edit css as required"
@@ -882,61 +886,61 @@ msgstr ""
 "by default displayed above if choices are displayed as full width buttons, "
 "next to if dropdown. edit css as required"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:436
+#: ../inc/admin.echo.settings.input.fields.inc.php:441
 msgid "Show Order Details on \"Thank You\" page (Y/N)"
 msgstr "Show Order Details on \"Thank You\" page (Y/N)"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:436
+#: ../inc/admin.echo.settings.input.fields.inc.php:441
 msgid ""
 "Will add any order details after your thank you text on successful order"
 msgstr ""
 "Will add any order details after your thank you text on successful order"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:487
+#: ../inc/admin.echo.settings.input.fields.inc.php:492
 msgid "Set the roles that are allowed to access these pages"
 msgstr "Set the roles that are allowed to access these pages"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:488
+#: ../inc/admin.echo.settings.input.fields.inc.php:493
 msgid "Menu Items and Categories are accessible just like \"normal\" posts"
 msgstr "Menu Items and Categories are accessible just like \"normal\" posts"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:522
+#: ../inc/admin.echo.settings.input.fields.inc.php:527
 msgid "show most recent *confirmed* orders"
 msgstr "show most recent *confirmed* orders"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:523
+#: ../inc/admin.echo.settings.input.fields.inc.php:528
 msgid "maximum results [0 to show all]"
 msgstr "maximum results [0 to show all]"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:526
+#: ../inc/admin.echo.settings.input.fields.inc.php:531
 msgid "poll for new orders every"
 msgstr "poll for new orders every"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:526
+#: ../inc/admin.echo.settings.input.fields.inc.php:531
 msgid "seconds"
 msgstr "seconds"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:527
+#: ../inc/admin.echo.settings.input.fields.inc.php:532
 msgid "on/off"
 msgstr "on/off"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:539
+#: ../inc/admin.echo.settings.input.fields.inc.php:544
 msgid "Delete abandoned/cancelled orders from database older than"
 msgstr "Delete abandoned/cancelled orders from database older than"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:541
+#: ../inc/admin.echo.settings.input.fields.inc.php:546
 msgid "Days (minimum: 1)"
 msgstr "Days (minimum: 1)"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:543
+#: ../inc/admin.echo.settings.input.fields.inc.php:548
 msgid "delete failed, tampered or otherwise invalid entries too."
 msgstr "delete failed, tampered or otherwise invalid entries too."
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:544
+#: ../inc/admin.echo.settings.input.fields.inc.php:549
 msgid "go"
 msgstr "go"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:545
+#: ../inc/admin.echo.settings.input.fields.inc.php:550
 msgid ""
 "As soon as customers go to the order page an order will be initialized and "
 "stored in the db to be checked against when going through with the purchase "
@@ -952,7 +956,7 @@ msgstr ""
 "order orphaned in the db.Click the \"ok\" button to clean your db of these "
 "entries (it will NOT affect any completed or pending orders)"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:546
+#: ../inc/admin.echo.settings.input.fields.inc.php:551
 msgid ""
 "Note: This will delete these entries PERMANENTLY from the db and is not "
 "reversable."

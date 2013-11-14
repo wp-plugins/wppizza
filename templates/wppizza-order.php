@@ -14,9 +14,11 @@
 *	[$formelements = form elements from settings->order form]
 *	
 *********************************************************************************************************/
-/**if the user is logged in , pre-enter the info we have -> NEW IN VERSION 2.0***/
-global $current_user;
-get_currentuserinfo();
+/**if the user is logged in , pre-enter the info we have (if prefill is selected in wppizza->order form settings CHANGED IN VERSION 2.6.5.3***/
+if(is_user_logged_in() ) {
+	global $current_user;
+	$userMeta=maybe_unserialize(get_user_meta($current_user->ID,'wppizza_user_meta',true));
+}
 ?>
 
 <?php
@@ -92,21 +94,21 @@ get_currentuserinfo();
 			do_action('wppizza_order_before_field_'.$elmKey.'');
 		?>			
 			<?php if($elm['enabled']){?>
-				<label for="<?php echo $elm['key'] ?>"><?php echo $elm['lbl'] ?><?php echo !empty($elm['required'])?'*':'' ?></label>
+				<label for="<?php echo $elm['key'] ?>"<?php echo !empty($elm['required'])?' class="wppizza-order-label-required"':'' ?>><?php echo $elm['lbl'] ?></label>
 				<?php if($elm['type']=='text'){ ?>
-					<input id="<?php echo $elm['key'] ?>" name="<?php echo $elm['key'] ?>" type="text" value="<?php echo $elm['key']=='cname' ? $current_user->user_firstname : '' /*NEW IN VERSION 2.0*/ ?> <?php echo $elm['key']=='cname' ? $current_user->user_lastname : '' /*NEW IN VERSION 2.0*/ ?>" <?php echo !empty($elm['required'])?'required':'' ?>/>
+					<input id="<?php echo $elm['key'] ?>" name="<?php echo $elm['key'] ?>" type="text" value="<?php echo !empty($elm['prefill']) && isset($userMeta[$elm['key']]) ? $userMeta[$elm['key']] :''  /*CHANGED IN VERSION 2.6.5.3*/ ?>" <?php echo !empty($elm['required'])?'required':'' ?>/>
 				<?php } ?>
 				<?php if($elm['type']=='email'){?>
-					<input id="<?php echo $elm['key'] ?>" name="<?php echo $elm['key'] ?>" type="email" value="<?php echo $current_user->user_email /*NEW IN VERSION 2.0*/ ?>" <?php echo !empty($elm['required'])?'required':'' ?>/>
+					<input id="<?php echo $elm['key'] ?>" name="<?php echo $elm['key'] ?>" type="email" value="<?php echo !empty($elm['prefill']) && isset($userMeta[$elm['key']]) ? $userMeta[$elm['key']] :''  /*CHANGED IN VERSION 2.6.5.3*/ ?>" <?php echo !empty($elm['required'])?'required':'' ?>/>
 				<?php } ?>
 				<?php if($elm['type']=='textarea'){?>
-					<textarea id="<?php echo $elm['key'] ?>" name="<?php echo $elm['key'] ?>" <?php echo !empty($elm['required'])?'required':'' ?>></textarea>
+					<textarea id="<?php echo $elm['key'] ?>" name="<?php echo $elm['key'] ?>" <?php echo !empty($elm['required'])?'required':'' ?>><?php echo !empty($elm['prefill']) && isset($userMeta[$elm['key']]) ? $userMeta[$elm['key']] :''  /*CHANGED IN VERSION 2.6.5.3*/ ?></textarea>
 				<?php } ?>
 				<?php if($elm['type']=='select'){?>
 					<select id="<?php echo $elm['key'] ?>" name="<?php echo $elm['key'] ?>" <?php echo !empty($elm['required'])?'required':'' ?>>
 						<option value="">--------</option>
 						<?php foreach($elm['value'] as $a=>$b){?>
-						<option value="<?php echo wppizza_validate_string($b) ?>"><?php echo $b ?></option>
+						<option value="<?php echo wppizza_validate_string($b) ?>" <?php echo !empty($elm['prefill']) && isset($userMeta[$elm['key']]) && $userMeta[$elm['key']]==wppizza_validate_string($b) ? 'selected="selected"' :''  /*CHANGED IN VERSION 2.6.5.3*/ ?>><?php echo $b ?></option>
 						<?php } ?>
 					</select>
 				<?php } ?>

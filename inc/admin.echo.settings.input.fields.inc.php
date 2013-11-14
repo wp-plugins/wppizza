@@ -224,7 +224,7 @@ $options = $this->pluginOptions;
 			if($field=='order_form'){
 				sort($options[$field]);
 				echo"<table>";
-					echo"<tr><td>".__('Sort', $this->pluginLocale)."</td><td>".__('Label', $this->pluginLocale)."</td><td>".__('Enabled', $this->pluginLocale)."</td><td>".__('Required', $this->pluginLocale)."</td><td>".__('Type', $this->pluginLocale)."</td></tr>";
+					echo"<tr><td>".__('Sort', $this->pluginLocale)."</td><td>".__('Label', $this->pluginLocale)."</td><td>".__('Enabled', $this->pluginLocale)."</td><td>".__('Required', $this->pluginLocale)."</td><td>".__('Prefill [if known]', $this->pluginLocale)."</td><td>".__('Type', $this->pluginLocale)."</td></tr>";
 				foreach($options[$field] as $k=>$v){
 					echo"<tr>";
 					echo"<td><input name='".$this->pluginSlug."[".$field."][".$k."][sort]' size='1' type='text' value='".$v['sort']."' /></td>";
@@ -233,6 +233,8 @@ $options = $this->pluginOptions;
 					echo"<td><input name='".$this->pluginSlug."[".$field."][".$k."][enabled]' type='checkbox' ". checked($v['enabled'],true,false)." value='1' /></td>";
 
 					echo"<td><input name='".$this->pluginSlug."[".$field."][".$k."][required]' type='checkbox' ". checked($v['required'],true,false)." value='1' /></td>";
+
+					echo"<td><input name='".$this->pluginSlug."[".$field."][".$k."][prefill]' type='checkbox' ". checked($v['prefill'],true,false)." value='1' /></td>";
 
 					echo "<td>";
 						echo "<select id='".$this->pluginSlug."_".$field."_type_".$k."' class='".$this->pluginSlug."_".$field."_type' name='".$this->pluginSlug."[".$field."][".$k."][type]' />";
@@ -249,6 +251,9 @@ $options = $this->pluginOptions;
 							echo "".__('seperate multiple with comma', $this->pluginLocale)."";
 						echo "</span>";
 					echo"</td>";
+					
+
+					
 					echo"</tr>";
 				}
 				echo"</table>";

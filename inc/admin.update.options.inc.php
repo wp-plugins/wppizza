@@ -81,6 +81,10 @@
 			if(isset($options['order_form'][$k]['value'])){
 				$update_options['order_form'][$k]['value']=$options['order_form'][$k]['value'];
 			}
+			/**add prefill option*/
+			if(!isset($options['order_form'][$k]['prefill'])){
+				$update_options['order_form'][$k]['prefill']=$defaultOptions['order_form'][$k]['prefill'];
+			}
 		}
 	}
 	if(isset($options['plugin_data']['category_parent_page'])){
@@ -92,5 +96,4 @@
 	/*this will always be an empty array (discounts set to "none"), so distinctly set it here as the comparison function above will strip it as it's empty**/
 	$update_options['order']['discounts']['none']=array();
 	ksort($update_options['order']['discounts']);/*to keep a consistant order*/
-
 ?>

@@ -181,6 +181,8 @@
 #wppizza-send-order>fieldset>textarea{height:75px}
 /**order page -> nocheckout (instead of send order button) as minimum values etc have not been reached NEW 2.5.3*/
 #wppizza-send-order>fieldset>.wppizza-order-nocheckout{color:red;text-align:center;line-height:30px}
+/**required label in order page NEW 2.6.5.3*/
+.wppizza-order-label-required:after{content:'*';color:red;padding-left:5px;}
 
 #wppizza-cart-contents{border:1px dotted #CECECE;padding:10px;}
 #wppizza-cart-contents>ul{margin:0 0 10px 0 ;padding:0;list-style-position:inside}

@@ -98,7 +98,18 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 				$oIni=maybe_unserialize($res->order_ini);
 				$oDetails = apply_filters('wppizza_filter_order_db_return', $oIni);
 
-
+				/*********************************************************************
+				*
+				*		[update user meta data]
+				*
+				*********************************************************************/
+				if($res->wp_user_id>0){
+					$userMeta=$cDetails;
+					/*tidy up a bit*/
+					if($userMeta['wppizza-gateway']){unset($userMeta['wppizza-gateway']);}
+					if($userMeta['wppizza_hash']){unset($userMeta['wppizza_hash']);}
+					update_user_meta($res->wp_user_id, 'wppizza_user_meta', $userMeta);
+				}
 				/*********************************************************************
 				*
 				*

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WPPizza v2.5.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-11-14 11:07-0000\n"
-"PO-Revision-Date: 2013-11-14 11:07-0000\n"
+"POT-Creation-Date: 2013-11-14 21:10-0000\n"
+"PO-Revision-Date: 2013-11-14 21:10-0000\n"
 "Last-Translator: ollybach <dev@1000db.com>\n"
 "Language-Team: Yair - Halev.sites <halev.sites@gmail.com>\n"
 "Language: he_IL\n"
@@ -797,8 +797,8 @@ msgstr ""
 # @ wppizza-locale
 #: inc/admin.echo.settings.input.fields.inc.php:193
 #: inc/admin.echo.settings.input.fields.inc.php:206
-#: inc/admin.echo.settings.input.fields.inc.php:402
-#: inc/admin.echo.settings.input.fields.inc.php:415
+#: inc/admin.echo.settings.input.fields.inc.php:407
+#: inc/admin.echo.settings.input.fields.inc.php:420
 msgid "add"
 msgstr "להוסיף"
 
@@ -827,23 +827,27 @@ msgstr "מאופשר"
 msgid "Required"
 msgstr "דרוש"
 
+#: inc/admin.echo.settings.input.fields.inc.php:227
+msgid "Prefill [if known]"
+msgstr "Prefill [if known]"
+
 # @ wppizza-locale
 #: inc/admin.echo.settings.input.fields.inc.php:227
 msgid "Type"
 msgstr "סוג"
 
 # @ wppizza-locale
-#: inc/admin.echo.settings.input.fields.inc.php:249
+#: inc/admin.echo.settings.input.fields.inc.php:251
 msgid "seperate multiple with comma"
 msgstr "הפרד מרובים עם פסיק"
 
 # @ wppizza-locale
-#: inc/admin.echo.settings.input.fields.inc.php:263
+#: inc/admin.echo.settings.input.fields.inc.php:268
 msgid "Free delivery when total order value reaches"
 msgstr "משלוח חינם כאשר סך ערך הזמנה מגיע ל"
 
 # @ wppizza-locale
-#: inc/admin.echo.settings.input.fields.inc.php:267
+#: inc/admin.echo.settings.input.fields.inc.php:272
 msgid ""
 "Deliver even when total order value is below minimum (the difference between "
 "total and \"Minimum Total\" above will be added to the Total as \"Delivery "
@@ -853,7 +857,7 @@ msgstr ""
 "סה&quot;כ מזערי &quot;לעיל יתווסף לסה&quot;כ כמו&quot; דמי משלוח &quot;)"
 
 # @ wppizza-locale
-#: inc/admin.echo.settings.input.fields.inc.php:269
+#: inc/admin.echo.settings.input.fields.inc.php:274
 msgid ""
 "(If this is not selected and the total order is below the set value above, "
 "the customer will not be able to submit the order to you)"
@@ -861,14 +865,14 @@ msgstr ""
 "(אם לא נבחר והסדר הכולל הוא נמוך מערך הקבוצה לעיל, הלקוח לא יוכל להגיש לך)"
 
 # @ wppizza-locale
-#: inc/admin.echo.settings.input.fields.inc.php:272
+#: inc/admin.echo.settings.input.fields.inc.php:277
 #, fuzzy
 msgid ""
 "Fixed Delivery charges if order has not reached total for free delivery [0 "
 "to disable]"
 msgstr "דמי משלוח קבועים [מתווסף לסך הקניות ]"
 
-#: inc/admin.echo.settings.input.fields.inc.php:274
+#: inc/admin.echo.settings.input.fields.inc.php:279
 msgid ""
 "if set (i.e. not 0) \"Deliver even when total order value is below minimum\" "
 "must be checked for this to have any effect"
@@ -877,27 +881,27 @@ msgstr ""
 "must be checked for this to have any effect"
 
 # @ wppizza-locale
-#: inc/admin.echo.settings.input.fields.inc.php:279
+#: inc/admin.echo.settings.input.fields.inc.php:284
 msgid "Fixed Delivery Charges [added to order total]"
 msgstr "דמי משלוח קבועים [מתווסף לסך הקניות ]"
 
 # @ wppizza-locale
-#: inc/admin.echo.settings.input.fields.inc.php:284
+#: inc/admin.echo.settings.input.fields.inc.php:289
 msgid "Delivery Charges per item"
 msgstr "חיובי משלוח לפריט"
 
 # @ wppizza-locale
-#: inc/admin.echo.settings.input.fields.inc.php:287
+#: inc/admin.echo.settings.input.fields.inc.php:292
 msgid "Do not apply delivery charges when total order value reaches "
 msgstr "לא חלים דמי משלוח כאשר סך ערך הזמנה מגיע ל"
 
 # @ wppizza-locale
-#: inc/admin.echo.settings.input.fields.inc.php:289
+#: inc/admin.echo.settings.input.fields.inc.php:294
 msgid "[set to 0 to always apply charges per item]"
 msgstr "[הגדר 0 כדי להחיל תמיד חיובים לפריט]"
 
 # @ wppizza-locale
-#: inc/admin.echo.settings.input.fields.inc.php:299
+#: inc/admin.echo.settings.input.fields.inc.php:304
 msgid ""
 "minimum order value to offer delivery [will disable \"place order\" button "
 "in cart and order page until set order value (before any discounts etc) has "
@@ -909,7 +913,7 @@ msgstr ""
 "לקוחות עדיין יכולים לבחור ב &quot;איסוף עצמי&quot; (אם מאופשר).]"
 
 # @ wppizza-locale
-#: inc/admin.echo.settings.input.fields.inc.php:300
+#: inc/admin.echo.settings.input.fields.inc.php:305
 msgid ""
 "probably most useful with \"Fixed\" / \"Per Item\" delivery charges or when "
 "\"Deliver even when total order value is below...etc\" is checked]"
@@ -918,13 +922,13 @@ msgstr ""
 "או כאשר &quot;לספק גם כאשר סה&quot;כ ערך הזמנה הוא מתחת ... וכו &#39;&quot; "
 "מסומן]"
 
-#: inc/admin.echo.settings.input.fields.inc.php:305
+#: inc/admin.echo.settings.input.fields.inc.php:310
 msgid ""
 "<b>Exclude</b> following menu items when calculating if free delivery applies"
 msgstr ""
 "<b>Exclude</b> following menu items when calculating if free delivery applies"
 
-#: inc/admin.echo.settings.input.fields.inc.php:306
+#: inc/admin.echo.settings.input.fields.inc.php:311
 msgid ""
 "For example: you might want to offer free delivery only when total order of "
 "*meals* exceeds the set free delivery amount. In this case, exclude all your "
@@ -934,27 +938,27 @@ msgstr ""
 "*meals* exceeds the set free delivery amount. In this case, exclude all your "
 "*drinks and non-meals* by selecting those below."
 
-#: inc/admin.echo.settings.input.fields.inc.php:318
+#: inc/admin.echo.settings.input.fields.inc.php:323
 msgid "Ctrl+Click to select multiple"
 msgstr "Ctrl+Click to select multiple"
 
 # @ wppizza-locale
-#: inc/admin.echo.settings.input.fields.inc.php:328
+#: inc/admin.echo.settings.input.fields.inc.php:333
 msgid "tick to enable"
 msgstr "סמן כדי לאפשר"
 
 # @ wppizza-locale
-#: inc/admin.echo.settings.input.fields.inc.php:330
+#: inc/admin.echo.settings.input.fields.inc.php:335
 msgid "Discount for self-pickup ?"
 msgstr "הנחה לאיסוף עצמי?"
 
 # @ wppizza-locale
-#: inc/admin.echo.settings.input.fields.inc.php:330
+#: inc/admin.echo.settings.input.fields.inc.php:335
 msgid "in % - 0 to disable"
 msgstr "ב% - 0 להשבית"
 
 # @ wppizza-locale
-#: inc/admin.echo.settings.input.fields.inc.php:332
+#: inc/admin.echo.settings.input.fields.inc.php:337
 msgid ""
 "enable javascript alert when user selects self pickup (set corresponding "
 "text in localization)"
@@ -963,91 +967,91 @@ msgstr ""
 "בלוקליזציה)"
 
 # @ wppizza-locale
-#: inc/admin.echo.settings.input.fields.inc.php:335
+#: inc/admin.echo.settings.input.fields.inc.php:340
 msgid "under cart only"
 msgstr "תחת סל רק"
 
 # @ wppizza-locale
-#: inc/admin.echo.settings.input.fields.inc.php:336
+#: inc/admin.echo.settings.input.fields.inc.php:341
 msgid "on order page only"
 msgstr "בעמוד הזמנה בלבד"
 
 # @ wppizza-locale
-#: inc/admin.echo.settings.input.fields.inc.php:337
+#: inc/admin.echo.settings.input.fields.inc.php:342
 msgid "both"
 msgstr "שניהם"
 
 # @ wppizza-locale
-#: inc/admin.echo.settings.input.fields.inc.php:346
+#: inc/admin.echo.settings.input.fields.inc.php:351
 msgid "No Discounts"
 msgstr "אין הנחות"
 
 # @ wppizza-locale
-#: inc/admin.echo.settings.input.fields.inc.php:349
+#: inc/admin.echo.settings.input.fields.inc.php:354
 msgid "Percentage Discount"
 msgstr "אחוז הנחה"
 
 # @ wppizza-locale
-#: inc/admin.echo.settings.input.fields.inc.php:352
-#: inc/admin.echo.settings.input.fields.inc.php:364
+#: inc/admin.echo.settings.input.fields.inc.php:357
+#: inc/admin.echo.settings.input.fields.inc.php:369
 msgid "If order total >"
 msgstr "אם סך הזמנה &gt;"
 
 # @ wppizza-locale
-#: inc/admin.echo.settings.input.fields.inc.php:354
+#: inc/admin.echo.settings.input.fields.inc.php:359
 #: inc/admin.setup.default.options.inc.php:548
 msgid "discount"
 msgstr "הנחה"
 
 # @ wppizza-locale
-#: inc/admin.echo.settings.input.fields.inc.php:356
+#: inc/admin.echo.settings.input.fields.inc.php:361
 msgid "percent"
 msgstr "אחוזים"
 
 # @ wppizza-locale
-#: inc/admin.echo.settings.input.fields.inc.php:361
+#: inc/admin.echo.settings.input.fields.inc.php:366
 msgid "Standard Discount [money off]"
 msgstr "הנחה רגילה [money off]"
 
 # @ wppizza-locale
-#: inc/admin.echo.settings.input.fields.inc.php:366
+#: inc/admin.echo.settings.input.fields.inc.php:371
 msgid "get"
 msgstr "לקבל"
 
 # @ wppizza-locale
-#: inc/admin.echo.settings.input.fields.inc.php:368
+#: inc/admin.echo.settings.input.fields.inc.php:373
 msgid "off"
 msgstr "off"
 
 # @ wppizza-locale
-#: inc/admin.echo.settings.input.fields.inc.php:393
+#: inc/admin.echo.settings.input.fields.inc.php:398
 msgid "apply tax to delivery/shipping  too"
 msgstr "להחיל מס למשלוח / משלוח גם"
 
 # @ wppizza-locale
-#: inc/admin.echo.settings.input.fields.inc.php:403
+#: inc/admin.echo.settings.input.fields.inc.php:408
 msgid "how many size option fields ?"
 msgstr "כמה מידות שדות אפשרות ?"
 
 # @ wppizza-locale
-#: inc/admin.echo.settings.input.fields.inc.php:425
+#: inc/admin.echo.settings.input.fields.inc.php:430
 msgid "Display Gateway choices as dropdowns instead of buttons"
 msgstr "להציג אפשרויות Gateway כתפריט נפתח במקום כפתורים"
 
 # @ wppizza-locale
-#: inc/admin.echo.settings.input.fields.inc.php:425
-#: inc/admin.echo.settings.input.fields.inc.php:431
+#: inc/admin.echo.settings.input.fields.inc.php:430
+#: inc/admin.echo.settings.input.fields.inc.php:436
 msgid ""
 "[only applicable if more than one gateway installed, activated and enabled]"
 msgstr "[ישים רק אם הותקן שער אחד או יותר, מופעל ומאופשר]"
 
 # @ wppizza-locale
-#: inc/admin.echo.settings.input.fields.inc.php:429
+#: inc/admin.echo.settings.input.fields.inc.php:434
 msgid "Label:"
 msgstr "תווית:"
 
 # @ wppizza-locale
-#: inc/admin.echo.settings.input.fields.inc.php:431
+#: inc/admin.echo.settings.input.fields.inc.php:436
 msgid ""
 "by default displayed above if choices are displayed as full width buttons, "
 "next to if dropdown. edit css as required"
@@ -1056,73 +1060,73 @@ msgstr ""
 "נדרש עריכת CSS "
 
 # @ wppizza-locale
-#: inc/admin.echo.settings.input.fields.inc.php:436
+#: inc/admin.echo.settings.input.fields.inc.php:441
 msgid "Show Order Details on \"Thank You\" page (Y/N)"
 msgstr "הצג פרטי הזמנה בדף &quot;תודה&quot; (כן/לא)"
 
 # @ wppizza-locale
-#: inc/admin.echo.settings.input.fields.inc.php:436
+#: inc/admin.echo.settings.input.fields.inc.php:441
 msgid ""
 "Will add any order details after your thank you text on successful order"
 msgstr "אוסיף להזמנה שלך טקסט תודה אחרי הזמנה מוצלחת"
 
 # @ wppizza-locale
-#: inc/admin.echo.settings.input.fields.inc.php:487
+#: inc/admin.echo.settings.input.fields.inc.php:492
 msgid "Set the roles that are allowed to access these pages"
 msgstr "הגדר את בעלי התפקידים שמורשים לגשת לדפים אלה"
 
 # @ wppizza-locale
-#: inc/admin.echo.settings.input.fields.inc.php:488
+#: inc/admin.echo.settings.input.fields.inc.php:493
 msgid "Menu Items and Categories are accessible just like \"normal\" posts"
 msgstr "פריטי תפריט קטגוריות ונגישים בדיוק כמו פוסטים &quot;נורמלים&quot;"
 
 # @ wppizza-locale
-#: inc/admin.echo.settings.input.fields.inc.php:522
+#: inc/admin.echo.settings.input.fields.inc.php:527
 msgid "show most recent *confirmed* orders"
 msgstr "להציג הזמנות *שאושרו* האחרונות"
 
 # @ wppizza-locale
-#: inc/admin.echo.settings.input.fields.inc.php:523
+#: inc/admin.echo.settings.input.fields.inc.php:528
 msgid "maximum results [0 to show all]"
 msgstr "תוצאות מרביות [0 להציג הכל]"
 
 # @ wppizza-locale
-#: inc/admin.echo.settings.input.fields.inc.php:526
+#: inc/admin.echo.settings.input.fields.inc.php:531
 msgid "poll for new orders every"
 msgstr "סקר עבור הזמנות חדשות בכל"
 
 # @ wppizza-locale
-#: inc/admin.echo.settings.input.fields.inc.php:526
+#: inc/admin.echo.settings.input.fields.inc.php:531
 msgid "seconds"
 msgstr "שניות"
 
 # @ wppizza-locale
-#: inc/admin.echo.settings.input.fields.inc.php:527
+#: inc/admin.echo.settings.input.fields.inc.php:532
 msgid "on/off"
 msgstr "הפעלה / כיבוי"
 
 # @ wppizza-locale
-#: inc/admin.echo.settings.input.fields.inc.php:539
+#: inc/admin.echo.settings.input.fields.inc.php:544
 msgid "Delete abandoned/cancelled orders from database older than"
 msgstr "למחוק הזמנות נטושות / מבוטלות ממסד הנתונים אם ישנות יותר מ"
 
 # @ wppizza-locale
-#: inc/admin.echo.settings.input.fields.inc.php:541
+#: inc/admin.echo.settings.input.fields.inc.php:546
 msgid "Days (minimum: 1)"
 msgstr "ימים (מינימום: 1)"
 
 # @ wppizza-locale
-#: inc/admin.echo.settings.input.fields.inc.php:543
+#: inc/admin.echo.settings.input.fields.inc.php:548
 msgid "delete failed, tampered or otherwise invalid entries too."
 msgstr "למחוק אם נכשלו, או ערכים אחרים לא חוקיים."
 
 # @ wppizza-locale
-#: inc/admin.echo.settings.input.fields.inc.php:544
+#: inc/admin.echo.settings.input.fields.inc.php:549
 msgid "go"
 msgstr "עבור"
 
 # @ wppizza-locale
-#: inc/admin.echo.settings.input.fields.inc.php:545
+#: inc/admin.echo.settings.input.fields.inc.php:550
 msgid ""
 "As soon as customers go to the order page an order will be initialized and "
 "stored in the db to be checked against when going through with the purchase "
@@ -1137,7 +1141,7 @@ msgstr ""
 "ערכים אלה (זה לא ישפיע על כל הזמנות שהושלמו או תלויות ועומדות)"
 
 # @ wppizza-locale
-#: inc/admin.echo.settings.input.fields.inc.php:546
+#: inc/admin.echo.settings.input.fields.inc.php:551
 msgid ""
 "Note: This will delete these entries PERMANENTLY from the db and is not "
 "reversable."

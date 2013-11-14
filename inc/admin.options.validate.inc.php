@@ -176,6 +176,7 @@
 				$options['order_form'][$a]['type'] = wppizza_validate_letters_only($input['order_form'][$a]['type']);
 				$options['order_form'][$a]['enabled'] = !empty($input['order_form'][$a]['enabled']) ? true : false;
 				$options['order_form'][$a]['required'] = !empty($input['order_form'][$a]['required']) ? true : false;
+				$options['order_form'][$a]['prefill'] = !empty($input['order_form'][$a]['prefill']) ? true : false;
 			}
 		}
 		/**validate sizes settings***/
