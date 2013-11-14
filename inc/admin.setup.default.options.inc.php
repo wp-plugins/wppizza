@@ -369,6 +369,7 @@
 					'standard'=>array('delivery_charge'=>'7.5'),
 					'per_item'=>array('delivery_charge_per_item'=>'0','delivery_per_item_free'=>'50')
 				),
+				'delivery_calculation_exclude_item'=>array(),
 				'discounts'=>array(
 					'none'=>array(),
 					'percentage'=>array(

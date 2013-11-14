@@ -595,6 +595,7 @@ function wppizza_order_summary($session,$options,$ajax=null){
 			$deliveryLabel=$options['localization']['free_delivery']['lbl'];//initialize var
 			$deliveryCharges='';
 
+
 			if($options['order']['delivery_selected']=='standard'){//standard (i.e. fixed delivery charges)
 				/**delivery settings to display with discount options somewhere*/
 				if($options['order']['delivery']['standard']['delivery_charge']>0){
@@ -604,14 +605,15 @@ function wppizza_order_summary($session,$options,$ajax=null){
 			}
 			if($options['order']['delivery_selected']=='minimum_total'){//minimum total
 				if($options['order']['delivery']['minimum_total']['deliver_below_total']){
-					if($session['total_price_items']<$options['order']['delivery']['minimum_total']['min_total']){
+					if($session['total_price_calc_delivery']<$options['order']['delivery']['minimum_total']['min_total']){
 						$deliveryLabel=$options['localization']['delivery_charges']['lbl'];
-						$deliveryCharges=wppizza_output_format_float($options['order']['delivery']['minimum_total']['min_total']-$session['total_price_items']);
+						$deliveryCharges=wppizza_output_format_float($options['order']['delivery']['minimum_total']['min_total']-$session['total_price_calc_delivery']);
 					}
 				}
+				
 				/**fixed price set if below free delivery: overrides "deliver_below_total" **/
 				if($options['order']['delivery']['minimum_total']['deliverycharges_below_total']>0){
-					if($session['total_price_items']<$options['order']['delivery']['minimum_total']['min_total']){
+					if($session['total_price_calc_delivery']<$options['order']['delivery']['minimum_total']['min_total']){
 						$deliveryLabel=$options['localization']['delivery_charges']['lbl'];
 						$deliveryCharges=wppizza_output_format_float($options['order']['delivery']['minimum_total']['deliverycharges_below_total']);
 					}
@@ -631,7 +633,7 @@ function wppizza_order_summary($session,$options,$ajax=null){
 				/**free delivery isset>0**/
 				if($options['order']['delivery']['per_item']['delivery_per_item_free']>0){
 					/*value not reached for free delivery*/
-					if($session['total_price_items']<$options['order']['delivery']['per_item']['delivery_per_item_free']){
+					if($session['total_price_calc_delivery']<$options['order']['delivery']['per_item']['delivery_per_item_free']){
 						/*number of items*deliverycharges per item*/
 						if($cartItemsCount>0){
 							$deliveryCharges=wppizza_output_format_float($cartItemsCount*$options['order']['delivery']['per_item']['delivery_charge_per_item']);
@@ -689,7 +691,7 @@ function wppizza_order_summary($session,$options,$ajax=null){
 
 
 			/**minimum order value set but not reached***/
-			if($options['order']['order_min_for_delivery']>0 && $options['order']['order_min_for_delivery']>$session['total_price_items'] && !($summary['selfPickup'])){
+			if($options['order']['order_min_for_delivery']>0 && $options['order']['order_min_for_delivery']>$session['total_price_calc_delivery'] && !isset($summary['selfPickup'])){
 				$placeOrderDisabled=true;
 				$options['order']['delivery']['minimum_total']['min_total']=$options['order']['order_min_for_delivery'];
 				$options['localization']['minimum_order']['lbl']=$options['localization']['minimum_order_delivery']['lbl'];
@@ -752,7 +754,7 @@ function wppizza_order_summary($session,$options,$ajax=null){
 						$options['order']['delivery_selected']=='minimum_total' &&
 							(
 								$options['order']['delivery']['minimum_total']['deliver_below_total'] ||
-								(!$options['order']['delivery']['minimum_total']['deliver_below_total'] && $session['total_price_items']>=$options['order']['delivery']['minimum_total']['min_total'])
+								(!$options['order']['delivery']['minimum_total']['deliver_below_total'] &&  $session['total_price_calc_delivery']>=$options['order']['delivery']['minimum_total']['min_total'])
 							)
 
 						) ||

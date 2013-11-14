@@ -155,6 +155,7 @@
 				}
 			}
 
+			$options['order']['delivery_calculation_exclude_item'] = !empty($input['order']['delivery_calculation_exclude_item']) ? $input['order']['delivery_calculation_exclude_item'] : array();
 			$options['order']['item_tax']=wppizza_validate_float_only($input['order']['item_tax']);
 			$options['order']['shipping_tax'] = !empty($input['order']['shipping_tax']) ? true : false;
 			

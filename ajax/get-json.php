@@ -27,6 +27,7 @@ if(isset($_POST['vars']['type']) && (($_POST['vars']['type']=='add' || $_POST['v
 	}
 	/**initialize price array***/
 	$itemprice=array();
+	$itempricefordelivery=array();/*if we have excluded item to count towards free delivery */
 	/**********set header********************/
 	header('Content-type: application/json');
 	/**add to cart**/
@@ -78,13 +79,18 @@ if(isset($_POST['vars']['type']) && (($_POST['vars']['type']=='add' || $_POST['v
 	}
 
 	/*total price*/
-	foreach($_SESSION[$this->pluginSession]['items'] as $group){
+	foreach($_SESSION[$this->pluginSession]['items'] as $k=>$group){
 		foreach($group as $v){
 			$itemprice[]=$v['price'];
+			/**exclude items that are set to be excluded from calculating whether or not free delivery applies**/
+			if(!in_array($group[0]['id'],$options['order']['delivery_calculation_exclude_item'])){
+				$itempricefordelivery[]=$v['price'];
+			}
 		}
 	}
 
 	$totalitemprice=array_sum($itemprice);
+	$totalitempricefordelivery=array_sum($itempricefordelivery);
 
 	/**total tax on all items -> currently not used as we will be calculating tax AFTER any discounts**/
 	$_SESSION[$this->pluginSession]['total_items_tax']=0;
@@ -94,6 +100,9 @@ if(isset($_POST['vars']['type']) && (($_POST['vars']['type']=='add' || $_POST['v
 
 
 	$_SESSION[$this->pluginSession]['total_price_items']=$totalitemprice;
+	$_SESSION[$this->pluginSession]['total_price_calc_delivery']=$totalitempricefordelivery;
+	
+	
 	print"".json_encode(wppizza_order_summary($_SESSION[$this->pluginSession],$options,true))."";
 	exit();
 }

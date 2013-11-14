@@ -32,6 +32,10 @@
 	[metaboxes]
 ********************/
 .wppizza-meta-label{float:left;min-width:125px;line-height:200%}
+/*******************
+	[order settings]
+*********************/
+.wppizza_delivery_calculation_exclude_item{height:100px !important}
 
 /*******************
 	[generic]

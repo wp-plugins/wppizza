@@ -26,7 +26,9 @@
 	if(!isset($options['order']['delivery']['minimum_total']['deliverycharges_below_total'])){
 		$update_options['order']['delivery']['minimum_total']['deliverycharges_below_total']=$defaultOptions['order']['delivery']['minimum_total']['deliverycharges_below_total'];
 	}
-		
+	if(!isset($options['order']['delivery_calculation_exclude_item'])){
+		$update_options['order']['delivery_calculation_exclude_item']=$defaultOptions['order']['delivery_calculation_exclude_item'];
+	}
 	/****************************************************************************
 	$update_options now holds the old options plus the added new defaults options
 	*****************************************************************************/

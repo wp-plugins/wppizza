@@ -51,9 +51,9 @@ $options = $this->pluginOptions;
 			if($field=='empty_category_and_items'){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[plugin_data][".$field."]' type='checkbox'  value='1' />";
 				echo" ".__('delete images too ?', $this->pluginLocale)."";
-				echo "<input id='".$field."_delete_attachments' name='".$this->pluginSlug."[plugin_data][delete_attachments]' type='checkbox'  value='1' />";
+				echo" <input id='".$field."_delete_attachments' name='".$this->pluginSlug."[plugin_data][delete_attachments]' type='checkbox'  value='1' />";
 				echo" ".__('empty order table ?', $this->pluginLocale)."";
-				echo "<input id='".$field."_truncate_orders' name='".$this->pluginSlug."[plugin_data][truncate_orders]' type='checkbox'  value='1' />";
+				echo" <input id='".$field."_truncate_orders' name='".$this->pluginSlug."[plugin_data][truncate_orders]' type='checkbox'  value='1' />";
 			}
 			if($field=='include_css' ){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[layout][".$field."]' type='checkbox'  ". checked($options['layout'][$field],true,false)." value='1' />";
@@ -299,7 +299,24 @@ $options = $this->pluginOptions;
 				echo" ".__('minimum order value to offer delivery [will disable "place order" button in cart and order page until set order value (before any discounts etc) has been reached. 0 to disable. Customer can still choose "self-pickup" (if enabled).]', $this->pluginLocale)."<br />";
 				echo" <em>".__('probably most useful with "Fixed" / "Per Item" delivery charges or when "Deliver even when total order value is below...etc" is checked]', $this->pluginLocale)."</em>";
 				echo "</span>";
-
+				
+				/**Exclude following menu items when calculating if free delivery**/
+				echo "<span class='wppizza_option' style='margin:20px 0'>";
+					echo" ".__('<b>Exclude</b> following menu items when calculating if free delivery applies', $this->pluginLocale)." :<br/>";
+					echo'<em>'.__('For example: you might want to offer free delivery only when total order of *meals* exceeds the set free delivery amount. In this case, exclude all your *drinks and non-meals* by selecting those below.', $this->pluginLocale).'</em><br/>';
+					echo"<select name='".$this->pluginSlug."[order][delivery_calculation_exclude_item][]' multiple='multiple' class='wppizza_delivery_calculation_exclude_item'>";
+					$args = array('post_type' => ''.WPPIZZA_POST_TYPE.'','posts_per_page' => -1, 'orderby'=>'title' ,'order' => 'ASC');
+					$query = new WP_Query( $args );							
+					foreach($query->posts as $pKey=>$pVal){
+						echo"<option value='".$pVal->ID."' ";
+							if(isset($options['order']['delivery_calculation_exclude_item']) && in_array($pVal->ID,$options['order']['delivery_calculation_exclude_item'])){
+								echo" selected='selected'";
+							}
+						echo">".$pVal->post_title."</option>";
+					}
+					echo"</select>";
+					echo'<br/>'.__('Ctrl+Click to select multiple', $this->pluginLocale).'';
+				echo "</span>";
 
 			}
 			/**I don't think this actually in use anywhere ?!**/
@@ -499,7 +516,7 @@ $options = $this->pluginOptions;
 			
 			if($field=='history'){
 				echo"<div id='wppizza_".$field."'>";
-
+					
 					echo"<div id='wppizza_".$field."_search' class='button'>";
 						echo "<span style='float:left'>";
 						echo "<a href='#' id='".$field."_get_orders' class='button'>".__('show most recent *confirmed* orders', $this->pluginLocale)."</a>";
@@ -507,9 +524,9 @@ $options = $this->pluginOptions;
 						echo "</span>";
 						echo "<span style='float:right;margin-right:50px'>";
 						echo " ".__('poll for new orders every', $this->pluginLocale)."<input id='".$field."_orders_poll_interval' size='2' type='text' value='30' />".__('seconds', $this->pluginLocale)."";
-						echo "<span class='button'><input id='".$field."_orders_poll_enabled' type='checkbox' value='1' />".__('on/off', $this->pluginLocale)."</span>";
-								echo "<span id='wppizza-orders-polling'></span>";
-						echo "</span>";
+						echo "<label class='button'><input id='".$field."_orders_poll_enabled' type='checkbox' value='1' />".__('on/off', $this->pluginLocale)."</span>";
+								echo "<span id='wppizza-orders-polling'></span>";/*shows loading icon*/
+						echo "</label>";
 					echo"</div>";
 					echo"<div id='wppizza_".$field."_orders'></div>";
 
