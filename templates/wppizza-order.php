@@ -18,6 +18,9 @@
 if(is_user_logged_in() ) {
 	global $current_user;
 	$userMeta=maybe_unserialize(get_user_meta($current_user->ID,'wppizza_user_meta',true));
+	/*if we have not yet got an email, use the wp email and name**/
+	if(!isset($userMeta['cemail'])){$userMeta['cemail']=$current_user->data->user_email;};
+	if(!isset($userMeta['cname'])){$userMeta['cname']=$current_user->data->user_nicename;};
 }
 ?>
 

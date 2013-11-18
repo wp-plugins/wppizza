@@ -205,7 +205,13 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 				**********************************************************/
 				if($oDetails['item_tax']>0 && $pOptions['order']['shipping_tax']){
 					$wppizzaEmailOrderSummary['item_tax']=array('label'=>($pOptions['localization']['item_tax_total']['lbl']),'price'=>$oDetails['item_tax'],'currency'=>$oDetails['currency'] );
-				}				
+				}			
+				/**********************************************************
+				*	[handling charges - (most likely to be used for vv payment)]
+				**********************************************************/
+				if(isset($oDetails['handling_charge']) && $oDetails['handling_charge']>0){
+					$wppizzaEmailOrderSummary['handling_charge']=array('label'=>($pOptions['localization']['order_page_handling']['lbl']),'price'=>wppizza_output_format_price($oDetails['handling_charge'],$pOptions['layout']['hide_decimals']),'currency'=>$oDetails['currency'] );
+				}						
 				/**********************************************************
 					[order total]
 				**********************************************************/
@@ -621,6 +627,10 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 			if($this->pluginOptions['order']['shipping_tax']){
 				$summary['tax_applied']='items_and_shipping';
 			}
+			if(isset($thisOrderDetails['handling_charge']) && $thisOrderDetails['handling_charge']>0){
+				$summary['handling_charge']=wppizza_output_format_price($thisOrderDetails['handling_charge'],$this->pluginOptions['layout']['hide_decimals']);
+			}
+			
 			
 			/***********************************************
 				[if template copied to theme directory use

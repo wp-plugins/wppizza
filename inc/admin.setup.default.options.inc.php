@@ -394,17 +394,17 @@
 				'order_sms'=>''
 			),
 			'order_form'=>array(
-				0=>array('sort'=>0,'key'=>'cname','lbl'=>__('Name :', $this->pluginLocale),'value'=>array(),'type'=>'text','enabled'=>true,'required'=>false,'prefill'=>true),
-				1=>array('sort'=>1,'key'=>'cemail','lbl'=>__('Email :', $this->pluginLocale),'value'=>array(),'type'=>'email','enabled'=>true,'required'=>false,'prefill'=>true),
-				2=>array('sort'=>2,'key'=>'caddress','lbl'=>__('Address :', $this->pluginLocale),'value'=>array(),'type'=>'textarea','enabled'=>true,'required'=>true,'prefill'=>true),
-				3=>array('sort'=>3,'key'=>'ctel','lbl'=>__('Telephone :', $this->pluginLocale),'value'=>array(),'type'=>'text','enabled'=>true,'required'=>true,'prefill'=>true),
-				4=>array('sort'=>4,'key'=>'ccomments','lbl'=>__('Comments :', $this->pluginLocale),'value'=>array(),'type'=>'textarea','enabled'=>true,'required'=>false,'prefill'=>false),
-				5=>array('sort'=>5,'key'=>'ccustom1','lbl'=>__('Custom Field 1 :', $this->pluginLocale),'value'=>array(),'type'=>'text','enabled'=>false,'required'=>false,'prefill'=>false),
-				6=>array('sort'=>6,'key'=>'ccustom2','lbl'=>__('Custom Field 2 :', $this->pluginLocale),'value'=>array(),'type'=>'text','enabled'=>false,'required'=>false,'prefill'=>false),
-				7=>array('sort'=>7,'key'=>'ccustom3','lbl'=>__('Custom Field 3 :', $this->pluginLocale),'value'=>array(),'type'=>'text','enabled'=>false,'required'=>false,'prefill'=>false),
-				8=>array('sort'=>8,'key'=>'ccustom4','lbl'=>__('Custom Field 4 :', $this->pluginLocale),'value'=>array(),'type'=>'text','enabled'=>false,'required'=>false,'prefill'=>false),
-				9=>array('sort'=>9,'key'=>'ccustom5','lbl'=>__('Custom Field 5 :', $this->pluginLocale),'value'=>array(),'type'=>'text','enabled'=>false,'required'=>false,'prefill'=>false),
-				10=>array('sort'=>10,'key'=>'ccustom6','lbl'=>__('Custom Field 6 :', $this->pluginLocale),'value'=>array(),'type'=>'text','enabled'=>false,'required'=>false,'prefill'=>false)
+				0=>array('sort'=>0,'key'=>'cname','lbl'=>__('Name :', $this->pluginLocale),'value'=>array(),'type'=>'text','enabled'=>true,'required'=>false,'prefill'=>true,'onregister'=>false),
+				1=>array('sort'=>1,'key'=>'cemail','lbl'=>__('Email :', $this->pluginLocale),'value'=>array(),'type'=>'email','enabled'=>true,'required'=>false,'prefill'=>true,'onregister'=>false),
+				2=>array('sort'=>2,'key'=>'caddress','lbl'=>__('Address :', $this->pluginLocale),'value'=>array(),'type'=>'textarea','enabled'=>true,'required'=>true,'prefill'=>true,'onregister'=>false),
+				3=>array('sort'=>3,'key'=>'ctel','lbl'=>__('Telephone :', $this->pluginLocale),'value'=>array(),'type'=>'text','enabled'=>true,'required'=>true,'prefill'=>true,'onregister'=>false),
+				4=>array('sort'=>4,'key'=>'ccomments','lbl'=>__('Comments :', $this->pluginLocale),'value'=>array(),'type'=>'textarea','enabled'=>true,'required'=>false,'prefill'=>false,'onregister'=>false),
+				5=>array('sort'=>5,'key'=>'ccustom1','lbl'=>__('Custom Field 1 :', $this->pluginLocale),'value'=>array(),'type'=>'text','enabled'=>false,'required'=>false,'prefill'=>false,'onregister'=>false),
+				6=>array('sort'=>6,'key'=>'ccustom2','lbl'=>__('Custom Field 2 :', $this->pluginLocale),'value'=>array(),'type'=>'text','enabled'=>false,'required'=>false,'prefill'=>false,'onregister'=>false),
+				7=>array('sort'=>7,'key'=>'ccustom3','lbl'=>__('Custom Field 3 :', $this->pluginLocale),'value'=>array(),'type'=>'text','enabled'=>false,'required'=>false,'prefill'=>false,'onregister'=>false),
+				8=>array('sort'=>8,'key'=>'ccustom4','lbl'=>__('Custom Field 4 :', $this->pluginLocale),'value'=>array(),'type'=>'text','enabled'=>false,'required'=>false,'prefill'=>false,'onregister'=>false),
+				9=>array('sort'=>9,'key'=>'ccustom5','lbl'=>__('Custom Field 5 :', $this->pluginLocale),'value'=>array(),'type'=>'text','enabled'=>false,'required'=>false,'prefill'=>false,'onregister'=>false),
+				10=>array('sort'=>10,'key'=>'ccustom6','lbl'=>__('Custom Field 6 :', $this->pluginLocale),'value'=>array(),'type'=>'text','enabled'=>false,'required'=>false,'prefill'=>false,'onregister'=>false)
 			),
 			'gateways'=>array(
 				'gateway_selected'=>array('COD'=>true),
@@ -484,6 +484,10 @@
 				'order_page_self_pickup'=>array(
 					'descr'=>__('Order Page - Self Pickup: text on order page to highlight self pickup (if applicable)', $this->pluginLocale),
 					'lbl'=>__('Note: you have chosen to pickup the order yourself. This order will not be delivered. Please allow 30 min. for us to prepare your order.', $this->pluginLocale)
+				),
+				'order_page_handling'=>array(
+					'descr'=>__('Order Page - Additional Handling Charges: text on order page if a handling charge for payment processing has been made (if applicable)', $this->pluginLocale),
+					'lbl'=>__('handling charge', $this->pluginLocale)
 				),
 				'required_field'=>array(
 					'descr'=>__('Order Page: message when required field is missing', $this->pluginLocale),

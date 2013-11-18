@@ -85,6 +85,10 @@
 			if(!isset($options['order_form'][$k]['prefill'])){
 				$update_options['order_form'][$k]['prefill']=$defaultOptions['order_form'][$k]['prefill'];
 			}
+			/**add prefill option*/
+			if(!isset($options['order_form'][$k]['onregister'])){
+				$update_options['order_form'][$k]['onregister']=$defaultOptions['order_form'][$k]['onregister'];
+			}			
 		}
 	}
 	if(isset($options['plugin_data']['category_parent_page'])){

@@ -130,7 +130,12 @@ $mailPadding['10x5']='padding:10px 5px';
 		<?php if(isset($order_summary['delivery'])){ ?>
 							<tr><td style="<?php echo $mailPadding['0x5'] ?>"><?php echo $order_summary['delivery']['label']; ?></td><td><?php echo $order_summary['delivery']['currency'].' '.$order_summary['delivery']['price']; ?></td></tr>
 		<?php } ?>
-
+		
+		<?php /**handling charges if any**/ ?>
+		<?php if(isset($order_summary['handling_charge'])){ ?>
+							<tr><td style="<?php echo $mailPadding['0x5'] ?>"><?php echo $order_summary['handling_charge']['label']; ?></td><td><?php echo $order_summary['handling_charge']['currency'].' '.$order_summary['handling_charge']['price']; ?></td></tr>
+		<?php } ?>
+		
 		<?php /*add devider**/ ?>
 							<tr><td colspan="2" style="<?php echo $mailDivider ?>">&nbsp;</td></tr>
 

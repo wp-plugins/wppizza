@@ -462,7 +462,7 @@ $options = $this->pluginOptions;
 				echo"<div id='wppizza_".$field."'>";
 					echo"<div id='wppizza_".$field."_options'>";
 					asort($localizeOptions);
-					$bgStyle=array(0,5,11,12,15,22,29);
+					$bgStyle=array(0,5,11,12,15,23,30);
 					$i=0;
 					foreach($localizeOptions as $k=>$v){
 					if(in_array($i,$bgStyle)){echo'<div>';}

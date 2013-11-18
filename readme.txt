@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.2, WP 3.3 
 Tested up to: 3.7.1
-Stable tag: 2.6.6
+Stable tag: 2.6.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -119,6 +119,20 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 
 == Changelog ==
+
+2.6.7   
+* prefill orderpage with wp email and nicename when user is logged in but has never ordered before  
+* added option to add and display additional handling charges (might be used and probably most useful for CC gateways)  
+* BUGFIX: fixed reintroduced bug in previous version in certain circumstances, that allowed order even when minimum order value had not been reached  
+* some other minor bugfixes  
+
+18th November 2013  
+
+
+2.6.6.1   
+* eliminated some php undefined notices     
+17th November 2013  
+
 
 2.6.6    
 * finally, storing customer data in uesermeta table to enable prefill of order page if user is logged in. Subsequently, amended wppizza-order.php template and admin order form settings   
