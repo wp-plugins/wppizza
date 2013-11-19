@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WPPizza\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-11-14 21:10-0000\n"
-"PO-Revision-Date: 2013-11-14 21:10-0000\n"
+"POT-Creation-Date: 2013-11-19 08:09-0000\n"
+"PO-Revision-Date: 2013-11-19 08:09-0000\n"
 "Last-Translator: ollybach <dev@1000db.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -835,7 +835,7 @@ msgid "If order total >"
 msgstr "If order total >"
 
 #: ../inc/admin.echo.settings.input.fields.inc.php:359
-#: ../inc/admin.setup.default.options.inc.php:548
+#: ../inc/admin.setup.default.options.inc.php:552
 msgid "discount"
 msgstr "discount"
 
@@ -1917,46 +1917,58 @@ msgstr ""
 "delivered. Please allow 30 min. for us to prepare your order."
 
 #: ../inc/admin.setup.default.options.inc.php:489
+msgid ""
+"Order Page - Additional Handling Charges: text on order page if a handling "
+"charge for payment processing has been made (if applicable)"
+msgstr ""
+"Order Page - Additional Handling Charges: text on order page if a handling "
+"charge for payment processing has been made (if applicable)"
+
+#: ../inc/admin.setup.default.options.inc.php:490
+msgid "handling charge"
+msgstr "handling charge"
+
+#: ../inc/admin.setup.default.options.inc.php:493
 msgid "Order Page: message when required field is missing"
 msgstr "Order Page: message when required field is missing"
 
-#: ../inc/admin.setup.default.options.inc.php:490
+#: ../inc/admin.setup.default.options.inc.php:494
 msgid "this is a required field"
 msgstr "this is a required field"
 
-#: ../inc/admin.setup.default.options.inc.php:493
+#: ../inc/admin.setup.default.options.inc.php:497
 msgid "Order Page: label of thank you page after order has been sent"
 msgstr "Order Page: label of thank you page after order has been sent"
 
-#: ../inc/admin.setup.default.options.inc.php:494
+#: ../inc/admin.setup.default.options.inc.php:498
 msgid "thank you"
 msgstr "thank you"
 
-#: ../inc/admin.setup.default.options.inc.php:497
+#: ../inc/admin.setup.default.options.inc.php:501
 msgid "Order Page: text of thank you page after order has been sent"
 msgstr "Order Page: text of thank you page after order has been sent"
 
-#: ../inc/admin.setup.default.options.inc.php:498
+#: ../inc/admin.setup.default.options.inc.php:502
 msgid "thank you, we have received your order"
 msgstr "thank you, we have received your order"
 
-#: ../inc/admin.setup.default.options.inc.php:502
+#: ../inc/admin.setup.default.options.inc.php:506
 msgid "Order Email: label for order details"
 msgstr "Order Email: label for order details"
 
-#: ../inc/admin.setup.default.options.inc.php:503
+#: ../inc/admin.setup.default.options.inc.php:507
 msgid "order details"
 msgstr "order details"
 
-#: ../inc/admin.setup.default.options.inc.php:506
+#: ../inc/admin.setup.default.options.inc.php:510
 msgid "Order Email: label to identify how the order was paid for"
 msgstr "Order Email: label to identify how the order was paid for"
 
-#: ../inc/admin.setup.default.options.inc.php:507
+#: ../inc/admin.setup.default.options.inc.php:511
 msgid "Paid By:"
 msgstr "Paid By:"
 
-#: ../inc/admin.setup.default.options.inc.php:510
+#: ../inc/admin.setup.default.options.inc.php:514
 msgid ""
 "Order Email: Text you would like to display at the end of emails after "
 "everything else."
@@ -1964,39 +1976,39 @@ msgstr ""
 "Order Email: Text you would like to display at the end of emails after "
 "everything else."
 
-#: ../inc/admin.setup.default.options.inc.php:514
+#: ../inc/admin.setup.default.options.inc.php:518
 msgid "Label Discount (Spend): i.e \"spend\" 50.00 save 10.00"
 msgstr "Label Discount (Spend): i.e \"spend\" 50.00 save 10.00"
 
-#: ../inc/admin.setup.default.options.inc.php:515
+#: ../inc/admin.setup.default.options.inc.php:519
 msgid "spend"
 msgstr "spend"
 
-#: ../inc/admin.setup.default.options.inc.php:518
+#: ../inc/admin.setup.default.options.inc.php:522
 msgid "Label Discount (Save): i.e spend 50.00 \"save\" 10.00"
 msgstr "Label Discount (Save): i.e spend 50.00 \"save\" 10.00"
 
-#: ../inc/admin.setup.default.options.inc.php:519
+#: ../inc/admin.setup.default.options.inc.php:523
 msgid "save"
 msgstr "save"
 
-#: ../inc/admin.setup.default.options.inc.php:523
+#: ../inc/admin.setup.default.options.inc.php:527
 msgid "Label Info: i.e. \"free delivery for orders over\"..."
 msgstr "Label Info: i.e. \"free delivery for orders over\"..."
 
-#: ../inc/admin.setup.default.options.inc.php:524
+#: ../inc/admin.setup.default.options.inc.php:528
 msgid "free delivery for orders over"
 msgstr "free delivery for orders over"
 
-#: ../inc/admin.setup.default.options.inc.php:527
+#: ../inc/admin.setup.default.options.inc.php:531
 msgid "Label Info: required minimum order value (displayed if applicable)"
 msgstr "Label Info: required minimum order value (displayed if applicable)"
 
-#: ../inc/admin.setup.default.options.inc.php:528
+#: ../inc/admin.setup.default.options.inc.php:532
 msgid "minimum order"
 msgstr "minimum order"
 
-#: ../inc/admin.setup.default.options.inc.php:531
+#: ../inc/admin.setup.default.options.inc.php:535
 msgid ""
 "Label Info: required minimum order value for delivery (displayed if "
 "applicable)"
@@ -2004,19 +2016,19 @@ msgstr ""
 "Label Info: required minimum order value for delivery (displayed if "
 "applicable)"
 
-#: ../inc/admin.setup.default.options.inc.php:532
+#: ../inc/admin.setup.default.options.inc.php:536
 msgid "minimum order for delivery"
 msgstr "minimum order for delivery"
 
-#: ../inc/admin.setup.default.options.inc.php:535
+#: ../inc/admin.setup.default.options.inc.php:539
 msgid "Price Labels (Sub)Totals: text to display when free delivery applies"
 msgstr "Price Labels (Sub)Totals: text to display when free delivery applies"
 
-#: ../inc/admin.setup.default.options.inc.php:536
+#: ../inc/admin.setup.default.options.inc.php:540
 msgid "free delivery"
 msgstr "free delivery"
 
-#: ../inc/admin.setup.default.options.inc.php:539
+#: ../inc/admin.setup.default.options.inc.php:543
 msgid ""
 "Price Labels (Sub)Totals: text delivery charges - when set to \"Fixed\" or "
 "\"Free delivery over\" (if applicable)"
@@ -2024,11 +2036,11 @@ msgstr ""
 "Price Labels (Sub)Totals: text delivery charges - when set to \"Fixed\" or "
 "\"Free delivery over\" (if applicable)"
 
-#: ../inc/admin.setup.default.options.inc.php:540
+#: ../inc/admin.setup.default.options.inc.php:544
 msgid "delivery charges"
 msgstr "delivery charges"
 
-#: ../inc/admin.setup.default.options.inc.php:543
+#: ../inc/admin.setup.default.options.inc.php:547
 msgid ""
 "Price Labels (Sub)Totals: text delivery when set to \"Delivery Charges per "
 "item\" (if applicable)"
@@ -2036,45 +2048,45 @@ msgstr ""
 "Price Labels (Sub)Totals: text delivery when set to \"Delivery Charges per "
 "item\" (if applicable)"
 
-#: ../inc/admin.setup.default.options.inc.php:544
+#: ../inc/admin.setup.default.options.inc.php:548
 msgid "delivery charges per item"
 msgstr "delivery charges per item"
 
-#: ../inc/admin.setup.default.options.inc.php:547
+#: ../inc/admin.setup.default.options.inc.php:551
 msgid "Price Labels (Sub)Totals: text before sum of discounts applied(if any)"
 msgstr "Price Labels (Sub)Totals: text before sum of discounts applied(if any)"
 
-#: ../inc/admin.setup.default.options.inc.php:551
+#: ../inc/admin.setup.default.options.inc.php:555
 msgid ""
 "Price Labels (Sub)Totals: text before sum of tax applied to all items(if > 0)"
 msgstr ""
 "Price Labels (Sub)Totals: text before sum of tax applied to all items(if > 0)"
 
-#: ../inc/admin.setup.default.options.inc.php:552
+#: ../inc/admin.setup.default.options.inc.php:556
 msgid "Sales Tax"
 msgstr "Sales Tax"
 
-#: ../inc/admin.setup.default.options.inc.php:555
+#: ../inc/admin.setup.default.options.inc.php:559
 msgid "Price Labels (Sub)Totals: text before total sum of ORDER"
 msgstr "Price Labels (Sub)Totals: text before total sum of ORDER"
 
-#: ../inc/admin.setup.default.options.inc.php:556
+#: ../inc/admin.setup.default.options.inc.php:560
 msgid "total"
 msgstr "total"
 
-#: ../inc/admin.setup.default.options.inc.php:559
+#: ../inc/admin.setup.default.options.inc.php:563
 msgid "Price Labels (Sub)Totals: text before total sum of ITEMS in cart"
 msgstr "Price Labels (Sub)Totals: text before total sum of ITEMS in cart"
 
-#: ../inc/admin.setup.default.options.inc.php:560
+#: ../inc/admin.setup.default.options.inc.php:564
 msgid "your items"
 msgstr "your items"
 
-#: ../inc/admin.setup.default.options.inc.php:563
+#: ../inc/admin.setup.default.options.inc.php:567
 msgid "Openinghours: text to display when shop is closed that day "
 msgstr "Openinghours: text to display when shop is closed that day "
 
-#: ../inc/admin.setup.default.options.inc.php:564
+#: ../inc/admin.setup.default.options.inc.php:568
 msgid "closed"
 msgstr "closed"
 

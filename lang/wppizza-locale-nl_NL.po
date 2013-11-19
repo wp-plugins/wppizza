@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WPPizza\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-11-14 21:10-0000\n"
-"PO-Revision-Date: 2013-11-14 21:10-0000\n"
+"POT-Creation-Date: 2013-11-19 08:10-0000\n"
+"PO-Revision-Date: 2013-11-19 08:10-0000\n"
 "Last-Translator: ollybach <dev@1000db.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -838,7 +838,7 @@ msgid "If order total >"
 msgstr "Als order totaal >"
 
 #: ../inc/admin.echo.settings.input.fields.inc.php:359
-#: ../inc/admin.setup.default.options.inc.php:548
+#: ../inc/admin.setup.default.options.inc.php:552
 msgid "discount"
 msgstr "korting"
 
@@ -1954,48 +1954,61 @@ msgstr ""
 "bestelling te bereiden."
 
 #: ../inc/admin.setup.default.options.inc.php:489
+msgid ""
+"Order Page - Additional Handling Charges: text on order page if a handling "
+"charge for payment processing has been made (if applicable)"
+msgstr ""
+"Order Page - Additional Handling Charges: text on order page if a handling "
+"charge for payment processing has been made (if applicable)"
+
+#: ../inc/admin.setup.default.options.inc.php:490
+#, fuzzy
+msgid "handling charge"
+msgstr "bezorgkosten"
+
+#: ../inc/admin.setup.default.options.inc.php:493
 msgid "Order Page: message when required field is missing"
 msgstr "Bestel Pagina: bericht wanneer verplicht veld ontbreekt"
 
-#: ../inc/admin.setup.default.options.inc.php:490
+#: ../inc/admin.setup.default.options.inc.php:494
 msgid "this is a required field"
 msgstr "Dit is een verplicht veld"
 
-#: ../inc/admin.setup.default.options.inc.php:493
+#: ../inc/admin.setup.default.options.inc.php:497
 msgid "Order Page: label of thank you page after order has been sent"
 msgstr ""
 "Bestel Pagina: label van de bedankt pagina nadat de bestelling is verzonden"
 
-#: ../inc/admin.setup.default.options.inc.php:494
+#: ../inc/admin.setup.default.options.inc.php:498
 msgid "thank you"
 msgstr "dank u"
 
-#: ../inc/admin.setup.default.options.inc.php:497
+#: ../inc/admin.setup.default.options.inc.php:501
 msgid "Order Page: text of thank you page after order has been sent"
 msgstr ""
 "Bestel Pagina: tekst van de dank u pagina nadat de bestelling is verzonden"
 
-#: ../inc/admin.setup.default.options.inc.php:498
+#: ../inc/admin.setup.default.options.inc.php:502
 msgid "thank you, we have received your order"
 msgstr "dank u, hebben wij hebben uw bestelling ontvangen"
 
-#: ../inc/admin.setup.default.options.inc.php:502
+#: ../inc/admin.setup.default.options.inc.php:506
 msgid "Order Email: label for order details"
 msgstr "Bestel Email: label voor bestelgegevens"
 
-#: ../inc/admin.setup.default.options.inc.php:503
+#: ../inc/admin.setup.default.options.inc.php:507
 msgid "order details"
 msgstr "bestel details"
 
-#: ../inc/admin.setup.default.options.inc.php:506
+#: ../inc/admin.setup.default.options.inc.php:510
 msgid "Order Email: label to identify how the order was paid for"
 msgstr "Bestel Email: etiket om te bepalen hoe de bestelling werd betaald "
 
-#: ../inc/admin.setup.default.options.inc.php:507
+#: ../inc/admin.setup.default.options.inc.php:511
 msgid "Paid By:"
 msgstr "Betaald Door:"
 
-#: ../inc/admin.setup.default.options.inc.php:510
+#: ../inc/admin.setup.default.options.inc.php:514
 msgid ""
 "Order Email: Text you would like to display at the end of emails after "
 "everything else."
@@ -2003,63 +2016,63 @@ msgstr ""
 "Bestel Email: Tekst die u wilt aan het einde van e-mails om te laten zien na "
 "al het andere."
 
-#: ../inc/admin.setup.default.options.inc.php:514
+#: ../inc/admin.setup.default.options.inc.php:518
 msgid "Label Discount (Spend): i.e \"spend\" 50.00 save 10.00"
 msgstr ""
 "Label Korting (Besteed): dat wil zeggen \"te besteden \" bespaar 50,00 10,00"
 
-#: ../inc/admin.setup.default.options.inc.php:515
+#: ../inc/admin.setup.default.options.inc.php:519
 msgid "spend"
 msgstr "besteed"
 
-#: ../inc/admin.setup.default.options.inc.php:518
+#: ../inc/admin.setup.default.options.inc.php:522
 msgid "Label Discount (Save): i.e spend 50.00 \"save\" 10.00"
 msgstr "label Korting (opslaan): dwz uitgeven 50,00 \"bespaar \" 10.00"
 
-#: ../inc/admin.setup.default.options.inc.php:519
+#: ../inc/admin.setup.default.options.inc.php:523
 msgid "save"
 msgstr "bespaar"
 
-#: ../inc/admin.setup.default.options.inc.php:523
+#: ../inc/admin.setup.default.options.inc.php:527
 msgid "Label Info: i.e. \"free delivery for orders over\"..."
 msgstr ""
 "Label Info: dwz \"gratis levering voor bestellingen van meer dan \" ..."
 
-#: ../inc/admin.setup.default.options.inc.php:524
+#: ../inc/admin.setup.default.options.inc.php:528
 msgid "free delivery for orders over"
 msgstr "gratis levering voor bestellingen van meer dan"
 
-#: ../inc/admin.setup.default.options.inc.php:527
+#: ../inc/admin.setup.default.options.inc.php:531
 msgid "Label Info: required minimum order value (displayed if applicable)"
 msgstr ""
 "Label Info: vereiste minimum orderwaarde (indien van toepassing weergegeven)"
 
-#: ../inc/admin.setup.default.options.inc.php:528
+#: ../inc/admin.setup.default.options.inc.php:532
 msgid "minimum order"
 msgstr "minimum bestelling"
 
-#: ../inc/admin.setup.default.options.inc.php:531
+#: ../inc/admin.setup.default.options.inc.php:535
 msgid ""
 "Label Info: required minimum order value for delivery (displayed if "
 "applicable)"
 msgstr ""
 "Label Info: vereiste minimum orderwaarde (indien van toepassing weergegeven)"
 
-#: ../inc/admin.setup.default.options.inc.php:532
+#: ../inc/admin.setup.default.options.inc.php:536
 msgid "minimum order for delivery"
 msgstr "minimum bestelling orderwaarde"
 
-#: ../inc/admin.setup.default.options.inc.php:535
+#: ../inc/admin.setup.default.options.inc.php:539
 msgid "Price Labels (Sub)Totals: text to display when free delivery applies"
 msgstr ""
 "Prijs lables (Sub) Totalen: tekst moet worden weergegeven wanneer gratis "
 "bezorging geldt"
 
-#: ../inc/admin.setup.default.options.inc.php:536
+#: ../inc/admin.setup.default.options.inc.php:540
 msgid "free delivery"
 msgstr "gratis bezorging"
 
-#: ../inc/admin.setup.default.options.inc.php:539
+#: ../inc/admin.setup.default.options.inc.php:543
 msgid ""
 "Price Labels (Sub)Totals: text delivery charges - when set to \"Fixed\" or "
 "\"Free delivery over\" (if applicable)"
@@ -2067,11 +2080,11 @@ msgstr ""
 "Prijs labels (Sub) Totalen: bezorg tekst - wanneer ingesteld op \"Vast \" "
 "of  \"Gratis bij besteding van meer dan \" (indien van toepassing)"
 
-#: ../inc/admin.setup.default.options.inc.php:540
+#: ../inc/admin.setup.default.options.inc.php:544
 msgid "delivery charges"
 msgstr "bezorgkosten"
 
-#: ../inc/admin.setup.default.options.inc.php:543
+#: ../inc/admin.setup.default.options.inc.php:547
 msgid ""
 "Price Labels (Sub)Totals: text delivery when set to \"Delivery Charges per "
 "item\" (if applicable)"
@@ -2079,52 +2092,52 @@ msgstr ""
 "Prijs etiketten (Sub) Totalen: bezorg tekst wanneer ingesteld op  "
 "\"Bezorgkosten per stuk \" (indien van toepassing)"
 
-#: ../inc/admin.setup.default.options.inc.php:544
+#: ../inc/admin.setup.default.options.inc.php:548
 msgid "delivery charges per item"
 msgstr "verzendkosten per artikel"
 
-#: ../inc/admin.setup.default.options.inc.php:547
+#: ../inc/admin.setup.default.options.inc.php:551
 msgid "Price Labels (Sub)Totals: text before sum of discounts applied(if any)"
 msgstr ""
 "Prijs etiketten (Sub) Totalen: tekst vóór de som van de kortingen toegepast "
 "(indien van toepassing)"
 
-#: ../inc/admin.setup.default.options.inc.php:551
+#: ../inc/admin.setup.default.options.inc.php:555
 msgid ""
 "Price Labels (Sub)Totals: text before sum of tax applied to all items(if > 0)"
 msgstr ""
 "Prijs lables (Sub) Totalen: tekst vóór de som van BTW toegepast op alle "
 "items (indien> 0)"
 
-#: ../inc/admin.setup.default.options.inc.php:552
+#: ../inc/admin.setup.default.options.inc.php:556
 msgid "Sales Tax"
 msgstr "BTW"
 
-#: ../inc/admin.setup.default.options.inc.php:555
+#: ../inc/admin.setup.default.options.inc.php:559
 msgid "Price Labels (Sub)Totals: text before total sum of ORDER"
 msgstr "Prijs labels (Sub) Totalen: tekst voor de totale som van de BESTELLING"
 
-#: ../inc/admin.setup.default.options.inc.php:556
+#: ../inc/admin.setup.default.options.inc.php:560
 msgid "total"
 msgstr "totaal"
 
-#: ../inc/admin.setup.default.options.inc.php:559
+#: ../inc/admin.setup.default.options.inc.php:563
 msgid "Price Labels (Sub)Totals: text before total sum of ITEMS in cart"
 msgstr ""
 "Prijs etiketten (Sub) Totalen: tekst voor de totale som van de ITEMS in de "
 "winkelwagen"
 
-#: ../inc/admin.setup.default.options.inc.php:560
+#: ../inc/admin.setup.default.options.inc.php:564
 msgid "your items"
 msgstr "uw items"
 
-#: ../inc/admin.setup.default.options.inc.php:563
+#: ../inc/admin.setup.default.options.inc.php:567
 msgid "Openinghours: text to display when shop is closed that day "
 msgstr ""
 "Openingsuren: tekst die moet worden weergegeven wanneer de winkel die dag "
 "gesloten is"
 
-#: ../inc/admin.setup.default.options.inc.php:564
+#: ../inc/admin.setup.default.options.inc.php:568
 msgid "closed"
 msgstr "gesloten"
 

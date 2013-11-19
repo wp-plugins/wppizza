@@ -237,10 +237,10 @@ jQuery(document).ready(function($){
 					hasClassAjax=selected.hasClass("wppizzaGwAjaxSubmit");
 				}else{
 					var selected = $("select[name='wppizza-gateway']");
-					hasClassAjax=("select[name='wppizza-gateway'] option:selected").hasClass("wppizzaGwAjaxSubmit")
+					hasClassAjax=$("select[name='wppizza-gateway'] option:selected").hasClass("wppizzaGwAjaxSubmit")
 				}
 				var currVal = selected.val();
-
+				
 				/**cod->transmit form via ajax if cod or forced by gw settings (i.e $this->gatewayTypeSubmit = 'ajax')*/
 				if(currVal=='cod' || hasClassAjax){				
 					var self=$('#wppizza-send-order');

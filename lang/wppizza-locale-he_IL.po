@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WPPizza v2.5.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-11-14 21:10-0000\n"
-"PO-Revision-Date: 2013-11-14 21:10-0000\n"
+"POT-Creation-Date: 2013-11-19 08:09-0000\n"
+"PO-Revision-Date: 2013-11-19 08:10-0000\n"
 "Last-Translator: ollybach <dev@1000db.com>\n"
 "Language-Team: Yair - Halev.sites <halev.sites@gmail.com>\n"
 "Language: he_IL\n"
@@ -866,7 +866,6 @@ msgstr ""
 
 # @ wppizza-locale
 #: inc/admin.echo.settings.input.fields.inc.php:277
-#, fuzzy
 msgid ""
 "Fixed Delivery charges if order has not reached total for free delivery [0 "
 "to disable]"
@@ -999,7 +998,7 @@ msgstr "אם סך הזמנה &gt;"
 
 # @ wppizza-locale
 #: inc/admin.echo.settings.input.fields.inc.php:359
-#: inc/admin.setup.default.options.inc.php:548
+#: inc/admin.setup.default.options.inc.php:552
 msgid "discount"
 msgstr "הנחה"
 
@@ -2267,127 +2266,141 @@ msgstr ""
 "שימו לב: בחרת לאסוף בעצמך. משלוח זה לא יימסר לשליח ועליך לבוא למקום לקחת. יש "
 "לאפשר לנו 30 דקות. כדי להכין את ההזמנה שלך."
 
-# @ wppizza-locale
 #: inc/admin.setup.default.options.inc.php:489
+msgid ""
+"Order Page - Additional Handling Charges: text on order page if a handling "
+"charge for payment processing has been made (if applicable)"
+msgstr ""
+"Order Page - Additional Handling Charges: text on order page if a handling "
+"charge for payment processing has been made (if applicable)"
+
+# @ wppizza-locale
+#: inc/admin.setup.default.options.inc.php:490
+#, fuzzy
+msgid "handling charge"
+msgstr "דמי משלוח"
+
+# @ wppizza-locale
+#: inc/admin.setup.default.options.inc.php:493
 msgid "Order Page: message when required field is missing"
 msgstr "עמוד הזמנה: הודעה כאשר שדה נדרש חסר"
 
 # @ wppizza-locale
-#: inc/admin.setup.default.options.inc.php:490
+#: inc/admin.setup.default.options.inc.php:494
 msgid "this is a required field"
 msgstr "שדה חובה"
 
 # @ wppizza-locale
-#: inc/admin.setup.default.options.inc.php:493
+#: inc/admin.setup.default.options.inc.php:497
 msgid "Order Page: label of thank you page after order has been sent"
 msgstr "עמוד הזמנה: תווית של דף תודה לאחר שההזמנה נשלחה"
 
 # @ wppizza-locale
-#: inc/admin.setup.default.options.inc.php:494
+#: inc/admin.setup.default.options.inc.php:498
 msgid "thank you"
 msgstr "תודה"
 
 # @ wppizza-locale
-#: inc/admin.setup.default.options.inc.php:497
+#: inc/admin.setup.default.options.inc.php:501
 msgid "Order Page: text of thank you page after order has been sent"
 msgstr "עמוד הזמנה: טקסט של דף תודה לאחר שההזמנה נשלחה"
 
 # @ wppizza-locale
-#: inc/admin.setup.default.options.inc.php:498
+#: inc/admin.setup.default.options.inc.php:502
 msgid "thank you, we have received your order"
 msgstr "תודה לך, קבלנו את ההזמנה שלך"
 
 # @ wppizza-locale
-#: inc/admin.setup.default.options.inc.php:502
+#: inc/admin.setup.default.options.inc.php:506
 msgid "Order Email: label for order details"
 msgstr "דוא&quot;ל הזמנה: תווית לפרטי ההזמנה"
 
 # @ wppizza-locale
-#: inc/admin.setup.default.options.inc.php:503
+#: inc/admin.setup.default.options.inc.php:507
 msgid "order details"
 msgstr "פרטי הזמנה"
 
 # @ wppizza-locale
-#: inc/admin.setup.default.options.inc.php:506
+#: inc/admin.setup.default.options.inc.php:510
 msgid "Order Email: label to identify how the order was paid for"
 msgstr "דוא&quot;ל הזמנה: תווית כדי לזהות כיצד ההזמנה שולמה עבור"
 
 # @ wppizza-locale
-#: inc/admin.setup.default.options.inc.php:507
+#: inc/admin.setup.default.options.inc.php:511
 msgid "Paid By:"
 msgstr "שולם על ידי:"
 
 # @ wppizza-locale
-#: inc/admin.setup.default.options.inc.php:510
+#: inc/admin.setup.default.options.inc.php:514
 msgid ""
 "Order Email: Text you would like to display at the end of emails after "
 "everything else."
 msgstr "דוא&quot;ל הזמנה: טקסט שברצונך להציג בסוף המיילים אחרי הכל ."
 
 # @ wppizza-locale
-#: inc/admin.setup.default.options.inc.php:514
+#: inc/admin.setup.default.options.inc.php:518
 msgid "Label Discount (Spend): i.e \"spend\" 50.00 save 10.00"
 msgstr "תווית מנחה (Spend): i.e \"שולם\" 50.00 חיסכון של 10.00"
 
 # @ wppizza-locale
-#: inc/admin.setup.default.options.inc.php:515
+#: inc/admin.setup.default.options.inc.php:519
 msgid "spend"
 msgstr "שולם"
 
 # @ wppizza-locale
-#: inc/admin.setup.default.options.inc.php:518
+#: inc/admin.setup.default.options.inc.php:522
 msgid "Label Discount (Save): i.e spend 50.00 \"save\" 10.00"
 msgstr "תווית הנחה (חיסכון): i.e שולם 50.00 \"חיסכון\" 10.00"
 
 # @ wppizza-locale
-#: inc/admin.setup.default.options.inc.php:519
+#: inc/admin.setup.default.options.inc.php:523
 msgid "save"
 msgstr "חיסכון"
 
 # @ wppizza-locale
-#: inc/admin.setup.default.options.inc.php:523
+#: inc/admin.setup.default.options.inc.php:527
 msgid "Label Info: i.e. \"free delivery for orders over\"..."
 msgstr "תווית מידע : &quot;משלוח חינם עבור הזמנות מעל&quot;, כלומר ..."
 
 # @ wppizza-locale
-#: inc/admin.setup.default.options.inc.php:524
+#: inc/admin.setup.default.options.inc.php:528
 msgid "free delivery for orders over"
 msgstr "משלוח חינם להזמנות מעל"
 
 # @ wppizza-locale
-#: inc/admin.setup.default.options.inc.php:527
+#: inc/admin.setup.default.options.inc.php:531
 msgid "Label Info: required minimum order value (displayed if applicable)"
 msgstr "תוויתמידע: ערך הזמנת מינימום הנדרש (מוצג אם רלוונטי)"
 
 # @ wppizza-locale
-#: inc/admin.setup.default.options.inc.php:528
+#: inc/admin.setup.default.options.inc.php:532
 msgid "minimum order"
 msgstr "מינימום הזמנה"
 
 # @ wppizza-locale
-#: inc/admin.setup.default.options.inc.php:531
+#: inc/admin.setup.default.options.inc.php:535
 msgid ""
 "Label Info: required minimum order value for delivery (displayed if "
 "applicable)"
 msgstr "תווית מידע: ערך הזמנת מינימום הנדרש למשלוח (מוצג אם רלוונטי)"
 
 # @ wppizza-locale
-#: inc/admin.setup.default.options.inc.php:532
+#: inc/admin.setup.default.options.inc.php:536
 msgid "minimum order for delivery"
 msgstr "מינימום הזמנה למשלוח"
 
 # @ wppizza-locale
-#: inc/admin.setup.default.options.inc.php:535
+#: inc/admin.setup.default.options.inc.php:539
 msgid "Price Labels (Sub)Totals: text to display when free delivery applies"
 msgstr "תוויות מחיר (תת) סך הכל: טקסט שיוצג כאשר משלוח חינם חל"
 
 # @ wppizza-locale
-#: inc/admin.setup.default.options.inc.php:536
+#: inc/admin.setup.default.options.inc.php:540
 msgid "free delivery"
 msgstr "משלוח חינם"
 
 # @ wppizza-locale
-#: inc/admin.setup.default.options.inc.php:539
+#: inc/admin.setup.default.options.inc.php:543
 msgid ""
 "Price Labels (Sub)Totals: text delivery charges - when set to \"Fixed\" or "
 "\"Free delivery over\" (if applicable)"
@@ -2396,12 +2409,12 @@ msgstr ""
 "&quot;משלוח חינם מעל&quot; (אם קיים)"
 
 # @ wppizza-locale
-#: inc/admin.setup.default.options.inc.php:540
+#: inc/admin.setup.default.options.inc.php:544
 msgid "delivery charges"
 msgstr "דמי משלוח"
 
 # @ wppizza-locale
-#: inc/admin.setup.default.options.inc.php:543
+#: inc/admin.setup.default.options.inc.php:547
 msgid ""
 "Price Labels (Sub)Totals: text delivery when set to \"Delivery Charges per "
 "item\" (if applicable)"
@@ -2410,54 +2423,54 @@ msgstr ""
 "לפריט&quot; (אם קיים)"
 
 # @ wppizza-locale
-#: inc/admin.setup.default.options.inc.php:544
+#: inc/admin.setup.default.options.inc.php:548
 msgid "delivery charges per item"
 msgstr "משלוח מטענים לכל פריט"
 
 # @ wppizza-locale
-#: inc/admin.setup.default.options.inc.php:547
+#: inc/admin.setup.default.options.inc.php:551
 msgid "Price Labels (Sub)Totals: text before sum of discounts applied(if any)"
 msgstr "תוויות מחיר (תת) סל הכל: טקסט לפני הסכום של ההנחות (אם בכלל)"
 
 # @ wppizza-locale
-#: inc/admin.setup.default.options.inc.php:551
+#: inc/admin.setup.default.options.inc.php:555
 msgid ""
 "Price Labels (Sub)Totals: text before sum of tax applied to all items(if > 0)"
 msgstr ""
 "תוויות מחיר (תת) סך הכל: טקסט לפני סכום המס יחולו על כל הפריטים (אם&gt; 0)"
 
 # @ wppizza-locale
-#: inc/admin.setup.default.options.inc.php:552
+#: inc/admin.setup.default.options.inc.php:556
 msgid "Sales Tax"
 msgstr "מס קנייה"
 
 # @ wppizza-locale
-#: inc/admin.setup.default.options.inc.php:555
+#: inc/admin.setup.default.options.inc.php:559
 msgid "Price Labels (Sub)Totals: text before total sum of ORDER"
 msgstr "תוויות מחיר (תת) סך הכל: טקסט לפני הסכום הכולל של ההזמנה"
 
 # @ wppizza-locale
-#: inc/admin.setup.default.options.inc.php:556
+#: inc/admin.setup.default.options.inc.php:560
 msgid "total"
 msgstr "סך הכל"
 
 # @ wppizza-locale
-#: inc/admin.setup.default.options.inc.php:559
+#: inc/admin.setup.default.options.inc.php:563
 msgid "Price Labels (Sub)Totals: text before total sum of ITEMS in cart"
 msgstr "תוויות מחיר (תת) סך: טקסט לפני הסכום של פריטים בסל כולל"
 
 # @ wppizza-locale
-#: inc/admin.setup.default.options.inc.php:560
+#: inc/admin.setup.default.options.inc.php:564
 msgid "your items"
 msgstr "הפריטים שלך"
 
 # @ wppizza-locale
-#: inc/admin.setup.default.options.inc.php:563
+#: inc/admin.setup.default.options.inc.php:567
 msgid "Openinghours: text to display when shop is closed that day "
 msgstr "שעות פתיחה: הטקסט שיוצג כאשר החנות סגורה באותו היום"
 
 # @ wppizza-locale
-#: inc/admin.setup.default.options.inc.php:564
+#: inc/admin.setup.default.options.inc.php:568
 msgid "closed"
 msgstr "סגור"
 
