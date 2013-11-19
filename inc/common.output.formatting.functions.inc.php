@@ -64,6 +64,7 @@
 		$items['KYD']='$';
 		$items['CLP']='$';
 		$items['CNY']='¥';
+		$items['RMB']='¥';
 		$items['COP']='$';
 		$items['CRC']='¢';
 		$items['HRK']='kn';

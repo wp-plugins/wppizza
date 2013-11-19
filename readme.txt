@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.2, WP 3.3 
 Tested up to: 3.7.1
-Stable tag: 2.6.7.1
+Stable tag: 2.6.7.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -120,12 +120,17 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 == Changelog ==
 
-2.6.7.1
+
+2.6.7.2  
+* Maintenance Release  
+* Added RMB as alternative to CNY currency (chinese)   
+20th November 2013  
+
+2.6.7.1  
 * fixed "cash on delivery" not submitting when gatway choice set to dropdown  
 19th November 2013  
 
    
-
 2.6.7   
 * prefill orderpage with wp email and nicename when user is logged in but has never ordered before  
 * added option to add and display additional handling charges (might be used and probably most useful for CC gateways)  

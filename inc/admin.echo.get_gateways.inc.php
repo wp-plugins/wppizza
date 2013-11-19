@@ -52,11 +52,13 @@
 
 			/***gateway specific elements**/
 			foreach($gw['gatewaySettings'] as $key=>$val){
+				if($val['type']!='norender'){/**if we want to be able to save an element but dont want to display it as an option*/
 				print"<div>";
 					print"<label>".$val['label']."</label>";
 					wppizza_echo_formfield($val['type'],$val['key'],$this->pluginSlug."[gateways][".$gw['gatewayOptionsName']."][".$val['key']."]",$val['value'],$val['placeholder'],$val['options']);
 					print"<br/>".$val['descr']."";
 				print"</div>";
+				}
 			}
 
 		print"</div>";
