@@ -36,6 +36,16 @@
 	[order settings]
 *********************/
 .wppizza_delivery_calculation_exclude_item{height:100px !important}
+/******************
+	[order form fields]
+*******************/
+.wppizza-order-form-wrap .form-table th{width:auto !important;}
+#wppizza_order_form tr.cemail>td{margin-bottom:0;padding-bottom:0}
+#wppizza_order_form th{vertical-align:top; width:auto !important; background-color:#DEDEDE;text-shadow:none}
+#wppizza_order_form {border:1px solid #999999;margin-bottom:10px}
+#wppizza_order_form tr:nth-child(odd){background:#EFEFEF;}
+#wppizza_order_form tr:nth-child(even){background:#FFFFFF;}
+
 
 /*******************
 	[generic]

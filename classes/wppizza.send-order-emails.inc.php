@@ -104,10 +104,29 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 				*
 				*********************************************************************/
 				if($res->wp_user_id>0){
+					/**update profile**/
+					if(!empty($oIni['update_profile'])){
+	    				$ff=$pOptions['order_form'];
+						foreach( $ff as $field ) {
+						if(!empty($field['enabled'])) {
+							if( $field['type']!='select'){
+								update_user_meta( $res->wp_user_id, 'wppizza_'.$field['key'], wppizza_validate_string($cDetails[$field['key']]) );	/*we've validated already, but lets just be save*/
+							}else{
+								$selKey = array_search($cDetails[$field['key']], $field['value']);
+								update_user_meta( $res->wp_user_id, 'wppizza_'.$field['key'], $selKey );
+							}
+						}}
+						/**also update WP email...hmmm better not*/
+						//if(!empty($field['enabled']) && $field['key']=='cemail' && !empty($cDetails['cemail'])) {
+						//	wp_update_user( array ( 'ID' => $res->wp_user_id, 'user_email' => $cDetails['cemail'] ) ) ;
+						//}
+					}
+					/**the below isnt really needed anymore, but - for legacy reasons - let's keep it for the moment*/
 					$userMeta=$cDetails;
 					/*tidy up a bit*/
 					if($userMeta['wppizza-gateway']){unset($userMeta['wppizza-gateway']);}
 					if($userMeta['wppizza_hash']){unset($userMeta['wppizza_hash']);}
+					if($userMeta['update_profile']){unset($userMeta['update_profile']);}
 					update_user_meta($res->wp_user_id, 'wppizza_user_meta', $userMeta);
 				}
 				/*********************************************************************

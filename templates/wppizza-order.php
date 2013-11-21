@@ -17,10 +17,14 @@
 /**if the user is logged in , pre-enter the info we have (if prefill is selected in wppizza->order form settings CHANGED IN VERSION 2.6.5.3***/
 if(is_user_logged_in() ) {
 	global $current_user;
-	$userMeta=maybe_unserialize(get_user_meta($current_user->ID,'wppizza_user_meta',true));
-	/*if we have not yet got an email, use the wp email and name**/
-	if(!isset($userMeta['cemail'])){$userMeta['cemail']=$current_user->data->user_email;};
-	if(!isset($userMeta['cname'])){$userMeta['cname']=$current_user->data->user_nicename;};
+	$getUserMeta=get_user_meta( $current_user->ID );
+	foreach($getUserMeta as $k=>$v){
+		/**for legacy reasons, strip wppizza_ from key*/
+		if(substr($k,0,8)=='wppizza_'){
+			$k=substr($k,8);
+		}
+		$userMeta[$k]=$v[0];
+	}
 }
 ?>
 
@@ -111,11 +115,17 @@ if(is_user_logged_in() ) {
 					<select id="<?php echo $elm['key'] ?>" name="<?php echo $elm['key'] ?>" <?php echo !empty($elm['required'])?'required':'' ?>>
 						<option value="">--------</option>
 						<?php foreach($elm['value'] as $a=>$b){?>
-						<option value="<?php echo wppizza_validate_string($b) ?>" <?php echo !empty($elm['prefill']) && isset($userMeta[$elm['key']]) && $userMeta[$elm['key']]==wppizza_validate_string($b) ? 'selected="selected"' :''  /*CHANGED IN VERSION 2.6.5.3*/ ?>><?php echo $b ?></option>
+						<option value="<?php echo wppizza_validate_string($b) ?>" <?php echo !empty($elm['prefill']) && isset($userMeta[$elm['key']]) && $userMeta[$elm['key']]==wppizza_validate_string($a) ? 'selected="selected"' :''  /*CHANGED IN VERSION 2.6.5.3*/ ?>><?php echo $b ?></option>
 						<?php } ?>
 					</select>
 				<?php } ?>
 			<?php } ?>
+		<?php } ?>
+		<?php if(is_user_logged_in() ) { /**allow user to update profile ADDED IN VERSION 2.8*/ ?>
+			<label for="wppizza_profile_update">
+			<input id="wppizza_profile_update" name="wppizza_profile_update" type="checkbox" value="1" />
+			<?php echo $txt['update_profile']['lbl'] ?>
+			</label>
 		<?php } ?>
 		<?php
 			/*NEW IN VERSION 2.0 => FOR FUTURE USE*/

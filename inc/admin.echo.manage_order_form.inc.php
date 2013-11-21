@@ -1,5 +1,5 @@
 <?php
-		echo'<div id="'.$this->pluginSlug.'-settings" class="wrap">';
+		echo'<div id="'.$this->pluginSlug.'-settings" class="wrap wppizza-order-form-wrap">';
 		echo"<h2>". $this->pluginName." ".__('Orders Form', $this->pluginLocale)."</h2>";
 		echo'<form action="options.php" method="post">';
 		echo'<input type="hidden" name="'.$this->pluginSlug.'_order_form" value="1">';

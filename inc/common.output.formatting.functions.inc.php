@@ -123,7 +123,7 @@
 		$items['PYG']='Gs';
 		$items['PEN']='S/.';
 		$items['PHP']='&#8369;';
-		$items['PLN']='zl';
+		$items['PLN']='&#122;&#322;';
 		$items['QAR']='&#65020;';
 		$items['RON']='lei';
 		$items['RUB']='&#1088;';

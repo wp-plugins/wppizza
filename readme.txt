@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.2, WP 3.3 
 Tested up to: 3.7.1
-Stable tag: 2.6.7.2
+Stable tag: 2.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -120,6 +120,11 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 == Changelog ==
 
+2.7  
+* allow prefill of orderpage of user is logged in and adding of formfields at registration    
+* fixed Poland [PLN] Currency Symbol    
+* exclude id's from category navigation (shortcode only at the moment)
+20th November 2013  
 
 2.6.7.2  
 * Maintenance Release  
@@ -610,9 +615,11 @@ in case where you cannot or do not want to use a widget, here are the correspond
 	
 	attributes:  
 	- type='navigation' 		(required [str])  
-	- title='some title' 		(optional[str]: will render as h2 as first element in cart element if set)  
+	- title='some title' 		(optional[str]: will render as h2 as first element in cart element if set) 
+	- parent='slug-name' 		(optionsl [str]): only show child categories of this slug 
+	- exclude='6,5,8' 			(optional [comma separated category id's]): exclude some id's
 
-	example: 		[wppizza type='navigation' title='some title']
+	example: 		[wppizza type='navigation' title='some title' parent='slug-name' exclude='6,5,8']
 
 
 = Can I edit the templates ? =

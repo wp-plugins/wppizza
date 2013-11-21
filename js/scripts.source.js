@@ -239,11 +239,16 @@ jQuery(document).ready(function($){
 					var selected = $("select[name='wppizza-gateway']");
 					hasClassAjax=$("select[name='wppizza-gateway'] option:selected").hasClass("wppizzaGwAjaxSubmit")
 				}
+				var self=$('#wppizza-send-order');
 				var currVal = selected.val();
-				
+				var profileUpdate=$("#wppizza_profile_update").is(':checked');
+				if(profileUpdate==true){
+					jQuery.post(wppizza.ajaxurl , {action :'wppizza_json',vars:{'type':'profile_update','data':self.serialize()}}, function(response) {
+						//console.log(response);
+					},'html');
+				}
 				/**cod->transmit form via ajax if cod or forced by gw settings (i.e $this->gatewayTypeSubmit = 'ajax')*/
 				if(currVal=='cod' || hasClassAjax){				
-					var self=$('#wppizza-send-order');
 					self.prepend('<div id="wppizza-loading"></div>');
 					jQuery.post(wppizza.ajaxurl , {action :'wppizza_json',vars:{'type':'sendorder','data':self.serialize()}}, function(response) {
 						$('#wppizza-send-order #wppizza-loading').remove();
@@ -251,7 +256,6 @@ jQuery(document).ready(function($){
 					},'html').error(function(jqXHR, textStatus, errorThrown) {$('#wppizza-send-order #wppizza-loading').remove();alert("error : " + errorThrown);console.log(jqXHR.responseText);});
 					return false;
 				}else{
-					var self=$('#wppizza-send-order');
 					self.prepend('<div id="wppizza-loading" style="opacity:0.8;"></div>');
 					form.submit();					
 				}

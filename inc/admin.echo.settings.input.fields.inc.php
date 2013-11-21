@@ -223,18 +223,18 @@ $options = $this->pluginOptions;
 
 			if($field=='order_form'){
 				sort($options[$field]);
-				echo"<table>";
-					echo"<tr><td>".__('Sort', $this->pluginLocale)."</td><td>".__('Label', $this->pluginLocale)."</td><td>".__('Enabled', $this->pluginLocale)."</td><td>".__('Required', $this->pluginLocale)."</td><td>".__('Prefill [if known]', $this->pluginLocale)."</td><td>".__('Type', $this->pluginLocale)."</td></tr>";
+				echo"<table id='wppizza_".$field."'>";
+					echo"<tr><th>".__('Sort', $this->pluginLocale)."</th><th>".__('Label', $this->pluginLocale)."</th><th>".__('Enabled', $this->pluginLocale)."</th><th>".__('Required', $this->pluginLocale)."</th><th>".__('Prefill<br/>[if known]', $this->pluginLocale)."</th><th>".__('Use when<br/>Registering ?', $this->pluginLocale)."</th><th>".__('Type', $this->pluginLocale)."</th></tr>";
 				foreach($options[$field] as $k=>$v){
-					echo"<tr>";
+					if($v['key']=='cemail'){$style=' style="margin-bottom:0"';}else{$style='';}
+					echo"<tr class='".$v['key']."'>";
 					echo"<td><input name='".$this->pluginSlug."[".$field."][".$k."][sort]' size='1' type='text' value='".$v['sort']."' /></td>";
 					echo"<td><input name='".$this->pluginSlug."[".$field."][".$k."][lbl]' size='15' type='text' value='".$v['lbl']."' /></td>";
-
 					echo"<td><input name='".$this->pluginSlug."[".$field."][".$k."][enabled]' type='checkbox' ". checked($v['enabled'],true,false)." value='1' /></td>";
-
 					echo"<td><input name='".$this->pluginSlug."[".$field."][".$k."][required]' type='checkbox' ". checked($v['required'],true,false)." value='1' /></td>";
-
+					if($v['key']=='cemail'){$disabled=" disabled='disabled'";}else{$disabled='';}
 					echo"<td><input name='".$this->pluginSlug."[".$field."][".$k."][prefill]' type='checkbox' ". checked($v['prefill'],true,false)." value='1' /></td>";
+					echo"<td><input name='".$this->pluginSlug."[".$field."][".$k."][onregister]' type='checkbox' ". checked($v['onregister'],true,false)." ".$disabled." value='1' /></td>";
 
 					echo "<td>";
 						echo "<select id='".$this->pluginSlug."_".$field."_type_".$k."' class='".$this->pluginSlug."_".$field."_type' name='".$this->pluginSlug."[".$field."][".$k."][type]' />";
@@ -248,12 +248,14 @@ $options = $this->pluginOptions;
 							echo "<input name='".$this->pluginSlug."[".$field."][".$k."][value]' type='text' value='".$val."' />";
 						echo "</span>";
 						echo "<span class='".$this->pluginSlug."_".$field."_select'".$display.">";
-							echo "".__('seperate multiple with comma', $this->pluginLocale)."";
+							echo "".__('separate multiple with comma', $this->pluginLocale)."";
 						echo "</span>";
 					echo"</td>";
-					
-
-					
+					if($v['key']=='cemail'){
+						echo"<tr><td colspan='7' style='margin:0;padding:0 0 0 10px'>";
+						echo"<span class='description'>".__('Note: only this field can and should be used to send email notifications of the order to the customer (if enabled).<br/>Furthermore, you cannot select this field to show on the registration form. (Wordpress already adds this field)', $this->pluginLocale)."</span>";
+						echo"</td></tr>";
+					}
 					echo"</tr>";
 				}
 				echo"</table>";
@@ -462,7 +464,7 @@ $options = $this->pluginOptions;
 				echo"<div id='wppizza_".$field."'>";
 					echo"<div id='wppizza_".$field."_options'>";
 					asort($localizeOptions);
-					$bgStyle=array(0,5,11,12,15,23,30);
+					$bgStyle=array(0,5,11,12,15,24,31);
 					$i=0;
 					foreach($localizeOptions as $k=>$v){
 					if(in_array($i,$bgStyle)){echo'<div>';}

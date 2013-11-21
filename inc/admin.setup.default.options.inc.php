@@ -501,7 +501,10 @@
 					'descr'=>__('Order Page: text of thank you page after order has been sent', $this->pluginLocale),
 					'lbl'=>__('thank you, we have received your order', $this->pluginLocale)
 				),
-
+				'update_profile'=>array(
+					'descr'=>__('Order Page: label next to checkbox text to allow user to update profile', $this->pluginLocale),
+					'lbl'=>__('update my user data with the details above', $this->pluginLocale)
+				),
 				'order_details'=>array(
 					'descr'=>__('Order Email: label for order details', $this->pluginLocale),
 					'lbl'=>__('order details', $this->pluginLocale)

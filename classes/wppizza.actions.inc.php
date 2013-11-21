@@ -32,6 +32,12 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 			add_filter('wppizza_filter_sanitize_post_vars', array( $this, 'wppizza_filter_sanitize_post_vars'),10,1);
 			add_filter('wppizza_filter_order_summary', array( $this, 'wppizza_filter_order_summary_legacy'),10,1);
 
+			/***************
+				[selected fields to the registration process]
+			***************/
+			add_action( 'register_form', array( $this,'wppizza_user_register_form_display_fields') );
+			add_action( 'user_register', array( $this,'wppizza_user_register_form_save_fields'), 100 );
+
 
 		/************************************************************************
 			[runs only for frontend]
@@ -70,6 +76,11 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 			add_action('save_post', array( $this, 'wppizza_admin_save_metaboxes'), 10, 2 );
 			/**sort menu item column in admin by name**/
 			add_filter( 'request', array( $this, 'wppizza_items_sort') );
+			/**registration fields***/
+			add_action( 'show_user_profile', array( $this, 'wppizza_user_info') );
+			add_action( 'edit_user_profile', array( $this, 'wppizza_user_info') );
+			add_action( 'personal_options_update', array( $this, 'wppizza_user_update_meta' ));
+			add_action( 'edit_user_profile_update', array( $this, 'wppizza_user_update_meta' ));
 
 		}
 		/************************************************************************
@@ -79,6 +90,109 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 		add_action('wp_ajax_wppizza_json', array(&$this,'wppizza_json') );// non logged in users
 		add_action('wp_ajax_nopriv_wppizza_json', array(&$this,'wppizza_json') );
       }
+      
+/*********************************************************************************
+*
+*	[filter: wppizza custom fields]
+*
+*********************************************************************************/      
+	/***profile page***/
+	function wppizza_user_info($user){
+		$userMetaData=get_user_meta( $user->ID );
+		$ff=$this->pluginOptions['order_form'];
+		asort($ff);
+		print"<h3> ".__('Additional information',$this->pluginLocale)."</h3>";
+		print"<table class='form-table'>";
+			foreach( $ff as $field ) {
+	
+				/**lets exclude deisabled and "email" as wp already has this of course**/
+				if(!empty($field['enabled']) && $field['type']!='email'){
+				$selectedValue=!empty($userMetaData['wppizza_'.$field['key'].''][0]) ? esc_attr($userMetaData['wppizza_'.$field['key'].''][0]) : '';
+				
+				print"<tr><th><label for='wppizza_".$field['key']."'>".$field['lbl']."</label></th><td>";
+	
+					/**normal text input**/
+					if ( $field['type']=='text'){
+			    		print'<input type="text" name="wppizza_'.$field['key'].'" id="wppizza_'.$field['key'].'" value="'.$selectedValue.'" class="regular-text" />';
+					}
+					/**textareas**/
+					if ( $field['type']=='textarea'){
+						print'<textarea name="wppizza_'.$field['key'].'" id="wppizza_'.$field['key'].'" rows="5" cols="30">'.$selectedValue.'</textarea>';
+					}
+					/**select**/
+					if ( $field['type']=='select'){
+						print'<select name="wppizza_'.$field['key'].'" id="wppizza_'.$field['key'].'">';
+							print'<option value="">--------</option>';
+							foreach($field['value'] as $key=>$value){
+							print'<option value="'.$key.'" '.selected($key,$selectedValue,false).'>'.$value.'</option>';
+							}
+						print'</select>';
+					}
+				print"</td></tr>";
+			}}
+		print"</table>";
+	}
+	/**update profile**/
+	function wppizza_user_update_meta($user_id){
+		if ( !current_user_can( 'edit_user', $user_id ) ) { return false; }
+	    $ff=$this->pluginOptions['order_form'];
+		foreach( $ff as $field ) {
+		if(!empty($field['enabled']) && $field['key']!='cemail') {
+			$sanitizeInput=wppizza_validate_string($_POST['wppizza_'.$field['key']]);
+			update_user_meta( $user_id, 'wppizza_'.$field['key'], $sanitizeInput );	
+		}}
+		/**distinctly add email from wp email field**/
+		$sanitizeEmail=wppizza_validate_string($_POST['email']);
+		update_user_meta( $user_id, 'wppizza_cemail', $sanitizeEmail );			
+	}      
+	/***show selected fields on registration page***/
+	function wppizza_user_register_form_display_fields(){
+	
+	    $ff=$this->pluginOptions['order_form'];
+		asort($ff);
+	    foreach( $ff as $field ) {
+	    	if(!empty($field['enabled']) && !empty($field['onregister'])) {
+	    	if( isset( $_POST[ 'wppizza_'.$field['key'] ] ) ) { $field_value = stripslashes(wppizza_validate_string($_POST['wppizza_'.$field['key'] ])); } else { $field_value=''; }
+	 		echo"<p>";
+	 			echo"<label for='wppizza_".$field['key']."'>".$field['lbl']."<br />";
+	 			if ( $field['type']=='text'){
+	 				echo"<input type='text' name='wppizza_".$field['key']."' id='wppizza_".$field['key']."' class='input' value='". $field_value."' size='20' /></label>";
+	 			}
+				/**textareas**/
+				if ( $field['type']=='textarea'){
+					print'<textarea  class="input" name="wppizza_'.$field['key'].'" id="wppizza_'.$field['key'].'" rows="5" cols="30">'.$field_value.'</textarea>';
+				}	 	
+				/**select**/
+				if ( $field['type']=='select'){
+					print'<select name="wppizza_'.$field['key'].'" id="wppizza_'.$field['key'].'" class="input">';
+						print'<option value="">--------</option>';
+						foreach($field['value'] as $key=>$value){
+							print'<option value="'.$key.'" '.selected($key,$field_value,false).'>'.$value.'</option>';
+						}
+					print'</select>';
+				}						
+	 		echo"</p>";	 
+	    	}
+	    }
+	}
+	function wppizza_user_register_form_save_fields( $user_id, $password = '', $meta = array() ){		
+	    $userdata       = array();
+		$userdata['ID'] = $user_id;
+
+	    $ff=$this->pluginOptions['order_form'];
+		asort($ff);
+	    foreach( $ff as $field ) {
+	    if(!empty($field['enabled']) && !empty($field['onregister'])) {
+	    		$sanitizeInput=wppizza_validate_string($_POST['wppizza_'.$field['key']]);			
+				update_user_meta( $user_id, 'wppizza_'.$field['key'], $sanitizeInput );	
+		}}
+		/**distinctly add email from wp email field**/
+		$sanitizeEmail=wppizza_validate_string($_POST['user_email']);
+		update_user_meta( $user_id, 'wppizza_cemail', $sanitizeEmail );	
+	 
+	 $new_user_id = wp_update_user( $userdata );
+	}
+	    	
 /***********************************************************************************************
 *
 *
@@ -615,6 +729,10 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 					$child_of=$query->term_id;
 				}
 			}
+			$excludeIds='';
+			if(isset($atts['exclude'])){
+			$excludeIds=$atts['exclude'];
+			}			
 			$post_type=$this->pluginSlug;
 			$args = array(
 			  'taxonomy'     => $this->pluginSlugCategoryTaxonomy,
@@ -623,13 +741,13 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 			  'pad_counts'   => 0,      // 1 for yes, 0 for no
 			  'hierarchical' => 1,      // 1 for yes, 0 for no
 			  'title_li'     => $title,
-			  'depth '     	 => 0,
+			  'depth'     	 => 0,
+			  'exclude'      => $excludeIds,
 			  'child_of'     => $child_of,
 			  'show_option_none'   => __('Nothing here'),
 			  'hide_empty'   => 1,
 			  'echo'   => 0				// keep as variable
 			);//'walker'        => new wppizza_walker_nav_menu,
-
 
 			/*check if the file exists in the theme, otherwise serve the file from the plugin directory if possible*/
 			if ($template_file = locate_template( array ('wppizza-navigation.php'))){

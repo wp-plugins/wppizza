@@ -123,6 +123,30 @@ if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='order-pickup'){
 	}
 exit();
 }
+/***************************************************************
+*
+*
+*	[profile update]
+*
+*
+***************************************************************/
+if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='profile_update'){
+	/*****************************************
+		[get and parse all post variables to get hash
+	*****************************************/
+	$params = array();
+	parse_str($_POST['vars']['data'], $params);
+	/*****************************************
+		[get the order]
+	*****************************************/
+	global $wpdb;
+	$order = $wpdb->get_row("SELECT id,order_ini FROM ".$wpdb->prefix . $this->pluginOrderTable." WHERE hash='".$params['wppizza_hash']."' ");
+	$oDetails=maybe_unserialize($order->order_ini);
+	$oDetails['update_profile']=1;
+	/*update order to say we want to update profile when done**/
+	$wpdb->query("UPDATE ".$wpdb->prefix . $this->pluginOrderTable." SET order_ini='".maybe_serialize($oDetails)."'WHERE id='".$order->id."' ");	
+exit();
+}
 /************************************************************************************************
 *
 *
