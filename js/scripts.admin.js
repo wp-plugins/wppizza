@@ -14,8 +14,12 @@ jQuery(document).ready(function($){
 	/*******************************************
 	*	[functions]
 	********************************************/
-	wpPizzaCreateNewKey = function(objId){
-		var currentInputs=$('#'+objId+' .wppizza-getkey').get();
+	wpPizzaCreateNewKey = function(objId,btn){
+		if(typeof btn!=='undefined'){
+			btn.hide();/*disable*/
+		}
+		var self=$('#'+objId+' .wppizza-getkey');
+		var currentInputs=self.get();
 		/*make array if keys*/
 		var keyIds = [];
 			for (var i = 0; i < currentInputs.length; i++) {
@@ -24,7 +28,6 @@ jQuery(document).ready(function($){
 			var maxKey = Math.max.apply( null, keyIds );
 			/*if none yet, start at zero**/
 			if(maxKey<0){var newKey = 0;}else{var newKey = (maxKey+1);}
-
 		return newKey;
 	}
 	/******************************
@@ -110,13 +113,14 @@ jQuery(document).ready(function($){
 	*	[size option - add new]
 	*******************************/
 	$(document).on('click', '#wppizza_add_sizes', function(e){
-		e.preventDefault();
-		var newKey = wpPizzaCreateNewKey('wppizza_sizes_options');
+		e.preventDefault();var self=$(this);
+		var newKey = wpPizzaCreateNewKey('wppizza_sizes_options',self);
 			var newFields=parseInt($('#wppizza_add_sizes_fields').val());
 			if(newFields>=1){
 				jQuery.post(ajaxurl , {action :'wppizza_admin_json',vars:{'field':'sizes','id':newKey,'newFields':newFields}}, function(response) {
 					var html=response;
 					$('#wppizza_sizes_options').append(html);
+					self.show();/*reenable add button*/
 				},'html').error(function(jqXHR, textStatus, errorThrown) {alert("error : " + errorThrown);});
 			}
 	});
@@ -124,37 +128,39 @@ jQuery(document).ready(function($){
 	*	[additives - add new]
 	******************************/
 	$(document).on('click', '#wppizza_add_additives', function(e){
-		e.preventDefault();
-		var newKey = wpPizzaCreateNewKey('wppizza_additives_options');
+		e.preventDefault();var self=$(this);
+		var newKey = wpPizzaCreateNewKey('wppizza_additives_options',self);
 		jQuery.post(ajaxurl , {action :'wppizza_admin_json',vars:{'field':'additives','id':newKey}}, function(response) {
 			$('#wppizza_additives_options').append(response);
+			self.show();/*reenable add button*/
 		},'html').error(function(jqXHR, textStatus, errorThrown) {alert("error : " + errorThrown);});
 	});
 	/******************************
 	*	[category - add new]
 	******************************/
 	$(document).on('click', '#wppizza_add_meals', function(e){
-		e.preventDefault();
-		var newKey = wpPizzaCreateNewKey('wppizza_meals .wppizza_meals_category');
+		e.preventDefault();var self=$(this);
+		var newKey = wpPizzaCreateNewKey('wppizza_meals .wppizza_meals_category',self);
 		jQuery.post(ajaxurl , {action :'wppizza_admin_json',vars:{'field':'meals','id':newKey}}, function(response) {
 			var html='<span class="wppizza_option">';
 			html+=response;
 			html+='<div id="wppizza_category_items_'+newKey+'" class="wppizza_category_items"></div>';
 			html+='</span>';
 			$('#wppizza_meals_options').append(html);
+			self.show();/*reenable add button*/
 		},'html').error(function(jqXHR, textStatus, errorThrown) {alert("error : " + errorThrown);});
 	});
 	/******************************
 		[menu/meal category - add new item to category]
 	******************************/
 	$(document).on('click', '.wppizza_add_meals_item', function(e){
-		e.preventDefault();
+		e.preventDefault();var self=$(this);
 		var self=$(this);
 		var CatId=self.attr('id').split("_").pop(-1);
-		var newKey = wpPizzaCreateNewKey('wppizza_category_items_'+CatId+'');
+		var newKey = wpPizzaCreateNewKey('wppizza_category_items_'+CatId+'',self);
 		jQuery.post(ajaxurl , {action :'wppizza_admin_json',vars:{'field':'meals','item':1,'id':CatId,'newKey':newKey}}, function(response) {		
 			$('#wppizza_category_items_'+CatId+'').prepend(response);
-		
+			self.show();/*reenable add button*/
 		},'html').error(function(jqXHR, textStatus, errorThrown) {alert("error : " + errorThrown);});
 	});
 	/******************************

@@ -184,11 +184,19 @@
 		if(isset($_POST[''.$this->pluginSlug.'_sizes'])){
 			$options['sizes'] = array();//initialize array
 			if(isset($input['sizes'])){
+			
 			foreach($input['sizes'] as $a=>$b){
+				$i=0;
 				foreach($b as $c=>$d){
+					if($i==0){
+					$options['sizes'][$a][$c]['lbladmin']=wppizza_validate_string($d['lbladmin']);
+					}
 					$options['sizes'][$a][$c]['lbl']=wppizza_validate_string($d['lbl']);
 					$options['sizes'][$a][$c]['price']=wppizza_validate_float_only($d['price'],2);
+				$i++;
 				}
+			
+			
 			}}
 		}
 		/**validate additives ***/

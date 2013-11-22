@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.2, WP 3.3 
 Tested up to: 3.7.1
-Stable tag: 2.7
+Stable tag: 2.7.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -120,8 +120,16 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 == Changelog ==
 
+2.7.1  
+* added display of label/id to uniquely identify meal sizes/price tiers in admin screens as these might have the same frontend labels    
+22th November 2013  
+
+
 2.7  
 * allow prefill of orderpage of user is logged in and adding of formfields at registration    
+20th November 2013  
+
+2.6.7.3  
 * fixed Poland [PLN] Currency Symbol    
 * exclude id's from category navigation (shortcode only at the moment)
 20th November 2013  

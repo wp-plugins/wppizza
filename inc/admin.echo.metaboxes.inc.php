@@ -7,14 +7,16 @@
 	$meta_values = $meta_values[0];
 
 	$str='';
-	
+
 	/****  pricetiers and prices ***/
 	$str.="<div class='".$this->pluginSlug."_option'>";
 	$str.="<div class='wppizza-meta-label'>".__('price tier and prices', $this->pluginLocale).":</div> ";
 	$str.="<select name='".$this->pluginSlug."[sizes]' class='wppizza_pricetier_select'>";
 	foreach($optionsSizes as $l=>$m){
 		if($l==$meta_values['sizes']){$sel=" selected='selected'";}else{$sel='';}
-		$str.="<option value='".$l."'".$sel.">".implode(", ",$m['lbl'])."</option>";
+		if($options['sizes'][$l][0]['lbladmin']!=''){$ident='"'.$options['sizes'][$l][0]['lbladmin'].'"';}else{$ident='ID:'.$l.'';}
+		
+		$str.="<option value='".$l."'".$sel.">".implode(", ",$m['lbl'])." [".$ident."]</option>";
 	}
 	$str.="</select>";
 	$str.="<span class='wppizza_pricetiers'>";
