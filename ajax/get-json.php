@@ -7,7 +7,7 @@ if(!defined('DOING_AJAX') || !DOING_AJAX){
 }
 /**testing variables ****************************/
 //unset($_SESSION[$this->pluginSession]);
-//sleep(2);//when testing jquery fadeins etc
+//sleep(5);//when testing jquery fadeins etc
 /******************************************/
 $options=$this->pluginOptions;
 
@@ -18,7 +18,7 @@ $options=$this->pluginOptions;
 *
 *
 ***************************************************************/
-if(isset($_POST['vars']['type']) && (($_POST['vars']['type']=='add' || $_POST['vars']['type']=='remove' || $_POST['vars']['type']=='increment') && $_POST['vars']['id']!='')||  $_POST['vars']['type']=='refresh'){
+if(isset($_POST['vars']['type']) && (($_POST['vars']['type']=='add' || $_POST['vars']['type']=='remove' || $_POST['vars']['type']=='removeall' || $_POST['vars']['type']=='increment') && $_POST['vars']['id']!='')||  $_POST['vars']['type']=='refresh'){
 
 	/**set count as int*********/
 	$itemCount=1;
@@ -77,13 +77,19 @@ if(isset($_POST['vars']['type']) && (($_POST['vars']['type']=='add' || $_POST['v
 			unset($_SESSION[$this->pluginSession]['items'][$groupId]);
 		}
 	}
+	/**empty  cart -> just unset**/
+	if($_POST['vars']['type']=='removeall'){
+		unset($_SESSION[$this->pluginSession]['items']);
+		$_SESSION[$this->pluginSession]['items']=array();
+	}
+
 
 	/*total price*/
 	foreach($_SESSION[$this->pluginSession]['items'] as $k=>$group){
 		foreach($group as $v){
 			$itemprice[]=$v['price'];
 			/**exclude items that are set to be excluded from calculating whether or not free delivery applies**/
-			if(!in_array($group[0]['id'],$options['order']['delivery_calculation_exclude_item'])){
+			if(!isset($options['order']['delivery_calculation_exclude_item']) || !in_array($group[0]['id'],$options['order']['delivery_calculation_exclude_item'])){
 				$itempricefordelivery[]=$v['price'];
 			}
 		}
@@ -101,8 +107,8 @@ if(isset($_POST['vars']['type']) && (($_POST['vars']['type']=='add' || $_POST['v
 
 	$_SESSION[$this->pluginSession]['total_price_items']=$totalitemprice;
 	$_SESSION[$this->pluginSession]['total_price_calc_delivery']=$totalitempricefordelivery;
-	
-	
+
+
 	print"".json_encode(wppizza_order_summary($_SESSION[$this->pluginSession],$options,true))."";
 	exit();
 }
@@ -144,7 +150,7 @@ if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='profile_update'){
 	$oDetails=maybe_unserialize($order->order_ini);
 	$oDetails['update_profile']=1;
 	/*update order to say we want to update profile when done**/
-	$wpdb->query("UPDATE ".$wpdb->prefix . $this->pluginOrderTable." SET order_ini='".maybe_serialize($oDetails)."'WHERE id='".$order->id."' ");	
+	$wpdb->query("UPDATE ".$wpdb->prefix . $this->pluginOrderTable." SET order_ini='".maybe_serialize($oDetails)."'WHERE id='".$order->id."' ");
 exit();
 }
 /************************************************************************************************

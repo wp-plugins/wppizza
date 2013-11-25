@@ -327,6 +327,7 @@
 				'show_currency_with_price' => 0,
 				'currency_symbol_left' => false,
 				'cart_increase' => false,
+				'empty_cart_button' => false,
 				'prettyPhoto' => false,
 				'prettyPhotoStyle' => 'pp_default'
 			),
@@ -445,6 +446,10 @@
 					'descr'=>__('Shoppingcart: text to display when shop closed ', $this->pluginLocale),
 					'lbl'=>__('currently closed', $this->pluginLocale)
 				),
+				'empty_cart'=>array(
+					'descr'=>__('Shoppingcart: text to display for button to empty cart ', $this->pluginLocale),
+					'lbl'=>__('empty cart', $this->pluginLocale)
+				),					
 				'cart_is_empty'=>array(
 					'descr'=>__('Shoppingcart: text to display when cart is empty', $this->pluginLocale),
 					'lbl'=>__('your cart is empty', $this->pluginLocale)

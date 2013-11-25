@@ -12,7 +12,7 @@
 *	[$cart['order_value'] = contains subtotal, deliver charges, discounts and grand total]
 *	[$txt array= localized variables from settings->localization]
 *	[$formelements = form elements from settings->order form]
-*	
+*
 *********************************************************************************************************/
 /**if the user is logged in , pre-enter the info we have (if prefill is selected in wppizza->order form settings CHANGED IN VERSION 2.6.5.3***/
 if(is_user_logged_in() ) {
@@ -61,7 +61,7 @@ if(is_user_logged_in() ) {
 			<?php if($cart['order_value']['item_tax']['val']>0 && $cart['tax_applied']=='items_only'){/*item/sales tax applies (items only)  NEW IN VERSION 2.0/2.5 */ ?>
 				<li class="wppizza-order-item-tax"><?php echo $txt['item_tax_total']['lbl'] ?><span><?php echo $cart['currency'].' '.$cart['order_value']['item_tax']['val']; ?></span></li>
 			<?php } ?>
-			
+
 			<?php if(!isset($cart['self_pickup_enabled']) ||  $cart['selfPickup']==0){ /*no self pickup enabled or chosen :conditional  NEW IN VERSION  v1.4.1*/ ?>
 				<?php if($cart['order_value']['delivery_charges']['val']!='' ){/*delivery charges if any*/?>
 					<li class="wppizza-order-pickup"><?php echo $txt['delivery_charges']['lbl'] ?><span><?php echo $cart['currency'].' '.$cart['order_value']['delivery_charges']['val']; ?></span></li>
@@ -69,11 +69,11 @@ if(is_user_logged_in() ) {
 					<li class="wppizza-order-pickup"><?php echo $txt['delivery_charges']['lbl'] ?><span><?php echo $txt['free_delivery']['lbl'] ?></span></li>
 				<?php } ?>
 			<?php } ?>
-			
+
 			<?php if($cart['order_value']['item_tax']['val']>0 && $cart['tax_applied']=='items_and_shipping'){/*item/sales tax applied to items AND shipping  NEW IN VERSION 2.0 / 2.5*/ ?>
 				<li class="wppizza-order-item-tax"><?php echo $txt['item_tax_total']['lbl'] ?><span><?php echo $cart['currency'].' '.$cart['order_value']['item_tax']['val']; ?></span></li>
-			<?php } ?>			
-			
+			<?php } ?>
+
 				<li id="wppizza-cart-total"><?php echo $txt['order_total']['lbl'] ?><span><?php echo $cart['currency'].' '.$cart['order_value']['total']['val']; ?></span></li>
 
 			<?php if(isset($cart['self_pickup_enabled']) &&  $cart['selfPickup']==1){ /*self pickup conditional-> no delivery charges : NEW IN VERSION 1.4.1**/ ?>
@@ -99,7 +99,7 @@ if(is_user_logged_in() ) {
 		<?php
 			/*NEW IN VERSION 2.4 */
 			do_action('wppizza_order_before_field_'.$elmKey.'');
-		?>			
+		?>
 			<?php if($elm['enabled']){?>
 				<label for="<?php echo $elm['key'] ?>"<?php echo !empty($elm['required'])?' class="wppizza-order-label-required"':'' ?>><?php echo $elm['lbl'] ?></label>
 				<?php if($elm['type']=='text'){ ?>
@@ -130,7 +130,7 @@ if(is_user_logged_in() ) {
 		<?php
 			/*NEW IN VERSION 2.0 => FOR FUTURE USE*/
 			do_action('wppizza_gateway_choice_before');
-		?>			
+		?>
 		<?php
 			/*output the buy now/send order button depending on gateway*/
 			/*NEW IN VERSION 2.0 IMPORTANT*/
@@ -141,7 +141,7 @@ if(is_user_logged_in() ) {
 		<?php
 			/*NEW IN VERSION 2.0 => FOR FUTURE USE*/
 			do_action('wppizza_gateway_choice_after');
-		?>	
+		?>
 	<?php } ?>
 </form>
 <?php

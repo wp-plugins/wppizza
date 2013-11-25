@@ -7,6 +7,7 @@ extract(shortcode_atts(array('type' => ''), $atts));
 		category='pizza' 		(optional: '[category-slug]')
 		noheader='1' 			(optional: 'anything')
 		showadditives='1' 		(optional[bool]: 0 or 1)
+		exclude='6,5,8' 		(optional [comma separated menu item id's]): exclude some id's
 	example: 		[wppizza category='pizza' noheader='1']
 **********************************************/
 if($type==''){
@@ -21,7 +22,7 @@ return $markup;
 		type='navigation' 		(required [str])
 	 	title='some title' 		(optional[str]: will render as h2 as first element in cart elemnt if set)
 	 	parent='slug-name' 		(optionsl [str]): only show child categories of this slug
-	 	exclude='6,5,8' 		(optionsl [comma separated category id's]): exclude some id's
+	 	exclude='6,5,8' 		(optional [comma separated category id's]): exclude some id's
 	example: 		[wppizza type='navigation' title='some title' parent='slug-name' exclude='6,5,8']
 **********************************************/
 if($type=='navigation'){

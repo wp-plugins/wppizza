@@ -67,6 +67,7 @@
 		'post_type' => ''.WPPIZZA_POST_TYPE.'',
 		'posts_per_page' => $options['layout']['items_per_loop'],
 		'paged' => $paged ,
+		'post__not_in' => $exclude , /*ADDED in v.2.7.3*/
 		'tax_query' => array(
 			array(
 				'taxonomy' => ''.WPPIZZA_TAXONOMY.'',
@@ -80,9 +81,9 @@
 	);
 	/**new in version 2.5. currenly used to display single posts***/
 	$args = apply_filters('wppizza_filter_loop', $args);
+
 	/**execute query**/	
 	$the_query = new WP_Query( $args );
-	
 ?>
 <?php
 /********************************************
@@ -242,19 +243,19 @@
 		<?php the_content();?>
 		</div>
 <?php
+/*********************************************
+		[article end]
+**********************************************/
+?>
+	</article>
+<?php
 /*************************************************
 	[comments box - if single item view and enabled of course]
 **************************************************/
 if(is_single()){	
 	comments_template( '', true ); 
 }
-?>
-<?php
-/*********************************************
-		[article end]
-**********************************************/
-?>
-	</article>
+?>	
 <?php endwhile;	?>
 <?php
 /********************************************
@@ -268,7 +269,7 @@ if(isset($additivesOnPage) || (isset($showadditives) && $showadditives==1)){
 ?>
 	<div class='<?php echo $post_type ?>-contains-additives'>
 	<?php foreach($options['additives'] as $k=>$v){?>
-		<span><sup>(<?php echo $k ?>)</sup><?php echo $v ?></span>
+		<span id="wppizza-additive-<?php echo $k ?>" class="wppizza-additive"><sup>(<?php echo $k ?>)</sup><?php echo $v ?></span>
 	<?php } ?>
 	</div>
 <?php }} ?>

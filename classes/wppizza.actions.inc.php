@@ -45,14 +45,15 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 		if(!is_admin()){
 			/***enqueue frontend scripts and styles***/
 			add_action('wp_enqueue_scripts', array( $this, 'wppizza_register_scripts_and_styles'),$this->pluginOptions['layout']['css_priority']);
-
+			
 			/***************
 				[filters]
 			***************/
 			/*include template**/
 			add_filter('template_include', array( $this,'wppizza_include_template'), 1 );
 			/***use loop for single post***/
-			add_filter('wppizza_filter_loop', array( $this, 'wppizza_filter_loop'));
+			add_filter('wppizza_filter_loop', array( $this, 'wppizza_filter_loop'),10,2);
+			
 			/***exclude selected order page from navigation */
 			add_filter('get_pages', array(&$this,'wppizza_exclude_order_page_from_navigation'));
 		}
@@ -81,7 +82,11 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 			add_action( 'edit_user_profile', array( $this, 'wppizza_user_info') );
 			add_action( 'personal_options_update', array( $this, 'wppizza_user_update_meta' ));
 			add_action( 'edit_user_profile_update', array( $this, 'wppizza_user_update_meta' ));
-
+			
+			/**allow custom order status fields**/
+			add_action( 'admin_init', array( $this, 'wppizza_set_order_status' ));
+			//add_filter( 'wppizza_filter_order_status', array( $this, 'wppizza_filter_order_status') );
+			//add_action( 'wppizza_set_order_status', array( $this, 'wppizza_set_order_status' ));
 		}
 		/************************************************************************
 			[ajax]
@@ -599,17 +604,18 @@ function wppizza_get_registered_gateways() {
 			$iDent=substr($class,16);
 			$c=new $class;
 			$c->gateway_settings();
-				$paymentGateways[] =array(
-					'sort'=>!empty($gatewayOrder[$iDent]) ? $gatewayOrder[$iDent] : '0',
-					'enabled'=>!empty($gatewayDetails[$iDent]) ? $gatewayDetails[$iDent] : false,
-					'ident'=>$iDent,
-					'gatewayName'=>$c->gatewayName,
-					'gatewayDescription'=>$c->gatewayDescription,
-					'gatewayAdditionalInfo'=>$c->gatewayAdditionalInfo,
-					'gatewayOptionsName'=>$c->gatewayOptionsName,
-					'gatewayOptions'=>$c->gatewayOptions,
-					'gatewaySettings'=>$c->gateway_settings()
-				);
+			$paymentGateways[] =array(
+				'sort'=>!empty($gatewayOrder[$iDent]) ? $gatewayOrder[$iDent] : '0',
+				'enabled'=>!empty($gatewayDetails[$iDent]) ? $gatewayDetails[$iDent] : false,
+				'ident'=>$iDent,
+				'gatewayName'=>$c->gatewayName,
+				'gatewayDescription'=>$c->gatewayDescription,
+				'gatewayAdditionalInfo'=>$c->gatewayAdditionalInfo,
+				'gatewayOptionsName'=>$c->gatewayOptionsName,
+				'gatewayOptions'=>$c->gatewayOptions,
+				'gatewaySettings'=>$c->gateway_settings(),
+				'gatewaySettingsNonEditable'=>method_exists($c,'gateway_settings_non_editable') ? $c->gateway_settings_non_editable() : array()
+			);
 		}
 	}
 	return $paymentGateways;
@@ -699,6 +705,12 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 			if($query){
 			$query_var=''.$query->slug.'';
 			}
+
+			$exclude=array();
+			if(isset($atts['exclude'])){
+				$exclude=explode(",",$atts['exclude']);
+			}
+
 			/*set template style if !default*/
 			$loStyle='';
 			if($options['layout']['style']!='default'){
@@ -1020,9 +1032,9 @@ public function wppizza_require_common_input_validation_functions(){
      * Use loop template when displying SINGLE ITEMS in custom post type category
      * [see header of templates/wppizza-single.php for details]
      ******************************************************/
-	function wppizza_filter_loop($args){
-		global $post;
+	function wppizza_filter_loop($args,$args2=null){
 		if(is_single()){
+			$args['p']=$post->ID;
 			$catTerms = get_the_terms($post->ID, WPPIZZA_TAXONOMY);
 			if ( $catTerms && ! is_wp_error( $catTerms ) ){
 				$firstCat=reset($catTerms);
@@ -1033,6 +1045,7 @@ public function wppizza_require_common_input_validation_functions(){
 		}
 		return $args;
 	}
+
 /***********************************************************************************************
 *
 *
@@ -1439,6 +1452,42 @@ public function wppizza_require_common_input_validation_functions(){
 		}
 		return $orderItems;
 	}
+
+
+/*******************************************************
+*
+*	[filter: allow order statuses to be changed]
+*	[WILL ALTER THE DB WPPIZZA_ORDERS TABLE - USE WITH CARE]
+*	[BACKUP YOUR DATA]
+******************************************************/
+function wppizza_set_order_status(){
+	$setStatus=wppizza_custom_order_status();
+	/**compare and see if we have to do anything**/
+	if($this->pluginOptions['plugin_data']['db_order_status_options']!=$setStatus){
+		global $wpdb;
+		$usedOrderStatus = $wpdb->get_col("SELECT DISTINCT(order_status) FROM ".$wpdb->prefix . $this->pluginOrderTable." ");
+		$newStatus=array();
+		foreach($setStatus as $k=>$v){
+			$newStatus[]=wppizza_validate_alpha_only(str_replace(" ","_",strtoupper($v)));
+		}
+		/**implicitly add all options already in use**/
+		foreach($usedOrderStatus as $k=>$v){
+			$newStatus[]=wppizza_validate_alpha_only(str_replace(" ","_",strtoupper($v)));	
+		}
+		/**implicitly add NEW option (as its default)*****/
+		$newStatus[]='NEW';
+		
+
+		/**update options**/
+		$update_options=$this->pluginOptions;
+		$update_options['plugin_data']['db_order_status_options']=$setStatus;
+		update_option($this->pluginSlug, $update_options );
+		/**ALTER TABLE**/
+		$setNewOrderStatus=array_unique($newStatus);
+		require_once(WPPIZZA_PATH .'inc/admin.create.order.table.inc.php');
+	}
+}
+
 
 /*******************************************************
 *

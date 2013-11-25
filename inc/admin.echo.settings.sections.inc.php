@@ -35,11 +35,13 @@
 		add_settings_field('hide_prices', '<b>'.__('Hide prices altogether:', $this->pluginLocale).'</b><br/><span style="color:red">'.__('this will disable the adding of any item to the shoppingcart.', $this->pluginLocale).'</span><br/>'.__('Really only useful if you want to display your menu without offering online orders', $this->pluginLocale).'', array( $this, 'wppizza_admin_settings_input'), 'layout', 'layout', 'hide_prices' );
 		add_settings_field('hide_decimals', '<b>'.__('Don\'t show decimals:', $this->pluginLocale).'</b><br/>'.__('[prices will be rounded if necessary]', $this->pluginLocale).'', array( $this, 'wppizza_admin_settings_input'), 'layout', 'layout', 'hide_decimals' );
 		add_settings_field('cart_increase', '<b>'.__('Enable increase/decrease of items in cart via input field/textbox', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'layout', 'layout', 'cart_increase' );
+		add_settings_field('empty_cart_button', '<b>'.__('Enable "empty cart" button', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'layout', 'layout', 'empty_cart_button' );
 		add_settings_field('disable_online_order', '<b>'.__('Completely disable online orders:', $this->pluginLocale).'</b><br/><span style="color:red">'.__('this will still display prices (unless set to be hidden above), but will disable shoppingcart and orderpage', $this->pluginLocale).'</span><br/>'.__('Useful if you want to display your menu and prices but without offering online orders.', $this->pluginLocale).'', array( $this, 'wppizza_admin_settings_input'), 'layout', 'layout', 'disable_online_order' );
 
 		
 		
 		
+
 
 		/**opening times**/
 		add_settings_section('opening_times', __('Opening Times', $this->pluginLocale),  array( $this, 'wppizza_admin_page_text_header'), 'opening_times');

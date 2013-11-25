@@ -67,6 +67,7 @@
 		'post_type' => ''.WPPIZZA_POST_TYPE.'',
 		'posts_per_page' => $options['layout']['items_per_loop'],
 		'paged' => $paged ,
+		'post__not_in' => $exclude ,/*ADDED in v.2.7.3*/
 		'tax_query' => array(
 			array(
 				'taxonomy' => ''.WPPIZZA_TAXONOMY.'',
@@ -251,20 +252,19 @@
 
 	</div>
 <?php
+/*********************************************
+		[article end]
+**********************************************/
+?>
+	</article>
+<?php
 /*************************************************
 	[comments box - if single item view and enabled of course]
 **************************************************/
 if(is_single()){	
 	comments_template( '', true ); 
 }
-?>
-<?php
-/*********************************************
-		[article end]
-**********************************************/
-?>
-	</article>
-	
+?>	
 <?php endwhile;	?>
 <?php
 /********************************************

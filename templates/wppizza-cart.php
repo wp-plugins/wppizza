@@ -56,21 +56,32 @@ if(isset($request) && $request=='ajax'){
 return;
 }
 ?>
+<?php
+	/*ADDED IN VERSION 2.7.3*/
+	do_action('wppizza_cart_start');
+?>
 <?php if(isset($openingTimes)){ ?>
 	<div class="wppizza-opening-hours"<?php if(isset($cartStyle['width'])){echo $cartStyle['width'];}?>><?php echo $openingTimes ?></div>
 <?php } ?>
+<?php
+	/*ADDED IN VERSION 2.7.3*/
+	do_action('wppizza_cart_before_cart');
+?>
 <div class="wppizza-cart <?php echo $stickycart; ?>"<?php if(isset($cartStyle['cart'])){echo $cartStyle['cart'];}?>>
 	<?php if($cart['shopopen']==1){ /*make sure that we are open*/ ?>
 	<input type='hidden' class='wppizza-open' name='wppizza-open' />
 	<?php } ?>
-
 <?php
-/*testing things*/
-//print_r($cart);
+	/*ADDED IN VERSION 2.7.3*/
+	do_action('wppizza_cart_before_order');
 ?>
 	<div class="wppizza-order">
 	<?php echo $cartContents ?>
 	</div>
+<?php
+	/*ADDED IN VERSION 2.7.3*/
+	do_action('wppizza_cart_before_info');
+?>
 	<div class="wppizza-cart-info">
 			<div class="wppizza-cart-nocheckout"><?php echo $cart['nocheckout'] ?></div>
 			<span class="wppizza-cart-total-items">
@@ -161,19 +172,34 @@ return;
 				<?php echo ($cart['order_self_pickup_cart']) ?>
 			</span>
 			<?php } ?>
-
-
+<?php
+	/*ADDED IN VERSION 2.7.3*/
+	do_action('wppizza_cart_before_cartbutton');
+?>	
 		<div class="wppizza-cart-button"><?php echo $cart['button'] ?></div>
-
+<?php
+	/*ADDED IN VERSION 2.7.3*/
+	do_action('wppizza_cart_after_cartbutton');
+?>	
 	</div>
+<?php
+	/*ADDED IN VERSION 2.7.3*/
+	do_action('wppizza_cart_after_info');
+?>	
 </div>
+<?php
+	/*ADDED IN VERSION 2.7.3*/
+	do_action('wppizza_cart_after_cart');
+?>
 <?php if(isset($cart['self_pickup_enabled']) && isset($cart['self_pickup_cart'])){ /*ALLOW SELF PICKUP AND DISPLAY IN CART: ADDED/CHANGED IN V1.4.1**/ ?>
 	<div class="wppizza-order-pickup-choice">
 	<label><input type='checkbox' id='<?php echo $cart['selfPickupId'] ?>' name='wppizza-order-pickup' value='1' <?php checked($cart['selfPickup'],1,true) ?> /><?php echo $cart['order_self_pickup'] ?></label>
 	</div>
 <?php } ?>
-
-
+<?php
+	/*ADDED IN VERSION 2.7.3*/
+	do_action('wppizza_cart_before_orderinfo');
+?>
 <?php if(isset($orderinfo)){ ?>
 	<ul id="wppizza-orders-info" <?php if(isset($cartStyle['width'])){echo $cartStyle['width'];}?>>
 		<?php if(isset($cart['pricing_discounts'])){foreach($cart['pricing_discounts'] as $discounts){?>
@@ -187,3 +213,7 @@ return;
 		<?php }?>
 	</ul>
 <?php } ?>
+<?php
+	/*ADDED IN VERSION 2.7.3*/
+	do_action('wppizza_cart_end');
+?>

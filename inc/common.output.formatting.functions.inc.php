@@ -31,8 +31,16 @@
 		return $str;
 	}
 
-	function wppizza_custom_order_status(){
+	/**default order status*/
+	function wppizza_order_status_default(){
 		$orderStatus=array('NEW','ACKNOWLEDGED','ON_HOLD','PROCESSED','DELIVERED','REJECTED','OTHER');
+		return $orderStatus;
+	}
+	/**allow filtering of default**/
+	function wppizza_custom_order_status(){
+		$orderStatus=wppizza_order_status_default();
+		$orderStatus= apply_filters('wppizza_filter_order_status', $orderStatus);
+	
 		return $orderStatus;
 	}
 
@@ -487,7 +495,6 @@ function wppizza_order_summary($session,$options,$ajax=null){
 	if(!isset($session['total_price_calc_delivery'])){
 		$session['total_price_calc_delivery']=0;
 	}
-	
 	/****************************************************
 		[get currency]
 	****************************************************/
@@ -505,7 +512,7 @@ function wppizza_order_summary($session,$options,$ajax=null){
 	$groupedItems=array();//ini array
 	$summary['items']=array();//ini array
 	/**lets group items by id and sizes***/
-	foreach($session['items'] as $groupid=>$groupitems){
+	foreach($session['items'] as $groupid=>$groupitems){ 
 		foreach($groupitems as $v){
 			$cartItemsCount++;
 			/**really only for legacy reasons, future versions will only have extend key**/
@@ -787,6 +794,14 @@ function wppizza_order_summary($session,$options,$ajax=null){
 	//		$summary['nocheckout']=''.$options['localization']['minimum_order']['lbl'].' '.wppizza_output_format_price($options['order']['delivery']['minimum_total']['min_total'],$optionsDecimals).' '.$options['order']['currency_symbol'].'';
 	//	}
 
+	
+		/****************************************************
+			[empty cart button, show/hide depending if enabled or no of items]
+		*****************************************************/
+		if(!empty($options['layout']['empty_cart_button']) && count($summary['items'])>0 ){
+			$summary['button'].='<input class="wppizza-empty-cart-button btn btn-primary" type="button" value="'.$options['localization']['empty_cart']['lbl'].'" />';
+		}
+	
 	}
 	/**enable increase/decrese in cart**/
 	if($options['layout']['cart_increase']){
@@ -884,13 +899,28 @@ function wppizza_email_html_entities($str){
 /****************************************************************************
 	[output formfields depending on type]
 ****************************************************************************/
-function wppizza_echo_formfield($type='text',$id='',$name='',$value='',$placeholder='',$options=''){
-	//$ff='';
+function wppizza_echo_formfield($type='text',$id='',$name='',$value='',$placeholder='',$options='',$selected=''){
+
 	if($type=='text' || $type=='email'){
 		echo'<input type="'.$type.'" id="'.$id.'" name="'.$name.'" value="'.$value.'"  size="40" placeholder="'.$placeholder.'" />';
 	}
-	if($type=='checkbox' || $type=='radio'){
+	if($type=='checkbox' || $type=='radio'){/**lets keep this for legacy reasons*/
 		echo'<input type="'.$type.'" id="'.$id.'" name="'.$name.'" value="1" '.$value.'/>';
+	}
+
+	if($type=='check'){
+		echo'<input type="checkbox" id="'.$id.'" name="'.$name.'" value="'.$value.'" '.$selected.'/>';
+	}
+	if($type=='rdo'){
+		if(is_array($options)){
+			$i=0;
+			foreach($options as $key=>$val){
+				echo'<input type="radio" id="'.$key.'_'.$i.'" name="'.$key.'" value="'.$val.'" '.checked(is_array($selected) && in_array($val,$selected),true,false).'/>';		
+			$i++;
+			}
+		}else{
+			echo'<input type="rdo" id="'.$id.'" name="'.$name.'" value="'.$value.'" '.$selected.'/>';
+		}
 	}
 
 	if($type=='checkboxmulti'){

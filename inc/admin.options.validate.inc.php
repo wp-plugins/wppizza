@@ -7,7 +7,7 @@
 		$options['plugin_data']['version'] = $this->pluginVersion;
 		$options['plugin_data']['nag_notice'] = isset($input['plugin_data']['nag_notice']) ? $input['plugin_data']['nag_notice'] : $options['plugin_data']['nag_notice'];
 		$options['plugin_data']['empty_category_and_items'] = false;/*we dont really want to save these settings, just execute when true*/
-
+		$options['plugin_data']['db_order_status_options'] = !empty($input['plugin_data']['db_order_status_options']) ? $input['plugin_data']['db_order_status_options'] : wppizza_order_status_default();
 
 		if(isset($input['plugin_data']['empty_category_and_items']) && $input['plugin_data']['empty_category_and_items']==1){
 			$this->wppizza_empty_taxonomy(!empty($input['plugin_data']['delete_attachments']) ? true : false, !empty($input['plugin_data']['truncate_orders']) ? true : false);
@@ -71,6 +71,7 @@
 			$options['layout']['show_currency_with_price'] = wppizza_validate_int_only($input['layout']['show_currency_with_price']);
 			$options['layout']['cart_increase'] = !empty($input['layout']['cart_increase']) ? true : false;
 			$options['layout']['prettyPhoto'] = !empty($input['layout']['prettyPhoto']) ? true : false;
+			$options['layout']['empty_cart_button'] = !empty($input['layout']['empty_cart_button']) ? true : false;
 			$options['layout']['prettyPhotoStyle']=wppizza_validate_string($input['layout']['prettyPhotoStyle']);
 
 			$options['opening_times_format']['hour']=wppizza_validate_string($input['opening_times_format']['hour']);
@@ -261,7 +262,6 @@
 			$gateways=$this->wppizza_get_registered_gateways();
 
 			foreach($gateways as $k=>$v){
-			//if(is_array($v['gatewaySettings']) && count($v['gatewaySettings'])>0)
 				$updateGatewayOptions=array();
 				foreach($v['gatewaySettings'] as $l=>$m){
 					/*validate value according to callback*/
@@ -281,11 +281,20 @@
 					}
 					$updateGatewayOptions[$m['key']]=$val;
 				}
-
+				
+				/****add label and info*****/
 					$lbl=wppizza_validate_string($input['gateways'][$v['gatewayOptionsName']]['gateway_label']);
 				$updateGatewayOptions['gateway_label']=!empty($lbl) ? $lbl : $v['gatewayName'];
 				$updateGatewayOptions['gateway_info']=wppizza_validate_string($input['gateways'][$v['gatewayOptionsName']]['gateway_info']);
-
+				
+				/****add any non-user-editable gateway specific options (version numbers for example)*****/
+				if(isset($v['gatewaySettingsNonEditable']) && is_array($v['gatewaySettingsNonEditable'])){
+					foreach($v['gatewaySettingsNonEditable'] as $neKey=>$neVal){
+						$updateGatewayOptions[$neKey]=$neVal;
+					}
+				}
+				
+					
 				update_option($v['gatewayOptionsName'],$updateGatewayOptions);
 			}
 		}

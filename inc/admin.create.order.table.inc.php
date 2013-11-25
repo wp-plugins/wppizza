@@ -22,8 +22,11 @@ if($wpdb->get_var("SHOW TABLES LIKE '$table_name'") == $table_name) {
 	}
 }
 /**create and alter table via dbDelta**/
-$dbOrderStatus="'".implode("','",wppizza_custom_order_status())."'";
-
+if(isset($setNewOrderStatus) && is_array($setNewOrderStatus)){
+	$dbOrderStatus="'".implode("','",$setNewOrderStatus)."'";
+}else{
+	$dbOrderStatus="'".implode("','",wppizza_custom_order_status())."'";
+}
 
 $sql="CREATE TABLE ".$wpdb->prefix ."wppizza_orders (
 	id INT(10) NOT NULL AUTO_INCREMENT,

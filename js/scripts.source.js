@@ -78,18 +78,21 @@ jQuery(document).ready(function($){
 		}
 	});
 	
-	$(document).on(''+wppizzaClickEvent+'', '.wppizza-add-to-cart,.wppizza-remove-from-cart,.wppizza-cart-refresh,.wppizza-cart-increment', function(e){
+	$(document).on(''+wppizzaClickEvent+'', '.wppizza-add-to-cart,.wppizza-remove-from-cart,.wppizza-cart-refresh,.wppizza-cart-increment,.wppizza-empty-cart-button', function(e){
 		if ($(".wppizza-open").length > 0){//first check if shopping cart exists on page and that we are open
 			e.preventDefault();
 			e.stopPropagation();
 
 		var self=$(this);
-		var cartButton=$('.wppizza-cart-button input,.wppizza-cart-button>a');
-		cartButton.attr("disabled", "true");/*disable place order button*/
+		var selfId=self.attr('id');
+		var cartButton=$('.wppizza-cart-button input,.wppizza-cart-button>a,.wppizza-empty-cart-button');
+		cartButton.attr("disabled", "true");/*disable place order button to stop trying to order whilst stuff is being added to the cart*/
+
 		var itemCount=1;		
 		
 		if(self.hasClass('wppizza-add-to-cart')){type='add';}
 		if(self.hasClass('wppizza-remove-from-cart')){type='remove';}
+		if(self.hasClass('wppizza-empty-cart-button')){type='removeall';selfId=0;}
 		if(self.hasClass('wppizza-cart-refresh')){type='refresh';}
 		if(self.hasClass('wppizza-cart-increment')){
 			var itemCount=self.closest('li').find('.wppizza-cart-incr').val();
@@ -99,15 +102,17 @@ jQuery(document).ready(function($){
 				type='increment';  
 			}
 		}
-		
-			self.fadeOut(100).fadeIn(400);
+			if(type!='removeall'){
+				self.fadeOut(100).fadeIn(400);
+			}
 			$('.wppizza-order').prepend('<div id="wppizza-loading"></div>');
-			jQuery.post(wppizza.ajaxurl , {action :'wppizza_json',vars:{'type':type,'id':self.attr('id'),'itemCount':itemCount}}, function(response) {
+			jQuery.post(wppizza.ajaxurl , {action :'wppizza_json',vars:{'type':type,'id':selfId,'itemCount':itemCount}}, function(response) {
 
 				/*show items in cart*/
 				$('.wppizza-order').html(response.itemsajax);
 				/*button*/
 				$('.wppizza-cart-button').html(response.button);
+				
 				/*minimum order not reached*/
 				$('.wppizza-cart-nocheckout').html(response.nocheckout);
 				/*order summary*/
@@ -151,7 +156,7 @@ jQuery(document).ready(function($){
 				$('.wppizza-cart-total-items-label').html('');
 				$('.wppizza-cart-total-items-value').html('');
 				}
-				
+
 				cartButton.removeAttr("disabled");/*re-enable place order button*/
 				
 				wppizzaCartRefreshed(wppizza.funcCartRefr);
@@ -201,10 +206,12 @@ jQuery(document).ready(function($){
 			alert(wppizza.msg.choosesize);
 	}});
 	/*only one size, trigger click*/
-	$(document).on(''+wppizzaClickEvent+'', '.wppizza-trigger-click', function(e){
+	$(document).on(''+wppizzaClickEvent+'', '.wppizza-trigger-click', function(e){		
 		if ($(".wppizza-open").length > 0 &&  $(".wppizza-cart").length > 0){
-			/*just loose wppizza-article- from id*/
-			var ArticleId=this.id.substr(16);
+			/*just loose wppizza-article- from id*/			
+			 var ArticleId=this.id.split("-");
+			ArticleId=ArticleId.splice(2);
+			ArticleId = ArticleId.join("-");
 			/**make target id*/
 			target=$('#wppizza-'+ArticleId+'');
 			/*trigger*/
@@ -271,12 +278,15 @@ jQuery(document).ready(function($){
 	});
 
 	/******************************
-	* Let's make IE7 IE8 happy
+	* Let's make IE7 IE8 happy and stop submitting while other stuff is going on such as adding items etc
 	*******************************/
 	$(document).on(''+wppizzaClickEvent+'', '.wppizza-cart-button>a', function(e){
 		e.preventDefault(); e.stopPropagation();
-        var url=jQuery(this).attr("href");
-        window.location.href = url;
+		var attr = $(this).attr('disabled');
+		if (typeof attr !== 'undefined' && attr !== false){}else{
+        	var url=jQuery(this).attr("href");
+	        window.location.href = url;
+		}
 	})
 
 })

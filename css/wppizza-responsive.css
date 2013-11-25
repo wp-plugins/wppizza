@@ -33,9 +33,11 @@
 .wppizza-delivery>div{margin:0 3px;}
 .wppizza-discounts>div{display:inline;margin:0 3px;}
 
-/**buy now button below cart*/
+/**buy now and empty cart buttons below cart*/
 .wppizza-cart-button{font-weight:600;;padding:0;text-align:center;margin:2px}
-.wppizza-cart-button input{margin:0 auto;width:auto;height:auto !important; padding:4px 6px !important;line-height:100%;float:none}
+.wppizza-cart-button input{margin:0 1px;width:auto;height:auto !important; padding:4px 6px !important;line-height:100%;float:none}
+
+
 /**buy now button in order page*/
 .wppizza-send-order{display:block}
 /*paypal buy now button*/

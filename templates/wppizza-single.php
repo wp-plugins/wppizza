@@ -37,6 +37,14 @@
 	}	
 	endwhile; // end of the loop.
 ?>
+/************************************************************
+	to display the link to the single page add the following somewhere in the wppizza-loop.php
+************************************************************/
+<?php
+	if(!is_single()){/*no point displaying it whan already on single page i would have tought**/
+		echo"<a href='".$permalink."'>[whatever you want linked]</a>";
+	}
+?>
 /***********************************************************************************
 	Re d) : 
 	if you have a customised version of wppizza-loop.php in your template directory 
@@ -70,15 +78,3 @@ AFTER
 		
 	while ( $the_query->have_posts() ) : $the_query->the_post();
 	$postId=get_the_ID();
-
-
-
-
-/************************************************************
-	to display the link add the following somewhere in the loop
-************************************************************/
-<?php
-	if(!is_single()){/*no point displaying it whan already on single page i would have tought**/
-		echo"<a href='".$permalink."'>[whatever you want linked]</a>";
-	}
-?>
