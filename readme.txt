@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.2, WP 3.3 
 Tested up to: 3.7.1
-Stable tag: 2.8
+Stable tag: 2.8.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -120,6 +120,11 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 == Changelog ==
 
+2.8.1
+* Maintenance Release  
+25th November 2013  
+
+
 2.8  
 * added ids and classes to additives list at bottom of page  
 * added a bunch of do_actions to wppizza-cart.php template to be hooked into as required  
@@ -130,7 +135,7 @@ note: if you are a customised version of wppizza-loop.php or wppizza-loop-respon
 * added method (gateway_settings_non_editable) that can be used in gateways to update/add non-editable options values to gatways options (like version numbers etc)  
 * added filter to add other order status types in order history (wppizza_filter_order_status). use with caution, backup your data first  
 
-22th November 2013  
+25th November 2013  
 
 2.7.1  
 * added display of label/id to uniquely identify meal sizes/price tiers in admin screens as these might have the same frontend labels    

@@ -40,8 +40,13 @@
 	function wppizza_custom_order_status(){
 		$orderStatus=wppizza_order_status_default();
 		$orderStatus= apply_filters('wppizza_filter_order_status', $orderStatus);
+		$setOrderStatus=array();
+		foreach($orderStatus as $oStatus){
+		$setOrderStatus[]=wppizza_validate_alpha_only(str_replace(" ","_",strtoupper($oStatus)));	
+		}
+		$newOrderStatus=array_unique($setOrderStatus);
 	
-		return $orderStatus;
+		return $newOrderStatus;
 	}
 
 	function wppizza_currencies($selected='',$returnValue=null){

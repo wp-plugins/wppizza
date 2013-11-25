@@ -85,8 +85,6 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 			
 			/**allow custom order status fields**/
 			add_action( 'admin_init', array( $this, 'wppizza_set_order_status' ));
-			//add_filter( 'wppizza_filter_order_status', array( $this, 'wppizza_filter_order_status') );
-			//add_action( 'wppizza_set_order_status', array( $this, 'wppizza_set_order_status' ));
 		}
 		/************************************************************************
 			[ajax]
@@ -1463,7 +1461,8 @@ public function wppizza_require_common_input_validation_functions(){
 function wppizza_set_order_status(){
 	$setStatus=wppizza_custom_order_status();
 	/**compare and see if we have to do anything**/
-	if($this->pluginOptions['plugin_data']['db_order_status_options']!=$setStatus){
+	if(!isset($this->pluginOptions['plugin_data']['db_order_status_options']) || $this->pluginOptions['plugin_data']['db_order_status_options']!=$setStatus){
+
 		global $wpdb;
 		$usedOrderStatus = $wpdb->get_col("SELECT DISTINCT(order_status) FROM ".$wpdb->prefix . $this->pluginOrderTable." ");
 		$newStatus=array();
@@ -1481,6 +1480,7 @@ function wppizza_set_order_status(){
 		/**update options**/
 		$update_options=$this->pluginOptions;
 		$update_options['plugin_data']['db_order_status_options']=$setStatus;
+
 		update_option($this->pluginSlug, $update_options );
 		/**ALTER TABLE**/
 		$setNewOrderStatus=array_unique($newStatus);
