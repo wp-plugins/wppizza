@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WPPizza\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-11-25 15:08-0000\n"
-"PO-Revision-Date: 2013-11-25 15:08-0000\n"
+"POT-Creation-Date: 2013-11-26 11:41-0000\n"
+"PO-Revision-Date: 2013-11-26 11:41-0000\n"
 "Last-Translator: ollybach <dev@1000db.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -124,11 +124,11 @@ msgstr "FAILED: Sending of Mail Failed"
 msgid "Cash on Delivery"
 msgstr "Cash on Delivery"
 
-#: ../classes/wppizza.actions.inc.php:109
+#: ../classes/wppizza.actions.inc.php:107
 msgid "Additional information"
 msgstr "Additional information"
 
-#: ../classes/wppizza.actions.inc.php:217
+#: ../classes/wppizza.actions.inc.php:215
 msgid ""
 "WPPizza requires the server on which your site resides to be running PHP 5.2 "
 "or higher. As of version 3.2, WordPress itself will also <a href=\"http://"
@@ -142,178 +142,178 @@ msgstr ""
 "a>. You should get in touch with your web hosting provider and ask them to "
 "update PHP.<br /><br /><a href=\""
 
-#: ../classes/wppizza.actions.inc.php:401
+#: ../classes/wppizza.actions.inc.php:399
 msgid "Set Item Options"
 msgstr "Set Item Options"
 
-#: ../classes/wppizza.actions.inc.php:515
+#: ../classes/wppizza.actions.inc.php:513
 #: ../inc/admin.echo.register.submenu.pages.inc.php:3
 msgid "Settings"
 msgstr "Settings"
 
-#: ../classes/wppizza.actions.inc.php:516
+#: ../classes/wppizza.actions.inc.php:514
 #: ../inc/admin.echo.settings.sections.inc.php:53
 msgid "Order Settings"
 msgstr "Order Settings"
 
-#: ../classes/wppizza.actions.inc.php:517
+#: ../classes/wppizza.actions.inc.php:515
 msgid "Gateways"
 msgstr "Gateways"
 
-#: ../classes/wppizza.actions.inc.php:518
+#: ../classes/wppizza.actions.inc.php:516
 msgid "Order Form Settings"
 msgstr "Order Form Settings"
 
-#: ../classes/wppizza.actions.inc.php:519
+#: ../classes/wppizza.actions.inc.php:517
 #: ../inc/admin.echo.manage_opening_times.inc.php:3
 #: ../inc/admin.echo.settings.sections.inc.php:47
 msgid "Opening Times"
 msgstr "Opening Times"
 
-#: ../classes/wppizza.actions.inc.php:520
+#: ../classes/wppizza.actions.inc.php:518
 #: ../inc/admin.echo.manage_meal_sizes.inc.php:3
 msgid "Meal Sizes"
 msgstr "Meal Sizes"
 
-#: ../classes/wppizza.actions.inc.php:521
+#: ../classes/wppizza.actions.inc.php:519
 #: ../inc/admin.echo.manage_additives.inc.php:4
 #: ../inc/admin.echo.settings.sections.inc.php:75
 msgid "Additives"
 msgstr "Additives"
 
-#: ../classes/wppizza.actions.inc.php:522
+#: ../classes/wppizza.actions.inc.php:520
 #: ../inc/admin.echo.manage_layout.inc.php:3
 msgid "Layout"
 msgstr "Layout"
 
-#: ../classes/wppizza.actions.inc.php:523
+#: ../classes/wppizza.actions.inc.php:521
 msgid "Localization"
 msgstr "Localization"
 
-#: ../classes/wppizza.actions.inc.php:524
+#: ../classes/wppizza.actions.inc.php:522
 #: ../inc/admin.echo.manage_order_history.inc.php:3
 #: ../inc/admin.echo.settings.sections.inc.php:83
 msgid "Order History"
 msgstr "Order History"
 
-#: ../classes/wppizza.actions.inc.php:525
+#: ../classes/wppizza.actions.inc.php:523
 #: ../inc/admin.echo.manage_access_rights.inc.php:3
 #: ../inc/admin.echo.settings.sections.inc.php:86
 msgid "Access Rights"
 msgstr "Access Rights"
 
-#: ../classes/wppizza.actions.inc.php:526
+#: ../classes/wppizza.actions.inc.php:524
 #: ../inc/admin.echo.manage_tools.inc.php:3
 #: ../inc/admin.echo.register.submenu.pages.inc.php:14
 msgid "Tools"
 msgstr "Tools"
 
-#: ../classes/wppizza.actions.inc.php:527
+#: ../classes/wppizza.actions.inc.php:525
 msgid "Delete Orders"
 msgstr "Delete Orders"
 
-#: ../classes/wppizza.actions.inc.php:759
+#: ../classes/wppizza.actions.inc.php:757
 msgid "Nothing here"
 msgstr "Nothing here"
 
-#: ../classes/wppizza.actions.inc.php:882
+#: ../classes/wppizza.actions.inc.php:880
 msgid "Menu Items"
 msgstr "Menu Items"
 
-#: ../classes/wppizza.actions.inc.php:883
+#: ../classes/wppizza.actions.inc.php:881
 msgid "WPPizza Menu Item"
 msgstr "WPPizza Menu Item"
 
-#: ../classes/wppizza.actions.inc.php:884
+#: ../classes/wppizza.actions.inc.php:882
 msgid "Add New"
 msgstr "Add New"
 
-#: ../classes/wppizza.actions.inc.php:885
+#: ../classes/wppizza.actions.inc.php:883
 msgid "Add New Menu Item"
 msgstr "Add New Menu Item"
 
-#: ../classes/wppizza.actions.inc.php:886
+#: ../classes/wppizza.actions.inc.php:884
 msgid "Edit"
 msgstr "Edit"
 
-#: ../classes/wppizza.actions.inc.php:887
+#: ../classes/wppizza.actions.inc.php:885
 msgid "Edit Menu Item"
 msgstr "Edit Menu Item"
 
-#: ../classes/wppizza.actions.inc.php:888
+#: ../classes/wppizza.actions.inc.php:886
 msgid "New Menu Item"
 msgstr "New Menu Item"
 
-#: ../classes/wppizza.actions.inc.php:889
+#: ../classes/wppizza.actions.inc.php:887
 msgid "All Menu Items"
 msgstr "All Menu Items"
 
-#: ../classes/wppizza.actions.inc.php:890
+#: ../classes/wppizza.actions.inc.php:888
 msgid "View"
 msgstr "View"
 
-#: ../classes/wppizza.actions.inc.php:891
+#: ../classes/wppizza.actions.inc.php:889
 msgid "View Menu Items"
 msgstr "View Menu Items"
 
-#: ../classes/wppizza.actions.inc.php:892
+#: ../classes/wppizza.actions.inc.php:890
 msgid "Search Menu Items"
 msgstr "Search Menu Items"
 
-#: ../classes/wppizza.actions.inc.php:893
+#: ../classes/wppizza.actions.inc.php:891
 msgid "No items found"
 msgstr "No items found"
 
-#: ../classes/wppizza.actions.inc.php:894
+#: ../classes/wppizza.actions.inc.php:892
 msgid "No items found in the Trash"
 msgstr "No items found in the Trash"
 
-#: ../classes/wppizza.actions.inc.php:903
+#: ../classes/wppizza.actions.inc.php:901
 #, php-format
 msgid "Holds %1$s  menu items data"
 msgstr "Holds %1$s  menu items data"
 
-#: ../classes/wppizza.actions.inc.php:940
+#: ../classes/wppizza.actions.inc.php:938
 msgid "WPPizza Categories"
 msgstr "WPPizza Categories"
 
-#: ../classes/wppizza.actions.inc.php:941
+#: ../classes/wppizza.actions.inc.php:939
 msgid "Category"
 msgstr "Category"
 
-#: ../classes/wppizza.actions.inc.php:942
+#: ../classes/wppizza.actions.inc.php:940
 msgid "Search Categories"
 msgstr "Search Categories"
 
-#: ../classes/wppizza.actions.inc.php:943
+#: ../classes/wppizza.actions.inc.php:941
 msgid "All Categories"
 msgstr "All Categories"
 
-#: ../classes/wppizza.actions.inc.php:944
+#: ../classes/wppizza.actions.inc.php:942
 msgid "Parent Category"
 msgstr "Parent Category"
 
-#: ../classes/wppizza.actions.inc.php:945
+#: ../classes/wppizza.actions.inc.php:943
 msgid "Parent Category:"
 msgstr "Parent Category:"
 
-#: ../classes/wppizza.actions.inc.php:946
+#: ../classes/wppizza.actions.inc.php:944
 msgid "Edit Category"
 msgstr "Edit Category"
 
-#: ../classes/wppizza.actions.inc.php:947
+#: ../classes/wppizza.actions.inc.php:945
 msgid "Update Category"
 msgstr "Update Category"
 
-#: ../classes/wppizza.actions.inc.php:948
+#: ../classes/wppizza.actions.inc.php:946
 msgid "Add New Category"
 msgstr "Add New Category"
 
-#: ../classes/wppizza.actions.inc.php:949
+#: ../classes/wppizza.actions.inc.php:947
 msgid "New Category Name"
 msgstr "New Category Name"
 
-#: ../classes/wppizza.actions.inc.php:950
+#: ../classes/wppizza.actions.inc.php:948
 msgid "Categories"
 msgstr "Categories"
 
@@ -445,7 +445,7 @@ msgid "price tier and prices"
 msgstr "price tier and prices"
 
 #: ../inc/admin.echo.metaboxes.inc.php:32
-#: ../inc/admin.setup.default.options.inc.php:422
+#: ../inc/admin.setup.default.options.inc.php:421
 msgid "contains additives"
 msgstr "contains additives"
 
@@ -867,7 +867,7 @@ msgid "If order total >"
 msgstr "If order total >"
 
 #: ../inc/admin.echo.settings.input.fields.inc.php:364
-#: ../inc/admin.setup.default.options.inc.php:560
+#: ../inc/admin.setup.default.options.inc.php:557
 msgid "discount"
 msgstr "discount"
 
@@ -928,51 +928,51 @@ msgid ""
 msgstr ""
 "Will add any order details after your thank you text on successful order"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:497
+#: ../inc/admin.echo.settings.input.fields.inc.php:498
 msgid "Set the roles that are allowed to access these pages"
 msgstr "Set the roles that are allowed to access these pages"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:498
+#: ../inc/admin.echo.settings.input.fields.inc.php:499
 msgid "Menu Items and Categories are accessible just like \"normal\" posts"
 msgstr "Menu Items and Categories are accessible just like \"normal\" posts"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:532
+#: ../inc/admin.echo.settings.input.fields.inc.php:533
 msgid "show most recent *confirmed* orders"
 msgstr "show most recent *confirmed* orders"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:533
+#: ../inc/admin.echo.settings.input.fields.inc.php:534
 msgid "maximum results [0 to show all]"
 msgstr "maximum results [0 to show all]"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:536
+#: ../inc/admin.echo.settings.input.fields.inc.php:537
 msgid "poll for new orders every"
 msgstr "poll for new orders every"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:536
+#: ../inc/admin.echo.settings.input.fields.inc.php:537
 msgid "seconds"
 msgstr "seconds"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:537
+#: ../inc/admin.echo.settings.input.fields.inc.php:538
 msgid "on/off"
 msgstr "on/off"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:549
+#: ../inc/admin.echo.settings.input.fields.inc.php:550
 msgid "Delete abandoned/cancelled orders from database older than"
 msgstr "Delete abandoned/cancelled orders from database older than"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:551
+#: ../inc/admin.echo.settings.input.fields.inc.php:552
 msgid "Days (minimum: 1)"
 msgstr "Days (minimum: 1)"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:553
+#: ../inc/admin.echo.settings.input.fields.inc.php:554
 msgid "delete failed, tampered or otherwise invalid entries too."
 msgstr "delete failed, tampered or otherwise invalid entries too."
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:554
+#: ../inc/admin.echo.settings.input.fields.inc.php:555
 msgid "go"
 msgstr "go"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:555
+#: ../inc/admin.echo.settings.input.fields.inc.php:556
 msgid ""
 "As soon as customers go to the order page an order will be initialized and "
 "stored in the db to be checked against when going through with the purchase "
@@ -988,7 +988,7 @@ msgstr ""
 "order orphaned in the db.Click the \"ok\" button to clean your db of these "
 "entries (it will NOT affect any completed or pending orders)"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:556
+#: ../inc/admin.echo.settings.input.fields.inc.php:557
 msgid ""
 "Note: This will delete these entries PERMANENTLY from the db and is not "
 "reversable."
@@ -1790,19 +1790,19 @@ msgstr "Custom Field 6 :"
 msgid "Please select your payment method:"
 msgstr "Please select your payment method:"
 
-#: ../inc/admin.setup.default.options.inc.php:421
+#: ../inc/admin.setup.default.options.inc.php:420
 msgid "Menu Item: label when hovering over additives (if set)"
 msgstr "Menu Item: label when hovering over additives (if set)"
 
-#: ../inc/admin.setup.default.options.inc.php:425
+#: ../inc/admin.setup.default.options.inc.php:424
 msgid "Menu Item: text to display when hovering over prices"
 msgstr "Menu Item: text to display when hovering over prices"
 
-#: ../inc/admin.setup.default.options.inc.php:426
+#: ../inc/admin.setup.default.options.inc.php:425
 msgid "add to cart"
 msgstr "add to cart"
 
-#: ../inc/admin.setup.default.options.inc.php:429
+#: ../inc/admin.setup.default.options.inc.php:428
 msgid ""
 "Menu Item: alert when trying to add to cart but shop is closed (only "
 "displayed when shoppingcart is displayed on page)"
@@ -1810,11 +1810,11 @@ msgstr ""
 "Menu Item: alert when trying to add to cart but shop is closed (only "
 "displayed when shoppingcart is displayed on page)"
 
-#: ../inc/admin.setup.default.options.inc.php:430
+#: ../inc/admin.setup.default.options.inc.php:429
 msgid "sorry, we are currently closed"
 msgstr "sorry, we are currently closed"
 
-#: ../inc/admin.setup.default.options.inc.php:433
+#: ../inc/admin.setup.default.options.inc.php:432
 msgid ""
 "Menu Item: alert when adding to cart by clicking on menu name but more than "
 "one size is available. (Only relevant if \"Add item to cart on click of "
@@ -1824,87 +1824,87 @@ msgstr ""
 "one size is available. (Only relevant if \"Add item to cart on click of "
 "*item title* \" is enabled)"
 
-#: ../inc/admin.setup.default.options.inc.php:434
+#: ../inc/admin.setup.default.options.inc.php:433
 msgid "please choose a size"
 msgstr "please choose a size"
 
-#: ../inc/admin.setup.default.options.inc.php:437
+#: ../inc/admin.setup.default.options.inc.php:436
 msgid "Menu Pagination : previous page"
 msgstr "Menu Pagination : previous page"
 
-#: ../inc/admin.setup.default.options.inc.php:438
+#: ../inc/admin.setup.default.options.inc.php:437
 msgid "< previous"
 msgstr "< previous"
 
-#: ../inc/admin.setup.default.options.inc.php:441
+#: ../inc/admin.setup.default.options.inc.php:440
 msgid "Menu Pagination : next page"
 msgstr "Menu Pagination : next page"
 
-#: ../inc/admin.setup.default.options.inc.php:442
+#: ../inc/admin.setup.default.options.inc.php:441
 msgid "next >"
 msgstr "next >"
 
-#: ../inc/admin.setup.default.options.inc.php:446
+#: ../inc/admin.setup.default.options.inc.php:444
 msgid "Shoppingcart: text to display when shop closed "
 msgstr "Shoppingcart: text to display when shop closed "
 
-#: ../inc/admin.setup.default.options.inc.php:447
+#: ../inc/admin.setup.default.options.inc.php:445
 msgid "currently closed"
 msgstr "currently closed"
 
-#: ../inc/admin.setup.default.options.inc.php:450
-msgid "Shoppingcart: text to display for button to empty cart "
-msgstr "Shoppingcart: text to display for button to empty cart "
+#: ../inc/admin.setup.default.options.inc.php:448
+msgid "Shoppingcart: empty cart button text"
+msgstr "Shoppingcart: empty cart button text"
 
-#: ../inc/admin.setup.default.options.inc.php:451
+#: ../inc/admin.setup.default.options.inc.php:449
 msgid "empty cart"
 msgstr "empty cart"
 
-#: ../inc/admin.setup.default.options.inc.php:454
+#: ../inc/admin.setup.default.options.inc.php:452
 msgid "Shoppingcart: text to display when cart is empty"
 msgstr "Shoppingcart: text to display when cart is empty"
 
-#: ../inc/admin.setup.default.options.inc.php:455
+#: ../inc/admin.setup.default.options.inc.php:453
 msgid "your cart is empty"
 msgstr "your cart is empty"
 
-#: ../inc/admin.setup.default.options.inc.php:458
+#: ../inc/admin.setup.default.options.inc.php:456
 msgid "Shoppingcart: text to display when hovering over remove from cart icon"
 msgstr "Shoppingcart: text to display when hovering over remove from cart icon"
 
-#: ../inc/admin.setup.default.options.inc.php:459
+#: ../inc/admin.setup.default.options.inc.php:457
 msgid "remove from cart"
 msgstr "remove from cart"
 
-#: ../inc/admin.setup.default.options.inc.php:462
+#: ../inc/admin.setup.default.options.inc.php:460
 msgid "Shoppingcart: text of button in cart to proceed to order page"
 msgstr "Shoppingcart: text of button in cart to proceed to order page"
 
-#: ../inc/admin.setup.default.options.inc.php:463
+#: ../inc/admin.setup.default.options.inc.php:461
 msgid "place your order"
 msgstr "place your order"
 
-#: ../inc/admin.setup.default.options.inc.php:466
+#: ../inc/admin.setup.default.options.inc.php:464
 msgid ""
 "Shoppingcart - Self Pickup: text next to self pickup checkbox (if enabled)"
 msgstr ""
 "Shoppingcart - Self Pickup: text next to self pickup checkbox (if enabled)"
 
-#: ../inc/admin.setup.default.options.inc.php:467
+#: ../inc/admin.setup.default.options.inc.php:465
 msgid "I would like to pickup the order myself"
 msgstr "I would like to pickup the order myself"
 
-#: ../inc/admin.setup.default.options.inc.php:470
+#: ../inc/admin.setup.default.options.inc.php:468
 msgid ""
 "Shoppingcart - Self Pickup: text under total value (if selected by customer)"
 msgstr ""
 "Shoppingcart - Self Pickup: text under total value (if selected by customer)"
 
-#: ../inc/admin.setup.default.options.inc.php:471
+#: ../inc/admin.setup.default.options.inc.php:469
 msgid "Delivery: pickup"
 msgstr "Delivery: pickup"
 
-#: ../inc/admin.setup.default.options.inc.php:474
+#: ../inc/admin.setup.default.options.inc.php:472
 msgid ""
 "Shoppingcart - Self Pickup: javascript alert when customer selects self "
 "pickup (if enabled)"
@@ -1912,7 +1912,7 @@ msgstr ""
 "Shoppingcart - Self Pickup: javascript alert when customer selects self "
 "pickup (if enabled)"
 
-#: ../inc/admin.setup.default.options.inc.php:475
+#: ../inc/admin.setup.default.options.inc.php:473
 msgid ""
 "You have chosen to pickup the order yourself. This order will not be "
 "delivered. Please allow 30 min. for us to prepare your order."
@@ -1920,31 +1920,31 @@ msgstr ""
 "You have chosen to pickup the order yourself. This order will not be "
 "delivered. Please allow 30 min. for us to prepare your order."
 
-#: ../inc/admin.setup.default.options.inc.php:478
+#: ../inc/admin.setup.default.options.inc.php:476
 msgid "Order Page: label above itemised order"
 msgstr "Order Page: label above itemised order"
 
-#: ../inc/admin.setup.default.options.inc.php:479
+#: ../inc/admin.setup.default.options.inc.php:477
 msgid "your order"
 msgstr "your order"
 
-#: ../inc/admin.setup.default.options.inc.php:482
+#: ../inc/admin.setup.default.options.inc.php:480
 msgid "Order Page: button label for sending order"
 msgstr "Order Page: button label for sending order"
 
-#: ../inc/admin.setup.default.options.inc.php:483
+#: ../inc/admin.setup.default.options.inc.php:481
 msgid "send order"
 msgstr "send order"
 
-#: ../inc/admin.setup.default.options.inc.php:486
+#: ../inc/admin.setup.default.options.inc.php:484
 msgid "Order Page: label above personal info"
 msgstr "Order Page: label above personal info"
 
-#: ../inc/admin.setup.default.options.inc.php:487
+#: ../inc/admin.setup.default.options.inc.php:485
 msgid "please enter the required information below"
 msgstr "please enter the required information below"
 
-#: ../inc/admin.setup.default.options.inc.php:490
+#: ../inc/admin.setup.default.options.inc.php:488
 msgid ""
 "Order Page - Self Pickup: text on order page to highlight self pickup (if "
 "applicable)"
@@ -1952,7 +1952,7 @@ msgstr ""
 "Order Page - Self Pickup: text on order page to highlight self pickup (if "
 "applicable)"
 
-#: ../inc/admin.setup.default.options.inc.php:491
+#: ../inc/admin.setup.default.options.inc.php:489
 msgid ""
 "Note: you have chosen to pickup the order yourself. This order will not be "
 "delivered. Please allow 30 min. for us to prepare your order."
@@ -1960,7 +1960,7 @@ msgstr ""
 "Note: you have chosen to pickup the order yourself. This order will not be "
 "delivered. Please allow 30 min. for us to prepare your order."
 
-#: ../inc/admin.setup.default.options.inc.php:494
+#: ../inc/admin.setup.default.options.inc.php:492
 msgid ""
 "Order Page - Additional Handling Charges: text on order page if a handling "
 "charge for payment processing has been made (if applicable)"
@@ -1968,60 +1968,60 @@ msgstr ""
 "Order Page - Additional Handling Charges: text on order page if a handling "
 "charge for payment processing has been made (if applicable)"
 
-#: ../inc/admin.setup.default.options.inc.php:495
+#: ../inc/admin.setup.default.options.inc.php:493
 msgid "handling charge"
 msgstr "handling charge"
 
-#: ../inc/admin.setup.default.options.inc.php:498
+#: ../inc/admin.setup.default.options.inc.php:496
 msgid "Order Page: message when required field is missing"
 msgstr "Order Page: message when required field is missing"
 
-#: ../inc/admin.setup.default.options.inc.php:499
+#: ../inc/admin.setup.default.options.inc.php:497
 msgid "this is a required field"
 msgstr "this is a required field"
 
-#: ../inc/admin.setup.default.options.inc.php:502
+#: ../inc/admin.setup.default.options.inc.php:500
 msgid "Order Page: label of thank you page after order has been sent"
 msgstr "Order Page: label of thank you page after order has been sent"
 
-#: ../inc/admin.setup.default.options.inc.php:503
+#: ../inc/admin.setup.default.options.inc.php:501
 msgid "thank you"
 msgstr "thank you"
 
-#: ../inc/admin.setup.default.options.inc.php:506
+#: ../inc/admin.setup.default.options.inc.php:504
 msgid "Order Page: text of thank you page after order has been sent"
 msgstr "Order Page: text of thank you page after order has been sent"
 
-#: ../inc/admin.setup.default.options.inc.php:507
+#: ../inc/admin.setup.default.options.inc.php:505
 msgid "thank you, we have received your order"
 msgstr "thank you, we have received your order"
 
-#: ../inc/admin.setup.default.options.inc.php:510
+#: ../inc/admin.setup.default.options.inc.php:508
 msgid "Order Page: label next to checkbox text to allow user to update profile"
 msgstr ""
 "Order Page: label next to checkbox text to allow user to update profile"
 
-#: ../inc/admin.setup.default.options.inc.php:511
+#: ../inc/admin.setup.default.options.inc.php:509
 msgid "update my user data with the details above"
 msgstr "update my user data with the details above"
 
-#: ../inc/admin.setup.default.options.inc.php:514
+#: ../inc/admin.setup.default.options.inc.php:512
 msgid "Order Email: label for order details"
 msgstr "Order Email: label for order details"
 
-#: ../inc/admin.setup.default.options.inc.php:515
+#: ../inc/admin.setup.default.options.inc.php:513
 msgid "order details"
 msgstr "order details"
 
-#: ../inc/admin.setup.default.options.inc.php:518
+#: ../inc/admin.setup.default.options.inc.php:516
 msgid "Order Email: label to identify how the order was paid for"
 msgstr "Order Email: label to identify how the order was paid for"
 
-#: ../inc/admin.setup.default.options.inc.php:519
+#: ../inc/admin.setup.default.options.inc.php:517
 msgid "Paid By:"
 msgstr "Paid By:"
 
-#: ../inc/admin.setup.default.options.inc.php:522
+#: ../inc/admin.setup.default.options.inc.php:520
 msgid ""
 "Order Email: Text you would like to display at the end of emails after "
 "everything else."
@@ -2029,39 +2029,39 @@ msgstr ""
 "Order Email: Text you would like to display at the end of emails after "
 "everything else."
 
-#: ../inc/admin.setup.default.options.inc.php:526
+#: ../inc/admin.setup.default.options.inc.php:524
 msgid "Label Discount (Spend): i.e \"spend\" 50.00 save 10.00"
 msgstr "Label Discount (Spend): i.e \"spend\" 50.00 save 10.00"
 
-#: ../inc/admin.setup.default.options.inc.php:527
+#: ../inc/admin.setup.default.options.inc.php:525
 msgid "spend"
 msgstr "spend"
 
-#: ../inc/admin.setup.default.options.inc.php:530
+#: ../inc/admin.setup.default.options.inc.php:528
 msgid "Label Discount (Save): i.e spend 50.00 \"save\" 10.00"
 msgstr "Label Discount (Save): i.e spend 50.00 \"save\" 10.00"
 
-#: ../inc/admin.setup.default.options.inc.php:531
+#: ../inc/admin.setup.default.options.inc.php:529
 msgid "save"
 msgstr "save"
 
-#: ../inc/admin.setup.default.options.inc.php:535
+#: ../inc/admin.setup.default.options.inc.php:532
 msgid "Label Info: i.e. \"free delivery for orders over\"..."
 msgstr "Label Info: i.e. \"free delivery for orders over\"..."
 
-#: ../inc/admin.setup.default.options.inc.php:536
+#: ../inc/admin.setup.default.options.inc.php:533
 msgid "free delivery for orders over"
 msgstr "free delivery for orders over"
 
-#: ../inc/admin.setup.default.options.inc.php:539
+#: ../inc/admin.setup.default.options.inc.php:536
 msgid "Label Info: required minimum order value (displayed if applicable)"
 msgstr "Label Info: required minimum order value (displayed if applicable)"
 
-#: ../inc/admin.setup.default.options.inc.php:540
+#: ../inc/admin.setup.default.options.inc.php:537
 msgid "minimum order"
 msgstr "minimum order"
 
-#: ../inc/admin.setup.default.options.inc.php:543
+#: ../inc/admin.setup.default.options.inc.php:540
 msgid ""
 "Label Info: required minimum order value for delivery (displayed if "
 "applicable)"
@@ -2069,19 +2069,19 @@ msgstr ""
 "Label Info: required minimum order value for delivery (displayed if "
 "applicable)"
 
-#: ../inc/admin.setup.default.options.inc.php:544
+#: ../inc/admin.setup.default.options.inc.php:541
 msgid "minimum order for delivery"
 msgstr "minimum order for delivery"
 
-#: ../inc/admin.setup.default.options.inc.php:547
+#: ../inc/admin.setup.default.options.inc.php:544
 msgid "Price Labels (Sub)Totals: text to display when free delivery applies"
 msgstr "Price Labels (Sub)Totals: text to display when free delivery applies"
 
-#: ../inc/admin.setup.default.options.inc.php:548
+#: ../inc/admin.setup.default.options.inc.php:545
 msgid "free delivery"
 msgstr "free delivery"
 
-#: ../inc/admin.setup.default.options.inc.php:551
+#: ../inc/admin.setup.default.options.inc.php:548
 msgid ""
 "Price Labels (Sub)Totals: text delivery charges - when set to \"Fixed\" or "
 "\"Free delivery over\" (if applicable)"
@@ -2089,11 +2089,11 @@ msgstr ""
 "Price Labels (Sub)Totals: text delivery charges - when set to \"Fixed\" or "
 "\"Free delivery over\" (if applicable)"
 
-#: ../inc/admin.setup.default.options.inc.php:552
+#: ../inc/admin.setup.default.options.inc.php:549
 msgid "delivery charges"
 msgstr "delivery charges"
 
-#: ../inc/admin.setup.default.options.inc.php:555
+#: ../inc/admin.setup.default.options.inc.php:552
 msgid ""
 "Price Labels (Sub)Totals: text delivery when set to \"Delivery Charges per "
 "item\" (if applicable)"
@@ -2101,81 +2101,81 @@ msgstr ""
 "Price Labels (Sub)Totals: text delivery when set to \"Delivery Charges per "
 "item\" (if applicable)"
 
-#: ../inc/admin.setup.default.options.inc.php:556
+#: ../inc/admin.setup.default.options.inc.php:553
 msgid "delivery charges per item"
 msgstr "delivery charges per item"
 
-#: ../inc/admin.setup.default.options.inc.php:559
+#: ../inc/admin.setup.default.options.inc.php:556
 msgid "Price Labels (Sub)Totals: text before sum of discounts applied(if any)"
 msgstr "Price Labels (Sub)Totals: text before sum of discounts applied(if any)"
 
-#: ../inc/admin.setup.default.options.inc.php:563
+#: ../inc/admin.setup.default.options.inc.php:560
 msgid ""
 "Price Labels (Sub)Totals: text before sum of tax applied to all items(if > 0)"
 msgstr ""
 "Price Labels (Sub)Totals: text before sum of tax applied to all items(if > 0)"
 
-#: ../inc/admin.setup.default.options.inc.php:564
+#: ../inc/admin.setup.default.options.inc.php:561
 msgid "Sales Tax"
 msgstr "Sales Tax"
 
-#: ../inc/admin.setup.default.options.inc.php:567
+#: ../inc/admin.setup.default.options.inc.php:564
 msgid "Price Labels (Sub)Totals: text before total sum of ORDER"
 msgstr "Price Labels (Sub)Totals: text before total sum of ORDER"
 
-#: ../inc/admin.setup.default.options.inc.php:568
+#: ../inc/admin.setup.default.options.inc.php:565
 msgid "total"
 msgstr "total"
 
-#: ../inc/admin.setup.default.options.inc.php:571
+#: ../inc/admin.setup.default.options.inc.php:568
 msgid "Price Labels (Sub)Totals: text before total sum of ITEMS in cart"
 msgstr "Price Labels (Sub)Totals: text before total sum of ITEMS in cart"
 
-#: ../inc/admin.setup.default.options.inc.php:572
+#: ../inc/admin.setup.default.options.inc.php:569
 msgid "your items"
 msgstr "your items"
 
-#: ../inc/admin.setup.default.options.inc.php:575
+#: ../inc/admin.setup.default.options.inc.php:572
 msgid "Openinghours: text to display when shop is closed that day "
 msgstr "Openinghours: text to display when shop is closed that day "
 
-#: ../inc/admin.setup.default.options.inc.php:576
+#: ../inc/admin.setup.default.options.inc.php:573
 msgid "closed"
 msgstr "closed"
 
-#: ../inc/common.output.formatting.functions.inc.php:433
+#: ../inc/common.output.formatting.functions.inc.php:438
 msgid "Mondays"
 msgstr "Mondays"
 
-#: ../inc/common.output.formatting.functions.inc.php:434
+#: ../inc/common.output.formatting.functions.inc.php:439
 msgid "Tuesdays"
 msgstr "Tuesdays"
 
-#: ../inc/common.output.formatting.functions.inc.php:435
+#: ../inc/common.output.formatting.functions.inc.php:440
 msgid "Wednesdays"
 msgstr "Wednesdays"
 
-#: ../inc/common.output.formatting.functions.inc.php:436
+#: ../inc/common.output.formatting.functions.inc.php:441
 msgid "Thursdays"
 msgstr "Thursdays"
 
-#: ../inc/common.output.formatting.functions.inc.php:437
+#: ../inc/common.output.formatting.functions.inc.php:442
 msgid "Fridays"
 msgstr "Fridays"
 
-#: ../inc/common.output.formatting.functions.inc.php:438
+#: ../inc/common.output.formatting.functions.inc.php:443
 msgid "Saturdays"
 msgstr "Saturdays"
 
-#: ../inc/common.output.formatting.functions.inc.php:439
+#: ../inc/common.output.formatting.functions.inc.php:444
 msgid "Sundays"
 msgstr "Sundays"
 
-#: ../inc/common.output.formatting.functions.inc.php:447
+#: ../inc/common.output.formatting.functions.inc.php:452
 msgid "Default"
 msgstr "Default"
 
-#: ../inc/common.output.formatting.functions.inc.php:448
+#: ../inc/common.output.formatting.functions.inc.php:453
 msgid "Responsive [Experimental]"
 msgstr "Responsive [Experimental]"
 

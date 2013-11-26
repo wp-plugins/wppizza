@@ -454,8 +454,9 @@ $options = $this->pluginOptions;
 				echo"</div>";
 			}
 			if($field=='localization'){
-				/**to get descriptions include default options**/
-				require_once(WPPIZZA_PATH .'inc/admin.setup.default.options.inc.php');
+				/**to get descriptions include default options. do not use require_once, as we need this more than once**/
+				require(WPPIZZA_PATH .'inc/admin.setup.default.options.inc.php');
+
 				/**add description to array**/
 				$localizeOptions=array();
 				foreach($defaultOptions['localization'] as $k=>$v){

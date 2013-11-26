@@ -83,8 +83,8 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 			add_action( 'personal_options_update', array( $this, 'wppizza_user_update_meta' ));
 			add_action( 'edit_user_profile_update', array( $this, 'wppizza_user_update_meta' ));
 			
-			/**allow custom order status fields**/
-			add_action( 'admin_init', array( $this, 'wppizza_set_order_status' ));
+			/**allow custom order status fields. priority must be<10**/
+			add_action( 'admin_init', array( $this, 'wppizza_set_order_status' ),9);
 		}
 		/************************************************************************
 			[ajax]
@@ -243,8 +243,8 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 			/**update  options if installed version < current version***/
 			if( version_compare( $options['plugin_data']['version'], 	$this->pluginVersion, '<' ) || isset($forceUpdate)) {
 
-				/**get default options***/
-				require_once(WPPIZZA_PATH .'inc/admin.setup.default.options.inc.php');
+				/**get default options. do not use require_once, as we need this more than once ***/
+				require(WPPIZZA_PATH .'inc/admin.setup.default.options.inc.php');
 				/**compare table options against default options and delete/add as required***/
 				require_once(WPPIZZA_PATH .'inc/admin.update.options.inc.php');
 
@@ -1460,9 +1460,9 @@ public function wppizza_require_common_input_validation_functions(){
 ******************************************************/
 function wppizza_set_order_status(){
 	$setStatus=wppizza_custom_order_status();
+	
 	/**compare and see if we have to do anything**/
 	if($this->pluginOptions!=0 && (!isset($this->pluginOptions['plugin_data']['db_order_status_options']) || $this->pluginOptions['plugin_data']['db_order_status_options']!=$setStatus)){
-
 		global $wpdb;
 		$usedOrderStatus = $wpdb->get_col("SELECT DISTINCT(order_status) FROM ".$wpdb->prefix . $this->pluginOrderTable." ");
 		$newStatus=array();

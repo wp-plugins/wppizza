@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.2, WP 3.3 
 Tested up to: 3.7.1
-Stable tag: 2.8.2
+Stable tag: 2.8.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -119,6 +119,12 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 
 == Changelog ==
+
+
+2.8.3  
+* BUGFIX: in some circumstances - when updating the plugin - some values of some newly added localization variables - did not get set correctly due to the use of require_once instead of require.  
+* Maintenance: changed priority of wppizza_set_order_status filter as it might otherwise interfere with options update   
+26th November 2013  
 
 2.8.2  
 * BUGFIX: 2.8 and 2.8.1 was broken for new installs !!! Do not use 2.8 or 2.8.1 for new installs   

@@ -416,7 +416,6 @@
 			'sizes'=>$defaultSizes,
 			'additives'=>$defaultAdditives,
 			'localization'=>array(
-
 				'contains_additives'=>array(
 					'descr'=>__('Menu Item: label when hovering over additives (if set)', $this->pluginLocale),
 					'lbl'=>__('contains additives', $this->pluginLocale)
@@ -441,15 +440,14 @@
 					'descr'=>__('Menu Pagination : next page', $this->pluginLocale),
 					'lbl'=>__('next >', $this->pluginLocale)
 				),
-
 				'closed'=>array(
 					'descr'=>__('Shoppingcart: text to display when shop closed ', $this->pluginLocale),
 					'lbl'=>__('currently closed', $this->pluginLocale)
 				),
 				'empty_cart'=>array(
-					'descr'=>__('Shoppingcart: text to display for button to empty cart ', $this->pluginLocale),
+					'descr'=>__('Shoppingcart: empty cart button text', $this->pluginLocale),
 					'lbl'=>__('empty cart', $this->pluginLocale)
-				),					
+				),								
 				'cart_is_empty'=>array(
 					'descr'=>__('Shoppingcart: text to display when cart is empty', $this->pluginLocale),
 					'lbl'=>__('your cart is empty', $this->pluginLocale)
@@ -530,7 +528,6 @@
 					'descr'=>__('Label Discount (Save): i.e spend 50.00 "save" 10.00', $this->pluginLocale),
 					'lbl'=>__('save', $this->pluginLocale)
 				),
-
 				'free_delivery_for_orders_of'=>array(
 					'descr'=>__('Label Info: i.e. "free delivery for orders over"...', $this->pluginLocale),
 					'lbl'=>__('free delivery for orders over', $this->pluginLocale)
@@ -575,7 +572,6 @@
 					'descr'=>__('Openinghours: text to display when shop is closed that day ', $this->pluginLocale),
 					'lbl'=>__('closed', $this->pluginLocale)
 				)
-
 			)
 		);
 
