@@ -67,7 +67,7 @@
 		'post_type' => ''.WPPIZZA_POST_TYPE.'',
 		'posts_per_page' => $options['layout']['items_per_loop'],
 		'paged' => $paged ,
-		'post__not_in' => $exclude , /*ADDED in v.2.7.3*/
+		'post__not_in' => !empty($exclude) ? $exclude : '' , /*ADDED in v.2.7.3*/
 		'tax_query' => array(
 			array(
 				'taxonomy' => ''.WPPIZZA_TAXONOMY.'',

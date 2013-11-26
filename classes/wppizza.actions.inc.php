@@ -1461,7 +1461,7 @@ public function wppizza_require_common_input_validation_functions(){
 function wppizza_set_order_status(){
 	$setStatus=wppizza_custom_order_status();
 	/**compare and see if we have to do anything**/
-	if(!isset($this->pluginOptions['plugin_data']['db_order_status_options']) || $this->pluginOptions['plugin_data']['db_order_status_options']!=$setStatus){
+	if($this->pluginOptions!=0 && (!isset($this->pluginOptions['plugin_data']['db_order_status_options']) || $this->pluginOptions['plugin_data']['db_order_status_options']!=$setStatus)){
 
 		global $wpdb;
 		$usedOrderStatus = $wpdb->get_col("SELECT DISTINCT(order_status) FROM ".$wpdb->prefix . $this->pluginOrderTable." ");
@@ -1476,7 +1476,6 @@ function wppizza_set_order_status(){
 		/**implicitly add NEW option (as its default)*****/
 		$newStatus[]='NEW';
 		
-
 		/**update options**/
 		$update_options=$this->pluginOptions;
 		$update_options['plugin_data']['db_order_status_options']=$setStatus;
