@@ -180,9 +180,9 @@ jQuery(document).ready(function($){
 	*	[customer selects self pickup , session gets set via ajax
 	*	reload page to reflect delivery charges....
 	*	only relevant if there's a shoppingcart or orderpage on page]
-	*
+	*	[as it's an input element always use click insetad of touchstart, cause iStuff is stupid]
 	***********************************************/
-	$(document).on(''+wppizzaClickEvent+'', '#wppizza-order-pickup-sel,#wppizza-order-pickup-js', function(e){
+	$(document).on('click', '#wppizza-order-pickup-sel,#wppizza-order-pickup-js', function(e){
 		if (($(".wppizza-open").length > 0 &&  $(".wppizza-cart").length > 0) || $("#wppizza-send-order").length>0){
 			var self=$(this);
 			var selfValue=self.is(':checked');
