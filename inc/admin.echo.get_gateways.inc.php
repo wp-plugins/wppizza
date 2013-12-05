@@ -38,7 +38,8 @@
 			/***gateway label on  frontend (if empty uses gatewayName**/
 			print"<div>";
 			print"<label>".__('Frontend Label',$this->pluginLocale)."</label>";
-			print"<input name='".$this->pluginSlug."[gateways][wppizza_gateway_".$gwIdent."][gateway_label]' type='text' size='40' value='".$gw['gatewayOptions']['gateway_label']."' /> ";
+			$gwLabel=!empty($gw['gatewayOptions']['gateway_label']) ? $gw['gatewayOptions']['gateway_label'] : '';
+			print"<input name='".$this->pluginSlug."[gateways][wppizza_gateway_".$gwIdent."][gateway_label]' type='text' size='40' value='".$gwLabel."' /> ";
 			print"[".__('displays',$this->pluginLocale)." '".$gw['gatewayName']."' ".__('if Empty',$this->pluginLocale)."]";
 			print"<br/>[".__('only displayed if more than one gateway installed, activated and enabled',$this->pluginLocale)."]";
 			print"</div>";
@@ -46,7 +47,8 @@
 			/***gateway additional info on  frontend - can be left empty**/
 				print"<div>";
 				print"<label>".__('Frontend: Additional Plugin Information',$this->pluginLocale)."</label>";
-				print"<textarea name='".$this->pluginSlug."[gateways][wppizza_gateway_".$gwIdent."][gateway_info]' />".$gw['gatewayOptions']['gateway_info']."</textarea>";
+				$gwInfo=!empty($gw['gatewayOptions']['gateway_info']) ? $gw['gatewayOptions']['gateway_info'] : '';
+				print"<textarea name='".$this->pluginSlug."[gateways][wppizza_gateway_".$gwIdent."][gateway_info]' />".$gwInfo."</textarea>";
 				print"<br/>[".__('only displayed if more than one gateway installed, activated and enabled',$this->pluginLocale)."]";
 				print"</div>";
 
@@ -55,7 +57,10 @@
 				if($val['type']!='norender'){/**if we want to be able to save an element but dont want to display it as an option*/
 				print"<div>";
 					print"<label>".$val['label']."</label>";
-					wppizza_echo_formfield($val['type'],$val['key'],$this->pluginSlug."[gateways][".$gw['gatewayOptionsName']."][".$val['key']."]",$val['value'],$val['placeholder'],$val['options'],$val['selected']);
+						
+						$selected=!empty($val['selected']) ? $val['selected'] : '' ;
+						wppizza_echo_formfield($val['type'],$val['key'],$this->pluginSlug."[gateways][".$gw['gatewayOptionsName']."][".$val['key']."]",$val['value'],$val['placeholder'],$val['options'],$selected);
+					
 					print"<br/>".$val['descr']."";
 				print"</div>";
 				}

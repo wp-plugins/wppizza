@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.2, WP 3.3 
 Tested up to: 3.7.1
-Stable tag: 2.8.3.1
+Stable tag: 2.8.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -120,11 +120,15 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 == Changelog ==
 
-
-2.8.3.1  
-* BUGFIX: iStuff should now also react when choosing self-pickup   
-28th November 2013  
-
+2.8.4  
+* added space between fromname and fromemail when sending email to make spamassassin happier (only applies when using wp_mail and mail)  
+* added gratuity/tip from field that can be used in order form inclding relevant css declarations  
+* added some more action hooks  
+* added user caps class to deal more easily with acces rights to plugin and extensions to the plugin  
+* added easy digital download sl classes for any possible extensions to hook into to allow notifications of updates for non-wp hosted extensions (not used in the main plugin , but might come in handy for extensions)  
+* eliminated some more php notices  
+* some minor bugfixes  
+4th December 2013  
 
 2.8.3  
 * BUGFIX: in some circumstances - when updating the plugin - some values of some newly added localization variables - did not get set correctly due to the use of require_once instead of require.  
@@ -560,8 +564,8 @@ if you do, copy the wppizza/css/wppizza-default.css (or wppizza/css/wppizza-resp
 = Can I use this plugin when I am not using english on my site ? =
 
 of course you can.  
-although the administration backend is currently only available in english (albeit translation ready, contact me if you want to help me translating it into a different language), 
-you can have the frontend in whatever language you want. just go to wppizza->settings->localization and edit the variables as required
+although the administration backend is currently only available in a few other languages apart from english (albeit translation ready, contact me if you want to help me translating it into a different language), 
+you can have the frontend in whatever language you want. just go to wppizza->settings->localization and edit the variables as required. Furthermore, WPPizza is WPML compatible.
 
 
 = How do I sort the categories ? =
@@ -584,8 +588,9 @@ alternatively, add " add_theme_support( 'post-thumbnails'); " (without the quote
 
 Sure.  
 Just don't display the shoppingcart anywhere. If you choose to do this, you might also want to delete any orderpage you might have (as there's nothing to order).  
-alternatively, if you still want to show the cart (to show combined prices/taxes/discounts) but want to disable ordering, you could copy wppizza-custom.css to your them directory and add ".wppizza-cart-button{display:none}" without the quotes to it  
-you would still probably want to delete/hide your order page or at least disable all your gateways  
+Alternatively, if you still want to show the cart (to show combined prices/taxes/discounts) but want to disable ordering, you could copy wppizza-custom.css to your them directory and add ".wppizza-cart-button{display:none}" without the quotes to it.
+You can probably also achieve the same thing by using a combination of the layout and/or order setting options available from within the plugin.
+You would still probably want to delete/hide your order page or at least disable all your gateways  
 
 
 = I'm using the plugin with xyz theme and it's all messed up  =
@@ -597,7 +602,7 @@ make sure your theme (or one of your plugins) does not use an old version of jQu
 
 If that still doesn't help, you might have to adjust the CSS (see 'Can I edit the css ?' above)
 
-If you have problems, let me know what theme you are using and I'll have a look..  
+If you have problems, send me a link to your site I'll have a look...
 
 
 = can i send html emails ? =  
@@ -605,7 +610,7 @@ If you have problems, let me know what theme you are using and I'll have a look.
 yup.  
 go to wppizza->settings and change "Select Type of Mail Delivery" to "HTML and plaintext"  
 if you do , you probably want to edit the html template. To do so, move "wppizza-order-html-email.php" from the wppizza template directory to your theme folder and edit as required  
-if you want to use smtp, do thet same with "wppizza-phpmailer-settings.php"  
+if you want to use smtp, do the same with "wppizza-phpmailer-settings.php"  and edit as needed  
 
 
 = What are the available shortcodes ? =  
@@ -626,9 +631,10 @@ in case where you cannot or do not want to use a widget, here are the correspond
 	- category='pizza' 		(optional: '[category-slug]'. if omitted, will display the first category)  
 	- noheader='1' 			(optional: 'anything'. omit attribute to show header. will suppress header (category title and description) in wppizza-loop.php. you can globally hide all category headers by setting "suppress headers" in wppizza->settings->layout.)  
 	- showadditives='0' 	(optional: '0' or '1'. if omitted, a list of additives will be displayed if any of the category items has additives added. if set (0 or 1): force to display/hide additives list. useful when displaying more than 1 category on a page)  
+	- exclude='6,5,8' 		(optional [comma separated menu item id's]): exclude some id's  
 	- note: if you want to edit the category loop and/or headers, copy wppizza-loop.php from the plugins template directory into your theme directory and edit it there.  
 	
-	example: 		[wppizza category='pizza' noheader='1' showadditives='0']
+	example: 		[wppizza category='pizza' noheader='1' showadditives='0' exclude='6,5,8']
 
 
 - **display openingtimes** (returns grouped opening times in a string):
@@ -656,30 +662,31 @@ in case where you cannot or do not want to use a widget, here are the correspond
 	
 	attributes:  
 	- type='navigation' 		(required [str])  
-	- title='some title' 		(optional[str]: will render as h2 as first element in cart element if set) 
-	- parent='slug-name' 		(optionsl [str]): only show child categories of this slug 
-	- exclude='6,5,8' 			(optional [comma separated category id's]): exclude some id's
+	- title='some title' 		(optional[str]: will render as h2 as first element in cart element if set)  
+	- parent='slug-name' 		(optionsl [str]): only show child categories of this slug  
+	- exclude='6,5,8' 			(optional [comma separated category id's]): exclude some id's  
 
-	example: 		[wppizza type='navigation' title='some title' parent='slug-name' exclude='6,5,8']
+	example: 		[wppizza type='navigation' title='some title' parent='slug-name' exclude='6,5,8']  
 
 
 = Can I edit the templates ? =
 
 Sure, if you want.  
-Just make sure you copy the relevant template from wppizza/templates/ to your theme directory and edit those so you dont loose your edits when the plugin gets updated. Make sure to read the comments in the relevant files.
+Just make sure you copy the relevant template from wppizza/templates/ to your theme directory and edit those so you don't loose your edits when the plugin gets updated. Make sure to read the comments in the relevant files.
+** Preferably though - if at all possible - I would suggest to use css and/or some of the action hooks provided  to be able to take advantage of any possible future updates or improvements of those templates **
 
 
 = How do the orders get to my restaurant ? =
 
 by email.  
-if you need them to be sent by fax for example you will have to look into integrating your orders with a fax2email gateway. (search for it on your favourite search engine)   
+if you need them to be sent by fax for example you will have to look into integrating your orders with a fax2email gateway. (search for it on your favourite search engine)
 
 
 = Where do I set the images for any particular menu item? =
 
 just use the "featured image" for a menu item  
 if you do not have this options it's either hidden (go to "screen options" at the top of the page to enable/show it) or your theme does not have thumbnails enabled (tell the author about it. not my fault)
-if the auther doesnt want to or cannot do anything about it, you can also just put the following code at the bottom of your themes function file (before the closing ?> )
+if the auther doesnt want to or cannot do anything about it, you can also try just to put the following code at the bottom of your themes function file (before the closing ?> if any )
 	
 	add_theme_support('post-thumbnails');
 
@@ -693,6 +700,6 @@ if the auther doesnt want to or cannot do anything about it, you can also just p
 = How can I submit a bug, ask for help or request a new feature? =
 
 	- leave a message on the <a href="http://wordpress.org/support/plugin/wppizza">wordpress forum</a> and I'll respond asap.  
-	- send an email to support[at]wp-pizza.com with as much info as you can give me or 
+	- send an email to dev[at]wp-pizza.com with as much info as you can give me or 
 	- use the "contact us" or "feature request" page on <a href="http://www.wp-pizza.com/">www.wp-pizza.com</a>
 

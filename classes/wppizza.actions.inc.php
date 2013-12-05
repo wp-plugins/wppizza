@@ -108,8 +108,8 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 		print"<table class='form-table'>";
 			foreach( $ff as $field ) {
 	
-				/**lets exclude deisabled and "email" as wp already has this of course**/
-				if(!empty($field['enabled']) && $field['type']!='email'){
+				/**lets exclude disabled and "email" as wp already has this of course, as well as gratuities**/
+				if(!empty($field['enabled']) && $field['type']!='email' && $field['type']!='tips'){
 				$selectedValue=!empty($userMetaData['wppizza_'.$field['key'].''][0]) ? esc_attr($userMetaData['wppizza_'.$field['key'].''][0]) : '';
 				
 				print"<tr><th><label for='wppizza_".$field['key']."'>".$field['lbl']."</label></th><td>";
@@ -980,6 +980,9 @@ public function wppizza_require_common_input_validation_functions(){
 	    $_SESSION[$this->pluginSession]['items']=array();
 	    /*gross sum of all items in cart,before discounts etc*/
 	    $_SESSION[$this->pluginSession]['total_price_items']=0;
+	    /**tips***/
+	    $_SESSION[$this->pluginSession]['tips']=0;	    
+	    
 	}
 /*********************************************************
 *
@@ -1156,7 +1159,7 @@ public function wppizza_require_common_input_validation_functions(){
 		$jsExtend['jsExtend']=array();
 		$jsExtend['jsExtend'] = apply_filters('wppizza_filter_js_extend', $jsExtend['jsExtend']);
 
-		$localized_array = array( 'ajaxurl' =>admin_url('admin-ajax.php'),'validate_error'=>array('email'=>''.$options['localization']['required_field']['lbl'].'','required'=>''.$options['localization']['required_field']['lbl'].''),'msg'=>$jsMessages,'funcCartRefr'=>$jsCartRefreshCompleteFunctions['functionsCartRefresh'],'extend'=>$jsExtend['jsExtend']);
+		$localized_array = array( 'ajaxurl' =>admin_url('admin-ajax.php'),'validate_error'=>array('email'=>''.$options['localization']['required_field']['lbl'].'','required'=>''.$options['localization']['required_field']['lbl'].'','decimal'=>''.$options['localization']['required_field_decimal']['lbl'].''),'msg'=>$jsMessages,'funcCartRefr'=>$jsCartRefreshCompleteFunctions['functionsCartRefresh'],'extend'=>$jsExtend['jsExtend']);
 		wp_localize_script( $this->pluginSlug,$this->pluginSlug, $localized_array );
 
     }
@@ -1280,7 +1283,10 @@ public function wppizza_require_common_input_validation_functions(){
 	function wppizza_filter_sanitize_post_vars($arr){
 		if(is_array($arr)){
 			array_walk_recursive($arr,array($this,'wppizza_filter_sanitize_post_vars_recursive'));
-		}
+		}		
+		/**as tips belong to order details and not customer details, we exclude them from the post vars that get stored in the db customer_ini*/
+		if(isset($arr['ctips'])){unset($arr['ctips']);}
+		
 		return $arr;
 	}
 /*********************************************************************************

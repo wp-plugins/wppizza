@@ -73,7 +73,13 @@ if(is_user_logged_in() ) {
 			<?php if($cart['order_value']['item_tax']['val']>0 && $cart['tax_applied']=='items_and_shipping'){/*item/sales tax applied to items AND shipping  NEW IN VERSION 2.0 / 2.5*/ ?>
 				<li class="wppizza-order-item-tax"><?php echo $txt['item_tax_total']['lbl'] ?><span><?php echo $cart['currency'].' '.$cart['order_value']['item_tax']['val']; ?></span></li>
 			<?php } ?>
-
+			
+			
+			<?php if(isset($cart['tips']) && $cart['tips']>0){/*tips NEW 2.8.4*/?>
+				<li class="wppizza-order-tips"><?php echo $txt['tips']['lbl'] ?><span><span></span><?php echo $cart['currency'].' '.$cart['tips']['val']; ?></span></li>
+			<?php } ?>
+			
+			
 				<li id="wppizza-cart-total"><?php echo $txt['order_total']['lbl'] ?><span><?php echo $cart['currency'].' '.$cart['order_value']['total']['val']; ?></span></li>
 
 			<?php if(isset($cart['self_pickup_enabled']) &&  $cart['selfPickup']==1){ /*self pickup conditional-> no delivery charges : NEW IN VERSION 1.4.1**/ ?>
@@ -105,6 +111,13 @@ if(is_user_logged_in() ) {
 				<?php if($elm['type']=='text'){ ?>
 					<input id="<?php echo $elm['key'] ?>" name="<?php echo $elm['key'] ?>" type="text" value="<?php echo !empty($elm['prefill']) && isset($userMeta[$elm['key']]) ? $userMeta[$elm['key']] :''  /*CHANGED IN VERSION 2.6.5.3*/ ?>" <?php echo !empty($elm['required'])?'required':'' ?>/>
 				<?php } ?>
+				<?php if($elm['type']=='tips'){ /*ADDED IN VERSION 2.8.4 */ ?>
+					<div id="wppizza-<?php echo $elm['key'] ?>-wrap-outer"><span id="wppizza-<?php echo $elm['key'] ?>-wrap-inner">
+					<input id="wppizza-<?php echo $elm['key'] ?>-btn" type="button" class="btn btn-secondary" value="<?php echo $txt['tips_ok']['lbl'] ?>" />
+					<input id="<?php echo $elm['key'] ?>" name="<?php echo $elm['key'] ?>" type="text" value="<?php echo !empty($cart['tips']['val']) ? $cart['tips']['val'] :'' ?>" <?php echo !empty($elm['required'])?'required':'' ?>/>
+					</span></div>
+					
+				<?php } ?>
 				<?php if($elm['type']=='email'){?>
 					<input id="<?php echo $elm['key'] ?>" name="<?php echo $elm['key'] ?>" type="email" value="<?php echo !empty($elm['prefill']) && isset($userMeta[$elm['key']]) ? $userMeta[$elm['key']] :''  /*CHANGED IN VERSION 2.6.5.3*/ ?>" <?php echo !empty($elm['required'])?'required':'' ?>/>
 				<?php } ?>
@@ -119,6 +132,16 @@ if(is_user_logged_in() ) {
 						<?php } ?>
 					</select>
 				<?php } ?>
+				<?php if($elm['type']=='selectcustom'){/*NEW IN VERSION 2.8.4 BUT NOT IN USE AT THE MOMENT. THIS WILL PROBABLY CHANGE */?>
+					<select id="<?php echo $elm['key'] ?>" name="<?php echo $elm['key'] ?>" <?php echo !empty($elm['required'])?'required':'' ?>>
+						<option value="">--------</option>
+						<?php foreach($elm['value'] as $a=>$b){?>
+						<option value="<?php echo wppizza_validate_string($b) ?>" <?php echo !empty($elm['prefill']) && isset($userMeta[$elm['key']]) && $userMeta[$elm['key']]==wppizza_validate_string($b) ? 'selected="selected"' :''  /*CHANGED IN VERSION 2.6.5.3*/ ?>><?php echo $a ?></option>
+						<?php } ?>
+					</select>
+				<?php } ?>				
+				
+				
 			<?php } ?>
 		<?php } ?>
 		<?php if(is_user_logged_in() ) { /**allow user to update profile ADDED IN VERSION 2.8*/ ?>

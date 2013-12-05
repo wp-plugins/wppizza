@@ -225,42 +225,109 @@ $options = $this->pluginOptions;
 			}
 
 			if($field=='order_form'){
-				sort($options[$field]);
+		
+
+		
+				asort($options[$field]);
+
+	//	print_r($options[$field]);
+		
+	//	exit();
+
+
+
 				echo"<table id='wppizza_".$field."'>";
 					echo"<tr><th>".__('Sort', $this->pluginLocale)."</th><th>".__('Label', $this->pluginLocale)."</th><th>".__('Enabled', $this->pluginLocale)."</th><th>".__('Required', $this->pluginLocale)."</th><th>".__('Prefill<br/>[if known]', $this->pluginLocale)."</th><th>".__('Use when<br/>Registering ?', $this->pluginLocale)."</th><th>".__('Type', $this->pluginLocale)."</th></tr>";
 				foreach($options[$field] as $k=>$v){
+					$disableRegister=false;$disablePrefill=false;$fixedType='';$fixedTypeLabel='';
+					
+					if($v['key']=='cemail'){$disableRegister=true;$fixedType='email';$fixedTypeLabel='email';}
+					if($v['key']=='ctips'){$disableRegister=true;$disablePrefill=true;$fixedType='tips';$fixedTypeLabel='';}
+					if($v['key']=='csurcharges'){$disableRegister=true;$disablePrefill=true;$fixedType='selectcustom';}
+					
+					
 					if($v['key']=='cemail'){$style=' style="margin-bottom:0"';}else{$style='';}
 					echo"<tr class='".$v['key']."'>";
 					echo"<td><input name='".$this->pluginSlug."[".$field."][".$k."][sort]' size='1' type='text' value='".$v['sort']."' /></td>";
 					echo"<td><input name='".$this->pluginSlug."[".$field."][".$k."][lbl]' size='15' type='text' value='".$v['lbl']."' /></td>";
 					echo"<td><input name='".$this->pluginSlug."[".$field."][".$k."][enabled]' type='checkbox' ". checked($v['enabled'],true,false)." value='1' /></td>";
 					echo"<td><input name='".$this->pluginSlug."[".$field."][".$k."][required]' type='checkbox' ". checked($v['required'],true,false)." value='1' /></td>";
-					if($v['key']=='cemail'){$disabled=" disabled='disabled'";}else{$disabled='';}
-					echo"<td><input name='".$this->pluginSlug."[".$field."][".$k."][prefill]' type='checkbox' ". checked($v['prefill'],true,false)." value='1' /></td>";
-					echo"<td><input name='".$this->pluginSlug."[".$field."][".$k."][onregister]' type='checkbox' ". checked($v['onregister'],true,false)." ".$disabled." value='1' /></td>";
+					echo"<td>";
+						if(!$disablePrefill){echo"<input name='".$this->pluginSlug."[".$field."][".$k."][prefill]' type='checkbox' ". checked($v['prefill'],true,false)." value='1' />";}else{echo"".__('N/A', $this->pluginLocale)."";}
+					echo"</td>";
+					echo"<td>";
+						if(!$disableRegister){echo"<input name='".$this->pluginSlug."[".$field."][".$k."][onregister]' type='checkbox' ". checked($v['onregister'],true,false)." value='1' />";}else{echo"".__('N/A', $this->pluginLocale)."";}
+					echo"</td>";
 
 					echo "<td>";
-						echo "<select id='".$this->pluginSlug."_".$field."_type_".$k."' class='".$this->pluginSlug."_".$field."_type' name='".$this->pluginSlug."[".$field."][".$k."][type]' />";
-							echo'<option value="text" '.selected($v['type'],"text",false).'>text</option>';
-							echo'<option value="email" '.selected($v['type'],"email",false).'>email</option>';
-							echo'<option value="textarea" '.selected($v['type'],"textarea",false).'>textarea</option>';
-							echo'<option value="select" '.selected($v['type'],"select",false).'>select</option>';
-						echo "</select>";
-						if($v['type']!='select'){$display=' style="display:none"';$val='';}else{$display='';$val=''.implode(",",$v['value']).'';}
+						
+						if($fixedType!=''){
+							echo "<input type='hidden' id='".$this->pluginSlug."_".$field."_type_".$k."' name='".$this->pluginSlug."[".$field."][".$k."][type]' value='".$fixedType."' />";	
+							echo "".$fixedTypeLabel."";
+						}else{
+							echo "<select id='".$this->pluginSlug."_".$field."_type_".$k."' class='".$this->pluginSlug."_".$field."_type' name='".$this->pluginSlug."[".$field."][".$k."][type]' />";
+								echo'<option value="text" '.selected($v['type'],"text",false).'>text</option>';
+								echo'<option value="email" '.selected($v['type'],"email",false).'>email</option>';
+								echo'<option value="textarea" '.selected($v['type'],"textarea",false).'>textarea</option>';
+								echo'<option value="select" '.selected($v['type'],"select",false).'>select</option>';
+							echo "</select>";
+						}
+						
+						$display=' style="display:none"';$val='';
+						
+						if($v['type']=='select'){$display='';$val=''.implode(",",$v['value']).'';}
+						if($v['type']=='selectcustom'){$display='';
+							$valArr=array();
+							foreach($v['value'] as $vKey=>$vVal){
+								$valArr[]=''.$vKey.':'.$vVal.'';
+							}
+							$val=implode("|",$valArr);
+						}
+						
+						
 						echo "<span class='".$this->pluginSlug."_".$field."_select'".$display.">";
 							echo "<input name='".$this->pluginSlug."[".$field."][".$k."][value]' type='text' value='".$val."' />";
 						echo "</span>";
 						echo "<span class='".$this->pluginSlug."_".$field."_select'".$display.">";
-							echo "".__('separate multiple with comma', $this->pluginLocale)."";
+							if($v['type']!='selectcustom'){echo "".__('separate multiple with comma', $this->pluginLocale)."";}
+							if($v['type']=='selectcustom'){echo "".__('enter required value pairs', $this->pluginLocale)."";}
 						echo "</span>";
-					echo"</td>";
+					echo"</td>";// ".$v['key']." ".$v['type']."
+					echo"</tr>";
+					
 					if($v['key']=='cemail'){
-						echo"<tr><td colspan='7' style='margin:0;padding:0 0 0 10px'>";
-						echo"<span class='description'>".__('Note: only this field can and should be used to send email notifications of the order to the customer (if enabled).<br/>Furthermore, you cannot select this field to show on the registration form. (Wordpress already adds this field)', $this->pluginLocale)."</span>";
+						echo"<tr class='".$v['key']."'><td colspan='7' style='margin:0;padding:0 0 0 10px'>";
+						echo"<span class='description'>".__('<b>Note:</b> only this field can and should be used to send email notifications of the order to the customer (if enabled).<br/>Furthermore, you cannot select this field to show on the registration form. (Wordpress already adds this field)', $this->pluginLocale)."</span>";
 						echo"</td></tr>";
 					}
-					echo"</tr>";
+					if($v['key']=='ctips'){
+						
+						
+						
+						echo"<tr class='".$v['key']."'><td colspan='7' style='margin:0;padding:0 0 0 10px'>";
+						echo"<span class='description'>";
+						echo"".__('<b>Tips/Gratuities:</b> allow the customer can enter a <b>numerical</b> amount to be used as tips/gratuities.<br/>This field will not be added to the users profile and can therefore not be pre-filled or used in the registration form.', $this->pluginLocale)."";
+						/**the following notice can probably be removed in a few months**/
+						if (class_exists( 'WPPIZZA_GATEWAY_PAYPAL') ) {
+							$pluginPath=dirname(dirname(plugin_dir_path( __FILE__ )));
+							$gwPaypalData=get_plugin_data($pluginPath.'/wppizza-gateway-paypal/wppizza-gateway-paypal.php', false, false );
+							if( version_compare( $gwPaypalData['Version'], '2.1' , '<' )) {
+								echo"<br/><span style='color:red'>If you want to enable this field you MUST update to Wppizza Paypal Gateway 2.1+.<br/>If your version of the paypal gateway is < 2.0 <a href='mailto:dev@wp-pizza.com'> contact me</a> with your purchase id for an update.<br/>If your version is >= 2.0 you should be able to update via your dashboard (provided you activated your license).<br/>This notice will disappear as soon as you have updated the Paypal Gateway. </span>";
+							}
+						}
+						/*********************end of notice******************************/
+						echo"</span>";
+						echo"</td></tr>";
+					}	
+					if($v['key']=='csurcharges'){
+						echo"<tr class='".$v['key']."'><td colspan='7' style='margin:0;padding:0 0 0 10px'>";
+						echo"<span class='description'>".__('<b>Surcharges:</b> generate a dropdown of applicable surcharges as comma/pipe delimited label/price pairs (% allowed).<br />Example: "CC:1.00|COD:0.75%|Other:5" etc. <b>Any value selected by the customer will be added to the delivery charges.</b><br/>This field will not be added to the users profile and can therefore not be pre-filled or used in the registration form.', $this->pluginLocale)."</span>";
+						echo"</td></tr>";
+					}									
+					
 				}
+				//future use
+				//echo"<tr><th colspan='7' class='wppizza-order-form-footer' ><span id='wppizza-toggle-tgs' class='description'>".__('Show Tips/Gratuities', $this->pluginLocale)."<span></th></tr>";
 				echo"</table>";
 			}
 
@@ -468,7 +535,7 @@ $options = $this->pluginOptions;
 				echo"<div id='wppizza_".$field."'>";
 					echo"<div id='wppizza_".$field."_options'>";
 					asort($localizeOptions);
-					$bgStyle=array(0,5,11,12,15,24,31);
+					$bgStyle=array(0,5,11,12,15,27,34);
 					$i=0;
 					foreach($localizeOptions as $k=>$v){
 					if(in_array($i,$bgStyle)){echo'<div>';}

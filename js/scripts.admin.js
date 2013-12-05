@@ -68,7 +68,7 @@ jQuery(document).ready(function($){
 	/*******************************
 	*	[time picker]
 	*******************************/
-    $('#wppizza-settings').on('click', '.wppizza-time-select', function(e){
+    $('#wppizza-settings,.wppizza-settings').on('click', '.wppizza-time-select', function(e){
     	e.preventDefault();
     	$(this).timepicker({
     	hourText: 'Hour',
@@ -87,7 +87,7 @@ jQuery(document).ready(function($){
     /*******************************
 	*	[date picker]
 	*******************************/
-    $('#wppizza-settings').on('click', '.wppizza-date-select', function(e){
+    $('#wppizza-settings,.wppizza-settings').on('click', '.wppizza-date-select', function(e){
     	e.preventDefault();
     	$(this).datepicker({dateFormat : 'dd M yy'}).datepicker( "show" );
     });
@@ -216,7 +216,13 @@ jQuery(document).ready(function($){
 				return;	
 			}
 		}
-		$(this).closest('span').remove();
+		/**allow to remove by class and not just span*/
+		var remItem=$(this).closest('.wppizza-row-remove');
+		if(remItem.length>0){
+			remItem.remove();	
+		}else{
+			$(this).closest('span').remove();
+		}
 	});
 	/*****************************
 	*	[poll orders]
@@ -301,5 +307,11 @@ jQuery(document).ready(function($){
 		$('.wppizza-gateway-settings').slideUp();
 		self.closest('.wppizza-gateway').find('.wppizza-gateway-settings').slideDown();
 	});	
+	/*********************************************************
+	*	[show order form tips/surcharges option - not yet in use]
+	*********************************************************/
+	$(document).on('click', '#wppizza-toggle-tgs', function(e){
+		$('#wppizza_order_form tr.ctips,#wppizza_order_form tr.csurcharges').toggle("slow");
+	});		
 
 })

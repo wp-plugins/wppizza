@@ -166,7 +166,6 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 	function wppizza_gateway_order_details($addVars=array()) {
 		$gatewayOrder=array();
 		$cartDetails=wppizza_order_summary($_SESSION[$this->pluginSession],$this->pluginOptions);
-
 		$gatewayOrder['currencyiso']=$cartDetails['currencyiso'];
 		$gatewayOrder['currency']=$cartDetails['currency'];
 		foreach($cartDetails['items'] as $k=>$v){
@@ -195,6 +194,8 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 		$gatewayOrder['item_tax']=wppizza_validate_float_only($cartDetails['order_value']['item_tax']['val']);
 
 		$gatewayOrder['delivery_charges']=!empty($cartDetails['order_value']['delivery_charges']['val']) ? wppizza_validate_float_only($cartDetails['order_value']['delivery_charges']['val']) : '';
+		$gatewayOrder['tips']=!empty($cartDetails['tips']['val']) ? wppizza_validate_float_only($cartDetails['tips']['val']) : '';
+		
 		$gatewayOrder['selfPickup']=!empty($cartDetails['selfPickup']) ? 1 : 0;
 		$gatewayOrder['total']=wppizza_validate_float_only($cartDetails['order_value']['total']['val']);
 

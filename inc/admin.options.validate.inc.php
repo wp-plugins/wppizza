@@ -171,16 +171,29 @@
 		if(isset($_POST[''.$this->pluginSlug.'_order_form'])){
 			foreach($input['order_form'] as $a=>$b){
 				$options['order_form'][$a]['sort'] = (int)($input['order_form'][$a]['sort']);
-				$options['order_form'][$a]['key'] = ($options['order_form'][$a]['key']);
+				$options['order_form'][$a]['key'] = $options['order_form'][$a]['key'];
 				$options['order_form'][$a]['lbl'] = wppizza_validate_string($input['order_form'][$a]['lbl']);
-				$options['order_form'][$a]['value'] = wppizza_strtoarray($input['order_form'][$a]['value']);
 				$options['order_form'][$a]['type'] = wppizza_validate_letters_only($input['order_form'][$a]['type']);
 				$options['order_form'][$a]['enabled'] = !empty($input['order_form'][$a]['enabled']) ? true : false;
 				$options['order_form'][$a]['required'] = !empty($input['order_form'][$a]['required']) ? true : false;
 				$options['order_form'][$a]['prefill'] = !empty($input['order_form'][$a]['prefill']) ? true : false;
 				$options['order_form'][$a]['onregister'] = !empty($input['order_form'][$a]['onregister']) ? true : false;
+				
+				if($options['order_form'][$a]['type']=='selectcustom'){
+					$options['order_form'][$a]['value'] = wppizza_surchargestoarray($input['order_form'][$a]['value']);
+				}else{
+					$options['order_form'][$a]['value'] = wppizza_strtoarray($input['order_form'][$a]['value']);
+				}				
+				
+				
+				
 			}
 		}
+		
+		
+		//print_r($options['order_form']);
+		//exit();
+		
 		/**validate sizes settings***/
 		if(isset($_POST[''.$this->pluginSlug.'_sizes'])){
 			$options['sizes'] = array();//initialize array

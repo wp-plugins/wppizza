@@ -14,8 +14,7 @@
 	$str.="<select name='".$this->pluginSlug."[sizes]' class='wppizza_pricetier_select'>";
 	foreach($optionsSizes as $l=>$m){
 		if($l==$meta_values['sizes']){$sel=" selected='selected'";}else{$sel='';}
-		if($options['sizes'][$l][0]['lbladmin']!=''){$ident='"'.$options['sizes'][$l][0]['lbladmin'].'"';}else{$ident='ID:'.$l.'';}
-		
+		$ident=!empty($options['sizes'][$l][0]['lbladmin']) && $options['sizes'][$l][0]['lbladmin']!='' ? $options['sizes'][$l][0]['lbladmin'] :'ID:'.$l.'';		
 		$str.="<option value='".$l."'".$sel.">".implode(", ",$m['lbl'])." [".$ident."]</option>";
 	}
 	$str.="</select>";

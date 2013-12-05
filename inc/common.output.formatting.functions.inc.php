@@ -742,12 +742,19 @@ function wppizza_order_summary($session,$options,$ajax=null){
 				$summary['tax_applied']='items_and_shipping';
 				$itemTax=wppizza_round_up(($totalSales+$deliveryCharges)/100*$options['order']['item_tax'],2);
 			}
-
+			/******************************************************
+				[gratuities]
+			*******************************************************/
+			$gratuities=0;
+			if(isset($session['tips']) && $session['tips']>0){
+				$gratuities=wppizza_output_format_price($session['tips'],$optionsDecimals);
+				$summary['tips']=array('lbl'=>$options['localization']['tips']['lbl'],'val'=>$gratuities);
+			}
 
 	/****************************************************
 		[get total order value]
 	****************************************************/
-	$totalOrder=$session['total_price_items']-(float)$discountValue+(float)$deliveryCharges+(float)$itemTax;
+	$totalOrder=$session['total_price_items']-(float)$discountValue+(float)$deliveryCharges+(float)$itemTax+(float)$gratuities;
 	/**if customer chose self pickup, display only label that states self pickup . no need for value**/
 	$deliveryValue=wppizza_output_format_price($deliveryCharges,$optionsDecimals);
 	$summary['order_value']=array('item_tax'=>array('lbl'=>$options['localization']['item_tax_total']['lbl'],'val'=>wppizza_output_format_price($itemTax,$optionsDecimals)),'total_price_items'=>array('lbl'=>$options['localization']['order_items']['lbl'],'val'=>wppizza_output_format_price(wppizza_output_format_float($session['total_price_items']),$optionsDecimals)),'delivery_charges'=>array('lbl'=>$deliveryLabel,'val'=>$deliveryValue),'discount'=>array('lbl'=>$discountLabel,'val'=>$discountValuePrint),'total'=>array('lbl'=>$options['localization']['order_total']['lbl'],'val'=>wppizza_output_format_price(wppizza_output_format_float($totalOrder),$optionsDecimals)));
@@ -808,7 +815,7 @@ function wppizza_order_summary($session,$options,$ajax=null){
 		}
 	
 	}
-	/**enable increase/decrese in cart**/
+	/**enable increase/decrease in cart**/
 	if($options['layout']['cart_increase']){
 		$summary['increase_decrease']=1;
 	}

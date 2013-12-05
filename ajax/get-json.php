@@ -153,6 +153,34 @@ if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='profile_update'){
 	$wpdb->query("UPDATE ".$wpdb->prefix . $this->pluginOrderTable." SET order_ini='".maybe_serialize($oDetails)."'WHERE id='".$order->id."' ");
 exit();
 }
+
+/***************************************************************
+*
+*
+*	[tip added ]
+*
+*
+***************************************************************/
+if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='add_tips'){
+	/*****************************************
+		[get and parse all post variables
+	*****************************************/
+	$params = array();
+	parse_str($_POST['vars']['data'], $params);
+	/*****************************************
+		[sanitize gratuity]
+	*****************************************/
+	$tips=wppizza_validate_float_only($params['ctips'],2);
+	global $wpdb;
+	/*might as well delete the previously initialized order. So we do not delete arbitrary stuff when messing with the hash, restrict to INITIALIZED and orders of 3 minutes or less. Ought to be reasonably safe**/
+	$res=$wpdb->query( $wpdb->prepare( "DELETE FROM ".$wpdb->prefix . $this->pluginOrderTable." WHERE hash=%s AND payment_status='INITIALIZED' AND order_date > TIMESTAMPADD(MINUTE,-3,NOW()) ",$params['wppizza_hash']));
+	/**add to session*/
+	$_SESSION[$this->pluginSession]['tips']=$tips;
+exit();
+}
+
+
+
 /************************************************************************************************
 *
 *

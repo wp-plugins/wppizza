@@ -153,7 +153,20 @@ return;
 					<?php } ?>				
 				</span>
 			</span>			
-			<?php } ?>						
+			<?php } ?>			
+			
+			
+			<?php if(isset($cart['tips']) && $cart['tips']>0){/*tips NEW 2.8.4*/?>
+			<span class="wppizza-order-tips">
+				<span class="wppizza-order-tips-label">
+					<?php echo $cart['tips']['lbl'] ?>
+				</span>
+				<span class="wppizza-order-tips-value wppizza-cart-info-price">
+					<?php echo $cart['currency'].' '.$cart['tips']['val']; ?>
+				</span>
+			</span>
+			<?php } ?>			
+						
 						
 			<span class="wppizza-cart-total">
 				<span class="wppizza-cart-total-label">

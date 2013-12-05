@@ -230,7 +230,13 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 				**********************************************************/
 				if(isset($oDetails['handling_charge']) && $oDetails['handling_charge']>0){
 					$wppizzaEmailOrderSummary['handling_charge']=array('label'=>($pOptions['localization']['order_page_handling']['lbl']),'price'=>wppizza_output_format_price($oDetails['handling_charge'],$pOptions['layout']['hide_decimals']),'currency'=>$oDetails['currency'] );
-				}						
+				}		
+				/**********************************************************
+				*	[tips )]
+				**********************************************************/
+				if(isset($oDetails['tips']) && $oDetails['tips']>0){
+					$wppizzaEmailOrderSummary['tips']=array('label'=>($pOptions['localization']['tips']['lbl']),'price'=>wppizza_output_format_price($oDetails['tips'],$pOptions['layout']['hide_decimals']),'currency'=>$oDetails['currency'] );
+				}										
 				/**********************************************************
 					[order total]
 				**********************************************************/
@@ -409,13 +415,13 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 				/************set headers*************/
 				$header = '';
 				if($orderFromEmail!=''){
-					$header .= 'From: '.$orderFromName.'<'.$orderFromEmail.'>' . PHP_EOL.
+					$header .= 'From: '.$orderFromName.' <'.$orderFromEmail.'>' . PHP_EOL.
 					'Reply-To: '.$this->orderClientEmail.'' . PHP_EOL .
 					'X-Mailer: PHP/' . $phpVersion;
 					$header .= PHP_EOL;
 					$header .= 'Cc: '.$this->orderClientEmail.'' . PHP_EOL;
 				}else{
-					$header .= 'From: --------<>' . PHP_EOL.
+					$header .= 'From: -------- <>' . PHP_EOL.
 					'Reply-To: '.$this->orderClientEmail.'' . PHP_EOL .
 					'X-Mailer: PHP/' . $phpVersion;
 					$header .= PHP_EOL;
@@ -441,10 +447,10 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 				/************set headers*************/
 				$wpMailHeaders=array();
 				if($orderFromEmail!=''){
-					$wpMailHeaders[] = 'From: '.$orderFromName.'<'.$orderFromEmail.'>';
+					$wpMailHeaders[] = 'From: '.$orderFromName.' <'.$orderFromEmail.'>';
 					$wpMailHeaders[] = 'Cc: '.$this->orderClientEmail.'';
 				}else{
-					$wpMailHeaders[] = 'From: --------<>';
+					$wpMailHeaders[] = 'From: -------- <>';
 				}
 				if(count($this->orderShopBcc)>0){
 					$bccs=implode(",",$this->orderShopBcc);/*trying to get rid of strict errors->passed by reference*/
@@ -649,6 +655,9 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 			if(isset($thisOrderDetails['handling_charge']) && $thisOrderDetails['handling_charge']>0){
 				$summary['handling_charge']=wppizza_output_format_price($thisOrderDetails['handling_charge'],$this->pluginOptions['layout']['hide_decimals']);
 			}
+			if(isset($thisOrderDetails['tips']) && $thisOrderDetails['tips']>0){
+				$summary['tips']=wppizza_output_format_price($thisOrderDetails['tips'],$this->pluginOptions['layout']['tips']);
+			}			
 			
 			
 			/***********************************************

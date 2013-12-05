@@ -405,7 +405,9 @@
 				7=>array('sort'=>7,'key'=>'ccustom3','lbl'=>__('Custom Field 3 :', $this->pluginLocale),'value'=>array(),'type'=>'text','enabled'=>false,'required'=>false,'prefill'=>false,'onregister'=>false),
 				8=>array('sort'=>8,'key'=>'ccustom4','lbl'=>__('Custom Field 4 :', $this->pluginLocale),'value'=>array(),'type'=>'text','enabled'=>false,'required'=>false,'prefill'=>false,'onregister'=>false),
 				9=>array('sort'=>9,'key'=>'ccustom5','lbl'=>__('Custom Field 5 :', $this->pluginLocale),'value'=>array(),'type'=>'text','enabled'=>false,'required'=>false,'prefill'=>false,'onregister'=>false),
-				10=>array('sort'=>10,'key'=>'ccustom6','lbl'=>__('Custom Field 6 :', $this->pluginLocale),'value'=>array(),'type'=>'text','enabled'=>false,'required'=>false,'prefill'=>false,'onregister'=>false)
+				10=>array('sort'=>10,'key'=>'ccustom6','lbl'=>__('Custom Field 6 :', $this->pluginLocale),'value'=>array(),'type'=>'text','enabled'=>false,'required'=>false,'prefill'=>false,'onregister'=>false),
+				11=>array('sort'=>11,'key'=>'ctips','lbl'=>__('Tips/Gratuities :', $this->pluginLocale),'value'=>array(),'type'=>'tips','enabled'=>false,'required'=>false,'prefill'=>false,'onregister'=>false)
+				//...one day... 12=>array('sort'=>12,'key'=>'csurcharges','lbl'=>__('Surcharges :', $this->pluginLocale),'value'=>array(),'type'=>'selectcustom','enabled'=>false,'required'=>false,'prefill'=>false,'onregister'=>false) in the future maybe
 			),
 			'gateways'=>array(
 				'gateway_selected'=>array('COD'=>true),
@@ -496,6 +498,10 @@
 					'descr'=>__('Order Page: message when required field is missing', $this->pluginLocale),
 					'lbl'=>__('this is a required field', $this->pluginLocale)
 				),
+				'required_field_decimal'=>array(
+					'descr'=>__('Order Page: message when field should be a decimal number', $this->pluginLocale),
+					'lbl'=>__('decimal numbers only please', $this->pluginLocale)
+				),					
 				'thank_you'=>array(
 					'descr'=>__('Order Page: label of thank you page after order has been sent', $this->pluginLocale),
 					'lbl'=>__('thank you', $this->pluginLocale)
@@ -508,6 +514,14 @@
 					'descr'=>__('Order Page: label next to checkbox text to allow user to update profile', $this->pluginLocale),
 					'lbl'=>__('update my user data with the details above', $this->pluginLocale)
 				),
+				'tips'=>array(
+					'descr'=>__('Order Page: Tips/Gratuities', $this->pluginLocale),
+					'lbl'=>__('tips/gratuities', $this->pluginLocale)
+				),
+				'tips_ok'=>array(
+					'descr'=>__('Order Page: Tips/Gratuities confirm button', $this->pluginLocale),
+					'lbl'=>__('ok', $this->pluginLocale)
+				),												
 				'order_details'=>array(
 					'descr'=>__('Order Email: label for order details', $this->pluginLocale),
 					'lbl'=>__('order details', $this->pluginLocale)

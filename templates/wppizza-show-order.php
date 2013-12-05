@@ -81,6 +81,9 @@
 		<?php if(isset($summary['handling_charge']) && $summary['handling_charge']>0){/*handling charges (probably only used for cc's) */ ?>
 			<li class="wppizza-order-item-tax"><?php echo $orderlbl['order_page_handling'] ?><span><?php echo $order['currency'].' '.$summary['handling_charge']; ?></span></li>
 		<?php } ?>
+		<?php if(isset($summary['tips']) && $summary['tips']>0){/*tips and gratuities */ ?>
+			<li class="wppizza-order-item-tax"><?php echo $orderlbl['tips'] ?><span><?php echo $order['currency'].' '.$summary['tips']; ?></span></li>
+		<?php } ?>		
 
 			<li id="wppizza-cart-total"><?php echo $orderlbl['order_total'] ?><span><?php echo $order['currency'].' '.$summary['total']; ?></span></li>
 

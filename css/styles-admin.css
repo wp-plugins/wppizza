@@ -45,8 +45,11 @@
 #wppizza_order_form {border:1px solid #999999;margin-bottom:10px}
 #wppizza_order_form tr:nth-child(odd){background:#EFEFEF;}
 #wppizza_order_form tr:nth-child(even){background:#FFFFFF;}
-
-
+/*toggled via js - not yet in use
+#wppizza_order_form tr.ctips,#wppizza_order_form tr.csurcharges{display:none}
+#wppizza_order_form .wppizza-order-form-footer{text-align:center}
+#wppizza_order_form #wppizza-toggle-tgs{cursor:pointer;color:blue;}
+*/
 /*******************
 	[generic]
 *********************/

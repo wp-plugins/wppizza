@@ -224,16 +224,46 @@ jQuery(document).ready(function($){
 	*
 	***********************************************/
 
-	/*******************************************
+
+	/*******************************************************************
 	*	[validate and submit order page]
 	*	gateway could be either by dropdown,
 	*	radio, or if only one, hidden elm
+	*******************************************************************/
+	$(document).on(''+wppizzaClickEvent+'', '.wppizza-ordernow', function(e){
+		$('#wppizza-send-order').validate().settings.ignore = "";
+	});
+	/*******************************
+	*	[validate tips/gratuities]
+	*******************************/
+	/**current tip value set **/
+	var wppizzaCTipsCurr=$("#wppizza-send-order #ctips").val();
+	/**click should work here even on iStupid as it's a button **/	
+	$(document).on('click', '#wppizza-ctips-btn', function(e){
+		/*we only want to validate the tips, so lets igmore everythig else*/
+		$('#wppizza-send-order').validate().settings.ignore = "#wppizza-send-order>fieldset>input,#wppizza-send-order>fieldset>textarea,#wppizza-send-order>fieldset>select";
+		var isValid=$("#wppizza-send-order").valid();
+		if(isValid){
+			var wppizzaCTipsNew=$("#wppizza-send-order #ctips").val();
+			/**only update/refresh if the value has actually changed**/
+	  		if(wppizzaCTipsCurr!=wppizzaCTipsNew){
+				jQuery.post(wppizza.ajaxurl , {action :'wppizza_json',vars:{'type':'add_tips','data':$('#wppizza-send-order').serialize()}}, function(response) {
+					window.location.href=window.location.href;/*make sure page gest reloaded without confirm*/
+				},'json'); 
+	  		}			
+		}
+	});
+	/*******************************************
+	*	[ini validation]
 	*******************************************/
-	$(document).on(''+wppizzaClickEvent+'', '.wppizza-ordernow', function(e){		
-		$("#wppizza-send-order").validate({
+	$("#wppizza-send-order").validate({
+			rules: {
+	   			ctips: {
+	      			number: true
+	    		}
+	  		},
 			submitHandler: function(form) {
 				var hasClassAjax=false;
-				
 				if($("input[name='wppizza-gateway']").length>0){
 					var elm = $("input[name='wppizza-gateway']");
 					if(elm.is(':radio')){
@@ -268,15 +298,19 @@ jQuery(document).ready(function($){
 				}
 			}
 		})
-	});
 	/******************************
 	* set error messages
 	*******************************/
 	jQuery.extend(jQuery.validator.messages, {
     	required: wppizza.validate_error.required,
-    	email: wppizza.validate_error.email
+    	email: wppizza.validate_error.email,
+    	number: wppizza.validate_error.decimal
 	});
-
+	/**allow for commas in number validation but no negatives**/
+	$.validator.methods.number = function (value, element) {
+	    return this.optional(element) || /^(?:\d+|\d{1,3}(?:[\s\.,]\d{3})+)(?:[\.,]\d+)?$/.test(value);
+	    //return this.optional(element) || /^-?(?:\d+|\d{1,3}(?:[\s\.,]\d{3})+)(?:[\.,]\d+)?$/.test(value);//this would allow negatives too
+	}
 	/******************************
 	* Let's make IE7 IE8 happy and stop submitting while other stuff is going on such as adding items etc
 	*******************************/

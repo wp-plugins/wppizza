@@ -53,6 +53,7 @@
 .wppizza-order>ul.wppizza-cart-contents>.wppizza-cart-item:before {content:'';}
 .wppizza-order>ul.wppizza-cart-contents>.wppizza-cart-item:after {content:'';}
 
+
 /*lets also try to remove before and after if in sidebar*/
 #sidebar .wppizza-order>ul.wppizza-cart-contents>.wppizza-cart-item:before {content:'';}
 #sidebar .wppizza-order>ul.wppizza-cart-contents>.wppizza-cart-item:after {content:'';}
@@ -178,13 +179,20 @@
 /**note: you might want to set the background color for the legend explicitly to work with your theme to make this work in IE and not have ugly lines going THROUGH the legend (or just take out the border above)*/
 #wppizza-send-order>fieldset>legend{margin:0 20px;padding:10px 20px;font-weight:600;width:auto;border:none;background-color:inherit;}
 #wppizza-send-order>fieldset>label{display:block}
-#wppizza-send-order>fieldset>label.error{color:#FF0000;padding:0 0 5px 0;font-size:90%}
+#wppizza-send-order>fieldset label.error{color:#FF0000;padding:0 0 5px 0;font-size:90%}
 #wppizza-send-order>fieldset>input,#wppizza-send-order>fieldset>select,#wppizza-send-order>fieldset>textarea{margin-bottom:3px;width:100%;min-width:100%;padding-left:0;padding-right:0;}
 #wppizza-send-order>fieldset>textarea{height:75px}
 /**order page -> nocheckout (instead of send order button) as minimum values etc have not been reached NEW 2.5.3*/
 #wppizza-send-order>fieldset>.wppizza-order-nocheckout{color:red;text-align:center;line-height:30px}
 /**required label in order page NEW 2.6.5.3*/
 .wppizza-order-label-required:after{content:'*';color:red;padding-left:5px;}
+/*tips/gratuities field and button NEW IN VERSION 2.8.4 to have the error/validation message in a sensible place we have to mess around with floats etc **/
+#wppizza-send-order #wppizza-ctips-wrap-outer{overflow:auto;}
+#wppizza-send-order #wppizza-ctips-wrap-inner{float:left}
+#wppizza-send-order #ctips{float:right}
+#wppizza-send-order #wppizza-ctips-btn{margin:2px 1px;width:auto;min-width:0;height:auto !important; padding:5px 7px !important;line-height:100%;float:right}
+#wppizza-send-order #wppizza-ctips-wrap-inner label.error{display:block}
+
 
 #wppizza-cart-contents{border:1px dotted #CECECE;padding:10px;}
 #wppizza-cart-contents>ul{margin:0 0 10px 0 ;padding:0;list-style-position:inside}
