@@ -176,10 +176,6 @@
 <?php
 	/*ADDED IN VERSION 2.8.5*/
 	do_action('wppizza_loop_inside_before_article',$postId);
-	
-	
-	print"<a href=".$permalink.">link here </a>";
-	
 ?>
 	<article id="post-<?php the_ID(); ?>" <?php post_class(array(''.$post_type.'-article','entry-content')); ?>>
 <?php
