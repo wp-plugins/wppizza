@@ -706,7 +706,10 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 
 			$exclude=array();
 			if(isset($atts['exclude'])){
-				$exclude=explode(",",$atts['exclude']);
+				$exclXplode=explode(",",$atts['exclude']);
+				foreach($exclXplode as $exclId){
+					$exclude[$exclId]=$exclId;
+				}
 			}
 
 			/*set template style if !default*/
@@ -757,7 +760,10 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 			  'show_option_none'   => __('Nothing here'),
 			  'hide_empty'   => 1,
 			  'echo'   => 0				// keep as variable
-			);//'walker'        => new wppizza_walker_nav_menu,
+			);
+			
+			/***add a filter if required*****/
+			$args = apply_filters('wppizza_filter_navigation', $args);
 
 			/*check if the file exists in the theme, otherwise serve the file from the plugin directory if possible*/
 			if ($template_file = locate_template( array ('wppizza-navigation.php'))){
@@ -1033,8 +1039,10 @@ public function wppizza_require_common_input_validation_functions(){
      * Use loop template when displying SINGLE ITEMS in custom post type category
      * [see header of templates/wppizza-single.php for details]
      ******************************************************/
-	function wppizza_filter_loop($args,$args2=null){
-		if(is_single()){
+	function wppizza_filter_loop($args,$args2=null){		
+		if(is_single() && get_post_type()==WPPIZZA_POST_TYPE){
+			global $post;
+			
 			$args['p']=$post->ID;
 			$catTerms = get_the_terms($post->ID, WPPIZZA_TAXONOMY);
 			if ( $catTerms && ! is_wp_error( $catTerms ) ){

@@ -95,6 +95,10 @@
  * 
  ********************************************/
 ?>
+<?php
+	/*ADDED IN VERSION 2.8.5*/
+	do_action('wppizza_loop_outside_start',$the_query);
+?>
 <?php if(!isset($noheader) && $termDetails){ /*exclude header if set*/?>
 	<header class="page-header entry-header <?php echo $post_type ?>-header">
 		<h1 class="page-title entry-title <?php echo $post_type ?>-title"><?php echo $termDetails->name ?></h1>
@@ -103,6 +107,10 @@
 		<?php endif; ?>
 	</header>
 <?php } ?>
+<?php
+	/*ADDED IN VERSION 2.8.5*/
+	do_action('wppizza_loop_outside_before',$the_query);
+?>
 <?php
 /********************************************
 *
@@ -165,7 +173,25 @@
 	 	if($numberOfSizes>1){$clickTriggerClass=' '.$post_type.'-trigger-choose';}
 	}
 ?>
+<?php
+	/*ADDED IN VERSION 2.8.5*/
+	do_action('wppizza_loop_inside_before_article',$postId);
+	
+	
+	print"<a href=".$permalink.">link here </a>";
+	
+?>
 	<article id="post-<?php the_ID(); ?>" <?php post_class(array(''.$post_type.'-article','entry-content')); ?>>
+<?php
+/*********************************************
+	[single items entry content]
+	[lets attempt to keep single items (if used)
+	somewhat consistant. depends on theme though]
+**********************************************/
+if(is_single()){
+	print"<div class='entry-content'>";
+}
+?>
 <?php
 /*********************************************
 			[thumbnails]
@@ -197,6 +223,10 @@
 			</div>
 		<?php } } ?>
 <?php
+	/*ADDED IN VERSION 2.8.5*/
+	do_action('wppizza_loop_inside_after_thumbnails',$postId);
+?>		
+<?php
 /*********************************************
 		[prices]
 **********************************************/
@@ -223,8 +253,13 @@
 	   	<?php } ?>
 
 		</div>
+<?php 	} ?>
+
 <?php
-	}
+	/*ADDED IN VERSION 2.8.5*/
+	do_action('wppizza_loop_inside_after_prices',$postId);
+?>
+<?php
 /*********************************************
 		[title, additives info and description]
 **********************************************/
@@ -240,14 +275,35 @@
 				</sup>
 			<?php } ?>
 		</h2>
+<?php
+	/*ADDED IN VERSION 2.8.5*/
+	do_action('wppizza_loop_inside_after_title',$postId);
+?>			
 		<?php the_content();?>
 		</div>
+
+<?php
+	/*ADDED IN VERSION 2.8.5*/
+	do_action('wppizza_loop_inside_after_content',$postId);
+?>
+<?php
+/*********************************************
+		[single items entry content end]
+**********************************************/
+if(is_single()){
+	print"</div>";
+}
+?>
 <?php
 /*********************************************
 		[article end]
 **********************************************/
 ?>
 	</article>
+<?php
+	/*ADDED IN VERSION 2.8.5*/
+	do_action('wppizza_loop_inside_after_article',$postId);
+?>
 <?php
 /*************************************************
 	[comments box - if single item view and enabled of course]
@@ -256,7 +312,15 @@ if(is_single()){
 	comments_template( '', true ); 
 }
 ?>	
+<?php
+	/*ADDED IN VERSION 2.8.5*/
+	do_action('wppizza_loop_inside_after_comments',$postId);
+?>
 <?php endwhile;	?>
+<?php
+	/*ADDED IN VERSION 2.8.5*/
+	do_action('wppizza_loop_outside_after',$the_query);
+?>
 <?php
 /********************************************
  *
@@ -274,6 +338,10 @@ if(isset($additivesOnPage) || (isset($showadditives) && $showadditives==1)){
 	</div>
 <?php }} ?>
 <?php
+	/*ADDED IN VERSION 2.8.5*/
+	do_action('wppizza_loop_outside_after_additives',$the_query);
+?>
+<?php
 /*************************************************
 	[pagination - no need to display empty divs]
 **************************************************/
@@ -284,3 +352,7 @@ if(!is_single() && $the_query->max_num_pages>1){
   <div class="alignright"><?php next_posts_link(''.$txt['next']['lbl'].'',$the_query->max_num_pages) ?></div>
 </div>
 <?php } ?>
+<?php
+	/*ADDED IN VERSION 2.8.5*/
+	do_action('wppizza_loop_outside_end',$the_query);
+?>

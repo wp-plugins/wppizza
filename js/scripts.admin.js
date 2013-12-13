@@ -37,6 +37,8 @@ jQuery(document).ready(function($){
 			e.preventDefault();
 			var ordId=$(this).attr('id').split("-").pop(-1);
             //Get the value of textareas
+            var initiator=$('#wppizza_order_initiator_'+ordId+'').val();
+            var transaction_id=$('#wppizza_order_transaction_id_'+ordId+'').val();
             var order=$('#wppizza_order_details_'+ordId+'').val();
             var customer=$('#wppizza_order_customer_details_'+ordId+'').val();
 
@@ -44,16 +46,21 @@ jQuery(document).ready(function($){
             var currentPage = document.body.innerHTML;
 
             //Re-create the page HTML with required info only
-            document.body.innerHTML =
+           var wpPizzaOrderHistory=
               "<html><head><title></title></head><body>" +
-              wppizzaNl2br(customer) + wppizzaNl2br(order) +"</body></html>";
+              (initiator) + "<br />" +
+              (transaction_id)  + "<br /><br />" +
+              wppizzaNl2br(customer) + 
+              wppizzaNl2br(order) +"</body></html>";
 
-            //Print Page
-            window.print();
-
-            //Restore orignal HTML
-            document.body.innerHTML = currentPage;
-
+            //Print Page : as Android doesnt understnd this, let's open a window            
+            var wpPizzaOrderHistoryWindow = window.open("","WppizzaOrder","width=750,height=550");
+			wpPizzaOrderHistoryWindow.document.write(wpPizzaOrderHistory);
+            
+            wpPizzaOrderHistoryWindow.focus();
+			/*android doesnt understand .print() not my fault really*/
+			wpPizzaOrderHistoryWindow.print();
+            
 	});
 	/**nl2br when printing*/
 	var wppizzaNl2br =function(str, is_xhtml) {

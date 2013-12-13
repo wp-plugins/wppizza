@@ -126,7 +126,7 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 					/*tidy up a bit*/
 					if($userMeta['wppizza-gateway']){unset($userMeta['wppizza-gateway']);}
 					if($userMeta['wppizza_hash']){unset($userMeta['wppizza_hash']);}
-					if($userMeta['update_profile']){unset($userMeta['update_profile']);}
+					if(isset($userMeta['update_profile'])){unset($userMeta['update_profile']);}
 					update_user_meta($res->wp_user_id, 'wppizza_user_meta', $userMeta);
 				}
 				/*********************************************************************
@@ -362,7 +362,7 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 					$recipientName =!empty($cDetails['cname']) ? wppizza_validate_string($cDetails['cname']) : '';
 					$fromEmails=!empty($cDetails['cemail']) ? wppizza_validate_email_array($cDetails['cemail']) : '';
 					$this->orderClientName= wppizza_email_decode_entities($recipientName,$this->blogCharset).'';
-					$this->orderClientEmail=$fromEmails[0];
+					$this->orderClientEmail=!empty($fromEmails[0]) ? $fromEmails[0] : '';
 
 					/***********************************************
 						[overwrite subject vars for email subject]
@@ -547,13 +547,16 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 			$output='';
 			/***successfully sent***/
 			if(isset($mailResults['status'])){
-				$output="<div class='mailSuccess'><h1>".$this->pluginOptions['localization']['thank_you']['lbl']."</h1>".nl2br($this->pluginOptions['localization']['thank_you_p']['lbl'])."</div>";
+				$output.="<div class='mailSuccess'><h1>".$this->pluginOptions['localization']['thank_you']['lbl']."</h1>".nl2br($this->pluginOptions['localization']['thank_you_p']['lbl'])."</div>";
 				$output.=$this->gateway_order_on_thankyou($orderId);
 				$this->wppizza_unset_cart();
 			}
 			/***mail sending error or transaction already processes -> show error***/
-			if(!isset($mailResults['status'])){
-				$output="<p class='mailError'>".$mailResults['mailer'].": ".print_r($mailResults['error'],true)."</p>";
+			if(!($mailResults['status']) || !isset($mailResults['status'])  ){
+				
+				$output="<p class='mailError'>".$this->pluginOptions['localization']['thank_you_error']['lbl']."</p>";
+				$output.="<p class='mailError'>".$mailResults['mailer'].": ".print_r($mailResults['error'],true)."</p>";
+				
 			}
 		return $output;
 		}
@@ -656,7 +659,7 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 				$summary['handling_charge']=wppizza_output_format_price($thisOrderDetails['handling_charge'],$this->pluginOptions['layout']['hide_decimals']);
 			}
 			if(isset($thisOrderDetails['tips']) && $thisOrderDetails['tips']>0){
-				$summary['tips']=wppizza_output_format_price($thisOrderDetails['tips'],$this->pluginOptions['layout']['tips']);
+				$summary['tips']=wppizza_output_format_price($thisOrderDetails['tips'],$this->pluginOptions['layout']['hide_decimals']);
 			}			
 			
 			

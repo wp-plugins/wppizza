@@ -327,6 +327,8 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 	    $_SESSION[$this->pluginSession]['items']=array();
 	    /*gross sum of all items in cart,before discounts etc*/
 	    $_SESSION[$this->pluginSession]['total_price_items']=0;
+	    /**gratuities**/
+	    $_SESSION[$this->pluginSession]['tips']=0;
 	}
 }
 ?>

@@ -5,8 +5,8 @@ Author URI: http://www.wp-pizza.com
 Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.2, WP 3.3 
-Tested up to: 3.7.1
-Stable tag: 2.8.4
+Tested up to: 3.8
+Stable tag: 2.8.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -119,6 +119,20 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 
 == Changelog ==
+
+2.8.5  
+* added a bunch of action hooks to the loop templates  
+* added a filter that can be hooked into for the navigation  
+* admin  - when trying to print in the order history, Android did not understand window.print(). Introduced a workaround to open a window that can then be printed on Android (via additionally available Android printing Apps)  
+* admin - added transaction id and gateway used when printing order  
+* eliminated some php notices when using shortcode in wp posts (although using the shortcodes in pages is recommended. but if you must...)     
+* added "translatable" array of row numbers to style localization (admin) odd/even rows depending on language used   
+* added string that can be localized when mail sending error occurs (displayed additionally to the actual error)  
+* tested with WP 3.8 (although the admin could be *visually* improved as WP 3.8 uses bigger fonts - to address in future versions -  it all seems to behave just fine, which is the important thing)   
+* BUGFIX: in some scenarios "thank you page" displayed "thank you" instead of error (as it should do) when email had NOT been sent due to mailer/server error      
+13th December 2013  
+
+
 
 2.8.4  
 * added space between fromname and fromemail when sending email to make spamassassin happier (only applies when using wp_mail and mail)  

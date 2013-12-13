@@ -156,9 +156,11 @@ $output='';
 						$output.="<td style='white-space:nowrap'>";
 							$output.= date("d-M-Y H:i:s",strtotime($orders->order_date));
 							if($orders->initiator!=''){
-								$output.="<br/>Payment By: ". $orders->initiator ."";
+								$output.="<input type='hidden' id='wppizza_order_initiator_".$orders->id."' value='".__('Payment By', $this->pluginLocale).": ". $orders->initiator ."' />";
+								$output.="<br/>".__('Payment By', $this->pluginLocale).": ". $orders->initiator ."";
 							}
 							if($orders->transaction_id!=''){
+								$output.="<input type='hidden' id='wppizza_order_transaction_id_".$orders->id."' value='ID: ". $orders->transaction_id ."' />";
 								$output.="<br/>ID: ". $orders->transaction_id ."";
 							}
 							$output.="<br/>";
