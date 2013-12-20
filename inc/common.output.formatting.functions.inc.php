@@ -894,9 +894,11 @@ function wppizza_email_decode_entities($str,$charset,$decodeNCRs=true){
 			$charset='UTF-8';
 		}
 		if($decodeNCRs){
-   			$str= html_entity_decode($str,ENT_QUOTES,"".$charset."");////".get_bloginfo('charset')." #NOTE: UTF-8 does not work!
+   			$str= html_entity_decode($str,ENT_QUOTES,"".$charset."");////".get_bloginfo('charset')." 
     		$str= preg_replace('/&#(\d+);/me',"chr(\\1)",$str); //#decimal notation
 	    	$str= preg_replace('/&#x([a-f0-9]+);/mei',"chr(0x\\1)",$str);  //#hex notation
+	    	/**the below is - i think - an error as to how &amp; is stored in the db in the first place. ought to check that at some point*/
+	    	$str= str_replace('&amp;','&',$str);/*let's deal with &amp too quotes have already been dealt with in html_entity_decode. not using htmlspecialchars_decode as that would also convert back &lt; and &gt; which we (probably) dont want. lt's be safe.*/ 
 		}
 
 	return $str;

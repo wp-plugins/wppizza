@@ -276,6 +276,10 @@ if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='sendorder'){
 		mail_sent='".$mailSent."',
 		mail_error='".$mailError."'
 		WHERE id='".$orderId."' ");
+	
+		/**do additional stuff when order has been executed*/
+		do_action('wppizza_on_order_executed', $orderId , $this->pluginOrderTable);
+	
 	}
 
 

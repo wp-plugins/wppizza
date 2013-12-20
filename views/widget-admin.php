@@ -109,7 +109,7 @@
 		    	<label for="<?php echo $this->get_field_id( 'orderinfo' ); ?>"><?php _e("Display Order Info ?", $this->pluginLocale); ?></label><br/>
 	
 				<input id="<?php echo $this->get_field_id( 'width' ); ?>" name="<?php echo $this->get_field_name( 'width' ); ?>" type="text" size="2" value="<?php echo $width; ?>" />
-		    	<label for="<?php echo $this->get_field_id( 'width' ); ?>"><?php _e("Width [% or px]", $this->pluginLocale); ?></label>
+		    	<label for="<?php echo $this->get_field_id( 'width' ); ?>"><?php _e("Width [&#37; or px]", $this->pluginLocale); ?></label>
 		    	<br/><small><?php _e("i.e. 200px or 85% - defaults to 100% if left blank", $this->pluginLocale); ?></small>
 		    	<br/>
 		    	

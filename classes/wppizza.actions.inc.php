@@ -56,6 +56,10 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 			
 			/***exclude selected order page from navigation */
 			add_filter('get_pages', array(&$this,'wppizza_exclude_order_page_from_navigation'));
+			
+			/***dont put WPPizza Categories intitle tag */
+			add_filter( 'wp_title', array( $this, 'wppizza_filter_title_tag'),20,3);
+			
 		}
 		/************************************************************************
 			[runs only for admin]
@@ -962,8 +966,27 @@ public function wppizza_require_common_input_validation_functions(){
 		    'rewrite' => array( 'slug' => ''.$sel_category_parent['post_name'].'','hierarchical'=>true )
 		  ));
 	}
-
-
+	/**lets attempt to get rid of WPPizza Categories in title tag*/
+	function wppizza_filter_title_tag($title, $sep ,$loc){
+		if(get_post_type()==WPPIZZA_POST_TYPE){
+			$titleOrig=$title;
+			$strSearch=__('WPPizza Categories',$this->pluginLocale);
+			if($sep && $loc=='right'){
+				$title=str_ireplace(''.$strSearch.' '.$sep.'','',$title);
+			}
+			if($sep && $loc!='right'){
+				$title=str_ireplace(''.$strSearch.' WPPizza Categories','',$title);
+			}	
+			/*if we dont have a seperator or nothing has been done yet and its still the same, just try a normal str replace*/
+			if(!$sep || trim($sep)=='' || $title==$titleOrig){
+				$title=str_ireplace($strSearch,'',$title);	
+			}
+		/**might as well trim it*/
+		$title=trim($title);
+		}
+		
+		return $title;
+	}
 	/*******************************************************
 		[start session]
 	******************************************************/

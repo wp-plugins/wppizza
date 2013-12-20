@@ -8,8 +8,6 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 
 			$this->wppizza_order_emails_extend();
 
-			/**blog charset-> moved to mothership*/
-		//	$this->blogCharset=get_bloginfo('charset');
 			/**timestamp the order*/
 			$this->currentTime= current_time('timestamp');
 			//$this->orderTimestamp =date("d-M-Y H:i:s", current_time('timestamp'));

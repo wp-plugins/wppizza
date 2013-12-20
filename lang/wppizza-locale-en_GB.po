@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WPPizza\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-13 21:11-0000\n"
-"PO-Revision-Date: 2013-12-13 21:11-0000\n"
+"POT-Creation-Date: 2013-12-16 18:47-0000\n"
+"PO-Revision-Date: 2013-12-16 18:47-0000\n"
 "Last-Translator: ollybach <dev@1000db.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -2372,9 +2372,8 @@ msgid "Display Order Info ?"
 msgstr "Display Order Info ?"
 
 #: ../views/widget-admin.php:112
-#, php-format
-msgid "Width [% or px]"
-msgstr "Width [% or px]"
+msgid "Width [&#37; or px]"
+msgstr "Width [&#37; or px]"
 
 #: ../views/widget-admin.php:113
 msgid "i.e. 200px or 85% - defaults to 100% if left blank"
