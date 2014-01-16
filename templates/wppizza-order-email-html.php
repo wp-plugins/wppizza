@@ -75,7 +75,7 @@ $mailPadding['10x5']='padding:10px 5px';
 ?>
 							<tr><td colspan="2" style="<?php echo $mailPadding['20x0x0x15'] ?>"><?php echo $orderLabel['order_details']; ?></td></tr>
 							<tr><td colspan="2" style="<?php echo $mailPadding['2x0x0x15'] ?>"><?php echo $nowdate; ?></td></tr>
-							<tr><td colspan="2" style="<?php echo $mailPadding['2x0x0x15'] ?>"><?php echo $orderLabel['order_paid_by']; ?> <?php echo $gatewayUsed; ?> (<?php echo $transactionId; ?>)</td></tr>
+							<tr><td colspan="2" style="<?php echo $mailPadding['2x0x0x15'] ?>"><?php echo $orderLabel['order_paid_by']; ?> <?php echo $gatewayLabel; ?> (<?php echo $transactionId; ?>)</td></tr>
 							<tr><td colspan="2" style="<?php echo $mailDivider ?>">&nbsp;</td></tr><?php /*add devider**/ ?>
 
 <?php

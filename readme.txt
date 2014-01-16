@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.2, WP 3.3 
 Tested up to: 3.8
-Stable tag: 2.8.6.1
+Stable tag: 2.8.6.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -121,6 +121,11 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 
 == Changelog ==
+ 
+2.8.6.2 
+* using set gateway frontend label in emails  to identify gateway as opposed to obscure things like COD (especially given that it might be something different in different languages)  
+16th January 2014  
+
 
 2.8.6.1
 * fixed wmpl related email attachments php warning when value did not exist(yet)  

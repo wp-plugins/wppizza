@@ -25,7 +25,7 @@
 ===========<?php echo $orderLabel['order_details'] ?>============
 <?php echo $nowdate ?>
 
-<?php echo $orderLabel['order_paid_by'] ?> <?php echo $gatewayUsed ?> (<?php echo $transactionId ?>)
+<?php echo $orderLabel['order_paid_by'] ?> <?php echo $gatewayLabel ?> (<?php echo $transactionId ?>)
 
 
 

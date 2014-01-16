@@ -41,7 +41,7 @@
 			$gwLabel=!empty($gw['gatewayOptions']['gateway_label']) ? $gw['gatewayOptions']['gateway_label'] : '';
 			print"<input name='".$this->pluginSlug."[gateways][wppizza_gateway_".$gwIdent."][gateway_label]' type='text' size='40' value='".$gwLabel."' /> ";
 			print"<span class='description'>[".__('displays',$this->pluginLocale)." '".$gw['gatewayName']."' ".__('if Empty',$this->pluginLocale)."]";
-			print"<br/>[".__('only displayed if more than one gateway installed, activated and enabled',$this->pluginLocale)."]</span>";
+			print"<br/>[".__('Used in emails and frontend. However, it is only being displayed on frontend order page if more than one gateway installed, activated and enabled',$this->pluginLocale)."]</span>";
 			print"</div>";
 
 			/***gateway additional info on  frontend - can be left empty**/

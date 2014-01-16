@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WPPizza\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-01-16 15:06-0000\n"
-"PO-Revision-Date: 2014-01-16 15:06-0000\n"
+"POT-Creation-Date: 2014-01-16 20:47-0000\n"
+"PO-Revision-Date: 2014-01-16 20:47-0000\n"
 "Last-Translator: ollybach <dev@1000db.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -82,43 +82,43 @@ msgstr "Dettagli Cliente"
 msgid "Order Details"
 msgstr "Dettagli Ordine"
 
-#: ../ajax/admin-get-json.php:159 ../ajax/admin-get-json.php:160
+#: ../ajax/admin-get-json.php:168 ../ajax/admin-get-json.php:169
 msgid "Payment By"
 msgstr "Payment By"
 
-#: ../ajax/admin-get-json.php:167
+#: ../ajax/admin-get-json.php:176
 msgid "Status"
 msgstr "Stato"
 
-#: ../ajax/admin-get-json.php:182
+#: ../ajax/admin-get-json.php:191
 msgid "Last Status Update"
 msgstr "Last Status Update"
 
-#: ../ajax/admin-get-json.php:203 ../inc/admin.echo.get_additives.inc.php:7
+#: ../ajax/admin-get-json.php:212 ../inc/admin.echo.get_additives.inc.php:7
 #: ../inc/admin.echo.get_mealsizes.inc.php:55
 #: ../inc/admin.echo.get_openingtimes.inc.php:14
 #: ../inc/admin.echo.get_timesclosed.inc.php:22
 msgid "delete"
 msgstr "cancella"
 
-#: ../ajax/admin-get-json.php:207
+#: ../ajax/admin-get-json.php:216
 msgid "print order"
 msgstr "stampa ordine"
 
-#: ../ajax/admin-get-json.php:215
+#: ../ajax/admin-get-json.php:224
 msgid "add notes"
 msgstr "add notes"
 
-#: ../ajax/admin-get-json.php:225
+#: ../ajax/admin-get-json.php:231
 msgid "notes:"
 msgstr "notes:"
 
-#: ../ajax/admin-get-json.php:226
+#: ../ajax/admin-get-json.php:232
 #: ../inc/admin.setup.default.options.inc.php:533
 msgid "ok"
 msgstr "ok"
 
-#: ../ajax/admin-get-json.php:232
+#: ../ajax/admin-get-json.php:238
 msgid "no orders yet :("
 msgstr "ancora nessun ordine :("
 
@@ -400,16 +400,23 @@ msgid "if Empty"
 msgstr "se Vuoto"
 
 #: ../inc/admin.echo.get_gateways.inc.php:44
+msgid ""
+"Used in emails and frontend. However, it is only being displayed on frontend "
+"order page if more than one gateway installed, activated and enabled"
+msgstr ""
+"Used in emails and frontend. However, it is only being displayed on frontend "
+"order page if more than one gateway installed, activated and enabled"
+
+#: ../inc/admin.echo.get_gateways.inc.php:49
+msgid "Frontend: Additional Plugin Information"
+msgstr "Frontend: Informazioni addizionali sul plugin"
+
 #: ../inc/admin.echo.get_gateways.inc.php:52
 msgid ""
 "only displayed if more than one gateway installed, activated and enabled"
 msgstr ""
 "mostrato solamente se più di un gateway di pagamento è installato, attivato "
 "e abilitato."
-
-#: ../inc/admin.echo.get_gateways.inc.php:49
-msgid "Frontend: Additional Plugin Information"
-msgstr "Frontend: Informazioni addizionali sul plugin"
 
 #: ../inc/admin.echo.get_mealsizes.inc.php:6
 msgid "Admin Screen Label"
@@ -2360,47 +2367,38 @@ msgid "closed"
 msgstr "chiuso"
 
 #: ../inc/common.output.formatting.functions.inc.php:438
-#: ../inc/common.output.formatting.functions.inc00.php:438
 msgid "Mondays"
 msgstr "Lunedì"
 
 #: ../inc/common.output.formatting.functions.inc.php:439
-#: ../inc/common.output.formatting.functions.inc00.php:439
 msgid "Tuesdays"
 msgstr "Martedi"
 
 #: ../inc/common.output.formatting.functions.inc.php:440
-#: ../inc/common.output.formatting.functions.inc00.php:440
 msgid "Wednesdays"
 msgstr "Mercoledì"
 
 #: ../inc/common.output.formatting.functions.inc.php:441
-#: ../inc/common.output.formatting.functions.inc00.php:441
 msgid "Thursdays"
 msgstr "Giovedì"
 
 #: ../inc/common.output.formatting.functions.inc.php:442
-#: ../inc/common.output.formatting.functions.inc00.php:442
 msgid "Fridays"
 msgstr "Venerdì"
 
 #: ../inc/common.output.formatting.functions.inc.php:443
-#: ../inc/common.output.formatting.functions.inc00.php:443
 msgid "Saturdays"
 msgstr "Sabato"
 
 #: ../inc/common.output.formatting.functions.inc.php:444
-#: ../inc/common.output.formatting.functions.inc00.php:444
 msgid "Sundays"
 msgstr "Domenica"
 
 #: ../inc/common.output.formatting.functions.inc.php:452
-#: ../inc/common.output.formatting.functions.inc00.php:452
 msgid "Default"
 msgstr "Default"
 
 #: ../inc/common.output.formatting.functions.inc.php:453
-#: ../inc/common.output.formatting.functions.inc00.php:453
 msgid "Responsive [Experimental]"
 msgstr "Responsive [Sperimentale]"
 

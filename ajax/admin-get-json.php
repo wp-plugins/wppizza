@@ -156,8 +156,17 @@ $output='';
 						$output.="<td style='white-space:nowrap'>";
 							$output.= date("d-M-Y H:i:s",strtotime($orders->order_date));
 							if($orders->initiator!=''){
-								$output.="<input type='hidden' id='wppizza_order_initiator_".$orders->id."' value='".__('Payment By', $this->pluginLocale).": ". $orders->initiator ."' />";
-								$output.="<br/>".__('Payment By', $this->pluginLocale).": ". $orders->initiator ."";
+								/**get label from gateway class**/
+								$gwIdent=$orders->initiator;
+								$gatewayClassname='WPPIZZA_GATEWAY_'.$orders->initiator;
+								if (class_exists(''.$gatewayClassname.'')) {
+									$gw=new $gatewayClassname;
+									if($gw->gatewayOptions['gateway_label']!=''){
+									$gwIdent=$gw->gatewayOptions['gateway_label'];
+									}
+								}
+								$output.="<input type='hidden' id='wppizza_order_initiator_".$orders->id."' value='".__('Payment By', $this->pluginLocale).": ". $gwIdent ."' />";
+								$output.="<br/>".__('Payment By', $this->pluginLocale).": ". $gwIdent ."";
 							}
 							if($orders->transaction_id!=''){
 								$output.="<input type='hidden' id='wppizza_order_transaction_id_".$orders->id."' value='ID: ". $orders->transaction_id ."' />";

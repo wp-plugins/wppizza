@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WPPizza v2.5.4.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-01-16 15:06-0000\n"
-"PO-Revision-Date: 2014-01-16 15:06-0000\n"
+"POT-Creation-Date: 2014-01-16 20:46-0000\n"
+"PO-Revision-Date: 2014-01-16 20:46-0000\n"
 "Last-Translator: ollybach <dev@1000db.com>\n"
 "Language-Team: Yair - Halev.sites <halev.sites@gmail.com>\n"
 "Language: he_IL\n"
@@ -98,21 +98,21 @@ msgstr "פרטי לקוח"
 msgid "Order Details"
 msgstr "פרטי הזמנה"
 
-#: ajax/admin-get-json.php:159 ajax/admin-get-json.php:160
+#: ajax/admin-get-json.php:168 ajax/admin-get-json.php:169
 msgid "Payment By"
 msgstr "תשלום ע\"י"
 
 # @ wppizza-locale
-#: ajax/admin-get-json.php:167
+#: ajax/admin-get-json.php:176
 msgid "Status"
 msgstr "סטטוס"
 
-#: ajax/admin-get-json.php:182
+#: ajax/admin-get-json.php:191
 msgid "Last Status Update"
 msgstr "סטטוס אחרון עודכן "
 
 # @ wppizza-locale
-#: ajax/admin-get-json.php:203 inc/admin.echo.get_additives.inc.php:7
+#: ajax/admin-get-json.php:212 inc/admin.echo.get_additives.inc.php:7
 #: inc/admin.echo.get_mealsizes.inc.php:55
 #: inc/admin.echo.get_openingtimes.inc.php:14
 #: inc/admin.echo.get_timesclosed.inc.php:22
@@ -120,25 +120,25 @@ msgid "delete"
 msgstr "למחוק"
 
 # @ wppizza-locale
-#: ajax/admin-get-json.php:207
+#: ajax/admin-get-json.php:216
 msgid "print order"
 msgstr "הדפס הזמנה"
 
 # @ wppizza-locale
-#: ajax/admin-get-json.php:215
+#: ajax/admin-get-json.php:224
 msgid "add notes"
 msgstr "add notes"
 
-#: ajax/admin-get-json.php:225
+#: ajax/admin-get-json.php:231
 msgid "notes:"
 msgstr "notes:"
 
-#: ajax/admin-get-json.php:226 inc/admin.setup.default.options.inc.php:533
+#: ajax/admin-get-json.php:232 inc/admin.setup.default.options.inc.php:533
 msgid "ok"
 msgstr "ok"
 
 # @ wppizza-locale
-#: ajax/admin-get-json.php:232
+#: ajax/admin-get-json.php:238
 msgid "no orders yet :("
 msgstr "אין הזמנות עדיין: ("
 
@@ -483,15 +483,23 @@ msgstr "אם ריק"
 
 # @ wppizza-locale
 #: inc/admin.echo.get_gateways.inc.php:44
-#: inc/admin.echo.get_gateways.inc.php:52
 msgid ""
-"only displayed if more than one gateway installed, activated and enabled"
-msgstr "מוצג רק אם הותקן שער תשלום אחד או יותר, מופעל ומאופשר"
+"Used in emails and frontend. However, it is only being displayed on frontend "
+"order page if more than one gateway installed, activated and enabled"
+msgstr ""
+"Used in emails and frontend. However, it is only being displayed on frontend "
+"order page if more than one gateway installed, activated and enabled"
 
 # @ wppizza-locale
 #: inc/admin.echo.get_gateways.inc.php:49
 msgid "Frontend: Additional Plugin Information"
 msgstr "ממשק קדמי: מידע נוסף תוסף"
+
+# @ wppizza-locale
+#: inc/admin.echo.get_gateways.inc.php:52
+msgid ""
+"only displayed if more than one gateway installed, activated and enabled"
+msgstr "מוצג רק אם הותקן שער תשלום אחד או יותר, מופעל ומאופשר"
 
 #: inc/admin.echo.get_mealsizes.inc.php:6
 msgid "Admin Screen Label"
@@ -2681,55 +2689,46 @@ msgstr "סגור"
 
 # @ wppizza-locale
 #: inc/common.output.formatting.functions.inc.php:438
-#: inc/common.output.formatting.functions.inc00.php:438
 msgid "Mondays"
 msgstr "יום שני"
 
 # @ wppizza-locale
 #: inc/common.output.formatting.functions.inc.php:439
-#: inc/common.output.formatting.functions.inc00.php:439
 msgid "Tuesdays"
 msgstr "יום שלישי"
 
 # @ wppizza-locale
 #: inc/common.output.formatting.functions.inc.php:440
-#: inc/common.output.formatting.functions.inc00.php:440
 msgid "Wednesdays"
 msgstr "ימי רביעי"
 
 # @ wppizza-locale
 #: inc/common.output.formatting.functions.inc.php:441
-#: inc/common.output.formatting.functions.inc00.php:441
 msgid "Thursdays"
 msgstr "ימי חמישי"
 
 # @ wppizza-locale
 #: inc/common.output.formatting.functions.inc.php:442
-#: inc/common.output.formatting.functions.inc00.php:442
 msgid "Fridays"
 msgstr "ימי שישי"
 
 # @ wppizza-locale
 #: inc/common.output.formatting.functions.inc.php:443
-#: inc/common.output.formatting.functions.inc00.php:443
 msgid "Saturdays"
 msgstr "שבתות"
 
 # @ wppizza-locale
 #: inc/common.output.formatting.functions.inc.php:444
-#: inc/common.output.formatting.functions.inc00.php:444
 msgid "Sundays"
 msgstr "ימי ראשון"
 
 # @ wppizza-locale
 #: inc/common.output.formatting.functions.inc.php:452
-#: inc/common.output.formatting.functions.inc00.php:452
 msgid "Default"
 msgstr "ברירת מחדל"
 
 # @ wppizza-locale
 #: inc/common.output.formatting.functions.inc.php:453
-#: inc/common.output.formatting.functions.inc00.php:453
 msgid "Responsive [Experimental]"
 msgstr "מותאם [ניסיון]"
 

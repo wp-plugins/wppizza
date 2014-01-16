@@ -307,6 +307,18 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 						[set general vars]
 					************************************************/
 					$gatewayUsed=$res->initiator;
+					
+					/**get gateway frontend label instead of just COD or similar**/
+					$gatewayLabel=$res->initiator;
+					$gatewayClassname='WPPIZZA_GATEWAY_'.$res->initiator;
+					if (class_exists(''.$gatewayClassname.'')) {
+						$gw=new $gatewayClassname;
+						if($gw->gatewayOptions['gateway_label']!=''){
+						$gatewayLabel=$gw->gatewayOptions['gateway_label'];
+						}
+					}
+					/**********************/
+					
 					$transactionId=$res->transaction_id;
 					$nowdate=$this->orderTimestamp;
 					$orderLabel=$this->orderLabels['plaintext'];
@@ -503,6 +515,16 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 				$nowdate=$this->orderTimestamp;
 				$transactionId=$this->orderTransactionId;
 				$gatewayUsed=$this->orderGatewayUsed;
+				/**get gateway frontend label instead of just COD or similar**/
+				$gatewayLabel=$this->orderGatewayUsed;
+				$gatewayClassname='WPPIZZA_GATEWAY_'.$this->orderGatewayUsed;
+				if (class_exists(''.$gatewayClassname.'')) {
+					$gw=new $gatewayClassname;
+					if($gw->gatewayOptions['gateway_label']!=''){
+					$gatewayLabel=$gw->gatewayOptions['gateway_label'];
+					}
+				}
+				/**********************/				
 				$currency=$this->orderCurrency;
 				/***get localization vars**/
 				$orderLabel=$this->orderLabels['html'];
@@ -608,6 +630,16 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 			$order['transaction_id']=$res->transaction_id;
 			$order['transaction_date_time']="".date_i18n(get_option('date_format'),$thisOrderDetails['time'])." ".date_i18n(get_option('time_format'),$thisOrderDetails['time'])."";
 			$order['gatewayUsed']=$res->initiator;
+			/**get gateway frontend label instead of just COD or similar**/
+			$order['gatewayLabel']=$res->initiator;
+				$gatewayClassname='WPPIZZA_GATEWAY_'.$res->initiator;
+				if (class_exists(''.$gatewayClassname.'')) {
+					$gw=new $gatewayClassname;
+					if($gw->gatewayOptions['gateway_label']!=''){
+					$order['gatewayLabel']=$gw->gatewayOptions['gateway_label'];
+					}
+				}
+			/**********************/			
 			$order['currency']=$thisOrderDetails['currency'];
 			$order['currencyiso']=$thisOrderDetails['currencyiso'];
 
