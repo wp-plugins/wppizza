@@ -8,7 +8,7 @@
 *	if you are sending html emails with phpmailer (wppizza->settings->Select Type of Mail Delivery)
 *	you could also comment OUT
 *	$mail->AltBody = $this->orderMessage['plaintext'];
-*	in wppizza-phpmailer-settings.php as phpmailer will automatically generate plaintext emails form the html input
+*	in wppizza-phpmailer-settings.php as phpmailer will automatically generate plaintext emails from the html input
 *	if you do this, changes to this file will not make any difference
 *	make sure however, that you copy wppizza-phpmailer-settings.php to your theme directory
 *	as otherwise your changes will be overwritten in the next update of this plugin. just saying.....
@@ -95,4 +95,3 @@ echo $emailPlaintext['order_summary'];
 <?php
 	echo $orderLabel['order_email_footer'];
 ?>
-

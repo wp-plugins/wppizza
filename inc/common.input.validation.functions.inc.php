@@ -102,13 +102,13 @@
 				$hasPc = strpos($keyVal[1], '%');
 				if ($hasPc !== false) {
 					$val.='%';
-				}				
-				
+				}
+
 			}
 			$array[$key]=$val;
 		}
 		return $array;
-	}	
+	}
 /*****************************************************
 * return array
 * @arr the input array to validate
@@ -329,7 +329,7 @@ function wppizza_inflate($arr, $divider_char = "/") {
 		}
 		/**as tips belong to order details and not customer details, we exclude them from the post vars that get stored in the db customer_ini*/
 		if(isset($arr['ctips'])){unset($arr['ctips']);}
-		
+
 		return mysql_real_escape_string(serialize($arr));
 	}
 ?>

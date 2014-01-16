@@ -19,6 +19,10 @@
 
 	/*distinctly set plugin version*/
 	$update_options['plugin_data']['version']=$this->pluginVersion;
+
+	if(!isset($options['order']['delivery']['no_delivery'])){
+		$update_options['order']['delivery']['no_delivery']=$defaultOptions['order']['delivery']['no_delivery'];
+	}
 	/*add delivery charges per item if it does not exist yet (as wppizza_merge_options -> wppizza_traverse_list only looks for first dimansion in array. should maybe be made recursive one day though.....)*/
 	if(!isset($options['order']['delivery']['per_item'])){
 		$update_options['order']['delivery']['per_item']=$defaultOptions['order']['delivery']['per_item'];
@@ -37,6 +41,7 @@
 		[now lets remove obsolete options]
 	***********************************************/
 	$removed_options=wppizza_compare_options($options,$defaultOptions);/*get obsolete options**/
+
 	/*ini array*/
 	$arr1_flat = array();
 	$arr2_flat = array();
@@ -48,8 +53,6 @@
 
 	/**unflatten->final options**/
 	$update_options = wppizza_inflate($ret);
-
-
 
 	/******************************************************************************************************
 	*
@@ -73,6 +76,9 @@
 	if(isset($options['order']['order_email_bcc'])){
 		$update_options['order']['order_email_bcc']=$options['order']['order_email_bcc'];
 	}
+	if(isset($options['order']['order_email_attachments'])){
+		$update_options['order']['order_email_attachments']=$options['order']['order_email_attachments'];
+	}
 	if(isset($options['order_form'])){
 		$update_options['order_form']=$update_options['order_form'];
 		/*lets not loose select options in order form**/
@@ -85,10 +91,10 @@
 			if(!isset($options['order_form'][$k]['prefill'])){
 				$update_options['order_form'][$k]['prefill']=$defaultOptions['order_form'][$k]['prefill'];
 			}
-			/**add prefill option*/
+			/**add onregister option*/
 			if(!isset($options['order_form'][$k]['onregister'])){
 				$update_options['order_form'][$k]['onregister']=$defaultOptions['order_form'][$k]['onregister'];
-			}			
+			}
 		}
 	}
 	if(isset($options['plugin_data']['category_parent_page'])){

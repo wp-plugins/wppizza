@@ -5,7 +5,6 @@
 ***********************/
 .wppizza-cart{height:250px;position: relative;z-index: 999;left: 0;right: 0;padding:0;margin:0;background-color:inherit;border: 1px solid #ccc;}
 .wppizza-cart-fixed{height:250px;position:fixed;top:10px;left:auto;right:auto;background-color:#FEFEFE;}/**-----added in version 2.6.4----***/
-
 /*opening hours top/bottom*/
 .wppizza-opening-hours{text-align:center}
 
@@ -131,7 +130,7 @@
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff',endColorstr='#ffe6e6e6',GradientType=0);
     filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
 }
-.wppizza-cart-item>.wppizza-cart-incr{padding:2px;margin:0;font-size:90%;width:20px}
+.wppizza-cart-item>.wppizza-cart-incr{padding:2px;margin:0;font-size:90%;width:20px !important;}
 
 /**-----END NEW IN VERSION 2.5----***/
 

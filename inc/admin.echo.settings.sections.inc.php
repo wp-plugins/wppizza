@@ -38,9 +38,6 @@
 		add_settings_field('empty_cart_button', '<b>'.__('Enable "empty cart" button', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'layout', 'layout', 'empty_cart_button' );
 		add_settings_field('disable_online_order', '<b>'.__('Completely disable online orders:', $this->pluginLocale).'</b><br/><span style="color:red">'.__('this will still display prices (unless set to be hidden above), but will disable shoppingcart and orderpage', $this->pluginLocale).'</span><br/>'.__('Useful if you want to display your menu and prices but without offering online orders.', $this->pluginLocale).'', array( $this, 'wppizza_admin_settings_input'), 'layout', 'layout', 'disable_online_order' );
 
-		
-		
-		
 
 
 		/**opening times**/
@@ -62,6 +59,10 @@
 		add_settings_field('order_email_bcc', '<b>'.__('If you would like to BCC order emails add these here [separated by comma if multiple]:', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'order', 'order', 'order_email_bcc' );
 		add_settings_field('order_email_from', '<b>'.__('If you want to set a static "From" email address set it here, otherwise leave blank . All emails will appear to have been sent from this address. (Some fax gateways for example require a distinct FROM email address). However, the customers email address will still be stored in the db/order history if entered', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'order', 'order', 'order_email_from' );
 		add_settings_field('order_email_from_name', '<b>'.__('Instead of using the customers name - if enabled/entered in the order form fields - you can set a static name here (useful in conjunction with any "From" email address set above).', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'order', 'order', 'order_email_from_name' );
+		add_settings_field('order_email_attachments', '<b>'.__('Email Attachments [separated by comma if multiple]:', $this->pluginLocale).'</b><br /><span style="color:red">'.__('Settings->Mail Delivery must be set to wp_mail or PHPMailer', $this->pluginLocale).'</span>', array( $this, 'wppizza_admin_settings_input'), 'order', 'order', 'order_email_attachments' );
+
+
+
 
 		/**order form**/
 		add_settings_section('order_form', __('Order Form', $this->pluginLocale),  array( $this, 'wppizza_admin_page_text_header'), 'order_form');

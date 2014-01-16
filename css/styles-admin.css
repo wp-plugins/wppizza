@@ -6,6 +6,11 @@
 #wppizza-settings #history .form-table th,#wppizza-settings #ingredients .form-table th,#wppizza-settings #meals .form-table th{width:5px;}
 
 .wppizza_option{display:block}
+#wppizza-delivery-options-select{border:1px solid #CECECE;display:inline-block;}
+#wppizza-delivery-options-select>span{padding:10px 5px 15px 5px}
+#wppizza-delivery-options-select>span:nth-child(even){background:#EFEFEF;}
+#wppizza-delivery-options-select>span:nth-child(odd){background:#FFFFFF;}
+
 
 .wppizza_weekday{min-width:100px;display:inline-block}
 .wppizza_img_placeholder{width:75px;height:75px;background:url('img/no_image.png');margin:3px auto}
@@ -35,7 +40,7 @@
 /*******************
 	[order settings]
 *********************/
-.wppizza_delivery_calculation_exclude_item{height:100px !important}
+.wppizza_delivery_calculation_exclude_item{height:120px !important}
 /******************
 	[order form fields]
 *******************/
@@ -76,6 +81,10 @@
 #wppizza_history_orders tr:nth-child(even){background:#FFFFFF;}
 #wppizza-settings .wppizza_order_customer_details{height:100px;min-width:300px}
 #wppizza-settings .wppizza_order_details {width:390px !important;height:100px}
+#wppizza-settings .wppizza-order-notes-tr{display:none}
+#wppizza-settings .wppizza-order-has-notes-tr{display:table-row}/*for soem reason, chrome doesnt like display block */
+#wppizza-settings .wppizza-order-notes-tr>td,#wppizza-settings .wppizza-order-has-notes-tr>td{text-align:center;margin:0;padding:0}
+#wppizza-settings .wppizza-order-notes {width:90% !important;height:75px;}
 #wppizza_history_clear{border:1px solid #EFEFEF;padding:5px}
 .wppizza-ord-status-new{background-color:#FBEC5D !important}
 #wppizza-orders-polling{width:50px;height:35px;position:absolute;right:30px;margin-top:2px}

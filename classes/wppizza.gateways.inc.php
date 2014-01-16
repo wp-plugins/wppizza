@@ -196,7 +196,7 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 		$gatewayOrder['delivery_charges']=!empty($cartDetails['order_value']['delivery_charges']['val']) ? wppizza_validate_float_only($cartDetails['order_value']['delivery_charges']['val']) : '';
 		$gatewayOrder['tips']=!empty($cartDetails['tips']['val']) ? wppizza_validate_float_only($cartDetails['tips']['val']) : '';
 		
-		$gatewayOrder['selfPickup']=!empty($cartDetails['selfPickup']) ? 1 : 0;
+		$gatewayOrder['selfPickup']=!empty($cartDetails['selfPickup']) ? wppizza_validate_int_only($cartDetails['selfPickup']) : 0;
 		$gatewayOrder['total']=wppizza_validate_float_only($cartDetails['order_value']['total']['val']);
 
 		/**add any additional variables are set we want to pass/hash*/

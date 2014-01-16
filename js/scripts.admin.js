@@ -1,13 +1,13 @@
 jQuery(document).ready(function($){
 	/**if we are on the category edit page, make it sortable and update on new sort**/
 	if(pagenow=='edit-wppizza_menu'){
-		var wpPizzaCategories = $('#the-list');	
+		var wpPizzaCategories = $('#the-list');
 		wpPizzaCategories.sortable({
 			update: function(event, ui) {
 				jQuery.post(ajaxurl , {action :'wppizza_admin_json',vars:{'field':'cat_sort','order': wpPizzaCategories.sortable('toArray').toString()}}, function(response) {
 					//console.log(response);
-				},'html').error(function(jqXHR, textStatus, errorThrown) {alert("error : " + errorThrown);});				
-				
+				},'html').error(function(jqXHR, textStatus, errorThrown) {alert("error : " + errorThrown);});
+
 			}
 		});
 	}
@@ -41,6 +41,7 @@ jQuery(document).ready(function($){
             var transaction_id=$('#wppizza_order_transaction_id_'+ordId+'').val();
             var order=$('#wppizza_order_details_'+ordId+'').val();
             var customer=$('#wppizza_order_customer_details_'+ordId+'').val();
+            var notes=$('#wppizza-order-notes-'+ordId+'').val();
 
             //store HTML of current whole page in variable
             var currentPage = document.body.innerHTML;
@@ -50,17 +51,18 @@ jQuery(document).ready(function($){
               "<html><head><title></title></head><body>" +
               (initiator) + "<br />" +
               (transaction_id)  + "<br /><br />" +
-              wppizzaNl2br(customer) + 
-              wppizzaNl2br(order) +"</body></html>";
+              wppizzaNl2br(customer) +
+              wppizzaNl2br(order) + "<br /><br />" +
+              wppizzaNl2br(notes) + "</body></html>";
 
-            //Print Page : as Android doesnt understnd this, let's open a window            
+            //Print Page : as Android doesnt understnd this, let's open a window
             var wpPizzaOrderHistoryWindow = window.open("","WppizzaOrder","width=750,height=550");
 			wpPizzaOrderHistoryWindow.document.write(wpPizzaOrderHistory);
-            
+
             wpPizzaOrderHistoryWindow.focus();
 			/*android doesnt understand .print() not my fault really*/
 			wpPizzaOrderHistoryWindow.print();
-            
+
 	});
 	/**nl2br when printing*/
 	var wppizzaNl2br =function(str, is_xhtml) {
@@ -71,7 +73,7 @@ jQuery(document).ready(function($){
 		printFormatted=printFormatted.replace(/\s{2}/g, '&nbsp;&nbsp;');
 
 		return printFormatted;
-	}	
+	}
 	/*******************************
 	*	[time picker]
 	*******************************/
@@ -165,14 +167,14 @@ jQuery(document).ready(function($){
 		var self=$(this);
 		var CatId=self.attr('id').split("_").pop(-1);
 		var newKey = wpPizzaCreateNewKey('wppizza_category_items_'+CatId+'',self);
-		jQuery.post(ajaxurl , {action :'wppizza_admin_json',vars:{'field':'meals','item':1,'id':CatId,'newKey':newKey}}, function(response) {		
+		jQuery.post(ajaxurl , {action :'wppizza_admin_json',vars:{'field':'meals','item':1,'id':CatId,'newKey':newKey}}, function(response) {
 			$('#wppizza_category_items_'+CatId+'').prepend(response);
 			self.show();/*reenable add button*/
 		},'html').error(function(jqXHR, textStatus, errorThrown) {alert("error : " + errorThrown);});
 	});
 	/******************************
 	*	[pricetier select - onchange]
-	******************************/	
+	******************************/
 	$(document).on('change', '.wppizza_pricetier_select', function(e){
 		var self=$(this);
 		var selId=self.val();
@@ -184,17 +186,17 @@ jQuery(document).ready(function($){
 	});
 	/******************************
 	*	[widget type has changed, show relevant option]
-	******************************/		
+	******************************/
 	$(document).on('change', '.wppizza-select', function(e){
-		self=$(this);		
+		self=$(this);
 		self.closest('div').find('.wppizza-selected>p').hide();
 		self.closest('div').find('.wppizza-selected>.wppizza-selected-'+self.val()+'').fadeIn();
-	});		
+	});
 
-	
+
 	/******************************
 	*	[order form field type select - onchange]
-	******************************/	
+	******************************/
 	$(document).on('change', '.wppizza_order_form_type', function(e){
 		var self=$(this);
 		var id=self.attr('id').split("_").pop(-1);
@@ -202,10 +204,10 @@ jQuery(document).ready(function($){
 		//alert(val);
 		self.closest('td').find('.wppizza_order_form_select input').val('');//empty value
 		if(val=='select'){
-			self.closest('td').find('.wppizza_order_form_select').css('display', 'block');	
+			self.closest('td').find('.wppizza_order_form_select').css('display', 'block');
 		}else{
 			self.closest('td').find('.wppizza_order_form_select').css('display', 'none');
-			
+
 		}
 
 	});
@@ -220,13 +222,13 @@ jQuery(document).ready(function($){
 			var noOfSizes=$('#wppizza_sizes_options>span').length;
 			if(noOfSizes<=1){
 				alert('Sorry, at least one size option must be defined');
-				return;	
+				return;
 			}
 		}
 		/**allow to remove by class and not just span*/
 		var remItem=$(this).closest('.wppizza-row-remove');
 		if(remItem.length>0){
-			remItem.remove();	
+			remItem.remove();
 		}else{
 			$(this).closest('span').remove();
 		}
@@ -234,19 +236,19 @@ jQuery(document).ready(function($){
 	/*****************************
 	*	[poll orders]
 	*****************************/
-	var pollObj=$('#history_orders_poll_enabled');	
+	var pollObj=$('#history_orders_poll_enabled');
 	if(pollObj.length>0){
 		var pollingInterval=$('#history_orders_poll_interval').val();
 		var pollOrdersInterval=setInterval(function(){pollOrders()},(pollingInterval*1000));
 	}
 	/*****************************
 	*	[change poll interval]
-	*****************************/	
+	*****************************/
 	$(document).on('change', '#history_orders_poll_interval', function(e){
 		var pollingInterval=$(this).val();
-		clearInterval(pollOrdersInterval);		
+		clearInterval(pollOrdersInterval);
 		pollOrdersInterval=setInterval(function(){pollOrders()},(pollingInterval*1000));
-	});	
+	});
 	/*****************************
 	*	[do poll if enabled]
 	*****************************/
@@ -255,7 +257,7 @@ jQuery(document).ready(function($){
 		$('#wppizza-orders-polling').addClass('wppizza-load');
 		var triggerTarget=$('#history_get_orders');
 		triggerTarget.trigger('click');
-	}}	
+	}}
 	/*****************************
 	*	[update order status]
 	*****************************/
@@ -267,11 +269,35 @@ jQuery(document).ready(function($){
 		jQuery.post(ajaxurl , {action :'wppizza_admin_json',vars:{'field':'orderstatuschange','id':selId,'selVal':selVal}}, function(response) {
 			self.closest('tr').removeClass().addClass('wppizza-ord-status-'+selClass+'');
 			$('#wppizza_order_update-'+selId).html(response);
-		},'html').error(function(jqXHR, textStatus, errorThrown) {alert("error : " + errorThrown);});				
-	});	
+		},'html').error(function(jqXHR, textStatus, errorThrown) {alert("error : " + errorThrown);});
+	});
+	/*****************************
+	*	[update order notes]
+	*****************************/
+	$(document).on('click', '.wppizza-order-add-notes', function(e){
+		var self=$(this);
+		var selId=self.attr('id').split("-").pop(-1);
+		$('#wppizza-order-notes-tr-'+selId+',#wppizza-order-has-notes-tr-'+selId+'').fadeIn("slow");
+	});
+	$(document).on('click', '.wppizza-order-do-notes', function(e){
+		var self=$(this);
+		var selId=self.attr('id').split("-").pop(-1);
+		var selVal=$('#wppizza-order-notes-'+selId+'').val();
+		jQuery.post(ajaxurl , {action :'wppizza_admin_json',vars:{'field':'ordernoteschange','id':selId,'selVal':selVal}}, function(response) {
+			//$('#wppizza_order_update-'+selId).html(response);
+			if(response<=0){
+				self.closest('tr').fadeOut(250);
+				$('#wppizza-order-add-notes-'+selId+'').fadeIn(250,function(){alert('ok');});
+			}else{
+				$('#wppizza-order-add-notes-'+selId+'').fadeOut(250,function(){alert('ok');});
+			}
+
+		},'text').error(function(jqXHR, textStatus, errorThrown) {alert("error : " + errorThrown);});
+	});
+
 	/******************************
 	*	[show orders]
-	******************************/	
+	******************************/
 	$(document).on('click', '#history_get_orders', function(e){
 		e.preventDefault();
 		var limit=$('#history_orders_limit').val();
@@ -282,7 +308,7 @@ jQuery(document).ready(function($){
 	});
 	/******************************
 	*	[delete orders]
-	******************************/	
+	******************************/
 	$(document).on('click', '.wppizza_order_delete', function(e){
 		e.preventDefault();
 		if(!confirm('are you sure ?')){ return false;}
@@ -292,10 +318,10 @@ jQuery(document).ready(function($){
 			alert(response);
 			self.closest('tr').empty().remove();
 		},'html').error(function(jqXHR, textStatus, errorThrown) {alert("error : " + errorThrown);});
-	});	
+	});
 	/******************************
 	*	[delete abandoned orders]
-	******************************/	
+	******************************/
 	$(document).on('click', '#wppizza_order_abandoned_delete', function(e){
 		e.preventDefault();
 		if(!confirm('are you sure ?')){ return false;}
@@ -304,7 +330,7 @@ jQuery(document).ready(function($){
 		jQuery.post(ajaxurl , {action :'wppizza_admin_json',vars:{'field':'delete_abandoned_orders','days':days,'failed':failed}}, function(response) {
 			alert(response);
 		},'html').error(function(jqXHR, textStatus, errorThrown) {alert("error : " + errorThrown);});
-	});		
+	});
 	/*****************************
 	*	[show gateway settings option]
 	*****************************/
@@ -313,12 +339,12 @@ jQuery(document).ready(function($){
 		var self=$(this);
 		$('.wppizza-gateway-settings').slideUp();
 		self.closest('.wppizza-gateway').find('.wppizza-gateway-settings').slideDown();
-	});	
+	});
 	/*********************************************************
 	*	[show order form tips/surcharges option - not yet in use]
 	*********************************************************/
 	$(document).on('click', '#wppizza-toggle-tgs', function(e){
 		$('#wppizza_order_form tr.ctips,#wppizza_order_form tr.csurcharges').toggle("slow");
-	});		
+	});
 
 })

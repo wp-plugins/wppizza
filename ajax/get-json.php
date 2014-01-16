@@ -162,11 +162,29 @@ exit();
 *
 ***************************************************************/
 if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='add_tips'){
+
 	/*****************************************
 		[get and parse all post variables
 	*****************************************/
 	$params = array();
 	parse_str($_POST['vars']['data'], $params);
+	/**selects are zero indexed*/
+	foreach($options['order_form'] as $elmKey=>$elm){
+		if($elm['type']=='select' && isset($params[$elm['key']])){
+			foreach($elm['value'] as $a=>$b){
+				if($params[$elm['key']]==$b){
+					$params[$elm['key']]=''.$a.'';
+				}
+			}
+		}
+	}
+	/*****************************************
+		[parse and add all get variables
+	*****************************************/
+	$getParameters = array();
+	if($_POST['vars']['urlGetVars']!=''){
+		parse_str(substr($_POST['vars']['urlGetVars'],1), $getParameters);/*loose the '?'  */
+	}
 	/*****************************************
 		[sanitize gratuity]
 	*****************************************/
@@ -176,6 +194,24 @@ if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='add_tips'){
 	$res=$wpdb->query( $wpdb->prepare( "DELETE FROM ".$wpdb->prefix . $this->pluginOrderTable." WHERE hash=%s AND payment_status='INITIALIZED' AND order_date > TIMESTAMPADD(MINUTE,-3,NOW()) ",$params['wppizza_hash']));
 	/**add to session*/
 	$_SESSION[$this->pluginSession]['tips']=$tips;
+
+	/**get entered data to re-populate input fields but loose irrelevant vars**/
+	if(isset($params['wppizza-gateway'])){unset($params['wppizza-gateway']);}
+	if(isset($params['wppizza_hash'])){unset($params['wppizza_hash']);}
+	if(isset($params['ctips'])){unset($params['ctips']);}/*tips have to be POSTed and are set via session*/
+
+
+	/*********build the location url making sure permalinks are taken care of too**/
+	$location='';
+	$locUrl=explode('?',$_POST['vars']['locHref']);
+	$location.=$locUrl[0];/*get url before get vars*/
+	$postAndGetParameters=array_merge($getParameters,$params);
+	if(count($postAndGetParameters)>0){
+		/*add ? and build query*/
+		$location.="?".http_build_query($postAndGetParameters)."";
+	}
+
+	print"".$location."";
 exit();
 }
 
@@ -276,10 +312,10 @@ if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='sendorder'){
 		mail_sent='".$mailSent."',
 		mail_error='".$mailError."'
 		WHERE id='".$orderId."' ");
-	
+
 		/**do additional stuff when order has been executed*/
 		do_action('wppizza_on_order_executed', $orderId , $this->pluginOrderTable);
-	
+
 	}
 
 

@@ -249,6 +249,7 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 
 				/**get default options. do not use require_once, as we need this more than once ***/
 				require(WPPIZZA_PATH .'inc/admin.setup.default.options.inc.php');
+
 				/**compare table options against default options and delete/add as required***/
 				require_once(WPPIZZA_PATH .'inc/admin.update.options.inc.php');
 
@@ -1349,7 +1350,7 @@ public function wppizza_require_common_input_validation_functions(){
 		$orderDetails['item_tax']=wppizza_output_format_price($oDetails['item_tax'],$this->pluginOptions['layout']['hide_decimals']);
 
 		$orderDetails['delivery_charges']=!empty($oDetails['delivery_charges']) ? wppizza_output_format_price($oDetails['delivery_charges'],$this->pluginOptions['layout']['hide_decimals']) : '';
-		$orderDetails['selfPickup']=!empty($oDetails['selfPickup']) ? 1 : 0;
+		$orderDetails['selfPickup']=!empty($oDetails['selfPickup']) ? wppizza_validate_int_only($oDetails['selfPickup']) : 0;
 		$orderDetails['total']=wppizza_output_format_price($oDetails['total'],$this->pluginOptions['layout']['hide_decimals']);
 
 	return $orderDetails;
@@ -1574,6 +1575,10 @@ function wppizza_set_order_status(){
 			/**order email bcc **/
 			foreach($this->pluginOptions['order']['order_email_bcc'] as $k=>$arr){
 				$this->pluginOptions['order']['order_email_bcc'][$k] = icl_translate(WPPIZZA_SLUG,'order_email_bcc_'. $k.'', $arr);
+			}
+			/**order email attachments **/
+			foreach($this->pluginOptions['order']['order_email_attachments'] as $k=>$arr){
+				$this->pluginOptions['order']['order_email_attachments'][$k] = icl_translate(WPPIZZA_SLUG,'order_email_attachments_'. $k.'', $arr);
 			}
 		}
 	}

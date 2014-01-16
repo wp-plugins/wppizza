@@ -170,26 +170,26 @@ $output='';
 									$output.="<option value='".$s."' ".selected($orders->order_status,$s,false).">".__($s, $this->pluginLocale)."</option>";
 								}
 							$output.="</select>";
-							
-							
+
+
 							//$output.="<br/>";
 							//$output.="<a href='javascript:void()' id='wppizza_order_reject'>".__('Reject with email to customer', $this->pluginLocale)."</a>";
 							//$output.="<span id='wppizza_order_rejected-".$orders->id."'>";
-							//$output.="</span>";							
-							
-							
-							$output.="<br/>";	
+							//$output.="</span>";
+
+
+							$output.="<br/>";
 							$output.="".__('Last Status Update', $this->pluginLocale).":<br />";
 							$output.="<span id='wppizza_order_update-".$orders->id."'>";
 							if($orders->order_update!='0000-00-00 00:00:00'){
 								$output.= date("d-M-Y H:i:s",strtotime($orders->order_update));
 							}else{
-								$output.= date("d-M-Y H:i:s",strtotime($orders->order_date));	
+								$output.= date("d-M-Y H:i:s",strtotime($orders->order_date));
 							}
 							$output.="</span>";
-							
-							
-							
+
+
+
 						$output.="</td>";
 						$output.="<td>";
 							$output.="<textarea id='wppizza_order_customer_details_".$orders->id."' class='wppizza_order_customer_details'>". $orders->customer_details ."</textarea>";
@@ -204,8 +204,23 @@ $output='';
 								$output.="<br/>";
 							}
 							/*print order*/
-							$output.="<a href='#'  id='wppizza-print-order-".$orders->id."' class='wppizza-print-order button'>".__('print order', $this->pluginLocale)."</a>";
+							$output.="<a href='javascript:void(0);'  id='wppizza-print-order-".$orders->id."' class='wppizza-print-order button'>".__('print order', $this->pluginLocale)."</a>";
+							/*add edit notes*/
+								$output.="<br/>";
+								if(trim($orders->notes)==''){
+									$nbtrClass='wppizza-order-notes-tr';$notesBtnSty='block';
+								}else{
+									$nbtrClass='wppizza-order-has-notes-tr';$notesBtnSty='none';
+								}
+								$output.="<a href='javascript:void(0);'  id='wppizza-order-add-notes-".$orders->id."' class='wppizza-order-add-notes button' style='display:".$notesBtnSty."'>".__('add notes', $this->pluginLocale)."</a>";
+						$output.="</td>";
+					$output.="</tr>";
 
+					/**order notes**/
+					$output.="<tr id='".$nbtrClass."-".$orders->id."' class='".$nbtrClass."'>";
+						$output.="<td colspan='4'>";
+							$output.="<textarea id='wppizza-order-notes-".$orders->id."' class='wppizza-order-notes' placeholder='".__('notes:', $this->pluginLocale)."'>".$orders->notes."</textarea>";
+							$output.="<a href='javascript:void(0);'  id='wppizza-order-do-notes-".$orders->id."' class='wppizza-order-do-notes button'>".__('ok', $this->pluginLocale)."</a>";
 						$output.="</td>";
 					$output.="</tr>";
 				}
@@ -221,8 +236,23 @@ $output='';
 		global $wpdb;
 		$res=$wpdb->query("UPDATE ".$wpdb->prefix . $this->pluginOrderTable." SET order_status='".$_POST['vars']['selVal']."',order_update=NULL WHERE id=".$_POST['vars']['id']." ");
 		$thisOrder = $wpdb->get_results("SELECT order_update FROM ".$wpdb->prefix . $this->pluginOrderTable." WHERE id=".$_POST['vars']['id']."");
-		
+
 		$output= date("d-M-Y H:i:s",strtotime($thisOrder[0]->order_update));
+	}
+	/********************************************
+		[order history -> update notes]
+	********************************************/
+	if($_POST['vars']['field']=='ordernoteschange' && isset($_POST['vars']['id']) && $_POST['vars']['id']>=0){
+		global $wpdb;
+		/*add notes to db*/
+		$notes=wppizza_validate_string($_POST['vars']['selVal']);
+		$res=$wpdb->query("UPDATE ".$wpdb->prefix . $this->pluginOrderTable." SET notes='".$notes."' WHERE id=".$_POST['vars']['id']." ");
+		$output=strlen($notes);
+
+		/*we probably do not want to update the order status date/time otherwsie use the below instead and use the response insetad of 'ok' in the js */
+		//$res=$wpdb->query("UPDATE ".$wpdb->prefix . $this->pluginOrderTable." SET notes='".wppizza_validate_string($_POST['vars']['selVal'])."',order_update=NULL WHERE id=".$_POST['vars']['id']." ");
+		//$thisOrder = $wpdb->get_results("SELECT order_update FROM ".$wpdb->prefix . $this->pluginOrderTable." WHERE id=".$_POST['vars']['id']."");
+		//$output= date("d-M-Y H:i:s",strtotime($thisOrder[0]->order_update));
 	}
 	/******************************************************
 		[prize tier selection has been changed->add relevant price options input fields]

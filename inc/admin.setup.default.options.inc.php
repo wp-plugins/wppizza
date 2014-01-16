@@ -366,6 +366,7 @@
 				'order_min_for_delivery' => 0,
 				'order_pickup_display_location' => 1,
 				'delivery'=>array(
+					'no_delivery'=>'',
 					'minimum_total'=>array('min_total'=>'7.5','deliver_below_total'=>true,'deliverycharges_below_total'=>'0'),
 					'standard'=>array('delivery_charge'=>'7.5'),
 					'per_item'=>array('delivery_charge_per_item'=>'0','delivery_per_item_free'=>'50')
@@ -390,6 +391,7 @@
 				'shipping_tax'=>false,
 				'order_email_to'=>array(''.get_option('admin_email').''),
 				'order_email_bcc'=>array(),
+				'order_email_attachments'=>array(),
 				'order_email_from'=>'',
 				'order_email_from_name'=>'',
 				'order_sms'=>''
@@ -449,7 +451,7 @@
 				'empty_cart'=>array(
 					'descr'=>__('Shoppingcart: empty cart button text', $this->pluginLocale),
 					'lbl'=>__('empty cart', $this->pluginLocale)
-				),								
+				),
 				'cart_is_empty'=>array(
 					'descr'=>__('Shoppingcart: text to display when cart is empty', $this->pluginLocale),
 					'lbl'=>__('your cart is empty', $this->pluginLocale)
@@ -487,8 +489,12 @@
 					'lbl'=>__('please enter the required information below', $this->pluginLocale)
 				),
 				'order_page_self_pickup'=>array(
-					'descr'=>__('Order Page - Self Pickup: text on order page to highlight self pickup (if applicable)', $this->pluginLocale),
+					'descr'=>__('Order Page - Self Pickup: text on order page / email to highlight self pickup (if applicable)', $this->pluginLocale),
 					'lbl'=>__('Note: you have chosen to pickup the order yourself. This order will not be delivered. Please allow 30 min. for us to prepare your order.', $this->pluginLocale)
+				),
+				'order_page_no_delivery'=>array(
+					'descr'=>__('Order Page - No Delivery Offered / Pickup Only: text on order page / email if delivery is not being offered (if applicable)', $this->pluginLocale),
+					'lbl'=>__('Please collect your order at the store.', $this->pluginLocale)
 				),
 				'order_page_handling'=>array(
 					'descr'=>__('Order Page - Additional Handling Charges: text on order page if a handling charge for payment processing has been made (if applicable)', $this->pluginLocale),
@@ -501,7 +507,7 @@
 				'required_field_decimal'=>array(
 					'descr'=>__('Order Page: message when field should be a decimal number', $this->pluginLocale),
 					'lbl'=>__('decimal numbers only please', $this->pluginLocale)
-				),					
+				),
 				'thank_you'=>array(
 					'descr'=>__('Order Page: label of thank you page after order has been sent', $this->pluginLocale),
 					'lbl'=>__('thank you', $this->pluginLocale)
@@ -513,7 +519,7 @@
 				'thank_you_error'=>array(
 					'descr'=>__('Order Page: text on "thank you" page if there was an *error* sending order emails ', $this->pluginLocale),
 					'lbl'=>__('Apologies. There was an error receiving your order. Please try again.', $this->pluginLocale)
-				),					
+				),
 				'update_profile'=>array(
 					'descr'=>__('Order Page: label next to checkbox text to allow user to update profile', $this->pluginLocale),
 					'lbl'=>__('update my user data with the details above', $this->pluginLocale)
@@ -525,7 +531,7 @@
 				'tips_ok'=>array(
 					'descr'=>__('Order Page: Tips/Gratuities confirm button', $this->pluginLocale),
 					'lbl'=>__('ok', $this->pluginLocale)
-				),												
+				),
 				'order_details'=>array(
 					'descr'=>__('Order Email: label for order details', $this->pluginLocale),
 					'lbl'=>__('order details', $this->pluginLocale)

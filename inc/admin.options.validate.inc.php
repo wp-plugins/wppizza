@@ -132,6 +132,7 @@
 
 			$options['order']['delivery_selected'] = wppizza_validate_alpha_only($input['order']['delivery_selected']);
 			$options['order']['discount_selected'] = wppizza_validate_alpha_only($input['order']['discount_selected']);
+
 			$options['order']['delivery'] = array();
 			foreach($input['order']['delivery'] as $k=>$v){
 				foreach($v as $l=>$m){
@@ -141,9 +142,13 @@
 				}
 				if($k=='minimum_total'){
 					$options['order']['delivery'][$k]['deliver_below_total']=!empty($input['order']['delivery'][$k]['deliver_below_total']) ? true : false;
-					$options['order']['delivery'][$k]['deliverycharges_below_total']=wppizza_validate_float_only($input['order']['delivery'][$k]['deliverycharges_below_total']);					
+					$options['order']['delivery'][$k]['deliverycharges_below_total']=wppizza_validate_float_only($input['order']['delivery'][$k]['deliverycharges_below_total']);
 				}
 			}
+			/**hardcode no_delivery (as there are  no submitted input values)*/
+					$options['order']['delivery']['no_delivery']='';
+
+
 			$options['order']['discounts'] = array();//initialize array
 			$options['order']['discounts']['none'] = array();//add distinctly as it has no array associated with it
 			foreach($input['order']['discounts'] as $a=>$b){
@@ -159,10 +164,11 @@
 			$options['order']['delivery_calculation_exclude_item'] = !empty($input['order']['delivery_calculation_exclude_item']) ? $input['order']['delivery_calculation_exclude_item'] : array();
 			$options['order']['item_tax']=wppizza_validate_float_only($input['order']['item_tax']);
 			$options['order']['shipping_tax'] = !empty($input['order']['shipping_tax']) ? true : false;
-			
+
 
 			$options['order']['order_email_to'] = wppizza_validate_email_array($input['order']['order_email_to']);
 			$options['order']['order_email_bcc'] = wppizza_validate_email_array($input['order']['order_email_bcc']);
+			$options['order']['order_email_attachments'] = wppizza_strtoarray($input['order']['order_email_attachments']);
 			$emailFrom=wppizza_validate_email_array($input['order']['order_email_from']);/*validated as array but we only store the first value as string*/
 			$options['order']['order_email_from'] = !empty($emailFrom[0]) ? ''.$emailFrom[0].'' : '' ;
 			$options['order']['order_email_from_name'] = wppizza_validate_string($input['order']['order_email_from_name']);
@@ -178,27 +184,23 @@
 				$options['order_form'][$a]['required'] = !empty($input['order_form'][$a]['required']) ? true : false;
 				$options['order_form'][$a]['prefill'] = !empty($input['order_form'][$a]['prefill']) ? true : false;
 				$options['order_form'][$a]['onregister'] = !empty($input['order_form'][$a]['onregister']) ? true : false;
-				
+
 				if($options['order_form'][$a]['type']=='selectcustom'){
 					$options['order_form'][$a]['value'] = wppizza_surchargestoarray($input['order_form'][$a]['value']);
 				}else{
 					$options['order_form'][$a]['value'] = wppizza_strtoarray($input['order_form'][$a]['value']);
-				}				
-				
-				
-				
+				}
+
+
+
 			}
 		}
-		
-		
-		//print_r($options['order_form']);
-		//exit();
-		
+
 		/**validate sizes settings***/
 		if(isset($_POST[''.$this->pluginSlug.'_sizes'])){
 			$options['sizes'] = array();//initialize array
 			if(isset($input['sizes'])){
-			
+
 			foreach($input['sizes'] as $a=>$b){
 				$i=0;
 				foreach($b as $c=>$d){
@@ -209,8 +211,8 @@
 					$options['sizes'][$a][$c]['price']=wppizza_validate_float_only($d['price'],2);
 				$i++;
 				}
-			
-			
+
+
 			}}
 		}
 		/**validate additives ***/
@@ -242,7 +244,7 @@
 			//$roles=get_editable_roles();/*only get roles user is allowed to edit**/
 			foreach($input['admin_access_caps'] as $roleName=>$v){
 				$userRole = get_role($roleName);
-				
+
 				foreach($access as $akey=>$aVal){
 					/**not checked, but previously selected->remove capability**/
 					if(isset($userRole->capabilities[$aVal['cap']]) && ( !is_array($input['admin_access_caps'][$roleName]) || !isset($input['admin_access_caps'][$roleName][$aVal['cap']]))){
@@ -294,20 +296,18 @@
 					}
 					$updateGatewayOptions[$m['key']]=$val;
 				}
-				
+
 				/****add label and info*****/
 					$lbl=wppizza_validate_string($input['gateways'][$v['gatewayOptionsName']]['gateway_label']);
 				$updateGatewayOptions['gateway_label']=!empty($lbl) ? $lbl : $v['gatewayName'];
 				$updateGatewayOptions['gateway_info']=wppizza_validate_string($input['gateways'][$v['gatewayOptionsName']]['gateway_info']);
-				
+
 				/****add any non-user-editable gateway specific options (version numbers for example)*****/
 				if(isset($v['gatewaySettingsNonEditable']) && is_array($v['gatewaySettingsNonEditable'])){
 					foreach($v['gatewaySettingsNonEditable'] as $neKey=>$neVal){
 						$updateGatewayOptions[$neKey]=$neVal;
 					}
 				}
-				
-					
 				update_option($v['gatewayOptionsName'],$updateGatewayOptions);
 			}
 		}

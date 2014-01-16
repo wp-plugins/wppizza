@@ -210,12 +210,14 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 				/**********************************************************
 				*	[delivery charges - no self pickup enabled or selected]
 				**********************************************************/
+				if($options['order']['delivery_selected']!='no_delivery'){/*delivery disabled*/
 				if(!isset($oDetails['selfPickup']) || $oDetails['selfPickup']==0){
 					if($oDetails['delivery_charges']!=''){
 						$wppizzaEmailOrderSummary['delivery']=array('label'=>($pOptions['localization']['delivery_charges']['lbl']),'price'=>$oDetails['delivery_charges'],'currency'=>$oDetails['currency'] );
 					}else{
 						$wppizzaEmailOrderSummary['delivery']=array('label'=>($pOptions['localization']['free_delivery']['lbl']),'price'=>'','currency'=>'' );
 					}
+				}
 				}
 				/**********************************************************
 				*	[item tax - tax applied to items only]
@@ -240,10 +242,15 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 				**********************************************************/
 					$wppizzaEmailOrderSummary['total']=array('label'=>($pOptions['localization']['order_total']['lbl']),'price'=>$oDetails['total'],'currency'=>$oDetails['currency'] );
 				/****************************************************
-					[self pickup - enabled and selected]
+					[self pickup (enabled and selected) / no delivery offered ]
 				****************************************************/
-				if(isset($oDetails['selfPickup']) && $oDetails['selfPickup']==1){
+				if(isset($oDetails['selfPickup']) && $oDetails['selfPickup']>=1){
+					if($oDetails['selfPickup']==1){
 						$wppizzaEmailOrderSummary['self_pickup']=array('label'=>($pOptions['localization']['order_page_self_pickup']['lbl']),'price'=>'','currency'=>'' );
+					}
+					if($oDetails['selfPickup']==2){
+						$wppizzaEmailOrderSummary['self_pickup']=array('label'=>($pOptions['localization']['order_page_no_delivery']['lbl']),'price'=>'','currency'=>'' );
+					}					
 				}
 
 
@@ -430,6 +437,7 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 				}
 				$header .= 'MIME-Version: 1.0' . PHP_EOL;
 				$header .= 'Content-type: text/plain; charset='.$this->blogCharset.'' . PHP_EOL;
+								
 				/************send mail**************/
 				if( @mail( $this->orderShopEmail, $this->subjectPrefix.$this->subject.$this->subjectSuffix, $this->orderMessage['plaintext'], $header)) {
 					$sendMail['status']=true;
@@ -455,9 +463,20 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 					$wpMailHeaders[]= 'Bcc: '.$bccs.'';
 				}
 				$wpMailHeaders[] = 'Reply-To: '.$this->orderClientEmail.'';
+				
+				/***attachments***/
+				$wpMailAttachments = array();
+				/**any attachments set in options ?**/
+				if(count($this->pluginOptions['order']['order_email_attachments'])>0){
+					foreach($this->pluginOptions['order']['order_email_attachments'] as $attachment){
+						if(is_file($attachment)){
+							$wpMailAttachments[]=$attachment;
+						}
+					}
+				}				
 
 				/************send mail**************/
-				if(@wp_mail($this->orderShopEmail, $this->subjectPrefix.$this->subject.$this->subjectSuffix, $this->orderMessage['plaintext'], $wpMailHeaders)) {
+				if(@wp_mail($this->orderShopEmail, $this->subjectPrefix.$this->subject.$this->subjectSuffix, $this->orderMessage['plaintext'], $wpMailHeaders, $wpMailAttachments)) {
 					$sendMail['status']=true;
 				}else{
 					$sendMail['status']=false;
@@ -645,7 +664,9 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 			$summary['total_price_items']=$thisOrderDetails['total_price_items'];
 			$summary['discount']=$thisOrderDetails['discount'];
 			$summary['item_tax']=$thisOrderDetails['item_tax'];
-			$summary['delivery_charges']=$thisOrderDetails['delivery_charges'];
+			if($this->pluginOptions['order']['delivery_selected']!='no_delivery'){/*delivery disabled*/
+				$summary['delivery_charges']=$thisOrderDetails['delivery_charges'];
+			}
 			$summary['total_price_items']=$thisOrderDetails['total_price_items'];
 			$summary['selfPickup']=$thisOrderDetails['selfPickup'];
 			$summary['total']=$thisOrderDetails['total'];

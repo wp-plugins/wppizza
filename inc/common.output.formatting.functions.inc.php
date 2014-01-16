@@ -501,6 +501,13 @@ function wppizza_order_summary($session,$options,$ajax=null){
 		$session['total_price_calc_delivery']=0;
 	}
 	/****************************************************
+		[set the original free delivery min_total value as a var 
+		to be able to compare against further down and deisplay appropriate
+		text if min order value has also been set
+	******************************************************/
+	$orderMinTotalSet=$options['order']['delivery']['minimum_total']['min_total'];	
+	
+	/****************************************************
 		[get currency]
 	****************************************************/
 	$summary['currency']=''.$options['order']['currency_symbol'].'';
@@ -615,6 +622,17 @@ function wppizza_order_summary($session,$options,$ajax=null){
 			$deliveryLabel=$options['localization']['free_delivery']['lbl'];//initialize var
 			$deliveryCharges='';
 
+			if($options['order']['delivery_selected']=='no_delivery'){/*delivery disabled*/
+				$deliveryCharges='';/*set to empty to hide*/
+				$deliveryLabel='';/*set to empty to hide*/
+				/*set flag for 'no delivery'*/
+				$summary['no_delivery']=1;
+				$summary['self_pickup_enabled']=1;
+				$summary['selfPickup']=2;/**set to >1 to not display self pickup note/text in emails and order page*/
+				/**disable self pickup checkboxes*/
+				$options['order']['order_pickup']=false;
+			}
+
 
 			if($options['order']['delivery_selected']=='standard'){//standard (i.e. fixed delivery charges)
 				/**delivery settings to display with discount options somewhere*/
@@ -679,6 +697,7 @@ function wppizza_order_summary($session,$options,$ajax=null){
 
 			}
 
+						
 			/*******************************************
 			*	admin enabled self pickup on the frontend
 			******************************************/
@@ -711,10 +730,13 @@ function wppizza_order_summary($session,$options,$ajax=null){
 
 
 			/**minimum order value set but not reached***/
-			if($options['order']['order_min_for_delivery']>0 && $options['order']['order_min_for_delivery']>$session['total_price_calc_delivery'] && !($summary['selfPickup'])){
+			if($options['order']['order_min_for_delivery']>0 && $options['order']['order_min_for_delivery']>$session['total_price_calc_delivery'] ){//&& (!isset($summary['selfPickup']) ||  isset($summary['no_delivery']))
 				$placeOrderDisabled=true;
+				
+				/**set min_total value to be min order for delivery**/
 				$options['order']['delivery']['minimum_total']['min_total']=$options['order']['order_min_for_delivery'];
-				$options['localization']['minimum_order']['lbl']=$options['localization']['minimum_order_delivery']['lbl'];
+				
+				$options['localization']['minimum_order']['lbl']=$options['localization']['minimum_order']['lbl'];
 			}
 
 
@@ -774,7 +796,6 @@ function wppizza_order_summary($session,$options,$ajax=null){
 			$summary['innercartinfo']=$options['localization']['cart_is_empty']['lbl'];
 		}
 		if(count($summary['items'])>0){//open and stuff in cart -> check min value reached in do/dont display button and info
-			/*deliver when set to always deliver,  minimum value has been reached, or fixed delivery charges*/
 			if(
 					(
 						(
@@ -786,27 +807,32 @@ function wppizza_order_summary($session,$options,$ajax=null){
 
 						) ||
 						$options['order']['delivery_selected']=='standard' ||
+						$options['order']['delivery_selected']=='no_delivery' ||
 						$options['order']['delivery_selected']=='per_item'
 					) && !isset($placeOrderDisabled)
 
 			){
-				if($options['order']['orderpage']){//go to page
+				if($options['order']['orderpage']){//go to order page
+					/**wpml select of order page**/
+					if(function_exists('icl_object_id')) {
+						$options['order']['orderpage']=icl_object_id($options['order']['orderpage'],'page');
+					}
 					$summary['button']='<a href="'.get_page_link($options['order']['orderpage']).'">';
 					$summary['button'].='<input class="btn btn-primary" type="button" value="'.$options['localization']['place_your_order']['lbl'].'" />';
 					$summary['button'].='</a>';
 
 				}
 			}else{
-			/*minimum order not reached. only applies when "Deliver even when total order value is below minimum" is NOT checked and the corresponding option(radio) has been selected*/
-				$summary['nocheckout']=''.$options['localization']['minimum_order']['lbl'].' '.wppizza_output_format_price($options['order']['delivery']['minimum_total']['min_total'],$optionsDecimals).' '.$options['order']['currency_symbol'].'';
+					/**free delivery and charges > min order value*/
+					if($options['order']['delivery_selected']=='minimum_total' && $orderMinTotalSet==$options['order']['delivery']['minimum_total']['min_total']){//&& $orderMinTotalSet>=$options['order']['delivery']['minimum_total']['min_total']
+						$summary['nocheckout']=''.$options['localization']['minimum_order_delivery']['lbl'].' ';
+					}else{				
+						$summary['nocheckout']=''.$options['localization']['minimum_order']['lbl'].' ';
+					}
+						$summary['nocheckout'].=''.wppizza_output_format_price($options['order']['delivery']['minimum_total']['min_total'],$optionsDecimals).' '.$options['order']['currency_symbol'].'';
 			}
 		}
 
-	//	if($placeOrderDisabled){
-	//		$summary['nocheckout']=''.$options['localization']['minimum_order']['lbl'].' '.wppizza_output_format_price($options['order']['delivery']['minimum_total']['min_total'],$optionsDecimals).' '.$options['order']['currency_symbol'].'';
-	//	}
-
-	
 		/****************************************************
 			[empty cart button, show/hide depending if enabled or no of items]
 		*****************************************************/

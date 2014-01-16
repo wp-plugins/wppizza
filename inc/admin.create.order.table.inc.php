@@ -47,6 +47,7 @@ $sql="CREATE TABLE ".$wpdb->prefix ."wppizza_orders (
 	mail_construct TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	mail_sent ENUM('Y','N','ERROR') NULL DEFAULT 'N',
 	mail_error TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	notes TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	PRIMARY KEY  (id),
 	KEY hash (hash),
 	KEY wp_user_id (wp_user_id),

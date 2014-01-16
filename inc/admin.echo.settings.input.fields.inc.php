@@ -135,7 +135,7 @@ $options = $this->pluginOptions;
 			}
 			if($field=='prettyPhoto' ){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[layout][".$field."]' type='checkbox'  ". checked($options['layout'][$field],true,false)." value='1' />";
-			}			
+			}
 			if($field=='prettyPhotoStyle'){
 				echo "<select name='".$this->pluginSlug."[layout][".$field."]'>";
 					echo "<option value='pp_default' ".selected($options['layout'][$field],"pp_default",false).">default</option>";
@@ -146,11 +146,11 @@ $options = $this->pluginOptions;
 					echo "<option value='facebook' ".selected($options['layout'][$field],"facebook",false).">facebook</option>";
 				echo "</select>";
 				echo' '.__('see wppizza.prettyPhoto.custom.js.php if you want to adjust prettyPhoto options', $this->pluginLocale).'';
-			}			
-			
-			
-			
-			
+			}
+
+
+
+
 			if($field=='hide_cart_icon'){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[layout][".$field."]' type='checkbox'  ". checked($options['layout'][$field],true,false)." value='1' />";
 			}
@@ -221,31 +221,23 @@ $options = $this->pluginOptions;
 
 			if($field=='orderpage'){
 				wp_dropdown_pages('name='.$this->pluginSlug.'[order]['.$field.']&selected='.$options['order'][$field].'&show_option_none='.__('select your orderpage', $this->pluginLocale).'');
-				echo " ".__('Exclude from Navigation ?', $this->pluginLocale)."<input id='orderpage_exclude' name='".$this->pluginSlug."[order][orderpage_exclude]' type='checkbox'  ". checked($options['order']['orderpage_exclude'],true,false)." value='1' />";
+				echo " ".__('Exclude from Navigation ?', $this->pluginLocale)." <input id='orderpage_exclude' name='".$this->pluginSlug."[order][orderpage_exclude]' type='checkbox'  ". checked($options['order']['orderpage_exclude'],true,false)." value='1' />";
 			}
 
 			if($field=='order_form'){
-		
 
-		
 				asort($options[$field]);
-
-	//	print_r($options[$field]);
-		
-	//	exit();
-
-
 
 				echo"<table id='wppizza_".$field."'>";
 					echo"<tr><th>".__('Sort', $this->pluginLocale)."</th><th>".__('Label', $this->pluginLocale)."</th><th>".__('Enabled', $this->pluginLocale)."</th><th>".__('Required', $this->pluginLocale)."</th><th>".__('Prefill<br/>[if known]', $this->pluginLocale)."</th><th>".__('Use when<br/>Registering ?', $this->pluginLocale)."</th><th>".__('Type', $this->pluginLocale)."</th></tr>";
 				foreach($options[$field] as $k=>$v){
 					$disableRegister=false;$disablePrefill=false;$fixedType='';$fixedTypeLabel='';
-					
+
 					if($v['key']=='cemail'){$disableRegister=true;$fixedType='email';$fixedTypeLabel='email';}
 					if($v['key']=='ctips'){$disableRegister=true;$disablePrefill=true;$fixedType='tips';$fixedTypeLabel='';}
 					if($v['key']=='csurcharges'){$disableRegister=true;$disablePrefill=true;$fixedType='selectcustom';}
-					
-					
+
+
 					if($v['key']=='cemail'){$style=' style="margin-bottom:0"';}else{$style='';}
 					echo"<tr class='".$v['key']."'>";
 					echo"<td><input name='".$this->pluginSlug."[".$field."][".$k."][sort]' size='1' type='text' value='".$v['sort']."' /></td>";
@@ -260,9 +252,9 @@ $options = $this->pluginOptions;
 					echo"</td>";
 
 					echo "<td>";
-						
+
 						if($fixedType!=''){
-							echo "<input type='hidden' id='".$this->pluginSlug."_".$field."_type_".$k."' name='".$this->pluginSlug."[".$field."][".$k."][type]' value='".$fixedType."' />";	
+							echo "<input type='hidden' id='".$this->pluginSlug."_".$field."_type_".$k."' name='".$this->pluginSlug."[".$field."][".$k."][type]' value='".$fixedType."' />";
 							echo "".$fixedTypeLabel."";
 						}else{
 							echo "<select id='".$this->pluginSlug."_".$field."_type_".$k."' class='".$this->pluginSlug."_".$field."_type' name='".$this->pluginSlug."[".$field."][".$k."][type]' />";
@@ -272,9 +264,9 @@ $options = $this->pluginOptions;
 								echo'<option value="select" '.selected($v['type'],"select",false).'>select</option>';
 							echo "</select>";
 						}
-						
+
 						$display=' style="display:none"';$val='';
-						
+
 						if($v['type']=='select'){$display='';$val=''.implode(",",$v['value']).'';}
 						if($v['type']=='selectcustom'){$display='';
 							$valArr=array();
@@ -283,8 +275,8 @@ $options = $this->pluginOptions;
 							}
 							$val=implode("|",$valArr);
 						}
-						
-						
+
+
 						echo "<span class='".$this->pluginSlug."_".$field."_select'".$display.">";
 							echo "<input name='".$this->pluginSlug."[".$field."][".$k."][value]' type='text' value='".$val."' />";
 						echo "</span>";
@@ -294,16 +286,16 @@ $options = $this->pluginOptions;
 						echo "</span>";
 					echo"</td>";// ".$v['key']." ".$v['type']."
 					echo"</tr>";
-					
+
 					if($v['key']=='cemail'){
 						echo"<tr class='".$v['key']."'><td colspan='7' style='margin:0;padding:0 0 0 10px'>";
 						echo"<span class='description'>".__('<b>Note:</b> only this field can and should be used to send email notifications of the order to the customer (if enabled).<br/>Furthermore, you cannot select this field to show on the registration form. (Wordpress already adds this field)', $this->pluginLocale)."</span>";
 						echo"</td></tr>";
 					}
 					if($v['key']=='ctips'){
-						
-						
-						
+
+
+
 						echo"<tr class='".$v['key']."'><td colspan='7' style='margin:0;padding:0 0 0 10px'>";
 						echo"<span class='description'>";
 						echo"".__('<b>Tips/Gratuities:</b> allow the customer can enter a <b>numerical</b> amount to be used as tips/gratuities.<br/>This field will not be added to the users profile and can therefore not be pre-filled or used in the registration form.', $this->pluginLocale)."";
@@ -318,24 +310,40 @@ $options = $this->pluginOptions;
 						/*********************end of notice******************************/
 						echo"</span>";
 						echo"</td></tr>";
-					}	
+					}
+
+
+					/***********************
+					//currently not in use
 					if($v['key']=='csurcharges'){
 						echo"<tr class='".$v['key']."'><td colspan='7' style='margin:0;padding:0 0 0 10px'>";
 						echo"<span class='description'>".__('<b>Surcharges:</b> generate a dropdown of applicable surcharges as comma/pipe delimited label/price pairs (% allowed).<br />Example: "CC:1.00|COD:0.75%|Other:5" etc. <b>Any value selected by the customer will be added to the delivery charges.</b><br/>This field will not be added to the users profile and can therefore not be pre-filled or used in the registration form.', $this->pluginLocale)."</span>";
 						echo"</td></tr>";
-					}									
-					
+					}
+					********************/
+
 				}
-				//future use
+				//future use.....maybe
 				//echo"<tr><th colspan='7' class='wppizza-order-form-footer' ><span id='wppizza-toggle-tgs' class='description'>".__('Show Tips/Gratuities', $this->pluginLocale)."<span></th></tr>";
 				echo"</table>";
 			}
 
 
 			if($field=='delivery'){
+				/****sort in a more sensible manner**/
+				$options['order'][$field]=array('no_delivery'=>$options['order'][$field]['no_delivery'],'minimum_total'=>$options['order'][$field]['minimum_total'],'standard'=>$options['order'][$field]['standard'],'per_item'=>$options['order'][$field]['per_item']);
+				/**end custom sort**/
+
+				echo "<span id='wppizza-delivery-options-select'>";
 				foreach($options['order'][$field] as $k=>$v){
 					echo "<span class='wppizza_option'>";
 					echo "<input name='".$this->pluginSlug."[order][delivery_selected]' type='radio' ". checked($options['order']['delivery_selected']==$k,true,false)." value='".$k."' />";
+
+					if($k=='no_delivery'){
+						echo" ".__('No delivery offered / pickup only', $this->pluginLocale)."";
+						echo"<br /><span class='description'>".__('removes any labels, text, charges, checkboxes etc associated with delivery options. You can still set a minimum order value below.', $this->pluginLocale)."</span>";
+
+					}
 					if($k=='minimum_total'){
 						echo" ".__('Free delivery when total order value reaches', $this->pluginLocale).":";
 						echo"<input name='".$this->pluginSlug."[order][".$field."][minimum_total][min_total]' size='3' type='text' value='".wppizza_output_format_price($options['order'][$field]['minimum_total']['min_total'],$optionsDecimals)."' />";
@@ -343,19 +351,19 @@ $options = $this->pluginOptions;
 						echo"<input name='".$this->pluginSlug."[order][".$field."][minimum_total][deliver_below_total]' type='checkbox' ". checked($v['deliver_below_total'],true,false)." value='1' />";
 						echo" ".__('Deliver even when total order value is below minimum (the difference between total and "Minimum Total" above will be added to the Total as "Delivery Charges")', $this->pluginLocale)."";
 						echo"<br />";
-						echo" ".__('(If this is not selected and the total order is below the set value above, the customer will not be able to submit the order to you)', $this->pluginLocale)."";
+						echo"<span class='description'>".__('(If this is not selected and the total order is below the set value above, the customer will not be able to submit the order to you)', $this->pluginLocale)."</span>";
 						echo"<br />";
 						echo"<input name='".$this->pluginSlug."[order][".$field."][minimum_total][deliverycharges_below_total]' size='3' type='text' value='".wppizza_output_format_price($options['order'][$field]['minimum_total']['deliverycharges_below_total'],$optionsDecimals)."' />";
 						echo" ".__('Fixed Delivery charges if order has not reached total for free delivery [0 to disable]', $this->pluginLocale)."";
 						echo"<br />";
 						echo" <em style='color:red'>(".__('if set (i.e. not 0) "Deliver even when total order value is below minimum" must be checked for this to have any effect', $this->pluginLocale).")</em>";
-						echo "<br /><br />";
+
 						echo"</div>";
 					}
 					if($k=='standard'){
 						echo" ".__('Fixed Delivery Charges [added to order total]', $this->pluginLocale).":";
 						echo "<input name='".$this->pluginSlug."[order][".$field."][standard][delivery_charge]' size='3' type='text' value='".wppizza_output_format_price($options['order'][$field]['standard']['delivery_charge'],$optionsDecimals)."' />";
-						echo "<br /><br />";
+
 					}
 					if($k=='per_item'){
 						echo" ".__('Delivery Charges per item', $this->pluginLocale).":";
@@ -368,22 +376,22 @@ $options = $this->pluginOptions;
 					}
 					echo "</span>";
 				}
-
+				echo "</span>";
 
 				/**min order for delivery**/
 				echo "<span class='wppizza_option' style='margin-top:20px'>";
 				echo"<input name='".$this->pluginSlug."[order][order_min_for_delivery]' size='3' type='text' value='".wppizza_output_format_price($options['order']['order_min_for_delivery'],$optionsDecimals)."' />";
-				echo" ".__('minimum order value to offer delivery [will disable "place order" button in cart and order page until set order value (before any discounts etc) has been reached. 0 to disable. Customer can still choose "self-pickup" (if enabled).]', $this->pluginLocale)."<br />";
-				echo" <em>".__('probably most useful with "Fixed" / "Per Item" delivery charges or when "Deliver even when total order value is below...etc" is checked]', $this->pluginLocale)."</em>";
+				echo" ".__('minimum order value [will disable "place order" button in cart and order page until set order value (before any discounts etc) has been reached. 0 to disable.]', $this->pluginLocale)."<br />";
+				echo" <span class='description'>".__('Customer can still choose "self-pickup" (if enabled / applicable).', $this->pluginLocale)."</span>";
 				echo "</span>";
-				
+
 				/**Exclude following menu items when calculating if free delivery**/
 				echo "<span class='wppizza_option' style='margin:20px 0'>";
 					echo" ".__('<b>Exclude</b> following menu items when calculating if free delivery applies', $this->pluginLocale)." :<br/>";
-					echo'<em>'.__('For example: you might want to offer free delivery only when total order of *meals* exceeds the set free delivery amount. In this case, exclude all your *drinks and non-meals* by selecting those below.', $this->pluginLocale).'</em><br/>';
+					echo'<span class="description">'.__('For example: you might want to offer free delivery only when total order of *meals* exceeds the set free delivery amount. In this case, exclude all your *drinks and non-meals* by selecting those below.', $this->pluginLocale).'</span><br/>';
 					echo"<select name='".$this->pluginSlug."[order][delivery_calculation_exclude_item][]' multiple='multiple' class='wppizza_delivery_calculation_exclude_item'>";
 					$args = array('post_type' => ''.WPPIZZA_POST_TYPE.'','posts_per_page' => -1, 'orderby'=>'title' ,'order' => 'ASC');
-					$query = new WP_Query( $args );							
+					$query = new WP_Query( $args );
 					foreach($query->posts as $pKey=>$pVal){
 						echo"<option value='".$pVal->ID."' ";
 							if(isset($options['order']['delivery_calculation_exclude_item']) && in_array($pVal->ID,$options['order']['delivery_calculation_exclude_item'])){
@@ -454,6 +462,11 @@ $options = $this->pluginOptions;
 				if(is_array($options['order'][$field])){$val=implode(",",$options['order'][$field]);}else{$val='';}
 				echo "<input id='".$field."' name='".$this->pluginSlug."[order][".$field."]' size='30' type='text' value='".$val."' />";
 			}
+			if($field=='order_email_attachments'){
+				if(is_array($options['order'][$field])){$val=implode(",",$options['order'][$field]);}else{$val='';}
+				echo "<input id='".$field."' name='".$this->pluginSlug."[order][".$field."]' size='30' type='text' value='".$val."' placeholder='/absolute/path/to/your/file'/>";
+				echo" <span class='description'>".__('if you wish to add an attachment to the order emails add the FULL ABSOLUTE PATH to the file(s) here', $this->pluginLocale)."</span>";
+			}
 
 			if($field=='order_email_from'){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[order][".$field."]' size='30' type='text' value='".$options['order'][$field]."' />";
@@ -461,6 +474,7 @@ $options = $this->pluginOptions;
 			if($field=='order_email_from_name'){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[order][".$field."]' size='30' type='text' value='".$options['order'][$field]."' />";
 			}
+
 
 
 			if($field=='item_tax'){
@@ -535,7 +549,7 @@ $options = $this->pluginOptions;
 				echo"<div id='wppizza_".$field."'>";
 					echo"<div id='wppizza_".$field."_options'>";
 					asort($localizeOptions);
-					$lngOddEvenArray=__('0,5,11,12,15,28,35', $this->pluginLocale);
+					$lngOddEvenArray=__('0,5,11,12,15,29,36', $this->pluginLocale);
 					$lngOddEvan=explode(",",$lngOddEvenArray);
 					$bgStyle=$lngOddEvan;
 					$i=0;
@@ -559,8 +573,8 @@ $options = $this->pluginOptions;
 					echo"</div>";
 				echo"</div>";
 			}
-			
-			
+
+
 			if($field=='access'){
 				global $current_user,$user_level,$wp_roles;
 				echo"<div id='wppizza_".$field."'>";
@@ -575,10 +589,10 @@ $options = $this->pluginOptions;
 							unset($roles[$curRoles]);
 						}
 					}}
-					
+
 					$access=$this->wppizza_set_capabilities();
 					foreach($roles as $roleName=>$v){
-						
+
 						$userRole = get_role($roleName);
 							echo"<div class='wppizza-access'>";
 							echo"<input type='hidden' name='".$this->pluginSlug."[admin_access_caps][".$roleName."]' value='".$roleName."'>";
@@ -591,12 +605,12 @@ $options = $this->pluginOptions;
 							echo"</div>";
 					}
 				echo"</div>";
-			}			
-			
-			
+			}
+
+
 			if($field=='history'){
 				echo"<div id='wppizza_".$field."'>";
-					
+
 					echo"<div id='wppizza_".$field."_search' class='button'>";
 						echo "<span style='float:left'>";
 						echo "<a href='#' id='".$field."_get_orders' class='button'>".__('show most recent *confirmed* orders', $this->pluginLocale)."</a>";
@@ -626,7 +640,7 @@ $options = $this->pluginOptions;
 						echo"<br/><span style='color:red'>".__('Note: This will delete these entries PERMANENTLY from the db and is not reversable.', $this->pluginLocale)."</style>";
 					echo"</div>";
 				echo"</div>";
-			}			
-			
+			}
+
 	}
 ?>
