@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.2, WP 3.3 
 Tested up to: 3.8
-Stable tag: 2.8.6
+Stable tag: 2.8.6.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -63,8 +63,9 @@ Note: you might want to start with  Option 1 first, as you can always use Option
 	- a selection of available meal sizes
 	- as well as default opening times, order settings etc.
 	
-	to be able to add items to your shopping cart make sure that ALL pages that display your menu items have the shopping cart displayed somewhere, so:
-	- display the shoppingcart somewhere on those pages (typically in a sidebar) using the wppizza widget (using type:cart) or the following shortcode: [wppizza type='cart']
+	** to be able to add items to your shopping cart make sure that ALL pages that display your menu items have the shopping cart displayed somewhere, so: **  
+	- display the shoppingcart somewhere on those pages (typically in a sidebar) using the wppizza widget (using type:cart) or the following shortcode: [wppizza type='cart']  
+	- ** note: you will most likely NOT want to display the shopping cart on the final order page. If your theme does not allow to adjust this - via templates for example -  use one of the many WP plugins available that lets you choose which widget to display on which page**  
 	- if the cart displays "currently closed" adjust your opening times in wppizza->settings->openingtimes
 	- make sure the navigation to those pages gets displayed somewhere (this will normally already be the case - usually by some pagelist or menu ).
 
@@ -78,7 +79,8 @@ Note: you might want to start with  Option 1 first, as you can always use Option
 	- open /wppizza/templates/wppizza-wrapper.php and copy everything between 	[copy from here .....] to [...........copy to here]
 	- place this snippet in the 'wppizza-wrapper.php' file we created above in your theme directory, REPLACING the original loop (including the while ( have_posts() ) : the_post(); or similar part) 
 	- display the navigation by either using the widget (type:navigation) or a shortcode [wppizza type='navigation']
-	- ensure you still have an order page that includes the following shortcode [wppizza type='orderpage'] and wppizza->settings->order settings: 'order page' is set to use this page
+	- ensure you still have an order page that includes the following shortcode [wppizza type='orderpage'] and wppizza->settings->order settings: 'order page' is set to use this page (you might have to re-save your permalink settings)  
+	- ensure - as outlined in Option 1 - that you are displaying your shopping cart  
 	- if you wish , you can now delete all wppizza default pages EXCEPT THE ORDER PAGE. However,if using permalinks, you might want to keep the parent page (default: Our Menu) and set the permalinks in wppizza->settings to this page. If you do, make sure to update permalinks structure once.
 
 	Now you do not have to maintain any wppizza category pages, or navigation when adding new categories or menu items to wppizza as it's all taken care of automagically.
@@ -120,6 +122,12 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 == Changelog ==
 
+2.8.6.1
+* fixed wmpl related email attachments php warning when value did not exist(yet)  
+* updated the readme in a couple of places  
+16th January 2014  
+
+  
 2.8.6  
 * made sure input fields do not loose their entered value on orderpage when tip is being added   
 * optionally add attachments to order emails  

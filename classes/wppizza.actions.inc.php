@@ -1577,9 +1577,10 @@ function wppizza_set_order_status(){
 				$this->pluginOptions['order']['order_email_bcc'][$k] = icl_translate(WPPIZZA_SLUG,'order_email_bcc_'. $k.'', $arr);
 			}
 			/**order email attachments **/
+			if(isset($this->pluginOptions['order']['order_email_attachments']) && is_array($this->pluginOptions['order']['order_email_attachments'])){
 			foreach($this->pluginOptions['order']['order_email_attachments'] as $k=>$arr){
 				$this->pluginOptions['order']['order_email_attachments'][$k] = icl_translate(WPPIZZA_SLUG,'order_email_attachments_'. $k.'', $arr);
-			}
+			}}
 		}
 	}
 }
