@@ -307,6 +307,7 @@
 				'category_parent_page' => array(),
 				'empty_category_and_items' => false,
 				'wp_multisite_session_per_site' => true,
+				'using_cache_plugin' => false,
 				'nag_notice' => $this->pluginNagNotice
 			),
 			'layout'=>array(

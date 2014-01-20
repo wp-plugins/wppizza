@@ -20,6 +20,10 @@
 	/*distinctly set plugin version*/
 	$update_options['plugin_data']['version']=$this->pluginVersion;
 
+	if(!isset($options['plugin_data']['using_cache_plugin'])){
+		$update_options['plugin_data']['using_cache_plugin']=$defaultOptions['plugin_data']['using_cache_plugin'];
+	}
+
 	if(!isset($options['order']['delivery']['no_delivery'])){
 		$update_options['order']['delivery']['no_delivery']=$defaultOptions['order']['delivery']['no_delivery'];
 	}

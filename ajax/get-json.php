@@ -331,5 +331,18 @@ if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='sendorder'){
 	print"".$output."";
 exit();
 }
+/************************************************************************************************
+*
+*	[using a cache plugin, load full cart dynamically]
+*
+************************************************************************************************/
+if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='hasCachePlugin'){
+		ob_start();
+		$attributes=json_decode(stripslashes($_POST['vars']['attributes']),true);
+		$this->wppizza_include_shortcode_template('cart',$attributes);
+		$markup = ob_get_clean();
+	print"".$markup."";
+exit();
+}
 exit();
 ?>

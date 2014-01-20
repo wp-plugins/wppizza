@@ -47,9 +47,22 @@ if($type=='cart'){
 		$markup='';
 		return $markup;
 	}else{
-		ob_start();
-		$this->wppizza_include_shortcode_template($type,$atts);
-		$markup = ob_get_clean();
+		/**caching plugin enabled->insert empty div to be filled with cart by ajax request**/
+		if($this->pluginOptions['plugin_data']['using_cache_plugin'] && !isset($atts['request'])){
+			$isOpen=wpizza_are_we_open($this->pluginOptions['opening_times_standard'],$this->pluginOptions['opening_times_custom'],$this->pluginOptions['times_closed_standard']);
+			$markup="<div class='wppizza-cart-nocache'><div class='wppizza-cart-nocacheinner'>";
+			$markup.="<div id='wppizza-loading'></div>";
+				/**we need to pass on the attributes too*/
+				$markup.="<input type='hidden' id='wppizza-cart-nocache-attributes' name='wppizza-cart-nocache-attributes' value='".json_encode($atts)."' />";
+			if($isOpen==1){/*we need this to not break other wppizza extensions**/
+				$markup.="<input type='hidden' class='wppizza-open' name='wppizza-open' />";
+			}
+			$markup.="</div></div>";
+		}else{
+			ob_start();
+			$this->wppizza_include_shortcode_template($type,$atts);
+			$markup = ob_get_clean();
+		}
 	return $markup;
 	}
 }

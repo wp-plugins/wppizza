@@ -59,7 +59,7 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 			
 			/***dont put WPPizza Categories intitle tag */
 			add_filter( 'wp_title', array( $this, 'wppizza_filter_title_tag'),20,3);
-			
+						
 		}
 		/************************************************************************
 			[runs only for admin]
@@ -790,6 +790,13 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 			if(isset($atts['request'])){
 			$request=$atts['request'];
 			}
+			
+			/**if request is ajax , return formatted tems**/
+			//$cachePlugin=false;
+			//if(isset($this->pluginOptions['plugin_data']['using_cache_plugin'])){
+			//$cachePlugin=true;
+			//}
+			
 			/**variables to use in template**/
 			$options = $this->pluginOptions;
 			$cart=wppizza_order_summary($_SESSION[$this->pluginSession],$options);
@@ -1192,6 +1199,11 @@ public function wppizza_require_common_input_validation_functions(){
 		$jsExtend['jsExtend'] = apply_filters('wppizza_filter_js_extend', $jsExtend['jsExtend']);
 
 		$localized_array = array( 'ajaxurl' =>admin_url('admin-ajax.php'),'validate_error'=>array('email'=>''.$options['localization']['required_field']['lbl'].'','required'=>''.$options['localization']['required_field']['lbl'].'','decimal'=>''.$options['localization']['required_field_decimal']['lbl'].''),'msg'=>$jsMessages,'funcCartRefr'=>$jsCartRefreshCompleteFunctions['functionsCartRefresh'],'extend'=>$jsExtend['jsExtend']);
+		/**are we using a cache plugin ?**/
+		if($options['plugin_data']['using_cache_plugin']){
+			$localized_array['usingCache']=1;
+		}
+		
 		wp_localize_script( $this->pluginSlug,$this->pluginSlug, $localized_array );
 
     }

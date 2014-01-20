@@ -3,6 +3,8 @@
 *	[shopping cart]
 *
 ***********************/
+.wppizza-cart-nocache{margin:0;padding:0;border:none}
+.wppizza-cart-nocacheinner{height:250px;position: relative;z-index: 999;left: 0;right: 0;padding:0;margin:0;background-color:inherit;border:none}
 .wppizza-cart{height:250px;position: relative;z-index: 999;left: 0;right: 0;padding:0;margin:0;background-color:inherit;border: 1px solid #ccc;}
 .wppizza-cart-fixed{height:250px;position:fixed;top:10px;left:auto;right:auto;background-color:#FEFEFE;}/**-----added in version 2.6.4----***/
 /*opening hours top/bottom*/

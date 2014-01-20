@@ -78,7 +78,7 @@ jQuery(document).ready(function($){
 		}
 	});
 
-	$(document).on(''+wppizzaClickEvent+'', '.wppizza-add-to-cart,.wppizza-remove-from-cart,.wppizza-cart-refresh,.wppizza-cart-increment,.wppizza-empty-cart-button', function(e){
+	$(document).on(''+wppizzaClickEvent+'', '.wppizza-add-to-cart,.wppizza-remove-from-cart,.wppizza-cart-refresh,#wppizza-force-refresh,.wppizza-cart-increment,.wppizza-empty-cart-button', function(e){
 		if ($(".wppizza-open").length > 0){//first check if shopping cart exists on page and that we are open
 			e.preventDefault();
 			e.stopPropagation();
@@ -93,7 +93,7 @@ jQuery(document).ready(function($){
 		if(self.hasClass('wppizza-add-to-cart')){type='add';}
 		if(self.hasClass('wppizza-remove-from-cart')){type='remove';}
 		if(self.hasClass('wppizza-empty-cart-button')){type='removeall';selfId=0;}
-		if(self.hasClass('wppizza-cart-refresh')){type='refresh';}
+		if(self.hasClass('wppizza-cart-refresh') || selfId=='wppizza-force-refresh'){type='refresh';}
 		if(self.hasClass('wppizza-cart-increment')){
 			var itemCount=self.closest('li').find('.wppizza-cart-incr').val();
 			if(itemCount==0){
@@ -324,4 +324,15 @@ jQuery(document).ready(function($){
 	        window.location.href = url;
 		}
 	});
+	/***********************************************
+	*
+	*	[using cache plugin, load cart dynamically]
+	*
+	***********************************************/
+	if(typeof wppizza.usingCache!=='undefined'){
+		var wppizzaNoCacheAttr=$('#wppizza-cart-nocache-attributes').val();
+		jQuery.post(wppizza.ajaxurl , {action :'wppizza_json',vars:{'type':'hasCachePlugin','attributes':wppizzaNoCacheAttr}}, function(response) {
+			$('.wppizza-cart-nocache').html(response);
+		},'html').error(function(jqXHR, textStatus, errorThrown) {alert("error : " + errorThrown);console.log(jqXHR.responseText);});
+	}
 })
