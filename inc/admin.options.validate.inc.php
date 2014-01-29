@@ -1,7 +1,6 @@
 <?php
 	/**get previously saved options**/
-	$options = $this->pluginOptions;
-
+	$options = $this->pluginOptionsNoWpml;
 
 		/**lets not forget static, uneditable options **/
 		$options['plugin_data']['version'] = $this->pluginVersion;
@@ -74,6 +73,13 @@
 			$options['layout']['prettyPhoto'] = !empty($input['layout']['prettyPhoto']) ? true : false;
 			$options['layout']['empty_cart_button'] = !empty($input['layout']['empty_cart_button']) ? true : false;
 			$options['layout']['prettyPhotoStyle']=wppizza_validate_string($input['layout']['prettyPhotoStyle']);
+
+
+			$options['layout']['sticky_cart_animation']=absint($input['layout']['sticky_cart_animation']);
+			$options['layout']['sticky_cart_animation_style']=wppizza_validate_string($input['layout']['sticky_cart_animation_style']);
+			$options['layout']['sticky_cart_background']=preg_replace("/[^a-zA-Z#]/","",$input['layout']['sticky_cart_background']);
+
+			$options['layout']['sticky_cart_margin_top']=absint($input['layout']['sticky_cart_margin_top']);
 
 			$options['opening_times_format']['hour']=wppizza_validate_string($input['opening_times_format']['hour']);
 			$options['opening_times_format']['separator']=wppizza_validate_string($input['opening_times_format']['separator']);

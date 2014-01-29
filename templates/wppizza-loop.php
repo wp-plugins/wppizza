@@ -14,8 +14,7 @@
 	*******************************************/ 
 	$post_type=WPPIZZA_POST_TYPE;
 	
-	/***********get plugin options **************/
-	$options=get_option(WPPIZZA_SLUG);
+	/*********** plugin options **************/
 	$currency=$options['order']['currency_symbol'];//put currency into a shorter variable. just easier to deal with further down
 	$optionsDecimals=$options['layout']['hide_decimals'];
 	$txt=$options['localization'];/**put localization vars into a shorter variable

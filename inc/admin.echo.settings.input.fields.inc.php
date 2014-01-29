@@ -177,6 +177,54 @@ $options = $this->pluginOptions;
 			if($field=='empty_cart_button'){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[layout][".$field."]' type='checkbox'  ". checked($options['layout'][$field],true,false)." value='1' />";
 			}
+			if($field=='sticky_cart_settings'){
+				echo "<input id='' name='".$this->pluginSlug."[layout][sticky_cart_animation]' size='2' type='text'  value='{$options['layout']['sticky_cart_animation']}' />";
+				echo" <span class='description'>".__('Animation Speed [in ms - 0 to disable animation]', $this->pluginLocale)."</span>";
+				echo"<br />";
+				echo "<select name='".$this->pluginSlug."[layout][sticky_cart_animation_style]'>";
+					echo "<option value='' ".selected($options['layout']['sticky_cart_animation_style'],'',false).">---".__('no animation', $this->pluginLocale)."---</option>";
+					echo "<option value='linear' ".selected($options['layout']['sticky_cart_animation_style'],'linear',false).">linear</option>";
+					echo "<option value='swing' ".selected($options['layout']['sticky_cart_animation_style'],'swing',false).">swing</option>";
+					echo "<option value='easeInQuad' ".selected($options['layout']['sticky_cart_animation_style'],'easeInQuad',false).">easeInQuad</option>";
+					echo "<option value='easeOutQuad' ".selected($options['layout']['sticky_cart_animation_style'],'easeOutQuad',false).">easeOutQuad</option>";
+					echo "<option value='easeInOutQuad' ".selected($options['layout']['sticky_cart_animation_style'],'easeInOutQuad',false).">easeInOutQuad</option>";
+					echo "<option value='easeInCubic' ".selected($options['layout']['sticky_cart_animation_style'],'easeInCubic',false).">easeInCubic</option>";
+					echo "<option value='easeOutCubic' ".selected($options['layout']['sticky_cart_animation_style'],'easeOutCubic',false).">easeOutCubic</option>";
+					echo "<option value='easeInOutCubic' ".selected($options['layout']['sticky_cart_animation_style'],'easeInOutCubic',false).">easeInOutCubic</option>";
+					echo "<option value='easeInQuart' ".selected($options['layout']['sticky_cart_animation_style'],'easeInQuart',false).">easeInQuart</option>";
+					echo "<option value='easeOutQuart' ".selected($options['layout']['sticky_cart_animation_style'],'easeOutQuart',false).">easeOutQuart</option>";
+					echo "<option value='easeInOutQuart' ".selected($options['layout']['sticky_cart_animation_style'],'easeInOutQuart',false).">easeInOutQuart</option>";
+					echo "<option value='easeInQuint' ".selected($options['layout']['sticky_cart_animation_style'],'easeInQuint',false).">easeInQuint</option>";
+					echo "<option value='easeOutQuint' ".selected($options['layout']['sticky_cart_animation_style'],'easeOutQuint',false).">easeOutQuint</option>";
+					echo "<option value='easeInOutQuint' ".selected($options['layout']['sticky_cart_animation_style'],'easeInOutQuint',false).">easeInOutQuint</option>";
+					echo "<option value='easeInExpo' ".selected($options['layout']['sticky_cart_animation_style'],'easeInExpo',false).">easeInExpo</option>";
+					echo "<option value='easeOutExpo' ".selected($options['layout']['sticky_cart_animation_style'],'easeOutExpo',false).">easeOutExpo</option>";
+					echo "<option value='easeInOutExpo' ".selected($options['layout']['sticky_cart_animation_style'],'easeInOutExpo',false).">easeInOutExpo</option>";
+					echo "<option value='easeInSine' ".selected($options['layout']['sticky_cart_animation_style'],'easeInSine',false).">easeInSine</option>";
+					echo "<option value='easeOutSine' ".selected($options['layout']['sticky_cart_animation_style'],'easeOutSine',false).">easeOutSine</option>";
+					echo "<option value='easeInOutSine' ".selected($options['layout']['sticky_cart_animation_style'],'easeInOutSine',false).">easeInOutSine</option>";
+					echo "<option value='easeInCirc' ".selected($options['layout']['sticky_cart_animation_style'],'easeInCirc',false).">easeInCirc</option>";
+					echo "<option value='easeOutCirc' ".selected($options['layout']['sticky_cart_animation_style'],'easeOutCirc',false).">easeOutCirc</option>";
+					echo "<option value='easeInOutCirc' ".selected($options['layout']['sticky_cart_animation_style'],'easeInOutCirc',false).">easeInOutCirc</option>";
+					echo "<option value='easeInElastic' ".selected($options['layout']['sticky_cart_animation_style'],'easeInElastic',false).">easeInElastic</option>";
+					echo "<option value='easeOutElastic' ".selected($options['layout']['sticky_cart_animation_style'],'easeOutElastic',false).">easeOutElastic</option>";
+					echo "<option value='easeInOutElastic' ".selected($options['layout']['sticky_cart_animation_style'],'easeInOutElastic',false).">easeInOutElastic</option>";
+					echo "<option value='easeInBack' ".selected($options['layout']['sticky_cart_animation_style'],'easeInBack',false).">easeInBack</option>";
+					echo "<option value='easeOutBack' ".selected($options['layout']['sticky_cart_animation_style'],'easeOutBack',false).">easeOutBack</option>";
+					echo "<option value='easeInOutBack' ".selected($options['layout']['sticky_cart_animation_style'],'easeInOutBack',false).">easeInOutBack</option>";
+					echo "<option value='easeInBounce' ".selected($options['layout']['sticky_cart_animation_style'],'easeInBounce',false).">easeInBounce</option>";
+					echo "<option value='easeOutBounce' ".selected($options['layout']['sticky_cart_animation_style'],'easeOutBounce',false).">easeOutBounce</option>";
+					echo "<option value='easeInOutBounce' ".selected($options['layout']['sticky_cart_animation_style'],'easeInOutBounce',false).">easeInOutBounce</option>";					
+				echo "</select>";
+				echo" <span class='description'>".__('Animation Style ["no animation" to disable].<br/>Note: any style other than "swing" or "linear" will additionally include "jquery.ui.effect" in the page [if not already loaded]', $this->pluginLocale)."</span>";
+				echo"<br />";
+				echo " <input id='' name='".$this->pluginSlug."[layout][sticky_cart_margin_top]' size='2' type='text'  value='{$options['layout']['sticky_cart_margin_top']}' />";
+				echo" <span class='description'>".__('Distance from top of browser when cart is "sticky" to allow for theme specific requirements [in px]', $this->pluginLocale)."</span>";
+				echo"<br />";
+				echo " <input id='' name='".$this->pluginSlug."[layout][sticky_cart_background]' size='5' type='text'  value='{$options['layout']['sticky_cart_background']}' />";
+				echo" <span class='description'>".__('Distinct CSS Background Colour when cart is "sticky" [hexdec (i.e #ffeeff) or string (i.e transparent, inherit, red etc)]', $this->pluginLocale)."</span>";
+				
+			}			
 			if($field=='opening_times_standard'){
 				echo"<div id='wppizza_".$field."'>";
 				foreach(wppizza_days() as $k=>$v){

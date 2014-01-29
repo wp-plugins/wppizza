@@ -330,7 +330,11 @@
 				'cart_increase' => false,
 				'empty_cart_button' => false,
 				'prettyPhoto' => false,
-				'prettyPhotoStyle' => 'pp_default'
+				'prettyPhotoStyle' => 'pp_default',
+				'sticky_cart_animation' =>450,
+				'sticky_cart_animation_style' =>'',
+				'sticky_cart_margin_top' =>20,
+				'sticky_cart_background' =>'inherit'
 			),
 			'opening_times_standard'=>array(
 				0=>array('open'=>'14:30','close'=>'01:00'),

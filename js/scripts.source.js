@@ -35,26 +35,105 @@ jQuery(document).ready(function($){
 
 	/*******************************
 	*	[keep cart static on page when scrolling]
+	*	[always adds wppizza-cart-fixed class when scrolling is relevant so we can set things if needed]
 	*******************************/
-    var wppizzaCartStickyElm=$('.wppizza-cart-sticky');
-    if(wppizzaCartStickyElm.length>0){
-    	$.each(wppizzaCartStickyElm,function(i,v){
-	    	var self=$(this);
-    		var wppizzaCartOffset = self.offset();
-    		var wppizzaCartWidth = self.width();
-    		var wppizzaCartParentWidth = self.parent().width();
-    		$(window).scroll(function () {
-		        var scrollTop = $(window).scrollTop();
-        		// check the visible top of the browser
-        		if (wppizzaCartOffset.top<scrollTop) {
-            		self.width(wppizzaCartWidth).addClass('wppizza-cart-fixed');
-        		} else {
-		            self.width(wppizzaCartWidth).removeClass('wppizza-cart-fixed');
-        		}
-    		});
-	    });
-    }
+	var wppizzaCartStickyElm=$('.wppizza-cart-sticky');/**get all elements*/
+	var wppizzaCartStickyScrollTimeout;/**ini timeout*/
+	var wppizzaCartStickyScrollTop = $(window).scrollTop()+wppizza.crt.mt;/*get top poxition where state toggle (browser + set margin)*/
+	/**initialize a couple of vars vor the elements*/
+	var wppizzaCartStickySelf = [];	
+	var wppizzaCartStickyVars = [];
 
+	var wppizzaCartStickyAnimation = false;
+	if(wppizza.crt.anim>0 && wppizza.crt.fx!=''){
+		wppizzaCartStickyAnimation = true;
+	}
+	/**get all aplicable elements and their variables**/
+	if(wppizzaCartStickyElm.length>0){
+		$.each(wppizzaCartStickyElm,function(e,v){
+			/***get the element object and add vars as required**/		
+			wppizzaCartStickySelf[e]=$(this);
+			wppizzaCartStickyVars[e]=wppizzaCartStickySelf[e].css(["backgroundColor","width"]);
+			wppizzaCartStickyVars[e]['offset-top']= wppizzaCartStickySelf[e].offset().top;/*offset from top of page**/
+			wppizzaCartStickyVars[e]['state']='';/**initialize state so - when set below - we dont ever need do the same thing multiple times**/
+			/*set distinct width of element so we dont have to set it all the time when scrolling or setting fixed position*/
+			wppizzaCartStickySelf[e].width(wppizzaCartStickyVars[e]['width']);
+		});
+	}
+	
+	/**********no animation, just add/remove class, top and bg colour*******************************************************************************************************/
+	if(!wppizzaCartStickyAnimation){
+		/*let's rock n' scroll.....( oh dear )*/
+		$(window).scroll(function () {
+			var wppizzaCartStickyScrollTop = ($(window).scrollTop()+wppizza.crt.mt);
+			$.each(wppizzaCartStickySelf,function(e,v){
+				/**leave it in place**/
+				if (wppizzaCartStickyVars[e]['offset-top']>=wppizzaCartStickyScrollTop) {
+					wppizzaCartStickySelf[e].removeClass('wppizza-cart-fixed').css({'top':'','background-color':''+wppizzaCartStickyVars[e]['backgroundColor']+''});
+				}
+				/**set to fixed**/
+				if (wppizzaCartStickyVars[e]['offset-top']<wppizzaCartStickyScrollTop) {
+					wppizzaCartStickySelf[e].addClass('wppizza-cart-fixed').css({'top':''+wppizza.crt.mt+'px','background-color':''+wppizza.crt.bg+''});
+				}
+			});
+		});
+	}
+
+	/**********with animation, *******************************************************************************************************************************************/
+	if(wppizzaCartStickyAnimation){
+	var wppizzaCartStickyAnimIni = true;/*set load flag*/	
+		
+		/***********initialize on load***********/
+		setTimeout(function(){/*a little timeout to give the page time to render*/
+			$.each(wppizzaCartStickySelf,function(e,v){
+				/**leave it in place**/
+				if (wppizzaCartStickyVars[e]['offset-top']>=wppizzaCartStickyScrollTop) {
+					wppizzaCartStickyVars[e]['state']='relative';/*set state flag so we dont do the same thing  multiple times**/
+				}
+				/**move to sticky/fixed**/
+				if (wppizzaCartStickyVars[e]['offset-top']<wppizzaCartStickyScrollTop) {
+					wppizzaCartStickySelf[e].addClass('wppizza-cart-fixed').css({'background-color':''+wppizza.crt.bg+'','top':'0'});
+					wppizzaCartStickySelf[e].animate({'top':''+wppizza.crt.mt+'px'},wppizza.crt.anim,''+wppizza.crt.fx+'',function(){});
+					wppizzaCartStickyVars[e]['state']='fixed';/*set state flag so we dont do the same thing  multiple times**/
+				}
+			});	
+			wppizzaCartStickyAnimIni=false;/*unset previously set load flag*/
+		},200);
+		
+
+		/*********on scroll after load *************/
+		$(window).scroll(function () {
+			if(!wppizzaCartStickyAnimIni){/*only react to scrolling after initial load*/
+			
+				var wppizzaCartStickyScrollTop = $(window).scrollTop()+wppizza.crt.mt;/*find out if we need fixed or relative*/
+			
+					clearTimeout(wppizzaCartStickyScrollTimeout);	
+					wppizzaCartStickyScrollTimeout = setTimeout(function(){/*a little timeout to not go mad*/
+						/*iterate through elements*/
+						$.each(wppizzaCartStickySelf,function(e,v){
+							/**put back in its place if state has changed, otherwise just leave in peace**/
+							if (wppizzaCartStickyVars[e]['offset-top']>=wppizzaCartStickyScrollTop && wppizzaCartStickyVars[e]['state']!='relative') {
+								wppizzaCartStickyVars[e]['state']='relative';/*set state flag so we dont do the same thing  multiple times**/
+								
+								wppizzaCartStickySelf[e].removeClass('wppizza-cart-fixed');
+								wppizzaCartStickySelf[e].animate({'top':''},wppizza.crt.anim,''+wppizza.crt.fx+'',function(){
+									wppizzaCartStickySelf[e].css({'background-color':''+wppizzaCartStickyVars[e]['backgroundColor']+''});
+								});
+								// if we do not want to animate when returning to relative state , use this instead of the above. 
+								//wppizzaCartStickySelf[e].removeClass('wppizza-cart-fixed').css({'top':'','background-color':''+wppizzaCartStickyVars[e]['backgroundColor']+''});
+							}
+							/**move to sticky/fixed if state has changed, otherwise just leave in peace**/
+							if (wppizzaCartStickyVars[e]['offset-top']<wppizzaCartStickyScrollTop && wppizzaCartStickyVars[e]['state']!='fixed') {
+								
+								wppizzaCartStickyVars[e]['state']='fixed';/*set state flag so we dont do the same thing  multiple times**/
+								wppizzaCartStickySelf[e].addClass('wppizza-cart-fixed').css({'background-color':''+wppizza.crt.bg+''});
+								wppizzaCartStickySelf[e].animate({'top':''+wppizza.crt.mt+'px'},wppizza.crt.anim,''+wppizza.crt.fx+'',function(){});						
+							}
+						});
+				},100);
+			}
+		});
+	}
 	/*******************************
 	*	[add to cart / remove from cart]
 	*******************************/

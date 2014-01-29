@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.2, WP 3.3 
 Tested up to: 3.8
-Stable tag: 2.8.6.3
+Stable tag: 2.8.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -122,8 +122,17 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 == Changelog ==
  
+2.8.7   
+* WPML: Added missing translations to order page, loop templates and emails and fixed some bugs when updating plugin whilst not being in the main language  
+* WPML: Order page was not excluded from navigation (if set) in any other than the main language  
+* WPML: eliminated some php notices/warnings on new install of WPPizza when WPML is already installed  
+* WPML: removed superflous (and wpml interfering) get_option query from loop templates   
+* minified frontend css  (and updated readme regarding customisation of css accordingly) 
+* added some animation options (wppizza->layout) when setting cart to be always visible when scrolling ("sticky")  
+29th January 2014  
+
 2.8.6.3   
-* EXPERIMENTAL: added option to force cart to be loaded dynamically via ajax when using a cache plugin - wppizza->settings->I am using a caching plugin (you still want to exclude your order page from caching)
+* EXPERIMENTAL: added option to force cart to be loaded dynamically via ajax when using a cache plugin - wppizza->settings->I am using a caching plugin (you still want to exclude your order page from caching)  
 20th January 2014  
 
 2.8.6.2  
@@ -607,8 +616,10 @@ note: if you are a customised version of wppizza-loop.php or wppizza-loop-respon
 = Can I edit the css ? =
 
 although the css has been written so that it works with many themes out of the box (see www.wp-pizza.com - all themes use the same default stylesheet) you might want to adjust some things here and there to work with your theme (especially if you want to support older browsers).  
-if you do, copy the wppizza/css/wppizza-default.css (or wppizza/css/wppizza-responsive.css if using the responsive style) to your theme directory (so it does not get overwritten by future updates of the plugin) and edit as required  
-**alternatively *(and possibly better as any future updates to the main css will still be reflected)*, just copy wppizza-custom.css to your theme directory and only overwrite the styles you need to override.** (this file will be read AFTER the main default.css). "Include css" has to be enabled for this to apply  
+if you do, copy the wppizza/css/wppizza-default.source.css (or wppizza/css/wppizza-responsive.source.css if using the responsive style) as wppizza-default.css (or wppizza-responsive.css)  to your theme directory (so it does not get overwritten by future updates of the plugin) and edit as required.  
+**alternatively *(and possibly better as any future updates to the main css will still be reflected)*, just copy wppizza-custom.css to your theme directory and only overwrite the styles you need to override.**  
+
+(this file will be read AFTER the main default.css). "Include css" has to be enabled for this to apply   
 
 
 = Can I use this plugin when I am not using english on my site ? =
@@ -723,7 +734,8 @@ in case where you cannot or do not want to use a widget, here are the correspond
 
 Sure, if you want.  
 Just make sure you copy the relevant template from wppizza/templates/ to your theme directory and edit those so you don't loose your edits when the plugin gets updated. Make sure to read the comments in the relevant files.
-** Preferably though - if at all possible - I would suggest to use css and/or some of the action hooks provided  to be able to take advantage of any possible future updates or improvements of those templates **
+
+**Preferably though - if at all possible - I would suggest to use css and/or some of the action hooks provided  to be able to take advantage of any possible future updates or improvements of those templates**
 
 
 = How do the orders get to my restaurant ? =

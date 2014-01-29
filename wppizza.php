@@ -5,7 +5,7 @@ Description: Maintain your restaurant menu online and accept cash on delivery or
 Author: ollybach
 Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Author URI: http://www.wp-pizza.com
-Version: 2.8.6.3
+Version: 2.8.7
 License:
 
   Copyright 2012 ollybach (dev@wp-pizza.com)
@@ -47,6 +47,7 @@ class WPPizza extends WP_Widget {
 	protected $pluginSlug;
 	protected $pluginLocale;
 	protected $pluginOptions;
+	protected $pluginOptionsNoWpml;
 	protected $pluginSession;
 	protected $pluginName;
 	protected $pluginSlugCategoryTaxonomy;
@@ -65,13 +66,14 @@ class WPPizza extends WP_Widget {
 ********************************************************/
  function __construct() {
 	/**init constants***/
-	$this->pluginVersion='2.8.6.3';//increment in line with stable tag in readme and version above
+	$this->pluginVersion='2.8.7';//increment in line with stable tag in readme and version above
  	$this->pluginName="".WPPIZZA_NAME."";
  	$this->pluginSlug="".WPPIZZA_SLUG."";//set also in uninstall when deleting options
 	$this->pluginSlugCategoryTaxonomy="".WPPIZZA_TAXONOMY."";//also on uninstall delete wppizza_children as well as widget
 	$this->pluginOrderTable="".WPPIZZA_SLUG."_orders";
 	$this->pluginLocale="".WPPIZZA_LOCALE."";
 	$this->pluginOptions = get_option(WPPIZZA_SLUG,0);
+	$this->pluginOptionsNoWpml = $this->pluginOptions; //when updating some options (notably localizations) we do NOT want to have the variables messed with by WPML before we enter them into the db	
 	$this->pluginNagNotice=0;//default off->for use in updates to this plugin
 	$this->pluginPath=__FILE__;//default off->for use in updates to this plugin
 	/**blog charset*/
@@ -96,6 +98,10 @@ class WPPizza extends WP_Widget {
 
     /**allow overwriting of pluginVars in seperate class*/
     add_action('init', array( $this, 'wppizza_extend'),1);
+
+	/**add wpml . must run front and backend (ajax request)***/
+	add_action('init', array( $this, 'wppizza_wpml_localization'),99);
+
 }
 
 /*****************************************************************************************************************
@@ -152,6 +158,14 @@ class WPPizza extends WP_Widget {
 			$items['openingtimes']=__('Openingtimes', $this->pluginLocale);
 		return $items;
 	}
+	/*******************************************************
+	*
+	*	[WPML : make strings wpml compatible]
+	*
+	******************************************************/
+	function wppizza_wpml_localization() {
+		require(WPPIZZA_PATH .'inc/wpml.inc.php');
+	}	
 	/*******************************************************
      *
      *	[EXTEND : class must start with WPPIZZA_EXTEND_]

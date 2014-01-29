@@ -10,7 +10,7 @@ if(!defined('DOING_AJAX') || !DOING_AJAX){
 /******************************************/
 /**********set header********************/
 //header('Content-type: application/json');
-$options=$this->pluginOptions;
+$options=$this->pluginOptionsNoWpml;
 $optionSizes=wppizza_sizes_available($options['sizes']);//outputs an array $arr=array(['lbl']=>array(),['prices']=>array());
 
 $output='';

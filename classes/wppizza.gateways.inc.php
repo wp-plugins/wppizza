@@ -13,13 +13,20 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 		if(!is_admin()){
 			add_action('init', array( $this, 'wppizza_instanciate_gateways_frontend'));
 			add_action('init', array( $this, 'wppizza_do_gateways'));/**output available gateway choices on order page**/
-			add_action('init', array($this,'wppizza_gateway_initialize_order'));/*initialize oder into db */
+			add_action('init', array($this,'wppizza_gateway_initialize_order'));/*initialize oder into db */		
 		}
+		
+		/************************************************************************
+			[load wpml from parent. used in ajax call, so must be available front and backend ]
+		*************************************************************************/		
+		add_action('init', array( $this, 'wppizza_wpml_localization'),99);			
+		
 		/************************************************************************
 			[runs only in backend]
 		*************************************************************************/
 		add_action('admin_init', array( $this, 'wppizza_available_gateways'),1);/**check if a gateways has been (un)installed and if so, update option**/
 		add_action('admin_init', array( $this, 'wppizza_load_gateways_admin'));
+		
 	}
 
 	function wppizza_do_gateways() {
@@ -39,15 +46,20 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 	function wppizza_instanciate_gateways_frontend() {
 		/**get the selected gateway and associated classname*/
 		$wppizzaGateway=array();
+		$wppizzaGatewayOptions=array();
 		if(isset($this->pluginOptions['gateways']['gateway_selected']) && is_array($this->pluginOptions['gateways']['gateway_selected'])){
 		foreach($this->pluginOptions['gateways']['gateway_selected'] as $gw=>$enbld){
 			if($enbld){/**only add enabled gateways**/
 				$gatewayClass="WPPIZZA_GATEWAY_".strtoupper($gw);
 				$wppizzaGateway[$gw]=new $gatewayClass;
+				$wppizzaGatewayOptions[$gw]=$wppizzaGateway[$gw];
 			}
 		}}
 		$this->pluginGateways=$wppizzaGateway;
+			
+	return $wppizzaGatewayOptions;
 	}
+	
 /***********************************************
 	[include default COD "gateway"]
 ***********************************************/

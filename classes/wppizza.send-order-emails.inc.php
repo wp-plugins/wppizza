@@ -6,6 +6,13 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 		function __construct() {
 			parent::__construct();
 
+			/**get gateway vars we can use in wpml and when displaying "paid by"*/
+			$wppizzaGateways=new WPPIZZA_GATEWAYS();
+			$this->pluginGateways=$wppizzaGateways->wppizza_instanciate_gateways_frontend();
+
+			/**do some  wpml**/
+			$this->wppizza_wpml_localization();
+			/**extend**/
 			$this->wppizza_order_emails_extend();
 
 			/**timestamp the order*/
@@ -14,7 +21,7 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 			$this->orderTimestamp ="".date_i18n(get_option('date_format'),$this->currentTime)." ".date_i18n(get_option('time_format'),$this->currentTime)."";
 
 			/**set shop name and email*/
-			$this->orderShopName 	='';
+			$this->orderShopName 	='';/**not in use currently it seems*/
 			$this->orderShopEmail 	=$this->pluginOptions['order']['order_email_to'][0];
 
 			/**who to bcc the order to*/
@@ -309,13 +316,9 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 					$gatewayUsed=$res->initiator;
 					
 					/**get gateway frontend label instead of just COD or similar**/
-					$gatewayLabel=$res->initiator;
-					$gatewayClassname='WPPIZZA_GATEWAY_'.$res->initiator;
-					if (class_exists(''.$gatewayClassname.'')) {
-						$gw=new $gatewayClassname;
-						if($gw->gatewayOptions['gateway_label']!=''){
-						$gatewayLabel=$gw->gatewayOptions['gateway_label'];
-						}
+					$gatewayLabel=$res->initiator;		
+					if(isset($this->pluginGateways[$res->initiator])){
+						$gatewayLabel=!empty($this->pluginGateways[$res->initiator]->gatewayOptions['gateway_label']) ? $this->pluginGateways[$res->initiator]->gatewayOptions['gateway_label'] : $gatewayLabel;
 					}
 					/**********************/
 					
@@ -517,13 +520,9 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 				$gatewayUsed=$this->orderGatewayUsed;
 				/**get gateway frontend label instead of just COD or similar**/
 				$gatewayLabel=$this->orderGatewayUsed;
-				$gatewayClassname='WPPIZZA_GATEWAY_'.$this->orderGatewayUsed;
-				if (class_exists(''.$gatewayClassname.'')) {
-					$gw=new $gatewayClassname;
-					if($gw->gatewayOptions['gateway_label']!=''){
-					$gatewayLabel=$gw->gatewayOptions['gateway_label'];
-					}
-				}
+				if(isset($this->pluginGateways[$this->orderGatewayUsed])){
+					$gatewayLabel=!empty($this->pluginGateways[$this->orderGatewayUsed]->gatewayOptions['gateway_label']) ? $this->pluginGateways[$this->orderGatewayUsed]->gatewayOptions['gateway_label'] : $gatewayLabel;
+				}				
 				/**********************/				
 				$currency=$this->orderCurrency;
 				/***get localization vars**/
@@ -629,16 +628,15 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 			**********************************************************/
 			$order['transaction_id']=$res->transaction_id;
 			$order['transaction_date_time']="".date_i18n(get_option('date_format'),$thisOrderDetails['time'])." ".date_i18n(get_option('time_format'),$thisOrderDetails['time'])."";
+
 			$order['gatewayUsed']=$res->initiator;
+
 			/**get gateway frontend label instead of just COD or similar**/
-			$order['gatewayLabel']=$res->initiator;
-				$gatewayClassname='WPPIZZA_GATEWAY_'.$res->initiator;
-				if (class_exists(''.$gatewayClassname.'')) {
-					$gw=new $gatewayClassname;
-					if($gw->gatewayOptions['gateway_label']!=''){
-					$order['gatewayLabel']=$gw->gatewayOptions['gateway_label'];
-					}
-				}
+			$order['gatewayLabel']=$res->initiator;			
+			if(isset($this->pluginGateways[$res->initiator])){
+				$order['gatewayLabel']=!empty($this->pluginGateways[$res->initiator]->gatewayOptions['gateway_label']) ? $this->pluginGateways[$res->initiator]->gatewayOptions['gateway_label'] : $order['gatewayLabel'];
+			}
+						
 			/**********************/			
 			$order['currency']=$thisOrderDetails['currency'];
 			$order['currencyiso']=$thisOrderDetails['currencyiso'];

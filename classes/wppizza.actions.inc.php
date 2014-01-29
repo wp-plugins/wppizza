@@ -21,10 +21,6 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 			add_action('init', array( $this, 'wppizza_send_order_emails'));
 
 			/***************
-				[make user defined localizations strings wpml compatible]
-			***************/
-    		add_action('init', array( $this, 'wppizza_wpml_localization'),15);
-			/***************
 				[filters]
 			***************/
 			/**sanitize db input vars**/
@@ -225,7 +221,7 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 	******************************************************/
 	public function wppizza_admin_options_init(){
 
-		$options = $this->pluginOptions;
+		$options = $this->pluginOptionsNoWpml;
 		if($options==0){/*no options db entry->do stuff*/
 			$install_options=1;
 			/****set nag notice to 1 as its first install*******/
@@ -255,6 +251,7 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 
 				/**compare currently installed options vs this vesrion**/
 				if(	version_compare( $options['plugin_data']['version'], '2.0', '<' )){$update_options['plugin_data']['nag_notice']='2.1';}
+				if(	version_compare( $options['plugin_data']['version'], '2.8.7', '<' )){$update_options['plugin_data']['nag_notice']='2.8.7';}
 
 				/**update options**/
 				update_option($this->pluginSlug, $update_options );
@@ -319,6 +316,13 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 				$pluginUpdatedNotice.='<br/>';
 			}
 
+			if($this->pluginOptions['plugin_data']['nag_notice']=='2.8.7'){
+				$pluginUpdatedNotice.='<b>Update Notice '.WPPIZZA_NAME.' '.$this->pluginVersion.':</b><br/><br/>';
+				$pluginUpdatedNotice.='If you are using the "Cart visible on page when scrolling ?" in the wppizza shoppingcart widget (or per shortcode) please check your settings (notably the background colour) in WPPizza->Layout-> "sticky/scolling" cart settings [if used]" ';
+				$pluginUpdatedNotice.='<br/><br/>thank you<br/>';
+			}
+
+
 			$pluginUpdatedNotice.='<br/><a href="#" onclick="wppizza_dismiss_notice(); return false;" class="button-primary">dismiss</a>';
 			$pluginUpdatedNotice.='</div>';
 			$pluginUpdatedNotice=__($pluginUpdatedNotice, $this->pluginLocale);
@@ -340,7 +344,7 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
         print"".$js;
     }
     public function wppizza_dismiss_notice() {
-    	$options = $this->pluginOptions;
+    	$options = $this->pluginOptionsNoWpml;
     	$options['plugin_data']['nag_notice']=0;
     	update_option($this->pluginSlug,$options);
         die();
@@ -818,7 +822,6 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 				$stickycart='wppizza-cart-sticky';
 			}
 			
-			
 			/**dsiaply order info like discounts and delivery costs**/
 			if(isset($atts['orderinfo'])){
 				$orderinfo=true;
@@ -1160,13 +1163,16 @@ public function wppizza_require_common_input_validation_functions(){
 		/****************
 			js
 		****************/
+		/*only load easing if necessary**/
+		if(!in_array($options['layout']['sticky_cart_animation_style'],array('','swing','linear')) && $options['layout']['sticky_cart_animation']>0){
+			wp_enqueue_script("jquery-effects-core");
+		}
     	wp_register_script($this->pluginSlug, plugins_url( 'js/scripts.min.js', $this->pluginPath ), array('jquery'), $this->pluginVersion ,$options['plugin_data']['js_in_footer']);
     	wp_enqueue_script($this->pluginSlug);
     	
     	wp_register_script($this->pluginSlug.'-validate', plugins_url( 'js/jquery.validate.min.js', $this->pluginPath ), array($this->pluginSlug), $this->pluginVersion ,$options['plugin_data']['js_in_footer']);
     	wp_enqueue_script($this->pluginSlug.'-validate');    	
-    	
-    	
+
     	/**pretty photo**/
     	if($options['layout']['prettyPhoto']){
     		wp_register_script($this->pluginSlug.'-prettyPhoto', plugins_url( 'js/jquery.prettyPhoto.js', $this->pluginPath ), array('jquery'), $this->pluginVersion ,$options['plugin_data']['js_in_footer']);
@@ -1203,6 +1209,12 @@ public function wppizza_require_common_input_validation_functions(){
 		if($options['plugin_data']['using_cache_plugin']){
 			$localized_array['usingCache']=1;
 		}
+		/**sticky cart settings**/
+			$localized_array['crt']=array();
+			$localized_array['crt']['anim']=$options['layout']['sticky_cart_animation'];
+			$localized_array['crt']['fx']=$options['layout']['sticky_cart_animation_style'];
+			$localized_array['crt']['mt']=$options['layout']['sticky_cart_margin_top'];
+			$localized_array['crt']['bg']=$options['layout']['sticky_cart_background'];
 		
 		wp_localize_script( $this->pluginSlug,$this->pluginSlug, $localized_array );
 
@@ -1217,6 +1229,12 @@ public function wppizza_require_common_input_validation_functions(){
 			$pageCount = count($pages);
 			for ( $i=0; $i<$pageCount; $i++ ) {
 				$page = & $pages[$i];
+				
+				/**wpml select of order page**/
+				if(function_exists('icl_object_id')) {
+					$this->pluginOptions['order']['orderpage']=icl_object_id($this->pluginOptions['order']['orderpage'],'page');
+				}
+				
 				if ($page->ID==$this->pluginOptions['order']['orderpage']) {
 					unset( $pages[$i] );/*unset the order page*/
 				}
@@ -1508,91 +1526,32 @@ public function wppizza_require_common_input_validation_functions(){
 *	[WILL ALTER THE DB WPPIZZA_ORDERS TABLE - USE WITH CARE]
 *	[BACKUP YOUR DATA]
 ******************************************************/
-function wppizza_set_order_status(){
-	$setStatus=wppizza_custom_order_status();
-	
-	/**compare and see if we have to do anything**/
-	if($this->pluginOptions!=0 && (!isset($this->pluginOptions['plugin_data']['db_order_status_options']) || $this->pluginOptions['plugin_data']['db_order_status_options']!=$setStatus)){
-		global $wpdb;
-		$usedOrderStatus = $wpdb->get_col("SELECT DISTINCT(order_status) FROM ".$wpdb->prefix . $this->pluginOrderTable." ");
-		$newStatus=array();
-		foreach($setStatus as $k=>$v){
-			$newStatus[]=wppizza_validate_alpha_only(str_replace(" ","_",strtoupper($v)));
-		}
-		/**implicitly add all options already in use**/
-		foreach($usedOrderStatus as $k=>$v){
-			$newStatus[]=wppizza_validate_alpha_only(str_replace(" ","_",strtoupper($v)));	
-		}
-		/**implicitly add NEW option (as its default)*****/
-		$newStatus[]='NEW';
+	function wppizza_set_order_status(){
+		$setStatus=wppizza_custom_order_status();
 		
-		/**update options**/
-		$update_options=$this->pluginOptions;
-		$update_options['plugin_data']['db_order_status_options']=$setStatus;
-
-		update_option($this->pluginSlug, $update_options );
-		/**ALTER TABLE**/
-		$setNewOrderStatus=array_unique($newStatus);
-		require_once(WPPIZZA_PATH .'inc/admin.create.order.table.inc.php');
-	}
-}
-
-
-/*******************************************************
-*
-*	[WPML : make user defined strings wpml compatible]
-*
-******************************************************/
-	function wppizza_wpml_localization(){
-		if(function_exists('icl_translate')) {
-			/**localization**/
-			foreach($this->pluginOptions['localization'] as $k=>$arr){
-				$this->pluginOptions['localization'][$k]['lbl'] = icl_translate(WPPIZZA_SLUG,''. $k.'', $arr['lbl']);
+		/**compare and see if we have to do anything**/
+		if($this->pluginOptions!=0 && (!isset($this->pluginOptions['plugin_data']['db_order_status_options']) || $this->pluginOptions['plugin_data']['db_order_status_options']!=$setStatus)){
+			global $wpdb;
+			$usedOrderStatus = $wpdb->get_col("SELECT DISTINCT(order_status) FROM ".$wpdb->prefix . $this->pluginOrderTable." ");
+			$newStatus=array();
+			foreach($setStatus as $k=>$v){
+				$newStatus[]=wppizza_validate_alpha_only(str_replace(" ","_",strtoupper($v)));
 			}
-			/**additives**/
-			foreach($this->pluginOptions['additives'] as $k=>$str){
-				$this->pluginOptions['additives'][$k] = icl_translate(WPPIZZA_SLUG,'additives_'. $k.'', $str);
+			/**implicitly add all options already in use**/
+			foreach($usedOrderStatus as $k=>$v){
+				$newStatus[]=wppizza_validate_alpha_only(str_replace(" ","_",strtoupper($v)));	
 			}
-			/**sizes**/
-			foreach($this->pluginOptions['sizes'] as $k=>$arr){
-				foreach($arr as $sKey=>$sArr){
-					$this->pluginOptions['sizes'][$k][$sKey]['lbl'] = icl_translate(WPPIZZA_SLUG,'sizes_'. $k.'_'.$sKey.'', $sArr['lbl']);
-				}
-			}
-			/**gateway**/
-			$this->pluginOptions['gateways']['gateway_select_label'] = icl_translate(WPPIZZA_SLUG,'gateway_select_label', $this->pluginOptions['gateways']['gateway_select_label']);
-			$registerdGateways=$this->wppizza_get_registered_gateways();
-			foreach($registerdGateways as $k=>$regGw){
-				$regGw['gatewayName'] = icl_translate(WPPIZZA_SLUG.'_gateways',''.strtolower($regGw['ident']).'_ident', $regGw['gatewayName']);
-				if(isset($regGw['gatewayOptions']) && is_array($regGw['gatewayOptions'])){
-					foreach($regGw['gatewayOptions'] as $g=>$gwOption){
-						if(is_string($gwOption) && $gwOption!=''){
-							$regGw['gatewayOptions'][$g] =__($gwOption, $this->pluginLocale);
-							$regGw['gatewayOptions'][$g] = icl_translate(WPPIZZA_SLUG.'_gateways',''.strtolower($regGw['ident']).'_'. $g.'', $regGw['gatewayOptions'][$g]);
-						}
-					}
-				}
-			}
-			/**order_form**/
-			foreach($this->pluginOptions['order_form'] as $k=>$arr){
-				$this->pluginOptions['order_form'][$k]['lbl'] = icl_translate(WPPIZZA_SLUG,'order_form_'. $k.'', $arr['lbl']);
-			}
-			/**order**/
-			$this->pluginOptions['order']['order_email_from'] = icl_translate(WPPIZZA_SLUG,'order_email_from', $this->pluginOptions['order']['order_email_from']);
-			$this->pluginOptions['order']['order_email_from_name'] = icl_translate(WPPIZZA_SLUG,'order_email_from_name', $this->pluginOptions['order']['order_email_from_name']);
-			/**order email to **/
-			foreach($this->pluginOptions['order']['order_email_to'] as $k=>$arr){
-				$this->pluginOptions['order']['order_email_to'][$k] = icl_translate(WPPIZZA_SLUG,'order_email_to_'.$k.'', $arr);
-			}
-			/**order email bcc **/
-			foreach($this->pluginOptions['order']['order_email_bcc'] as $k=>$arr){
-				$this->pluginOptions['order']['order_email_bcc'][$k] = icl_translate(WPPIZZA_SLUG,'order_email_bcc_'. $k.'', $arr);
-			}
-			/**order email attachments **/
-			if(isset($this->pluginOptions['order']['order_email_attachments']) && is_array($this->pluginOptions['order']['order_email_attachments'])){
-			foreach($this->pluginOptions['order']['order_email_attachments'] as $k=>$arr){
-				$this->pluginOptions['order']['order_email_attachments'][$k] = icl_translate(WPPIZZA_SLUG,'order_email_attachments_'. $k.'', $arr);
-			}}
+			/**implicitly add NEW option (as its default)*****/
+			$newStatus[]='NEW';
+			
+			/**update options**/
+			$update_options=$this->pluginOptions;
+			$update_options['plugin_data']['db_order_status_options']=$setStatus;
+	
+			update_option($this->pluginSlug, $update_options );
+			/**ALTER TABLE**/
+			$setNewOrderStatus=array_unique($newStatus);
+			require_once(WPPIZZA_PATH .'inc/admin.create.order.table.inc.php');
 		}
 	}
 }
