@@ -84,4 +84,16 @@ try {
 }
 /**set to phpmailer to be able to identify function if errors are thrown**/
 $sendMail['mailer']='phpmailer';
+	
+	/**
+		some action hook, do with  this what  you will like so in your function.php:
+			
+		add_action('wppizza_phpmailer_sent', 'my_custom_phpmailer',10,2);
+		function my_custom_phpmailer($mail,$mailsent){
+			if($mailsent){
+			//**do something with the $mail object (like curl post or whatnot)
+			}
+		}
+	**/
+	do_action('wppizza_phpmailer_sent',$mail, $sendMail['status']);
 ?>

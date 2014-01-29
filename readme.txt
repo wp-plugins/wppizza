@@ -122,6 +122,11 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 == Changelog ==
  
+2.8.7.1   
+* added action hook to wppizza-phpmailer-settings.php to do additional stuff if required after $mail->Send();  
+29th January 2014   
+ 
+ 
 2.8.7   
 * WPML: Added missing translations to order page, loop templates and emails and fixed some bugs when updating plugin whilst not being in the main language  
 * WPML: Order page was not excluded from navigation (if set) in any other than the main language  
