@@ -6,7 +6,7 @@
 .wppizza-cart-nocache{margin:0;padding:0;border:none}
 .wppizza-cart-nocacheinner{height:250px;position: relative;z-index: 999;left: 0;right: 0;padding:0;margin:0;background-color:inherit;border:none}
 .wppizza-cart{height:250px;position: relative;z-index: 999;left: 0;right: 0;padding:0;margin:0;background-color:inherit;border: 1px solid #ccc;}
-.wppizza-cart-fixed{position:fixed;left:auto;right:auto;}/**-----amended in version 2.8.7 background and margin now set via WPPizza -> layout----***/
+.wppizza-cart-fixed{position:fixed;left:auto;right:auto;border:1px solid red}/**-----amended in version 2.8.7 background and margin now set via WPPizza -> layout----***/
 
 /*opening hours top/bottom*/
 .wppizza-opening-hours{text-align:center}
@@ -252,6 +252,12 @@
 .wppizza-article-price-lbl{font-size:60%;text-align:center;white-space: nowrap;}
 .wppizza-article-price-lbl:hover{text-decoration:underline}
 .wppizza-article-price-lbl:after{content: url('img/cart-black-12-12.png');position: relative;top: 2px;margin-left: 2px;}
+
+/**feedback when item added to cart-> ADDED v2.8.7.3*/
+.wppizza-item-added-feedback{margin:0;padding:0;font-size:60%;text-align:center;}
+.wppizza-item-added-feedback>div{font-size:180%;}
+
+
 /*hide cart icon if set in settings overriding above class*/
 .wppizza-no-cart:after{content:'' !important;}
 /*add cursor if we allow trigger by menu title*/

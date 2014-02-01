@@ -77,9 +77,17 @@
 
 			$options['layout']['sticky_cart_animation']=absint($input['layout']['sticky_cart_animation']);
 			$options['layout']['sticky_cart_animation_style']=wppizza_validate_string($input['layout']['sticky_cart_animation_style']);
-			$options['layout']['sticky_cart_background']=preg_replace("/[^a-zA-Z#]/","",$input['layout']['sticky_cart_background']);
-
 			$options['layout']['sticky_cart_margin_top']=absint($input['layout']['sticky_cart_margin_top']);
+			$options['layout']['sticky_cart_background']=preg_replace("/[^a-zA-Z0-9#]/","",$input['layout']['sticky_cart_background']);
+			$options['layout']['sticky_cart_limit_bottom_elm_id']=preg_replace("/[^a-zA-Z0-9_-]/","",$input['layout']['sticky_cart_limit_bottom_elm_id']);
+			
+
+			
+			$options['layout']['jquery_fb_add_to_cart'] = !empty($input['layout']['jquery_fb_add_to_cart']) ? true : false;
+			$options['layout']['jquery_fb_add_to_cart_ms']=absint($input['layout']['jquery_fb_add_to_cart_ms']);
+			
+			
+			
 
 			$options['opening_times_format']['hour']=wppizza_validate_string($input['opening_times_format']['hour']);
 			$options['opening_times_format']['separator']=wppizza_validate_string($input['opening_times_format']['separator']);
@@ -233,7 +241,7 @@
 		/**validate localization ***/
 		if(isset($_POST[''.$this->pluginSlug.'_localization'])){
 			if(isset($input['localization'])){
-			$allowHtml=array('thank_you_p');/*array of items to allow html (such as tinymce textareas) */
+			$allowHtml=array('thank_you_p','jquery_fb_add_to_cart_info');/*array of items to allow html (such as tinymce textareas) */
 			foreach($input['localization'] as $a=>$b){
 				/*add new value , but keep desciption (as its not editable on frontend)*/
 				if(in_array($a,$allowHtml)){$html=1;}else{$html=false;}

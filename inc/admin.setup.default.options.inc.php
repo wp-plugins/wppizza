@@ -334,7 +334,10 @@
 				'sticky_cart_animation' =>450,
 				'sticky_cart_animation_style' =>'',
 				'sticky_cart_margin_top' =>20,
-				'sticky_cart_background' =>'inherit'
+				'sticky_cart_background' =>'inherit',
+				'sticky_cart_limit_bottom_elm_id' =>'',
+				'jquery_fb_add_to_cart' =>false,
+				'jquery_fb_add_to_cart_ms' =>1000
 			),
 			'opening_times_standard'=>array(
 				0=>array('open'=>'14:30','close'=>'01:00'),
@@ -440,6 +443,10 @@
 				'alert_choose_size'=>array(
 					'descr'=>__('Menu Item: alert when adding to cart by clicking on menu name but more than one size is available. (Only relevant if "Add item to cart on click of *item title* " is enabled)', $this->pluginLocale),
 					'lbl'=>__('please choose a size', $this->pluginLocale)
+				),
+				'jquery_fb_add_to_cart_info'=>array(
+					'descr'=>__('Menu Item: text that briefly replaces selected item price when adding item to cart [html allowed]. (Only relevant if "Briefly replace item price with customised text" in WPPizza->Layout is enabled. CSS Class: "wppizza-item-added-feedback")', $this->pluginLocale),
+					'lbl'=>__('<div>&#10004;</div>item added', $this->pluginLocale)
 				),
 				'previous'=>array(
 					'descr'=>__('Menu Pagination : previous page', $this->pluginLocale),

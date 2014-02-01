@@ -135,6 +135,16 @@ $options = $this->pluginOptions;
 			}
 
 
+			if($field=='jquery_feedback_added_to_cart'){
+				echo "<input id='' name='".$this->pluginSlug."[layout][jquery_fb_add_to_cart]' type='checkbox'  ". checked($options['layout']['jquery_fb_add_to_cart'],true,false)." value='1' />";
+				echo" <span class='description'>".__('Replace item price with customised text when adding an item to cart [set/edit text in localization]', $this->pluginLocale)."</span>";
+				echo "<br />";
+				echo "<input id='' name='".$this->pluginSlug."[layout][jquery_fb_add_to_cart_ms]' size='4' type='text'  value='{$options['layout']['jquery_fb_add_to_cart_ms']}' />";
+				echo" <span class='description'>".__('How long is it visible for before reverting back to displaying price [in ms]', $this->pluginLocale)."</span>";
+			}
+
+
+
 			if($field=='placeholder_img'){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[layout][".$field."]' type='checkbox'  ". checked($options['layout'][$field],true,false)." value='1' />";
 			}
@@ -223,7 +233,9 @@ $options = $this->pluginOptions;
 				echo"<br />";
 				echo " <input id='' name='".$this->pluginSlug."[layout][sticky_cart_background]' size='5' type='text'  value='{$options['layout']['sticky_cart_background']}' />";
 				echo" <span class='description'>".__('Distinct CSS Background Colour when cart is "sticky" [hexdec (i.e #ffeeff) or string (i.e transparent, inherit, red etc)]', $this->pluginLocale)."</span>";
-				
+				echo"<br />";
+				echo " <input id='' name='".$this->pluginSlug."[layout][sticky_cart_limit_bottom_elm_id]' size='5' type='text'  value='{$options['layout']['sticky_cart_limit_bottom_elm_id']}' />";
+				echo" <span class='description'>".__('If you want to have a sticky cart NOT scroll further down that the TOP of a particular element that is further down on the page (might be useful in som layouts/themes), set that elements ID here [leave blank to ignore]', $this->pluginLocale)."</span>";				
 			}			
 			if($field=='opening_times_standard'){
 				echo"<div id='wppizza_".$field."'>";
@@ -602,7 +614,7 @@ $options = $this->pluginOptions;
 				echo"<div id='wppizza_".$field."'>";
 					echo"<div id='wppizza_".$field."_options'>";
 					asort($localizeOptions);
-					$lngOddEvenArray=__('0,5,11,12,15,29,36', $this->pluginLocale);
+					$lngOddEvenArray=__('0,5,12,13,16,30,37', $this->pluginLocale);
 					$lngOddEvan=explode(",",$lngOddEvenArray);
 					$bgStyle=$lngOddEvan;
 					$i=0;
@@ -618,7 +630,7 @@ $options = $this->pluginOptions;
 						//echo "<textarea name='".$this->pluginSlug."[".$field."][".$k."]' style='width:185px;height:150px'>".$v['lbl']."</textarea>";
 						}else{
 						echo "<input name='".$this->pluginSlug."[".$field."][".$k."]' size='30' type='text' value='".$v['lbl']."' />";
-						echo"".$v['descr']."<br/>";
+						echo"<span class='description'>".$v['descr']."</span><br/>";
 						}
 					$i++;
 					if(in_array($i,$bgStyle)){echo'</div>';}

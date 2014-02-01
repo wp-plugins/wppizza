@@ -1215,6 +1215,15 @@ public function wppizza_require_common_input_validation_functions(){
 			$localized_array['crt']['fx']=$options['layout']['sticky_cart_animation_style'];
 			$localized_array['crt']['mt']=$options['layout']['sticky_cart_margin_top'];
 			$localized_array['crt']['bg']=$options['layout']['sticky_cart_background'];
+			if($options['layout']['sticky_cart_limit_bottom_elm_id']!=''){
+			$localized_array['crt']['lmtb']=$options['layout']['sticky_cart_limit_bottom_elm_id'];
+			}
+			
+			if($options['layout']['jquery_fb_add_to_cart']!=''){
+				$localized_array['itm']['fbatc']=$options['localization']['jquery_fb_add_to_cart_info']['lbl'];
+				$localized_array['itm']['fbatcms']=$options['layout']['jquery_fb_add_to_cart_ms'];
+			}
+			
 		
 		wp_localize_script( $this->pluginSlug,$this->pluginSlug, $localized_array );
 

@@ -33,16 +33,32 @@ jQuery(document).ready(function($){
   	wppizzaClickEvent=wppizzaCheckEventSupport("click");
 
 
-	/*******************************
+	/****************************************************************************************************************************************************************************************************
+	*
 	*	[keep cart static on page when scrolling]
 	*	[always adds wppizza-cart-fixed class when scrolling is relevant so we can set things if needed]
-	*******************************/
+	*
+	****************************************************************************************************************************************************************************************************/
 	var wppizzaCartStickyElm=$('.wppizza-cart-sticky');/**get all elements*/
 	var wppizzaCartStickyScrollTimeout;/**ini timeout*/
+	/**********************
+		[get bottom limit]
+	***********************/
+	var wppizzaCartStickyLimitBottomElm=false
+	/**set bottom scroll limit by div id**/
+	if(typeof wppizza.crt.lmtb !=='undefined' && $('#'+wppizza.crt.lmtb+'').length>0){
+		wppizzaCartStickyLimitBottomElm=$('#'+wppizza.crt.lmtb+'');/*set element*/
+		var wppizzaCartStickyLimitOffset=0;/**set limit offset to be substracted from wppizza.crt.mt  if required **/
+		var wppizzaCartStickyLimitBottom=wppizzaCartStickyLimitBottomElm.offset().top;/*get element top*/
+	}
 	var wppizzaCartStickyScrollTop = $(window).scrollTop()+wppizza.crt.mt;/*get top poxition where state toggle (browser + set margin)*/
+
+
 	/**initialize a couple of vars vor the elements*/
 	var wppizzaCartStickySelf = [];	
 	var wppizzaCartStickyVars = [];
+	var wppizzaCartStickyParent = [];
+
 
 	var wppizzaCartStickyAnimation = false;
 	if(wppizza.crt.anim>0 && wppizza.crt.fx!=''){
@@ -53,27 +69,61 @@ jQuery(document).ready(function($){
 		$.each(wppizzaCartStickyElm,function(e,v){
 			/***get the element object and add vars as required**/		
 			wppizzaCartStickySelf[e]=$(this);
-			wppizzaCartStickyVars[e]=wppizzaCartStickySelf[e].css(["backgroundColor","width"]);
+			
+			/**wrap in wraper div which is then set to height of cart to stop things jumping around**/
+			wppizzaCartStickySelf[e].wrap( "<div class='wppizza-cart-wrap'></div>" );
+			
+			wppizzaCartStickyVars[e]=wppizzaCartStickySelf[e].css(["backgroundColor","width","height"]);
 			wppizzaCartStickyVars[e]['offset-top']= wppizzaCartStickySelf[e].offset().top;/*offset from top of page**/
 			wppizzaCartStickyVars[e]['state']='';/**initialize state so - when set below - we dont ever need do the same thing multiple times**/
+			wppizzaCartStickyVars[e]['height-int']=parseInt(wppizzaCartStickyVars[e]['height']);/*make sure we also have height an integer*/
+			
+			/**set limit bottom**/
+			if(wppizzaCartStickyLimitBottomElm && wppizzaCartStickyLimitBottom>(wppizzaCartStickyVars[e]['offset-top']+wppizzaCartStickyVars[e]['height-int'])){
+				wppizzaCartStickyVars[e]['limit-bottom']=Math.floor(wppizzaCartStickyLimitBottom-wppizzaCartStickyVars[e]['height-int']);
+			}
+
+			/*get parent element so we can set height on it*/
+			wppizzaCartStickyParent[e] = wppizzaCartStickySelf[e].parent();
+			
 			/*set distinct width of element so we dont have to set it all the time when scrolling or setting fixed position*/
 			wppizzaCartStickySelf[e].width(wppizzaCartStickyVars[e]['width']);
+			wppizzaCartStickyParent[e].height(wppizzaCartStickyVars[e]['height']);
 		});
 	}
-	
+	/***********************************************
+	*	[we have set an element limit past which the 
+	*	sticky cart should not scroll, 
+	*	lets calculate the (negative) offset here]
+	/***********************************************/
+	var wppizzaCartStickyMaxOffset = function(elm,top,limitElm){
+		var val=0;
+		if(wppizzaCartStickyLimitBottomElm){
+			var limit=limitElm.offset().top;/*get limit element top*/
+			var elmOffset=Math.floor(limit-top-elm['height-int']);/*if negative we use it**/
+			if(elmOffset<0){
+				val=elmOffset;
+			}
+		}
+		return val;
+	};
 	/**********no animation, just add/remove class, top and bg colour*******************************************************************************************************/
 	if(!wppizzaCartStickyAnimation){
 		/*let's rock n' scroll.....( oh dear )*/
 		$(window).scroll(function () {
 			var wppizzaCartStickyScrollTop = ($(window).scrollTop()+wppizza.crt.mt);
 			$.each(wppizzaCartStickySelf,function(e,v){
+
+				/**calcuate needed offset if we are limiting the scroll by a set element below cart***/
+				var wppizzaCartStickyLimitOffset=wppizzaCartStickyMaxOffset(wppizzaCartStickyVars[e],wppizzaCartStickyScrollTop,wppizzaCartStickyLimitBottomElm);
+
 				/**leave it in place**/
 				if (wppizzaCartStickyVars[e]['offset-top']>=wppizzaCartStickyScrollTop) {
 					wppizzaCartStickySelf[e].removeClass('wppizza-cart-fixed').css({'top':'','background-color':''+wppizzaCartStickyVars[e]['backgroundColor']+''});
 				}
 				/**set to fixed**/
 				if (wppizzaCartStickyVars[e]['offset-top']<wppizzaCartStickyScrollTop) {
-					wppizzaCartStickySelf[e].addClass('wppizza-cart-fixed').css({'top':''+wppizza.crt.mt+'px','background-color':''+wppizza.crt.bg+''});
+					wppizzaCartStickySelf[e].addClass('wppizza-cart-fixed').css({'top':''+(wppizza.crt.mt+wppizzaCartStickyLimitOffset)+'px','background-color':''+wppizza.crt.bg+''});
 				}
 			});
 		});
@@ -86,6 +136,10 @@ jQuery(document).ready(function($){
 		/***********initialize on load***********/
 		setTimeout(function(){/*a little timeout to give the page time to render*/
 			$.each(wppizzaCartStickySelf,function(e,v){
+
+				/**calcuate needed offset if we are limiting the scroll by a set element below cart***/
+				var wppizzaCartStickyLimitOffset=wppizzaCartStickyMaxOffset(wppizzaCartStickyVars[e],wppizzaCartStickyScrollTop,wppizzaCartStickyLimitBottomElm);
+
 				/**leave it in place**/
 				if (wppizzaCartStickyVars[e]['offset-top']>=wppizzaCartStickyScrollTop) {
 					wppizzaCartStickyVars[e]['state']='relative';/*set state flag so we dont do the same thing  multiple times**/
@@ -93,7 +147,7 @@ jQuery(document).ready(function($){
 				/**move to sticky/fixed**/
 				if (wppizzaCartStickyVars[e]['offset-top']<wppizzaCartStickyScrollTop) {
 					wppizzaCartStickySelf[e].addClass('wppizza-cart-fixed').css({'background-color':''+wppizza.crt.bg+'','top':'0'});
-					wppizzaCartStickySelf[e].animate({'top':''+wppizza.crt.mt+'px'},wppizza.crt.anim,''+wppizza.crt.fx+'',function(){});
+					wppizzaCartStickySelf[e].animate({'top':''+(wppizza.crt.mt+wppizzaCartStickyLimitOffset)+'px'},wppizza.crt.anim,''+wppizza.crt.fx+'',function(){});
 					wppizzaCartStickyVars[e]['state']='fixed';/*set state flag so we dont do the same thing  multiple times**/
 				}
 			});	
@@ -111,6 +165,10 @@ jQuery(document).ready(function($){
 					wppizzaCartStickyScrollTimeout = setTimeout(function(){/*a little timeout to not go mad*/
 						/*iterate through elements*/
 						$.each(wppizzaCartStickySelf,function(e,v){
+							
+							/**calcuate needed offset if we are limiting the scroll by a set element below cart***/
+							var wppizzaCartStickyLimitOffset=wppizzaCartStickyMaxOffset(wppizzaCartStickyVars[e],wppizzaCartStickyScrollTop,wppizzaCartStickyLimitBottomElm);
+							
 							/**put back in its place if state has changed, otherwise just leave in peace**/
 							if (wppizzaCartStickyVars[e]['offset-top']>=wppizzaCartStickyScrollTop && wppizzaCartStickyVars[e]['state']!='relative') {
 								wppizzaCartStickyVars[e]['state']='relative';/*set state flag so we dont do the same thing  multiple times**/
@@ -122,12 +180,12 @@ jQuery(document).ready(function($){
 								// if we do not want to animate when returning to relative state , use this instead of the above. 
 								//wppizzaCartStickySelf[e].removeClass('wppizza-cart-fixed').css({'top':'','background-color':''+wppizzaCartStickyVars[e]['backgroundColor']+''});
 							}
-							/**move to sticky/fixed if state has changed, otherwise just leave in peace**/
-							if (wppizzaCartStickyVars[e]['offset-top']<wppizzaCartStickyScrollTop && wppizzaCartStickyVars[e]['state']!='fixed') {
+							/**move to sticky/fixed if state has changed or we have a limit set , otherwise just leave in peace**/
+							if (wppizzaCartStickyVars[e]['offset-top']<wppizzaCartStickyScrollTop && (wppizzaCartStickyVars[e]['state']!='fixed' || wppizzaCartStickyLimitBottomElm)) {
 								
 								wppizzaCartStickyVars[e]['state']='fixed';/*set state flag so we dont do the same thing  multiple times**/
 								wppizzaCartStickySelf[e].addClass('wppizza-cart-fixed').css({'background-color':''+wppizza.crt.bg+''});
-								wppizzaCartStickySelf[e].animate({'top':''+wppizza.crt.mt+'px'},wppizza.crt.anim,''+wppizza.crt.fx+'',function(){});						
+								wppizzaCartStickySelf[e].animate({'top':''+(wppizza.crt.mt+wppizzaCartStickyLimitOffset)+'px'},wppizza.crt.anim,''+wppizza.crt.fx+'',function(){});						
 							}
 						});
 				},100);
@@ -166,7 +224,14 @@ jQuery(document).ready(function($){
 		var selfId=self.attr('id');
 		var cartButton=$('.wppizza-cart-button input,.wppizza-cart-button>a,.wppizza-empty-cart-button');
 		cartButton.attr("disabled", "true");/*disable place order button to stop trying to order whilst stuff is being added to the cart*/
-
+		/**feedback on item add enabled?*/
+		var fbatc=false;
+		if(typeof wppizza.itm!=='undefined' && typeof wppizza.itm.fbatc!=='undefined'){
+		 fbatc=true;	
+		}
+		
+		
+		
 		var itemCount=1;
 
 		if(self.hasClass('wppizza-add-to-cart')){type='add';}
@@ -181,9 +246,22 @@ jQuery(document).ready(function($){
 				type='increment';
 			}
 		}
-			if(type!='removeall'){
+			if(type!='removeall' && type!='add' ){
 				self.fadeOut(100).fadeIn(400);
 			}
+			if(!fbatc && type=='add'){/*make this dedicated for add*/
+				self.fadeOut(100).fadeIn(400);
+			}
+			if(fbatc && type=='add'){
+				var currentHtml=self.html();
+				self.fadeOut(100, function(){
+					self.html( "<div class='wppizza-item-added-feedback'>"+wppizza.itm.fbatc+"</div>" ).fadeIn(400).delay(wppizza.itm.fbatcms).fadeOut(400,function(){
+						self.html(currentHtml).fadeIn(100);
+					});
+				});
+			}
+			
+			
 			$('.wppizza-order').prepend('<div id="wppizza-loading"></div>');
 			jQuery.post(wppizza.ajaxurl , {action :'wppizza_json',vars:{'type':type,'id':selfId,'itemCount':itemCount}}, function(response) {
 
