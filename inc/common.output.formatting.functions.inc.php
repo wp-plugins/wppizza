@@ -945,7 +945,7 @@ function wppizza_echo_formfield($type='text',$id='',$name='',$value='',$placehol
 		echo'<input type="'.$type.'" id="'.$id.'" name="'.$name.'" value="'.$value.'"  size="40" placeholder="'.$placeholder.'" />';
 	}
 	if($type=='checkbox' || $type=='radio'){/**lets keep this for legacy reasons*/
-		echo'<input type="'.$type.'" id="'.$id.'" name="'.$name.'" value="1" '.$value.'/>';
+		echo'<input type="'.$type.'" id="'.$id.'" name="'.$name.'" value="1" '.$selected.'/>';
 	}
 
 	if($type=='check'){

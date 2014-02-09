@@ -7,20 +7,39 @@
 		$str=(int)(preg_replace("/[^0-9]/","",$str));
 		return $str;
 	}
+	
+/*****************************************************
+* Validates boolean
+* @str the input to check
+******************************************************/
+	function wppizza_validate_boolean($inp){
+		$bool=filter_var($inp, FILTER_VALIDATE_BOOLEAN);
+		return $bool;
+	}	
+	
 /*****************************************************
 * Validates float [no negatives]
 * @str the input to check, @round [int] to round
 * save as float, regardless of what seperators/locale were used
 * (also mainly to make it work with legacy versions of plugin)
 ******************************************************/
-	function wppizza_validate_float_only($str,$round=''){
+	function wppizza_validate_float_only($str,$round='',$omitDecimals=false){
 		$str=preg_replace('/[^0-9.,]*/','',$str);/*first get  rid of all chrs that should definitely not be in there*/
 		$str=str_replace(array('.',','),'#',$str);/*make string we can explode*/
-		$floatArray=explode('#',$str);/*explode so we know the last bit are decimals*/
+		$floatArray=explode('#',$str);/*explode so we know the last bit might be decimals*/
 		$exLength=count($floatArray);
+		
+		/**************************************************************************************************
+			a bit of a hack to find out if the last part IS actually decimals (as we might be omitting them)
+			if it is not decimals (ie 1.300 or 1,300 depending on locale), it will be strlen==3
+		**************************************************************************************************/
+		if($exLength>0 && strlen($floatArray[$exLength-1])==3){
+			$omitDecimals=true;	
+		}
+		
 		$str='';
 		for($i=0;$i<$exLength;$i++){
-			if($i>0 && $i==($exLength-1)){
+			if($i>0 && $i==($exLength-1) && !$omitDecimals){
 			$str.='.';//add decimal point if needed
 			}
 			$str.=''.$floatArray[$i].'';
@@ -87,6 +106,7 @@
 * return pipe, colon seperated string as array
 * left of colon=>key, right of colon=>value
 * @str the input to check
+* CURRENTLY NOT IN USE
 ******************************************************/
 	function wppizza_surchargestoarray($str){
 		$str=explode("|",$str);
@@ -134,7 +154,6 @@
 				$email[]=$s;
 			}
 		}
-
 		return $email;
 	}
 /*****************************************************

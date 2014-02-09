@@ -180,7 +180,5 @@ class WPPIZZA_USER_CAPS{
     	}
 	    return $all_roles;
 	}
-	
-
 }
 ?>

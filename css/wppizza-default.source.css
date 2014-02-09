@@ -6,7 +6,7 @@
 .wppizza-cart-nocache{margin:0;padding:0;border:none}
 .wppizza-cart-nocacheinner{height:250px;position: relative;z-index: 999;left: 0;right: 0;padding:0;margin:0;background-color:inherit;border:none}
 .wppizza-cart{height:250px;position: relative;z-index: 999;left: 0;right: 0;padding:0;margin:0;background-color:inherit;border: 1px solid #ccc;}
-.wppizza-cart-fixed{position:fixed;left:auto;right:auto;border:1px solid red}/**-----amended in version 2.8.7 background and margin now set via WPPizza -> layout----***/
+.wppizza-cart-fixed{position:fixed;left:auto;right:auto;}/**-----amended in version 2.8.7 background and margin now set via WPPizza -> layout----***/
 
 /*opening hours top/bottom*/
 .wppizza-opening-hours{text-align:center}
@@ -283,7 +283,7 @@
 *
 ************************/
 .wppizza-gateways{margin:5px 0}
-.wppizza-gw-button{margin-bottom:3px;padding:10px 5px;color: #5e5e5e;background-color: #ebebeb;background-repeat: repeat-x;background-image: -moz-linear-gradient(top, #f9f9f9, #ebebeb);background-image: -ms-linear-gradient(top, #f9f9f9, #ebebeb);background-image: -webkit-linear-gradient(top, #f9f9f9, #ebebeb);background-image: -o-linear-gradient(top, #f9f9f9, #ebebeb);background-image: linear-gradient(top, #f9f9f9, #ebebeb);border: 1px solid #d2d2d2;border-radius: 3px;box-shadow: 0 1px 2px rgba(64, 64, 64, 0.1);}
+.wppizza-gw-button{position:relative;margin-bottom:3px;padding:10px 5px;color: #5e5e5e;background-color: #ebebeb;background-repeat: repeat-x;background-image: -moz-linear-gradient(top, #f9f9f9, #ebebeb);background-image: -ms-linear-gradient(top, #f9f9f9, #ebebeb);background-image: -webkit-linear-gradient(top, #f9f9f9, #ebebeb);background-image: -o-linear-gradient(top, #f9f9f9, #ebebeb);background-image: linear-gradient(top, #f9f9f9, #ebebeb);border: 1px solid #d2d2d2;border-radius: 3px;box-shadow: 0 1px 2px rgba(64, 64, 64, 0.1);}
 .wppizza-gw-button>label{cursor:pointer}
 .wppizza-gateway-img{vertical-align:bottom;margin-right:5px}
 .wppizza-gateway-addinfo{display:block;font-size:80%;padding-left:25px}

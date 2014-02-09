@@ -5,8 +5,8 @@ Author URI: http://www.wp-pizza.com
 Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.2, WP 3.3 
-Tested up to: 3.8
-Stable tag: 2.8.7.3
+Tested up to: 3.8.1
+Stable tag: 2.8.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -121,6 +121,20 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 
 == Changelog ==
+
+2.8.8   
+* added ability to custom sort (and ident) to additives  
+* added spans with id's and classes to additives to enable css styling  
+* added simple display of order total (displayed orders or all orders) in order history   
+* made scrolling cart behave with older versions of jQuery  
+* removed silly red border on scrolling cart when using default.css (accidentally left in when used during development)  
+* internal: added additional edd_sl methods (classes/wppizza.edd.inc.php) to make future developments of additional gateways easier  
+* internal: added mbstring check  
+* internal: added boolean validation function  
+* BUGFIX: fixed float bug (due to different number format locale) when ommitting decimals (wppizza->layout) and item/discount/total values etc  price(s)  is/are >1000   
+* BUGFIX: when selecting "do not display decimals", percentage discounts also had decimals omitted in admin view (albeit they were still applied correctly including decimals)  
+* BUGFIX: non-admins who had rights to view selected pages were able to access but not able to save them (surprised no-one noticed this before really)  
+9th February 2014   
 
 
 2.8.7.3   

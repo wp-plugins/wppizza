@@ -65,8 +65,6 @@
 		add_settings_field('order_email_attachments', '<b>'.__('Email Attachments [separated by comma if multiple]:', $this->pluginLocale).'</b><br /><span style="color:red">'.__('Settings->Mail Delivery must be set to wp_mail or PHPMailer', $this->pluginLocale).'</span>', array( $this, 'wppizza_admin_settings_input'), 'order', 'order', 'order_email_attachments' );
 
 
-
-
 		/**order form**/
 		add_settings_section('order_form', __('Order Form', $this->pluginLocale),  array( $this, 'wppizza_admin_page_text_header'), 'order_form');
 		add_settings_field('order_form', '<b>'.__('Form Fields:', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'order_form', 'order_form', 'order_form' );
@@ -77,7 +75,7 @@
 
 		/**additives**/
 		add_settings_section('additives', __('Additives', $this->pluginLocale),  array( $this, 'wppizza_admin_page_text_header'), 'additives');
-		add_settings_field('additives', '<b>'.__('Some meals and beverages may contain additives. Add any possible additves here and select them at any meal/beravage that contains these additives. This in turn will add a footnote to pages denoting which item contains what additives:', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'additives', 'additives', 'additives' );
+		add_settings_field('additives', '<b>'.__('Some meals and beverages may contain additives. Add any possible additives here and select them at any meal/beravage that contains these additives. This in turn will add a footnote to pages denoting which item contains what additives:', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'additives', 'additives', 'additives' );
 
 		/**localization**/
 		add_settings_section('localization', __('Frontened Localization', $this->pluginLocale),  array( $this, 'wppizza_admin_page_text_header'), 'localization');

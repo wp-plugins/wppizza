@@ -83,6 +83,9 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 			add_action( 'personal_options_update', array( $this, 'wppizza_user_update_meta' ));
 			add_action( 'edit_user_profile_update', array( $this, 'wppizza_user_update_meta' ));
 			
+			/**set capability to update options otherwise only a user with 'manage_options' could update anything. **/
+			add_filter( 'option_page_capability_'.$this->pluginSlug.'', array($this, 'wppizza_admin_option_page_capability' ));
+
 			/**allow custom order status fields. priority must be<10**/
 			add_action( 'admin_init', array( $this, 'wppizza_set_order_status' ),9);
 		}
@@ -209,13 +212,23 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 		display an error message and deactivate the plugin]
 	********************************************************/
 	function wppizza_check_plugin_requirements(){
+		if(!extension_loaded('mbstring')) {
+			add_action('admin_notices', array( $this, 'wppizza_required_notice_extensions') );
+		}
+		
 		if( version_compare( PHP_VERSION, '5.2', '<' )) {
 			require_once ABSPATH . '/wp-admin/includes/plugin.php';
 			deactivate_plugins($this->pluginPath);
 			wp_die(  __('WPPizza requires the server on which your site resides to be running PHP 5.2 or higher. As of version 3.2, WordPress itself will also <a href="http://wordpress.org/news/2010/07/eol-for-php4-and-mysql4">have this requirement</a>. You should get in touch with your web hosting provider and ask them to update PHP.<br /><br /><a href="' . admin_url( 'plugins.php' ) . '">Back to Plugins</a>', $this->pluginLocale) );
 		}
 	}
-
+	function wppizza_required_notice_extensions(){
+			echo'<div id="message" class="error wppizza_admin_notice" style="padding:20px;">';
+			 echo"".__('ATTENTION:', $this->pluginLocale)."<br/><br/>";
+			 echo"".__('WPPizza requires the <b>"mbstring"</b> extension in your php installation to be available/installed to work reliably. Please enable this module. If you do not know how to, speak to your hostinng provider', $this->pluginLocale);
+			 echo"<br/>".__('This notice will disappear as soon as mbstring is available.', $this->pluginLocale);
+			echo"</div>";
+	}
 	/*******************************************************
 		[insert options and defaults on first install]
 	******************************************************/
@@ -463,10 +476,7 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 *
 ************************************************************************************************/
 public function register_admin_menu_pages() {
-	// Check if user hass access to the plugin settings
-//	if (current_user_can('administrator')){
-		require_once(WPPIZZA_PATH .'inc/admin.echo.register.submenu.pages.inc.php');
-//	}
+	require_once(WPPIZZA_PATH .'inc/admin.echo.register.submenu.pages.inc.php');
 }
 function wppizza_admin_pages_init(){
 	require_once(WPPIZZA_PATH .'inc/admin.echo.settings.sections.inc.php');
@@ -553,6 +563,21 @@ function wppizza_set_capabilities($get_user_caps=false){
 
 	return $tabs;
 }
+/****************************************************************************************
+*
+*	[set capability to  save options, if we can't find one (although this should not ever happen)
+*	but something might have gotten screwed up, 
+*	automatically use 'manage_option' default so at least an admin can do stuff]
+*
+*****************************************************************************************/
+function wppizza_admin_option_page_capability($capability) {
+	$currentUserCaps=$this->wppizza_set_capabilities(true);
+	if(isset($currentUserCaps[0])){
+		$capability=$currentUserCaps[0]['cap'];
+	}
+	return $capability;
+}
+
 /*********************************************************
 *
 *	[admin output print functions -
@@ -686,6 +711,32 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 		if($type=='category'){
 		static $countCategory=0;$countCategory++;
 			$options = $this->pluginOptions;
+			
+			/*********************************************************************
+				[as we have changed in v.2.8.7.4 to have the additives as array
+				so we can custom sort them but dont really want to screw up 
+				anyones edited templates, re-map key and name]
+			*******************************************************************/
+				$mapAdditives=array();
+				foreach($options['additives'] as $o=>$a){
+					if(is_array($a)){
+						if($a['sort']==''){$a['sort']=$o;}
+						$mapAdditives[$a['sort']]=$a['name'];
+					}else{
+						/**in case we have not yet re-saved the additives**/
+						$mapAdditives[$o]=$a;
+					}
+				}
+				ksort($mapAdditives,SORT_STRING);				
+				$options['additives']=$mapAdditives;
+				/*******re-map additives inside loop too **************************/
+				add_filter('wppizza_filter_loop_meta', array( $this, 'wppizza_additives_remap'),10,1);
+			/*******************************************************************
+			*
+			*	[end of additives re-mapping
+			*
+			********************************************************************/
+			
 			/*select first category if none selected->used when using shortcode without category*/
 			if(!isset($atts['category'])){
 				$termSort=$options['layout']['category_sort'];
@@ -867,6 +918,23 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 					return;
 				}
 		}
+}
+function wppizza_additives_remap($meta){	
+	$convAdditives=array();
+	foreach($meta['additives'] as $o=>$a){
+		if(is_array($this->pluginOptions['additives'][$o])){
+			$thisAdditiveSort=$this->pluginOptions['additives'][$o]['sort'];
+			if($thisAdditiveSort==''){$thisAdditiveSort=$o;}
+			$thisAdditiveName=$this->pluginOptions['additives'][$o]['name'];
+		
+			$convAdditives[$thisAdditiveSort]=$thisAdditiveName;
+		}else{/*in case we still have old vars*/
+			$convAdditives[$o]=$a;
+		}
+	}
+	ksort($convAdditives,SORT_STRING);
+	$meta['additives']=$convAdditives;	
+	return $meta;
 }
 /*********************************************************
 *

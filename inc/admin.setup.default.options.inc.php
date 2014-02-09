@@ -62,11 +62,11 @@
 
 				/*default additives**/
 				$defaultAdditives=array(
-					0=>__('Food coloring', $this->pluginLocale),
-					1=>__('Flavor enhancers', $this->pluginLocale),
-					2=>__('Preservatives', $this->pluginLocale),
-					3=>__('Stabilizers', $this->pluginLocale),
-					4=>__('Sweeteners', $this->pluginLocale)
+					0=>array('sort'=>1,'name'=>__('Food coloring', $this->pluginLocale)),
+					1=>array('sort'=>2,'name'=>__('Flavor enhancers', $this->pluginLocale)),
+					2=>array('sort'=>3,'name'=>__('Preservatives', $this->pluginLocale)),
+					3=>array('sort'=>4,'name'=>__('Stabilizers', $this->pluginLocale)),
+					4=>array('sort'=>5,'name'=>__('Sweeteners', $this->pluginLocale))
 				);
 
 				/********************************************************************************************

@@ -96,6 +96,7 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 							print"<option value='".$key."' ".$gwAddClass." />";
 								print"".empty($gw->gatewayOptions['gateway_label']) ? $gw->gatewayName : $gw->gatewayOptions['gateway_label'] ." ";
 							print"</option>";
+							//do_action('wppizza_gateway_add_dropdown_option',$key);
 						$i++;
 						}
 						print"</select>";
@@ -115,12 +116,19 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 								$gwAddClass=' class="wppizzaGwAjaxSubmit"';
 							}
 							print"<div id='wppizza-gw-".$key."' class='wppizza-gw-button button'>";
-								print"<label>";
-								print"<input type='radio' name='wppizza-gateway' id='wppizza-gateway-".$key."' ".$gwAddClass." value='".$key."' ".checked($i,0,false)."/> ";
-								print"".!empty($gw->gatewayImage) ? $gw->gatewayImage : '' ." ";
-								print"".empty($gw->gatewayOptions['gateway_label']) ? $gw->gatewayName : $gw->gatewayOptions['gateway_label'] ." ";
-								print"</label>";
-								print"".!empty($gw->gatewayOptions['gateway_info']) ? '<span class="wppizza-gateway-addinfo">'.$gw->gatewayOptions['gateway_info'].'</span>' : '' ." ";
+								//do_action('wppizza_gateway_button_before_label',$key);
+									print"<label>";
+								//do_action('wppizza_gateway_button_labelinner_1',$key);
+									print"<input type='radio' name='wppizza-gateway' id='wppizza-gateway-".$key."' ".$gwAddClass." value='".$key."' ".checked($i,0,false)."/> ";
+								//do_action('wppizza_gateway_button_labelinner_2',$key);
+									print"".!empty($gw->gatewayImage) ? $gw->gatewayImage : '' ." ";
+								//do_action('wppizza_gateway_button_labelinner_3',$key);
+									print"".empty($gw->gatewayOptions['gateway_label']) ? $gw->gatewayName : $gw->gatewayOptions['gateway_label'] ." ";
+								//do_action('wppizza_gateway_button_labelinner_4',$key);
+									print"</label>";
+								//do_action('wppizza_gateway_button_after_label',$key);
+									print"".!empty($gw->gatewayOptions['gateway_info']) ? '<span class="wppizza-gateway-addinfo">'.$gw->gatewayOptions['gateway_info'].'</span>' : '' ." ";
+								//do_action('wppizza_gateway_button_after_addinfo',$key);
 							print"</div>";
 						$i++;
 						}

@@ -502,7 +502,7 @@ $options = $this->pluginOptions;
 							echo"".__('If order total >', $this->pluginLocale).":";
 							echo"<input name='".$this->pluginSlug."[order][".$field."][".$k."][discounts][".$l."][min_total]' size='3' type='text' value='".wppizza_output_format_price($options['order'][$field][$k]['discounts'][$l]['min_total'],$optionsDecimals)."' />";
 							echo"".__('discount', $this->pluginLocale).":";
-							echo"<input name='".$this->pluginSlug."[order][".$field."][".$k."][discounts][".$l."][discount]' size='3' type='text' value='".wppizza_output_format_price($options['order'][$field][$k]['discounts'][$l]['discount'],$optionsDecimals)."' />";
+							echo"<input name='".$this->pluginSlug."[order][".$field."][".$k."][discounts][".$l."][discount]' size='3' type='text' value='".wppizza_output_format_price($options['order'][$field][$k]['discounts'][$l]['discount'])."' />";
 							echo"".__('percent', $this->pluginLocale)."";
 							echo"<br />";
 						}
@@ -563,7 +563,7 @@ $options = $this->pluginOptions;
 				echo"<div id='wppizza_".$field."'>";
 					echo"<div id='wppizza_".$field."_options'>";
 					if(isset($options[$field]) && is_array($options[$field])){
-					asort($options[$field]);//sort but keep index
+					asort($options[$field]);//sort 
 					foreach($options[$field] as $k=>$v){
 						echo"".$this->wppizza_admin_section_additives($field,$k,$options[$field][$k],$optionInUse);
 					}}
@@ -676,6 +676,8 @@ $options = $this->pluginOptions;
 			if($field=='history'){
 				echo"<div id='wppizza_".$field."'>";
 
+					echo"<div id='wppizza_".$field."_totals'></div>";
+					
 					echo"<div id='wppizza_".$field."_search' class='button'>";
 						echo "<span style='float:left'>";
 						echo "<a href='#' id='".$field."_get_orders' class='button'>".__('show most recent *confirmed* orders', $this->pluginLocale)."</a>";

@@ -31,8 +31,9 @@
 		$str.="<div class='wppizza-meta-label'>".__('contains additives', $this->pluginLocale).":</div> ";
 		asort($options['additives']);//sort but keep index
 		foreach($options['additives']  as $s=>$o){
+			if(!is_array($o)){$lbl=$o;}else{$lbl=''.$o['name'];}/*legacy*/
 			$str.="<label class='button'>";
-			$str.="<input name='".$this->pluginSlug."[additives][".$s."]' size='5' type='checkbox' ". checked(in_array($s,$meta_values['additives']),true,false)." value='".$s."' /> ".$o."";
+			$str.="<input name='".$this->pluginSlug."[additives][".$s."]' size='5' type='checkbox' ". checked(in_array($s,$meta_values['additives']),true,false)." value='".$s."' /> ".$lbl."";
 			$str.="</label>";			
 		}
 		$str.="</div>";

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WPPizza\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-02-01 10:11-0000\n"
-"PO-Revision-Date: 2014-02-01 10:11-0000\n"
+"POT-Creation-Date: 2014-02-09 19:16-0000\n"
+"PO-Revision-Date: 2014-02-09 19:16-0000\n"
 "Last-Translator: ollybach <dev@1000db.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -51,7 +51,7 @@ msgstr "ordine cancellato"
 msgid "Done"
 msgstr "Fatto"
 
-#: ../ajax/admin-get-json.php:133
+#: ../ajax/admin-get-json.php:134
 msgid ""
 "Note: deleting an order will <b>ONLY</b> delete it from the database table. "
 "It will <b>NOT</b> issue any refunds, cancel the order, send emails etc."
@@ -60,7 +60,7 @@ msgstr ""
 "database. <b>NON</b> procederà a inviare nessun rimborso, cancellare "
 "l'ordine, mandare emails ecc. "
 
-#: ../ajax/admin-get-json.php:135
+#: ../ajax/admin-get-json.php:136
 msgid ""
 "\"Status\" is solely for your internal reference. Updating/changing the "
 "value will have no other effects but might help you to identify which orders "
@@ -70,57 +70,69 @@ msgstr ""
 "Cambiare il valore non avrà altro effetto ma potrebbe aiutarti nel tenere il "
 "conto di quali ordini sono stati effettivamente evasi e quali no."
 
-#: ../ajax/admin-get-json.php:139
+#: ../ajax/admin-get-json.php:140
 msgid "Order"
 msgstr "Ordine"
 
-#: ../ajax/admin-get-json.php:142
+#: ../ajax/admin-get-json.php:143
 msgid "Customer Details"
 msgstr "Dettagli Cliente"
 
-#: ../ajax/admin-get-json.php:145
+#: ../ajax/admin-get-json.php:146
 msgid "Order Details"
 msgstr "Dettagli Ordine"
 
-#: ../ajax/admin-get-json.php:168 ../ajax/admin-get-json.php:169
+#: ../ajax/admin-get-json.php:174 ../ajax/admin-get-json.php:175
 msgid "Payment By"
 msgstr "Payment By"
 
-#: ../ajax/admin-get-json.php:176
+#: ../ajax/admin-get-json.php:182
 msgid "Status"
 msgstr "Stato"
 
-#: ../ajax/admin-get-json.php:191
+#: ../ajax/admin-get-json.php:195
 msgid "Last Status Update"
 msgstr "Last Status Update"
 
-#: ../ajax/admin-get-json.php:212 ../inc/admin.echo.get_additives.inc.php:7
+#: ../ajax/admin-get-json.php:216 ../inc/admin.echo.get_additives.inc.php:16
 #: ../inc/admin.echo.get_mealsizes.inc.php:55
 #: ../inc/admin.echo.get_openingtimes.inc.php:14
 #: ../inc/admin.echo.get_timesclosed.inc.php:22
 msgid "delete"
 msgstr "cancella"
 
-#: ../ajax/admin-get-json.php:216
+#: ../ajax/admin-get-json.php:220
 msgid "print order"
 msgstr "stampa ordine"
 
-#: ../ajax/admin-get-json.php:224
+#: ../ajax/admin-get-json.php:228
 msgid "add notes"
 msgstr "add notes"
 
-#: ../ajax/admin-get-json.php:231
+#: ../ajax/admin-get-json.php:235
 msgid "notes:"
 msgstr "notes:"
 
-#: ../ajax/admin-get-json.php:232
+#: ../ajax/admin-get-json.php:236
 #: ../inc/admin.setup.default.options.inc.php:545
 msgid "ok"
 msgstr "ok"
 
-#: ../ajax/admin-get-json.php:238
+#: ../ajax/admin-get-json.php:242
 msgid "no orders yet :("
 msgstr "ancora nessun ordine :("
+
+#: ../ajax/admin-get-json.php:247
+msgid "Total of shown orders"
+msgstr ""
+
+#: ../ajax/admin-get-json.php:248
+msgid "show total of all orders"
+msgstr "show total of all orders"
+
+#: ../ajax/admin-get-json.php:270
+msgid "total all orders"
+msgstr "total all orders"
 
 #: ../ajax/get-json.php:262
 msgid "Sorry, we could not find this order."
@@ -142,11 +154,11 @@ msgstr "FALLITO : Invio della Mail Fallito"
 msgid "Cash on Delivery"
 msgstr "Contanti alla Consegna"
 
-#: ../classes/wppizza.actions.inc.php:107
+#: ../classes/wppizza.actions.inc.php:110
 msgid "Additional information"
 msgstr "Informazioni addizionali"
 
-#: ../classes/wppizza.actions.inc.php:215
+#: ../classes/wppizza.actions.inc.php:222
 msgid ""
 "WPPizza requires the server on which your site resides to be running PHP 5.2 "
 "or higher. As of version 3.2, WordPress itself will also <a href=\"http://"
@@ -160,207 +172,209 @@ msgstr ""
 "contattare il tuo provider web e chiedere di aggiornare la versione di PHP."
 "<br /><br /><a href=\""
 
-#: ../classes/wppizza.actions.inc.php:408
+#: ../classes/wppizza.actions.inc.php:227
+msgid "ATTENTION:"
+msgstr "ATTENTION:"
+
+#: ../classes/wppizza.actions.inc.php:228
+msgid ""
+"WPPizza requires the <b>\"mbstring\"</b> extension in your php installation "
+"to be available/installed to work reliably. Please enable this module. If "
+"you do not know how to, speak to your hostinng provider"
+msgstr ""
+"WPPizza requires the <b>\"mbstring\"</b> extension in your php installation "
+"to be available/installed to work reliably. Please enable this module. If "
+"you do not know how to, speak to your hostinng provider"
+
+#: ../classes/wppizza.actions.inc.php:229
+msgid "This notice will disappear as soon as mbstring is available."
+msgstr "This notice will disappear as soon as mbstring is available."
+
+#: ../classes/wppizza.actions.inc.php:421
 msgid "Set Item Options"
 msgstr "Imposta le opzioni articolo : "
 
-#: ../classes/wppizza.actions.inc.php:522
+#: ../classes/wppizza.actions.inc.php:532
 #: ../inc/admin.echo.register.submenu.pages.inc.php:3
 msgid "Settings"
 msgstr "Impostazioni "
 
-#: ../classes/wppizza.actions.inc.php:523
+#: ../classes/wppizza.actions.inc.php:533
 #: ../inc/admin.echo.settings.sections.inc.php:53
 msgid "Order Settings"
 msgstr "Impostazioni Ordine"
 
-#: ../classes/wppizza.actions.inc.php:524
+#: ../classes/wppizza.actions.inc.php:534
 msgid "Gateways"
 msgstr "Gateways di pagamento"
 
-#: ../classes/wppizza.actions.inc.php:525
+#: ../classes/wppizza.actions.inc.php:535
 msgid "Order Form Settings"
 msgstr "Impostazione Modulo Ordine"
 
-#: ../classes/wppizza.actions.inc.php:526
+#: ../classes/wppizza.actions.inc.php:536
 #: ../inc/admin.echo.manage_opening_times.inc.php:3
 #: ../inc/admin.echo.settings.sections.inc.php:47
 msgid "Opening Times"
 msgstr "Orari di Apertura"
 
-#: ../classes/wppizza.actions.inc.php:527
+#: ../classes/wppizza.actions.inc.php:537
 #: ../inc/admin.echo.manage_meal_sizes.inc.php:3
 msgid "Meal Sizes"
 msgstr "Formato Piatti"
 
-#: ../classes/wppizza.actions.inc.php:528
+#: ../classes/wppizza.actions.inc.php:538
 #: ../inc/admin.echo.manage_additives.inc.php:4
-#: ../inc/admin.echo.settings.sections.inc.php:79
+#: ../inc/admin.echo.settings.sections.inc.php:77
 msgid "Additives"
 msgstr "Additivi"
 
-#: ../classes/wppizza.actions.inc.php:529
+#: ../classes/wppizza.actions.inc.php:539
 #: ../inc/admin.echo.manage_layout.inc.php:3
 msgid "Layout"
 msgstr "Layout "
 
-#: ../classes/wppizza.actions.inc.php:530
+#: ../classes/wppizza.actions.inc.php:540
 msgid "Localization"
 msgstr "Localizzazione"
 
-#: ../classes/wppizza.actions.inc.php:531
+#: ../classes/wppizza.actions.inc.php:541
 #: ../inc/admin.echo.manage_order_history.inc.php:3
-#: ../inc/admin.echo.settings.sections.inc.php:87
+#: ../inc/admin.echo.settings.sections.inc.php:85
 msgid "Order History"
 msgstr "Storico Ordini"
 
-#: ../classes/wppizza.actions.inc.php:532
+#: ../classes/wppizza.actions.inc.php:542
 #: ../inc/admin.echo.manage_access_rights.inc.php:3
-#: ../inc/admin.echo.settings.sections.inc.php:90
+#: ../inc/admin.echo.settings.sections.inc.php:88
 msgid "Access Rights"
 msgstr "Diritti di Accesso"
 
-#: ../classes/wppizza.actions.inc.php:533
+#: ../classes/wppizza.actions.inc.php:543
 #: ../inc/admin.echo.manage_tools.inc.php:3
 #: ../inc/admin.echo.register.submenu.pages.inc.php:14
 msgid "Tools"
 msgstr "Strumenti"
 
-#: ../classes/wppizza.actions.inc.php:534
+#: ../classes/wppizza.actions.inc.php:544
 msgid "Delete Orders"
 msgstr "Cancella Ordini"
 
-#: ../classes/wppizza.actions.inc.php:769
+#: ../classes/wppizza.actions.inc.php:820
 msgid "Nothing here"
 msgstr "Niente qui"
 
-#: ../classes/wppizza.actions.inc.php:901
+#: ../classes/wppizza.actions.inc.php:969
 msgid "Menu Items"
 msgstr "Menu Articoli"
 
-#: ../classes/wppizza.actions.inc.php:902
+#: ../classes/wppizza.actions.inc.php:970
 msgid "WPPizza Menu Item"
 msgstr "Menu Articoli WPPizza"
 
-#: ../classes/wppizza.actions.inc.php:903
+#: ../classes/wppizza.actions.inc.php:971
 msgid "Add New"
 msgstr "Aggiungi Nuovo"
 
-#: ../classes/wppizza.actions.inc.php:904
+#: ../classes/wppizza.actions.inc.php:972
 msgid "Add New Menu Item"
 msgstr "Aggiungi Nuovo Articolo di Menu "
 
-#: ../classes/wppizza.actions.inc.php:905
+#: ../classes/wppizza.actions.inc.php:973
 msgid "Edit"
 msgstr "Modifica"
 
-#: ../classes/wppizza.actions.inc.php:906
+#: ../classes/wppizza.actions.inc.php:974
 msgid "Edit Menu Item"
 msgstr "Modifica Articolo di menu"
 
-#: ../classes/wppizza.actions.inc.php:907
+#: ../classes/wppizza.actions.inc.php:975
 msgid "New Menu Item"
 msgstr "Nuova Voce Menu"
 
-#: ../classes/wppizza.actions.inc.php:908
+#: ../classes/wppizza.actions.inc.php:976
 msgid "All Menu Items"
 msgstr "Tutti gli Articoli di Menu"
 
-#: ../classes/wppizza.actions.inc.php:909
+#: ../classes/wppizza.actions.inc.php:977
 msgid "View"
 msgstr "Visualizza"
 
-#: ../classes/wppizza.actions.inc.php:910
+#: ../classes/wppizza.actions.inc.php:978
 msgid "View Menu Items"
 msgstr "Visualizza Voci Menu"
 
-#: ../classes/wppizza.actions.inc.php:911
+#: ../classes/wppizza.actions.inc.php:979
 msgid "Search Menu Items"
 msgstr "Cerca Voci di Menu"
 
-#: ../classes/wppizza.actions.inc.php:912
+#: ../classes/wppizza.actions.inc.php:980
 msgid "No items found"
 msgstr "Nessun Articolo Trovato"
 
-#: ../classes/wppizza.actions.inc.php:913
+#: ../classes/wppizza.actions.inc.php:981
 msgid "No items found in the Trash"
 msgstr "Nessun Articolo trovato nel cestino"
 
-#: ../classes/wppizza.actions.inc.php:922
+#: ../classes/wppizza.actions.inc.php:990
 #, php-format
 msgid "Holds %1$s  menu items data"
 msgstr "Holds %1$s  menu items data"
 
-#: ../classes/wppizza.actions.inc.php:959
-#: ../classes/wppizza.actions.inc.php:984
+#: ../classes/wppizza.actions.inc.php:1027
+#: ../classes/wppizza.actions.inc.php:1052
 msgid "WPPizza Categories"
 msgstr "Categorie WPPizza"
 
-#: ../classes/wppizza.actions.inc.php:960
+#: ../classes/wppizza.actions.inc.php:1028
 msgid "Category"
 msgstr "Categoria"
 
-#: ../classes/wppizza.actions.inc.php:961
+#: ../classes/wppizza.actions.inc.php:1029
 msgid "Search Categories"
 msgstr "Cerca Categorie"
 
-#: ../classes/wppizza.actions.inc.php:962
+#: ../classes/wppizza.actions.inc.php:1030
 msgid "All Categories"
 msgstr "Tutte le Categorie"
 
-#: ../classes/wppizza.actions.inc.php:963
+#: ../classes/wppizza.actions.inc.php:1031
 msgid "Parent Category"
 msgstr "Categoria Principale"
 
-#: ../classes/wppizza.actions.inc.php:964
+#: ../classes/wppizza.actions.inc.php:1032
 msgid "Parent Category:"
 msgstr "Categoria Principale:"
 
-#: ../classes/wppizza.actions.inc.php:965
+#: ../classes/wppizza.actions.inc.php:1033
 msgid "Edit Category"
 msgstr "Modifica Categoria"
 
-#: ../classes/wppizza.actions.inc.php:966
+#: ../classes/wppizza.actions.inc.php:1034
 msgid "Update Category"
 msgstr "Aggiorna la Categoria"
 
-#: ../classes/wppizza.actions.inc.php:967
+#: ../classes/wppizza.actions.inc.php:1035
 msgid "Add New Category"
 msgstr "Aggiungi Nuova Categoria"
 
-#: ../classes/wppizza.actions.inc.php:968
+#: ../classes/wppizza.actions.inc.php:1036
 msgid "New Category Name"
 msgstr "Nuova Categoria"
 
-#: ../classes/wppizza.actions.inc.php:969
+#: ../classes/wppizza.actions.inc.php:1037
 msgid "Categories"
 msgstr "Categorie"
 
-#: ../classes/wppizza.edd.inc.php:18
-msgid "Enter your license key"
-msgstr "Enter your license key"
+#: ../classes/wppizza.edd.inc.php:101
+msgid "Deactivate License"
+msgstr "Deactivate License"
 
-#: ../classes/wppizza.edd.inc.php:19
-msgid "License Key"
-msgstr "License Key"
-
-#: ../classes/wppizza.edd.inc.php:23
-msgid "De-Activate License"
-msgstr "De-Activate License"
-
-#: ../classes/wppizza.edd.inc.php:25
+#: ../classes/wppizza.edd.inc.php:101 ../classes/wppizza.edd.inc.php:173
 msgid "Activate License"
 msgstr "Activate License"
 
-#: ../classes/wppizza.edd.inc.php:29
-msgid "License active"
-msgstr "License active"
-
-#: ../classes/wppizza.edd.inc.php:32
-msgid "License in-active"
-msgstr "License in-active"
-
-#: ../classes/wppizza.edd.inc.php:34
+#: ../classes/wppizza.edd.inc.php:110 ../classes/wppizza.edd.inc.php:182
 msgid ""
 "Please note: entering and activating the license is optional, but if you "
 "choose not to do so, you will not be informed of any future bugfixes and/or "
@@ -370,7 +384,51 @@ msgstr ""
 "choose not to do so, you will not be informed of any future bugfixes and/or "
 "updates."
 
-#: ../inc/admin.echo.get_additives.inc.php:9
+#: ../classes/wppizza.edd.inc.php:115
+msgid "ERROR"
+msgstr "ERROR"
+
+#: ../classes/wppizza.edd.inc.php:116
+msgid ""
+"There was a connection error, when trying to check your license.<br />Please "
+"try again."
+msgstr ""
+"There was a connection error, when trying to check your license.<br />Please "
+"try again."
+
+#: ../classes/wppizza.edd.inc.php:130 ../classes/wppizza.edd.inc.php:167
+msgid "License Key"
+msgstr "License Key"
+
+#: ../classes/wppizza.edd.inc.php:132
+msgid "license key"
+msgstr "license key"
+
+#: ../classes/wppizza.edd.inc.php:166
+msgid "Enter your license key"
+msgstr "Enter your license key"
+
+#: ../classes/wppizza.edd.inc.php:171
+msgid "De-Activate License"
+msgstr "De-Activate License"
+
+#: ../classes/wppizza.edd.inc.php:177
+msgid "License active"
+msgstr "License active"
+
+#: ../classes/wppizza.edd.inc.php:180
+msgid "License in-active"
+msgstr "License in-active"
+
+#: ../inc/admin.echo.get_additives.inc.php:12
+msgid "sort"
+msgstr "sort"
+
+#: ../inc/admin.echo.get_additives.inc.php:13
+msgid "name"
+msgstr "name"
+
+#: ../inc/admin.echo.get_additives.inc.php:18
 #: ../inc/admin.echo.get_mealsizes.inc.php:57
 msgid "in use"
 msgstr "in uso"
@@ -1120,45 +1178,45 @@ msgstr ""
 "Articoli menu e Categorie sono accessibili nello stesso modo dei post "
 "\"normali\""
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:681
+#: ../inc/admin.echo.settings.input.fields.inc.php:683
 msgid "show most recent *confirmed* orders"
 msgstr "mostra gli ordini *confermati* più recenti"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:682
+#: ../inc/admin.echo.settings.input.fields.inc.php:684
 msgid "maximum results [0 to show all]"
 msgstr "massimi risultati [0 per mostrarli tutti]"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:685
+#: ../inc/admin.echo.settings.input.fields.inc.php:687
 msgid "poll for new orders every"
 msgstr "effettua inquiry per nuovi ordini ogni"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:685
+#: ../inc/admin.echo.settings.input.fields.inc.php:687
 msgid "seconds"
 msgstr "secondi"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:686
+#: ../inc/admin.echo.settings.input.fields.inc.php:688
 msgid "on/off"
 msgstr "acceso/spento"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:698
+#: ../inc/admin.echo.settings.input.fields.inc.php:700
 msgid "Delete abandoned/cancelled orders from database older than"
 msgstr ""
 "Cancella ordini abbandonati/cancellati dal database che sono più vecchi di "
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:700
+#: ../inc/admin.echo.settings.input.fields.inc.php:702
 msgid "Days (minimum: 1)"
 msgstr "Giorni (minimo: 1)"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:702
+#: ../inc/admin.echo.settings.input.fields.inc.php:704
 msgid "delete failed, tampered or otherwise invalid entries too."
 msgstr ""
 "cancella anche record falliti, rovinati o qualunque altra voce non valida."
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:703
+#: ../inc/admin.echo.settings.input.fields.inc.php:705
 msgid "go"
 msgstr "vai"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:704
+#: ../inc/admin.echo.settings.input.fields.inc.php:706
 msgid ""
 "As soon as customers go to the order page an order will be initialized and "
 "stored in the db to be checked against when going through with the purchase "
@@ -1175,7 +1233,7 @@ msgstr ""
 "bottone \"ok\" per ripulire il tuo db da questi record (ciò non influenzerà "
 "gli ordini che sono completati o in attesa di completamento)"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:705
+#: ../inc/admin.echo.settings.input.fields.inc.php:707
 msgid ""
 "Note: This will delete these entries PERMANENTLY from the db and is not "
 "reversable."
@@ -1615,19 +1673,19 @@ msgstr "Email Attachments [separated by comma if multiple]:"
 msgid "Settings->Mail Delivery must be set to wp_mail or PHPMailer"
 msgstr "Settings->Mail Delivery must be set to wp_mail or PHPMailer"
 
-#: ../inc/admin.echo.settings.sections.inc.php:71
+#: ../inc/admin.echo.settings.sections.inc.php:69
 msgid "Order Form"
 msgstr "Modulo Ordine"
 
-#: ../inc/admin.echo.settings.sections.inc.php:72
+#: ../inc/admin.echo.settings.sections.inc.php:70
 msgid "Form Fields:"
 msgstr "Campi del Modulo :"
 
-#: ../inc/admin.echo.settings.sections.inc.php:75
+#: ../inc/admin.echo.settings.sections.inc.php:73
 msgid "Size Options Available"
 msgstr "Opzioni Formato Disponibili"
 
-#: ../inc/admin.echo.settings.sections.inc.php:76
+#: ../inc/admin.echo.settings.sections.inc.php:74
 msgid ""
 "As meals and beverages can come in different sizes, please add/edit the "
 "options you want to offer your customers. You will then be able to offer "
@@ -1637,27 +1695,27 @@ msgstr ""
 "modifica e aggiungi le opzioni che vuoi offrire ai tuoi clienti. Avrai poi "
 "la possibilità di offrire queste alternative per ogni singolo articolo."
 
-#: ../inc/admin.echo.settings.sections.inc.php:80
+#: ../inc/admin.echo.settings.sections.inc.php:78
 msgid ""
-"Some meals and beverages may contain additives. Add any possible additves "
+"Some meals and beverages may contain additives. Add any possible additives "
 "here and select them at any meal/beravage that contains these additives. "
 "This in turn will add a footnote to pages denoting which item contains what "
 "additives:"
 msgstr ""
-"Alcuni piatti o bevande potrebbero contenere additivi. Aggiungi qualsiasi "
-"additivo possibile qui e seleziona successivamente ogni alimento o bevanda "
-"che li contiene. Questo aggiungerà una nota a piè di pagina che indica quali "
-"articoli contengono quali additivi. "
+"Some meals and beverages may contain additives. Add any possible additives "
+"here and select them at any meal/beravage that contains these additives. "
+"This in turn will add a footnote to pages denoting which item contains what "
+"additives:"
 
-#: ../inc/admin.echo.settings.sections.inc.php:83
+#: ../inc/admin.echo.settings.sections.inc.php:81
 msgid "Frontened Localization"
 msgstr "Localizzazione del Frontend"
 
-#: ../inc/admin.echo.settings.sections.inc.php:84
+#: ../inc/admin.echo.settings.sections.inc.php:82
 msgid "Edit as required:"
 msgstr "Modifica come richiesto:"
 
-#: ../inc/admin.echo.settings.sections.inc.php:94
+#: ../inc/admin.echo.settings.sections.inc.php:92
 msgid "Miscellaneous Tools"
 msgstr "Strumenti Vari"
 
@@ -1710,11 +1768,22 @@ msgstr ""
 #: ../inc/admin.echo.settings.text.header.inc.php:22
 msgid ""
 "Add any additives (or other notes) that a meal may have and tick the "
-"relevant box(es) of any meal that contain these additives "
+"relevant box(es) of any meal that contains these additives "
 msgstr ""
-"Aggiungi qualsiasi additivo (o altre note) che un piatto potrebbe contenere "
-"e clicca sulle caselle di tutti i piatti che potrebbero contenere queste "
-"sostanze"
+"Add any additives (or other notes) that a meal may have and tick the "
+"relevant box(es) of any meal that contains these additives "
+
+#: ../inc/admin.echo.settings.text.header.inc.php:23
+msgid ""
+"by default, additives will be sorted alphabetically.<br/>However, you can "
+"use the \"sort\" field to customise the sortorder. If you do, your choosen "
+"sort id will be used to identify your choosen additives in the frontend so "
+"you want to make sure to have unique identifiers/sort id's"
+msgstr ""
+"by default, additives will be sorted alphabetically.<br/>However, you can "
+"use the \"sort\" field to customise the sortorder. If you do, your choosen "
+"sort id will be used to identify your choosen additives in the frontend so "
+"you want to make sure to have unique identifiers/sort id's"
 
 #: ../inc/admin.setup.default.options.inc.php:31
 msgid "regular"
@@ -2084,8 +2153,8 @@ msgstr ""
 "added-feedback\")"
 
 #: ../inc/admin.setup.default.options.inc.php:449
-msgid "item added"
-msgstr "item added"
+msgid "<div>&#10004;</div>item added"
+msgstr "<div>&#10004;</div>item added"
 
 #: ../inc/admin.setup.default.options.inc.php:452
 msgid "Menu Pagination : previous page"
@@ -2609,6 +2678,9 @@ msgstr "Cart visible on page when scrolling ?"
 #: ../views/widget-admin.php:120
 msgid "See also WPPizza->Layout for additional options"
 msgstr "See also WPPizza->Layout for additional options"
+
+#~ msgid "item added"
+#~ msgstr "item added"
 
 #~ msgid ""
 #~ "<b>Surcharges:</b> generate a dropdown of applicable surcharges as comma/"

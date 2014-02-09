@@ -73,10 +73,11 @@ jQuery(document).ready(function($){
 			/**wrap in wraper div which is then set to height of cart to stop things jumping around**/
 			wppizzaCartStickySelf[e].wrap( "<div class='wppizza-cart-wrap'></div>" );
 			
-			wppizzaCartStickyVars[e]=wppizzaCartStickySelf[e].css(["backgroundColor","width","height"]);
+			wppizzaCartStickyVars[e]=wppizzaCartStickySelf[e].css(["backgroundColor"]);
 			wppizzaCartStickyVars[e]['offset-top']= wppizzaCartStickySelf[e].offset().top;/*offset from top of page**/
 			wppizzaCartStickyVars[e]['state']='';/**initialize state so - when set below - we dont ever need do the same thing multiple times**/
-			wppizzaCartStickyVars[e]['height-int']=parseInt(wppizzaCartStickyVars[e]['height']);/*make sure we also have height an integer*/
+			wppizzaCartStickyVars[e]['height-int']=wppizzaCartStickyVars[e].height();/*make sure we also have height an integer and call it height-int instead of just height or jQuery 1.8.3 gets confused when SETTING height*/
+			wppizzaCartStickyVars[e]['width-int']=wppizzaCartStickyVars[e].width();/*make sure we also have width an integer and call it width-int instead of just width or jQuery 1.8.3 gets confused when SETTING width*/
 			
 			/**set limit bottom**/
 			if(wppizzaCartStickyLimitBottomElm && wppizzaCartStickyLimitBottom>(wppizzaCartStickyVars[e]['offset-top']+wppizzaCartStickyVars[e]['height-int'])){
@@ -87,8 +88,8 @@ jQuery(document).ready(function($){
 			wppizzaCartStickyParent[e] = wppizzaCartStickySelf[e].parent();
 			
 			/*set distinct width of element so we dont have to set it all the time when scrolling or setting fixed position*/
-			wppizzaCartStickySelf[e].width(wppizzaCartStickyVars[e]['width']);
-			wppizzaCartStickyParent[e].height(wppizzaCartStickyVars[e]['height']);
+			wppizzaCartStickySelf[e].width(wppizzaCartStickyVars[e]['width-int']);
+			wppizzaCartStickyParent[e].height(wppizzaCartStickyVars[e]['height-int']);
 		});
 	}
 	/***********************************************

@@ -80,15 +80,8 @@
 			$options['layout']['sticky_cart_margin_top']=absint($input['layout']['sticky_cart_margin_top']);
 			$options['layout']['sticky_cart_background']=preg_replace("/[^a-zA-Z0-9#]/","",$input['layout']['sticky_cart_background']);
 			$options['layout']['sticky_cart_limit_bottom_elm_id']=preg_replace("/[^a-zA-Z0-9_-]/","",$input['layout']['sticky_cart_limit_bottom_elm_id']);
-			
-
-			
 			$options['layout']['jquery_fb_add_to_cart'] = !empty($input['layout']['jquery_fb_add_to_cart']) ? true : false;
 			$options['layout']['jquery_fb_add_to_cart_ms']=absint($input['layout']['jquery_fb_add_to_cart_ms']);
-			
-			
-			
-
 			$options['opening_times_format']['hour']=wppizza_validate_string($input['opening_times_format']['hour']);
 			$options['opening_times_format']['separator']=wppizza_validate_string($input['opening_times_format']['separator']);
 			$options['opening_times_format']['minute']=wppizza_validate_string($input['opening_times_format']['minute']);
@@ -235,9 +228,13 @@
 			$options['additives'] = array();//initialize array
 			if(isset($input['additives'])){
 			foreach($input['additives'] as $a=>$b){
-				$options['additives'][$a]=wppizza_validate_string($b);
+				if(trim($b['name'])!=''){
+					$sort= ($b['sort']!='') ? wppizza_validate_int_only($b['sort']) : '';
+					$options['additives'][$a]=array('sort'=>$sort,'name'=>wppizza_validate_string($b['name']));
+				}
 			}}
 		}
+	
 		/**validate localization ***/
 		if(isset($_POST[''.$this->pluginSlug.'_localization'])){
 			if(isset($input['localization'])){

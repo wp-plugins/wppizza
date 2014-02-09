@@ -74,6 +74,8 @@
 	[order history]
 *********************/
 .wppizza-history-wrap .form-table th{display:none}
+#wppizza_history_totals{float:right;font-weight:600;font-size:100%}
+#wppizza_history_totals_getall{font-size:80%}
 #wppizza_history_search{border:1px solid #999999;margin-bottom:10px;margin-top:10px;width: 100%;line-height: 40px;height: 40px;padding: 0 10px;border-color: #CECECE;}
 #wppizza_history_orders>table{border:1px solid #999999;margin-bottom:10px}
 #wppizza_history_orders .wppizza-orders-head{background-color:#CECECE}

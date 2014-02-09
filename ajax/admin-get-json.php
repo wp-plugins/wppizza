@@ -124,6 +124,7 @@ $output='';
 	/**show get orders**/
 	if($_POST['vars']['field']=='get_orders'){
 		$output='';
+		$totalPriceOfShown=0;
 		global $wpdb;
 		if($_POST['vars']['limit']>0){$limit=' limit 0,'.$_POST['vars']['limit'].'';}else{$limit='';}
 		$allOrders = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix . $this->pluginOrderTable." WHERE payment_status IN ('COD','COMPLETED') ORDER BY id DESC ".$limit." ");
@@ -152,6 +153,11 @@ $output='';
 
 				$customOrderStatus=wppizza_custom_order_status();
 				foreach ( $allOrders as $orders ){
+					/**add to total ordered amount of shown items**/
+					$orderDet=maybe_unserialize($orders->order_ini);
+					$totalPriceOfShown+=(float)$orderDet['total'];
+					/*******************************************/
+					
 					$output.="<tr class='wppizza-ord-status-".strtolower($orders->order_status)."'>";
 						$output.="<td style='white-space:nowrap'>";
 							$output.= date("d-M-Y H:i:s",strtotime($orders->order_date));
@@ -180,12 +186,10 @@ $output='';
 								}
 							$output.="</select>";
 
-
 							//$output.="<br/>";
 							//$output.="<a href='javascript:void()' id='wppizza_order_reject'>".__('Reject with email to customer', $this->pluginLocale)."</a>";
 							//$output.="<span id='wppizza_order_rejected-".$orders->id."'>";
 							//$output.="</span>";
-
 
 							$output.="<br/>";
 							$output.="".__('Last Status Update', $this->pluginLocale).":<br />";
@@ -237,6 +241,35 @@ $output='';
 		}else{
 			$output.="<h1 style='text-align:center'>".__('no orders yet :(', $this->pluginLocale)."</h1>";
 		}
+		
+		$obj['orders']=$output;
+		
+		$obj['totals']=__('Total of shown orders', $this->pluginLocale).': '.$this->pluginOptions['order']['currency_symbol'].' '.wppizza_output_format_price($totalPriceOfShown).'';
+		$obj['totals'].='<br /><a href="javascript:void(0)" id="wppizza_history_totals_getall">'.__('show total of all orders', $this->pluginLocale).'</a>';
+		
+		print"".json_encode($obj)."";
+	exit();		
+	}
+	/*****************************************************
+		[order history get totals]
+	*****************************************************/
+	/**show get orders**/
+	if($_POST['vars']['field']=='get_orders_total'){
+		$totalPriceAll=0;
+		global $wpdb;
+		$allOrders = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix . $this->pluginOrderTable." WHERE payment_status IN ('COD','COMPLETED') ORDER BY id DESC ");	
+		if(is_array($allOrders) && count($allOrders)>0){
+			foreach ( $allOrders as $orders ){
+				/**add to total ordered amount of shown items**/
+				$orderDet=maybe_unserialize($orders->order_ini);
+				$totalPriceAll+=(float)$orderDet['total'];
+				/*******************************************/
+			}
+		}
+		
+		$obj['totals']=__('total all orders', $this->pluginLocale).': '.$this->pluginOptions['order']['currency_symbol'].' '.wppizza_output_format_price($totalPriceAll).'';
+		print"".json_encode($obj)."";
+	exit();		
 	}
 	/********************************************
 		[order history -> update order status]

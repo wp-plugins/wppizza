@@ -19,7 +19,8 @@
 			echo '<h4>'.__('Define a selection of sizes that might be available per item.', $this->pluginLocale).'</h4>';
 		}	
 		if($v['id']=='additives'){
-			echo '<h4>'.__('Add any additives (or other notes) that a meal may have and tick the relevant box(es) of any meal that contain these additives ', $this->pluginLocale).'</h4>';
+			echo '<h4>'.__('Add any additives (or other notes) that a meal may have and tick the relevant box(es) of any meal that contains these additives ', $this->pluginLocale).'</h4>';
+			echo"<p class='description'>".__('by default, additives will be sorted alphabetically.<br/>However, you can use the "sort" field to customise the sortorder. If you do, your choosen sort id will be used to identify your choosen additives in the frontend so you want to make sure to have unique identifiers/sort id\'s', $this->pluginLocale)."</p>";	
 		}
 		if($v['id']=='localization'){
 			//currently not in use

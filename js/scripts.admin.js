@@ -302,10 +302,21 @@ jQuery(document).ready(function($){
 		e.preventDefault();
 		var limit=$('#history_orders_limit').val();
 		jQuery.post(ajaxurl , {action :'wppizza_admin_json',vars:{'field':'get_orders','limit':limit}}, function(response) {
-			$('#wppizza_history_orders').html(response);
+			$('#wppizza_history_orders').html(response.orders);
+			$('#wppizza_history_totals').html(response.totals);
 			$('#wppizza-orders-polling').removeClass();
-		},'html').error(function(jqXHR, textStatus, errorThrown) {alert("error : " + errorThrown);});
+		},'json').error(function(jqXHR, textStatus, errorThrown) {alert("error : " + errorThrown);});
 	});
+	/******************************
+	*	[get total of all orders]
+	******************************/
+	$(document).on('click', '#wppizza_history_totals_getall', function(e){
+		e.preventDefault();
+		var limit=$('#history_orders_limit').val();
+		jQuery.post(ajaxurl , {action :'wppizza_admin_json',vars:{'field':'get_orders_total'}}, function(response) {
+			$('#wppizza_history_totals').html(response.totals);
+		},'json').error(function(jqXHR, textStatus, errorThrown) {alert("error : " + errorThrown);});
+	});	
 	/******************************
 	*	[delete orders]
 	******************************/
