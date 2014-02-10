@@ -718,13 +718,15 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 				anyones edited templates, re-map key and name]
 			*******************************************************************/
 				$mapAdditives=array();
-				foreach($options['additives'] as $o=>$a){
-					if(is_array($a)){
-						if($a['sort']==''){$a['sort']=$o;}
-						$mapAdditives[$a['sort']]=$a['name'];
-					}else{
-						/**in case we have not yet re-saved the additives**/
-						$mapAdditives[$o]=$a;
+				if(isset($options['additives']) && is_array($options['additives'])){
+					foreach($options['additives'] as $o=>$a){
+						if(is_array($a)){
+							if($a['sort']==''){$a['sort']=$o;}
+							$mapAdditives[$a['sort']]=$a['name'];
+						}else{
+							/**in case we have not yet re-saved the additives**/
+							$mapAdditives[$o]=$a;
+						}
 					}
 				}
 				ksort($mapAdditives,SORT_STRING);				
@@ -921,6 +923,7 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 }
 function wppizza_additives_remap($meta){	
 	$convAdditives=array();
+	if(isset($meta['additives']) && is_array($meta['additives'])){
 	foreach($meta['additives'] as $o=>$a){
 		if(is_array($this->pluginOptions['additives'][$o])){
 			$thisAdditiveSort=$this->pluginOptions['additives'][$o]['sort'];
@@ -931,6 +934,7 @@ function wppizza_additives_remap($meta){
 		}else{/*in case we still have old vars*/
 			$convAdditives[$o]=$a;
 		}
+	}
 	}
 	ksort($convAdditives,SORT_STRING);
 	$meta['additives']=$convAdditives;	

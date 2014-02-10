@@ -76,8 +76,8 @@ jQuery(document).ready(function($){
 			wppizzaCartStickyVars[e]=wppizzaCartStickySelf[e].css(["backgroundColor"]);
 			wppizzaCartStickyVars[e]['offset-top']= wppizzaCartStickySelf[e].offset().top;/*offset from top of page**/
 			wppizzaCartStickyVars[e]['state']='';/**initialize state so - when set below - we dont ever need do the same thing multiple times**/
-			wppizzaCartStickyVars[e]['height-int']=wppizzaCartStickyVars[e].height();/*make sure we also have height an integer and call it height-int instead of just height or jQuery 1.8.3 gets confused when SETTING height*/
-			wppizzaCartStickyVars[e]['width-int']=wppizzaCartStickyVars[e].width();/*make sure we also have width an integer and call it width-int instead of just width or jQuery 1.8.3 gets confused when SETTING width*/
+			wppizzaCartStickyVars[e]['height-int']=wppizzaCartStickySelf[e].height();/*make sure we also have height an integer and call it height-int instead of just height or jQuery 1.8.3 gets confused when SETTING height*/
+			wppizzaCartStickyVars[e]['width-int']=wppizzaCartStickySelf[e].width();/*make sure we also have width an integer and call it width-int instead of just width or jQuery 1.8.3 gets confused when SETTING width*/
 			
 			/**set limit bottom**/
 			if(wppizzaCartStickyLimitBottomElm && wppizzaCartStickyLimitBottom>(wppizzaCartStickyVars[e]['offset-top']+wppizzaCartStickyVars[e]['height-int'])){
