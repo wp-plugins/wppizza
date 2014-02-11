@@ -60,7 +60,7 @@ class WPPIZZA_EDD_SL{
 			$licenseNew=trim(wppizza_validate_string($_POST['wppizza']['gateways'][$gatewayOptionsName]['GatewayEDDLicense']));/*posted license number**/
 			/**defaults/previously set vars,  if no action taken**/	
 			$edd['error']=false;
-			$edd['status']=$gatewayOptions['GatewayEDDStatus']['lState'];/*current license status**/					
+			$edd['status']=!empty($gatewayOptions['GatewayEDDStatus']['lState']) ? $gatewayOptions['GatewayEDDStatus']['lState'] : '';/*current license status**/					
 			/***deactivate currently set license first, if it was not '' anyway and new one is different***/
 			if($licenseCurrent!='' && $licenseNew!=$licenseCurrent && $edd['status']=='valid'){
 				$edd=$this->edd_action('deactivate_license',$licenseCurrent,$gwEddName,$gwEddUrl);
@@ -235,8 +235,6 @@ class WPPIZZA_EDD_SL{
 	*
 	*
 	********************************************************************************/
-
-	
 	function edd_action($action,$license,$eddName,$eddUrl){
 		$api_params = array(
 			'edd_action'=> $action,

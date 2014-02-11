@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.2, WP 3.3 
 Tested up to: 3.8.1
-Stable tag: 2.8.8.1
+Stable tag: 2.8.8.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -121,6 +121,11 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 
 == Changelog ==
+
+2.8.8.2   
+* eliminated some more php notices  
+* made sticky/scrolling cart work when using 3rd party cache plugins (and wppizza->settings->"I am using a caching plugin" has been enabled)   
+11th February 2014   
 
 2.8.8.1   
 * eliminated php warning when no additive was defined  
