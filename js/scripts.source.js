@@ -353,9 +353,9 @@ jQuery(document).ready(function($){
 			if(self.attr('id')=='wppizza-order-pickup-js' && selfValue==true){
 				alert(wppizza.msg.pickup);
 			}
-			jQuery.post(wppizza.ajaxurl , {action :'wppizza_json',vars:{'type':'order-pickup','value':selfValue}}, function(response) {
-				window.location.href=window.location.href;/*make sure page gest reloaded without confirm*/
-			},'text').error(function(jqXHR, textStatus, errorThrown) {alert("error : " + errorThrown);console.log(jqXHR.responseText);});
+			jQuery.post(wppizza.ajaxurl , {action :'wppizza_json',vars:{'type':'order-pickup','value':selfValue,'data':$('#wppizza-send-order').serialize(),'locHref':location.href,'urlGetVars':location.search}}, function(res) {
+				window.location.href=res.location;/*make sure page gest reloaded without confirm*/
+			},'json').error(function(jqXHR, textStatus, errorThrown) {alert("error : " + errorThrown);console.log(jqXHR.responseText);});
 	}});
 	/***********************************************
 	*
@@ -411,9 +411,9 @@ jQuery(document).ready(function($){
 			/**only update/refresh if the value has actually changed**/
 	  		if(wppizzaCTipsCurr!=wppizzaCTipsNew){
 	  			$("#wppizza-send-order").prepend('<div id="wppizza-loading" style="opacity:0.8"></div>');
-				jQuery.post(wppizza.ajaxurl , {action :'wppizza_json',vars:{'type':'add_tips','data':$('#wppizza-send-order').serialize(),'locHref':location.href,'urlGetVars':location.search}}, function(location) {
-					window.location.href=location;/*make sure page gest reloaded without confirm*/
-				},'text');
+				jQuery.post(wppizza.ajaxurl , {action :'wppizza_json',vars:{'type':'add_tips','data':$('#wppizza-send-order').serialize(),'locHref':location.href,'urlGetVars':location.search}}, function(res) {
+				window.location.href=res.location;/*make sure page gest reloaded without confirm*/
+				},'json');
 	  		}
 		}
 	});

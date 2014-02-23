@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.2, WP 3.3 
 Tested up to: 3.8.1
-Stable tag: 2.8.8.2
+Stable tag: 2.8.8.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -121,6 +121,17 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 
 == Changelog ==
+
+
+2.8.8.3   
+* added filter (wppizza_filter_summary) to summary(wppizza_order_summary)  to selectively being able to overwrite variables in cart and orderpage  
+* added filter (wppizza_filter_is_open) to summary(wppizza_order_summary)  to selectively being able to force the shop to be open    
+* entered details on order page also stay if switching between self-pickup and delivery (see also using $_SESSIONS instead of $_GET now)    
+* using $_SESSIONS instead of $_GET variables to keep user info on orderpage when adding tips or changing from self-pickup to delivery and vice versa  
+* max decimals in any percentages settings now 5 instead of just 2 
+* BUGFIX: fixed some issues in some circumstances where percentages were not being saved with decimals depending on language used and hide decimals being on   
+23rd February 2014   
+
 
 2.8.8.2   
 * eliminated some more php notices  

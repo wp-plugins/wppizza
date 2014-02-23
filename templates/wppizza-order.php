@@ -27,6 +27,7 @@ if(is_user_logged_in() ) {
 	}
 }
 /***if we are adding get vars to the url (if a tip has been added for instance the page will be refreshed with vars appended), force prefill to be enabled and set values accordingly. ADDED IN VERSION 2.8.6**/
+/*$_GET will also include session data set in $_SESSION[$this->pluginSessionGlobal]['userdata'] as they will not be appended to the url anymore (it's just ugly). MODIFIED IN VERSION 2.8.8.3, but no changes made to this file */
 foreach($formelements as $elmKey=>$elm){
 	if(isset($_GET[$elm['key']])){
 		$formelements[$elmKey]['prefill']=1;

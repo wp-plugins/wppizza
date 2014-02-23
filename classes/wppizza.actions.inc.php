@@ -40,8 +40,7 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 		*************************************************************************/
 		if(!is_admin()){
 			/***enqueue frontend scripts and styles***/
-			add_action('wp_enqueue_scripts', array( $this, 'wppizza_register_scripts_and_styles'),$this->pluginOptions['layout']['css_priority']);
-			
+			add_action('wp_enqueue_scripts', array( $this, 'wppizza_register_scripts_and_styles'),$this->pluginOptions['layout']['css_priority']);			
 			/***************
 				[filters]
 			***************/
@@ -907,6 +906,13 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 			$txt = $options['localization'];
 			/**formelements from settings->order form*/
 			$formelements=$options['order_form'];
+			/**set session user vars as get vars to prefill form fields***/
+			if(isset($_SESSION[$this->pluginSessionGlobal]['userdata']) && is_array($_SESSION[$this->pluginSessionGlobal]['userdata'])){
+				foreach($_SESSION[$this->pluginSessionGlobal]['userdata'] as $k=>$v){
+					$_GET[$k]=$v;
+				}
+			}
+			
 			sort($formelements);
 				/*check if the file exists in the theme, otherwise serve the file from the plugin directory if possible*/
 				if ($template_file = locate_template( array (''.$this->pluginSlug.'-order.php' ))){
@@ -1081,6 +1087,10 @@ public function wppizza_require_common_input_validation_functions(){
 	    	$_SESSION[$this->pluginSession]['items']=array();
 	    	/*gross sum of all items in cart,before discounts etc*/
 	    	$_SESSION[$this->pluginSession]['total_price_items']=0;
+	    }
+	    if(!isset($_SESSION[$this->pluginSessionGlobal])){
+	    	/**userdata like address etc*****/
+	    	$_SESSION[$this->pluginSessionGlobal]=array();	    	
 	    }
 	}
 	/*******************************************************
@@ -1300,6 +1310,7 @@ public function wppizza_require_common_input_validation_functions(){
 		wp_localize_script( $this->pluginSlug,$this->pluginSlug, $localized_array );
 
     }
+
 /*********************************************************
 *
 *		[add filter functions]

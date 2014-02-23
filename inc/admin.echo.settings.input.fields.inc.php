@@ -477,7 +477,7 @@ $options = $this->pluginOptions;
 			if($field=='order_pickup'){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[order][".$field."]' type='checkbox'  ". checked($options['order'][$field],true,false)." value='1' /> ".__('tick to enable', $this->pluginLocale)."";
 
-				echo "<br/>".__('Discount for self-pickup ?', $this->pluginLocale)." <input id='order_pickup_discount' name='".$this->pluginSlug."[order][order_pickup_discount]' size='3' type='text' value='".wppizza_output_format_price($options['order']['order_pickup_discount'])."' /> ".__('in % - 0 to disable', $this->pluginLocale)."";
+				echo "<br/>".__('Discount for self-pickup ?', $this->pluginLocale)." <input id='order_pickup_discount' name='".$this->pluginSlug."[order][order_pickup_discount]' size='5' type='text' value='".wppizza_output_format_float($options['order']['order_pickup_discount'],'percent')."' /> ".__('in % - 0 to disable', $this->pluginLocale)."";
 
 				echo "<br/><input id='order_pickup_alert' name='".$this->pluginSlug."[order][order_pickup_alert]' type='checkbox'  ". checked($options['order']['order_pickup_alert'],true,false)." value='1' /> ".__('enable javascript alert when user selects self pickup (set corresponding text in localization)', $this->pluginLocale)."";
 			}
@@ -502,7 +502,7 @@ $options = $this->pluginOptions;
 							echo"".__('If order total >', $this->pluginLocale).":";
 							echo"<input name='".$this->pluginSlug."[order][".$field."][".$k."][discounts][".$l."][min_total]' size='3' type='text' value='".wppizza_output_format_price($options['order'][$field][$k]['discounts'][$l]['min_total'],$optionsDecimals)."' />";
 							echo"".__('discount', $this->pluginLocale).":";
-							echo"<input name='".$this->pluginSlug."[order][".$field."][".$k."][discounts][".$l."][discount]' size='3' type='text' value='".wppizza_output_format_price($options['order'][$field][$k]['discounts'][$l]['discount'])."' />";
+							echo"<input name='".$this->pluginSlug."[order][".$field."][".$k."][discounts][".$l."][discount]' size='5' type='text' value='".wppizza_output_format_float($options['order'][$field][$k]['discounts'][$l]['discount'],'percent')."' />";
 							echo"".__('percent', $this->pluginLocale)."";
 							echo"<br />";
 						}
@@ -543,7 +543,7 @@ $options = $this->pluginOptions;
 
 
 			if($field=='item_tax'){
-				echo "<input id='".$field."' name='".$this->pluginSlug."[order][".$field."]' size='2' type='text' value='".wppizza_output_format_price($options['order'][$field])."' />%";
+				echo "<input id='".$field."' name='".$this->pluginSlug."[order][".$field."]' size='5' type='text' value='".wppizza_output_format_float($options['order'][$field],'percent')."' />%";
 				echo"<br/>";
 				echo"<input name='".$this->pluginSlug."[order][shipping_tax]' type='checkbox'  ". checked($options['order']['shipping_tax'],true,false)." value='1' />";
 				echo" ".__('apply tax to delivery/shipping  too', $this->pluginLocale)."";

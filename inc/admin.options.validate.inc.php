@@ -133,7 +133,7 @@
 			$options['order']['orderpage_exclude']=!empty($input['order']['orderpage_exclude']) ? true : false;
 			$options['order']['order_pickup']=!empty($input['order']['order_pickup']) ? true : false;
 			$options['order']['order_pickup_alert']=!empty($input['order']['order_pickup_alert']) ? true : false;
-			$options['order']['order_pickup_discount']=wppizza_validate_float_only($input['order']['order_pickup_discount']);
+			$options['order']['order_pickup_discount']=wppizza_validate_float_pc($input['order']['order_pickup_discount']);
 			$options['order']['order_min_for_delivery']=wppizza_validate_float_only($input['order']['order_min_for_delivery']);
 
 			$options['order']['order_pickup_display_location'] = wppizza_validate_int_only($input['order']['order_pickup_display_location']);
@@ -163,14 +163,23 @@
 				foreach($b as $c=>$d){
 					foreach($d as $e=>$f){
 						foreach($f as $g=>$h){
-							$options['order']['discounts'][$a][$c][$e][$g]=wppizza_validate_float_only($h,2);
+
+//print"".$a."|".$g."|".$h."".PHP_EOL;
+							if($a=='percentage' && $g=='discount'){
+								$options['order']['discounts'][$a][$c][$e][$g]=wppizza_validate_float_pc($h);
+							}else{
+								$options['order']['discounts'][$a][$c][$e][$g]=wppizza_validate_float_only($h,2);
+							}
 						}
 					}
 				}
 			}
 
+
+//exit();
+
 			$options['order']['delivery_calculation_exclude_item'] = !empty($input['order']['delivery_calculation_exclude_item']) ? $input['order']['delivery_calculation_exclude_item'] : array();
-			$options['order']['item_tax']=wppizza_validate_float_only($input['order']['item_tax']);
+			$options['order']['item_tax']=wppizza_validate_float_pc($input['order']['item_tax'],5);//5 decimals should really be enough i would have thought
 			$options['order']['shipping_tax'] = !empty($input['order']['shipping_tax']) ? true : false;
 
 

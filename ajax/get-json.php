@@ -120,6 +120,11 @@ if(isset($_POST['vars']['type']) && (($_POST['vars']['type']=='add' || $_POST['v
 *
 ***************************************************************/
 if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='order-pickup'){
+	
+	
+	/*****************************************
+		[set session variable]
+	*****************************************/
 	if($_POST['vars']['value']=='true'){
 		$_SESSION[$this->pluginSession]['selfPickup']=1;
 	}else{
@@ -127,6 +132,68 @@ if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='order-pickup'){
 			unset($_SESSION[$this->pluginSession]['selfPickup']);
 		}
 	}
+	/*****************************************
+		set default location -> to be overwritten below if required
+	*****************************************/
+	$location=$_POST['vars']['locHref'];
+
+	/*****************************************
+		[get and parse all post variables
+		provided we are actually on the order
+		page, otherwise there's nothing to do
+	*****************************************/
+	if(count($_POST['vars']['data'])>0){
+		$params = array();
+		parse_str($_POST['vars']['data'], $params);
+		/**selects are zero indexed*/
+		foreach($options['order_form'] as $elmKey=>$elm){
+			if($elm['type']=='select' && isset($params[$elm['key']])){
+				foreach($elm['value'] as $a=>$b){
+					if($params[$elm['key']]==$b){
+						$params[$elm['key']]=''.$a.'';
+					}
+				}
+			}
+		}
+		
+		
+		/******************************************
+			[get entered data to re-populate input fields but loose irrelevant vars
+		********************************************/
+		/**empty first and start over**/
+		if(isset($_SESSION[$this->pluginSessionGlobal]['userdata'])){
+			unset($_SESSION[$this->pluginSessionGlobal]['userdata']);
+		}
+		foreach($options['order_form'] as $oForm){
+			if($oForm['key']!='ctips'){/**tips should not be in the global user session**/
+				if(isset($params[$oForm['key']])){
+					$_SESSION[$this->pluginSessionGlobal]['userdata'][$oForm['key']]=$params[$oForm['key']];
+				}
+			}
+		}	
+		
+		
+		/*****************************************
+			[parse and add all get variables
+		*****************************************/
+		$getParameters = array();
+		if($_POST['vars']['urlGetVars']!=''){
+			parse_str(substr($_POST['vars']['urlGetVars'],1), $getParameters);/*loose the '?'  */
+		}	
+	
+		/*********build the location url making sure permalinks are taken care of too**/
+		$location='';
+		$locUrl=explode('?',$_POST['vars']['locHref']);
+		$location.=$locUrl[0];/*get url before get vars*/
+		//$postAndGetParameters=array_merge($getParameters,$params);
+		if(count($getParameters)>0){
+			/*add ? and build query*/
+			$location.="?".http_build_query($getParameters)."";
+		}
+	}
+	$vars['location']=$location;
+	
+	print"".json_encode($vars)."";
 exit();
 }
 /***************************************************************
@@ -178,6 +245,7 @@ if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='add_tips'){
 			}
 		}
 	}
+	
 	/*****************************************
 		[parse and add all get variables
 	*****************************************/
@@ -192,26 +260,38 @@ if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='add_tips'){
 	global $wpdb;
 	/*might as well delete the previously initialized order. So we do not delete arbitrary stuff when messing with the hash, restrict to INITIALIZED and orders of 3 minutes or less. Ought to be reasonably safe**/
 	$res=$wpdb->query( $wpdb->prepare( "DELETE FROM ".$wpdb->prefix . $this->pluginOrderTable." WHERE hash=%s AND payment_status='INITIALIZED' AND order_date > TIMESTAMPADD(MINUTE,-3,NOW()) ",$params['wppizza_hash']));
-	/**add to session*/
+	
+	/**add tips distincly session*/
 	$_SESSION[$this->pluginSession]['tips']=$tips;
 
-	/**get entered data to re-populate input fields but loose irrelevant vars**/
-	if(isset($params['wppizza-gateway'])){unset($params['wppizza-gateway']);}
-	if(isset($params['wppizza_hash'])){unset($params['wppizza_hash']);}
-	if(isset($params['ctips'])){unset($params['ctips']);}/*tips have to be POSTed and are set via session*/
-
+	/******************************************
+		[get entered data to re-populate input fields but loose irrelevant vars
+	********************************************/
+	/**empty first and start over**/
+	if(isset($_SESSION[$this->pluginSessionGlobal]['userdata'])){
+		unset($_SESSION[$this->pluginSessionGlobal]['userdata']);
+	}
+	foreach($options['order_form'] as $oForm){
+		if($oForm['key']!='ctips'){/**tips should not be in the global user session**/
+			if(isset($params[$oForm['key']])){
+				$_SESSION[$this->pluginSessionGlobal]['userdata'][$oForm['key']]=$params[$oForm['key']];
+			}
+		}
+	}	
 
 	/*********build the location url making sure permalinks are taken care of too**/
 	$location='';
 	$locUrl=explode('?',$_POST['vars']['locHref']);
 	$location.=$locUrl[0];/*get url before get vars*/
-	$postAndGetParameters=array_merge($getParameters,$params);
-	if(count($postAndGetParameters)>0){
+	//$postAndGetParameters=array_merge($getParameters,$params);
+	if(count($getParameters)>0){
 		/*add ? and build query*/
-		$location.="?".http_build_query($postAndGetParameters)."";
+		$location.="?".http_build_query($getParameters)."";
 	}
 
-	print"".$location."";
+	$vars['location']=$location;
+		
+	print"".json_encode($vars)."";
 exit();
 }
 

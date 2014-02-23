@@ -784,7 +784,10 @@ function wppizza_order_summary($session,$options,$ajax=null){
 	/****************************************************
 		[check if we are open]
 	****************************************************/
-	$isOpen=wpizza_are_we_open($options['opening_times_standard'],$options['opening_times_custom'],$options['times_closed_standard']);
+	$isOpen=wpizza_are_we_open($options['opening_times_standard'],$options['opening_times_custom']=array(),$options['times_closed_standard']=array());
+
+	$isOpen = apply_filters('wppizza_filter_is_open', $isOpen);
+	
 	$summary['shopopen']=$isOpen;
 	$summary['button']='';
 	$summary['nocheckout']='';
@@ -845,6 +848,9 @@ function wppizza_order_summary($session,$options,$ajax=null){
 	if($options['layout']['cart_increase']){
 		$summary['increase_decrease']=1;
 	}
+	
+	$summary = apply_filters('wppizza_filter_summary', $summary);
+	
 return $summary;
 }
 /***************************************************

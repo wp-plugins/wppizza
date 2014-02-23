@@ -5,7 +5,7 @@ Description: Maintain your restaurant menu online and accept cash on delivery or
 Author: ollybach
 Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Author URI: http://www.wp-pizza.com
-Version: 2.8.8.2
+Version: 2.8.8.3
 License:
 
   Copyright 2012 ollybach (dev@wp-pizza.com)
@@ -66,7 +66,7 @@ class WPPizza extends WP_Widget {
 ********************************************************/
  function __construct() {
 	/**init constants***/
-	$this->pluginVersion='2.8.8.2';//increment in line with stable tag in readme and version above
+	$this->pluginVersion='2.8.8.3';//increment in line with stable tag in readme and version above
  	$this->pluginName="".WPPIZZA_NAME."";
  	$this->pluginSlug="".WPPIZZA_SLUG."";//set also in uninstall when deleting options
 	$this->pluginSlugCategoryTaxonomy="".WPPIZZA_TAXONOMY."";//also on uninstall delete wppizza_children as well as widget
@@ -79,15 +79,23 @@ class WPPizza extends WP_Widget {
 	/**blog charset*/
 	$this->blogCharset=get_bloginfo('charset');
 
-	/**set session per blogid when multisite and enabled to avoid having same cart contents between different network sites*/
+	/********************************************************************************************
+		set session per blogid when multisite and enabled to avoid having same cart 
+		contents between different network sites
+	*********************************************************************************************/
 	if(is_multisite() && $this->pluginOptions['plugin_data']['wp_multisite_session_per_site']){
 		global $blog_id;
 		$this->pluginSession=$this->pluginSlug.''.$blog_id;
 	}else{
 		$this->pluginSession=$this->pluginSlug;
 	}
-
-	/*classname and description*/
+	/**session name for user data for example such as address etc that keeps it's values across multisites**/
+		$this->pluginSessionGlobal=$this->pluginSlug.'Global';
+		
+		
+	/***************************************
+		classname and description
+	***************************************/
     $widget_opts = array (
         'classname' => WPPIZZA_CLASS,
         'description' => __('A Pizza Restaurant Plugin', $this->pluginLocale)

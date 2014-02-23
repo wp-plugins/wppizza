@@ -48,6 +48,27 @@
 		if(is_int($round)){$str=round($str,$round);}
 		return $str;
 	}
+	
+	
+	/*** currently this is just a fix to deal with percentages/sales tax that have 3 decimals as otherwsie it would be recognised with the function above as being 8625% instead of 8.625% ***/
+	/*** i need to write something else to take care of all these scenarios (i.e also when people choose to not display decimals etc)***/
+	/*** for now , the below will have to do for the salestax**/
+	function wppizza_validate_float_pc($str,$round=5){
+		$str=preg_replace('/[^0-9.,]*/','',$str);/*first get  rid of all chrs that should definitely not be in there*/	
+		$str=str_replace(array('.',','),'#',$str);/*make string we can explode*/
+		$floatArray=explode('#',$str);/*explode so we know the last bit might be decimals*/
+		$exLength=count($floatArray);
+		$str='';
+		for($i=0;$i<$exLength;$i++){
+			if($i>0 && $i==($exLength-1)){
+				$str.='.';//add decimal point if needed
+			}
+			$str.=''.$floatArray[$i].'';
+		}
+		$str=(float)$str;
+		if(is_int($round)){$str=round($str,$round);}		
+	return $str;	
+	}
 /*****************************************************
 * Validates a-zA_Z
 * @str the input to check, @limit to limit length of output
