@@ -784,7 +784,7 @@ function wppizza_order_summary($session,$options,$ajax=null){
 	/****************************************************
 		[check if we are open]
 	****************************************************/
-	$isOpen=wpizza_are_we_open($options['opening_times_standard'],$options['opening_times_custom']=array(),$options['times_closed_standard']=array());
+	$isOpen=wpizza_are_we_open($options['opening_times_standard'],$options['opening_times_custom'],$options['times_closed_standard']);
 
 	$isOpen = apply_filters('wppizza_filter_is_open', $isOpen);
 	
