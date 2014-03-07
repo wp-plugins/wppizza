@@ -383,9 +383,27 @@ jQuery(document).ready(function($){
 
 	/***********************************************
 	*
-	*	[expand image on hover - one day....]
+	*	[order form: login or continue as guest]
 	*
 	***********************************************/
+	$(document).on(''+wppizzaClickEvent+'', '#wppizza-login,#wppizza-login-cancel', function(e){
+		$("#wppizza-user-login-action").toggle(300);
+		$("#wppizza-user-login-option>span>a").toggle();		
+	});
+	$(document).on(''+wppizzaClickEvent+'', '#wppizza_btn_login', function(e){
+		$("#wppizza-user-login-action").append('<div id="wppizza-loading"></div>');		
+	});	
+	$(document).on('change', '#wppizza_account', function(e){
+		$("#wppizza-user-register-info" ).toggle(200);	
+		$(".wppizza-login-error").remove();	
+		
+	});	
+	/****insert nonce too via js *******/
+	if($("#wppizza-send-order").length>0){
+		jQuery.post(wppizza.ajaxurl , {action :'wppizza_json',vars:{'type':'nonce','val':'register'}}, function(nonce) {
+			$('#wppizza-create-account').append(nonce);
+		},'html').error(function(jqXHR, textStatus, errorThrown) {alert("error : " + errorThrown);console.log(jqXHR.responseText);});
+	}
 
 
 	/*******************************************************************
@@ -418,6 +436,10 @@ jQuery(document).ready(function($){
 		}
 	});
 	/*******************************************
+	*	[validation login]
+	*******************************************/
+	$("#wppizza-login-frm").validate({});	
+	/*******************************************
 	*	[ini validation]
 	*******************************************/
 	$("#wppizza-send-order").validate({
@@ -448,20 +470,59 @@ jQuery(document).ready(function($){
 						//console.log(response);
 					},'html');
 				}
-				/**cod->transmit form via ajax if cod or forced by gw settings (i.e $this->gatewayTypeSubmit = 'ajax')*/
-				if(currVal=='cod' || hasClassAjax){
-					self.prepend('<div id="wppizza-loading"></div>');
-					jQuery.post(wppizza.ajaxurl , {action :'wppizza_json',vars:{'type':'sendorder','data':self.serialize()}}, function(response) {
-						$('#wppizza-send-order #wppizza-loading').remove();
-						self.html('<div id="wppizza-order-received">'+response+'</div>');
-					},'html').error(function(jqXHR, textStatus, errorThrown) {$('#wppizza-send-order #wppizza-loading').remove();alert("error : " + errorThrown);console.log(jqXHR.responseText);});
-					return false;
-				}else{
-					self.prepend('<div id="wppizza-loading" style="opacity:0.8;"></div>');
-					form.submit();
+				
+				/***if we want to also register account check this first**/
+				var wppizzaLoginElm=$("#wppizza-user-login");
+				var wppizzaLoginErr=$(".wppizza-login-error");/*remove any previous errors*/
+				if(wppizzaLoginErr.length>0){
+					wppizzaLoginErr.remove();
+				}
+				
+				var wppizzaLoginSelect=$("input[type=radio][name='wppizza_account']:checked");
+								
+				wppizzaLoginElm.hide();
+				if(typeof wppizzaLoginSelect!=='undefined' && wppizzaLoginSelect.val()=='register'){
+					self.prepend('<div id="wppizza-loading"></div>');					
+					jQuery.post(wppizza.ajaxurl , {action :'wppizza_json',vars:{'type':'new-account','data':self.serialize()}}, function(response) {
+						/**account/email exists**/
+						if(typeof response.error!=='undefined'){
+							$('#wppizza-user-register-info').append(response.error);
+							$('#wppizza-send-order #wppizza-loading').remove();
+							wppizzaLoginElm.show();
+							return;
+						}
+						/***all is well. go ahead with stuff**/
+						if(typeof response.error==='undefined'){
+							wppizzaSelectSubmitType(self,currVal,hasClassAjax);
+						}
+					},'json');
+					return;
+				}else{				
+					/**we are not registering a new account, so just submit as planned**/
+					wppizzaSelectSubmitType(self,currVal,hasClassAjax);
 				}
 			}
 		})
+		
+		
+	/******************************
+	* submit via ajax or send form
+	*******************************/		
+	var wppizzaSelectSubmitType=function(self,currVal,hasClassAjax){
+		/**cod->transmit form via ajax if cod or forced by gw settings (i.e $this->gatewayTypeSubmit = 'ajax')*/
+		if(currVal=='cod' || hasClassAjax){
+			self.prepend('<div id="wppizza-loading"></div>');
+			$('#wppizza-user-login').empty().remove();
+			jQuery.post(wppizza.ajaxurl , {action :'wppizza_json',vars:{'type':'sendorder','data':self.serialize()}}, function(response) {
+				$('#wppizza-send-order #wppizza-loading').remove();
+				self.html('<div id="wppizza-order-received">'+response+'</div>');
+			},'html').error(function(jqXHR, textStatus, errorThrown) {$('#wppizza-send-order #wppizza-loading').remove();alert("error : " + errorThrown);console.log(jqXHR.responseText);});
+		}else{
+			self.prepend('<div id="wppizza-loading" style="opacity:0.8;"></div>');
+			form.submit();	
+		}
+	
+	};		
 	/******************************
 	* set error messages
 	*******************************/

@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.2, WP 3.3 
 Tested up to: 3.8.1
-Stable tag: 2.8.8.4
+Stable tag: 2.8.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -65,7 +65,9 @@ Note: you might want to start with  Option 1 first, as you can always use Option
 	
 	** to be able to add items to your shopping cart make sure that ALL pages that display your menu items have the shopping cart displayed somewhere, so: **  
 	- display the shoppingcart somewhere on those pages (typically in a sidebar) using the wppizza widget (using type:cart) or the following shortcode: [wppizza type='cart']  
-	- ** note: you will most likely NOT want to display the shopping cart on the final order page. If your theme does not allow to adjust this - via templates for example -  use one of the many WP plugins available that lets you choose which widget to display on which page**  
+	 
+	** note: you will most likely NOT want to display the shopping cart on the final order page. If your theme does not allow to adjust this - via templates for example -  use one of the many WP plugins available that lets you choose which widget to display on which page **  
+	
 	- if the cart displays "currently closed" adjust your opening times in wppizza->settings->openingtimes
 	- make sure the navigation to those pages gets displayed somewhere (this will normally already be the case - usually by some pagelist or menu ).
 
@@ -121,6 +123,15 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 
 == Changelog ==
+
+2.8.9  
+ADDED: order page - option to login, register new account on order or continue/order as guest [if not logged in already] (wppizza->order form settings "email" field must be set to enabled, required and Settings->General must have "anyone can register" enabled for registration of new account on order to work)    
+ADDED: Spanish Translation  
+Readme update  
+Maintenance  
+7th March 2014   
+
+
 
 2.8.8.4  
 BUGFIX: previous version broke distinctly set closing times during normal opening hours   
@@ -211,6 +222,7 @@ BUGFIX: previous version broke distinctly set closing times during normal openin
 * added notes section/field in order history  
 16th January 2014  
 
+
 2.8.5.2  
 * updated Hebrew translation (thanks Yair)  
 * added action hooks to after emails have been sent with order id as parameter  
@@ -218,9 +230,11 @@ BUGFIX: previous version broke distinctly set closing times during normal openin
 * fixed some minor character decoding issues  
 20th December 2013  
 
+
 2.8.5.1  
 * accidentally committed a development version (2.8.5) which had links to single posts displayed by default in the loop template . now fixed..
 13th December 2013  
+
 
 2.8.5  
 * added a bunch of action hooks to the loop templates  
@@ -815,6 +829,14 @@ if the auther doesnt want to or cannot do anything about it, you can also try ju
 * to change the name (i.e WPPizza) just add "define('WPPIZZA_NAME', 'The Name You Want');" to your wp-config.php 
 * to change the WPPizza Menu Icon in Admin Panel next to the Name just add "define('WPPIZZA_MENU_ICON', 'http://path/to/icon.png');" to your wp-config.php 
 	  
+
+
+= using a cache plugin =  
+
+* if you are using a cache plugin, you MUST exclude your order page from being cached  
+* you will probably also want to enable "I am using a caching plugin" in wppizza->settings  
+	  
+
 
 = How can I submit a bug, ask for help or request a new feature? =
 

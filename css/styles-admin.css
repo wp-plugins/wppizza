@@ -46,10 +46,11 @@
 *******************/
 .wppizza-order-form-wrap .form-table th{width:auto !important;}
 #wppizza_order_form tr.cemail>td{margin-bottom:0;padding-bottom:0}
-#wppizza_order_form th{vertical-align:top; width:auto !important; background-color:#DEDEDE;text-shadow:none}
+#wppizza_order_form th{vertical-align:top; width:auto !important; background-color:#DEDEDE;text-shadow:none;padding:5px;margin:5px}
 #wppizza_order_form {border:1px solid #999999;margin-bottom:10px}
 #wppizza_order_form tr:nth-child(odd){background:#EFEFEF;}
 #wppizza_order_form tr:nth-child(even){background:#FFFFFF;}
+#wppizza_order_form tr>td{padding:5px;margin:5px}
 /*toggled via js - not yet in use
 #wppizza_order_form tr.ctips,#wppizza_order_form tr.csurcharges{display:none}
 #wppizza_order_form .wppizza-order-form-footer{text-align:center}

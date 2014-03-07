@@ -189,6 +189,24 @@
 #wppizza-send-order #wppizza-ctips-btn{margin:2px 1px;width:auto;min-width:0;height:auto !important; padding:5px 7px !important;line-height:100%;float:right}
 #wppizza-send-order #wppizza-ctips-wrap-inner label.error{display:block}
 
+/*NEW IN VERSION 2.8.9*/
+/*************************************************
+*
+*	order page: login, login cancel , continue as guest or register elements
+*
+**************************************************/
+#wppizza-user-register-info{display:none;font-size:80%}
+#wppizza-user-register-info>.wppizza-login-error{font-size:120%}
+.wppizza-login-error{border-left: 4px solid #dd3d36;padding:5px;margin:5px;}
+#wppizza-user-login{overflow:auto;}
+#wppizza-user-login-action{border:1px dotted #CECECE;padding:5px;position:relative}
+#wppizza-login-frm{overflow:auto;}
+#wppizza-login-frm>span{display:inline-block;float:left;padding:5px 5px 5px 0;margin:0;}
+#wppizza-login-frm>span>div{font-size:80%;margin:0;padding:0;padding-left:5px}
+#wppizza-user-login-option span{display:inline-block;}
+#wppizza-user-login-action input{float:left;}
+#wppizza-user-login-action label.error{float:left;clear:both;color:#FF0000;padding:0 0 5px 0;font-size:90%}
+
 
 
 #wppizza-cart-contents{border:1px dotted #CECECE;padding:10px;}

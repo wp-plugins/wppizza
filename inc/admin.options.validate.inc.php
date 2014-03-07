@@ -163,8 +163,6 @@
 				foreach($b as $c=>$d){
 					foreach($d as $e=>$f){
 						foreach($f as $g=>$h){
-
-//print"".$a."|".$g."|".$h."".PHP_EOL;
 							if($a=='percentage' && $g=='discount'){
 								$options['order']['discounts'][$a][$c][$e][$g]=wppizza_validate_float_pc($h);
 							}else{
@@ -174,9 +172,6 @@
 					}
 				}
 			}
-
-
-//exit();
 
 			$options['order']['delivery_calculation_exclude_item'] = !empty($input['order']['delivery_calculation_exclude_item']) ? $input['order']['delivery_calculation_exclude_item'] : array();
 			$options['order']['item_tax']=wppizza_validate_float_pc($input['order']['item_tax'],5);//5 decimals should really be enough i would have thought
@@ -207,9 +202,6 @@
 				}else{
 					$options['order_form'][$a]['value'] = wppizza_strtoarray($input['order_form'][$a]['value']);
 				}
-
-
-
 			}
 		}
 
@@ -247,7 +239,7 @@
 		/**validate localization ***/
 		if(isset($_POST[''.$this->pluginSlug.'_localization'])){
 			if(isset($input['localization'])){
-			$allowHtml=array('thank_you_p','jquery_fb_add_to_cart_info');/*array of items to allow html (such as tinymce textareas) */
+			$allowHtml=array('thank_you_p','jquery_fb_add_to_cart_info','register_option_create_account_info','register_option_create_account_error');/*array of items to allow html (such as tinymce textareas) */
 			foreach($input['localization'] as $a=>$b){
 				/*add new value , but keep desciption (as its not editable on frontend)*/
 				if(in_array($a,$allowHtml)){$html=1;}else{$html=false;}

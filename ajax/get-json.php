@@ -42,7 +42,7 @@ if(isset($_POST['vars']['type']) && (($_POST['vars']['type']=='add' || $_POST['v
 		$meta_values = get_post_meta($itemVars[1],$this->pluginSlug,true);
 		$itemSizePrice=$meta_values['prices'][$itemVars[3]];
 		/**are we hiding pricetier name if only one available ?**/
-		if(count($meta_values['prices'])<=1 && $this->pluginOptions['layout']['hide_single_pricetier']==1){
+		if(count($meta_values['prices'])<=1 && $options['layout']['hide_single_pricetier']==1){
 			$itemSizeName='';
 		}else{
 			$itemSizeName=$options['sizes'][$itemVars[2]][$itemVars[3]]['lbl'];
@@ -100,8 +100,8 @@ if(isset($_POST['vars']['type']) && (($_POST['vars']['type']=='add' || $_POST['v
 
 	/**total tax on all items -> currently not used as we will be calculating tax AFTER any discounts**/
 	$_SESSION[$this->pluginSession]['total_items_tax']=0;
-	if($this->pluginOptions['order']['item_tax']>0){
-		$_SESSION[$this->pluginSession]['total_items_tax']=$totalitemprice/100*$this->pluginOptions['order']['item_tax'];
+	if($options['order']['item_tax']>0){
+		$_SESSION[$this->pluginSession]['total_items_tax']=$totalitemprice/100*$options['order']['item_tax'];
 	}
 
 
@@ -143,36 +143,12 @@ if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='order-pickup'){
 		page, otherwise there's nothing to do
 	*****************************************/
 	if(count($_POST['vars']['data'])>0){
-		$params = array();
-		parse_str($_POST['vars']['data'], $params);
-		/**selects are zero indexed*/
-		foreach($options['order_form'] as $elmKey=>$elm){
-			if($elm['type']=='select' && isset($params[$elm['key']])){
-				foreach($elm['value'] as $a=>$b){
-					if($params[$elm['key']]==$b){
-						$params[$elm['key']]=''.$a.'';
-					}
-				}
-			}
-		}
 		
-		
-		/******************************************
-			[get entered data to re-populate input fields but loose irrelevant vars
-		********************************************/
-		/**empty first and start over**/
-		if(isset($_SESSION[$this->pluginSessionGlobal]['userdata'])){
-			unset($_SESSION[$this->pluginSessionGlobal]['userdata']);
-		}
-		foreach($options['order_form'] as $oForm){
-			if($oForm['key']!='ctips'){/**tips should not be in the global user session**/
-				if(isset($params[$oForm['key']])){
-					$_SESSION[$this->pluginSessionGlobal]['userdata'][$oForm['key']]=$params[$oForm['key']];
-				}
-			}
-		}	
-		
-		
+		/***************************************************************
+			[get and parse all user post variables and save in session
+		***************************************************************/
+		$this->wppizza_sessionise_userdata($_POST['vars']['data'],$options['order_form']);
+
 		/*****************************************
 			[parse and add all get variables
 		*****************************************/
@@ -182,20 +158,91 @@ if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='order-pickup'){
 		}	
 	
 		/*********build the location url making sure permalinks are taken care of too**/
-		$location='';
-		$locUrl=explode('?',$_POST['vars']['locHref']);
-		$location.=$locUrl[0];/*get url before get vars*/
-		//$postAndGetParameters=array_merge($getParameters,$params);
-		if(count($getParameters)>0){
-			/*add ? and build query*/
-			$location.="?".http_build_query($getParameters)."";
-		}
+		$location=$this->wppizza_set_redirect_url($_POST['vars']['locHref'],$getParameters);
+
 	}
+	
+	
 	$vars['location']=$location;
 	
 	print"".json_encode($vars)."";
 exit();
 }
+/************************************************************************************************
+*
+*
+*	[create a nonce]
+*
+*
+************************************************************************************************/
+if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='nonce' && isset($_POST['vars']['val'])){
+	$nonceType=$_POST['vars']['val'];
+	$nonce=''.wp_nonce_field( 'wppizza_nonce_'.$nonceType.'','wppizza_nonce_'.$nonceType.'',false, false).'';
+print"".$nonce;
+exit();
+}
+/************************************************************************************************
+*
+*	[(try to) add new account, registering email as username]
+*	[if it already exists, just send the username and password again]
+*	[if it fails. just ignore]
+*
+************************************************************************************************/
+if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='new-account'){
+	
+	/*****************************************
+		[get and parse all post variables
+	*****************************************/
+	$postedVars = array();
+	parse_str($_POST['vars']['data'], $postedVars);	
+	$postedVars = apply_filters('wppizza_filter_sanitize_post_vars', $postedVars);
+	$output['pVar']=$postedVars;
+	/****************************************
+		verify nonce first
+	******************************************/
+	if (isset($postedVars['wppizza_nonce_register']) && wp_verify_nonce($postedVars['wppizza_nonce_register'],'wppizza_nonce_register') ){
+
+		/************************************************
+			check if email exists already
+			if it does not carry on adding account
+		************************************************/	
+		$user_id = username_exists( $postedVars['cemail'] );
+		$email_id = email_exists( $postedVars['cemail'] );
+
+		/**new user**/
+		if(!$user_id && !$email_id){
+			/************************************************************************************
+				we do NOT only want to save form fields here that are set to "use for registering"
+				but update / add all enabled ones, so let's change the action/method
+				and set distinct POST vars 
+			************************************************************************************/
+			remove_action('user_register', array( $this, 'wppizza_user_register_form_save_fields' ),100 );
+			add_action('user_register', array( $this, 'wppizza_user_register_order_page' ),100 );
+			$_POST=array();
+			foreach($postedVars as $k=>$v){
+				$_POST[$k]=$v;
+			}
+			/*generate a pw**/
+			$user_password = wp_generate_password( $length=10, $include_standard_special_chars=true );
+			/*create the user**/
+			$user_id_new = wp_create_user( $postedVars['cemail'], $user_password, $postedVars['cemail'] );			
+			/**this should never happen really**/
+			if(is_wp_error($user_id_new)){
+				$output['error']="<div class='wppizza-login-error'>Error: ".$user_id_new->get_error_message()."</div>";
+			}
+			/*send un/pw to user*/
+			if($user_id_new && $user_password!=''){/*bit of overkill*/
+				wp_new_user_notification( $user_id_new, $user_password );
+				wp_set_auth_cookie( $user_id_new );/**login too*/
+			}		
+		}else{
+			$output['error']="<div class='wppizza-login-error'>".$options['localization']['register_option_create_account_error']['lbl']."</div>";
+		}
+	}
+	print"".json_encode($output);/*not outputted but may one day come in handy for debug purposes*/
+	exit();
+}
+
 /***************************************************************
 *
 *
@@ -230,29 +277,11 @@ exit();
 ***************************************************************/
 if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='add_tips'){
 
-	/*****************************************
-		[get and parse all post variables
-	*****************************************/
-	$params = array();
-	parse_str($_POST['vars']['data'], $params);
-	/**selects are zero indexed*/
-	foreach($options['order_form'] as $elmKey=>$elm){
-		if($elm['type']=='select' && isset($params[$elm['key']])){
-			foreach($elm['value'] as $a=>$b){
-				if($params[$elm['key']]==$b){
-					$params[$elm['key']]=''.$a.'';
-				}
-			}
-		}
-	}
-	
-	/*****************************************
-		[parse and add all get variables
-	*****************************************/
-	$getParameters = array();
-	if($_POST['vars']['urlGetVars']!=''){
-		parse_str(substr($_POST['vars']['urlGetVars'],1), $getParameters);/*loose the '?'  */
-	}
+	/***************************************************************
+		[get and parse all user post variables and save in session and return parsed $params
+	***************************************************************/
+	$params = $this->wppizza_sessionise_userdata($_POST['vars']['data'],$options['order_form']);
+
 	/*****************************************
 		[sanitize gratuity]
 	*****************************************/
@@ -261,41 +290,26 @@ if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='add_tips'){
 	/*might as well delete the previously initialized order. So we do not delete arbitrary stuff when messing with the hash, restrict to INITIALIZED and orders of 3 minutes or less. Ought to be reasonably safe**/
 	$res=$wpdb->query( $wpdb->prepare( "DELETE FROM ".$wpdb->prefix . $this->pluginOrderTable." WHERE hash=%s AND payment_status='INITIALIZED' AND order_date > TIMESTAMPADD(MINUTE,-3,NOW()) ",$params['wppizza_hash']));
 	
-	/**add tips distincly session*/
+	/**add tips distincly to session*/
 	$_SESSION[$this->pluginSession]['tips']=$tips;
 
-	/******************************************
-		[get entered data to re-populate input fields but loose irrelevant vars
-	********************************************/
-	/**empty first and start over**/
-	if(isset($_SESSION[$this->pluginSessionGlobal]['userdata'])){
-		unset($_SESSION[$this->pluginSessionGlobal]['userdata']);
+	/*****************************************
+		[parse and add all get variables
+	*****************************************/
+	$getParameters = array();
+	if($_POST['vars']['urlGetVars']!=''){
+		parse_str(substr($_POST['vars']['urlGetVars'],1), $getParameters);/*loose the '?'  */
 	}
-	foreach($options['order_form'] as $oForm){
-		if($oForm['key']!='ctips'){/**tips should not be in the global user session**/
-			if(isset($params[$oForm['key']])){
-				$_SESSION[$this->pluginSessionGlobal]['userdata'][$oForm['key']]=$params[$oForm['key']];
-			}
-		}
-	}	
 
 	/*********build the location url making sure permalinks are taken care of too**/
-	$location='';
-	$locUrl=explode('?',$_POST['vars']['locHref']);
-	$location.=$locUrl[0];/*get url before get vars*/
-	//$postAndGetParameters=array_merge($getParameters,$params);
-	if(count($getParameters)>0){
-		/*add ? and build query*/
-		$location.="?".http_build_query($getParameters)."";
-	}
+	$location=$this->wppizza_set_redirect_url($_POST['vars']['locHref'],$getParameters);
+	
 
 	$vars['location']=$location;
 		
 	print"".json_encode($vars)."";
 exit();
 }
-
-
 
 /************************************************************************************************
 *

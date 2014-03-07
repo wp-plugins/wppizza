@@ -14,6 +14,9 @@
 		}
 		if($v['id']=='order_form'){
 			echo '<h4>'.__('Set the form fields you would like to show when a customer places an order', $this->pluginLocale).'</h4>';
+			echo"<span class='description'>".__('<b>Note:</b> only the email can and should be used to send email notifications of the order to the customer (if enabled).', $this->pluginLocale)."</span>";
+			echo"<br /><span class='description'><strong>".__('Additionally, if you want to offer customers to be able to register a new account on the order page - provided they are not logged in already - the email field must be set to be "enabled" and "required". Furthermore "Anyone can register" in "Settings->General" has to be enabled too.', $this->pluginLocale)."</strong></span>";
+			
 		}		
 		if($v['id']=='sizes'){
 			echo '<h4>'.__('Define a selection of sizes that might be available per item.', $this->pluginLocale).'</h4>';

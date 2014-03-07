@@ -406,7 +406,7 @@
 			),
 			'order_form'=>array(
 				0=>array('sort'=>0,'key'=>'cname','lbl'=>__('Name :', $this->pluginLocale),'value'=>array(),'type'=>'text','enabled'=>true,'required'=>false,'prefill'=>true,'onregister'=>false),
-				1=>array('sort'=>1,'key'=>'cemail','lbl'=>__('Email :', $this->pluginLocale),'value'=>array(),'type'=>'email','enabled'=>true,'required'=>false,'prefill'=>true,'onregister'=>false),
+				1=>array('sort'=>1,'key'=>'cemail','lbl'=>__('Email :', $this->pluginLocale),'value'=>array(),'type'=>'email','enabled'=>true,'required'=>true,'prefill'=>true,'onregister'=>false),
 				2=>array('sort'=>2,'key'=>'caddress','lbl'=>__('Address :', $this->pluginLocale),'value'=>array(),'type'=>'textarea','enabled'=>true,'required'=>true,'prefill'=>true,'onregister'=>false),
 				3=>array('sort'=>3,'key'=>'ctel','lbl'=>__('Telephone :', $this->pluginLocale),'value'=>array(),'type'=>'text','enabled'=>true,'required'=>true,'prefill'=>true,'onregister'=>false),
 				4=>array('sort'=>4,'key'=>'ccomments','lbl'=>__('Comments :', $this->pluginLocale),'value'=>array(),'type'=>'textarea','enabled'=>true,'required'=>false,'prefill'=>false,'onregister'=>false),
@@ -544,6 +544,30 @@
 					'descr'=>__('Order Page: Tips/Gratuities confirm button', $this->pluginLocale),
 					'lbl'=>__('ok', $this->pluginLocale)
 				),
+				'loginout_have_account'=>array(
+					'descr'=>__('Order Page [login/logout]: text before login link', $this->pluginLocale),
+					'lbl'=>__('already registered ?', $this->pluginLocale)
+				),					
+				'register_option_label'=>array(
+					'descr'=>__('Order Page [register]: text label register or continue as guest', $this->pluginLocale),
+					'lbl'=>__('continue as :', $this->pluginLocale)
+				),						
+				'register_option_guest'=>array(
+					'descr'=>__('Order Page [register]: register option -> as guest', $this->pluginLocale),
+					'lbl'=>__('guest', $this->pluginLocale)
+				),
+				'register_option_create_account'=>array(
+					'descr'=>__('Order Page [register]: register option -> create account', $this->pluginLocale),
+					'lbl'=>__('create account', $this->pluginLocale)
+				),										
+				'register_option_create_account_info'=>array(
+					'descr'=>__('Order Page [register]: additional info when create account option is chosen [html allowed]', $this->pluginLocale),
+					'lbl'=>__('Please ensure your email address is correct. A password will be emailed to you.', $this->pluginLocale)
+				),
+				'register_option_create_account_error'=>array(
+					'descr'=>__('Order Page [register]: error if email was already registered [html allowed]', $this->pluginLocale),
+					'lbl'=>__('This email address has already been registered. Please either <a href="#login">login</a>, use a different email address or continue as guest.', $this->pluginLocale)
+				),	
 				'order_details'=>array(
 					'descr'=>__('Order Email: label for order details', $this->pluginLocale),
 					'lbl'=>__('order details', $this->pluginLocale)

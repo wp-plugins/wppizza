@@ -37,8 +37,8 @@ foreach($formelements as $elmKey=>$elm){
 ?>
 
 <?php
-	/*NEW IN VERSION 2.0 => FOR FUTURE USE*/
-	do_action('wppizza_order_form_before');
+	/*AMENDED in 2.8.9 to take account of no of items*/
+	do_action('wppizza_order_form_before',count($cart['items']));
 ?>
 <form id='wppizza-send-order' method='post' action='' accept-charset="<?php echo get_bloginfo('charset') /*accept charset NEW IN VERSION 2.0 */ ?>">
 	<fieldset id="wppizza-cart-contents">
@@ -181,6 +181,6 @@ foreach($formelements as $elmKey=>$elm){
 	<?php } ?>
 </form>
 <?php
-	/*NEW IN VERSION 2.0 => FOR FUTURE USE*/
-	do_action('wppizza_order_form_after');
+	/*AMENDED in 2.8.9 to take account of no of items*/
+	do_action('wppizza_order_form_after',count($cart['items']));
 ?>

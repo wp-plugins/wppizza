@@ -346,21 +346,13 @@ $options = $this->pluginOptions;
 							echo "<input name='".$this->pluginSlug."[".$field."][".$k."][value]' type='text' value='".$val."' />";
 						echo "</span>";
 						echo "<span class='".$this->pluginSlug."_".$field."_select'".$display.">";
-							if($v['type']!='selectcustom'){echo "".__('separate multiple with comma', $this->pluginLocale)."";}
+							if($v['type']!='selectcustom'){echo "<span class='description'>".__('separate multiple with comma', $this->pluginLocale)."</span>";}
 							if($v['type']=='selectcustom'){echo "".__('enter required value pairs', $this->pluginLocale)."";}
 						echo "</span>";
 					echo"</td>";// ".$v['key']." ".$v['type']."
 					echo"</tr>";
 
-					if($v['key']=='cemail'){
-						echo"<tr class='".$v['key']."'><td colspan='7' style='margin:0;padding:0 0 0 10px'>";
-						echo"<span class='description'>".__('<b>Note:</b> only this field can and should be used to send email notifications of the order to the customer (if enabled).<br/>Furthermore, you cannot select this field to show on the registration form. (Wordpress already adds this field)', $this->pluginLocale)."</span>";
-						echo"</td></tr>";
-					}
 					if($v['key']=='ctips'){
-
-
-
 						echo"<tr class='".$v['key']."'><td colspan='7' style='margin:0;padding:0 0 0 10px'>";
 						echo"<span class='description'>";
 						echo"".__('<b>Tips/Gratuities:</b> allow the customer can enter a <b>numerical</b> amount to be used as tips/gratuities.<br/>This field will not be added to the users profile and can therefore not be pre-filled or used in the registration form.', $this->pluginLocale)."";
@@ -614,7 +606,7 @@ $options = $this->pluginOptions;
 				echo"<div id='wppizza_".$field."'>";
 					echo"<div id='wppizza_".$field."_options'>";
 					asort($localizeOptions);
-					$lngOddEvenArray=__('0,5,12,13,16,30,37', $this->pluginLocale);
+					$lngOddEvenArray=__('0,5,12,13,16,36,43', $this->pluginLocale);
 					$lngOddEvan=explode(",",$lngOddEvenArray);
 					$bgStyle=$lngOddEvan;
 					$i=0;

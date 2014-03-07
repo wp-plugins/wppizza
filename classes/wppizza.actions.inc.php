@@ -54,6 +54,15 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 			
 			/***dont put WPPizza Categories intitle tag */
 			add_filter( 'wp_title', array( $this, 'wppizza_filter_title_tag'),20,3);
+			
+			/***order form, login, logout, register, guest ****/
+			add_action('wppizza_order_form_before', array( $this, 'wppizza_do_login_form'));/**login/logout**/
+			add_filter('wp_authenticate', array( $this, 'wppizza_authenticate'),1,2);/*authenticate and redirect**/
+			add_filter('login_redirect', array( $this, 'wppizza_login_redirect'),10,3);/**successful login redirect**/
+			add_action('wppizza_gateway_choice_before', array( $this, 'wppizza_create_user_option'));/**continue and register or as guest**/	
+
+			
+			
 						
 		}
 		/************************************************************************
@@ -96,6 +105,188 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 		add_action('wp_ajax_nopriv_wppizza_json', array(&$this,'wppizza_json') );
       }
       
+
+/*********************************************************************************
+*
+*	[filters and actions for order page: login, logout[currently omitted], register, continue as guest]
+*
+*********************************************************************************/  
+	/************************************************************************
+		[output login form or logout link on order page]
+	************************************************************************/
+	function wppizza_do_login_form($items){
+		$txt=$this->pluginOptions['localization'];
+		/**logged in users - i dont think a logout link belongs there really. let's not do this for now**/
+		if(is_user_logged_in() && (int)$items>0) {
+			$html='';
+		//	$html.='<div id="wppizza-user-logout"><a href="'.wp_logout_url( $_SERVER['REQUEST_URI'] ).'" title="'.__( 'Log Out' ).'">'.__( 'Log Out' ).'</a></div>';
+			echo $html;
+			return;
+		}
+		
+		
+		/**as someone might be using previous versions of the wppizza-order.php template copied to their theme
+			it might not have that variable defined in the do_action, so let's assume a default of 1 as otherwsie the login would just never be displayed
+			caveat being, that it also gets displayed when there's nothing in the cart (although it isn't necessarily a problem 
+			having a login option even if the cart is empty. just my personal preference not to have it.)
+		**/
+		if(!is_int($items)){$items=1;}		
+		
+		/**non logged in users**/
+		if(!is_user_logged_in() && $items>0) {
+			/**any login errors ?**/
+			$error='';
+			$style='style="display:none"';/*login hidden if not fail**/
+			$styleAlt='style="display:block"';/*login hidden if not fail**/
+			if(isset($_GET['fail'])){
+				$style='style="display:block"';	
+				$styleAlt='style="display:none"';	
+				$wp_error = new WP_Error('authentication_failed', __('<strong>ERROR</strong>: Invalid username or incorrect password.'));/*native wp*/
+				$errMsg = $wp_error->get_error_message();
+				$error="<div class='wppizza-login-error'>".$errMsg."</div>";
+			}
+			
+			/***html***/
+			$html='';
+			$html.='<a name="login"></a>';
+			$html.='<div id="wppizza-user-login">';
+				$html.='<div id="wppizza-user-login-option">';
+					$html.='<span>'.$txt['loginout_have_account']['lbl'].'</span> <span><a href="javascript:void(0);" id="wppizza-login" '.$styleAlt.'>'. __( 'Log In' ).'</a></span>';
+					$html.='<span><a href="javascript:void(0);" id="wppizza-login-cancel" '.$style.'>'. __( 'Cancel' ).'</a></span>';
+				$html.='</div>';
+				$html.='<div id="wppizza-user-login-action" '.$style.'>';
+	            	$html.='<form id="wppizza-login-frm" action="'.wp_login_url().'" method="post">';
+            			$html.='<span><div class="wppizza-unpw-lbl">'.__( 'Username' ).'</div><input type="text" name="log" id="user_login" class="input wppizza_user_login" size="15" value="" placeholder="'.__( 'Username' ).'" required="required" /></span>';
+            			$html.='<span><div class="wppizza-unpw-lbl">'.__( 'Password' ).'</div><input type="password" name="pwd" id="user_pass" class="input wppizza_user_pass"  size="15" value="" placeholder="'.__( 'Password' ).'" required="required" /></span>';
+                		$html.='<span><div class="wppizza-unpw-lbl">&nbsp;</div><input type="submit" value="'.__( 'Log In' ).'" id="wppizza_btn_login" /></span>';
+                		$html.=''.wp_nonce_field( 'wppizza_nonce_login','wppizza_nonce_login',true,false).'';                		
+            		$html.='</form>';
+					$html.=$error;/**add errors if any**/	
+				$html.='</div>';				
+			$html.='</div>';
+			echo $html;
+			return;
+		}
+	}
+
+	/************************************************************************
+		[check login and redirect back to order page if failed]
+	************************************************************************/
+	function wppizza_authenticate( $username, $password){
+		if (isset($_POST['wppizza_nonce_login'])){
+	
+			$chkLogin = apply_filters('authenticate', null, $username, $password);
+			$setVars=false;
+			$unsetVars=false;
+					
+			/**failed login**/
+			if ( is_wp_error( $chkLogin ) ) {
+				$errors = $chkLogin->get_error_codes();
+				if(count($errors)>0){
+					$setVars=array('fail'=>1);
+				}
+				$redirectUrl=$this->wppizza_set_redirect_url($_POST['_wp_http_referer'],$setVars,$unsetVars);
+				wp_redirect( $redirectUrl);
+				exit();
+			}
+		}
+	}
+	/************************************************************************
+		[successful login from order page->redirect back to that page]
+	************************************************************************/	
+	function wppizza_login_redirect( $redirect_to, $request, $user  ){
+		/**check if we are coming from the order page**/
+		if (isset($_POST['wppizza_nonce_login'])){
+			/**verify nonce**/
+			if (wp_verify_nonce($_POST['wppizza_nonce_login'],'wppizza_nonce_login') ){
+				$redirectUrl=$this->wppizza_set_redirect_url($_POST['_wp_http_referer'],array(),array('fail'));
+				return $redirectUrl;
+			}else{
+				return $redirect_to;	
+			}
+		}
+		/**redirect others as normal*/
+		return $redirect_to;
+	}
+	/********************************************************************************
+		[helper to set redirect location with ability to add or unset some query vars
+	********************************************************************************/
+	function wppizza_set_redirect_url( $location, $setVars=false,$unsetVars=false){
+			/** 
+				check one day if one could/should be using this instead
+				wp_redirect( add_query_arg('login', 'failed', $referrer) );
+			*/
+			
+			/**split original into url and query vars**/
+			$locUrl=explode('?',$location);
+			/**make url**/
+			$redirectLocation='';
+			$redirectLocation.=$locUrl[0];/*get url before get vars*/
+			/**make query variables**/
+			
+			if(isset($locUrl[1]) && $locUrl[1]!=''){// && count($locUrl[1])>0
+				parse_str($locUrl[1],$qString);
+			}else{
+				$qString=array();	
+			}
+			/**add vars if set**/
+			if($setVars && is_array($setVars) && count($setVars)>0){
+				foreach($setVars as $qVarsKey=>$qVarsVal){
+					$qString[$qVarsKey]=$qVarsVal;
+				}
+			}
+			/**remove vars if set**/
+			if($unsetVars && is_array($unsetVars) && count($unsetVars)>0){
+				foreach($unsetVars as $qVarsKey){
+					if(isset($qString[$qVarsKey])){
+						unset($qString[$qVarsKey]);
+					}
+				}
+			}
+			/**add query variables if any**/
+			if(count($qString)>0){
+				$redirectLocation.='?'.http_build_query($qString);
+			}
+	
+		return $redirectLocation;
+	}
+	/********************************************************************************
+		[output div with radio options to continue as guest or simultaneous registration]
+	********************************************************************************/
+
+	function wppizza_create_user_option(){
+		if(!is_user_logged_in() && get_option('users_can_register')==1) {			
+			$formelements=$this->pluginOptions['order_form'];
+			/***********************************************************
+				check if we have the email set to enabled and required 
+				as otherwise new registration on order will not work
+				as there's noweher to send the password
+			*************************************************************/
+			$emailSet=false;
+			foreach($formelements as $k=>$oForm){
+				if($oForm['key']=='cemail' && $oForm['enabled']  && $oForm['required']){
+					$emailSet=true;
+					break;
+				}	
+			}		
+			if($emailSet){
+				$txt=$this->pluginOptions['localization'];
+				
+				$html='';
+				$html.='<div id="wppizza-create-account">';
+					$html.='<span>'.$txt['register_option_label']['lbl'].'</span>';
+					$html.='<label><input type="radio" id="wppizza_account" name="wppizza_account" value="guest" checked="checked" />'.$txt['register_option_guest']['lbl'].'</label>';
+					$html.='<label><input type="radio" id="wppizza_account" name="wppizza_account" value="register" />'.$txt['register_option_create_account']['lbl'].'</label>';
+				$html.='</div>';
+		        
+		        $html.='<div id="wppizza-user-register-info">';
+	            	$html.=''.$txt['register_option_create_account_info']['lbl'].'';
+				$html.='</div>';
+				echo $html;
+			}
+		}
+	}
+
 /*********************************************************************************
 *
 *	[filter: wppizza custom fields]
@@ -197,7 +388,23 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 	 
 	 $new_user_id = wp_update_user( $userdata );
 	}
-	    	
+
+	/****update/add user meta when registering via "order page" **/
+	function wppizza_user_register_order_page( $user_id, $password = '', $meta = array() ){		
+	    $ff=$this->pluginOptions['order_form'];
+	    foreach( $ff as $field ) {
+	    if(!empty($field['enabled']) && $field['type']!='cemail' && $field['type']!='tips') {	
+	    		/**selects should be stored by index**/
+	    		if($field['type']=='select'){
+	    			$sanitizeInput=array_search($_POST[$field['key']], $field['value']);
+	    		}else{
+	    		$sanitizeInput=wppizza_validate_string($_POST[$field['key']]);	    			
+	    		}
+				update_user_meta( $user_id, 'wppizza_'.$field['key'], $sanitizeInput );	
+		}}
+		/**turn off admin bar by default**/
+		update_user_meta( $user_id, 'show_admin_bar_front', 'false' );	
+	}		    	
 /***********************************************************************************************
 *
 *
@@ -1104,8 +1311,42 @@ public function wppizza_require_common_input_validation_functions(){
 	    $_SESSION[$this->pluginSession]['total_price_items']=0;
 	    /**tips***/
 	    $_SESSION[$this->pluginSession]['tips']=0;	    
-	    
 	}
+	/*******************************************************
+		[set/save submitted user post data in session, exclude tips though ]
+	******************************************************/
+	function wppizza_sessionise_userdata($postUserData,$orderFormOptions) {
+			if (!session_id()) {session_start();}
+			$params = array();
+			parse_str($postUserData, $params);
+			/**selects are zero indexed*/
+			foreach($orderFormOptions as $elmKey=>$elm){
+				if($elm['type']=='select' && isset($params[$elm['key']])){
+					foreach($elm['value'] as $a=>$b){
+						if($params[$elm['key']]==$b){
+							$params[$elm['key']]=''.$a.'';
+						}
+					}
+				}
+			}
+			/******************************************
+				[get entered data to re-populate input fields but loose irrelevant vars
+			********************************************/
+			/**empty first and start over**/
+			if(isset($_SESSION[$this->pluginSessionGlobal]['userdata'])){
+				unset($_SESSION[$this->pluginSessionGlobal]['userdata']);
+			}
+			foreach($orderFormOptions as $oForm){
+				if($oForm['key']!='ctips'){/**tips should not be in the global user session**/
+					if(isset($params[$oForm['key']])){
+						$_SESSION[$this->pluginSessionGlobal]['userdata'][$oForm['key']]=$params[$oForm['key']];
+					}
+				}
+			} 
+			
+		return $params;
+	}		
+	
 /*********************************************************
 *
 *	[include send order emails class]
