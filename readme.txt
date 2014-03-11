@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.2, WP 3.3 
 Tested up to: 3.8.1
-Stable tag: 2.8.9
+Stable tag: 2.8.9.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -124,17 +124,26 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 == Changelog ==
 
+2.8.9.1  
+* Maintenance Release - nothing too dramatic   
+* eliminate some possible php notices  
+* ensure wppizza user meta gets also deleted on uninstall  
+* eliminate possible conflict when another plugin also uses user_register action hook  
+11th March 2014   
+
+
+
 2.8.9  
-ADDED: order page - option to login, register new account on order or continue/order as guest [if not logged in already] (wppizza->order form settings "email" field must be set to enabled, required and Settings->General must have "anyone can register" enabled for registration of new account on order to work)    
-ADDED: Spanish Translation  
-Readme update  
-Maintenance  
+* ADDED: order page - option to login, register new account on order or continue/order as guest [if not logged in already] (wppizza->order form settings "email" field must be set to enabled, required and Settings->General must have "anyone can register" enabled for registration of new account on order to work)    
+* ADDED: Spanish Translation  
+* Readme update  
+* Maintenance  
 7th March 2014   
 
 
 
 2.8.8.4  
-BUGFIX: previous version broke distinctly set closing times during normal opening hours   
+* BUGFIX: previous version broke distinctly set closing times during normal opening hours   
 3rd March 2014   
 
 2.8.8.3   
@@ -222,7 +231,6 @@ BUGFIX: previous version broke distinctly set closing times during normal openin
 * added notes section/field in order history  
 16th January 2014  
 
-
 2.8.5.2  
 * updated Hebrew translation (thanks Yair)  
 * added action hooks to after emails have been sent with order id as parameter  
@@ -230,11 +238,9 @@ BUGFIX: previous version broke distinctly set closing times during normal openin
 * fixed some minor character decoding issues  
 20th December 2013  
 
-
 2.8.5.1  
 * accidentally committed a development version (2.8.5) which had links to single posts displayed by default in the loop template . now fixed..
 13th December 2013  
-
 
 2.8.5  
 * added a bunch of action hooks to the loop templates  

@@ -44,6 +44,31 @@ function delete_wppizza_custom_roles(){
 	}
 }
 
+/**get rid of all customer meta data***/
+function delete_wppizza_user_metadata($blogid){
+    $metaKeys[]=array();
+    $metaKeys[]='wppizza_cname';
+    $metaKeys[]='wppizza_cemail';
+    $metaKeys[]='wppizza_caddress';
+    $metaKeys[]='wppizza_ctel';
+    $metaKeys[]='wppizza_ccomments';
+    $metaKeys[]='wppizza_ccustom1';
+    $metaKeys[]='wppizza_ccustom2';
+    $metaKeys[]='wppizza_ccustom3';
+    $metaKeys[]='wppizza_ccustom4';
+    $metaKeys[]='wppizza_ccustom5';
+    $metaKeys[]='wppizza_ccustom6';
+    
+ 	$blogusers = get_users('blog_id='.$blogid.'');
+    foreach ($blogusers as $user) {
+    	foreach($metaKeys as $mKey){
+    		delete_user_meta( $user->ID,$mKey); 
+    	}
+    }
+}
+
+
+
 // Register wpPluginJanitor class only if it does not already exist.
 if( !class_exists( 'wpPluginJanitor' ) ){
 	
@@ -60,6 +85,8 @@ if( !class_exists( 'wpPluginJanitor' ) ){
 				$wpdb->query("DROP TABLE IF EXISTS $table");
 				/*delete custom roles*/
 				delete_wppizza_custom_roles();
+				/*delete user meta*/
+				delete_wppizza_user_metadata($blog['blog_id']);
 			}
 			restore_current_blog();		
  	   		}
@@ -72,7 +99,9 @@ if( !class_exists( 'wpPluginJanitor' ) ){
 		$table = $wpdb->prefix."wppizza_orders";
 		$wpdb->query("DROP TABLE IF EXISTS $table");	
 		/*delete custom roles*/
-		delete_wppizza_custom_roles();			
+		delete_wppizza_custom_roles();	
+		/*delete user meta*/
+		delete_wppizza_user_metadata($GLOBALS['blog_id']);		
 	}
 }
 ?>

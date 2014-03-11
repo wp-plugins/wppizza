@@ -371,20 +371,22 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 	    	}
 	    }
 	}
-	function wppizza_user_register_form_save_fields( $user_id, $password = '', $meta = array() ){		
+	function wppizza_user_register_form_save_fields( $user_id, $password = '', $meta = array() ){
 	    $userdata       = array();
 		$userdata['ID'] = $user_id;
 
 	    $ff=$this->pluginOptions['order_form'];
 		asort($ff);
 	    foreach( $ff as $field ) {
-	    if(!empty($field['enabled']) && !empty($field['onregister'])) {
+	    if(!empty($field['enabled']) && !empty($field['onregister']) && isset($_POST['wppizza_'.$field['key']])) {
 	    		$sanitizeInput=wppizza_validate_string($_POST['wppizza_'.$field['key']]);			
 				update_user_meta( $user_id, 'wppizza_'.$field['key'], $sanitizeInput );	
 		}}
 		/**distinctly add email from wp email field**/
-		$sanitizeEmail=wppizza_validate_string($_POST['user_email']);
-		update_user_meta( $user_id, 'wppizza_cemail', $sanitizeEmail );	
+		if(isset($_POST['user_email'])){
+			$sanitizeEmail=wppizza_validate_string($_POST['user_email']);
+			update_user_meta( $user_id, 'wppizza_cemail', $sanitizeEmail );	
+		}
 	 
 	 $new_user_id = wp_update_user( $userdata );
 	}
