@@ -1832,7 +1832,11 @@ public function wppizza_require_common_input_validation_functions(){
 							$strPartLeft=''.wppizza_email_decode_entities($v['label'],$this->blogCharset).'';
 						}
 						$spaces=$pad-strlen($strPartLeft);
+						if($this->pluginOptions['layout']['currency_symbol_position']=='right'){/*right aligned*/
+						$strPartRight=wppizza_email_decode_entities(''.$v['price'].' '.$v['currency'].'',$this->blogCharset);
+						}else{
 						$strPartRight=wppizza_email_decode_entities(''.$v['currency'].' '.$v['price'].'',$this->blogCharset);
+						}
 						/**add to string**/
 						$orderSummaryString.=''.$strPartLeft.''.str_pad($strPartRight,$spaces," ",STR_PAD_LEFT).''.PHP_EOL;
 				}

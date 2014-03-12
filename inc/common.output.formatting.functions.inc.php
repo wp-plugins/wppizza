@@ -510,8 +510,19 @@ function wppizza_order_summary($session,$options,$ajax=null){
 	/****************************************************
 		[get currency]
 	****************************************************/
-	$summary['currency']=''.$options['order']['currency_symbol'].'';
+	$summary['currency']=''.$options['order']['currency_symbol'].'';/*do not add any spans or anything else to this as it gets stored in the db */
 	$summary['currencyiso']=''.$options['order']['currency'].'';
+	
+	/****************************************************
+		[set currency positions]
+	****************************************************/	
+	$summary['currency_left']=$summary['currency'].' ';
+	$summary['currency_right']='';
+	if($options['layout']['currency_symbol_position']=='right'){/*right aligned*/
+		$summary['currency_left']='';		
+		$summary['currency_right']=' '.$summary['currency'];
+	}
+	
 	/****************************************************
 		[hide decimals?]
 	****************************************************/
@@ -756,13 +767,17 @@ function wppizza_order_summary($session,$options,$ajax=null){
 				$totalSales=$session['total_price_items']-(float)$discountValue;
 				/*round up decimals**/
 				$itemTax=wppizza_round_up($totalSales/100*$options['order']['item_tax'],2);
-			}
-			/****************************************************
-				[add tax to shipping too]
-			****************************************************/
-			if($options['order']['shipping_tax'] && $deliveryCharges!='' && (int)$deliveryCharges>0){
-				$summary['tax_applied']='items_and_shipping';
-				$itemTax=wppizza_round_up(($totalSales+$deliveryCharges)/100*$options['order']['item_tax'],2);
+			
+				/****************************************************
+					[add tax to shipping too]
+				****************************************************/
+				if($options['order']['shipping_tax']){
+					$summary['tax_applied']='items_and_shipping';/*set location*/
+				}
+				if($options['order']['shipping_tax'] && $deliveryCharges!='' && (int)$deliveryCharges>0){
+					$itemTax=wppizza_round_up(($totalSales+$deliveryCharges)/100*$options['order']['item_tax'],2);
+				}
+			
 			}
 			/******************************************************
 				[gratuities]
@@ -835,7 +850,7 @@ function wppizza_order_summary($session,$options,$ajax=null){
 					}else{				
 						$summary['nocheckout']=''.$options['localization']['minimum_order']['lbl'].' ';
 					}
-						$summary['nocheckout'].=''.wppizza_output_format_price($options['order']['delivery']['minimum_total']['min_total'],$optionsDecimals).' '.$options['order']['currency_symbol'].'';
+						$summary['nocheckout'].=''.$options['order']['currency_symbol'].' '.wppizza_output_format_price($options['order']['delivery']['minimum_total']['min_total'],$optionsDecimals).'';
 			}
 		}
 

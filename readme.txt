@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.2, WP 3.3 
 Tested up to: 3.8.1
-Stable tag: 2.8.9.1
+Stable tag: 2.8.9.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -123,6 +123,15 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 
 == Changelog ==
+
+2.8.9.2  
+* ADDED: option to set currency symbol in cart, emails, order and thank you page to be to the right of the price   
+* made currency symbol display consistently (i.e left / right of price) in conjunction with the above    
+* ADDED: filter to set style of html email template via filter hook instead of editing template directly  
+* removed some superflous linebreaks in order history display of items  
+* some minor css tweaks  
+12th March 2014   
+
 
 2.8.9.1  
 * Maintenance Release - nothing too dramatic   

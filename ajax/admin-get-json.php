@@ -208,7 +208,7 @@ $output='';
 							$output.="<textarea id='wppizza_order_customer_details_".$orders->id."' class='wppizza_order_customer_details'>". $orders->customer_details ."</textarea>";
 						$output.="</td>";
 						$output.="<td>";
-							$output.="<textarea id='wppizza_order_details_".$orders->id."' class='wppizza_order_details'>". $orders->order_details ."</textarea>";
+							$output.="<textarea id='wppizza_order_details_".$orders->id."' class='wppizza_order_details' >". $orders->order_details ."</textarea>";
 						$output.="</td>";
 						$output.="<td>";
 							/*admin only*/

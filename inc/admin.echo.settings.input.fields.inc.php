@@ -79,6 +79,10 @@ $options = $this->pluginOptions;
 			if($field=='currency_symbol_left'){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[layout][".$field."]' type='checkbox'  ". checked($options['layout'][$field],true,false)." value='1' />";
 			}
+			if($field=='currency_symbol_position'){
+				echo "".__('on left', $this->pluginLocale)." <input id='".$field."' name='".$this->pluginSlug."[layout][".$field."]' type='radio'  ".checked($options['layout'][$field],'left',false)." value='left' />";
+				echo "".__('on right', $this->pluginLocale)." <input id='".$field."' name='".$this->pluginSlug."[layout][".$field."]' type='radio'  ".checked($options['layout'][$field],'right',false)." value='right' />";				
+			}			
 			if($field=='cart_increase'){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[layout][".$field."]' type='checkbox'  ". checked($options['layout'][$field],true,false)." value='1' />";
 			}

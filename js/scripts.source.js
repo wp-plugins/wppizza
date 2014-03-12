@@ -269,7 +269,6 @@ jQuery(document).ready(function($){
 			
 			$('.wppizza-order').prepend('<div id="wppizza-loading"></div>');
 			jQuery.post(wppizza.ajaxurl , {action :'wppizza_json',vars:{'type':type,'id':selfId,'itemCount':itemCount}}, function(response) {
-
 				/*show items in cart*/
 				$('.wppizza-order').html(response.itemsajax);
 				/*button*/
@@ -279,29 +278,29 @@ jQuery(document).ready(function($){
 				$('.wppizza-cart-nocheckout').html(response.nocheckout);
 				/*order summary*/
 				$('.wppizza-cart-total-items-label').html(response.order_value.total_price_items.lbl);
-				$('.wppizza-cart-total-items-value').html(response.currency+' '+response.order_value.total_price_items.val);
+				$('.wppizza-cart-total-items-value').html(response.currency_left+''+response.order_value.total_price_items.val+''+response.currency_right);
 				if(response.nocheckout==''){
 					$('.wppizza-cart-discount-label').html(response.order_value.discount.lbl);
 
 					/*addcurrency if discount applies**/
 					if(response.order_value.discount.val!=''){
-						$('.wppizza-cart-discount-value').html('<span class="wppizza-minus"></span>'+response.currency+' '+response.order_value.discount.val);
+						$('.wppizza-cart-discount-value').html('<span class="wppizza-minus"></span>'+response.currency_left+''+response.order_value.discount.val+''+response.currency_right);
 					}else{
 						$('.wppizza-cart-discount-value').html(response.order_value.discount.val);
 					}
 					$('.wppizza-cart-delivery-charges-label').html(response.order_value.delivery_charges.lbl);
 					/*addcurrency if its not free delivery**/
 					if(response.order_value.delivery_charges.val!=''){
-					$('.wppizza-cart-delivery-charges-value').html(response.currency+' '+response.order_value.delivery_charges.val);
+					$('.wppizza-cart-delivery-charges-value').html(response.currency_left+''+response.order_value.delivery_charges.val+''+response.currency_right);
 					}else{
 					$('.wppizza-cart-delivery-charges-value').html(response.order_value.delivery_charges.val);
 					}
 					/**tax**/
 					$('.wppizza-cart-tax-label').html(response.order_value.item_tax.lbl);
-					$('.wppizza-cart-tax-value').html(response.currency+' '+response.order_value.item_tax.val);
+					$('.wppizza-cart-tax-value').html(response.currency_left+''+response.order_value.item_tax.val+''+response.currency_right);
 
 					$('.wppizza-cart-total-label').html(response.order_value.total.lbl);
-					$('.wppizza-cart-total-value').html(response.currency+' '+response.order_value.total.val);
+					$('.wppizza-cart-total-value').html(response.currency_left+''+response.order_value.total.val+''+response.currency_right);
 				}
 				if(response.nocheckout!='' || response.items.length==0){
 					$('.wppizza-cart-discount-label').html('');

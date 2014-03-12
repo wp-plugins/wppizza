@@ -102,6 +102,18 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 				/*order details: unserialize and filter**/
 				$oIni=maybe_unserialize($res->order_ini);
 				$oDetails = apply_filters('wppizza_filter_order_db_return', $oIni);
+				/*********************************************************************
+				*
+				*		[currency position]
+				*
+				*********************************************************************/
+				$currency_left=$oDetails['currency'].' ';
+				$currency_right='';
+				if($this->pluginOptions['layout']['currency_symbol_position']=='right'){/*right aligned*/
+					$currency_left='';		
+					$currency_right=' '.$oDetails['currency'];
+				}	
+
 
 				/*********************************************************************
 				*
@@ -186,17 +198,17 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 				foreach($oDetails['item'] as $k=>$v){
 					$wppizzaEmailOrderItems[$k]=$v;
 					/**for convenience, we concat vars into label and value and add them to array */
-					$wppizzaEmailOrderItems[$k]['label']=''.$v['quantity'].'x '.$v['name'].' '.$v['size'].'  '.$oDetails['currency'].' '.$v['price'].'';
-					$wppizzaEmailOrderItems[$k]['value']=''.$oDetails['currency'].' '.$v['pricetotal'].'';
+					$wppizzaEmailOrderItems[$k]['label']=''.$v['quantity'].'x '.$v['name'].' '.$v['size'].' ['.$currency_left.''.$v['price'].''.$currency_right.']';
+					$wppizzaEmailOrderItems[$k]['value']=''.$currency_left.$v['pricetotal'].$currency_right.'';
 				}
 
-				/*****************************************************************************************
+				/**********************************************************************************************
 				*
 				*
 				*	[order summary]
+				*	--we can probably loose all the currencies here. oh well. who knows maybe useful one day
 				*
-				*
-				****************************************************************************************/
+				*********************************************************************************************/
 				$wppizzaEmailOrderSummary=array();
 				/**********************************************************
 				*	[cart items
@@ -339,13 +351,15 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 							$spaces=75-strlen($strPartLeft);
 							$strPartRight=''.$v['value'].'';/*made up of => '.$v['currency'].' '.$v['pricetotal'].'*/
 							/**add to string, spacing left and right out somewhat and put linebreak before any additional info**/
-							$emailPlaintext['db_items'].=''.$strPartLeft.''.str_pad($strPartRight,$spaces," ",STR_PAD_LEFT).''.PHP_EOL.'';
+							$emailPlaintext['db_items'].=''.$strPartLeft.''.str_pad($strPartRight,$spaces," ",STR_PAD_LEFT).PHP_EOL.'';
 
 							/**NOTE: DO NOT DELETE OR ALTER THE ADDITIONAL INFO DECLARATIONS OR YOU MIGHT BREAK THINGS. IF NOT NOW THAN POSSIBLY IN THE FUTURE AS OTHER EXTENSIONS MAY RELY ON THIS!!!*/
-							if(isset($v['additional_info']) && $v['additional_info']!=''){$emailPlaintext['db_items'].=''.$v['additional_info'].'';}
-							/**add additional line break as spacer between items**/
-							$emailPlaintext['db_items'].=PHP_EOL;
+							if(isset($v['additional_info']) && trim($v['additional_info'])!=''){$emailPlaintext['db_items'].=''.$v['additional_info'].'';
+								/**add additional line break as spacer between items**/
+								$emailPlaintext['db_items'].=PHP_EOL;
+							}
 						}
+												
 					/**summary details as plaintext string: to use in plaintext emails and save into order history->order details**/
 					$emailPlaintext['order_summary'] = apply_filters('wppizza_filter_order_summary_to_plaintext', $wppizzaEmailOrderSummary);
 
@@ -525,6 +539,16 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 				}				
 				/**********************/				
 				$currency=$this->orderCurrency;
+				/****************************************************
+					[set currency positions]
+				****************************************************/	
+				$currency_left=$this->orderCurrency.' ';
+				$currency_right='';
+				if($this->pluginOptions['layout']['currency_symbol_position']=='right'){/*right aligned*/
+					$currency_left='';		
+					$currency_right=' '.$this->orderCurrency;
+				}				
+				
 				/***get localization vars**/
 				$orderLabel=$this->orderLabels['html'];
 
@@ -533,7 +557,7 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 				$customer_details_array = apply_filters('wppizza_filter_customer_details_html', $customer_details_array);
 
 				$order_items=$this->orderMessage['html']['order_items'];
-				$order_items = apply_filters('wppizza_filter_order_items_html', $order_items,'additional_info');
+				$order_items = apply_filters('wppizza_filter_order_items_html', $order_items, 'additional_info');
 				$order_summary=$this->orderMessage['html']['order_summary'];
 				$order_summary['tax_applied']='items_only';
 				if($this->pluginOptions['order']['shipping_tax']){
@@ -639,6 +663,16 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 						
 			/**********************/			
 			$order['currency']=$thisOrderDetails['currency'];
+			/****************************************************
+				[set currency positions]
+			****************************************************/	
+			$order['currency_left']=$thisOrderDetails['currency'].' ';
+			$order['currency_right']='';
+			if($this->pluginOptions['layout']['currency_symbol_position']=='right'){/*right aligned*/
+				$order['currency_left']='';		
+				$order['currency_right']=' '.$thisOrderDetails['currency'];
+			}		
+				
 			$order['currencyiso']=$thisOrderDetails['currencyiso'];
 
 			/***********************************************

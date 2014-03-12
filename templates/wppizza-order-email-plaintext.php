@@ -57,10 +57,10 @@ foreach($emailPlaintext['items'] as $k=>$v){
 	$output.=''.$strPartLeft.''.str_pad($strPartRight,$spaces," ",STR_PAD_LEFT).''.PHP_EOL.'';
 
 	/**NOTE: DO NOT DELETE OR ALTER THE ADDITIONAL INFO DECLARATIONS OR YOU MIGHT BREAK THINGS. IF NOT NOW THAN POSSIBLY IN THE FUTURE AS OTHER EXTENSIONS MAY RELY ON THIS!!!*/
-	if(isset($v['additional_info']) && $v['additional_info']!=''){$output.=''.$v['additional_info'].'';}
+	if(isset($v['additional_info']) && trim($v['additional_info'])!=''){$output.=''.$v['additional_info'].''.PHP_EOL.'';}
 
 	/**add additional line break as spacer between items**/
-	$output.=PHP_EOL;
+	//$output.=PHP_EOL;
 }
 /* print it */
 echo''.$output.'';

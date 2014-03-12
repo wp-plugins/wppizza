@@ -46,7 +46,7 @@ foreach($formelements as $elmKey=>$elm){
 		<?php if(count($cart['items'])>0){/*make sure there's stuff to order***/?>
 			<ul id="wppizza-item-details">
 			<?php foreach($cart['items'] as $item){ ?>
-				<li><?php echo''.$item['count'].'x '.$item['name'].' '.$item['size'].' ['.$cart['currency'].' '.$item['price'].']' ?> <span><?php echo''.$cart['currency'].' '.$item['pricetotal'].''; ?></span>
+				<li><?php echo''.$item['count'].'x '.$item['name'].' '.$item['size'].' <span class="wppizza-price-single">['.$cart['currency_left'].''.$item['price'].''.$cart['currency_right'].']</span>' ?> <span><?php echo''.$cart['currency_left'].''.$item['pricetotal'].''.$cart['currency_right'].''; ?></span>
 					<?php if(is_array($item['additionalinfo']) && count($item['additionalinfo'])>0){?>
 					<div class="wppizza-item-additionalinfo">
 						<?php foreach($item['additionalinfo'] as $additionalInfo){?>
@@ -60,35 +60,35 @@ foreach($formelements as $elmKey=>$elm){
 
 			<ul id="wppizza-cart-subtotals">
 
-				<li class="wppizza-order-total-items"><?php echo $txt['order_items']['lbl'] ?><span><?php echo $cart['currency'].' '.$cart['order_value']['total_price_items']['val']; ?></span></li>
+				<li class="wppizza-order-total-items"><?php echo $txt['order_items']['lbl'] ?><span><?php echo $cart['currency_left'].''.$cart['order_value']['total_price_items']['val'].''.$cart['currency_right']; ?></span></li>
 
 			<?php if($cart['order_value']['discount']['val']>0){/*discount applies*/?>
-				<li class="wppizza-order-discount"><?php echo $txt['discount']['lbl'] ?><span><span class="wppizza-minus"></span><?php echo $cart['currency'].' '.$cart['order_value']['discount']['val']; ?></span></li>
+				<li class="wppizza-order-discount"><?php echo $txt['discount']['lbl'] ?><span><span class="wppizza-minus"></span><?php echo $cart['currency_left'].''.$cart['order_value']['discount']['val'].''.$cart['currency_right']; ?></span></li>
 			<?php } ?>
 
 			<?php if($cart['order_value']['item_tax']['val']>0 && $cart['tax_applied']=='items_only'){/*item/sales tax applies (items only)  NEW IN VERSION 2.0/2.5 */ ?>
-				<li class="wppizza-order-item-tax"><?php echo $txt['item_tax_total']['lbl'] ?><span><?php echo $cart['currency'].' '.$cart['order_value']['item_tax']['val']; ?></span></li>
+				<li class="wppizza-order-item-tax wppizza-order-item-tax-itemsonly"><?php echo $txt['item_tax_total']['lbl'] ?><span><?php echo $cart['currency_left'].''.$cart['order_value']['item_tax']['val'].''.$cart['currency_right']; ?></span></li>
 			<?php } ?>
 
 			<?php if(!isset($cart['self_pickup_enabled']) ||  $cart['selfPickup']==0){ /*no self pickup enabled or chosen :conditional  NEW IN VERSION  v1.4.1*/ ?>
 				<?php if($cart['order_value']['delivery_charges']['val']!='' ){/*delivery charges if any*/?>
-					<li class="wppizza-order-pickup"><?php echo $txt['delivery_charges']['lbl'] ?><span><?php echo $cart['currency'].' '.$cart['order_value']['delivery_charges']['val']; ?></span></li>
+					<li class="wppizza-order-pickup"><?php echo $txt['delivery_charges']['lbl'] ?><span><?php echo $cart['currency_left'].''.$cart['order_value']['delivery_charges']['val'].''.$cart['currency_right']; ?></span></li>
 				<?php }else{ ?>
 					<li class="wppizza-order-pickup"><?php echo $txt['delivery_charges']['lbl'] ?><span><?php echo $txt['free_delivery']['lbl'] ?></span></li>
 				<?php } ?>
 			<?php } ?>
 
 			<?php if($cart['order_value']['item_tax']['val']>0 && $cart['tax_applied']=='items_and_shipping'){/*item/sales tax applied to items AND shipping  NEW IN VERSION 2.0 / 2.5*/ ?>
-				<li class="wppizza-order-item-tax"><?php echo $txt['item_tax_total']['lbl'] ?><span><?php echo $cart['currency'].' '.$cart['order_value']['item_tax']['val']; ?></span></li>
+				<li class="wppizza-order-item-tax wppizza-order-item-tax-itemsshipping"><?php echo $txt['item_tax_total']['lbl'] ?><span><?php echo $cart['currency_left'].''.$cart['order_value']['item_tax']['val'].''.$cart['currency_right']; ?></span></li>
 			<?php } ?>
 
 
 			<?php if(isset($cart['tips']) && $cart['tips']>0){/*tips NEW 2.8.4*/?>
-				<li class="wppizza-order-tips"><?php echo $txt['tips']['lbl'] ?><span><span></span><?php echo $cart['currency'].' '.$cart['tips']['val']; ?></span></li>
+				<li class="wppizza-order-tips"><?php echo $txt['tips']['lbl'] ?><span><span></span><?php echo $cart['currency_left'].''.$cart['tips']['val'].''.$cart['currency_right']; ?></span></li>
 			<?php } ?>
 
 
-				<li id="wppizza-cart-total"><?php echo $txt['order_total']['lbl'] ?><span><?php echo $cart['currency'].' '.$cart['order_value']['total']['val']; ?></span></li>
+				<li id="wppizza-cart-total"><?php echo $txt['order_total']['lbl'] ?><span><?php echo $cart['currency_left'].''.$cart['order_value']['total']['val'].''.$cart['currency_right']; ?></span></li>
 
 			<?php if(isset($cart['self_pickup_enabled']) &&  $cart['selfPickup']==1 && $txt['order_page_self_pickup']['lbl']!=''){ /*self pickup conditional-> no delivery charges : NEW IN VERSION 1.4.1**/ ?>
 				<li id="wppizza-self-pickup"><?php echo $txt['order_page_self_pickup']['lbl'] ?></li>

@@ -82,8 +82,8 @@
 #wppizza_history_orders .wppizza-orders-head{background-color:#CECECE}
 #wppizza_history_orders tr:nth-child(odd){background:#EFEFEF;}
 #wppizza_history_orders tr:nth-child(even){background:#FFFFFF;}
-#wppizza-settings .wppizza_order_customer_details{height:100px;min-width:300px}
-#wppizza-settings .wppizza_order_details {width:390px !important;height:100px}
+#wppizza-settings .wppizza_order_customer_details{height:100px;min-width:300px;font-size:90%}
+#wppizza-settings .wppizza_order_details {width:390px !important;height:100px;font-size:90%}
 #wppizza-settings .wppizza-order-notes-tr{display:none}
 #wppizza-settings .wppizza-order-has-notes-tr{display:table-row}/*for soem reason, chrome doesnt like display block */
 #wppizza-settings .wppizza-order-notes-tr>td,#wppizza-settings .wppizza-order-has-notes-tr>td{text-align:center;margin:0;padding:0}

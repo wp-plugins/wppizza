@@ -51,7 +51,7 @@ jQuery(document).ready(function($){
               "<html><head><title></title></head><body>" +
               (initiator) + "<br />" +
               (transaction_id)  + "<br /><br />" +
-              wppizzaNl2br(customer) +
+              wppizzaNl2br(customer) + "<br />" +
               wppizzaNl2br(order) + "<br /><br />" +
               wppizzaNl2br(notes) + "</body></html>";
 

@@ -327,6 +327,7 @@
 				'hide_decimals' => false,
 				'show_currency_with_price' => 0,
 				'currency_symbol_left' => false,
+				'currency_symbol_position' => 'left',
 				'cart_increase' => false,
 				'empty_cart_button' => false,
 				'prettyPhoto' => false,
