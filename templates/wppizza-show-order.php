@@ -79,10 +79,15 @@
 		<?php } ?>
 
 		<?php if(isset($summary['handling_charge']) && $summary['handling_charge']>0){/*handling charges (probably only used for cc's) */ ?>
-			<li class="wppizza-order-item-tax"><?php echo $orderlbl['order_page_handling'] ?><span><?php echo $order['currency_left'].''.$summary['handling_charge'].''.$order['currency_right']; ?></span></li>
+			<li class="wppizza-order-item-handling"><?php echo $orderlbl['order_page_handling'] ?><span><?php echo $order['currency_left'].''.$summary['handling_charge'].''.$order['currency_right']; ?></span></li>
 		<?php } ?>
+
 		<?php if(isset($summary['tips']) && $summary['tips']>0){/*tips and gratuities */ ?>
 			<li class="wppizza-order-item-tax"><?php echo $orderlbl['tips'] ?><span><?php echo $order['currency_left'].''.$summary['tips'].''.$order['currency_right']; ?></span></li>
+		<?php } ?>
+
+		<?php if($summary['taxes_included']>0 && $summary['tax_applied']=='taxes_included' ){/*taxes included NEW IN VERSION  v2.8.9.3*/ ?>
+			<li class="wppizza-order-item-tax"><?php echo $orderlbl['taxes_included'] ?><span><?php echo $order['currency_left'].''.$summary['taxes_included'].''.$order['currency_right']; ?></span></li>
 		<?php } ?>
 
 			<li id="wppizza-cart-total"><?php echo $orderlbl['order_total'] ?><span><?php echo $order['currency_left'].''.$summary['total'].''.$order['currency_right']; ?></span></li>

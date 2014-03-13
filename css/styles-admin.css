@@ -8,12 +8,17 @@
 .wppizza_option{display:block}
 #wppizza-delivery-options-select{border:1px solid #CECECE;display:inline-block;}
 #wppizza-delivery-options-select>span{padding:10px 5px 15px 5px}
-#wppizza-delivery-options-select>span:nth-child(even){background:#EFEFEF;}
+#wppizza-delivery-options-select>span:nth-child(even){background:#F9F9F9;}
 #wppizza-delivery-options-select>span:nth-child(odd){background:#FFFFFF;}
 
 
 .wppizza_weekday{min-width:100px;display:inline-block}
 .wppizza_img_placeholder{width:75px;height:75px;background:url('img/no_image.png');margin:3px auto}
+
+/*******************
+	[metaboxes]
+********************/
+.wppizza-meta-label{float:left;min-width:125px;line-height:200%}
 
 /******************
 	[meals]
@@ -33,29 +38,45 @@
 /**this should be unique to wppizza->todo**/
 #the-list.ui-sortable>tr{cursor:move}
 
-/*******************
-	[metaboxes]
-********************/
-.wppizza-meta-label{float:left;min-width:125px;line-height:200%}
+
 /*******************
 	[order settings]
 *********************/
 .wppizza_delivery_calculation_exclude_item{height:120px !important}
 /******************
+	[meal sizes]
+*******************/
+.wppizza-sizes-wrap .form-table th{display:none}
+#wppizza_sizes_options>span{padding:3px}
+#wppizza_sizes_options>span:nth-child(odd){background:#F9F9F9;}
+#wppizza_sizes_options>span:nth-child(even){background:#FFFFFF;}
+#wppizza-sizes-add{border-top:1px solid #AAAAAA;margin:0;padding:5px 0}
+
+/******************
+	[additives]
+*******************/
+.wppizza-additives-wrap .form-table th{display:none}
+#wppizza_additives_options>span{padding:3px}
+#wppizza_additives_options>span:nth-child(odd){background:#F9F9F9;}
+#wppizza_additives_options>span:nth-child(even){background:#FFFFFF;}
+#wppizza-additives-add{border-top:1px solid #AAAAAA;margin:0;padding:5px 0}
+
+/******************
 	[order form fields]
 *******************/
-.wppizza-order-form-wrap .form-table th{width:auto !important;}
+#wppizza-settings.wppizza-order-form-wrap .form-table{border:none;background:transparent}
+#wppizza-settings.wppizza-order-form-wrap .form-table tr:nth-child(odd){background:transparent}
+#wppizza-settings.wppizza-order-form-wrap .form-table>tbody>tr>th{display:none}
+
+
+
 #wppizza_order_form tr.cemail>td{margin-bottom:0;padding-bottom:0}
 #wppizza_order_form th{vertical-align:top; width:auto !important; background-color:#DEDEDE;text-shadow:none;padding:5px;margin:5px}
 #wppizza_order_form {border:1px solid #999999;margin-bottom:10px}
-#wppizza_order_form tr:nth-child(odd){background:#EFEFEF;}
+#wppizza_order_form tr:nth-child(odd){background:#F9F9F9;}
 #wppizza_order_form tr:nth-child(even){background:#FFFFFF;}
 #wppizza_order_form tr>td{padding:5px;margin:5px}
-/*toggled via js - not yet in use
-#wppizza_order_form tr.ctips,#wppizza_order_form tr.csurcharges{display:none}
-#wppizza_order_form .wppizza-order-form-footer{text-align:center}
-#wppizza_order_form #wppizza-toggle-tgs{cursor:pointer;color:blue;}
-*/
+
 /*******************
 	[generic]
 *********************/
@@ -68,19 +89,22 @@
 .wppizza_localization_textarea{width:250px}
 #wppizza_localization_options>div{border:1px solid #AAAAAA;margin-bottom:5px}
 #wppizza_localization_options>div:nth-child(even){background:#FEFEFE;}
-#wppizza_localization_options>div:nth-child(odd){background:#EFEFEF;}
-
+#wppizza_localization_options>div:nth-child(odd){background:#F9F9F9;}
 
 /*******************
 	[order history]
 *********************/
+#wppizza-settings.wppizza-history-wrap .form-table{border:none;background:transparent}
+#wppizza-settings.wppizza-history-wrap .form-table tr:nth-child(odd){background:transparent}
+
 .wppizza-history-wrap .form-table th{display:none}
 #wppizza_history_totals{float:right;font-weight:600;font-size:100%}
-#wppizza_history_totals_getall{font-size:80%}
-#wppizza_history_search{border:1px solid #999999;margin-bottom:10px;margin-top:10px;width: 100%;line-height: 40px;height: 40px;padding: 0 10px;border-color: #CECECE;}
-#wppizza_history_orders>table{border:1px solid #999999;margin-bottom:10px}
-#wppizza_history_orders .wppizza-orders-head{background-color:#CECECE}
-#wppizza_history_orders tr:nth-child(odd){background:#EFEFEF;}
+#wppizza_history_totals_getall{font-size:90%}
+#wppizza_history_search{border:1px solid #999999;margin-bottom:10px;margin-top:10px;width: 100%;line-height:42px;height: 44px;padding: 0 10px;border-color: #CECECE;}
+#wppizza_history_orders>table{border:1px solid #999999;margin-bottom:10px;background:#FFFFFF}
+#wppizza_history_orders>table tr>td{font-size:100% !important}
+#wppizza_history_orders .wppizza-orders-head>td{background-color:#f7f7f7}
+#wppizza_history_orders tr:nth-child(odd){background:#F9F9F9;}
 #wppizza_history_orders tr:nth-child(even){background:#FFFFFF;}
 #wppizza-settings .wppizza_order_customer_details{height:100px;min-width:300px;font-size:90%}
 #wppizza-settings .wppizza_order_details {width:390px !important;height:100px;font-size:90%}
@@ -114,10 +138,12 @@
 /******************
 	[access rights]
 *******************/
-#wppizza-settings.wppizza-access-wrap>form>table>tbody>tr>th{width:100px;}
+#wppizza-settings.wppizza-access-wrap>form>table>tbody>tr>th{display:none}
 .wppizza-access{overflow:auto;}
 .wppizza-access>ul{display:block;}
-.wppizza-access>ul>li{display:inline;list-style: none;float:left;padding-right:10px}
+.wppizza-access>ul>li{display:inline;list-style: none;float:left;padding:0; padding-right:10px}
+.wppizza-access:nth-child(odd){background:#F9F9F9;padding:3px}
+.wppizza-access:nth-child(even){background:#FFFFFF;padding:3px}
 /******************
 	[tools]
 *******************/
@@ -126,4 +152,15 @@
 /******************
 	[localization]
 *******************/
-#wppizza-settings.wppizza-localization-wrap>form>table>tbody>tr>th{width:100px;}
+.wppizza-localization-wrap .form-table th{display:none}
+
+/*******************
+	[wppizza admin  general]
+*********************/
+#wppizza-settings h4{margin-top:10px;margin-bottom:3px}
+#wppizza-settings .form-table {border:1px solid #999999;margin-bottom:10px;background-color:#FFFFFF;border-collapse:separate;}
+#wppizza-settings .form-table tr:nth-child(odd){background:#F9F9F9;}
+#wppizza-settings .form-table tr:nth-child(even){background:#FFFFFF;}
+#wppizza-settings .form-table th{vertical-align:top;padding:5px;margin:5px;font-size:95%;text-shadow:none}
+#wppizza-settings .form-table td{vertical-align:top;padding:5px;margin:5px;font-size:95%;text-shadow:none}
+#wppizza-settings .form-table input[type=text],#wppizza-settings .form-table select{padding:2px;margin:3px;font-size:100%;line-height:100%;height:auto}

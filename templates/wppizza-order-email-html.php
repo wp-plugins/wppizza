@@ -138,16 +138,21 @@ $htmlEmailStyle = apply_filters('wppizza_filter_html_email_style', $htmlEmailSty
 		<?php if(isset($order_summary['delivery'])){ ?>
 							<tr><td style="<?php echo $htmlEmailStyle['mailPadding']['0x5'] ?>"><?php echo $order_summary['delivery']['label']; ?></td><td><?php if($order_summary['delivery']['price']!=''){echo $currency_left.''.$order_summary['delivery']['price'].''.$currency_right;} ?></td></tr>
 		<?php } ?>
-		
+
 		<?php /**handling charges if any**/ ?>
 		<?php if(isset($order_summary['handling_charge'])){ ?>
 							<tr><td style="<?php echo $htmlEmailStyle['mailPadding']['0x5'] ?>"><?php echo $order_summary['handling_charge']['label']; ?></td><td><?php echo $currency_left.''.$order_summary['handling_charge']['price'].''.$currency_right; ?></td></tr>
 		<?php } ?>
-		<?php /**handling charges if any**/ ?>
+		<?php /**tips if any**/ ?>
 		<?php if(isset($order_summary['tips'])){ ?>
 							<tr><td style="<?php echo $htmlEmailStyle['mailPadding']['0x5'] ?>"><?php echo $order_summary['tips']['label']; ?></td><td><?php echo $currency_left.''.$order_summary['tips']['price'].''.$currency_right; ?></td></tr>
-		<?php } ?>		
-		
+		<?php } ?>
+
+		<?php /**taxes included**/ ?>
+		<?php if(isset($order_summary['taxes_included'])){ ?>
+							<tr><td style="<?php echo $htmlEmailStyle['mailPadding']['0x5'] ?>"><?php echo $order_summary['taxes_included']['label']; ?></td><td><?php echo $currency_left.''.$order_summary['taxes_included']['price'].''.$currency_right; ?></td></tr>
+		<?php } ?>
+
 		<?php /*add devider**/ ?>
 							<tr><td colspan="2" style="<?php echo $htmlEmailStyle['mailDivider'] ?>">&nbsp;</td></tr>
 

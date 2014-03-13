@@ -81,7 +81,10 @@ foreach($formelements as $elmKey=>$elm){
 			<?php if($cart['order_value']['item_tax']['val']>0 && $cart['tax_applied']=='items_and_shipping'){/*item/sales tax applied to items AND shipping  NEW IN VERSION 2.0 / 2.5*/ ?>
 				<li class="wppizza-order-item-tax wppizza-order-item-tax-itemsshipping"><?php echo $txt['item_tax_total']['lbl'] ?><span><?php echo $cart['currency_left'].''.$cart['order_value']['item_tax']['val'].''.$cart['currency_right']; ?></span></li>
 			<?php } ?>
-
+		
+			<?php if($cart['order_value']['taxes_included']['val']>0 && $cart['tax_applied']=='taxes_included'){/*all taxes included  NEW IN VERSION 2.8.9.3 */ ?>
+				<li class="wppizza-order-item-tax-inclusive"><?php echo $cart['order_value']['taxes_included']['lbl'] ?><span><?php echo $cart['currency_left'].''.$cart['order_value']['taxes_included']['val'].''.$cart['currency_right']; ?></span></li>
+			<?php } ?>
 
 			<?php if(isset($cart['tips']) && $cart['tips']>0){/*tips NEW 2.8.4*/?>
 				<li class="wppizza-order-tips"><?php echo $txt['tips']['lbl'] ?><span><span></span><?php echo $cart['currency_left'].''.$cart['tips']['val'].''.$cart['currency_right']; ?></span></li>

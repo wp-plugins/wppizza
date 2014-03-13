@@ -56,6 +56,5 @@ $str='';
 	}else{
 	$str.="".__('in use', $this->pluginLocale)."";
 	}
-	$str.="<hr />";
 	$str.="</span>";
 ?>

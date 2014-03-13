@@ -2,7 +2,7 @@
 		register_setting($this->pluginSlug,$this->pluginSlug, array( $this, 'wppizza_admin_options_validate') );
 
 		/**global settings**/
-		add_settings_section('global', __('Global Settings', $this->pluginLocale),  array( $this, 'wppizza_admin_page_text_header'), 'global');
+		add_settings_section('global','',  array( $this, 'wppizza_admin_page_text_header'), 'global');
 		add_settings_field('version', '<b>'.__('Plugin Version:', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'global', 'global', 'version' );
 		add_settings_field('js_in_footer', '<b>'.__('Javascript in Footer:', $this->pluginLocale).'</b> '.__('[combines all jsVars in one tidy place, but requires wp_footer in theme]', $this->pluginLocale).'', array( $this, 'wppizza_admin_settings_input'), 'global', 'global', 'js_in_footer' );
 		add_settings_field('mail_type', '<b>'.__('Select Type of Mail Delivery:', $this->pluginLocale).'</b><br/>'.__('[might be worth changing if you have trouble when sending/receiving orders with the default settings or prefer html emails ]', $this->pluginLocale).'<br/><b>'.__('if using PHPMailer function you probably want to edit the html template. To do so, move "wppizza-order-html-email.php" from the wppizza template directory to your theme folder and edit as required', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'global', 'global', 'mail_type' );
@@ -13,12 +13,12 @@
 		add_settings_field('category_parent_page', ''.__('<b>Permalinks:<br/>(only used and relevant when using widget or shortcode to display wppizza category navigation !!!)<br/><span style="color:red">when changing this setting, you MUST re-save your permalink settings</span></b><br/>(page cannot be used as static post page (wp settings) or have any children', $this->pluginLocale).'', array( $this, 'wppizza_admin_settings_input'), 'global', 'global', 'category_parent_page' );
 
 		/**gateways settings**/
-		add_settings_section('gateways', __('Gateways Settings', $this->pluginLocale),  array( $this, 'wppizza_admin_page_text_header'), 'gateways');
+		add_settings_section('gateways','',  array( $this, 'wppizza_admin_page_text_header'), 'gateways');
 		add_settings_field('gateways', '<b>'.__('Set Gateway Options:', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'gateways', 'gateways', 'gateways' );
 
 
 		/**layout settings**/
-		add_settings_section('layout', __('Layout Settings', $this->pluginLocale),  array( $this, 'wppizza_admin_page_text_header'), 'layout');
+		add_settings_section('layout','',  array( $this, 'wppizza_admin_page_text_header'), 'layout');
 		add_settings_field('items_per_loop', '<b>'.__('Menu Items per page:', $this->pluginLocale).'</b><br/>'.__('how many menu items per category page (displays pagination, if there are more menu items for the selected category)<br/>[options: -1=all, >1=items per page]<br/><span style="color:red">if not set to -1, it must be >= wordpress settings->reading->Blog pages show at most</span>', $this->pluginLocale).'', array( $this, 'wppizza_admin_settings_input'), 'layout', 'layout', 'items_per_loop' );
 		add_settings_field('include_css', '<b>'.__('Include CSS:', $this->pluginLocale).'</b><br/>'.__('include frontend css that came with this plugin (untick if you want to provide your own styles somewhere else)', $this->pluginLocale).'', array( $this, 'wppizza_admin_settings_input'), 'layout', 'layout', 'include_css' );
 		add_settings_field('style', '<b>'.__('Which style to use (if enabled above):', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'layout', 'layout', 'style' );
@@ -45,13 +45,13 @@
 
 
 		/**opening times**/
-		add_settings_section('opening_times', __('Opening Times', $this->pluginLocale),  array( $this, 'wppizza_admin_page_text_header'), 'opening_times');
+		add_settings_section('opening_times','',  array( $this, 'wppizza_admin_page_text_header'), 'opening_times');
 		add_settings_field('opening_times_standard', '<b>'.__('Standard opening times:', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'opening_times', 'opening_times', 'opening_times_standard' );
 		add_settings_field('opening_times_custom', '<b>'.__('Any dates/days where opening times differ from the standard times above (such as christmas etc).', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'opening_times', 'opening_times', 'opening_times_custom' );
 		add_settings_field('times_closed_standard', '<b>'.__('Closed (if you close for lunch for example):', $this->pluginLocale).'</b><br/><br/>'.__('If you are closed on certain days for a number of hours, enter them here<br/>i.e. if you are generally open on Tuesdays - as set above - from 9:30 to 23:00, but close for lunch between 12:00 and 14:00, enter Tuesdays 12:00 - 14:00 here. If you are also closed on Tuesday between 17:30 and 18:00, set this as well and so on ', $this->pluginLocale).'<br/><br/>'.__('Furthermore, do not enter times here that span midnight. If you are however closed from - let\'s say - 11:00PM Mondays to 1:00AM Tuesdays, enter "Mondays 23:00 to 23:59" as well as "Tuesdays 0:00 to 1:00', $this->pluginLocale).'<br/><br/>'.__('If you have setup any custom dates above (for example christmas or whatever), select "Custom Dates" instead of the day of week if you want to apply these closing times only to those dates', $this->pluginLocale).'<br/><br/><span style="color:red">'.__('Note: if you set anything here, it will not be reflected when displaying openingtimes via shortcode or in the widget, so you might want to display your openingtimes manually somewhere. It DOES, however close the shoppingcart, the ability to order etc as required)', $this->pluginLocale).'</span>', array( $this, 'wppizza_admin_settings_input'), 'opening_times', 'opening_times', 'times_closed_standard' );
 
 		/**order**/
-		add_settings_section('order', __('Order Settings', $this->pluginLocale),  array( $this, 'wppizza_admin_page_text_header'), 'order');
+		add_settings_section('order', '',  array( $this, 'wppizza_admin_page_text_header'), 'order');
 		add_settings_field('currency', '<b>'.__('Currency:', $this->pluginLocale).'</b><br/>'.__('set to --none-- to have no currency displayed anywhere', $this->pluginLocale).'', array( $this, 'wppizza_admin_settings_input'), 'order', 'order', 'currency' );
 		add_settings_field('orderpage', '<b>'.__('Order Page:', $this->pluginLocale).'</b><br/>'.__('ensure the page includes [wppizza type="orderpage"] or the widget equivalent. <b>You might also want to consider NOT displaying the shopping cart on this page</b> (although it won\'t break things)', $this->pluginLocale).'', array( $this, 'wppizza_admin_settings_input'), 'order', 'order', 'orderpage' );
 		add_settings_field('delivery', '<b>'.__('Delivery Charges:', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'order', 'order', 'delivery' );
@@ -67,26 +67,26 @@
 
 
 		/**order form**/
-		add_settings_section('order_form', __('Order Form', $this->pluginLocale),  array( $this, 'wppizza_admin_page_text_header'), 'order_form');
+		add_settings_section('order_form', '',  array( $this, 'wppizza_admin_page_text_header'), 'order_form');
 		add_settings_field('order_form', '<b>'.__('Form Fields:', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'order_form', 'order_form', 'order_form' );
 
 		/**size options**/
 		add_settings_section('sizes', __('Size Options Available', $this->pluginLocale),  array( $this, 'wppizza_admin_page_text_header'), 'sizes');
-		add_settings_field('sizes', '<b>'.__('As meals and beverages can come in different sizes, please add/edit the options you want to offer your customers. You will then be able to offer these options on a per item basis:', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'sizes', 'sizes', 'sizes' );
+		add_settings_field('sizes', '', array( $this, 'wppizza_admin_settings_input'), 'sizes', 'sizes', 'sizes' );
 
 		/**additives**/
-		add_settings_section('additives', __('Additives', $this->pluginLocale),  array( $this, 'wppizza_admin_page_text_header'), 'additives');
-		add_settings_field('additives', '<b>'.__('Some meals and beverages may contain additives. Add any possible additives here and select them at any meal/beravage that contains these additives. This in turn will add a footnote to pages denoting which item contains what additives:', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'additives', 'additives', 'additives' );
+		add_settings_section('additives', '',  array( $this, 'wppizza_admin_page_text_header'), 'additives');
+		add_settings_field('additives', '', array( $this, 'wppizza_admin_settings_input'), 'additives', 'additives', 'additives' );
 
 		/**localization**/
-		add_settings_section('localization', __('Frontened Localization', $this->pluginLocale),  array( $this, 'wppizza_admin_page_text_header'), 'localization');
-		add_settings_field('localization', '<b>'.__('Edit as required:', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'localization', 'localization', 'localization' );
+		add_settings_section('localization', __('Frontened Localization', $this->pluginLocale).' - '.__('edit as required:', $this->pluginLocale),  array( $this, 'wppizza_admin_page_text_header'), 'localization');
+		add_settings_field('localization', '', array( $this, 'wppizza_admin_settings_input'), 'localization', 'localization', 'localization' );
 
 		/**order history**/
-		add_settings_section('history', __('Order History', $this->pluginLocale),  array( $this, 'wppizza_admin_page_text_header'), 'history');
+		add_settings_section('history', '',  array( $this, 'wppizza_admin_page_text_header'), 'history');
 		add_settings_field('history', '', array( $this, 'wppizza_admin_settings_input'), 'history', 'history', 'history' );
 		/**access rights**/
-		add_settings_section('access', __('Access Rights', $this->pluginLocale),  array( $this, 'wppizza_admin_page_text_header'), 'access');
+		add_settings_section('access', '',  array( $this, 'wppizza_admin_page_text_header'), 'access');
 		add_settings_field('access', '', array( $this, 'wppizza_admin_settings_input'), 'access', 'access', 'access' );
 
 		/**tools**/

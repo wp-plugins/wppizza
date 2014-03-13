@@ -110,9 +110,9 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 				$currency_left=$oDetails['currency'].' ';
 				$currency_right='';
 				if($this->pluginOptions['layout']['currency_symbol_position']=='right'){/*right aligned*/
-					$currency_left='';		
+					$currency_left='';
 					$currency_right=' '.$oDetails['currency'];
-				}	
+				}
 
 
 				/*********************************************************************
@@ -243,19 +243,27 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 				**********************************************************/
 				if($oDetails['item_tax']>0 && $pOptions['order']['shipping_tax']){
 					$wppizzaEmailOrderSummary['item_tax']=array('label'=>($pOptions['localization']['item_tax_total']['lbl']),'price'=>$oDetails['item_tax'],'currency'=>$oDetails['currency'] );
-				}			
+				}
+
+				/**********************************************************
+				*	[taxes included]
+				**********************************************************/
+				if($oDetails['taxes_included']>0 && $pOptions['order']['taxes_included']){
+					$wppizzaEmailOrderSummary['taxes_included']=array('label'=>sprintf(''.$pOptions['localization']['taxes_included']['lbl'].'',$pOptions['order']['item_tax']),'price'=>$oDetails['taxes_included'],'currency'=>$oDetails['currency'] );
+				}
+
 				/**********************************************************
 				*	[handling charges - (most likely to be used for vv payment)]
 				**********************************************************/
 				if(isset($oDetails['handling_charge']) && $oDetails['handling_charge']>0){
 					$wppizzaEmailOrderSummary['handling_charge']=array('label'=>($pOptions['localization']['order_page_handling']['lbl']),'price'=>wppizza_output_format_price($oDetails['handling_charge'],$pOptions['layout']['hide_decimals']),'currency'=>$oDetails['currency'] );
-				}		
+				}
 				/**********************************************************
 				*	[tips )]
 				**********************************************************/
 				if(isset($oDetails['tips']) && $oDetails['tips']>0){
 					$wppizzaEmailOrderSummary['tips']=array('label'=>($pOptions['localization']['tips']['lbl']),'price'=>wppizza_output_format_price($oDetails['tips'],$pOptions['layout']['hide_decimals']),'currency'=>$oDetails['currency'] );
-				}										
+				}
 				/**********************************************************
 					[order total]
 				**********************************************************/
@@ -269,7 +277,7 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 					}
 					if($oDetails['selfPickup']==2){
 						$wppizzaEmailOrderSummary['self_pickup']=array('label'=>($pOptions['localization']['order_page_no_delivery']['lbl']),'price'=>'','currency'=>'' );
-					}					
+					}
 				}
 
 
@@ -326,14 +334,14 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 						[set general vars]
 					************************************************/
 					$gatewayUsed=$res->initiator;
-					
+
 					/**get gateway frontend label instead of just COD or similar**/
-					$gatewayLabel=$res->initiator;		
+					$gatewayLabel=$res->initiator;
 					if(isset($this->pluginGateways[$res->initiator])){
 						$gatewayLabel=!empty($this->pluginGateways[$res->initiator]->gatewayOptions['gateway_label']) ? $this->pluginGateways[$res->initiator]->gatewayOptions['gateway_label'] : $gatewayLabel;
 					}
 					/**********************/
-					
+
 					$transactionId=$res->transaction_id;
 					$nowdate=$this->orderTimestamp;
 					$orderLabel=$this->orderLabels['plaintext'];
@@ -359,7 +367,7 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 								$emailPlaintext['db_items'].=PHP_EOL;
 							}
 						}
-												
+
 					/**summary details as plaintext string: to use in plaintext emails and save into order history->order details**/
 					$emailPlaintext['order_summary'] = apply_filters('wppizza_filter_order_summary_to_plaintext', $wppizzaEmailOrderSummary);
 
@@ -466,7 +474,7 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 				}
 				$header .= 'MIME-Version: 1.0' . PHP_EOL;
 				$header .= 'Content-type: text/plain; charset='.$this->blogCharset.'' . PHP_EOL;
-								
+
 				/************send mail**************/
 				if( @mail( $this->orderShopEmail, $this->subjectPrefix.$this->subject.$this->subjectSuffix, $this->orderMessage['plaintext'], $header)) {
 					$sendMail['status']=true;
@@ -492,7 +500,7 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 					$wpMailHeaders[]= 'Bcc: '.$bccs.'';
 				}
 				$wpMailHeaders[] = 'Reply-To: '.$this->orderClientEmail.'';
-				
+
 				/***attachments***/
 				$wpMailAttachments = array();
 				/**any attachments set in options ?**/
@@ -502,7 +510,7 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 							$wpMailAttachments[]=$attachment;
 						}
 					}
-				}				
+				}
 
 				/************send mail**************/
 				if(@wp_mail($this->orderShopEmail, $this->subjectPrefix.$this->subject.$this->subjectSuffix, $this->orderMessage['plaintext'], $wpMailHeaders, $wpMailAttachments)) {
@@ -536,19 +544,19 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 				$gatewayLabel=$this->orderGatewayUsed;
 				if(isset($this->pluginGateways[$this->orderGatewayUsed])){
 					$gatewayLabel=!empty($this->pluginGateways[$this->orderGatewayUsed]->gatewayOptions['gateway_label']) ? $this->pluginGateways[$this->orderGatewayUsed]->gatewayOptions['gateway_label'] : $gatewayLabel;
-				}				
-				/**********************/				
+				}
+				/**********************/
 				$currency=$this->orderCurrency;
 				/****************************************************
 					[set currency positions]
-				****************************************************/	
+				****************************************************/
 				$currency_left=$this->orderCurrency.' ';
 				$currency_right='';
 				if($this->pluginOptions['layout']['currency_symbol_position']=='right'){/*right aligned*/
-					$currency_left='';		
+					$currency_left='';
 					$currency_right=' '.$this->orderCurrency;
-				}				
-				
+				}
+
 				/***get localization vars**/
 				$orderLabel=$this->orderLabels['html'];
 
@@ -562,8 +570,8 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 				$order_summary['tax_applied']='items_only';
 				if($this->pluginOptions['order']['shipping_tax']){
 					$order_summary['tax_applied']='items_and_shipping';
-				}				
-				
+				}
+
 
 
 				/*return $orderHtml*/
@@ -615,10 +623,10 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 			}
 			/***mail sending error or transaction already processes -> show error***/
 			if(!($mailResults['status']) || !isset($mailResults['status'])  ){
-				
+
 				$output="<p class='mailError'>".$this->pluginOptions['localization']['thank_you_error']['lbl']."</p>";
 				$output.="<p class='mailError'>".$mailResults['mailer'].": ".print_r($mailResults['error'],true)."</p>";
-				
+
 			}
 		return $output;
 		}
@@ -656,23 +664,23 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 			$order['gatewayUsed']=$res->initiator;
 
 			/**get gateway frontend label instead of just COD or similar**/
-			$order['gatewayLabel']=$res->initiator;			
+			$order['gatewayLabel']=$res->initiator;
 			if(isset($this->pluginGateways[$res->initiator])){
 				$order['gatewayLabel']=!empty($this->pluginGateways[$res->initiator]->gatewayOptions['gateway_label']) ? $this->pluginGateways[$res->initiator]->gatewayOptions['gateway_label'] : $order['gatewayLabel'];
 			}
-						
-			/**********************/			
+
+			/**********************/
 			$order['currency']=$thisOrderDetails['currency'];
 			/****************************************************
 				[set currency positions]
-			****************************************************/	
+			****************************************************/
 			$order['currency_left']=$thisOrderDetails['currency'].' ';
 			$order['currency_right']='';
 			if($this->pluginOptions['layout']['currency_symbol_position']=='right'){/*right aligned*/
-				$order['currency_left']='';		
+				$order['currency_left']='';
 				$order['currency_right']=' '.$thisOrderDetails['currency'];
-			}		
-				
+			}
+
 			$order['currencyiso']=$thisOrderDetails['currencyiso'];
 
 			/***********************************************
@@ -680,7 +688,11 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 			************************************************/
 			$orderlbl=array();
 			foreach($this->pluginOptions['localization'] as $k=>$v){
-				$orderlbl[$k]=$v['lbl'];
+				if($k=='taxes_included'){
+					$orderlbl[$k]=sprintf(''.$v['lbl'].'',$this->pluginOptions['order']['item_tax']);
+				}else{
+					$orderlbl[$k]=$v['lbl'];
+				}
 			}
 
 			/***********************************************
@@ -728,6 +740,7 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 			$summary['total_price_items']=$thisOrderDetails['total_price_items'];
 			$summary['discount']=$thisOrderDetails['discount'];
 			$summary['item_tax']=$thisOrderDetails['item_tax'];
+			$summary['taxes_included']=$thisOrderDetails['taxes_included'];
 			if($this->pluginOptions['order']['delivery_selected']!='no_delivery'){/*delivery disabled*/
 				$summary['delivery_charges']=$thisOrderDetails['delivery_charges'];
 			}
@@ -738,14 +751,20 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 			if($this->pluginOptions['order']['shipping_tax']){
 				$summary['tax_applied']='items_and_shipping';
 			}
+			if($this->pluginOptions['order']['taxes_included']){
+				$summary['tax_applied']='taxes_included';
+			}
+
+
+
 			if(isset($thisOrderDetails['handling_charge']) && $thisOrderDetails['handling_charge']>0){
 				$summary['handling_charge']=wppizza_output_format_price($thisOrderDetails['handling_charge'],$this->pluginOptions['layout']['hide_decimals']);
 			}
 			if(isset($thisOrderDetails['tips']) && $thisOrderDetails['tips']>0){
 				$summary['tips']=wppizza_output_format_price($thisOrderDetails['tips'],$this->pluginOptions['layout']['hide_decimals']);
-			}			
-			
-			
+			}
+
+
 			/***********************************************
 				[if template copied to theme directory use
 				that one otherwise use default]

@@ -179,12 +179,12 @@ $output='';
 								$output.="<br/>ID: ". $orders->transaction_id ."";
 							}
 							$output.="<br/>";
-							$output.="".__('Status', $this->pluginLocale)."";
+							$output.="<label>".__('Status', $this->pluginLocale)."";
 							$output.="<select id='wppizza_order_status-".$orders->id."' name='wppizza_order_status-".$orders->id."' class='wppizza_order_status'>";
 								foreach($customOrderStatus as $s){
 									$output.="<option value='".$s."' ".selected($orders->order_status,$s,false).">".__($s, $this->pluginLocale)."</option>";
 								}
-							$output.="</select>";
+							$output.="</select></label>";
 
 							//$output.="<br/>";
 							//$output.="<a href='javascript:void()' id='wppizza_order_reject'>".__('Reject with email to customer', $this->pluginLocale)."</a>";

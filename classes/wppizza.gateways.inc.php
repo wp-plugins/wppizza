@@ -13,20 +13,20 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 		if(!is_admin()){
 			add_action('init', array( $this, 'wppizza_instanciate_gateways_frontend'));
 			add_action('init', array( $this, 'wppizza_do_gateways'));/**output available gateway choices on order page**/
-			add_action('init', array($this,'wppizza_gateway_initialize_order'));/*initialize oder into db */		
+			add_action('init', array($this,'wppizza_gateway_initialize_order'));/*initialize oder into db */
 		}
-		
+
 		/************************************************************************
 			[load wpml from parent. used in ajax call, so must be available front and backend ]
-		*************************************************************************/		
-		add_action('init', array( $this, 'wppizza_wpml_localization'),99);			
-		
+		*************************************************************************/
+		add_action('init', array( $this, 'wppizza_wpml_localization'),99);
+
 		/************************************************************************
 			[runs only in backend]
 		*************************************************************************/
 		add_action('admin_init', array( $this, 'wppizza_available_gateways'),1);/**check if a gateways has been (un)installed and if so, update option**/
 		add_action('admin_init', array( $this, 'wppizza_load_gateways_admin'));
-		
+
 	}
 
 	function wppizza_do_gateways() {
@@ -56,10 +56,10 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 			}
 		}}
 		$this->pluginGateways=$wppizzaGateway;
-			
+
 	return $wppizzaGatewayOptions;
 	}
-	
+
 /***********************************************
 	[include default COD "gateway"]
 ***********************************************/
@@ -211,11 +211,13 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 
 		$gatewayOrder['total_price_items']=wppizza_validate_float_only($cartDetails['order_value']['total_price_items']['val']);
 		$gatewayOrder['discount']=wppizza_validate_float_only($cartDetails['order_value']['discount']['val']);
+		$gatewayOrder['taxrate']=wppizza_validate_float_only($cartDetails['taxrate']);
 		$gatewayOrder['item_tax']=wppizza_validate_float_only($cartDetails['order_value']['item_tax']['val']);
+		$gatewayOrder['taxes_included']=wppizza_validate_float_only($cartDetails['order_value']['taxes_included']['val']);
 
 		$gatewayOrder['delivery_charges']=!empty($cartDetails['order_value']['delivery_charges']['val']) ? wppizza_validate_float_only($cartDetails['order_value']['delivery_charges']['val']) : '';
 		$gatewayOrder['tips']=!empty($cartDetails['tips']['val']) ? wppizza_validate_float_only($cartDetails['tips']['val']) : '';
-		
+
 		$gatewayOrder['selfPickup']=!empty($cartDetails['selfPickup']) ? wppizza_validate_int_only($cartDetails['selfPickup']) : 0;
 		$gatewayOrder['total']=wppizza_validate_float_only($cartDetails['order_value']['total']['val']);
 

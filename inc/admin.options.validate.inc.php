@@ -176,6 +176,7 @@
 
 			$options['order']['delivery_calculation_exclude_item'] = !empty($input['order']['delivery_calculation_exclude_item']) ? $input['order']['delivery_calculation_exclude_item'] : array();
 			$options['order']['item_tax']=wppizza_validate_float_pc($input['order']['item_tax'],5);//5 decimals should really be enough i would have thought
+			$options['order']['taxes_included'] = !empty($input['order']['taxes_included']) ? true : false;
 			$options['order']['shipping_tax'] = !empty($input['order']['shipping_tax']) ? true : false;
 
 

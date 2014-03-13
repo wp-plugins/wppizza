@@ -20,11 +20,17 @@
 		}		
 		if($v['id']=='sizes'){
 			echo '<h4>'.__('Define a selection of sizes that might be available per item.', $this->pluginLocale).'</h4>';
+			echo"<span class='description'>".__('As meals and beverages can come in different sizes, please add/edit the options you want to offer your customers. You will then be able to offer these options on a per item basis:', $this->pluginLocale)."</span>";
 		}	
 		if($v['id']=='additives'){
+			echo '<h4>'.__('Some meals and beverages may contain additives. Add any possible additives here and select them at any meal/beravage that contains these additives. This in turn will add a footnote to pages denoting which item contains what additives', $this->pluginLocale).'</h4>';
 			echo '<h4>'.__('Add any additives (or other notes) that a meal may have and tick the relevant box(es) of any meal that contains these additives ', $this->pluginLocale).'</h4>';
 			echo"<p class='description'>".__('by default, additives will be sorted alphabetically.<br/>However, you can use the "sort" field to customise the sortorder. If you do, your choosen sort id will be used to identify your choosen additives in the frontend so you want to make sure to have unique identifiers/sort id\'s', $this->pluginLocale)."</p>";	
 		}
+		if($v['id']=='access'){
+			echo"<h4>".__('Set the roles that are allowed to access these pages', $this->pluginLocale)."</h4>";
+			echo"<span class='description'>".__('Menu Items and Categories are accessible just like "normal" posts', $this->pluginLocale)."</span>";			
+		}	
 		if($v['id']=='localization'){
 			//currently not in use
 			//echo '<h4>'.__('', $this->pluginLocale).'</h4>';

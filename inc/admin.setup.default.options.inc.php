@@ -397,6 +397,7 @@
 					)
 				),
 				'item_tax'=>0,
+				'taxes_included'=>false,
 				'shipping_tax'=>false,
 				'order_email_to'=>array(''.get_option('admin_email').''),
 				'order_email_bcc'=>array(),
@@ -621,6 +622,10 @@
 					'descr'=>__('Price Labels (Sub)Totals: text before sum of tax applied to all items(if > 0)', $this->pluginLocale),
 					'lbl'=>__('Sales Tax', $this->pluginLocale)
 				),
+				'taxes_included'=>array(
+					'descr'=>__('Price Labels (Sub)Totals: text before sum of tax applied if prices have been entered *inclusive* of tax (if > 0) [%d%% will be replaced by taxrate applied - i.e 10%]', $this->pluginLocale),
+					'lbl'=>__('incl. tax at %d%%', $this->pluginLocale)
+				),	
 				'order_total'=>array(
 					'descr'=>__('Price Labels (Sub)Totals: text before total sum of ORDER', $this->pluginLocale),
 					'lbl'=>__('total', $this->pluginLocale)

@@ -299,6 +299,10 @@ jQuery(document).ready(function($){
 					$('.wppizza-cart-tax-label').html(response.order_value.item_tax.lbl);
 					$('.wppizza-cart-tax-value').html(response.currency_left+''+response.order_value.item_tax.val+''+response.currency_right);
 
+					/**tax included**/
+					$('.wppizza-cart-tax-included-label').html(response.order_value.taxes_included.lbl);
+					$('.wppizza-cart-tax-included-value').html(response.currency_left+''+response.order_value.taxes_included.val+''+response.currency_right);
+
 					$('.wppizza-cart-total-label').html(response.order_value.total.lbl);
 					$('.wppizza-cart-total-value').html(response.currency_left+''+response.order_value.total.val+''+response.currency_right);
 				}
@@ -311,11 +315,13 @@ jQuery(document).ready(function($){
 					$('.wppizza-cart-total-value').html('');
 					$('.wppizza-cart-tax-label').html('');
 					$('.wppizza-cart-tax-value').html('');
+					$('.wppizza-cart-tax-included-label').html('');
+					$('.wppizza-cart-tax-included-value').html('');					
 
 				}
 				if(response.items.length==0){
-				$('.wppizza-cart-total-items-label').html('');
-				$('.wppizza-cart-total-items-value').html('');
+					$('.wppizza-cart-total-items-label').html('');
+					$('.wppizza-cart-total-items-value').html('');
 				}
 
 				cartButton.removeAttr("disabled");/*re-enable place order button*/

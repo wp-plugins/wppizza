@@ -105,7 +105,7 @@ return;
 					<?php } ?>
 				</span>
 				<span class="wppizza-cart-discount-value wppizza-cart-info-price">
-					<?php if($cart['nocheckout']=='' && count($cart['items'])>0){?>
+					<?php if($cart['nocheckout']=='' && count($cart['items'])>0 && $cart['order_value']['discount']['val']>0){?>
 					<?php echo '<span class="wppizza-minus"></span>'.$cart['currency_left'].''.$cart['order_value']['discount']['val'].''.$cart['currency_right']; ?>
 					<?php } ?>
 				</span>
@@ -135,7 +135,8 @@ return;
 				</span>
 				<span class="wppizza-cart-delivery-charges-value wppizza-cart-info-price">
 					<?php if($cart['nocheckout']=='' && count($cart['items'])>0){?>
-					<?php if($cart['order_value']['delivery_charges']['val']!=''){echo $cart['currency_left'].''.$cart['order_value']['delivery_charges']['val'].''.$cart['currency_right']; ?>
+					<?php 
+						if($cart['order_value']['delivery_charges']['val']!=''){echo $cart['currency_left'].''.$cart['order_value']['delivery_charges']['val'].''.$cart['currency_right']; ?>
 					<?php }} ?>
 				</span>
 			</span>
@@ -155,7 +156,21 @@ return;
 				</span>
 			</span>
 			<?php } ?>
-
+	
+			<?php if(isset($cart['tax_enabled']) && $cart['tax_applied']=='taxes_included'){ /*SUMMARY OF ALL TAXES IF INCLUDED IN SET PRICES ADDED 2.8.9.3*/ ?>
+			<span class="wppizza-cart-tax-included">
+				<span class="wppizza-cart-tax-included-label">
+					<?php if($cart['nocheckout']=='' && count($cart['items'])>0){?>
+					<?php echo $cart['order_value']['taxes_included']['lbl'] ?>
+					<?php } ?>
+				</span>
+				<span class="wppizza-cart-tax-included-value wppizza-cart-info-price">
+					<?php if($cart['nocheckout']=='' && count($cart['items'])>0){?>
+					<?php echo $cart['currency_left'].''.$cart['order_value']['taxes_included']['val'].''.$cart['currency_right']; ?>
+					<?php } ?>
+				</span>
+			</span>
+			<?php } ?>
 
 			<?php if(isset($cart['tips']) && $cart['tips']>0){/*tips NEW 2.8.4*/?>
 			<span class="wppizza-order-tips">

@@ -40,7 +40,7 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 		*************************************************************************/
 		if(!is_admin()){
 			/***enqueue frontend scripts and styles***/
-			add_action('wp_enqueue_scripts', array( $this, 'wppizza_register_scripts_and_styles'),$this->pluginOptions['layout']['css_priority']);			
+			add_action('wp_enqueue_scripts', array( $this, 'wppizza_register_scripts_and_styles'),$this->pluginOptions['layout']['css_priority']);
 			/***************
 				[filters]
 			***************/
@@ -48,22 +48,22 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 			add_filter('template_include', array( $this,'wppizza_include_template'), 1 );
 			/***use loop for single post***/
 			add_filter('wppizza_filter_loop', array( $this, 'wppizza_filter_loop'),10,2);
-			
+
 			/***exclude selected order page from navigation */
 			add_filter('get_pages', array(&$this,'wppizza_exclude_order_page_from_navigation'));
-			
+
 			/***dont put WPPizza Categories intitle tag */
 			add_filter( 'wp_title', array( $this, 'wppizza_filter_title_tag'),20,3);
-			
+
 			/***order form, login, logout, register, guest ****/
 			add_action('wppizza_order_form_before', array( $this, 'wppizza_do_login_form'));/**login/logout**/
 			add_filter('wp_authenticate', array( $this, 'wppizza_authenticate'),1,2);/*authenticate and redirect**/
 			add_filter('login_redirect', array( $this, 'wppizza_login_redirect'),10,3);/**successful login redirect**/
-			add_action('wppizza_gateway_choice_before', array( $this, 'wppizza_create_user_option'));/**continue and register or as guest**/	
+			add_action('wppizza_gateway_choice_before', array( $this, 'wppizza_create_user_option'));/**continue and register or as guest**/
 
-			
-			
-						
+
+
+
 		}
 		/************************************************************************
 			[runs only for admin]
@@ -90,7 +90,7 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 			add_action( 'edit_user_profile', array( $this, 'wppizza_user_info') );
 			add_action( 'personal_options_update', array( $this, 'wppizza_user_update_meta' ));
 			add_action( 'edit_user_profile_update', array( $this, 'wppizza_user_update_meta' ));
-			
+
 			/**set capability to update options otherwise only a user with 'manage_options' could update anything. **/
 			add_filter( 'option_page_capability_'.$this->pluginSlug.'', array($this, 'wppizza_admin_option_page_capability' ));
 
@@ -104,13 +104,13 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 		add_action('wp_ajax_wppizza_json', array(&$this,'wppizza_json') );// non logged in users
 		add_action('wp_ajax_nopriv_wppizza_json', array(&$this,'wppizza_json') );
       }
-      
+
 
 /*********************************************************************************
 *
 *	[filters and actions for order page: login, logout[currently omitted], register, continue as guest]
 *
-*********************************************************************************/  
+*********************************************************************************/
 	/************************************************************************
 		[output login form or logout link on order page]
 	************************************************************************/
@@ -123,15 +123,15 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 			echo $html;
 			return;
 		}
-		
-		
+
+
 		/**as someone might be using previous versions of the wppizza-order.php template copied to their theme
 			it might not have that variable defined in the do_action, so let's assume a default of 1 as otherwsie the login would just never be displayed
-			caveat being, that it also gets displayed when there's nothing in the cart (although it isn't necessarily a problem 
+			caveat being, that it also gets displayed when there's nothing in the cart (although it isn't necessarily a problem
 			having a login option even if the cart is empty. just my personal preference not to have it.)
 		**/
-		if(!is_int($items)){$items=1;}		
-		
+		if(!is_int($items)){$items=1;}
+
 		/**non logged in users**/
 		if(!is_user_logged_in() && $items>0) {
 			/**any login errors ?**/
@@ -139,13 +139,13 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 			$style='style="display:none"';/*login hidden if not fail**/
 			$styleAlt='style="display:block"';/*login hidden if not fail**/
 			if(isset($_GET['fail'])){
-				$style='style="display:block"';	
-				$styleAlt='style="display:none"';	
+				$style='style="display:block"';
+				$styleAlt='style="display:none"';
 				$wp_error = new WP_Error('authentication_failed', __('<strong>ERROR</strong>: Invalid username or incorrect password.'));/*native wp*/
 				$errMsg = $wp_error->get_error_message();
 				$error="<div class='wppizza-login-error'>".$errMsg."</div>";
 			}
-			
+
 			/***html***/
 			$html='';
 			$html.='<a name="login"></a>';
@@ -159,10 +159,10 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
             			$html.='<span><div class="wppizza-unpw-lbl">'.__( 'Username' ).'</div><input type="text" name="log" id="user_login" class="input wppizza_user_login" size="15" value="" placeholder="'.__( 'Username' ).'" required="required" /></span>';
             			$html.='<span><div class="wppizza-unpw-lbl">'.__( 'Password' ).'</div><input type="password" name="pwd" id="user_pass" class="input wppizza_user_pass"  size="15" value="" placeholder="'.__( 'Password' ).'" required="required" /></span>';
                 		$html.='<span><div class="wppizza-unpw-lbl">&nbsp;</div><input type="submit" value="'.__( 'Log In' ).'" id="wppizza_btn_login" /></span>';
-                		$html.=''.wp_nonce_field( 'wppizza_nonce_login','wppizza_nonce_login',true,false).'';                		
+                		$html.=''.wp_nonce_field( 'wppizza_nonce_login','wppizza_nonce_login',true,false).'';
             		$html.='</form>';
-					$html.=$error;/**add errors if any**/	
-				$html.='</div>';				
+					$html.=$error;/**add errors if any**/
+				$html.='</div>';
 			$html.='</div>';
 			echo $html;
 			return;
@@ -174,11 +174,11 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 	************************************************************************/
 	function wppizza_authenticate( $username, $password){
 		if (isset($_POST['wppizza_nonce_login'])){
-	
+
 			$chkLogin = apply_filters('authenticate', null, $username, $password);
 			$setVars=false;
 			$unsetVars=false;
-					
+
 			/**failed login**/
 			if ( is_wp_error( $chkLogin ) ) {
 				$errors = $chkLogin->get_error_codes();
@@ -193,7 +193,7 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 	}
 	/************************************************************************
 		[successful login from order page->redirect back to that page]
-	************************************************************************/	
+	************************************************************************/
 	function wppizza_login_redirect( $redirect_to, $request, $user  ){
 		/**check if we are coming from the order page**/
 		if (isset($_POST['wppizza_nonce_login'])){
@@ -202,7 +202,7 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 				$redirectUrl=$this->wppizza_set_redirect_url($_POST['_wp_http_referer'],array(),array('fail'));
 				return $redirectUrl;
 			}else{
-				return $redirect_to;	
+				return $redirect_to;
 			}
 		}
 		/**redirect others as normal*/
@@ -212,22 +212,22 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 		[helper to set redirect location with ability to add or unset some query vars
 	********************************************************************************/
 	function wppizza_set_redirect_url( $location, $setVars=false,$unsetVars=false){
-			/** 
+			/**
 				check one day if one could/should be using this instead
 				wp_redirect( add_query_arg('login', 'failed', $referrer) );
 			*/
-			
+
 			/**split original into url and query vars**/
 			$locUrl=explode('?',$location);
 			/**make url**/
 			$redirectLocation='';
 			$redirectLocation.=$locUrl[0];/*get url before get vars*/
 			/**make query variables**/
-			
+
 			if(isset($locUrl[1]) && $locUrl[1]!=''){// && count($locUrl[1])>0
 				parse_str($locUrl[1],$qString);
 			}else{
-				$qString=array();	
+				$qString=array();
 			}
 			/**add vars if set**/
 			if($setVars && is_array($setVars) && count($setVars)>0){
@@ -247,7 +247,7 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 			if(count($qString)>0){
 				$redirectLocation.='?'.http_build_query($qString);
 			}
-	
+
 		return $redirectLocation;
 	}
 	/********************************************************************************
@@ -255,10 +255,10 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 	********************************************************************************/
 
 	function wppizza_create_user_option(){
-		if(!is_user_logged_in() && get_option('users_can_register')==1) {			
+		if(!is_user_logged_in() && get_option('users_can_register')==1) {
 			$formelements=$this->pluginOptions['order_form'];
 			/***********************************************************
-				check if we have the email set to enabled and required 
+				check if we have the email set to enabled and required
 				as otherwise new registration on order will not work
 				as there's noweher to send the password
 			*************************************************************/
@@ -267,18 +267,18 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 				if($oForm['key']=='cemail' && $oForm['enabled']  && $oForm['required']){
 					$emailSet=true;
 					break;
-				}	
-			}		
+				}
+			}
 			if($emailSet){
 				$txt=$this->pluginOptions['localization'];
-				
+
 				$html='';
 				$html.='<div id="wppizza-create-account">';
 					$html.='<span>'.$txt['register_option_label']['lbl'].'</span>';
 					$html.='<label><input type="radio" id="wppizza_account" name="wppizza_account" value="guest" checked="checked" />'.$txt['register_option_guest']['lbl'].'</label>';
 					$html.='<label><input type="radio" id="wppizza_account" name="wppizza_account" value="register" />'.$txt['register_option_create_account']['lbl'].'</label>';
 				$html.='</div>';
-		        
+
 		        $html.='<div id="wppizza-user-register-info">';
 	            	$html.=''.$txt['register_option_create_account_info']['lbl'].'';
 				$html.='</div>';
@@ -291,7 +291,7 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 *
 *	[filter: wppizza custom fields]
 *
-*********************************************************************************/      
+*********************************************************************************/
 	/***profile page***/
 	function wppizza_user_info($user){
 		$userMetaData=get_user_meta( $user->ID );
@@ -300,13 +300,13 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 		print"<h3> ".__('Additional information',$this->pluginLocale)."</h3>";
 		print"<table class='form-table'>";
 			foreach( $ff as $field ) {
-	
+
 				/**lets exclude disabled and "email" as wp already has this of course, as well as gratuities**/
 				if(!empty($field['enabled']) && $field['type']!='email' && $field['type']!='tips'){
 				$selectedValue=!empty($userMetaData['wppizza_'.$field['key'].''][0]) ? esc_attr($userMetaData['wppizza_'.$field['key'].''][0]) : '';
-				
+
 				print"<tr><th><label for='wppizza_".$field['key']."'>".$field['lbl']."</label></th><td>";
-	
+
 					/**normal text input**/
 					if ( $field['type']=='text'){
 			    		print'<input type="text" name="wppizza_'.$field['key'].'" id="wppizza_'.$field['key'].'" value="'.$selectedValue.'" class="regular-text" />';
@@ -335,15 +335,15 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 		foreach( $ff as $field ) {
 		if(!empty($field['enabled']) && $field['key']!='cemail') {
 			$sanitizeInput=wppizza_validate_string($_POST['wppizza_'.$field['key']]);
-			update_user_meta( $user_id, 'wppizza_'.$field['key'], $sanitizeInput );	
+			update_user_meta( $user_id, 'wppizza_'.$field['key'], $sanitizeInput );
 		}}
 		/**distinctly add email from wp email field**/
 		$sanitizeEmail=wppizza_validate_string($_POST['email']);
-		update_user_meta( $user_id, 'wppizza_cemail', $sanitizeEmail );			
-	}      
+		update_user_meta( $user_id, 'wppizza_cemail', $sanitizeEmail );
+	}
 	/***show selected fields on registration page***/
 	function wppizza_user_register_form_display_fields(){
-	
+
 	    $ff=$this->pluginOptions['order_form'];
 		asort($ff);
 	    foreach( $ff as $field ) {
@@ -357,7 +357,7 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 				/**textareas**/
 				if ( $field['type']=='textarea'){
 					print'<textarea  class="input" name="wppizza_'.$field['key'].'" id="wppizza_'.$field['key'].'" rows="5" cols="30">'.$field_value.'</textarea>';
-				}	 	
+				}
 				/**select**/
 				if ( $field['type']=='select'){
 					print'<select name="wppizza_'.$field['key'].'" id="wppizza_'.$field['key'].'" class="input">';
@@ -366,8 +366,8 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 							print'<option value="'.$key.'" '.selected($key,$field_value,false).'>'.$value.'</option>';
 						}
 					print'</select>';
-				}						
-	 		echo"</p>";	 
+				}
+	 		echo"</p>";
 	    	}
 	    }
 	}
@@ -379,34 +379,34 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 		asort($ff);
 	    foreach( $ff as $field ) {
 	    if(!empty($field['enabled']) && !empty($field['onregister']) && isset($_POST['wppizza_'.$field['key']])) {
-	    		$sanitizeInput=wppizza_validate_string($_POST['wppizza_'.$field['key']]);			
-				update_user_meta( $user_id, 'wppizza_'.$field['key'], $sanitizeInput );	
+	    		$sanitizeInput=wppizza_validate_string($_POST['wppizza_'.$field['key']]);
+				update_user_meta( $user_id, 'wppizza_'.$field['key'], $sanitizeInput );
 		}}
 		/**distinctly add email from wp email field**/
 		if(isset($_POST['user_email'])){
 			$sanitizeEmail=wppizza_validate_string($_POST['user_email']);
-			update_user_meta( $user_id, 'wppizza_cemail', $sanitizeEmail );	
+			update_user_meta( $user_id, 'wppizza_cemail', $sanitizeEmail );
 		}
-	 
+
 	 $new_user_id = wp_update_user( $userdata );
 	}
 
 	/****update/add user meta when registering via "order page" **/
-	function wppizza_user_register_order_page( $user_id, $password = '', $meta = array() ){		
+	function wppizza_user_register_order_page( $user_id, $password = '', $meta = array() ){
 	    $ff=$this->pluginOptions['order_form'];
 	    foreach( $ff as $field ) {
-	    if(!empty($field['enabled']) && $field['type']!='cemail' && $field['type']!='tips') {	
+	    if(!empty($field['enabled']) && $field['type']!='cemail' && $field['type']!='tips') {
 	    		/**selects should be stored by index**/
 	    		if($field['type']=='select'){
 	    			$sanitizeInput=array_search($_POST[$field['key']], $field['value']);
 	    		}else{
-	    		$sanitizeInput=wppizza_validate_string($_POST[$field['key']]);	    			
+	    		$sanitizeInput=wppizza_validate_string($_POST[$field['key']]);
 	    		}
-				update_user_meta( $user_id, 'wppizza_'.$field['key'], $sanitizeInput );	
+				update_user_meta( $user_id, 'wppizza_'.$field['key'], $sanitizeInput );
 		}}
 		/**turn off admin bar by default**/
-		update_user_meta( $user_id, 'show_admin_bar_front', 'false' );	
-	}		    	
+		update_user_meta( $user_id, 'show_admin_bar_front', 'false' );
+	}
 /***********************************************************************************************
 *
 *
@@ -423,7 +423,7 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 		if(!extension_loaded('mbstring')) {
 			add_action('admin_notices', array( $this, 'wppizza_required_notice_extensions') );
 		}
-		
+
 		if( version_compare( PHP_VERSION, '5.2', '<' )) {
 			require_once ABSPATH . '/wp-admin/includes/plugin.php';
 			deactivate_plugins($this->pluginPath);
@@ -635,8 +635,8 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 
 		/** bypass, when doing "quickedit" (ajax) and /or "bulk edit"  as it will otherwsie loose all meta info (i.e prices, additives etc)!!!***/
 		if ( defined('DOING_AJAX') || isset($_GET['bulk_edit'])){return;}
-		
-		
+
+
 		/**bypass the below when activating plugin as we are installing the default items on first activation via wp_insert_post()**/
 		if(!isset($_GET['activate'])){
 			/***as this function gets called when creating a new page, we will also insert some default values (as $_POST will be empty)**/
@@ -774,7 +774,7 @@ function wppizza_set_capabilities($get_user_caps=false){
 /****************************************************************************************
 *
 *	[set capability to  save options, if we can't find one (although this should not ever happen)
-*	but something might have gotten screwed up, 
+*	but something might have gotten screwed up,
 *	automatically use 'manage_option' default so at least an admin can do stuff]
 *
 *****************************************************************************************/
@@ -919,10 +919,10 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 		if($type=='category'){
 		static $countCategory=0;$countCategory++;
 			$options = $this->pluginOptions;
-			
+
 			/*********************************************************************
 				[as we have changed in v.2.8.7.4 to have the additives as array
-				so we can custom sort them but dont really want to screw up 
+				so we can custom sort them but dont really want to screw up
 				anyones edited templates, re-map key and name]
 			*******************************************************************/
 				$mapAdditives=array();
@@ -937,7 +937,7 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 						}
 					}
 				}
-				ksort($mapAdditives,SORT_STRING);				
+				ksort($mapAdditives,SORT_STRING);
 				$options['additives']=$mapAdditives;
 				/*******re-map additives inside loop too **************************/
 				add_filter('wppizza_filter_loop_meta', array( $this, 'wppizza_additives_remap'),10,1);
@@ -946,7 +946,7 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 			*	[end of additives re-mapping
 			*
 			********************************************************************/
-			
+
 			/*select first category if none selected->used when using shortcode without category*/
 			if(!isset($atts['category'])){
 				$termSort=$options['layout']['category_sort'];
@@ -1015,7 +1015,7 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 			$excludeIds='';
 			if(isset($atts['exclude'])){
 			$excludeIds=$atts['exclude'];
-			}			
+			}
 			$post_type=$this->pluginSlug;
 			$args = array(
 			  'taxonomy'     => $this->pluginSlugCategoryTaxonomy,
@@ -1031,7 +1031,7 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 			  'hide_empty'   => 1,
 			  'echo'   => 0				// keep as variable
 			);
-			
+
 			/***add a filter if required*****/
 			$args = apply_filters('wppizza_filter_navigation', $args);
 
@@ -1055,13 +1055,13 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 			if(isset($atts['request'])){
 			$request=$atts['request'];
 			}
-			
+
 			/**if request is ajax , return formatted tems**/
 			//$cachePlugin=false;
 			//if(isset($this->pluginOptions['plugin_data']['using_cache_plugin'])){
 			//$cachePlugin=true;
 			//}
-			
+
 			/**variables to use in template**/
 			$options = $this->pluginOptions;
 			$cart=wppizza_order_summary($_SESSION[$this->pluginSession],$options);
@@ -1082,7 +1082,7 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 			if(isset($atts['stickycart'])){
 				$stickycart='wppizza-cart-sticky';
 			}
-			
+
 			/**dsiaply order info like discounts and delivery costs**/
 			if(isset($atts['orderinfo'])){
 				$orderinfo=true;
@@ -1121,7 +1121,7 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 					$_GET[$k]=$v;
 				}
 			}
-			
+
 			sort($formelements);
 				/*check if the file exists in the theme, otherwise serve the file from the plugin directory if possible*/
 				if ($template_file = locate_template( array (''.$this->pluginSlug.'-order.php' ))){
@@ -1136,7 +1136,7 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 				}
 		}
 }
-function wppizza_additives_remap($meta){	
+function wppizza_additives_remap($meta){
 	$convAdditives=array();
 	if(isset($meta['additives']) && is_array($meta['additives'])){
 	foreach($meta['additives'] as $o=>$a){
@@ -1144,7 +1144,7 @@ function wppizza_additives_remap($meta){
 			$thisAdditiveSort=$this->pluginOptions['additives'][$o]['sort'];
 			if($thisAdditiveSort==''){$thisAdditiveSort=$o;}
 			$thisAdditiveName=$this->pluginOptions['additives'][$o]['name'];
-		
+
 			$convAdditives[$thisAdditiveSort]=$thisAdditiveName;
 		}else{/*in case we still have old vars*/
 			$convAdditives[$o]=$a;
@@ -1152,7 +1152,7 @@ function wppizza_additives_remap($meta){
 	}
 	}
 	ksort($convAdditives,SORT_STRING);
-	$meta['additives']=$convAdditives;	
+	$meta['additives']=$convAdditives;
 	return $meta;
 }
 /*********************************************************
@@ -1202,8 +1202,8 @@ public function wppizza_require_common_input_validation_functions(){
 			'menu_name'          => ''.$this->pluginName.''
 		);
 		/**add a filter to labels if you want to...**/
-		$labels = apply_filters('wppizza_cpt_lbls', $labels);		
-		
+		$labels = apply_filters('wppizza_cpt_lbls', $labels);
+
 		$args = array(
 			'labels'        => $labels,
 			'description'   => sprintf( __( 'Holds %1$s  menu items data', $this->pluginLocale ), $this->pluginName ),
@@ -1218,7 +1218,7 @@ public function wppizza_require_common_input_validation_functions(){
 		);
 		/**add a filter to arguments if you want to**/
 		$args = apply_filters('wppizza_cpt_args', $args);
-		
+
 		register_post_type( $this->pluginSlug, $args );
 	}
 	/*******************************************************
@@ -1274,15 +1274,15 @@ public function wppizza_require_common_input_validation_functions(){
 			}
 			if($sep && $loc!='right'){
 				$title=str_ireplace(''.$strSearch.' WPPizza Categories','',$title);
-			}	
+			}
 			/*if we dont have a seperator or nothing has been done yet and its still the same, just try a normal str replace*/
 			if(!$sep || trim($sep)=='' || $title==$titleOrig){
-				$title=str_ireplace($strSearch,'',$title);	
+				$title=str_ireplace($strSearch,'',$title);
 			}
 		/**might as well trim it*/
 		$title=trim($title);
 		}
-		
+
 		return $title;
 	}
 	/*******************************************************
@@ -1299,7 +1299,7 @@ public function wppizza_require_common_input_validation_functions(){
 	    }
 	    if(!isset($_SESSION[$this->pluginSessionGlobal])){
 	    	/**userdata like address etc*****/
-	    	$_SESSION[$this->pluginSessionGlobal]=array();	    	
+	    	$_SESSION[$this->pluginSessionGlobal]=array();
 	    }
 	}
 	/*******************************************************
@@ -1312,7 +1312,7 @@ public function wppizza_require_common_input_validation_functions(){
 	    /*gross sum of all items in cart,before discounts etc*/
 	    $_SESSION[$this->pluginSession]['total_price_items']=0;
 	    /**tips***/
-	    $_SESSION[$this->pluginSession]['tips']=0;	    
+	    $_SESSION[$this->pluginSession]['tips']=0;
 	}
 	/*******************************************************
 		[set/save submitted user post data in session, exclude tips though ]
@@ -1344,11 +1344,11 @@ public function wppizza_require_common_input_validation_functions(){
 						$_SESSION[$this->pluginSessionGlobal]['userdata'][$oForm['key']]=$params[$oForm['key']];
 					}
 				}
-			} 
-			
+			}
+
 		return $params;
-	}		
-	
+	}
+
 /*********************************************************
 *
 *	[include send order emails class]
@@ -1398,10 +1398,10 @@ public function wppizza_require_common_input_validation_functions(){
      * Use loop template when displying SINGLE ITEMS in custom post type category
      * [see header of templates/wppizza-single.php for details]
      ******************************************************/
-	function wppizza_filter_loop($args,$args2=null){		
+	function wppizza_filter_loop($args,$args2=null){
 		if(is_single() && get_post_type()==WPPIZZA_POST_TYPE){
 			global $post;
-			
+
 			$args['p']=$post->ID;
 			$catTerms = get_the_terms($post->ID, WPPIZZA_TAXONOMY);
 			if ( $catTerms && ! is_wp_error( $catTerms ) ){
@@ -1474,7 +1474,7 @@ public function wppizza_require_common_input_validation_functions(){
 			wp_register_style($this->pluginSlug.'-prettyPhoto', plugins_url( 'css/wppizza-prettyPhoto.css', $this->pluginPath ), array(), $this->pluginVersion);
 			wp_enqueue_style($this->pluginSlug.'-prettyPhoto');
 		}
-		
+
 		if($options['layout']['include_css']){
 			/**if we want to keep all the original css (including future changes) but only want to overwrite some lines , add wppizza-custom.css to your template directory*/
 			if (file_exists( get_template_directory() . '/wppizza-custom.css')){
@@ -1482,9 +1482,9 @@ public function wppizza_require_common_input_validation_functions(){
 				wp_enqueue_style($this->pluginSlug.'-custom');
 			}
 		}
-		
 
-		
+
+
 		/****************
 			js
 		****************/
@@ -1494,23 +1494,23 @@ public function wppizza_require_common_input_validation_functions(){
 		}
     	wp_register_script($this->pluginSlug, plugins_url( 'js/scripts.min.js', $this->pluginPath ), array('jquery'), $this->pluginVersion ,$options['plugin_data']['js_in_footer']);
     	wp_enqueue_script($this->pluginSlug);
-    	
+
     	wp_register_script($this->pluginSlug.'-validate', plugins_url( 'js/jquery.validate.min.js', $this->pluginPath ), array($this->pluginSlug), $this->pluginVersion ,$options['plugin_data']['js_in_footer']);
-    	wp_enqueue_script($this->pluginSlug.'-validate');    	
+    	wp_enqueue_script($this->pluginSlug.'-validate');
 
     	/**pretty photo**/
     	if($options['layout']['prettyPhoto']){
     		wp_register_script($this->pluginSlug.'-prettyPhoto', plugins_url( 'js/jquery.prettyPhoto.js', $this->pluginPath ), array('jquery'), $this->pluginVersion ,$options['plugin_data']['js_in_footer']);
     		wp_enqueue_script($this->pluginSlug.'-prettyPhoto');
-    		/**copy js to template directory to edit settings (theme etc)**/ 
-    		if (file_exists( get_template_directory() . '/wppizza.prettyPhoto.custom.js')){	
+    		/**copy js to template directory to edit settings (theme etc)**/
+    		if (file_exists( get_template_directory() . '/wppizza.prettyPhoto.custom.js')){
 	    		wp_register_script($this->pluginSlug.'-ppCustom', get_template_directory_uri().'/wppizza.prettyPhoto.custom.js', array('jquery'), $this->pluginVersion ,$options['plugin_data']['js_in_footer']);
     		}else{
-	    		wp_register_script($this->pluginSlug.'-ppCustom', plugins_url( 'js/wppizza.prettyPhoto.custom.js.php?t='.$options['layout']['prettyPhotoStyle'].'', $this->pluginPath ), array('jquery'), $this->pluginVersion ,$options['plugin_data']['js_in_footer']);	
+	    		wp_register_script($this->pluginSlug.'-ppCustom', plugins_url( 'js/wppizza.prettyPhoto.custom.js.php?t='.$options['layout']['prettyPhotoStyle'].'', $this->pluginPath ), array('jquery'), $this->pluginVersion ,$options['plugin_data']['js_in_footer']);
     		}
-    		wp_enqueue_script($this->pluginSlug.'-ppCustom');     	
+    		wp_enqueue_script($this->pluginSlug.'-ppCustom');
     	}
-    	
+
 
     	/**localized js***/
 		wp_enqueue_script( $this->pluginSlug );
@@ -1543,13 +1543,13 @@ public function wppizza_require_common_input_validation_functions(){
 			if($options['layout']['sticky_cart_limit_bottom_elm_id']!=''){
 			$localized_array['crt']['lmtb']=$options['layout']['sticky_cart_limit_bottom_elm_id'];
 			}
-			
+
 			if($options['layout']['jquery_fb_add_to_cart']!=''){
 				$localized_array['itm']['fbatc']=$options['localization']['jquery_fb_add_to_cart_info']['lbl'];
 				$localized_array['itm']['fbatcms']=$options['layout']['jquery_fb_add_to_cart_ms'];
 			}
-			
-		
+
+
 		wp_localize_script( $this->pluginSlug,$this->pluginSlug, $localized_array );
 
     }
@@ -1564,12 +1564,12 @@ public function wppizza_require_common_input_validation_functions(){
 			$pageCount = count($pages);
 			for ( $i=0; $i<$pageCount; $i++ ) {
 				$page = & $pages[$i];
-				
+
 				/**wpml select of order page**/
 				if(function_exists('icl_object_id')) {
 					$this->pluginOptions['order']['orderpage']=icl_object_id($this->pluginOptions['order']['orderpage'],'page');
 				}
-				
+
 				if ($page->ID==$this->pluginOptions['order']['orderpage']) {
 					unset( $pages[$i] );/*unset the order page*/
 				}
@@ -1680,10 +1680,10 @@ public function wppizza_require_common_input_validation_functions(){
 	function wppizza_filter_sanitize_post_vars($arr){
 		if(is_array($arr)){
 			array_walk_recursive($arr,array($this,'wppizza_filter_sanitize_post_vars_recursive'));
-		}		
+		}
 		/**as tips belong to order details and not customer details, we exclude them from the post vars that get stored in the db customer_ini*/
 		if(isset($arr['ctips'])){unset($arr['ctips']);}
-		
+
 		return $arr;
 	}
 /*********************************************************************************
@@ -1713,6 +1713,7 @@ public function wppizza_require_common_input_validation_functions(){
 		$orderDetails['total_price_items']=wppizza_output_format_price($oDetails['total_price_items'],$this->pluginOptions['layout']['hide_decimals']);
 		$orderDetails['discount']=wppizza_output_format_price($oDetails['discount'],$this->pluginOptions['layout']['hide_decimals']);
 		$orderDetails['item_tax']=wppizza_output_format_price($oDetails['item_tax'],$this->pluginOptions['layout']['hide_decimals']);
+		$orderDetails['taxes_included']=wppizza_output_format_price($oDetails['taxes_included'],$this->pluginOptions['layout']['hide_decimals']);
 
 		$orderDetails['delivery_charges']=!empty($oDetails['delivery_charges']) ? wppizza_output_format_price($oDetails['delivery_charges'],$this->pluginOptions['layout']['hide_decimals']) : '';
 		$orderDetails['selfPickup']=!empty($oDetails['selfPickup']) ? wppizza_validate_int_only($oDetails['selfPickup']) : 0;
@@ -1806,21 +1807,21 @@ public function wppizza_require_common_input_validation_functions(){
 		}}
 		return $oItems;
 	}
-	
-	
-	
-	
+
+
+
+
 	function wppizza_filter_customer_details_html($cDetails){
 		if(isset($cDetails) && is_array($cDetails)){
 		foreach($cDetails as $k=>$v){
 			if($v['type']=='textarea'){
 				$cDetails[$k]['value']='<div class="wppizza-order-textarea">'.nl2br($v['value']).'</div>';
-			
+
 			}
 		}}
 		return	$cDetails;
-	}	
-	
+	}
+
 	function wppizza_filter_order_summary_to_plaintext($orderSummary){
 		if(is_array($orderSummary)){
 				$pad=74;
@@ -1867,7 +1868,7 @@ public function wppizza_require_common_input_validation_functions(){
 ******************************************************/
 	function wppizza_set_order_status(){
 		$setStatus=wppizza_custom_order_status();
-		
+
 		/**compare and see if we have to do anything**/
 		if($this->pluginOptions!=0 && (!isset($this->pluginOptions['plugin_data']['db_order_status_options']) || $this->pluginOptions['plugin_data']['db_order_status_options']!=$setStatus)){
 			global $wpdb;
@@ -1878,15 +1879,15 @@ public function wppizza_require_common_input_validation_functions(){
 			}
 			/**implicitly add all options already in use**/
 			foreach($usedOrderStatus as $k=>$v){
-				$newStatus[]=wppizza_validate_alpha_only(str_replace(" ","_",strtoupper($v)));	
+				$newStatus[]=wppizza_validate_alpha_only(str_replace(" ","_",strtoupper($v)));
 			}
 			/**implicitly add NEW option (as its default)*****/
 			$newStatus[]='NEW';
-			
+
 			/**update options**/
 			$update_options=$this->pluginOptions;
 			$update_options['plugin_data']['db_order_status_options']=$setStatus;
-	
+
 			update_option($this->pluginSlug, $update_options );
 			/**ALTER TABLE**/
 			$setNewOrderStatus=array_unique($newStatus);
