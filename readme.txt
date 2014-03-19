@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.2, WP 3.3 
 Tested up to: 3.8.1
-Stable tag: 2.8.9.3
+Stable tag: 2.8.9.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -124,11 +124,17 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 == Changelog ==
 
+2.8.9.4  
+* ADDED: option to group, sort and display items by category in cart, order page, thank you page and emails  
+* ADDED: filters and action hooks in the relevant templates to enable the above (which could of course also be used for other purposes if required)  
+18th March 2014   
+
 
 2.8.9.3  
 * ADDED: option to have any taxes displayed without adding them to the prices/totals (i.e if prices are entered with taxes already included but applicable taxes do still need to be visible)   
 * prettied up admin somewhat  
 13th March 2014   
+
 
 2.8.9.2  
 * ADDED: option to set currency symbol in cart, emails, order and thank you page to be to the right of the price   

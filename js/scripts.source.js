@@ -53,14 +53,14 @@ jQuery(document).ready(function($){
 			var wppizzaCartStickyLimitBottom=wppizzaCartStickyLimitBottomElm.offset().top;/*get element top*/
 		}
 		var wppizzaCartStickyScrollTop = $(window).scrollTop()+wppizza.crt.mt;/*get top poxition where state toggle (browser + set margin)*/
-	
-	
+
+
 		/**initialize a couple of vars vor the elements*/
-		var wppizzaCartStickySelf = [];	
+		var wppizzaCartStickySelf = [];
 		var wppizzaCartStickyVars = [];
 		var wppizzaCartStickyParent = [];
-	
-	
+
+
 		var wppizzaCartStickyAnimation = false;
 		if(wppizza.crt.anim>0 && wppizza.crt.fx!=''){
 			wppizzaCartStickyAnimation = true;
@@ -68,35 +68,35 @@ jQuery(document).ready(function($){
 		/**get all aplicable elements and their variables**/
 		if(wppizzaCartStickyElm.length>0){
 			$.each(wppizzaCartStickyElm,function(e,v){
-				/***get the element object and add vars as required**/		
+				/***get the element object and add vars as required**/
 				wppizzaCartStickySelf[e]=$(this);
-				
+
 				/**wrap in wraper div which is then set to height of cart to stop things jumping around**/
 				wppizzaCartStickySelf[e].wrap( "<div class='wppizza-cart-wrap'></div>" );
-				
+
 				wppizzaCartStickyVars[e]=wppizzaCartStickySelf[e].css(["backgroundColor"]);
 				wppizzaCartStickyVars[e]['offset-top']= wppizzaCartStickySelf[e].offset().top;/*offset from top of page**/
 				wppizzaCartStickyVars[e]['state']='';/**initialize state so - when set below - we dont ever need do the same thing multiple times**/
 				wppizzaCartStickyVars[e]['height-int']=wppizzaCartStickySelf[e].height();/*make sure we also have height an integer and call it height-int instead of just height or jQuery 1.8.3 gets confused when SETTING height*/
 				wppizzaCartStickyVars[e]['width-int']=wppizzaCartStickySelf[e].width();/*make sure we also have width an integer and call it width-int instead of just width or jQuery 1.8.3 gets confused when SETTING width*/
-				
+
 				/**set limit bottom**/
 				if(wppizzaCartStickyLimitBottomElm && wppizzaCartStickyLimitBottom>(wppizzaCartStickyVars[e]['offset-top']+wppizzaCartStickyVars[e]['height-int'])){
 					wppizzaCartStickyVars[e]['limit-bottom']=Math.floor(wppizzaCartStickyLimitBottom-wppizzaCartStickyVars[e]['height-int']);
 				}
-	
+
 				/*get parent element so we can set height on it*/
 				wppizzaCartStickyParent[e] = wppizzaCartStickySelf[e].parent();
-				
+
 				/*set distinct width of element so we dont have to set it all the time when scrolling or setting fixed position*/
 				wppizzaCartStickySelf[e].width(wppizzaCartStickyVars[e]['width-int']);
 				wppizzaCartStickyParent[e].height(wppizzaCartStickyVars[e]['height-int']);
 			});
 		}
-	
+
 		/***********************************************
-		*	[we have set an element limit past which the 
-		*	sticky cart should not scroll, 
+		*	[we have set an element limit past which the
+		*	sticky cart should not scroll,
 		*	lets calculate the (negative) offset here]
 		/***********************************************/
 		var wppizzaCartStickyMaxOffset = function(elm,top,limitElm){
@@ -116,10 +116,10 @@ jQuery(document).ready(function($){
 			$(window).scroll(function () {
 				var wppizzaCartStickyScrollTop = ($(window).scrollTop()+wppizza.crt.mt);
 				$.each(wppizzaCartStickySelf,function(e,v){
-	
+
 					/**calcuate needed offset if we are limiting the scroll by a set element below cart***/
 					var wppizzaCartStickyLimitOffset=wppizzaCartStickyMaxOffset(wppizzaCartStickyVars[e],wppizzaCartStickyScrollTop,wppizzaCartStickyLimitBottomElm);
-	
+
 					/**leave it in place**/
 					if (wppizzaCartStickyVars[e]['offset-top']>=wppizzaCartStickyScrollTop) {
 						wppizzaCartStickySelf[e].removeClass('wppizza-cart-fixed').css({'top':'','background-color':''+wppizzaCartStickyVars[e]['backgroundColor']+''});
@@ -131,18 +131,18 @@ jQuery(document).ready(function($){
 				});
 			});
 		}
-	
+
 		/**********with animation, *******************************************************************************************************************************************/
 		if(wppizzaCartStickyAnimation){
-		var wppizzaCartStickyAnimIni = true;/*set load flag*/	
-			
+		var wppizzaCartStickyAnimIni = true;/*set load flag*/
+
 			/***********initialize on load***********/
 			setTimeout(function(){/*a little timeout to give the page time to render*/
 				$.each(wppizzaCartStickySelf,function(e,v){
-	
+
 					/**calcuate needed offset if we are limiting the scroll by a set element below cart***/
 					var wppizzaCartStickyLimitOffset=wppizzaCartStickyMaxOffset(wppizzaCartStickyVars[e],wppizzaCartStickyScrollTop,wppizzaCartStickyLimitBottomElm);
-	
+
 					/**leave it in place**/
 					if (wppizzaCartStickyVars[e]['offset-top']>=wppizzaCartStickyScrollTop) {
 						wppizzaCartStickyVars[e]['state']='relative';/*set state flag so we dont do the same thing  multiple times**/
@@ -153,42 +153,42 @@ jQuery(document).ready(function($){
 						wppizzaCartStickySelf[e].animate({'top':''+(wppizza.crt.mt+wppizzaCartStickyLimitOffset)+'px'},wppizza.crt.anim,''+wppizza.crt.fx+'',function(){});
 						wppizzaCartStickyVars[e]['state']='fixed';/*set state flag so we dont do the same thing  multiple times**/
 					}
-				});	
+				});
 				wppizzaCartStickyAnimIni=false;/*unset previously set load flag*/
 			},200);
-			
-	
+
+
 			/*********on scroll after load *************/
 			$(window).scroll(function () {
 				if(!wppizzaCartStickyAnimIni){/*only react to scrolling after initial load*/
-				
+
 					var wppizzaCartStickyScrollTop = $(window).scrollTop()+wppizza.crt.mt;/*find out if we need fixed or relative*/
-				
-						clearTimeout(wppizzaCartStickyScrollTimeout);	
+
+						clearTimeout(wppizzaCartStickyScrollTimeout);
 						wppizzaCartStickyScrollTimeout = setTimeout(function(){/*a little timeout to not go mad*/
 							/*iterate through elements*/
 							$.each(wppizzaCartStickySelf,function(e,v){
-								
+
 								/**calcuate needed offset if we are limiting the scroll by a set element below cart***/
 								var wppizzaCartStickyLimitOffset=wppizzaCartStickyMaxOffset(wppizzaCartStickyVars[e],wppizzaCartStickyScrollTop,wppizzaCartStickyLimitBottomElm);
-								
+
 								/**put back in its place if state has changed, otherwise just leave in peace**/
 								if (wppizzaCartStickyVars[e]['offset-top']>=wppizzaCartStickyScrollTop && wppizzaCartStickyVars[e]['state']!='relative') {
 									wppizzaCartStickyVars[e]['state']='relative';/*set state flag so we dont do the same thing  multiple times**/
-									
+
 									wppizzaCartStickySelf[e].removeClass('wppizza-cart-fixed');
 									wppizzaCartStickySelf[e].animate({'top':''},wppizza.crt.anim,''+wppizza.crt.fx+'',function(){
 										wppizzaCartStickySelf[e].css({'background-color':''+wppizzaCartStickyVars[e]['backgroundColor']+''});
 									});
-									// if we do not want to animate when returning to relative state , use this instead of the above. 
+									// if we do not want to animate when returning to relative state , use this instead of the above.
 									//wppizzaCartStickySelf[e].removeClass('wppizza-cart-fixed').css({'top':'','background-color':''+wppizzaCartStickyVars[e]['backgroundColor']+''});
 								}
 								/**move to sticky/fixed if state has changed or we have a limit set , otherwise just leave in peace**/
 								if (wppizzaCartStickyVars[e]['offset-top']<wppizzaCartStickyScrollTop && (wppizzaCartStickyVars[e]['state']!='fixed' || wppizzaCartStickyLimitBottomElm)) {
-									
+
 									wppizzaCartStickyVars[e]['state']='fixed';/*set state flag so we dont do the same thing  multiple times**/
 									wppizzaCartStickySelf[e].addClass('wppizza-cart-fixed').css({'background-color':''+wppizza.crt.bg+''});
-									wppizzaCartStickySelf[e].animate({'top':''+(wppizza.crt.mt+wppizzaCartStickyLimitOffset)+'px'},wppizza.crt.anim,''+wppizza.crt.fx+'',function(){});						
+									wppizzaCartStickySelf[e].animate({'top':''+(wppizza.crt.mt+wppizzaCartStickyLimitOffset)+'px'},wppizza.crt.anim,''+wppizza.crt.fx+'',function(){});
 								}
 							});
 					},100);
@@ -232,14 +232,22 @@ jQuery(document).ready(function($){
 		/**feedback on item add enabled?*/
 		var fbatc=false;
 		if(typeof wppizza.itm!=='undefined' && typeof wppizza.itm.fbatc!=='undefined'){
-		 fbatc=true;	
+		 fbatc=true;
 		}
-		
-		
-		
-		var itemCount=1;
 
-		if(self.hasClass('wppizza-add-to-cart')){type='add';}
+
+
+		var itemCount=1;
+		/**get cat id**/
+		var catId='';
+		if(self.hasClass('wppizza-add-to-cart')){
+			type='add';
+			var postId = selfId.split('-');
+			var catdata = $('#wppizza-category-'+postId[1]+'').val();
+			if(typeof catdata!=='undefined'){/*some customised templates may not have catid added, so check first*/
+				catId=catdata;
+			}
+		}
 		if(self.hasClass('wppizza-remove-from-cart')){type='remove';}
 		if(self.hasClass('wppizza-empty-cart-button')){type='removeall';selfId=0;}
 		if(self.hasClass('wppizza-cart-refresh') || selfId=='wppizza-force-refresh'){type='refresh';}
@@ -265,10 +273,10 @@ jQuery(document).ready(function($){
 					});
 				});
 			}
-			
-			
+
+
 			$('.wppizza-order').prepend('<div id="wppizza-loading"></div>');
-			jQuery.post(wppizza.ajaxurl , {action :'wppizza_json',vars:{'type':type,'id':selfId,'itemCount':itemCount}}, function(response) {
+			jQuery.post(wppizza.ajaxurl , {action :'wppizza_json',vars:{'type':type,'id':selfId,'itemCount':itemCount,'catId':catId}}, function(response) {
 				/*show items in cart*/
 				$('.wppizza-order').html(response.itemsajax);
 				/*button*/
@@ -316,7 +324,7 @@ jQuery(document).ready(function($){
 					$('.wppizza-cart-tax-label').html('');
 					$('.wppizza-cart-tax-value').html('');
 					$('.wppizza-cart-tax-included-label').html('');
-					$('.wppizza-cart-tax-included-value').html('');					
+					$('.wppizza-cart-tax-included-value').html('');
 
 				}
 				if(response.items.length==0){
@@ -393,16 +401,16 @@ jQuery(document).ready(function($){
 	***********************************************/
 	$(document).on(''+wppizzaClickEvent+'', '#wppizza-login,#wppizza-login-cancel', function(e){
 		$("#wppizza-user-login-action").toggle(300);
-		$("#wppizza-user-login-option>span>a").toggle();		
+		$("#wppizza-user-login-option>span>a").toggle();
 	});
 	$(document).on(''+wppizzaClickEvent+'', '#wppizza_btn_login', function(e){
-		$("#wppizza-user-login-action").append('<div id="wppizza-loading"></div>');		
-	});	
+		$("#wppizza-user-login-action").append('<div id="wppizza-loading"></div>');
+	});
 	$(document).on('change', '#wppizza_account', function(e){
-		$("#wppizza-user-register-info" ).toggle(200);	
-		$(".wppizza-login-error").remove();	
-		
-	});	
+		$("#wppizza-user-register-info" ).toggle(200);
+		$(".wppizza-login-error").remove();
+
+	});
 	/****insert nonce too via js *******/
 	if($("#wppizza-send-order").length>0){
 		jQuery.post(wppizza.ajaxurl , {action :'wppizza_json',vars:{'type':'nonce','val':'register'}}, function(nonce) {
@@ -443,7 +451,7 @@ jQuery(document).ready(function($){
 	/*******************************************
 	*	[validation login]
 	*******************************************/
-	$("#wppizza-login-frm").validate({});	
+	$("#wppizza-login-frm").validate({});
 	/*******************************************
 	*	[ini validation]
 	*******************************************/
@@ -475,19 +483,19 @@ jQuery(document).ready(function($){
 						//console.log(response);
 					},'html');
 				}
-				
+
 				/***if we want to also register account check this first**/
 				var wppizzaLoginElm=$("#wppizza-user-login");
 				var wppizzaLoginErr=$(".wppizza-login-error");/*remove any previous errors*/
 				if(wppizzaLoginErr.length>0){
 					wppizzaLoginErr.remove();
 				}
-				
+
 				var wppizzaLoginSelect=$("input[type=radio][name='wppizza_account']:checked");
-								
+
 				wppizzaLoginElm.hide();
 				if(typeof wppizzaLoginSelect!=='undefined' && wppizzaLoginSelect.val()=='register'){
-					self.prepend('<div id="wppizza-loading"></div>');					
+					self.prepend('<div id="wppizza-loading"></div>');
 					jQuery.post(wppizza.ajaxurl , {action :'wppizza_json',vars:{'type':'new-account','data':self.serialize()}}, function(response) {
 						/**account/email exists**/
 						if(typeof response.error!=='undefined'){
@@ -502,17 +510,17 @@ jQuery(document).ready(function($){
 						}
 					},'json');
 					return;
-				}else{				
+				}else{
 					/**we are not registering a new account, so just submit as planned**/
 					wppizzaSelectSubmitType(self,currVal,hasClassAjax);
 				}
 			}
 		})
-		
-		
+
+
 	/******************************
 	* submit via ajax or send form
-	*******************************/		
+	*******************************/
 	var wppizzaSelectSubmitType=function(self,currVal,hasClassAjax){
 		/**cod->transmit form via ajax if cod or forced by gw settings (i.e $this->gatewayTypeSubmit = 'ajax')*/
 		if(currVal=='cod' || hasClassAjax){
@@ -524,10 +532,10 @@ jQuery(document).ready(function($){
 			},'html').error(function(jqXHR, textStatus, errorThrown) {$('#wppizza-send-order #wppizza-loading').remove();alert("error : " + errorThrown);console.log(jqXHR.responseText);});
 		}else{
 			self.prepend('<div id="wppizza-loading" style="opacity:0.8;"></div>');
-			form.submit();	
+			form.submit();
 		}
-	
-	};		
+
+	};
 	/******************************
 	* set error messages
 	*******************************/
@@ -555,7 +563,7 @@ jQuery(document).ready(function($){
 	/***********************************************
 	*
 	*	[using cache plugin, load cart dynamically]
-	*	[as the cart does not exist onload we will also 
+	*	[as the cart does not exist onload we will also
 	*	have to execute the sticky cart function after it has been created]
 	***********************************************/
 	if(typeof wppizza.usingCache!=='undefined'){

@@ -51,11 +51,21 @@
 		$termSlug=get_query_var( WPPIZZA_TAXONOMY );
 	}
 	/*************************************************************
-	now lets get term descriptions , names etc
-	only needs to run when noheader is not set though
+	now lets get term descriptions , names etc only needs to run
+	when noheader is not set or we want to add categories to emails etc
 	*************************************************************/
-	if(!isset($noheader)){
+	if(!isset($noheader) || isset($getSlugDetails)){
 		$termDetails = get_term_by( 'slug', $termSlug, WPPIZZA_TAXONOMY);
+	}
+
+	/**************************************************************************
+	 add a cat id to class so we can identify which category we are currently
+	 in when adding an item (if required)added as hidden input instead of class
+	 somewhere as we can otherwise break all sorts of other things
+	**************************************************************************/
+	$dataCatId=0;
+	if(isset($getSlugDetails)){
+		$dataCatId=$termDetails->term_id;
 	}
 
 	/*************************************************************	
@@ -177,6 +187,11 @@
 	do_action('wppizza_loop_inside_before_article',$postId);
 ?>
 	<article id="post-<?php the_ID(); ?>" <?php post_class(array(''.$post_type.'-article','entry-content')); ?>>
+<?php
+	/*Selected category ADDED IN VERSION 2.8.9.4*/
+	if($dataCatId>0){?>
+	<input type="hidden" id="wppizza-category-<?php the_ID(); ?>" value="<?php echo $dataCatId ?>" />
+<?php } ?>
 <?php
 /*********************************************
 	[single items entry content]

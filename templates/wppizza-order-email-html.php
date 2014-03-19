@@ -16,6 +16,7 @@
 	as gmail - for example - will strip the whole style declaration
 
 */
+$htmlEmailStyle['tableWidth']='500';
 $htmlEmailStyle['pageBackgroundColor']='#FFFFFF';
 $htmlEmailStyle['fontSize']='14px';
 $htmlEmailStyle['fontFamily']='Verdana, Helvetica, Arial, sans-serif';
@@ -23,7 +24,7 @@ $htmlEmailStyle['textColour']='#444444';
 $htmlEmailStyle['linkColor']='#21759B';
 $htmlEmailStyle['aLinkColor']='#21759B';
 $htmlEmailStyle['vLinkColor']='#21759B';
-
+$htmlEmailStyle['categories']='padding:5px 0 0 5px;margin:0;text-decoration:underline';/**used when showing categories too*/
 $htmlEmailStyle['mailBackgroundColor']='#F4F3F4';
 $htmlEmailStyle['mailHeaderBackgroundColor']='#21759B';
 $htmlEmailStyle['mailHeaderBackgroundImage']="";//something like: background:url('http://www.domain.com/logo.png') 10px 10px no-repeat;
@@ -65,7 +66,7 @@ $htmlEmailStyle = apply_filters('wppizza_filter_html_email_style', $htmlEmailSty
 			<tr>
 				<td>
 					<center>
-						<table width="550" cellpadding="0" cellspacing="0" align="center" bgcolor="<?php echo $htmlEmailStyle['mailBackgroundColor'] ?>" style="<?php echo $htmlEmailStyle['mailBorder'] ?>;background:<?php echo $htmlEmailStyle['mailBackgroundColor'] ?>;font-size:<?php echo $htmlEmailStyle['fontSize'] ?>;color:<?php echo $htmlEmailStyle['textColour'] ?>;font-family:<?php echo $htmlEmailStyle['fontFamily'] ?>;">
+						<table width="<?php echo $htmlEmailStyle['tableWidth'] ?>" cellpadding="0" cellspacing="0" align="center" bgcolor="<?php echo $htmlEmailStyle['mailBackgroundColor'] ?>" style="<?php echo $htmlEmailStyle['mailBorder'] ?>;background:<?php echo $htmlEmailStyle['mailBackgroundColor'] ?>;font-size:<?php echo $htmlEmailStyle['fontSize'] ?>;color:<?php echo $htmlEmailStyle['textColour'] ?>;font-family:<?php echo $htmlEmailStyle['fontFamily'] ?>;">
 <?php
 /***********************************************
 
@@ -105,7 +106,13 @@ $htmlEmailStyle = apply_filters('wppizza_filter_html_email_style', $htmlEmailSty
 
 ***********************************************************/
 ?>
-<?php 	foreach($order_items as $k=>$v){ ?>
+<?php
+		/***allow filtering of items (sort, add categories and whatnot)****/
+		$order_items = apply_filters('wppizza_emailhtml_filter_items', $order_items, 'htmlemail');
+		foreach($order_items as $k=>$v){
+		/***allow action per item - probably to use in conjunction with filter above****/
+		do_action('wppizza_emailhtml_item',$v,$htmlEmailStyle);
+?>
 							<tr><td style="<?php echo $htmlEmailStyle['mailPadding']['2x15'] ?>"><?php echo $v['label']; ?></td><td><?php echo $v['value']; ?></td></tr>
 		<?php if($v['additional_info']!=''){ /*only print if there's something to print*/ ?>
 							<tr><td colspan="2" style="<?php echo $htmlEmailStyle['mailPadding']['0x15x15x30'] ?>;font-size:90%"><?php echo $v['additional_info']; ?></td></tr>

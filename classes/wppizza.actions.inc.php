@@ -19,6 +19,8 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 
 			/*class to send order emails used via ajax too so must be avialable from bckend too*/
 			add_action('init', array( $this, 'wppizza_send_order_emails'));
+			/*category walker class to get hierarchical wppizza categories in set order ***/
+			add_action('init', array( $this, 'wppizza_category_walker'));			
 
 			/***************
 				[filters]
@@ -97,6 +99,22 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 			/**allow custom order status fields. priority must be<10**/
 			add_action( 'admin_init', array( $this, 'wppizza_set_order_status' ),9);
 		}
+		
+		
+		/************************************************************************************************************************
+			[sort by and print categories to order page and cart
+		*************************************************************************************************************************/
+		if(!is_admin()){
+			/**filter and sort selected items by their categoryies in order page **/
+			add_filter( 'wppizza_order_form_filter_items', array( $this, 'wppizza_filter_items_by_category'),10,2);
+			/**print category **/
+			add_action('wppizza_order_form_item', array( $this, 'wppizza_items_order_form_print_category'));
+		}
+		/**cart is ajax too so has to be available from is_admin**/
+		add_filter( 'wppizza_cart_filter_items', array( $this, 'wppizza_filter_items_by_category'),10,2);
+		/**print category **/
+		add_filter('wppizza_cart_item', array( $this, 'wppizza_items_cart_print_category'),10,2);
+		
 		/************************************************************************
 			[ajax]
 		*************************************************************************/
@@ -618,6 +636,10 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 				$i++;
 			}}
 			asort($newSort['layout']['category_sort']);	//probably superflous
+
+			/***update full hierarchy too make sure we are now using the right updated order***/
+			$newSort['layout']['category_sort_hierarchy']=$this->wppizza_complete_sorted_hierarchy($newSort['layout']['category_sort']);
+
 			update_option( $this->pluginSlug, $newSort );
 		}
 	}
@@ -965,6 +987,10 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 			if(isset($atts['noheader']) || $options['layout']['suppress_loop_headers']){
 				$noheader=1;
 			}
+			/**if we want to capture the category id a menu item is currently in **/
+			if($options['layout']['items_group_sort_print_by_category']){
+				$getSlugDetails=1;
+			}
 			/*show.hide additives at bottom of loop*/
 			if(isset($atts['showadditives'])){
 				$showadditives=$atts['showadditives'];
@@ -1055,12 +1081,6 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 			if(isset($atts['request'])){
 			$request=$atts['request'];
 			}
-
-			/**if request is ajax , return formatted tems**/
-			//$cachePlugin=false;
-			//if(isset($this->pluginOptions['plugin_data']['using_cache_plugin'])){
-			//$cachePlugin=true;
-			//}
 
 			/**variables to use in template**/
 			$options = $this->pluginOptions;
@@ -1264,7 +1284,33 @@ public function wppizza_require_common_input_validation_functions(){
 		    'rewrite' => array( 'slug' => ''.$sel_category_parent['post_name'].'','hierarchical'=>true )
 		  ));
 	}
-	/**lets attempt to get rid of WPPizza Categories in title tag*/
+	/*******************************************************
+		[get fully sorted hierarchy of wppizza categories]
+	******************************************************/	
+	function wppizza_complete_sorted_hierarchy($catsort=array()){
+			$args = array(
+			  'taxonomy'     		=> $this->pluginSlugCategoryTaxonomy,
+			  'style'		 		=> 'none',
+			  'child_of'     		=> '',
+			  'show_option_none'   	=> '',
+			  'hide_empty'   		=> 0,
+			  'walker'				=>	new WPPizzaCategoryHierarchyWalker() ,
+			  'echo'   				=> 0,				// keep as variable
+			  'get'					=>array('wppizza_category_sort'=>$catsort)
+			);
+			/**set custom sort order**/
+			add_filter('terms_clauses', array($this,'wppizza_term_filter'), '', 3);
+			$hierarchy=wp_list_categories( $args );/**will produce a pipe delimited string**/
+			/**lets make an array out of this **/
+			$hierarchy=explode('|',$hierarchy);
+			/**flip to have id's as keys**/
+			$hierarchy=array_flip($hierarchy);
+		return $hierarchy;
+	}
+	
+	/********************************************************
+		[lets attempt to get rid of WPPizza Categories in title tag
+	*********************************************************/
 	function wppizza_filter_title_tag($title, $sep ,$loc){
 		if(get_post_type()==WPPIZZA_POST_TYPE){
 			$titleOrig=$title;
@@ -1357,6 +1403,14 @@ public function wppizza_require_common_input_validation_functions(){
 	function wppizza_send_order_emails() {
 		require_once(WPPIZZA_PATH .'classes/wppizza.send-order-emails.inc.php');
 	}
+/*********************************************************
+*
+*	[include category walker class to get full sorted hierarchy]
+*
+*********************************************************/
+	function wppizza_category_walker() {
+		require_once(WPPIZZA_PATH .'classes/wppizza.category-walker.inc.php');
+	}	
 /***********************************************************************************************
 *
 * 	[template functions - include the relevant templates depending on shortcode/widget type and atts]
@@ -1378,6 +1432,10 @@ public function wppizza_require_common_input_validation_functions(){
 			if($options['layout']['suppress_loop_headers']){
 				$noheader=1;
 			}
+			/**if we want to capture the category id a menu item is currently in **/
+			if($options['layout']['items_group_sort_print_by_category']){
+				$getSlugDetails=1;
+			}			
 			if ( !is_single() ) {
 				/*check if the file exists in the theme, otherwise serve the file from the plugin directory if possible*/
 				if ($theme_file = locate_template( array ('wppizza-wrapper.php' ))){
@@ -1623,8 +1681,13 @@ public function wppizza_require_common_input_validation_functions(){
 *	[changes wppizza custom sort order query to display category navigation in the right order]
 *
 *********************************************************************************/
-	function wppizza_term_filter($pieces){
-		$cat=$this->pluginOptions['layout']['category_sort'];
+	function wppizza_term_filter($pieces, $taxonomies=false, $args=false){
+		/**allow to pass sort vars**/
+		if($args && isset($args['get']['wppizza_category_sort']) && is_array($args['get']['wppizza_category_sort'])){
+			$cat=$args['get']['wppizza_category_sort'];	
+		}else{
+			$cat=$this->pluginOptions['layout']['category_sort'];	
+		}
 		asort($cat);
 		$sort=implode(",",array_keys($cat));
 		/*customise order by clause*/
@@ -1642,7 +1705,7 @@ public function wppizza_require_common_input_validation_functions(){
 			/**extend key has priority over additional info (legacy)*/
 			if(isset($oItem['extend']) && count($oItem['extend'])>0){
 				$orderItems['items'][$k]['additionalinfo']=$oItem['extend'];
-				unset($orderItems['items'][$k]['extend']);
+				//unset($orderItems['items'][$k]['extend']);/*do not unset actually as simple asort will not work anymore in some places*/
 			}
 
 
@@ -1707,6 +1770,7 @@ public function wppizza_require_common_input_validation_functions(){
 			$orderDetails['item'][$k]['categories']=$v['categories'];
 			$orderDetails['item'][$k]['additionalinfo']=$v['additionalinfo'];
 			$orderDetails['item'][$k]['extend']=$v['extend'];
+			$orderDetails['item'][$k]['catIdSelected']=$v['catIdSelected'];
 		}
 
 
@@ -1721,6 +1785,160 @@ public function wppizza_require_common_input_validation_functions(){
 
 	return $orderDetails;
 	}
+/*********************************************************************************
+*
+*	[filter/action: sort by and print categories in
+*	order page, thank you page and emails if enabled]
+*
+*********************************************************************************/
+	/*******************
+	* sort by category
+	*******************/
+	function wppizza_filter_items_by_category($items,$page){
+		/*skip the whole thing if not enabled**/
+		if(!$this->pluginOptions['layout']['items_group_sort_print_by_category']){
+			return $items;
+		}
+		$setCatOrder=$this->pluginOptions['layout']['category_sort_hierarchy'];
+		$separator=$this->pluginOptions['layout']['items_category_separator'];
+		$itemsCategorySort=array();
+		$itemsCategorySort=array();
+		$existingCatHierarchy=array();
+
+		/**get categories and group/sort**/
+		foreach($items as $k=>$v){
+			/**associate category id with set sortorder*/
+			$itemCat=$setCatOrder[$v['catIdSelected']];
+			/**prepend first key of sortorder , append category hierarchy**/
+			$itemsCategorySort[$k]=array('catsort'=>$itemCat)+$v;//+array('itemCatHierarchy'=>$setCatHierarchy);
+		}
+		/*now sort by category**/
+		asort($itemsCategorySort);
+		
+		/***reiterate over items and display category name if first time****/
+		foreach($itemsCategorySort as $k=>$v){
+			$itemCatHierarchy=$this->wppizza_cat_parents( $v['catIdSelected'], $separator , $page);
+			/**set catnames to be empty if it's the same again as we only want to print  this the first time as header so to speak**/
+			if(!in_array($itemCatHierarchy,$existingCatHierarchy)){$setCatHierarchy=$itemCatHierarchy;}else{$setCatHierarchy='';}
+			/**append category hierarchy**/
+			$itemsCategorySort[$k]=$v+array('itemCatHierarchy'=>$setCatHierarchy);						
+			/*set current cat hierarchy to avoid double display**/
+			$existingCatHierarchy[]=$itemCatHierarchy;			
+		}
+		return $itemsCategorySort;
+	}
+	/*******************************************************************
+	* print category
+	* if you want output to be different, use remove_action/filter and add_action
+	*******************************************************************/
+	function wppizza_items_cart_print_category($item,$cartContents){
+		/**only print if not empty and enabled**/
+		if(isset($item['itemCatHierarchy']) && $item['itemCatHierarchy']!=''){
+			$cartContents.='<li class="wppizza-item-category"><span>'.$item['itemCatHierarchy'].'</span></li>';
+		}
+		return $cartContents;
+	}
+	function wppizza_items_order_form_print_category($item){
+		/**only print if not empty and enabled**/
+		if(isset($item['itemCatHierarchy']) && $item['itemCatHierarchy']!=''){
+			echo'<li class="wppizza-item-category">'.$item['itemCatHierarchy'].'</li>';
+		}
+	}
+	function wppizza_items_emailhtml_print_category($item,$style){
+		/**only print if not empty and enabled**/
+		if(isset($item['itemCatHierarchy']) && $item['itemCatHierarchy']!=''){
+			echo'<tr><td style="'.$style['categories'].'" colspan="2">'.$item['itemCatHierarchy'].':</td></tr>';
+		}
+	}
+	function wppizza_items_emailplaintext_print_category($item,$output){
+		static $c=0;
+		/**only print if not empty and enabled**/
+		if(isset($item['itemCatHierarchy']) && $item['itemCatHierarchy']!=''){
+			if($c>0){$output.=''.PHP_EOL;}/**skip topmost EOL*/
+			$output.='['.$item['itemCatHierarchy'].']'.PHP_EOL;
+			$c++;
+		}
+		return $output;
+	}
+	function wppizza_items_show_order_print_category($item){
+		/**only print if not empty and enabled**/
+		if(isset($item['itemCatHierarchy']) && $item['itemCatHierarchy']!=''){
+			echo'<li class="wppizza-item-category">'.$item['itemCatHierarchy'].'</li>';
+		}
+	}
+
+/**
+ * Retrieve category parents with separator for general taxonomies.
+ * Modified version of get_category_parents()
+ * @return string
+ */
+function wppizza_cat_parents( $id, $separator =' &raquo; ', $page , $taxonomy = 'wppizza_menu', $visited = array()  ) {
+	$topmost=false;
+	$parentOnly=false;
+
+	/**if not set differently, the whole path will be displayed**/
+	/**cart**/
+	if($page=='cart'){
+		/*no display*/
+		if($this->pluginOptions['layout']['items_category_hierarchy_cart']=='none'){
+			return;
+		}
+		/*topmost category only*/
+		if($this->pluginOptions['layout']['items_category_hierarchy_cart']=='topmost'){
+			$topmost=true;
+		}
+		/*direct parent cat only*/
+		if($this->pluginOptions['layout']['items_category_hierarchy_cart']=='parent'){
+			$parentOnly=true;
+		}
+	}
+	/**all others**/
+	if($page!='cart'){
+		/*topmost category only*/
+		if($this->pluginOptions['layout']['items_category_hierarchy']=='topmost'){
+			$topmost=true;
+		}
+		/*direct parent cat only*/
+		if($this->pluginOptions['layout']['items_category_hierarchy']=='parent'){
+			$parentOnly=true;
+		}
+	}
+
+
+	$c=0;
+	$chain = '';
+	$name = '';
+	$parent = get_term( $id, $taxonomy);
+
+	if ( is_wp_error( $parent ) ){
+		return;
+	}
+
+	$name = $parent->name;
+
+	/**direct parent only**/
+	if($parentOnly){
+		return $name;
+	}
+
+	if ( $parent->parent && ( $parent->parent != $parent->term_id ) && !in_array( $parent->parent, $visited ) ) {
+		$visited[] = $parent->parent;
+		if($topmost){/**topmost (grand) parent only**/
+			$name = $this->wppizza_cat_parents( $parent->parent, $separator, $page ,$taxonomy, $visited );
+		}else{/**full hierarchy**/
+			$chain .= $this->wppizza_cat_parents( $parent->parent, $separator, $page, $taxonomy, $visited );
+		}
+	$c++;
+	}
+
+	if($topmost){/**topmost (grand) parent only**/
+		return $name;
+	}else{/**full hierarchy**/
+		if($c>0){$chain .= ''.$separator.'';}
+		$chain .= $name;
+		return $chain;
+	}
+}
 /*********************************************************************************
 *
 *	[filter plaintext customer / order details converting array to string when returned from db]

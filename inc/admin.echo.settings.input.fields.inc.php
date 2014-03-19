@@ -76,13 +76,38 @@ $options = $this->pluginOptions;
 				echo "".__('on right', $this->pluginLocale)." <input id='".$field."' name='".$this->pluginSlug."[layout][".$field."]' type='radio'  ".checked($options['layout'][$field],2,false)." value='2' />";
 			}
 
+
+			if($field=='items_group_sort_print_by_category'){
+				echo "<input id='".$field."' name='".$this->pluginSlug."[layout][".$field."]' type='checkbox'  ". checked($options['layout'][$field],true,false)." value='1' />";
+				echo" <span class='description'>".__('displays categories in cart, order page and emails', $this->pluginLocale)."</span>";
+				echo "<br />";
+				echo "<br />";
+				echo" <span class='description'>".__('How would you like to display the categories in order pages and emails ? [only relevant in hierarchical category structure]', $this->pluginLocale)."</span>";
+				echo "<br />";
+				echo "".__('full path', $this->pluginLocale)." <input name='".$this->pluginSlug."[layout][items_category_hierarchy]' type='radio'  ".checked($options['layout']['items_category_hierarchy'],'full',false)." value='full' /> ";
+				echo "".__('parent category', $this->pluginLocale)." <input name='".$this->pluginSlug."[layout][items_category_hierarchy]' type='radio'  ".checked($options['layout']['items_category_hierarchy'],'parent',false)." value='parent' />";
+				echo "".__('topmost category', $this->pluginLocale)." <input name='".$this->pluginSlug."[layout][items_category_hierarchy]' type='radio'  ".checked($options['layout']['items_category_hierarchy'],'topmost',false)." value='topmost' />";
+				echo "<br />";
+				echo "<br />";
+				echo" <span class='description'>".__('How would you like to display the categories in the cart ?  [as the cart might have space restrictions you can adjust this separately]', $this->pluginLocale)."</span>";
+				echo "<br />";
+				echo "".__('do not display categories', $this->pluginLocale)." <input name='".$this->pluginSlug."[layout][items_category_hierarchy_cart]' type='radio'  ".checked($options['layout']['items_category_hierarchy_cart'],'none',false)." value='none' /> ";
+				echo "".__('full path', $this->pluginLocale)." <input name='".$this->pluginSlug."[layout][items_category_hierarchy_cart]' type='radio'  ".checked($options['layout']['items_category_hierarchy_cart'],'full',false)." value='full' /> ";
+				echo "".__('parent category', $this->pluginLocale)." <input name='".$this->pluginSlug."[layout][items_category_hierarchy_cart]' type='radio'  ".checked($options['layout']['items_category_hierarchy_cart'],'parent',false)." value='parent' />";
+				echo "".__('topmost category', $this->pluginLocale)." <input name='".$this->pluginSlug."[layout][items_category_hierarchy_cart]' type='radio'  ".checked($options['layout']['items_category_hierarchy_cart'],'topmost',false)." value='topmost' />";
+				echo "<br />";
+				echo "<br />";
+				echo "<input name='".$this->pluginSlug."[layout][items_category_separator]' size='2' type='text'  value='{$options['layout']['items_category_separator']}' />";
+				echo" <span class='description'>".__('Category Separator', $this->pluginLocale)."</span>";
+			}
+
 			if($field=='currency_symbol_left'){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[layout][".$field."]' type='checkbox'  ". checked($options['layout'][$field],true,false)." value='1' />";
 			}
 			if($field=='currency_symbol_position'){
 				echo "".__('on left', $this->pluginLocale)." <input id='".$field."' name='".$this->pluginSlug."[layout][".$field."]' type='radio'  ".checked($options['layout'][$field],'left',false)." value='left' />";
-				echo "".__('on right', $this->pluginLocale)." <input id='".$field."' name='".$this->pluginSlug."[layout][".$field."]' type='radio'  ".checked($options['layout'][$field],'right',false)." value='right' />";				
-			}			
+				echo "".__('on right', $this->pluginLocale)." <input id='".$field."' name='".$this->pluginSlug."[layout][".$field."]' type='radio'  ".checked($options['layout'][$field],'right',false)." value='right' />";
+			}
 			if($field=='cart_increase'){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[layout][".$field."]' type='checkbox'  ". checked($options['layout'][$field],true,false)." value='1' />";
 			}
@@ -228,7 +253,7 @@ $options = $this->pluginOptions;
 					echo "<option value='easeInOutBack' ".selected($options['layout']['sticky_cart_animation_style'],'easeInOutBack',false).">easeInOutBack</option>";
 					echo "<option value='easeInBounce' ".selected($options['layout']['sticky_cart_animation_style'],'easeInBounce',false).">easeInBounce</option>";
 					echo "<option value='easeOutBounce' ".selected($options['layout']['sticky_cart_animation_style'],'easeOutBounce',false).">easeOutBounce</option>";
-					echo "<option value='easeInOutBounce' ".selected($options['layout']['sticky_cart_animation_style'],'easeInOutBounce',false).">easeInOutBounce</option>";					
+					echo "<option value='easeInOutBounce' ".selected($options['layout']['sticky_cart_animation_style'],'easeInOutBounce',false).">easeInOutBounce</option>";
 				echo "</select>";
 				echo" <span class='description'>".__('Animation Style ["no animation" to disable].<br />Note: any style other than "swing" or "linear" will additionally include "jquery.ui.effect" in the page [if not already loaded]', $this->pluginLocale)."</span>";
 				echo"<br />";
@@ -239,8 +264,8 @@ $options = $this->pluginOptions;
 				echo" <span class='description'>".__('Distinct CSS Background Colour when cart is "sticky" [hexdec (i.e #ffeeff) or string (i.e transparent, inherit, red etc)]', $this->pluginLocale)."</span>";
 				echo"<br />";
 				echo " <input id='' name='".$this->pluginSlug."[layout][sticky_cart_limit_bottom_elm_id]' size='5' type='text'  value='{$options['layout']['sticky_cart_limit_bottom_elm_id']}' />";
-				echo" <span class='description'>".__('If you want to have a sticky cart NOT scroll further down that the TOP of a particular element that is further down on the page (might be useful in som layouts/themes), set that elements ID here [leave blank to ignore]', $this->pluginLocale)."</span>";				
-			}			
+				echo" <span class='description'>".__('If you want to have a sticky cart NOT scroll further down that the TOP of a particular element that is further down on the page (might be useful in som layouts/themes), set that elements ID here [leave blank to ignore]', $this->pluginLocale)."</span>";
+			}
 			if($field=='opening_times_standard'){
 				echo"<div id='wppizza_".$field."'>";
 				foreach(wppizza_days() as $k=>$v){
@@ -545,8 +570,8 @@ $options = $this->pluginOptions;
 				echo" ".__('apply tax to delivery/shipping  too', $this->pluginLocale)."";
 				echo"<br />";
 				echo"<input name='".$this->pluginSlug."[order][taxes_included]' type='checkbox'  ". checked($options['order']['taxes_included'],true,false)." value='1' />";
-				echo" ".__('all prices are entered including tax, but I distinctly need to display the sum of taxes applied', $this->pluginLocale)."";				
-				echo"<br /><span class='description'>".__('if enabled, the sum of applicable taxes will be displayed separately without however adding it to the total (if taxrate > 0%).', $this->pluginLocale)."</span>";				
+				echo" ".__('all prices are entered including tax, but I distinctly need to display the sum of taxes applied', $this->pluginLocale)."";
+				echo"<br /><span class='description'>".__('if enabled, the sum of applicable taxes will be displayed separately without however adding it to the total (if taxrate > 0%).', $this->pluginLocale)."</span>";
 			}
 			if($field=='sizes'){
 				echo"<div id='wppizza_".$field."'>";
@@ -565,7 +590,7 @@ $options = $this->pluginOptions;
 				echo"<div id='wppizza_".$field."'>";
 					echo"<div id='wppizza_".$field."_options'>";
 					if(isset($options[$field]) && is_array($options[$field])){
-					asort($options[$field]);//sort 
+					asort($options[$field]);//sort
 					foreach($options[$field] as $k=>$v){
 						echo"".$this->wppizza_admin_section_additives($field,$k,$options[$field][$k],$optionInUse);
 					}}
@@ -678,7 +703,7 @@ $options = $this->pluginOptions;
 				echo"<div id='wppizza_".$field."'>";
 
 					echo"<div id='wppizza_".$field."_totals'></div>";
-					
+
 					echo"<div id='wppizza_".$field."_search' class='button' style='overflow:auto'>";
 						echo "<span style='float:left;'>";
 						echo "<a href='#' id='".$field."_get_orders' class='button' style='margin-top:6px'>".__('show most recent *confirmed* orders', $this->pluginLocale)."</a>";

@@ -47,7 +47,13 @@ echo $emailPlaintext['customer_details'];
 *
 ****************************************************************************/
 $output='';
+
+/***allow filtering of items (sort, add categories and whatnot)****/
+$emailPlaintext['items'] = apply_filters('wppizza_emailplaintext_filter_items', $emailPlaintext['items'], 'plaintextemail');
+
 foreach($emailPlaintext['items'] as $k=>$v){
+	/***allow action per item - probably to use in conjunction with filter above****/
+	$output = apply_filters('wppizza_emailplaintext_item', $v, $output);	
 
 	$strPartLeft=''.$v['label'].'';/*made up of => '.$v['quantity'].'x '.$v['name'].' '.$v['size'].' ['.$v['currency'].' '.$v['price'].']'*/
 	$spaces=75-strlen($strPartLeft);

@@ -41,7 +41,13 @@
 
 <?php	/**order items details**/ 	?>
 	<ul id="wppizza-item-details">
-	<?php foreach($items as $k=>$item){ ?>
+	<?php
+		/***allow filtering of items (sort, add categories and whatnot)****/
+		$items = apply_filters('wppizza_show_order_filter_items', $items, 'showorder');
+		foreach($items as $k=>$item){
+		/***allow action per item - probably to use in conjunction with filter above****/
+		do_action('wppizza_show_order_item',$item);
+	?>
 		<li><?php echo''.$item['quantity'].'x '.$item['name'].' '.$item['size'].' <span class="wppizza-price-single">['.$order['currency_left'].''.$item['price'].''.$order['currency_right'].']</span>' ?> <span><?php echo''.$order['currency_left'].''.$item['pricetotal'].''.$order['currency_right']; ?></span>
 		<?php if(isset($item['additionalInfo']) && $item['additionalInfo']!=''){?>
 			<div class="wppizza-item-additionalinfo">

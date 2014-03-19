@@ -13,10 +13,13 @@ if(isset($cart['innercartinfo'])){
 	$cartContents='<p>'.$cart['innercartinfo'].'</p>';
 }else{
 	$cartContents='<ul class="wppizza-cart-contents">';
+	/**allow item filtering. ADDED 2.8.9.4*****/
+	$cart['items'] = apply_filters('wppizza_cart_filter_items', $cart['items'], 'cart');
 	foreach($cart['items'] as $k=>$item){
+		/***allow action per item - probably to use in conjunction with filter above.  ADDED 2.8.9.4****/
+		$cartContents = apply_filters('wppizza_cart_item', $item, $cartContents);	
+		
 		$cartContents.='<li class="wppizza-cart-item">';
-
-
 		/********CHANGES IN 2.5, *****alloow increase/decrease changed 2.5*************/
 		if(isset($cart['increase_decrease'])){
 			$cartContents.="<input type='text' size=3 class='wppizza-cart-incr' name='wppizza-cart-incr' value='".$item['count']."'>";

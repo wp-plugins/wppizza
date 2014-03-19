@@ -543,10 +543,29 @@ function wppizza_order_summary($session,$options,$ajax=null){
 			if(!isset($v['extend'])){$v['extend']=array();}
 			if(!isset($v['extenddata'])){$v['extenddata']=array();}
 			$cartItems[''.$groupid.''][]=array('sortname'=>$v['sortname'],'size'=>$v['size'],'sizename'=>$v['sizename'],'printname'=>$v['printname'],'price'=>$v['price'],'additionalinfo'=>$v['additionalinfo'],'extend'=>$v['extend'],'extenddata'=>$v['extenddata'],'postId'=>$v['id']);
+			/**conditional just used to not break other extensions/plugins that have not been updated yet to add selected category id.*/
+			if(isset($v['catIdSelected'])){
+				$catIdSelected[''.$groupid.'']=$v['catIdSelected'];
+			}else{
+				$catIdSelected[''.$groupid.'']='';
+			}
 		}
 	}
 	foreach($cartItems as $k=>$v){
-		$groupedItems[$k]=array('sortname'=>$cartItems[$k][0]['sortname'],'size'=>$cartItems[$k][0]['size'],'sizename'=>$cartItems[$k][0]['sizename'],'printname'=>$cartItems[$k][0]['printname'],'price'=>$cartItems[$k][0]['price'],'count'=>count($cartItems[$k]),'total'=>(count($cartItems[$k])*$cartItems[$k][0]['price']),'additionalinfo'=>$cartItems[$k][0]['additionalinfo'],'extend'=>$cartItems[$k][0]['extend'],'extenddata'=>$cartItems[$k][0]['extenddata'],'postId'=>$cartItems[$k][0]['postId'])	;
+		$groupedItems[$k]=array(
+			'sortname'=>$cartItems[$k][0]['sortname'],
+			'size'=>$cartItems[$k][0]['size'],
+			'sizename'=>$cartItems[$k][0]['sizename'],
+			'printname'=>$cartItems[$k][0]['printname'],
+			'price'=>$cartItems[$k][0]['price'],
+			'count'=>count($cartItems[$k]),
+			'total'=>(count($cartItems[$k])*$cartItems[$k][0]['price']),
+			'additionalinfo'=>$cartItems[$k][0]['additionalinfo'],
+			'extend'=>$cartItems[$k][0]['extend'],
+			'extenddata'=>$cartItems[$k][0]['extenddata'],
+			'postId'=>$cartItems[$k][0]['postId'],
+			'catIdSelected'=>$catIdSelected[$k]
+		);
 	}
 	asort($groupedItems);
 	/**output items sorted by name and size**/
@@ -554,7 +573,18 @@ function wppizza_order_summary($session,$options,$ajax=null){
 		/*get categories**/
 		$catObj = get_the_terms($v['postId'], WPPIZZA_TAXONOMY);
 		$catArray=json_decode(json_encode($catObj), true);
-		$summary['items'][$k]=array('name'=>$v['printname'],'count'=>$v['count'],'size'=>$v['sizename'],'price'=>wppizza_output_format_price($v['price'],$optionsDecimals),'pricetotal'=>wppizza_output_format_price($v['total'],$optionsDecimals),'categories'=>$catArray,'additionalinfo'=>$v['additionalinfo'],'extend'=>$v['extend'],'extenddata'=>$v['extenddata'],'postId'=>$v['postId']);
+		/*******************************************************************************************
+			if other extensions have yet to add selcatid, just add the first one
+			the item is categorised in.
+			90% of the time there will only be one anyway, so this would be correct.
+			worst case scenario, an enexpected (although not wrong) category will be displayed
+			{all of this is only relevant anyway if "show category for emails etc" is enabled in layout
+		*******************************************************************************************/
+		if($v['catIdSelected']==''){
+			$firstCat=reset($catArray);
+			$v['catIdSelected']=$firstCat['term_id'];
+		}		
+		$summary['items'][$k]=array('name'=>$v['printname'],'count'=>$v['count'],'size'=>$v['sizename'],'price'=>wppizza_output_format_price($v['price'],$optionsDecimals),'pricetotal'=>wppizza_output_format_price($v['total'],$optionsDecimals),'categories'=>$catArray,'additionalinfo'=>$v['additionalinfo'],'extend'=>$v['extend'],'extenddata'=>$v['extenddata'],'postId'=>$v['postId'],'catIdSelected'=>$v['catIdSelected']);
 	}
 
 

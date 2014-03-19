@@ -207,6 +207,7 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 			$gatewayOrder['item'][$k]['additionalInfo']=implode(" ",$addInfo);/*legacy paypal and order thank you page (note upper case I)*/
 			$gatewayOrder['item'][$k]['extend']=$v['extend'];
 			$gatewayOrder['item'][$k]['extenddata']=$v['extenddata'];/**to store data (keys, id's count, prices  etc) in the db to maybe retrieve later, put it in this key**/
+			$gatewayOrder['item'][$k]['catIdSelected']=wppizza_validate_int_only($v['catIdSelected']);/**store selected category.**/
 		}
 
 		$gatewayOrder['total_price_items']=wppizza_validate_float_only($cartDetails['order_value']['total_price_items']['val']);

@@ -45,7 +45,13 @@ foreach($formelements as $elmKey=>$elm){
 		<legend><?php echo $txt['your_order']['lbl'] ?></legend>
 		<?php if(count($cart['items'])>0){/*make sure there's stuff to order***/?>
 			<ul id="wppizza-item-details">
-			<?php foreach($cart['items'] as $item){ ?>
+			<?php
+					/***allow filtering of items (sort, add categories and whatnot) ADDED 2.8.9.4****/
+					$cart['items'] = apply_filters('wppizza_order_form_filter_items', $cart['items'],'order');
+					foreach($cart['items'] as $item){
+					/***allow action per item - probably to use in conjunction with filter above****/
+					do_action('wppizza_order_form_item',$item);
+			?>
 				<li><?php echo''.$item['count'].'x '.$item['name'].' '.$item['size'].' <span class="wppizza-price-single">['.$cart['currency_left'].''.$item['price'].''.$cart['currency_right'].']</span>' ?> <span><?php echo''.$cart['currency_left'].''.$item['pricetotal'].''.$cart['currency_right'].''; ?></span>
 					<?php if(is_array($item['additionalinfo']) && count($item['additionalinfo'])>0){?>
 					<div class="wppizza-item-additionalinfo">

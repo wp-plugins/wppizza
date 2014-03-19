@@ -37,6 +37,11 @@
 		if(isset($input['layout']['category_sort'])){
 			$options['layout']['category_sort']=$input['layout']['category_sort'];
 		}
+		
+		if(isset($input['layout']['category_sort_hierarchy'])){
+			$options['layout']['category_sort_hierarchy']=$input['layout']['category_sort_hierarchy'];
+		}		
+		
 		/*set number of items per loop. must be >= get_option('posts_per_page ')*/
 		if(isset($input['layout']['items_per_loop'])){
 			/*if minus=>set to -1**/
@@ -72,8 +77,12 @@
 			$options['layout']['show_currency_with_price'] = wppizza_validate_int_only($input['layout']['show_currency_with_price']);
 			$options['layout']['cart_increase'] = !empty($input['layout']['cart_increase']) ? true : false;
 			$options['layout']['prettyPhoto'] = !empty($input['layout']['prettyPhoto']) ? true : false;
-			$options['layout']['empty_cart_button'] = !empty($input['layout']['empty_cart_button']) ? true : false;
 			$options['layout']['prettyPhotoStyle']=wppizza_validate_string($input['layout']['prettyPhotoStyle']);
+			$options['layout']['empty_cart_button'] = !empty($input['layout']['empty_cart_button']) ? true : false;
+			$options['layout']['items_group_sort_print_by_category'] = !empty($input['layout']['items_group_sort_print_by_category']) ? true : false;
+			$options['layout']['items_category_hierarchy'] = preg_replace("/[^a-z]/","",$input['layout']['items_category_hierarchy']);
+			$options['layout']['items_category_hierarchy_cart'] = preg_replace("/[^a-z]/","",$input['layout']['items_category_hierarchy_cart']);
+			$options['layout']['items_category_separator']=wppizza_validate_string($input['layout']['items_category_separator']);
 
 
 			$options['layout']['sticky_cart_animation']=absint($input['layout']['sticky_cart_animation']);

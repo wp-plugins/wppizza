@@ -312,6 +312,7 @@
 			),
 			'layout'=>array(
 				'category_sort' => $category_sort,
+				'category_sort_hierarchy' => $this->wppizza_complete_sorted_hierarchy($category_sort),
 				'include_css' => true,
 				'css_priority' => 11,
 				'style' => 'default',
@@ -332,6 +333,10 @@
 				'empty_cart_button' => false,
 				'prettyPhoto' => false,
 				'prettyPhotoStyle' => 'pp_default',
+				'items_group_sort_print_by_category' => false,
+				'items_category_hierarchy' => 'full',
+				'items_category_hierarchy_cart' => 'parent',
+				'items_category_separator' => ' &raquo; ',					
 				'sticky_cart_animation' =>450,
 				'sticky_cart_animation_style' =>'',
 				'sticky_cart_margin_top' =>20,

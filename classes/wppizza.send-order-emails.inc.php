@@ -54,6 +54,16 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 			add_filter('wppizza_filter_customer_details_html', array( $this, 'wppizza_filter_customer_details_html'),10,1);/*order items to html*/
 			add_filter('wppizza_filter_order_items_html', array( $this, 'wppizza_filter_order_items_html'),10,2);/*order items to html*/
 
+			/**filter and sort selected items by their categoryies**/
+			add_filter( 'wppizza_emailhtml_filter_items', array( $this, 'wppizza_filter_items_by_category'),10,2);
+			add_filter( 'wppizza_emailplaintext_filter_items', array( $this, 'wppizza_filter_items_by_category'),10,2);
+			add_filter( 'wppizza_show_order_filter_items', array( $this, 'wppizza_filter_items_by_category'),10,2);
+
+			/**print category **/
+			add_action('wppizza_emailhtml_item', array( $this, 'wppizza_items_emailhtml_print_category'),10,2);
+			add_filter('wppizza_emailplaintext_item', array( $this, 'wppizza_items_emailplaintext_print_category'),10,2);
+			add_action('wppizza_show_order_item', array( $this, 'wppizza_items_show_order_print_category'));
+
 
 			/* we also need any overrides by extensions in the mmain class to be used here**/
 			$this->wppizza_extend();
@@ -354,7 +364,12 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 
 					/**items as string to insert into db**/
 					$emailPlaintext['db_items'] ='';
+						/***allow filtering of items (sort, add categories and whatnot)****/
+						$emailPlaintext['items'] = apply_filters('wppizza_emailplaintext_filter_items', $emailPlaintext['items'], 'plaintextemail');
 						foreach($emailPlaintext['items'] as $k=>$v){
+							/***allow action per item - probably to use in conjunction with filter above****/
+							$emailPlaintext['db_items'] = apply_filters('wppizza_emailplaintext_item', $v, $emailPlaintext['db_items']);							
+							
 							$strPartLeft=''.$v['label'].'';/*made up of => '.$v['quantity'].'x '.$v['name'].' '.$v['size'].' ['.$v['currency'].' '.$v['price'].']'*/
 							$spaces=75-strlen($strPartLeft);
 							$strPartRight=''.$v['value'].'';/*made up of => '.$v['currency'].' '.$v['pricetotal'].'*/

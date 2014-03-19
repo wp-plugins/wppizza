@@ -103,6 +103,12 @@ $output='';
 				$sorter++;
 			}
 		}
+		
+		
+		/***update full hierarchy too make sure we are now using the right updated order***/
+		$newOptions['layout']['category_sort_hierarchy']=$this->wppizza_complete_sorted_hierarchy($newOptions['layout']['category_sort']);		
+		
+		
 		update_option( $this->pluginSlug, $newOptions );
 	die(1);
 	}

@@ -25,6 +25,12 @@ if(isset($_POST['vars']['type']) && (($_POST['vars']['type']=='add' || $_POST['v
 	if(isset($_POST['vars']['itemCount'])){
 	$itemCount=(int)$_POST['vars']['itemCount'];
 	}
+	/**category id*********/
+	$catIdSelected='';
+	if(isset($_POST['vars']['catId']) && $_POST['vars']['catId']!=''){
+		$catIdSelected=(int)$_POST['vars']['catId'];
+	}
+
 	/**initialize price array***/
 	$itemprice=array();
 	$itempricefordelivery=array();/*if we have excluded item to count towards free delivery */
@@ -36,7 +42,11 @@ if(isset($_POST['vars']['type']) && (($_POST['vars']['type']=='add' || $_POST['v
 		$itemVars=explode("-",$_POST['vars']['id']);
 		//$meta=get_post_meta($itemVars[1], $this->pluginSlug, true );
 		$itemName=get_the_title($itemVars[1]);
-		$groupId=$itemVars[1].'.'.$itemVars[3];//group items by id and size. ensure there's a seperator between (as 8 and 31 would otherwise be the same as 83 and 1. furthermore , dont use "-" as the js splits by this
+		$groupId=$itemVars[1].'.'.$itemVars[3];//group items by id and size . ensure there's a seperator between (as 8 and 31 would otherwise be the same as 83 and 1. furthermore , dont use "-" as the js splits by this
+		/**add category to group id (distinct cat id will only be passed if catdisplay enabled in layout)**/
+		if($catIdSelected!='' && $this->pluginOptions['layout']['items_group_sort_print_by_category']){/*if we dont need to or want to split by category, do not add another distinction to the group*/
+			$groupId.='.'.$catIdSelected;
+		}
 
 		/*get item set meta values to get price for this size**/
 		$meta_values = get_post_meta($itemVars[1],$this->pluginSlug,true);
@@ -49,7 +59,7 @@ if(isset($_POST['vars']['type']) && (($_POST['vars']['type']=='add' || $_POST['v
 		}
 
 		/*add item to session array. adding lowercase name first to simplify sorting with asort**/
-		$_SESSION[$this->pluginSession]['items'][$groupId][]=array('sortname'=>strtolower($itemName),'size'=>$itemVars[3],'price'=>$itemSizePrice,'sizename'=>$itemSizeName,'printname'=>$itemName,'id'=>$itemVars[1]);
+		$_SESSION[$this->pluginSession]['items'][$groupId][]=array('sortname'=>strtolower($itemName),'size'=>$itemVars[3],'price'=>$itemSizePrice,'sizename'=>$itemSizeName,'printname'=>$itemName,'id'=>$itemVars[1],'catIdSelected'=>$catIdSelected);
 	}
 
 	/**increment when using textbox**/
@@ -120,8 +130,8 @@ if(isset($_POST['vars']['type']) && (($_POST['vars']['type']=='add' || $_POST['v
 *
 ***************************************************************/
 if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='order-pickup'){
-	
-	
+
+
 	/*****************************************
 		[set session variable]
 	*****************************************/
@@ -143,7 +153,7 @@ if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='order-pickup'){
 		page, otherwise there's nothing to do
 	*****************************************/
 	if(count($_POST['vars']['data'])>0){
-		
+
 		/***************************************************************
 			[get and parse all user post variables and save in session
 		***************************************************************/
@@ -155,16 +165,16 @@ if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='order-pickup'){
 		$getParameters = array();
 		if($_POST['vars']['urlGetVars']!=''){
 			parse_str(substr($_POST['vars']['urlGetVars'],1), $getParameters);/*loose the '?'  */
-		}	
-	
+		}
+
 		/*********build the location url making sure permalinks are taken care of too**/
 		$location=$this->wppizza_set_redirect_url($_POST['vars']['locHref'],$getParameters);
 
 	}
-	
-	
+
+
 	$vars['location']=$location;
-	
+
 	print"".json_encode($vars)."";
 exit();
 }
@@ -189,12 +199,12 @@ exit();
 *
 ************************************************************************************************/
 if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='new-account'){
-	
+
 	/*****************************************
 		[get and parse all post variables
 	*****************************************/
 	$postedVars = array();
-	parse_str($_POST['vars']['data'], $postedVars);	
+	parse_str($_POST['vars']['data'], $postedVars);
 	$postedVars = apply_filters('wppizza_filter_sanitize_post_vars', $postedVars);
 	$output['pVar']=$postedVars;
 	/****************************************
@@ -205,7 +215,7 @@ if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='new-account'){
 		/************************************************
 			check if email exists already
 			if it does not carry on adding account
-		************************************************/	
+		************************************************/
 		$user_id = username_exists( $postedVars['cemail'] );
 		$email_id = email_exists( $postedVars['cemail'] );
 
@@ -214,7 +224,7 @@ if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='new-account'){
 			/************************************************************************************
 				we do NOT only want to save form fields here that are set to "use for registering"
 				but update / add all enabled ones, so let's change the action/method
-				and set distinct POST vars 
+				and set distinct POST vars
 			************************************************************************************/
 			remove_action('user_register', array( $this, 'wppizza_user_register_form_save_fields' ),100 );
 			add_action('user_register', array( $this, 'wppizza_user_register_order_page' ),100 );
@@ -225,7 +235,7 @@ if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='new-account'){
 			/*generate a pw**/
 			$user_password = wp_generate_password( $length=10, $include_standard_special_chars=true );
 			/*create the user**/
-			$user_id_new = wp_create_user( $postedVars['cemail'], $user_password, $postedVars['cemail'] );			
+			$user_id_new = wp_create_user( $postedVars['cemail'], $user_password, $postedVars['cemail'] );
 			/**this should never happen really**/
 			if(is_wp_error($user_id_new)){
 				$output['error']="<div class='wppizza-login-error'>Error: ".$user_id_new->get_error_message()."</div>";
@@ -234,7 +244,7 @@ if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='new-account'){
 			if($user_id_new && $user_password!=''){/*bit of overkill*/
 				wp_new_user_notification( $user_id_new, $user_password );
 				wp_set_auth_cookie( $user_id_new );/**login too*/
-			}		
+			}
 		}else{
 			$output['error']="<div class='wppizza-login-error'>".$options['localization']['register_option_create_account_error']['lbl']."</div>";
 		}
@@ -289,7 +299,7 @@ if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='add_tips'){
 	global $wpdb;
 	/*might as well delete the previously initialized order. So we do not delete arbitrary stuff when messing with the hash, restrict to INITIALIZED and orders of 3 minutes or less. Ought to be reasonably safe**/
 	$res=$wpdb->query( $wpdb->prepare( "DELETE FROM ".$wpdb->prefix . $this->pluginOrderTable." WHERE hash=%s AND payment_status='INITIALIZED' AND order_date > TIMESTAMPADD(MINUTE,-3,NOW()) ",$params['wppizza_hash']));
-	
+
 	/**add tips distincly to session*/
 	$_SESSION[$this->pluginSession]['tips']=$tips;
 
@@ -303,10 +313,10 @@ if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='add_tips'){
 
 	/*********build the location url making sure permalinks are taken care of too**/
 	$location=$this->wppizza_set_redirect_url($_POST['vars']['locHref'],$getParameters);
-	
+
 
 	$vars['location']=$location;
-		
+
 	print"".json_encode($vars)."";
 exit();
 }
