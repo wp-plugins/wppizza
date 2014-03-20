@@ -92,10 +92,14 @@ foreach($formelements as $elmKey=>$elm){
 				<li class="wppizza-order-item-tax-inclusive"><?php echo $cart['order_value']['taxes_included']['lbl'] ?><span><?php echo $cart['currency_left'].''.$cart['order_value']['taxes_included']['val'].''.$cart['currency_right']; ?></span></li>
 			<?php } ?>
 
+			<?php /**handling charges if any NEW 2.8.9.4**/ ?>
+			<?php if(isset($cart['order_value']['handling_charge'])){ ?>
+				<li class="wppizza-order-handling-charge"><?php echo $txt['order_page_handling']['lbl'] ?><span><?php echo $cart['currency_left'].''.$cart['order_value']['handling_charge']['val'].''.$cart['currency_right']; ?></span></li>
+			<?php } ?>			
+			
 			<?php if(isset($cart['tips']) && $cart['tips']>0){/*tips NEW 2.8.4*/?>
 				<li class="wppizza-order-tips"><?php echo $txt['tips']['lbl'] ?><span><span></span><?php echo $cart['currency_left'].''.$cart['tips']['val'].''.$cart['currency_right']; ?></span></li>
 			<?php } ?>
-
 
 				<li id="wppizza-cart-total"><?php echo $txt['order_total']['lbl'] ?><span><?php echo $cart['currency_left'].''.$cart['order_value']['total']['val'].''.$cart['currency_right']; ?></span></li>
 

@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.2, WP 3.3 
 Tested up to: 3.8.1
-Stable tag: 2.8.9.4
+Stable tag: 2.8.9.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -62,13 +62,12 @@ Note: you might want to start with  Option 1 first, as you can always use Option
 	- a default list of additives that a menu item might have 
 	- a selection of available meal sizes
 	- as well as default opening times, order settings etc.
-	
-	** to be able to add items to your shopping cart make sure that ALL pages that display your menu items have the shopping cart displayed somewhere, so: **  
 	- display the shoppingcart somewhere on those pages (typically in a sidebar) using the wppizza widget (using type:cart) or the following shortcode: [wppizza type='cart']  
-	 
-	** note: you will most likely NOT want to display the shopping cart on the final order page. If your theme does not allow to adjust this - via templates for example -  use one of the many WP plugins available that lets you choose which widget to display on which page **  
+		
+	**to be able to add items to your shopping cart make sure that ALL pages that display your menu items have the shopping cart displayed somewhere**  
+	**However, you will most likely NOT want to display the shopping cart on the final order page. If your theme does not allow to adjust this - via templates for example -  use one of the many WP plugins available that lets you choose which widget to display on which page**  
 	
-	- if the cart displays "currently closed" adjust your opening times in wppizza->settings->openingtimes
+	- if the cart displays "currently closed" adjust your opening times in wppizza->settings->openingtimes (and make sure your timezone settings are correct)
 	- make sure the navigation to those pages gets displayed somewhere (this will normally already be the case - usually by some pagelist or menu ).
 
 	that should be it.......
@@ -94,7 +93,7 @@ see <a href='http://wordpress.org/extend/plugins/wppizza/faq/'>FAQ: "Can I edit 
 **Uninstall**
 
 Please note:  
-although all options, menue items and menue categories get deleted from the database along with the table that holds any orders you may have received, you will manually have to delete any additional pages (such as the order page for example) that have been created as i have no way of knowing if you are using this page elsewhere or have changed the content/name of it.  
+although all options, menu items and menu categories get deleted from the database along with the table that holds any orders you may have received, you will manually have to delete any additional pages (such as the order page for example) that have been created as i have no way of knowing if you are using this page elsewhere or have changed the content/name of it.  
 the same goes for the 3 example icons that come with this plugin as you might have used them elsewhere.
 
 
@@ -123,6 +122,13 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 
 == Changelog ==
+
+2.8.9.5  
+* ADDED: handling charges (if set in gateway) will now also be displayed/calculated on orderpage with any future gateways (and/or PayPal Standard Gateway 2.1.6+ , Authorize.net 1.1+)   
+* eliminated some - possible - rounding errors when hide decimals has been enabled  
+* amended readme  
+20th March 2014   
+
 
 2.8.9.4  
 * ADDED: option to group, sort and display items by category in cart, order page, thank you page and emails  

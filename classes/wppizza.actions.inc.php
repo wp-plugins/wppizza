@@ -1084,7 +1084,7 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 
 			/**variables to use in template**/
 			$options = $this->pluginOptions;
-			$cart=wppizza_order_summary($_SESSION[$this->pluginSession],$options);
+			$cart=wppizza_order_summary($_SESSION[$this->pluginSession],$options ,'cart');
 			$cart = apply_filters('wppizza_filter_order_summary', $cart);
 			/**txt variables from settings->localization*/
 			$txt = $options['localization'];/*put all text varibles into something easier to deal with**/
@@ -1129,7 +1129,7 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 		if($type=='orderpage'){
 			/*******get the variables***/
 			$options = $this->pluginOptions;
-			$cart=wppizza_order_summary($_SESSION[$this->pluginSession],$options);
+			$cart=wppizza_order_summary($_SESSION[$this->pluginSession],$options, 'orderpage');
 			$cart = apply_filters('wppizza_filter_order_summary', $cart);
 			/**txt variables from settings->localization*/
 			$txt = $options['localization'];

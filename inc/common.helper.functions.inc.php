@@ -22,6 +22,13 @@
 *
 *******************************************************************/	
 function wppizza_round_up ( $value, $precision ) { 
+	/**make sure we round up to full if hide decimals**/
+	if (class_exists( 'WPPIZZA' ) ) {
+		$wpp=new WPPIZZA();
+		if($wpp->pluginOptions['layout']['hide_decimals']){
+			$precision=0;		
+		}
+	}
     $pow = pow ( 10, $precision ); 
     return ( ceil ( $pow * $value ) + ceil ( $pow * $value - ceil ( $pow * $value ) ) ) / $pow; 
 } 	

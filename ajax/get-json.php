@@ -10,7 +10,6 @@ if(!defined('DOING_AJAX') || !DOING_AJAX){
 //sleep(5);//when testing jquery fadeins etc
 /******************************************/
 $options=$this->pluginOptions;
-
 /***************************************************************
 *
 *
@@ -119,7 +118,7 @@ if(isset($_POST['vars']['type']) && (($_POST['vars']['type']=='add' || $_POST['v
 	$_SESSION[$this->pluginSession]['total_price_calc_delivery']=$totalitempricefordelivery;
 
 
-	print"".json_encode(wppizza_order_summary($_SESSION[$this->pluginSession],$options,true))."";
+	print"".json_encode(wppizza_order_summary($_SESSION[$this->pluginSession],$options, 'cartajax', true))."";
 	exit();
 }
 /***************************************************************
@@ -320,7 +319,26 @@ if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='add_tips'){
 	print"".json_encode($vars)."";
 exit();
 }
-
+/************************************************************************************************
+*
+*
+*	[choose and set gateway to calculate charges]
+*
+*
+************************************************************************************************/
+if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='wppizza-select-gateway'){
+	
+	if(count($_POST['vars']['data'])>0){
+		$this->wppizza_sessionise_userdata($_POST['vars']['data'],$options['order_form']);
+	}
+	
+	if(isset($_SESSION[$this->pluginSessionGlobal]['userdata']['gateway'])){
+		unset($_SESSION[$this->pluginSessionGlobal]['userdata']['gateway']);
+	}
+	$_SESSION[$this->pluginSessionGlobal]['userdata']['gateway']=strtoupper(wppizza_validate_string($_POST['vars']['selgw']));
+	print"".json_encode($_SESSION[$this->pluginSessionGlobal]['userdata'])."";/*not being output anywhere though*/
+	exit();
+}
 /************************************************************************************************
 *
 *

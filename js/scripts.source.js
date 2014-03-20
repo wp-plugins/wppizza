@@ -349,7 +349,6 @@ jQuery(document).ready(function($){
 		if ($(".wppizza-open").length == 0 &&  $(".wppizza-cart").length > 0){
 			alert(wppizza.msg.closed);
 	}});
-
 	/***********************************************
 	*
 	*	[customer selects self pickup , session gets set via ajax
@@ -370,6 +369,27 @@ jQuery(document).ready(function($){
 				window.location.href=res.location;/*make sure page gest reloaded without confirm*/
 			},'json').error(function(jqXHR, textStatus, errorThrown) {alert("error : " + errorThrown);console.log(jqXHR.responseText);});
 	}});
+	
+	/******************************************************
+	*
+	*	[changing gateways, re-calculate handling charges
+	*	if any are >0 which will in turn add the hidden field
+	*	'#wppizza_calc_handling' we are checking first ]
+	******************************************************/
+	if($('#wppizza_calc_handling').length>0){
+		var wppizzaGatewaySelected = $("input[name='wppizza-gateway']");
+		wppizzaGatewaySelected.change(function(e){
+			$('#wppizza-send-order').prepend('<div id="wppizza-loading"></div>');
+			if(wppizzaGatewaySelected.is(':radio')){
+				var selectedGateway = $("input[name='wppizza-gateway']:checked").val();
+			}else{
+				var selectedGateway = $("select[name='wppizza-gateway']").val();
+			}
+			jQuery.post(wppizza.ajaxurl , {action :'wppizza_json',vars:{'type':'wppizza-select-gateway','data':$('#wppizza-send-order').serialize(),'selgw':selectedGateway}}, function(res) {
+				window.location.href=window.location.href;/*make sure page gest reloaded without confirm*/
+			},'json').error(function(jqXHR, textStatus, errorThrown) {	$('#wppizza-send-order #wppizza-loading').remove(); alert("error : " + errorThrown);console.log(jqXHR.responseText);});
+		});
+	}
 	/***********************************************
 	*
 	*	[if we are trying to add to cart by clicking on the title

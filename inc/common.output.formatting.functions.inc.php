@@ -4,6 +4,11 @@
 			//$str=number_format_i18n($str,2);
 			$str=sprintf('%01.2f',$str);
 		}
+		/**when hiding decimals $type==true**/
+		if($type=='hidedecimals'){
+			$str=sprintf('%01.0f',$str);
+		}
+		
 		return $str;
 	}
 
@@ -493,7 +498,7 @@ function wppizza_options_in_use(){
 *	[returns an array containing all order data (prices, discounts, currency etc]
 *
 *********************************************************************************/
-function wppizza_order_summary($session,$options,$ajax=null){
+function wppizza_order_summary($session,$options,$module=null,$ajax=null){
 	/***************************************************
 		[in i some vars if undefined]
 	***************************************************/
@@ -698,6 +703,17 @@ function wppizza_order_summary($session,$options,$ajax=null){
 					}
 				}
 
+				/**if we are hiding decimals recalc/round delivery charges or we might get rounding errors**/
+				if($deliveryCharges>0 && $optionsDecimals){
+					$recalc=wppizza_output_format_float($deliveryCharges,'hidedecimals');
+					if($recalc<=0){
+						$deliveryLabel=$options['localization']['free_delivery']['lbl'];
+						$deliveryCharges='';
+					}else{
+						$deliveryCharges=$recalc;;
+					}
+				}
+
 				/**delivery settings to display with discount options somewhere*/
 				if($options['order']['delivery']['minimum_total']['min_total']>0){
 					$summary['pricing_delivery']="".$options['localization']['free_delivery_for_orders_of']['lbl']." <span>".$options['order']['currency_symbol']." ".wppizza_output_format_price($options['order']['delivery']['minimum_total']['min_total'],$optionsDecimals)."</span>";
@@ -728,6 +744,7 @@ function wppizza_order_summary($session,$options,$ajax=null){
 				if($deliveryCharges>0){
 					$deliveryLabel=$options['localization']['delivery_charges']['lbl'];
 				}
+
 				/**delivery settings to display with discount options somewhere*/
 				if($options['order']['delivery']['per_item']['delivery_per_item_free']>0){
 					$summary['pricing_delivery']="".$options['localization']['delivery_charges_per_item']['lbl']." <span>".$options['order']['currency_symbol']." ".wppizza_output_format_price($options['order']['delivery']['per_item']['delivery_charge_per_item'],$optionsDecimals)."</span>";
@@ -737,7 +754,6 @@ function wppizza_order_summary($session,$options,$ajax=null){
 				}
 
 			}
-
 
 			/*******************************************
 			*	admin enabled self pickup on the frontend
@@ -845,6 +861,38 @@ function wppizza_order_summary($session,$options,$ajax=null){
 						$taxesIncluded=wppizza_round_up(($totalSales+$deliveryCharges)/(100+$options['order']['item_tax'])*$options['order']['item_tax'],2);
 					}
 				}
+				
+			/*********************************************************************
+			*
+			*
+			*	[surcharges handling charges]
+			*
+			*
+			**********************************************************************/				
+				/****************************************************
+					[total order before tips]
+				****************************************************/
+				$totalOrderBeforeTips=$session['total_price_items']-(float)$discountValue+(float)$deliveryCharges+(float)$itemTax;
+				
+				/****************************************************
+					[surcharges]
+				****************************************************/
+				$surcharges=0;
+				$surchargePcVal=$session['gateway-selected']['surchargePc'];
+				$surchargeFixedVal=$session['gateway-selected']['surchargeFixed'];
+				
+				/*charges percent*/
+				if($surchargePcVal>0){
+					$surcharges+=$totalOrderBeforeTips/100*abs($surchargePcVal);
+				}
+				/*charges fixed*/
+				if($surchargeFixedVal>0){
+					$surcharges+=$surchargeFixedVal;
+				}
+				/**round*/
+				if($surcharges>0){
+					$surcharges=wppizza_round_up($surcharges,2);
+				}
 			/*********************************************************************
 			*
 			*
@@ -872,6 +920,19 @@ function wppizza_order_summary($session,$options,$ajax=null){
 		'discount'=>array('lbl'=>$discountLabel,'val'=>$discountValuePrint),
 		'total'=>array('lbl'=>$options['localization']['order_total']['lbl'],'val'=>wppizza_output_format_price(wppizza_output_format_float($totalOrder),$optionsDecimals))
 	);
+	
+	/*******************************************************
+		[gateways must handle surcharges themselves and
+		update the db accordingly. However, to display 
+		surcharges on gateway change in the orderpage
+		we overwrite the total here for display before
+		actually processing and without adding them to the db]
+	*******************************************************/
+	if($surcharges>0 && $module=='orderpage'){
+		$summary['order_value']['total']=array('lbl'=>$options['localization']['order_total']['lbl'],'val'=>wppizza_output_format_price(wppizza_output_format_float($totalOrder+$surcharges),$optionsDecimals));
+		$summary['order_value']['handling_charge']=array('lbl'=>$options['localization']['order_page_handling']['lbl'],'val'=>wppizza_output_format_price(wppizza_output_format_float($surcharges),$optionsDecimals));
+	}
+	
 
 	/****************************************************
 		[check if we are open]
