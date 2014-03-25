@@ -931,6 +931,9 @@ function wppizza_order_summary($session,$options,$module=null,$ajax=null){
 	if($surcharges>0 && $module=='orderpage'){
 		$summary['order_value']['total']=array('lbl'=>$options['localization']['order_total']['lbl'],'val'=>wppizza_output_format_price(wppizza_output_format_float($totalOrder+$surcharges),$optionsDecimals));
 		$summary['order_value']['handling_charge']=array('lbl'=>$options['localization']['order_page_handling']['lbl'],'val'=>wppizza_output_format_price(wppizza_output_format_float($surcharges),$optionsDecimals));
+	}	
+	if($session['gateway-selected']['surchargeAtCheckout'] && $module=='orderpage'){
+		$summary['order_value']['handling_charge']=array('lbl'=>$options['localization']['order_page_handling']['lbl'],'str'=>$options['localization']['order_page_handling_oncheckout']['lbl']);
 	}
 	
 

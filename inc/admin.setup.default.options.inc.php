@@ -516,9 +516,13 @@
 					'lbl'=>__('Please collect your order at the store.', $this->pluginLocale)
 				),
 				'order_page_handling'=>array(
-					'descr'=>__('Order Page - Additional Handling Charges: text on order page if a handling charge for payment processing has been made (if applicable)', $this->pluginLocale),
+					'descr'=>__('Order Page [Handling Charges]: text on order page if a handling charge for payment processing has been made (if applicable)', $this->pluginLocale),
 					'lbl'=>__('handling charge', $this->pluginLocale)
 				),
+				'order_page_handling_oncheckout'=>array(
+					'descr'=>__('Order Page [Handling Charges]: text on order page if any handling charge will be calculated on checkout by a/the gateway itself', $this->pluginLocale),
+					'lbl'=>__('calculated on checkout', $this->pluginLocale)
+				),					
 				'required_field'=>array(
 					'descr'=>__('Order Page: message when required field is missing', $this->pluginLocale),
 					'lbl'=>__('this is a required field', $this->pluginLocale)

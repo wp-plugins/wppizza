@@ -378,6 +378,9 @@ jQuery(document).ready(function($){
 	******************************************************/
 	if($('#wppizza_calc_handling').length>0){
 		var wppizzaGatewaySelected = $("input[name='wppizza-gateway']");
+		if(wppizzaGatewaySelected.length==0){
+			wppizzaGatewaySelected = $("select[name='wppizza-gateway']");
+		}
 		wppizzaGatewaySelected.change(function(e){
 			$('#wppizza-send-order').prepend('<div id="wppizza-loading"></div>');
 			if(wppizzaGatewaySelected.is(':radio')){
@@ -483,6 +486,7 @@ jQuery(document).ready(function($){
 	  		},
 			submitHandler: function(form) {
 				var hasClassAjax=false;
+				var hasClassCustom=false;
 				if($("input[name='wppizza-gateway']").length>0){
 					var elm = $("input[name='wppizza-gateway']");
 					if(elm.is(':radio')){
@@ -491,9 +495,11 @@ jQuery(document).ready(function($){
 						var selected = elm;
 					}
 					hasClassAjax=selected.hasClass("wppizzaGwAjaxSubmit");
+					hasClassCustom=selected.hasClass("wppizzaGwCustom");
 				}else{
 					var selected = $("select[name='wppizza-gateway']");
-					hasClassAjax=$("select[name='wppizza-gateway'] option:selected").hasClass("wppizzaGwAjaxSubmit")
+					hasClassAjax=$("select[name='wppizza-gateway'] option:selected").hasClass("wppizzaGwAjaxSubmit");
+					hasClassCustom=$("select[name='wppizza-gateway'] option:selected").hasClass("wppizzaGwCustom");
 				}
 				var self=$('#wppizza-send-order');
 				var currVal = selected.val();
@@ -526,13 +532,13 @@ jQuery(document).ready(function($){
 						}
 						/***all is well. go ahead with stuff**/
 						if(typeof response.error==='undefined'){
-							wppizzaSelectSubmitType(self,currVal,hasClassAjax);
+							wppizzaSelectSubmitType(self,currVal,hasClassAjax,hasClassCustom);
 						}
 					},'json');
 					return;
 				}else{
 					/**we are not registering a new account, so just submit as planned**/
-					wppizzaSelectSubmitType(self,currVal,hasClassAjax);
+					wppizzaSelectSubmitType(self,currVal,hasClassAjax,hasClassCustom);
 				}
 			}
 		})
@@ -541,7 +547,12 @@ jQuery(document).ready(function($){
 	/******************************
 	* submit via ajax or send form
 	*******************************/
-	var wppizzaSelectSubmitType=function(self,currVal,hasClassAjax){
+	var wppizzaSelectSubmitType=function(self,currVal,hasClassAjax,hasClassCustom){
+		/**customised submit/payment via js window/overlay for example - will have to provide its own script**/
+		if(hasClassCustom){
+			window['wppizza' + currVal + 'payment']();
+			return;
+		}
 		/**cod->transmit form via ajax if cod or forced by gw settings (i.e $this->gatewayTypeSubmit = 'ajax')*/
 		if(currVal=='cod' || hasClassAjax){
 			self.prepend('<div id="wppizza-loading"></div>');

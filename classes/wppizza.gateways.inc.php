@@ -2,7 +2,8 @@
 if (!class_exists( 'WPPizza' ) ) {return ;}
 class WPPIZZA_GATEWAYS extends WPPIZZA {
 	protected $pluginGateways;
-
+	private $gatewayOrderDetails;
+	private $gatewayOrderId;
 	function __construct() {
     	parent::__construct();
 
@@ -13,7 +14,7 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 		if(!is_admin()){
 			add_action('init', array( $this, 'wppizza_instanciate_gateways_frontend'));
 			add_action('init', array( $this, 'wppizza_do_gateways'));/**output available gateway choices on order page**/
-			add_action('init', array($this,'wppizza_gateway_initialize_order'));/*initialize oder into db */
+			add_action('init', array( $this,'wppizza_gateway_initialize_order'));/*initialize oder into db */
 		}
 
 		/************************************************************************
@@ -65,6 +66,13 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 				if($wppizzaGatewayCount==0){
 					$this->pluginGatewaySelected=$gw;
 				}
+				/***check if surcharges are calculated by the gateway rather than set by admin**/
+				//$wppizzaGateway[$gw]->gatewaySurchargeAtCheckout=false;
+				if(isset($wppizzaGateway[$gw]->gatewaySurchargeAtCheckout)){
+					$this->showSurchageBeforOrder=true;	
+				}
+				
+
 				/***check (for legacy reasons) if we have the relevant vars in gateway plugin to calculate surcharges on order page **/
 				if(isset($wppizzaGateway[$gw]->gatewaySurchargePercent) && isset($wppizzaGateway[$gw]->gatewaySurchargeFixed)){
 					$wppizzaGateway[$gw]->surchargePc=$wppizzaGateway[$gw]->gatewayOptions[$wppizzaGateway[$gw]->gatewaySurchargePercent];
@@ -81,26 +89,30 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 			}
 		}}
 
+		/**if we have not yet set a gateway , use the first one **/
+		if(!isset($_SESSION[$this->pluginSessionGlobal]['userdata']['gateway'])){
+			$_SESSION[$this->pluginSession]['gateway-selected']['gw']=strtolower($this->pluginGatewaySelected);
+			$_SESSION[$this->pluginSession]['gateway-selected']['surchargePc']=$wppizzaGateway[$this->pluginGatewaySelected]->surchargePc;
+			$_SESSION[$this->pluginSession]['gateway-selected']['surchargeFixed']=$wppizzaGateway[$this->pluginGatewaySelected]->surchargeFixed;
+			$_SESSION[$this->pluginSession]['gateway-selected']['surchargeAtCheckout']=!empty($wppizzaGateway[$this->pluginGatewaySelected]->gatewaySurchargeAtCheckout) ? true:false;
+		}	
+		/***switch gw via ajax and reload page*****/
+		if(isset($_SESSION[$this->pluginSessionGlobal]['userdata']['gateway'])){
+			$selGw=$_SESSION[$this->pluginSessionGlobal]['userdata']['gateway'];
+			/**lets just make double sure this exists in case soemone feels the need to mess around with the html values**/
+			if(isset($wppizzaGateway[$selGw])){
+				if(isset($_SESSION[$this->pluginSession]['gateway-selected'])){
+					unset($_SESSION[$this->pluginSession]['gateway-selected']);
+				}
+				$_SESSION[$this->pluginSession]['gateway-selected']['gw']=strtolower($selGw);
+				$_SESSION[$this->pluginSession]['gateway-selected']['surchargePc']=$wppizzaGateway[$selGw]->surchargePc;
+				$_SESSION[$this->pluginSession]['gateway-selected']['surchargeFixed']=$wppizzaGateway[$selGw]->surchargeFixed;
+				$_SESSION[$this->pluginSession]['gateway-selected']['surchargeAtCheckout']=!empty($wppizzaGateway[$selGw]->gatewaySurchargeAtCheckout) ? true:false;
+			}
+		}
+			
 		/**add a hidden flag in frontend to display surcharges on gateway change and set initial session**/
 		if($this->showSurchageBeforOrder){
-			/**if we have not yet set a gateway , use the first one **/
-			if(!isset($_SESSION[$this->pluginSessionGlobal]['userdata']['gateway'])){
-				$_SESSION[$this->pluginSession]['gateway-selected']['gw']=strtolower($this->pluginGatewaySelected);
-				$_SESSION[$this->pluginSession]['gateway-selected']['surchargePc']=$wppizzaGateway[$this->pluginGatewaySelected]->surchargePc;
-				$_SESSION[$this->pluginSession]['gateway-selected']['surchargeFixed']=$wppizzaGateway[$this->pluginGatewaySelected]->surchargeFixed;
-			}	
-			/***switch gw via ajax and reload page*****/
-			if(isset($_SESSION[$this->pluginSessionGlobal]['userdata']['gateway'])){
-				$selGw=$_SESSION[$this->pluginSessionGlobal]['userdata']['gateway'];
-				/**lets just make double sure this exists in case soemone feels the need to mess around with the html values**/
-				if(isset($wppizzaGateway[$selGw])){
-					unset($_SESSION[$this->pluginSession]['gateway-selected']);
-					$_SESSION[$this->pluginSession]['gateway-selected']['gw']=strtolower($selGw);
-					$_SESSION[$this->pluginSession]['gateway-selected']['surchargePc']=$wppizzaGateway[$selGw]->surchargePc;
-					$_SESSION[$this->pluginSession]['gateway-selected']['surchargeFixed']=$wppizzaGateway[$selGw]->surchargeFixed;
-				}
-			}
-			
 			add_action('wppizza_choose_gateway',array($this,'wppizza_recalculate_handling'));
 		}
 
@@ -150,6 +162,9 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 							if(isset($gw->gatewayTypeSubmit) && $gw->gatewayTypeSubmit=='ajax'){
 								$gwAddClass=' class="wppizzaGwAjaxSubmit"';
 							}
+							if(isset($gw->gatewayTypeSubmit) && $gw->gatewayTypeSubmit=='custom'){/*customised*/
+								$gwAddClass=' class="wppizzaGwCustom"';
+							}
 							print"<option value='".$key."' ".$gwAddClass." ".selected($_SESSION[$this->pluginSession]['gateway-selected']['gw'],$key,false)." />";
 								print"".empty($gw->gatewayOptions['gateway_label']) ? $gw->gatewayName : $gw->gatewayOptions['gateway_label'] ." ";
 							print"</option>";
@@ -172,6 +187,9 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 							if(isset($gw->gatewayTypeSubmit) && $gw->gatewayTypeSubmit=='ajax'){
 								$gwAddClass=' class="wppizzaGwAjaxSubmit"';
 							}
+							if(isset($gw->gatewayTypeSubmit) && $gw->gatewayTypeSubmit=='custom'){/*customised*/
+								$gwAddClass=' class="wppizzaGwCustom"';
+							}						
 							print"<div id='wppizza-gw-".$key."' class='wppizza-gw-button button'>";
 									print"<label>";
 									print"<input type='radio' name='wppizza-gateway' id='wppizza-gateway-".$key."' ".$gwAddClass." value='".$key."' ".checked($_SESSION[$this->pluginSession]['gateway-selected']['gw'],$key,false)."/> ";
@@ -201,6 +219,9 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 					if(isset($gw->gatewayTypeSubmit) && $gw->gatewayTypeSubmit=='ajax'){
 						$gwAddClass=' class="wppizzaGwAjaxSubmit"';
 					}
+					if(isset($gw->gatewayTypeSubmit) && $gw->gatewayTypeSubmit=='custom'){/*customised*/
+								$gwAddClass=' class="wppizzaGwCustom"';
+					}					
 					/**add hidden value so the ajax call knows whether its cod or anything else*/
 					print"<input type='hidden' name='wppizza-gateway' id='wppizza-gateway-".$key."' ".$gwAddClass." value='".$key."' /> ";
 					/**if this method has not been defined in class or is empty, display standard button**/
@@ -287,7 +308,7 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 	/***********************************************
 		[check if gateways have changed/been (de)activated
 		and update option accordingly (provided its not
-		first install anyway or old version anyway]
+		first install or old version anyway]
 	***********************************************/
 	function wppizza_available_gateways() {
 		if(isset($this->pluginOptions['gateways']['gateway_selected'])){
@@ -339,6 +360,8 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 			add_action('wppizza_choose_gateway', array($this,'gateway_set_order_details'));
 			add_action('wppizza_choose_gateway', array($this,'gateway_db_initialize_order'));
 			add_action('wppizza_choose_gateway', array($this, 'gateway_form_fields'));
+			/**add a do action hook that has order id and details which can be used elsewhere **/
+			add_action('wppizza_order_form_after', array($this, 'gateway_order_details_hook'));
 		}
 	}
 	/********************************************************************
@@ -368,6 +391,11 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 		get_currentuserinfo();
 		$wpdb->hide_errors();
 		$wpdb->query( $wpdb->prepare( "INSERT INTO ".$wpdb->prefix . $this->pluginOrderTable." ( wp_user_id, hash, order_ini, payment_status )VALUES ( %s, %s, %s , %s )", array($current_user->ID, $this->gatewayOrderDetails['hash'], $this->gatewayOrderDetails['order_ini'],'INITIALIZED')));
+		$this->gatewayOrderId=$wpdb->insert_id;
+	}
+	/*some action hooks to do somthing with the order details that have been  inserted into db**/
+	function gateway_order_details_hook(){
+		do_action('wppizza_gateway_do_order_details', $this->gatewayOrderDetails, $this->gatewayOrderId);
 	}
 	/******************************************************************
 	*

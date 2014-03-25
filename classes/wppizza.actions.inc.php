@@ -14,7 +14,7 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 	    	add_action('init', array( $this, 'wppizza_require_common_helper_functions'));/*include output formatting functions**/
 	    	add_action('init', array( $this, 'wppizza_register_custom_posttypes'));/*register custom posttype*/
 			add_action('init', array( $this, 'wppizza_register_custom_taxonomies'));/*register taxonomies*/
-			add_action('init', array(&$this,'wppizza_init_sessions'));/*needed for admin AND frontend***/			/**add sessions to keep track of shippingcart***/
+			add_action('init', array( $this,'wppizza_init_sessions'));/*needed for admin AND frontend***/			/**add sessions to keep track of shippingcart***/
 			add_shortcode($this->pluginSlug, array($this, 'wppizza_add_shortcode'));//used in ajax request for cart contents so must be available when ajax and on front AND backend!
 
 			/*class to send order emails used via ajax too so must be avialable from bckend too*/
@@ -132,7 +132,8 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 	/************************************************************************
 		[output login form or logout link on order page]
 	************************************************************************/
-	function wppizza_do_login_form($items){
+	function wppizza_do_login_form($cart){
+		$items=count($cart['items']);
 		$txt=$this->pluginOptions['localization'];
 		/**logged in users - i dont think a logout link belongs there really. let's not do this for now**/
 		if(is_user_logged_in() && (int)$items>0) {
@@ -263,7 +264,7 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 			}
 			/**add query variables if any**/
 			if(count($qString)>0){
-				$redirectLocation.='?'.http_build_query($qString);
+				$redirectLocation.='?'.http_build_query($qString,'','&');
 			}
 
 		return $redirectLocation;

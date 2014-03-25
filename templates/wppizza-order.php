@@ -38,7 +38,7 @@ foreach($formelements as $elmKey=>$elm){
 
 <?php
 	/*AMENDED in 2.8.9 to take account of no of items*/
-	do_action('wppizza_order_form_before',count($cart['items']));
+	do_action('wppizza_order_form_before',$cart);
 ?>
 <form id='wppizza-send-order' method='post' action='' accept-charset="<?php echo get_bloginfo('charset') /*accept charset NEW IN VERSION 2.0 */ ?>">
 	<fieldset id="wppizza-cart-contents">
@@ -87,16 +87,21 @@ foreach($formelements as $elmKey=>$elm){
 			<?php if($cart['order_value']['item_tax']['val']>0 && $cart['tax_applied']=='items_and_shipping'){/*item/sales tax applied to items AND shipping  NEW IN VERSION 2.0 / 2.5*/ ?>
 				<li class="wppizza-order-item-tax wppizza-order-item-tax-itemsshipping"><?php echo $txt['item_tax_total']['lbl'] ?><span><?php echo $cart['currency_left'].''.$cart['order_value']['item_tax']['val'].''.$cart['currency_right']; ?></span></li>
 			<?php } ?>
-		
+
 			<?php if($cart['order_value']['taxes_included']['val']>0 && $cart['tax_applied']=='taxes_included'){/*all taxes included  NEW IN VERSION 2.8.9.3 */ ?>
 				<li class="wppizza-order-item-tax-inclusive"><?php echo $cart['order_value']['taxes_included']['lbl'] ?><span><?php echo $cart['currency_left'].''.$cart['order_value']['taxes_included']['val'].''.$cart['currency_right']; ?></span></li>
 			<?php } ?>
 
-			<?php /**handling charges if any NEW 2.8.9.4**/ ?>
+			<?php /**handling charges if any NEW 2.8.9.4 AMENDED 2.8.9.5**/ ?>
 			<?php if(isset($cart['order_value']['handling_charge'])){ ?>
-				<li class="wppizza-order-handling-charge"><?php echo $txt['order_page_handling']['lbl'] ?><span><?php echo $cart['currency_left'].''.$cart['order_value']['handling_charge']['val'].''.$cart['currency_right']; ?></span></li>
-			<?php } ?>			
-			
+				<?php if(isset($cart['order_value']['handling_charge']['val'])){ /*is number, add currency symbol**/ ?>
+					<li class="wppizza-order-handling-charge"><?php echo $txt['order_page_handling']['lbl'] ?><span><?php echo $cart['currency_left'].''.$cart['order_value']['handling_charge']['val'].''.$cart['currency_right']; ?></span></li>
+				<?php } ?>
+				<?php if(isset($cart['order_value']['handling_charge']['str'])){ /*is string (i.e "surcharge calculated at checkout"), omit currency symbol**/  ?>
+					<li class="wppizza-order-handling-charge-checkout"><?php echo $txt['order_page_handling']['lbl'] ?><span><?php echo $cart['order_value']['handling_charge']['str']; ?></span></li>
+				<?php } ?>
+			<?php } ?>
+
 			<?php if(isset($cart['tips']) && $cart['tips']>0){/*tips NEW 2.8.4*/?>
 				<li class="wppizza-order-tips"><?php echo $txt['tips']['lbl'] ?><span><span></span><?php echo $cart['currency_left'].''.$cart['tips']['val'].''.$cart['currency_right']; ?></span></li>
 			<?php } ?>
@@ -158,16 +163,6 @@ foreach($formelements as $elmKey=>$elm){
 						<?php } ?>
 					</select>
 				<?php } ?>
-				<?php if($elm['type']=='selectcustom'){/*NEW IN VERSION 2.8.4 BUT NOT IN USE AT THE MOMENT. THIS WILL PROBABLY CHANGE */?>
-					<select id="<?php echo $elm['key'] ?>" name="<?php echo $elm['key'] ?>" <?php echo !empty($elm['required'])?'required':'' ?>>
-						<option value="">--------</option>
-						<?php foreach($elm['value'] as $a=>$b){?>
-						<option value="<?php echo wppizza_validate_string($b) ?>" <?php echo !empty($elm['prefill']) && isset($userMeta[$elm['key']]) && $userMeta[$elm['key']]==wppizza_validate_string($b) ? 'selected="selected"' :''  /*CHANGED IN VERSION 2.6.5.3*/ ?>><?php echo $a ?></option>
-						<?php } ?>
-					</select>
-				<?php } ?>
-
-
 			<?php } ?>
 		<?php } ?>
 		<?php if(is_user_logged_in() ) { /**allow user to update profile ADDED IN VERSION 2.8*/ ?>
@@ -195,5 +190,5 @@ foreach($formelements as $elmKey=>$elm){
 </form>
 <?php
 	/*AMENDED in 2.8.9 to take account of no of items*/
-	do_action('wppizza_order_form_after',count($cart['items']));
+	do_action('wppizza_order_form_after',$cart);
 ?>

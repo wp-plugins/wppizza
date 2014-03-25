@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.2, WP 3.3 
 Tested up to: 3.8.1
-Stable tag: 2.8.9.5
+Stable tag: 2.8.9.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -122,6 +122,14 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 
 == Changelog ==
+
+2.8.9.6     
+* Maintenance Release. (Eliminated some php notices amongst other things)  
+* Added proviso for gateways to add surcharges themselves on checkout (epay.dk for example) in which case "handling charges" on order page will be displayed as "calculated at checkout" (amended wppizza-order.php template accordingly)  
+* Amended js to allow gateways to add their own javascript to show/execute payments - in an overlay for example - instead of being tied to a redirect  
+* amended readme  
+25th March 2014   
+
 
 2.8.9.5  
 * ADDED: handling charges (if set in gateway) will now also be displayed/calculated on orderpage with any future gateways (and/or PayPal Standard Gateway 2.1.6+ , Authorize.net 1.1+)   
@@ -832,6 +840,19 @@ in case where you cannot or do not want to use a widget, here are the correspond
 	- exclude='6,5,8' 			(optional [comma separated category id's]): exclude some id's  
 
 	example: 		[wppizza type='navigation' title='some title' parent='slug-name' exclude='6,5,8']  
+
+
+
+= Shortcodes do not work in widgets ? =  
+
+Some Themes do not have shortcode support enabled in text widgets.  
+To enable, either add this line to the functions.php of your theme;
+
+	add_filter('widget_text', 'do_shortcode');
+
+or use one of the wordpress plugins available here for example, that do this  
+http://wordpress.org/plugins/search.php?q=shortcode+in+text+widget  
+
 
 
 = Can I edit the templates ? =
