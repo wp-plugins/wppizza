@@ -5,7 +5,7 @@ Description: Maintain your restaurant menu online and accept cash on delivery or
 Author: ollybach
 Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Author URI: http://www.wp-pizza.com
-Version: 2.8.9.6
+Version: 2.8.9.7
 License:
 
   Copyright 2012 ollybach (dev@wp-pizza.com)
@@ -66,7 +66,7 @@ class WPPizza extends WP_Widget {
 ********************************************************/
  function __construct() {
 	/**init constants***/
-	$this->pluginVersion='2.8.9.6';//increment in line with stable tag in readme and version above
+	$this->pluginVersion='2.8.9.7';//increment in line with stable tag in readme and version above
  	$this->pluginName="".WPPIZZA_NAME."";
  	$this->pluginSlug="".WPPIZZA_SLUG."";//set also in uninstall when deleting options
 	$this->pluginSlugCategoryTaxonomy="".WPPIZZA_TAXONOMY."";//also on uninstall delete wppizza_children as well as widget
@@ -76,6 +76,11 @@ class WPPizza extends WP_Widget {
 	$this->pluginOptionsNoWpml = $this->pluginOptions; //when updating some options (notably localizations) we do NOT want to have the variables messed with by WPML before we enter them into the db	
 	$this->pluginNagNotice=0;//default off->for use in updates to this plugin
 	$this->pluginPath=__FILE__;//default off->for use in updates to this plugin
+	/**to get the template paths, uri's and possible subdir and set vars accordingly**/
+	$pathDirUri=$this->wppizza_template_paths();
+	$this->pluginTemplateDir=$pathDirUri['template_dir'];/**to amend get_stylesheet_directory() according to whether wppizza subdir exists*/
+	$this->pluginTemplateUri=$pathDirUri['template_uri'];/**to amend get_stylesheet_directory_uri() according to whether wppizza subdir exists*/
+	$this->pluginLocateDir=$pathDirUri['locate_dir'];/**to add relevant subdir - if exists - to locate_template*/
 	/**blog charset*/
 	$this->blogCharset=get_bloginfo('charset');
 
@@ -165,6 +170,30 @@ class WPPizza extends WP_Widget {
 			$items['openingtimes']=__('Openingtimes', $this->pluginLocale);
 		return $items;
 	}
+	/****************************************************************
+	*
+	*	[get/set Template Directories/Uri's. also check for subdir 'wppizza']
+	*
+	***************************************************************/
+	function wppizza_template_paths(){
+		$paths['template_dir']='';
+		$paths['template_uri']='';
+		$paths['locate_dir']='';
+		$dir=get_stylesheet_directory();
+		$uri=get_stylesheet_directory_uri();
+		
+		if(is_dir($dir.'/'.WPPIZZA_SLUG)){
+			$paths['template_dir']=$dir.'/'.WPPIZZA_SLUG;	
+			$paths['template_uri']=$uri.'/'.WPPIZZA_SLUG;	
+			$paths['locate_dir']=WPPIZZA_SLUG.'/';
+		}else{
+			$paths['template_dir']=$dir;	
+			$paths['template_uri']=$uri;
+			$paths['locate_dir']='';
+		}
+	
+		return $paths;
+	}	
 	/*******************************************************
 	*
 	*	[WPML : make strings wpml compatible]

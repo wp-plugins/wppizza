@@ -8,7 +8,10 @@ extract(shortcode_atts(array('type' => ''), $atts));
 		noheader='1' 			(optional: 'anything')
 		showadditives='1' 		(optional[bool]: 0 or 1)
 		exclude='6,5,8' 		(optional [comma separated menu item id's]): exclude some id's
+		include='6,5,8' 		(optional [comma separated menu item id's]): include only these id's (overrides exclude)
 	example: 		[wppizza category='pizza' noheader='1' exclude='6,7,8']
+	or
+	example: 		[wppizza category='pizza' noheader='1' include='6,7,8']
 **********************************************/
 if($type==''){
 	ob_start();

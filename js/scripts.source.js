@@ -1,6 +1,7 @@
 var wppizzaClickEvent='click';
 
 jQuery(document).ready(function($){
+
 	/*******************************************************
 	*	[detect browser supported events
 	*	and use touchstart if click is not supported

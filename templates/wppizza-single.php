@@ -28,8 +28,9 @@
 	
 	if(is_single()){/*the is_single() is probably overkill as it should really be a single anyway, oh well...**/
 		
-		if ($template_file = locate_template( array ('wppizza-loop.php' ))){ /*or use wppizza-loop-responsive.php, depending what you use*/
-			get_template_part( WPPIZZA_POST_TYPE, 'loop' );
+		if ($template_file = locate_template( array ('wppizza-loop.php' ))){ /*or use wppizza-loop-responsive.php, depending what you use. furthermore, if using a subdirectory called wppizza, use array ('wppizza/wppizza-loop.php' )*/
+			//get_template_part( WPPIZZA_POST_TYPE, 'loop' );
+			include_once($template_file);
 		}else{
 			include_once(''.WPPIZZA_PATH.'templates/wppizza-loop.php');	/*or use wppizza-loop-responsive.php, depending what you use*/
 		}

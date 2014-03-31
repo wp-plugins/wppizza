@@ -30,9 +30,10 @@ get_header();
 		/****************************************************************
 		if the loop template has been copied to the theme folder we get template part
 		otherwise, include from plugin template directory
+		if using a wppizza subdirectory, change array ('wppizza-loop.php') to array ('wppizza/wppizza-loop.php' )
 		****************************************************************/
 		if ($template_file = locate_template( array ('wppizza-loop.php' ))){
-			get_template_part( WPPIZZA_POST_TYPE, 'loop' ); 
+			include_once($template_file);
 		}else{
 			include_once(''.WPPIZZA_PATH.'templates/wppizza-loop.php');			
 		}

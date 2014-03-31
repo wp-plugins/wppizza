@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.2, WP 3.3 
 Tested up to: 3.8.1
-Stable tag: 2.8.9.6
+Stable tag: 2.8.9.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -116,12 +116,36 @@ Please update to version 2.5.7+ asap as metadata might get lost when using *quic
 
 == Other Notes ==
 
+= Translations provided by: =
+
+	- Italien:  Silvia Palandri  
+	- Hebrew:  Yair10 [&#1492;&#1500;&#1489;&#32;&#1489;&#1504;&#1497;&#1497;&#1514;&#32;&#1488;&#1514;&#1512;&#1497;&#1501;&#32;]  
+	- Dutch:  Jelmer  
+	- Spanish:  Andrew Kurtis at <a href="http://www.webhostinghub.com/">WebHostingHub</a>  
+
+Many, many thanks guys and girls.  
+
+Note: As the plugin gets updated over time and has some other strings and features added, the translations above (and future ones) will probably have a few strings not yet translated. If you wish, feel free to provide any of those missing and I will update the translations accordingly.  
+
+If you want to contribute your own translation, feel free to send me your files and I will be more than happy to include them.  
+
+
+
+
+= Demo Icons: =
 please note that the icons used in the demo installation are <a href="http://www.iconarchive.com/show/desktop-buffet-icons-by-aha-soft.html">iconarchive.com</a> icons and not for commercial use.  
 if you do wish to use any icon from this set commercially, please follow <a href="http://www.desktop-icon.com/stock-icons/desktop-buffet-icons.htm">this link</a> to purchase it.
 
 
 
 == Changelog ==
+
+2.8.9.7     
+* allow include in shortcode (as well as exclude -> see faq:shortcodes)  
+* removed login from orderpage if "anyone can register" has NOT been enabled  
+* customised templates should now be in child theme (if used)  
+* customised templates should now also work from within a subdirectory called 'wppizza' (if used, ALL customised templates will have to be in this directory though)  
+31st March 2014   
 
 2.8.9.6     
 * Maintenance Release. (Eliminated some php notices amongst other things)  
@@ -729,9 +753,12 @@ note: if you are a customised version of wppizza-loop.php or wppizza-loop-respon
 
 although the css has been written so that it works with many themes out of the box (see www.wp-pizza.com - all themes use the same default stylesheet) you might want to adjust some things here and there to work with your theme (especially if you want to support older browsers).  
 if you do, copy the wppizza/css/wppizza-default.source.css (or wppizza/css/wppizza-responsive.source.css if using the responsive style) as wppizza-default.css (or wppizza-responsive.css)  to your theme directory (so it does not get overwritten by future updates of the plugin) and edit as required.  
-**alternatively *(and possibly better as any future updates to the main css will still be reflected)*, just copy wppizza-custom.css to your theme directory and only overwrite the styles you need to override.**  
+
+**alternatively *(and possibly better as any future updates to the main css will still be reflected)*, just copy wppizza-custom.css to your theme directory (or child theme directory if used as of v2.8.9.7) and only overwrite the styles you need to override.**  
 
 (this file will be read AFTER the main default.css). "Include css" has to be enabled for this to apply   
+
+PS: Optionally as of version 2.8.9.7 - you could use a subdirectory called wppizza for all your customised wppizza templates.   
 
 
 = Can I use this plugin when I am not using english on my site ? =
@@ -805,6 +832,7 @@ in case where you cannot or do not want to use a widget, here are the correspond
 	- noheader='1' 			(optional: 'anything'. omit attribute to show header. will suppress header (category title and description) in wppizza-loop.php. you can globally hide all category headers by setting "suppress headers" in wppizza->settings->layout.)  
 	- showadditives='0' 	(optional: '0' or '1'. if omitted, a list of additives will be displayed if any of the category items has additives added. if set (0 or 1): force to display/hide additives list. useful when displaying more than 1 category on a page)  
 	- exclude='6,5,8' 		(optional [comma separated menu item id's]): exclude some id's  
+	- include='6,5,8' 		(optional [comma separated menu item id's]): include only these id's (overrides exclude)  
 	- note: if you want to edit the category loop and/or headers, copy wppizza-loop.php from the plugins template directory into your theme directory and edit it there.  
 	
 	example: 		[wppizza category='pizza' noheader='1' showadditives='0' exclude='6,5,8']
@@ -858,7 +886,7 @@ http://wordpress.org/plugins/search.php?q=shortcode+in+text+widget
 = Can I edit the templates ? =
 
 Sure, if you want.  
-Just make sure you copy the relevant template from wppizza/templates/ to your theme directory and edit those so you don't loose your edits when the plugin gets updated. Make sure to read the comments in the relevant files.
+Just make sure you copy the relevant template from wppizza/templates/ to your theme directory (or as of version 2.8.9.7 child theme directory if used) and edit those, so you don't loose your edits when the plugin gets updated. Make sure to read the comments in the relevant files.
 
 **Preferably though - if at all possible - I would suggest to use css and/or some of the action hooks provided  to be able to take advantage of any possible future updates or improvements of those templates**
 

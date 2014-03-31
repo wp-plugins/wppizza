@@ -133,6 +133,8 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 		[output login form or logout link on order page]
 	************************************************************************/
 	function wppizza_do_login_form($cart){
+		if(get_option('users_can_register')==0){return;}
+		
 		$items=count($cart['items']);
 		$txt=$this->pluginOptions['localization'];
 		/**logged in users - i dont think a logout link belongs there really. let's not do this for now**/
@@ -492,6 +494,8 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 				/**compare currently installed options vs this vesrion**/
 				if(	version_compare( $options['plugin_data']['version'], '2.0', '<' )){$update_options['plugin_data']['nag_notice']='2.1';}
 				if(	version_compare( $options['plugin_data']['version'], '2.8.7', '<' )){$update_options['plugin_data']['nag_notice']='2.8.7';}
+				/**check for child themes**/
+				if(	version_compare( $options['plugin_data']['version'], '2.8.9.7', '<' ) && get_stylesheet_directory()!=get_template_directory()){$update_options['plugin_data']['nag_notice']='2.8.9.7';}
 
 				/**update options**/
 				update_option($this->pluginSlug, $update_options );
@@ -561,7 +565,13 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 				$pluginUpdatedNotice.='If you are using the "Cart visible on page when scrolling ?" in the wppizza shoppingcart widget (or per shortcode) please check your settings (notably the background colour) in WPPizza->Layout-> "sticky/scolling" cart settings [if used]" ';
 				$pluginUpdatedNotice.='<br/><br/>thank you<br/>';
 			}
-
+			if($this->pluginOptions['plugin_data']['nag_notice']=='2.8.9.7'){
+				$pluginUpdatedNotice.='<b>Update Notice '.WPPIZZA_NAME.' '.$this->pluginVersion.' - you appear to be using a child theme:</b><br/><br/>';
+				$pluginUpdatedNotice.='<br />';
+				$pluginUpdatedNotice.='<b>Previous Versions - erroneously - only checked for and used customised wppizza templates that have been copied into the parent theme directory.<br />Therefore, <span style="color:red">if you are using any customised wppizza templates, please move them from your parent to your child theme.</span></b><br />';
+				$pluginUpdatedNotice.='<br /><b>Note: the above <b>does not yet apply</b> to customised files/css of other extensions which will be updated shortly to keep things consistent.</b>';
+				$pluginUpdatedNotice.='<br/><br/>thank you<br/>';
+			}
 
 			$pluginUpdatedNotice.='<br/><a href="#" onclick="wppizza_dismiss_notice(); return false;" class="button-primary">dismiss</a>';
 			$pluginUpdatedNotice.='</div>';
@@ -1008,14 +1018,22 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 					$exclude[$exclId]=$exclId;
 				}
 			}
-
+			/*include specific items only -> overrides exclude*****/
+			$include=array();
+			if(isset($atts['include'])){
+				$exclude=array();/*empty exclude*/
+				$inclXplode=explode(",",$atts['include']);
+				foreach($inclXplode as $inclId){
+					$include[$inclId]=$inclId;
+				}
+			}
 			/*set template style if !default*/
 			$loStyle='';
 			if($options['layout']['style']!='default'){
 				$loStyle='-'.$options['layout']['style'].''	;
 			}
 			/*include template from theme if exists*/
-			if ($template_file = locate_template( array ('wppizza-loop'.$loStyle.'.php' ))){
+			if ($template_file = locate_template( array ($this->pluginLocateDir.'wppizza-loop'.$loStyle.'.php' ))){
 				include($template_file);
 				return;
 			}
@@ -1063,7 +1081,7 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 			$args = apply_filters('wppizza_filter_navigation', $args);
 
 			/*check if the file exists in the theme, otherwise serve the file from the plugin directory if possible*/
-			if ($template_file = locate_template( array ('wppizza-navigation.php'))){
+			if ($template_file = locate_template( array ($this->pluginLocateDir.'wppizza-navigation.php'))){
 				include($template_file);
 				return;
 			}
@@ -1113,7 +1131,7 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 				$openingTimes=wppizza_frontendOpeningTimes($options);
 			}
 			/*check if the file exists in the theme, otherwise serve the file from the plugin directory if possible*/
-			if ($template_file = locate_template( array (''.$this->pluginSlug.'-cart.php'))){
+			if ($template_file = locate_template( array ($this->pluginLocateDir.''.$this->pluginSlug.'-cart.php'))){
 				include($template_file);
 				return;
 			}
@@ -1145,7 +1163,7 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 
 			sort($formelements);
 				/*check if the file exists in the theme, otherwise serve the file from the plugin directory if possible*/
-				if ($template_file = locate_template( array (''.$this->pluginSlug.'-order.php' ))){
+				if ($template_file = locate_template( array ($this->pluginLocateDir.''.$this->pluginSlug.'-order.php' ))){
 				include($template_file);
 					return;
 				}
@@ -1439,7 +1457,7 @@ public function wppizza_require_common_input_validation_functions(){
 			}			
 			if ( !is_single() ) {
 				/*check if the file exists in the theme, otherwise serve the file from the plugin directory if possible*/
-				if ($theme_file = locate_template( array ('wppizza-wrapper.php' ))){
+				if ($theme_file = locate_template( array ($this->pluginLocateDir.'wppizza-wrapper.php' ))){
 					include($theme_file);
 					return;
 				}
@@ -1486,15 +1504,15 @@ public function wppizza_require_common_input_validation_functions(){
     public function wppizza_register_scripts_and_styles_admin($hook) {
         if(is_admin()) {// && ($hook=='settings_page_'.$this->pluginSlug || $hook=='widgets.php')
             /**css**/
-            	if (file_exists( get_template_directory() . '/wppizza-admin.css')){
+            	if (file_exists( $this->pluginTemplateDir . '/wppizza-admin.css')){
 					/**copy stylesheet to template directory to keep settings**/
-					wp_register_style($this->pluginSlug.'-admin', get_template_directory_uri().'/wppizza-admin.css', array(), $this->pluginVersion);
+					wp_register_style($this->pluginSlug.'-admin', $this->pluginTemplateUri.'/wppizza-admin.css', array(), $this->pluginVersion);
             	}else{
 					wp_register_style($this->pluginSlug.'-admin', plugins_url( 'css/styles-admin.css',$this->pluginPath), array(), $this->pluginVersion);
             	}
 				/**if we want to keep all the original css (including future changes) but only want to overwrite some lines , add wppizza-admin-custom.css to your template directory*/
-				if (file_exists( get_template_directory() . '/wppizza-admin-custom.css')){
-					wp_register_style($this->pluginSlug.'-admin-custom', get_template_directory_uri().'/wppizza-admin-custom.css', array(''.$this->pluginSlug.'-admin'), $this->pluginVersion);
+				if (file_exists( $this->pluginTemplateDir . '/wppizza-admin-custom.css')){
+					wp_register_style($this->pluginSlug.'-admin-custom', $this->pluginTemplateUri.'/wppizza-admin-custom.css', array(''.$this->pluginSlug.'-admin'), $this->pluginVersion);
 					wp_enqueue_style($this->pluginSlug.'-admin-custom');
 				}
 				/**for timepicker etc*/
@@ -1519,9 +1537,9 @@ public function wppizza_require_common_input_validation_functions(){
     		css
     	**************/
 		if($options['layout']['include_css']){
-			if (file_exists( get_template_directory() . '/wppizza-'.$options['layout']['style'].'.css')){
+			if (file_exists( $this->pluginTemplateDir . '/wppizza-'.$options['layout']['style'].'.css')){
 			/**copy stylesheet to template directory to keep settings**/
-			wp_register_style($this->pluginSlug, get_template_directory_uri().'/wppizza-'.$options['layout']['style'].'.css', array(), $this->pluginVersion);
+			wp_register_style($this->pluginSlug, $this->pluginTemplateUri.'/wppizza-'.$options['layout']['style'].'.css', array(), $this->pluginVersion);
 			}else{
 			wp_register_style($this->pluginSlug, plugins_url( 'css/wppizza-'.$options['layout']['style'].'.css', $this->pluginPath ), array(), $this->pluginVersion);
 			}
@@ -1536,8 +1554,8 @@ public function wppizza_require_common_input_validation_functions(){
 
 		if($options['layout']['include_css']){
 			/**if we want to keep all the original css (including future changes) but only want to overwrite some lines , add wppizza-custom.css to your template directory*/
-			if (file_exists( get_template_directory() . '/wppizza-custom.css')){
-				wp_register_style($this->pluginSlug.'-custom', get_template_directory_uri().'/wppizza-custom.css', array(''.$this->pluginSlug.''), $this->pluginVersion);
+			if (file_exists( $this->pluginTemplateDir . '/wppizza-custom.css')){
+				wp_register_style($this->pluginSlug.'-custom', $this->pluginTemplateUri.'/wppizza-custom.css', array(''.$this->pluginSlug.''), $this->pluginVersion);
 				wp_enqueue_style($this->pluginSlug.'-custom');
 			}
 		}
@@ -1562,8 +1580,8 @@ public function wppizza_require_common_input_validation_functions(){
     		wp_register_script($this->pluginSlug.'-prettyPhoto', plugins_url( 'js/jquery.prettyPhoto.js', $this->pluginPath ), array('jquery'), $this->pluginVersion ,$options['plugin_data']['js_in_footer']);
     		wp_enqueue_script($this->pluginSlug.'-prettyPhoto');
     		/**copy js to template directory to edit settings (theme etc)**/
-    		if (file_exists( get_template_directory() . '/wppizza.prettyPhoto.custom.js')){
-	    		wp_register_script($this->pluginSlug.'-ppCustom', get_template_directory_uri().'/wppizza.prettyPhoto.custom.js', array('jquery'), $this->pluginVersion ,$options['plugin_data']['js_in_footer']);
+    		if (file_exists( $this->pluginTemplateDir . '/wppizza.prettyPhoto.custom.js')){
+	    		wp_register_script($this->pluginSlug.'-ppCustom', $this->pluginTemplateUri.'/wppizza.prettyPhoto.custom.js', array('jquery'), $this->pluginVersion ,$options['plugin_data']['js_in_footer']);
     		}else{
 	    		wp_register_script($this->pluginSlug.'-ppCustom', plugins_url( 'js/wppizza.prettyPhoto.custom.js.php?t='.$options['layout']['prettyPhotoStyle'].'', $this->pluginPath ), array('jquery'), $this->pluginVersion ,$options['plugin_data']['js_in_footer']);
     		}

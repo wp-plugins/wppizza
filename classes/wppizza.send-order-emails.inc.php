@@ -388,9 +388,9 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 
 					/**include plaintext template**/
 					$orderEmailPlaintext='';
-					if(file_exists( get_template_directory() . '/wppizza-order-email-plaintext.php')){
+					if(file_exists( $this->pluginTemplateDir . '/wppizza-order-email-plaintext.php')){
 						ob_start();
-						require_once(get_template_directory().'/wppizza-order-email-plaintext.php');
+						require_once($this->pluginTemplateDir.'/wppizza-order-email-plaintext.php');
 						$orderEmailPlaintext = ob_get_clean();
 					}else{
 						ob_start();
@@ -424,9 +424,9 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 					/***********************************************
 						[overwrite subject vars for email subject]
 					************************************************/
-					if (file_exists( get_template_directory() . '/wppizza-order-email-subject.php')){
+					if (file_exists( $this->pluginTemplateDir . '/wppizza-order-email-subject.php')){
 						/**copy to template directory to keep settings**/
-						include(get_template_directory() . '/wppizza-order-email-subject.php');
+						include($this->pluginTemplateDir . '/wppizza-order-email-subject.php');
 					}else{
 						include(WPPIZZA_PATH.'templates/wppizza-order-email-subject.php');
 					}
@@ -592,12 +592,12 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 				/*return $orderHtml*/
 				$orderHtml='';
 				/*for legacy reasons, someone might use an old template in their theme directory***/
-				if (file_exists( get_template_directory() . '/wppizza-order-html-email.php')){
-					require_once(get_template_directory().'/wppizza-order-html-email.php');
+				if (file_exists( $this->pluginTemplateDir . '/wppizza-order-html-email.php')){
+					require_once($this->pluginTemplateDir.'/wppizza-order-html-email.php');
 				}
-				elseif(file_exists( get_template_directory() . '/wppizza-order-email-html.php')){
+				elseif(file_exists( $this->pluginTemplateDir . '/wppizza-order-email-html.php')){
 					ob_start();
-					require_once(get_template_directory().'/wppizza-order-email-html.php');
+					require_once($this->pluginTemplateDir.'/wppizza-order-email-html.php');
 					$orderHtml = ob_get_clean();
 				}else{
 					ob_start();
@@ -612,8 +612,8 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 				/**/
 
 				/**set phpmailer settings**/
-				if (file_exists( get_template_directory() . '/wppizza-phpmailer-settings.php')){
-					require_once(get_template_directory().'/wppizza-phpmailer-settings.php');
+				if (file_exists( $this->pluginTemplateDir . '/wppizza-phpmailer-settings.php')){
+					require_once($this->pluginTemplateDir.'/wppizza-phpmailer-settings.php');
 				}else{
 					require_once(WPPIZZA_PATH.'templates/wppizza-phpmailer-settings.php');
 				}
@@ -785,8 +785,8 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 				that one otherwise use default]
 			***********************************************/
 			ob_start();
-			if (file_exists( get_template_directory() . '/wppizza-show-order.php')){
-				include(get_template_directory() . '/wppizza-show-order.php');
+			if (file_exists( $this->pluginTemplateDir . '/wppizza-show-order.php')){
+				include($this->pluginTemplateDir . '/wppizza-show-order.php');
 			}else{
 				include(WPPIZZA_PATH.'templates/wppizza-show-order.php');
 			}
