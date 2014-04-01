@@ -180,6 +180,32 @@ exit();
 /************************************************************************************************
 *
 *
+*	[get the confirm order page]
+*
+*
+************************************************************************************************/
+if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='confirmorder'){
+	header('Content-type: text/html');
+		/***************************************************************
+			[get and parse all user post variables and save in session
+		***************************************************************/
+		if(count($_POST['vars']['data'])>0){
+			$param=$this->wppizza_sessionise_userdata($_POST['vars']['data'],$options['order_form']);
+			/**add hash**/
+			$atts['hash']=!empty($param['wppizza_hash']) ? wppizza_validate_string($param['wppizza_hash']) : '';
+			/**add used gateway*/
+			$atts['gateway']=!empty($param['wppizza-gateway']) ? wppizza_validate_string($param['wppizza-gateway']) : '';
+		}		
+		ob_start();
+		$this->wppizza_include_shortcode_template('confirmationpage',$atts);
+		$markup = ob_get_clean();
+		
+	print"".$markup;
+	exit();
+}
+/************************************************************************************************
+*
+*
 *	[create a nonce]
 *
 *

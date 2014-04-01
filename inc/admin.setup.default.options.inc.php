@@ -424,8 +424,70 @@
 				9=>array('sort'=>9,'key'=>'ccustom5','lbl'=>__('Custom Field 5 :', $this->pluginLocale),'value'=>array(),'type'=>'text','enabled'=>false,'required'=>false,'prefill'=>false,'onregister'=>false),
 				10=>array('sort'=>10,'key'=>'ccustom6','lbl'=>__('Custom Field 6 :', $this->pluginLocale),'value'=>array(),'type'=>'text','enabled'=>false,'required'=>false,'prefill'=>false,'onregister'=>false),
 				11=>array('sort'=>11,'key'=>'ctips','lbl'=>__('Tips/Gratuities :', $this->pluginLocale),'value'=>array(),'type'=>'tips','enabled'=>false,'required'=>false,'prefill'=>false,'onregister'=>false)
-				//...one day... 12=>array('sort'=>12,'key'=>'csurcharges','lbl'=>__('Surcharges :', $this->pluginLocale),'value'=>array(),'type'=>'selectcustom','enabled'=>false,'required'=>false,'prefill'=>false,'onregister'=>false) in the future maybe
 			),
+			'confirmation_form_enabled'=>false,
+			'confirmation_form_amend_order_link'=>'',
+			'confirmation_form'=>array(
+				0=>array('sort'=>0,'key'=>'wpppizza_confirm_1','lbl'=>__('Accept Terms and Conditions', $this->pluginLocale),'value'=>array(),'type'=>'checkbox','enabled'=>false,'required'=>false),
+				1=>array('sort'=>1,'key'=>'wpppizza_confirm_2','lbl'=>__('Distance Selling Regulations ', $this->pluginLocale),'value'=>array(),'type'=>'checkbox','enabled'=>false,'required'=>false),
+				2=>array('sort'=>2,'key'=>'wpppizza_confirm_3','lbl'=>__('Other', $this->pluginLocale),'value'=>array(),'type'=>'checkbox','enabled'=>false,'required'=>false),
+				3=>array('sort'=>3,'key'=>'wpppizza_confirm_4','lbl'=>__('Other', $this->pluginLocale),'value'=>array(),'type'=>'checkbox','enabled'=>false,'required'=>false)
+			),		
+			'localization_confirmation_form'=>array(/**make sure keys are NOT used in "normal" localization vars too, as we are merging those two arrays to use in confirmation page */
+				'change_user_details'=>array(
+					'descr'=>__('Confirmation Form - [labels]: link text to use for link to return to previous page for changing personal details', $this->pluginLocale),
+					'lbl'=>__('change', $this->pluginLocale)
+				),
+				'change_order_details'=>array(
+					'descr'=>__('Confirmation Form - [labels]: text and associated link to use to direct customer to a page where he/she can amend the order.', $this->pluginLocale),
+					'lbl'=>__('amend order', $this->pluginLocale)
+				),						
+				'payment_method'=>array(
+					'descr'=>__('Confirmation Form - [labels]: label for payment method used', $this->pluginLocale),
+					'lbl'=>__('selected payment method :', $this->pluginLocale)
+				),		
+				'legend_legal'=>array(
+					'descr'=>__('Confirmation Form - [section header]: legal aspects', $this->pluginLocale),
+					'lbl'=>__('legal aspects', $this->pluginLocale)
+				),								
+				'legend_personal'=>array(
+					'descr'=>__('Confirmation Form - [section header]: personal details', $this->pluginLocale),
+					'lbl'=>__('personal information', $this->pluginLocale)
+				),								
+				'legend_payment_method'=>array(
+					'descr'=>__('Confirmation Form - [section header]: payment method', $this->pluginLocale),
+					'lbl'=>__('payment method', $this->pluginLocale)
+				),	
+				'legend_order_details'=>array(
+					'descr'=>__('Confirmation Form - [section header]: order details', $this->pluginLocale),
+					'lbl'=>__('order details', $this->pluginLocale)
+				),	
+				'confirm_now_button'=>array(
+					'descr'=>__('Confirmation Form - [labels]: label buy now button', $this->pluginLocale),
+					'lbl'=>__('buy now (legally binding)', $this->pluginLocale)
+				),
+				'header_itemised_article'=>array(
+					'descr'=>__('Confirmation Form - [itemised header]: article', $this->pluginLocale),
+					'lbl'=>__('article', $this->pluginLocale)
+				),
+				'header_itemised_price_single'=>array(
+					'descr'=>__('Confirmation Form - [itemised header]: single price', $this->pluginLocale),
+					'lbl'=>__('single price', $this->pluginLocale)
+				),
+				'header_itemised_quantity'=>array(
+					'descr'=>__('Confirmation Form - [itemised header]: quantity', $this->pluginLocale),
+					'lbl'=>__('quantity', $this->pluginLocale)
+				),
+				'header_itemised_price'=>array(
+					'descr'=>__('Confirmation Form - [itemised header]: price', $this->pluginLocale),
+					'lbl'=>__('price', $this->pluginLocale)
+				),
+				'subtotals_after_additional_info'=>array(
+					'descr'=>__('Confirmation Form - [miscellaneous]: additional/optional info/text to display after (sub)totals', $this->pluginLocale),
+					'lbl'=>''
+				)						
+											
+			),							
 			'gateways'=>array(
 				'gateway_selected'=>array('COD'=>true),
 				'gateway_select_as_dropdown'=>false,

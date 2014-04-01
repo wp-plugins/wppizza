@@ -101,6 +101,16 @@
 			}
 		}
 	}
+	if(isset($options['confirmation_form'])){
+		$update_options['confirmation_form']=$update_options['confirmation_form'];
+		/*lets not loose select options in order form**/
+		foreach($update_options['confirmation_form'] as $k=>$oForm){
+			$update_options['confirmation_form'][$k]['value']=array();
+			if(isset($options['confirmation_form'][$k]['value'])){
+				$update_options['confirmation_form'][$k]['value']=$options['confirmation_form'][$k]['value'];
+			}
+		}
+	}
 	if(isset($options['plugin_data']['category_parent_page'])){
 		$update_options['plugin_data']['category_parent_page']=$options['plugin_data']['category_parent_page'];
 	}

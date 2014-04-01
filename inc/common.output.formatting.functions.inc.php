@@ -928,11 +928,11 @@ function wppizza_order_summary($session,$options,$module=null,$ajax=null){
 		we overwrite the total here for display before
 		actually processing and without adding them to the db]
 	*******************************************************/
-	if($surcharges>0 && $module=='orderpage'){
+	if($surcharges>0 && ($module=='orderpage' || $module=='confirmationpage' )){
 		$summary['order_value']['total']=array('lbl'=>$options['localization']['order_total']['lbl'],'val'=>wppizza_output_format_price(wppizza_output_format_float($totalOrder+$surcharges),$optionsDecimals));
 		$summary['order_value']['handling_charge']=array('lbl'=>$options['localization']['order_page_handling']['lbl'],'val'=>wppizza_output_format_price(wppizza_output_format_float($surcharges),$optionsDecimals));
 	}	
-	if($session['gateway-selected']['surchargeAtCheckout'] && $module=='orderpage'){
+	if($session['gateway-selected']['surchargeAtCheckout'] && ($module=='orderpage' || $module=='confirmationpage' )){
 		$summary['order_value']['handling_charge']=array('lbl'=>$options['localization']['order_page_handling']['lbl'],'str'=>$options['localization']['order_page_handling_oncheckout']['lbl']);
 	}
 	
@@ -978,8 +978,23 @@ function wppizza_order_summary($session,$options,$module=null,$ajax=null){
 					/**wpml select of order page**/
 					if(function_exists('icl_object_id')) {
 						$options['order']['orderpage']=icl_object_id($options['order']['orderpage'],'page');
+						/*confirmation page -> amend order link**/
+						if($options['confirmation_form_amend_order_link']>0){
+							$options['confirmation_form_amend_order_link']=icl_object_id($options['confirmation_form_amend_order_link'],'page');
+						}
 					}
-					$summary['button']='<a href="'.get_page_link($options['order']['orderpage']).'">';
+					
+					
+					$summary['orderpagelink']=get_page_link($options['order']['orderpage']);
+					/*confirmation page -> amend order link**/
+					if($options['confirmation_form_amend_order_link']>0){
+						$summary['amendorderlink']=get_page_link($options['confirmation_form_amend_order_link']);
+					}else{
+						$summary['amendorderlink']='';	
+					}
+					
+					
+					$summary['button']='<a href="'.$summary['orderpagelink'].'">';
 					$summary['button'].='<input class="btn btn-primary" type="button" value="'.$options['localization']['place_your_order']['lbl'].'" />';
 					$summary['button'].='</a>';
 

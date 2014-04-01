@@ -20,7 +20,7 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 			/*class to send order emails used via ajax too so must be avialable from bckend too*/
 			add_action('init', array( $this, 'wppizza_send_order_emails'));
 			/*category walker class to get hierarchical wppizza categories in set order ***/
-			add_action('init', array( $this, 'wppizza_category_walker'));			
+			add_action('init', array( $this, 'wppizza_category_walker'));
 
 			/***************
 				[filters]
@@ -99,8 +99,8 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 			/**allow custom order status fields. priority must be<10**/
 			add_action( 'admin_init', array( $this, 'wppizza_set_order_status' ),9);
 		}
-		
-		
+
+
 		/************************************************************************************************************************
 			[sort by and print categories to order page and cart
 		*************************************************************************************************************************/
@@ -114,7 +114,7 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 		add_filter( 'wppizza_cart_filter_items', array( $this, 'wppizza_filter_items_by_category'),10,2);
 		/**print category **/
 		add_filter('wppizza_cart_item', array( $this, 'wppizza_items_cart_print_category'),10,2);
-		
+
 		/************************************************************************
 			[ajax]
 		*************************************************************************/
@@ -134,7 +134,7 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 	************************************************************************/
 	function wppizza_do_login_form($cart){
 		if(get_option('users_can_register')==0){return;}
-		
+
 		$items=count($cart['items']);
 		$txt=$this->pluginOptions['localization'];
 		/**logged in users - i dont think a logout link belongs there really. let's not do this for now**/
@@ -1174,6 +1174,100 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 					return;
 				}
 		}
+		/***************************************
+			[include confirmation page template]
+		***************************************/
+		if($type=='confirmationpage'){
+			/*******get the variables***/
+			$options = $this->pluginOptions;
+			$cart=wppizza_order_summary($_SESSION[$this->pluginSession],$options,$type);
+			$cart = apply_filters('wppizza_filter_order_summary', $cart);
+			/**check if tax was included in prices**/
+			$taxIncluded=$options['order']['item_tax_included'];
+
+
+			/**txt variables from settings->localization additional vars > localization_confirmation_form*/
+			$localize = array_merge($options['localization'],$options['localization_confirmation_form']);
+			$txt=array();
+			foreach($localize as $k=>$v){
+				$txt[$k]=$v['lbl'];
+			}
+
+			/**set session user vars as get vars to prefill form fields***/
+			$userdata=array();
+			if(isset($_SESSION[$this->pluginSessionGlobal]['userdata']) && is_array($_SESSION[$this->pluginSessionGlobal]['userdata'])){
+				foreach($_SESSION[$this->pluginSessionGlobal]['userdata'] as $k=>$v){
+					$userdata[$k]=$v;
+				}
+			}
+
+			/**formelements from settings->order form*/
+			$formelements=$options['order_form'];
+			sort($formelements);
+			foreach($formelements as $k=>$oForm){
+				$key=$oForm['key'];
+				if($oForm['key']=='ctips' || !$oForm['enabled']){/***exclude disabled and tips (as those belong to order details)**/
+					unset($formelements[$k]);
+				}else{
+					if($oForm['type']!='select'){
+						$formelements[$k]['userVal']=!empty($userdata[$key]) ? $userdata[$key] :'';
+					}else{
+						$formelements[$k]['userVal']=!empty($oForm['value'][$userdata[$key]]) ? $oForm['value'][$userdata[$key]] :'';
+					}
+				}
+			}
+
+			/**confirmation formelements from settings->order form*/
+			$confirmationelements=array();
+			foreach($options['confirmation_form'] as $elmKey=>$elm){
+				if($elm['enabled']){
+					$confirmationelements[$elmKey]=$elm;
+				}
+			}
+			sort($confirmationelements);
+
+			/**link back to order page**/
+			$orderpagelink=$cart['orderpagelink'];
+			/** link to amend order**/
+			$amendorderlink=$cart['amendorderlink'];
+
+			/******************************************
+				output button and payment method
+				and associated costs
+			******************************************/
+			$gwClass=new WPPIZZA_GATEWAYS;
+			$orderbutton='';
+			/**add required fields**/
+			$orderbutton.='<input id="wppizza_hash" name="wppizza_hash" type="hidden" value="'.$atts['hash'].'"/>';
+			$orderbutton.='<input id="wppizza-gateway" name="wppizza-gateway" type="hidden" value="'.$atts['gateway'].'"/>';
+			$orderbutton.=$gwClass->wppizza_gateway_standard_button($txt['confirm_now_button']);
+
+			/**get gateway frontend label instead of just COD or similar**/
+			$getGateways=$gwClass->wppizza_instanciate_gateways_frontend();
+			$gatewayLabel=strtoupper($atts['gateway']);
+			$getwayUsedIdent=$gatewayLabel;
+			if(isset($getGateways[$getwayUsedIdent])){
+				$gatewayLabel=!empty($getGateways[$getwayUsedIdent]->gatewayName) ? $getGateways[$getwayUsedIdent]->gatewayName : $atts['gateway'];
+				$gatewayLabel=!empty($getGateways[$getwayUsedIdent]->gatewayOptions['gateway_label']) ? $getGateways[$getwayUsedIdent]->gatewayOptions['gateway_label'] : $gatewayLabel;
+			}
+			/***********************************************
+				output what needs outputting
+			***********************************************/
+			/*check if the file exists in the theme, otherwise serve the file from the plugin directory if possible*/
+			if ($template_file = locate_template( array ($this->pluginLocateDir.''.$this->pluginSlug.'-confirmation.php' ))){
+				include($template_file);
+				return;
+			}
+			/*check if it exists in plugin directory, otherwise we will have to serve defaults**/
+			if (is_file(''.WPPIZZA_PATH.'templates/'.$this->pluginSlug.'-confirmation.php')){
+				$template_file =''.WPPIZZA_PATH.'templates/'.$this->pluginSlug.'-confirmation.php';
+				include($template_file);
+				return;
+			}
+
+
+
+		}
 }
 function wppizza_additives_remap($meta){
 	$convAdditives=array();
@@ -1305,7 +1399,7 @@ public function wppizza_require_common_input_validation_functions(){
 	}
 	/*******************************************************
 		[get fully sorted hierarchy of wppizza categories]
-	******************************************************/	
+	******************************************************/
 	function wppizza_complete_sorted_hierarchy($catsort=array()){
 			$args = array(
 			  'taxonomy'     		=> $this->pluginSlugCategoryTaxonomy,
@@ -1326,7 +1420,7 @@ public function wppizza_require_common_input_validation_functions(){
 			$hierarchy=array_flip($hierarchy);
 		return $hierarchy;
 	}
-	
+
 	/********************************************************
 		[lets attempt to get rid of WPPizza Categories in title tag
 	*********************************************************/
@@ -1429,7 +1523,7 @@ public function wppizza_require_common_input_validation_functions(){
 *********************************************************/
 	function wppizza_category_walker() {
 		require_once(WPPIZZA_PATH .'classes/wppizza.category-walker.inc.php');
-	}	
+	}
 /***********************************************************************************************
 *
 * 	[template functions - include the relevant templates depending on shortcode/widget type and atts]
@@ -1454,7 +1548,7 @@ public function wppizza_require_common_input_validation_functions(){
 			/**if we want to capture the category id a menu item is currently in **/
 			if($options['layout']['items_group_sort_print_by_category']){
 				$getSlugDetails=1;
-			}			
+			}
 			if ( !is_single() ) {
 				/*check if the file exists in the theme, otherwise serve the file from the plugin directory if possible*/
 				if ($theme_file = locate_template( array ($this->pluginLocateDir.'wppizza-wrapper.php' ))){
@@ -1611,6 +1705,10 @@ public function wppizza_require_common_input_validation_functions(){
 		if($options['plugin_data']['using_cache_plugin']){
 			$localized_array['usingCache']=1;
 		}
+		/**are we using a confirmation form too ?**/
+		if($options['confirmation_form_enabled']){
+			$localized_array['cfrm']=1;
+		}
 		/**sticky cart settings**/
 			$localized_array['crt']=array();
 			$localized_array['crt']['anim']=$options['layout']['sticky_cart_animation'];
@@ -1703,9 +1801,9 @@ public function wppizza_require_common_input_validation_functions(){
 	function wppizza_term_filter($pieces, $taxonomies=false, $args=false){
 		/**allow to pass sort vars**/
 		if($args && isset($args['get']['wppizza_category_sort']) && is_array($args['get']['wppizza_category_sort'])){
-			$cat=$args['get']['wppizza_category_sort'];	
+			$cat=$args['get']['wppizza_category_sort'];
 		}else{
-			$cat=$this->pluginOptions['layout']['category_sort'];	
+			$cat=$this->pluginOptions['layout']['category_sort'];
 		}
 		asort($cat);
 		$sort=implode(",",array_keys($cat));
@@ -1833,16 +1931,16 @@ public function wppizza_require_common_input_validation_functions(){
 		}
 		/*now sort by category**/
 		asort($itemsCategorySort);
-		
+
 		/***reiterate over items and display category name if first time****/
 		foreach($itemsCategorySort as $k=>$v){
 			$itemCatHierarchy=$this->wppizza_cat_parents( $v['catIdSelected'], $separator , $page);
 			/**set catnames to be empty if it's the same again as we only want to print  this the first time as header so to speak**/
 			if(!in_array($itemCatHierarchy,$existingCatHierarchy)){$setCatHierarchy=$itemCatHierarchy;}else{$setCatHierarchy='';}
 			/**append category hierarchy**/
-			$itemsCategorySort[$k]=$v+array('itemCatHierarchy'=>$setCatHierarchy);						
+			$itemsCategorySort[$k]=$v+array('itemCatHierarchy'=>$setCatHierarchy);
 			/*set current cat hierarchy to avoid double display**/
-			$existingCatHierarchy[]=$itemCatHierarchy;			
+			$existingCatHierarchy[]=$itemCatHierarchy;
 		}
 		return $itemsCategorySort;
 	}

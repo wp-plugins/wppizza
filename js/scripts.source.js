@@ -549,6 +549,17 @@ jQuery(document).ready(function($){
 	* submit via ajax or send form
 	*******************************/
 	var wppizzaSelectSubmitType=function(self,currVal,hasClassAjax,hasClassCustom){
+		/*****confirmation page enabled*****/
+		if(typeof wppizza.cfrm!=='undefined' && !self.hasClass('wppizza-confirm-order')){
+			$('#wppizza-user-login').empty().remove();			
+			self.prepend('<div id="wppizza-loading"></div>');
+			jQuery.post(wppizza.ajaxurl , {action :'wppizza_json',vars:{'type':'confirmorder','data':self.serialize()}}, function(response) {
+						self.html(response);//replace the form contents
+						self.addClass('wppizza-confirm-order');/*set class so we dont do this again**/			
+						$('#wppizza-send-order #wppizza-loading').remove();
+			},'html').error(function(jqXHR, textStatus, errorThrown) {$('#wppizza-send-order #wppizza-loading').remove();alert("error : " + errorThrown);console.log(jqXHR.responseText);});					
+			return;
+		}
 		/**customised submit/payment via js window/overlay for example - will have to provide its own script**/
 		if(hasClassCustom){
 			window['wppizza' + currVal + 'payment']();

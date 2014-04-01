@@ -65,7 +65,11 @@
 	[order form fields]
 *******************/
 #wppizza-settings.wppizza-order-form-wrap .form-table{border:none;background:transparent}
-#wppizza-settings.wppizza-order-form-wrap .form-table tr:nth-child(odd){background:transparent}
+#wppizza-settings.wppizza-order-form-wrap .form-table>tbody>tr:nth-child(odd){background:transparent}
+#wppizza-settings.wppizza-order-form-wrap .form-table>tbody>tr:nth-child(even){background:transparent}
+
+#wppizza-settings.wppizza-order-form-wrap .form-table>table>tr:nth-child(odd){background:#F9F9F9}
+#wppizza-settings.wppizza-order-form-wrap .form-table>table>tr:nth-child(even){background:#FFFFFF}
 #wppizza-settings.wppizza-order-form-wrap .form-table>tbody>tr>th{display:none}
 
 
@@ -77,6 +81,16 @@
 #wppizza_order_form tr:nth-child(even){background:#FFFFFF;}
 #wppizza_order_form tr>td{padding:5px;margin:5px}
 
+/******************
+	[confirmation form fields]
+*******************/
+.wppizza-order-form-wrap .form-table th{width:auto !important;}
+#wppizza_confirmation_form_info,#wppizza_confirmation_form_info td{border:0;margin:5px 0;background:transparent}
+#wppizza_confirmation_form th{vertical-align:top; width:auto !important; background-color:#DEDEDE;text-shadow:none;padding:5px}
+#wppizza_confirmation_form {border:1px solid #999999;margin-bottom:10px}
+#wppizza_confirmation_form tr:nth-child(odd){background:#EFEFEF;}
+#wppizza_confirmation_form tr:nth-child(even){background:#FFFFFF;}
+#wppizza_confirmation_form td{margin:0;padding:5px}
 /*******************
 	[generic]
 *********************/

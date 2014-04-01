@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.2, WP 3.3 
 Tested up to: 3.8.1
-Stable tag: 2.8.9.7
+Stable tag: 2.8.9.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -118,10 +118,10 @@ Please update to version 2.5.7+ asap as metadata might get lost when using *quic
 
 = Translations provided by: =
 
-	- Italien:  Silvia Palandri  
-	- Hebrew:  Yair10 [&#1492;&#1500;&#1489;&#32;&#1489;&#1504;&#1497;&#1497;&#1514;&#32;&#1488;&#1514;&#1512;&#1497;&#1501;&#32;]  
-	- Dutch:  Jelmer  
-	- Spanish:  Andrew Kurtis at <a href="http://www.webhostinghub.com/">WebHostingHub</a>  
+- Italien:  Silvia Palandri  
+- Hebrew:  Yair10 [&#1492;&#1500;&#1489;&#32;&#1489;&#1504;&#1497;&#1497;&#1514;&#32;&#1488;&#1514;&#1512;&#1497;&#1501;&#32;]  
+- Dutch:  Jelmer  
+- Spanish:  Andrew Kurtis at <a href="http://www.webhostinghub.com/">WebHostingHub</a>  
 
 Many, many thanks guys and girls.  
 
@@ -140,12 +140,18 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 == Changelog ==
 
+2.8.9.8  
+* added option to enable a final, non-editable confirmation page before payment/order processing  (some countries/jurisdictions might require this. enable and edit as required in wppizza->order form settings)  
+1st April 2014  
+
+
 2.8.9.7     
 * allow include in shortcode (as well as exclude -> see faq:shortcodes)  
 * removed login from orderpage if "anyone can register" has NOT been enabled  
 * customised templates should now be in child theme (if used)  
 * customised templates should now also work from within a subdirectory called 'wppizza' (if used, ALL customised templates will have to be in this directory though)  
 31st March 2014   
+
 
 2.8.9.6     
 * Maintenance Release. (Eliminated some php notices amongst other things)  

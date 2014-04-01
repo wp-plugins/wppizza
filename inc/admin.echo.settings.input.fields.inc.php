@@ -397,24 +397,69 @@ $options = $this->pluginOptions;
 						echo"</span>";
 						echo"</td></tr>";
 					}
-
-
-					/***********************
-					//currently not in use
-					if($v['key']=='csurcharges'){
-						echo"<tr class='".$v['key']."'><td colspan='7' style='margin:0;padding:0 0 0 10px'>";
-						echo"<span class='description'>".__('<b>Surcharges:</b> generate a dropdown of applicable surcharges as comma/pipe delimited label/price pairs (% allowed).<br />Example: "CC:1.00|COD:0.75%|Other:5" etc. <b>Any value selected by the customer will be added to the delivery charges.</b><br />This field will not be added to the users profile and can therefore not be pre-filled or used in the registration form.', $this->pluginLocale)."</span>";
-						echo"</td></tr>";
-					}
-					********************/
-
 				}
-				//future use.....maybe
-				//echo"<tr><th colspan='7' class='wppizza-order-form-footer' ><span id='wppizza-toggle-tgs' class='description'>".__('Show Tips/Gratuities', $this->pluginLocale)."<span></th></tr>";
 				echo"</table>";
 			}
 
-
+			if($field=='confirmation_form'){
+				echo"<hr /><br />";
+				echo "<input id='confirmation_form_enabled' name='".$this->pluginSlug."[confirmation_form_enabled]' type='checkbox'  ". checked($options['confirmation_form_enabled'],true,false)." value='1' />";
+				echo"<span class='description'><b>".__('Some Countries/Jurisdictions require another, final , non-editable confirmation page before sending the order. If this is the case, tick this box and save. You will get some additional formfields you can make available in that final form', $this->pluginLocale)."</b></span>";
+				if($options['confirmation_form_enabled']){
+				echo"<br /><span style='color:red'>Please note, this is still a bit experimantal, please let me know if you experience problems with this</span>";
+				}
+				echo"<br /><br />";
+				if($options['confirmation_form_enabled']){
+					
+					/***form fields*/
+					asort($options[$field]);
+					echo"<table id='wppizza_".$field."'>";
+						echo"<tr><th colspan='5'>".__('Legal', $this->pluginLocale)." <span class='description'>[".__('enable some formfields or text/links you might want to use and/or make required', $this->pluginLocale)."]</span></th></tr>";
+						echo"<tr><th>".__('Sort', $this->pluginLocale)."</th><th>".__('Label [html allowed]', $this->pluginLocale)."</th><th>".__('Enabled', $this->pluginLocale)."</th><th>".__('Required', $this->pluginLocale)."</th><th>".__('Type', $this->pluginLocale)."</th></tr>";
+					foreach($options[$field] as $k=>$v){
+						echo"<tr class='".$v['key']."'>";
+						echo"<td><input name='".$this->pluginSlug."[".$field."][".$k."][sort]' size='1' type='text' value='".$v['sort']."' /></td>";
+						echo"<td><input name='".$this->pluginSlug."[".$field."][".$k."][lbl]' size='55' type='text' value='".esc_html($v['lbl'])."' /></td>";
+						echo"<td><input name='".$this->pluginSlug."[".$field."][".$k."][enabled]' type='checkbox' ". checked($v['enabled'],true,false)." value='1' /></td>";
+						echo"<td><input name='".$this->pluginSlug."[".$field."][".$k."][required]' type='checkbox' ". checked($v['required'],true,false)." value='1' /></td>";
+						echo"<td>";
+							echo "<select id='".$this->pluginSlug."_".$field."_type_".$k."' class='".$this->pluginSlug."_".$field."_type' name='".$this->pluginSlug."[".$field."][".$k."][type]' />";
+								echo'<option value="checkbox" '.selected($v['type'],"checkbox",false).'>'.__('checkbox', $this->pluginLocale).'</option>';
+								echo'<option value="text" '.selected($v['type'],"text",false).'>'.__('text/link', $this->pluginLocale).'</option>';
+							echo "</select>";
+						echo"</td>";
+						echo"</tr>";
+	
+					}
+					echo"</table>";
+				
+					/***localization****/
+					/**to get descriptions include default options. do not use require_once, as we need this more than once**/
+					require(WPPIZZA_PATH .'inc/admin.setup.default.options.inc.php');
+					/**add description to array**/
+					$localizeOptions=array();
+					foreach($defaultOptions['localization_confirmation_form'] as $k=>$v){
+						$localizeOptions[$k]['descr']=$v['descr'];
+						$localizeOptions[$k]['lbl']=$options['localization_confirmation_form'][$k]['lbl'];
+					}
+					asort($localizeOptions);
+					echo"<table id='wppizza_".$field."'>";
+					echo"<tr><th>".__('Localization', $this->pluginLocale)."</th></tr>";
+					foreach($localizeOptions as $k=>$v){
+						echo "<tr><td>";
+						echo "<input name='".$this->pluginSlug."[localization_confirmation_form][".$k."]' size='30' type='text' value='".$v['lbl']."' />";
+						echo"<span class='description'>".$v['descr']."</span>";
+						if($k=='change_order_details'){
+							echo"<br />";
+							wp_dropdown_pages('name='.$this->pluginSlug.'[confirmation_form_amend_order_link]&selected='.$options['confirmation_form_amend_order_link'].'&show_option_none='.__('-- select page to link to --', $this->pluginLocale).'');
+							echo"<span class='description'>".__('set link to page to allow customer to amend order', $this->pluginLocale)."</span>";
+						}
+						echo "</td></tr>";
+					}
+					echo"</table>";				
+				}
+			}
+			
 			if($field=='delivery'){
 				/****sort in a more sensible manner**/
 				$options['order'][$field]=array('no_delivery'=>$options['order'][$field]['no_delivery'],'minimum_total'=>$options['order'][$field]['minimum_total'],'standard'=>$options['order'][$field]['standard'],'per_item'=>$options['order'][$field]['per_item']);
@@ -549,7 +594,7 @@ $options = $this->pluginOptions;
 				echo "<input id='".$field."' name='".$this->pluginSlug."[order][".$field."]' size='30' type='text' value='".$val."' />";
 			}
 			if($field=='order_email_attachments'){
-				if(is_array($options['order'][$field])){$val=implode(",",$options['order'][$field]);}else{$val='';}
+				if(isset($options['order'][$field]) && is_array($options['order'][$field])){$val=implode(",",$options['order'][$field]);}else{$val='';}
 				echo "<input id='".$field."' name='".$this->pluginSlug."[order][".$field."]' size='30' type='text' value='".$val."' placeholder='/absolute/path/to/your/file'/>";
 				echo" <span class='description'>".__('if you wish to add an attachment to the order emails add the FULL ABSOLUTE PATH to the file(s) here', $this->pluginLocale)."</span>";
 			}

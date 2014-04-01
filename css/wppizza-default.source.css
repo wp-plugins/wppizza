@@ -248,6 +248,36 @@
 .wppizza-item-additionalinfo:before{content:'+ ';margin-left:-10px;}/*[additional info for ordered items on "order page" and "thank you" page (if enabled)]*/
 /*END NEW IN VERSION 2.1*/
 
+
+/*NEW IN VERSION 2.8.9.8*/
+/*************************************************
+*
+*	final, final confirmatiom page (if enabled)
+*
+**************************************************/
+.wppizza-confirm-label-required:after{content:'*';color:red;padding:5px;}
+#wppizza-confirm-legal label.error{float:right}
+.wppizza-confirm-order fieldset{position:relative}
+.wppizza-confirm-dochange{padding-left:10px;font-size:80%}
+.wppizza-confirm-button{overflow:hidden}
+.wppizza-confirm-button>.wppizza-ordernow{float:right}
+/*itemised table*/
+.wppizza-confirm-itemised-th{border:none; border-bottom:1px solid #CECECE;}
+#wppizza-confirm-itemmised-details{padding:0;margin: 5px 0;border:none;}
+#wppizza-confirm-itemmised-details th{font-weight:600;}
+#wppizza-confirm-itemmised-details th,#wppizza-confirm-itemmised-details td{padding:3px;margin:3px;border:none; border-bottom:1px solid #CECECE;}
+.wppizza-confirm-item-price-total-th,.wppizza-confirm-item-price-total{text-align:right;padding:}
+.wppizza-confirm-item-price,.wppizza-confirm-item-price-total,.wppizza-confirm-item-quantity{white-space:nowrap}
+/**sub total table*/
+#wppizza-confirm-cart-subtotals-wrap{overflow:auto;margin:0;padding:0}
+#wppizza-confirm-cart-subtotals{border:none;width:auto;float:right;padding:0;margin:5px 0 5px 0}
+#wppizza-confirm-cart-subtotals tr{margin:3px 0;padding:0;height:auto;line-height:100%}
+#wppizza-confirm-cart-subtotals td{margin:0;padding:3px 3px 3px 5px;border:none;height:auto;line-height:100%;font-size:110%}
+#wppizza-confirm-cart-subtotals td:nth-child(2){text-align:right}
+#wppizza-confirm-cart-subtotals .wppizza-cart-total{border-top: 1px solid #CECECE;}
+#wppizza-confirm-cart-subtotals .wppizza-cart-total>td{font-weight:600;}
+#wppizza-confirm-subtotals-after{margin:0;padding:5px;line-height:100%;font-size:90%;text-align:right}
+
 /************************
 *
 *	[menu items]

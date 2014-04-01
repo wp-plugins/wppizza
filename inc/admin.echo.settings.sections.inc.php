@@ -70,6 +70,7 @@
 		/**order form**/
 		add_settings_section('order_form', '',  array( $this, 'wppizza_admin_page_text_header'), 'order_form');
 		add_settings_field('order_form', '<b>'.__('Form Fields:', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'order_form', 'order_form', 'order_form' );
+		add_settings_field('confirmation_form', '<b>'.__('Confirmation Page:', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'order_form', 'order_form', 'confirmation_form' );
 
 		/**size options**/
 		add_settings_section('sizes', __('Size Options Available', $this->pluginLocale),  array( $this, 'wppizza_admin_page_text_header'), 'sizes');

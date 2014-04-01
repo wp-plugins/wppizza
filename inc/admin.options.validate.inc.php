@@ -208,12 +208,40 @@
 				$options['order_form'][$a]['prefill'] = !empty($input['order_form'][$a]['prefill']) ? true : false;
 				$options['order_form'][$a]['onregister'] = !empty($input['order_form'][$a]['onregister']) ? true : false;
 
-				if($options['order_form'][$a]['type']=='selectcustom'){
-					$options['order_form'][$a]['value'] = wppizza_surchargestoarray($input['order_form'][$a]['value']);
-				}else{
+				//if($options['order_form'][$a]['type']=='selectcustom'){
+				//	$options['order_form'][$a]['value'] = wppizza_surchargestoarray($input['order_form'][$a]['value']);
+				//}else{
 					$options['order_form'][$a]['value'] = wppizza_strtoarray($input['order_form'][$a]['value']);
-				}
+				//}
 			}
+		
+			
+			$options['confirmation_form_enabled'] = !empty($input['confirmation_form_enabled']) ? true : false;
+			if(isset($input['confirmation_form']) && is_array($input['confirmation_form'])){
+			$options['confirmation_form_amend_order_link'] = (int)$input['confirmation_form_amend_order_link'];
+			foreach($input['confirmation_form'] as $a=>$b){
+				$options['confirmation_form'][$a]['sort'] = (int)($input['confirmation_form'][$a]['sort']);
+				$options['confirmation_form'][$a]['key'] = $options['confirmation_form'][$a]['key'];
+				$options['confirmation_form'][$a]['lbl'] = wppizza_validate_string($input['confirmation_form'][$a]['lbl'],true);
+				$options['confirmation_form'][$a]['type'] = wppizza_validate_letters_only($input['confirmation_form'][$a]['type']);
+				$options['confirmation_form'][$a]['enabled'] = !empty($input['confirmation_form'][$a]['enabled']) ? true : false;
+				$options['confirmation_form'][$a]['required'] = !empty($input['confirmation_form'][$a]['required']) ? true : false;			
+			}}else{			
+				$input['confirmation_form']=array();
+				$options['confirmation_form_amend_order_link'] = '';
+			}
+			
+			
+			if(isset($input['confirmation_form']) && is_array($input['confirmation_form'])){
+				if(isset($input['localization_confirmation_form'])){
+				//$allowHtml=array('thank_you_p','jquery_fb_add_to_cart_info');/*array of items to allow html (such as tinymce textareas) */
+				foreach($input['localization_confirmation_form'] as $a=>$b){
+					/*add new value , but keep desciption (as its not editable on frontend)*/
+					$html=false;
+					//if(in_array($a,$allowHtml)){$html=1;}
+					$options['localization_confirmation_form'][$a]=array('lbl'=>wppizza_validate_string($b,$html));
+				}}			
+			}		
 		}
 
 		/**validate sizes settings***/

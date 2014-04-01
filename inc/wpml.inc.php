@@ -19,6 +19,10 @@
 		foreach($this->pluginOptions['order_form'] as $k=>$arr){
 			$this->pluginOptions['order_form'][$k]['lbl'] = icl_translate(WPPIZZA_SLUG,'order_form_'. $k.'', $arr['lbl']);
 		}
+		/**confirmation_form**/
+		foreach($this->pluginOptions['confirmation_form'] as $k=>$arr){
+			$this->pluginOptions['confirmation_form'][$k]['lbl'] = icl_translate(WPPIZZA_SLUG,'confirmation_form_'. $k.'', $arr['lbl']);
+		}			
 		/**order**/
 		$this->pluginOptions['order']['order_email_from'] = icl_translate(WPPIZZA_SLUG,'order_email_from', $this->pluginOptions['order']['order_email_from']);
 		$this->pluginOptions['order']['order_email_from_name'] = icl_translate(WPPIZZA_SLUG,'order_email_from_name', $this->pluginOptions['order']['order_email_from_name']);
