@@ -404,6 +404,7 @@
 				'item_tax'=>0,
 				'taxes_included'=>false,
 				'shipping_tax'=>false,
+				'append_internal_id_to_transaction_id'=>false,
 				'order_email_to'=>array(''.get_option('admin_email').''),
 				'order_email_bcc'=>array(),
 				'order_email_attachments'=>array(),

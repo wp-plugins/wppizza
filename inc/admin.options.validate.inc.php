@@ -187,6 +187,7 @@
 			$options['order']['item_tax']=wppizza_validate_float_pc($input['order']['item_tax'],5);//5 decimals should really be enough i would have thought
 			$options['order']['taxes_included'] = !empty($input['order']['taxes_included']) ? true : false;
 			$options['order']['shipping_tax'] = !empty($input['order']['shipping_tax']) ? true : false;
+			$options['order']['append_internal_id_to_transaction_id'] = !empty($input['order']['append_internal_id_to_transaction_id']) ? true : false;
 
 
 			$options['order']['order_email_to'] = wppizza_validate_email_array($input['order']['order_email_to']);

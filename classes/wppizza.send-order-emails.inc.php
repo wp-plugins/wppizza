@@ -5,11 +5,6 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 
 		function __construct() {
 			parent::__construct();
-
-			/**get gateway vars we can use in wpml and when displaying "paid by"*/
-			$wppizzaGateways=new WPPIZZA_GATEWAYS();
-			$this->pluginGateways=$wppizzaGateways->wppizza_instanciate_gateways_frontend();
-
 			/**do some  wpml**/
 			$this->wppizza_wpml_localization();
 			/**extend**/
@@ -347,12 +342,17 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 
 					/**get gateway frontend label instead of just COD or similar**/
 					$gatewayLabel=$res->initiator;
+					$wppizzaGateways=new WPPIZZA_GATEWAYS();
+					$this->pluginGateways=$wppizzaGateways->wppizza_instanciate_gateways_frontend();
 					if(isset($this->pluginGateways[$res->initiator])){
 						$gatewayLabel=!empty($this->pluginGateways[$res->initiator]->gatewayOptions['gateway_label']) ? $this->pluginGateways[$res->initiator]->gatewayOptions['gateway_label'] : $gatewayLabel;
 					}
 					/**********************/
 
 					$transactionId=$res->transaction_id;
+					if($pOptions['order']['append_internal_id_to_transaction_id']){
+						$transactionId.='/'.$res->id.'';
+					}
 					$nowdate=$this->orderTimestamp;
 					$orderLabel=$this->orderLabels['plaintext'];
 
@@ -368,8 +368,8 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 						$emailPlaintext['items'] = apply_filters('wppizza_emailplaintext_filter_items', $emailPlaintext['items'], 'plaintextemail');
 						foreach($emailPlaintext['items'] as $k=>$v){
 							/***allow action per item - probably to use in conjunction with filter above****/
-							$emailPlaintext['db_items'] = apply_filters('wppizza_emailplaintext_item', $v, $emailPlaintext['db_items']);							
-							
+							$emailPlaintext['db_items'] = apply_filters('wppizza_emailplaintext_item', $v, $emailPlaintext['db_items']);
+
 							$strPartLeft=''.$v['label'].'';/*made up of => '.$v['quantity'].'x '.$v['name'].' '.$v['size'].' ['.$v['currency'].' '.$v['price'].']'*/
 							$spaces=75-strlen($strPartLeft);
 							$strPartRight=''.$v['value'].'';/*made up of => '.$v['currency'].' '.$v['pricetotal'].'*/
@@ -554,6 +554,9 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 				/**to be used in html template**/
 				$nowdate=$this->orderTimestamp;
 				$transactionId=$this->orderTransactionId;
+				if($this->pluginOptions['order']['append_internal_id_to_transaction_id']){
+					$transactionId.='/'.$orderid.'';
+				}
 				$gatewayUsed=$this->orderGatewayUsed;
 				/**get gateway frontend label instead of just COD or similar**/
 				$gatewayLabel=$this->orderGatewayUsed;
@@ -668,20 +671,24 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 			$thisOrderDetails=maybe_unserialize($res->order_ini);
 			$thisOrderDetails = apply_filters('wppizza_filter_order_db_return', $thisOrderDetails);
 
-
-
 			/**********************************************************
 				[organize vars to make them easier to use in template]
 			**********************************************************/
 			$order['transaction_id']=$res->transaction_id;
+			if($this->pluginOptions['order']['append_internal_id_to_transaction_id']){
+				$order['transaction_id'].='/'.$res->id.'';
+			}
 			$order['transaction_date_time']="".date_i18n(get_option('date_format'),$thisOrderDetails['time'])." ".date_i18n(get_option('time_format'),$thisOrderDetails['time'])."";
 
 			$order['gatewayUsed']=$res->initiator;
 
 			/**get gateway frontend label instead of just COD or similar**/
 			$order['gatewayLabel']=$res->initiator;
-			if(isset($this->pluginGateways[$res->initiator])){
-				$order['gatewayLabel']=!empty($this->pluginGateways[$res->initiator]->gatewayOptions['gateway_label']) ? $this->pluginGateways[$res->initiator]->gatewayOptions['gateway_label'] : $order['gatewayLabel'];
+				$wppizzaGateways=new WPPIZZA_GATEWAYS();
+				$this->pluginGateways=$wppizzaGateways->wppizza_instanciate_gateways_frontend();
+				$gwIni=strtoupper($res->initiator);
+			if(isset($this->pluginGateways[$gwIni])){
+				$order['gatewayLabel']=!empty($this->pluginGateways[$gwIni]->gatewayOptions['gateway_label']) ? $this->pluginGateways[$gwIni]->gatewayOptions['gateway_label'] : $order['gatewayLabel'];
 			}
 
 			/**********************/

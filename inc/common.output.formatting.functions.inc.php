@@ -207,20 +207,22 @@
 		asort($grouped);
 		foreach($grouped as $k=>$v){
 			foreach(explode(",",$v['consecutivedays']) as $b=>$c){
-				$consec=explode("-",$c);
-				$open=explode("|",$k);
-				if(count($consec)==2){
-					if(($consec[0]+1)==$consec[1]){$seperator=',';}else{$seperator='-';}
-					$str.=' '.wpizza_format_weekday($consec[0],'D').''.$seperator.''.wpizza_format_weekday($consec[1],'D').'';
-				}
-				if(count($consec)==1){
-					$str.=' '.wpizza_format_weekday($consec[0],'D').'';
-				}
-				if($open[0]==$open[1]){
-					$str.=' '.$options['localization']['openinghours_closed']['lbl'].'';
-				}else{
-					$str.=' '.wpizza_format_time($open[0],$options['opening_times_format']).'-'.wpizza_format_time($open[1],$options['opening_times_format']).'';//loose leading zeros
-				}
+				$str.='<span>';				
+					$consec=explode("-",$c);
+					$open=explode("|",$k);
+					if(count($consec)==2){
+						if(($consec[0]+1)==$consec[1]){$seperator=', ';}else{$seperator='-';}
+						$str.=''.wpizza_format_weekday($consec[0],'D').''.$seperator.''.wpizza_format_weekday($consec[1],'D').'';
+					}
+					if(count($consec)==1){
+						$str.=''.wpizza_format_weekday($consec[0],'D').'';
+					}
+					if($open[0]==$open[1]){
+						$str.=' '.$options['localization']['openinghours_closed']['lbl'].'';
+					}else{
+						$str.=' '.wpizza_format_time($open[0],$options['opening_times_format']).'-'.wpizza_format_time($open[1],$options['opening_times_format']).'';//loose leading zeros
+					}
+				$str.='</span> ';
 			}
 		}
 		return trim($str);
@@ -499,6 +501,10 @@ function wppizza_options_in_use(){
 *
 *********************************************************************************/
 function wppizza_order_summary($session,$options,$module=null,$ajax=null){
+	/**allow filtering of options and session**/
+	$session = apply_filters('wppizza_filter_order_summary_session', $session);
+	$options = apply_filters('wppizza_filter_order_summary_options', $options);
+	
 	/***************************************************
 		[in i some vars if undefined]
 	***************************************************/
@@ -944,8 +950,13 @@ function wppizza_order_summary($session,$options,$module=null,$ajax=null){
 	if(!isset($options['times_closed_standard'])){$options['times_closed_standard']=array();}/*get rid of some php notices*/
 
 	$isOpen=wpizza_are_we_open($options['opening_times_standard'],$options['opening_times_custom'],$options['times_closed_standard']);
-
+	
+	/***allow filtering of is_open**/
+	$options = apply_filters('wppizza_filter_order_summary_options_open', $options, $isOpen);
+	$session = apply_filters('wppizza_filter_order_summary_session_open', $session, $isOpen);
 	$isOpen = apply_filters('wppizza_filter_is_open', $isOpen);
+
+
 
 	$summary['shopopen']=$isOpen;
 	$summary['button']='';

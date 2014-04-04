@@ -181,8 +181,12 @@ $output='';
 								$output.="<br/>".__('Payment By', $this->pluginLocale).": ". $gwIdent ."";
 							}
 							if($orders->transaction_id!=''){
-								$output.="<input type='hidden' id='wppizza_order_transaction_id_".$orders->id."' value='ID: ". $orders->transaction_id ."' />";
-								$output.="<br/>ID: ". $orders->transaction_id ."";
+								$appendId='';
+								if($options['order']['append_internal_id_to_transaction_id']){
+									$appendId='/'.$orders->id.'';	
+								}
+								$output.="<input type='hidden' id='wppizza_order_transaction_id_".$orders->id."' value='ID: ". $orders->transaction_id .$appendId."' />";
+								$output.="<br/>ID: ". $orders->transaction_id . $appendId. "";
 							}
 							$output.="<br/>";
 							$output.="<label>".__('Status', $this->pluginLocale)."";

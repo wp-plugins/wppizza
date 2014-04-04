@@ -63,8 +63,8 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 			add_filter('login_redirect', array( $this, 'wppizza_login_redirect'),10,3);/**successful login redirect**/
 			add_action('wppizza_gateway_choice_before', array( $this, 'wppizza_create_user_option'));/**continue and register or as guest**/
 
-
-
+			/***reset loop query***/
+			add_action('wppizza_loop_outside_end', array( $this, 'wppizza_reset_loop_query'));/**needed by some themes **/
 
 		}
 		/************************************************************************
@@ -1531,6 +1531,13 @@ public function wppizza_require_common_input_validation_functions(){
 *	otherwise use the one in plugin template directory]
 *
 ************************************************************************************************/
+
+    /*****************************************************
+    * reset loop query. some themes need this
+    ******************************************************/
+	function wppizza_reset_loop_query(){
+		wp_reset_query();
+	}
 
     /*****************************************************
      * Wrapper template when displying items in custom post type category

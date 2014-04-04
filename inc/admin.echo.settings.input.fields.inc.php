@@ -589,6 +589,11 @@ $options = $this->pluginOptions;
 				}
 			}
 
+			if($field=='append_internal_id_to_transaction_id'){
+				echo "<input name='".$this->pluginSlug."[order][".$field."]' type='checkbox'  ". checked($options['order'][$field],true,false)." value='1' />";
+				echo" ".__('enable to append internal order ID to transaction ID [e.g COD13966037358 will become COD13966037358/123 where 123 = internal id of order table]', $this->pluginLocale)."";				
+			}
+
 			if($field=='order_email_to' || $field=='order_email_cc' || $field=='order_email_bcc' ){//$field==order_sms => not implemented
 				if(is_array($options['order'][$field])){$val=implode(",",$options['order'][$field]);}else{$val='';}
 				echo "<input id='".$field."' name='".$this->pluginSlug."[order][".$field."]' size='30' type='text' value='".$val."' />";
