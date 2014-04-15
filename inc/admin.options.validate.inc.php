@@ -136,7 +136,7 @@
 		/**validate order settings***/
 		if(isset($_POST[''.$this->pluginSlug.'_order'])){
 			$options['order'] = array();//initialize array
-			$options['order']['currency'] = strtoupper(wppizza_validate_letters_only($input['order']['currency'],3));//validation a bit overkill, but then again, why not
+			$options['order']['currency'] = strtoupper($input['order']['currency']);//validation a bit overkill, but then again, why not
 				$displayCurrency=wppizza_currencies($input['order']['currency'],true);
 			$options['order']['currency_symbol'] = $displayCurrency['val'];
 			$options['order']['orderpage'] = !empty($input['order']['orderpage']) ? (int)$input['order']['orderpage'] : false;
@@ -206,14 +206,10 @@
 				$options['order_form'][$a]['type'] = wppizza_validate_letters_only($input['order_form'][$a]['type']);
 				$options['order_form'][$a]['enabled'] = !empty($input['order_form'][$a]['enabled']) ? true : false;
 				$options['order_form'][$a]['required'] = !empty($input['order_form'][$a]['required']) ? true : false;
+				$options['order_form'][$a]['required_on_pickup'] = !empty($input['order_form'][$a]['required_on_pickup']) ? true : false;
 				$options['order_form'][$a]['prefill'] = !empty($input['order_form'][$a]['prefill']) ? true : false;
 				$options['order_form'][$a]['onregister'] = !empty($input['order_form'][$a]['onregister']) ? true : false;
-
-				//if($options['order_form'][$a]['type']=='selectcustom'){
-				//	$options['order_form'][$a]['value'] = wppizza_surchargestoarray($input['order_form'][$a]['value']);
-				//}else{
-					$options['order_form'][$a]['value'] = wppizza_strtoarray($input['order_form'][$a]['value']);
-				//}
+				$options['order_form'][$a]['value'] = wppizza_strtoarray($input['order_form'][$a]['value']);
 			}
 		
 			

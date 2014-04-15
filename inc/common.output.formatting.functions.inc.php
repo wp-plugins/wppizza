@@ -147,7 +147,8 @@
 		$items['RUB']='&#1088;';
 		$items['SHP']='£';
 		$items['SAR']='&#65020;';
-		$items['RSD']='&#1044;';
+		$items['RSD']='&#1056;&#1057;&#1044;';
+		$items['RSD-ALT']='RSD';//hyphens and anything thereafter will be stripped to get the right ISO in frontend
 		$items['SCR']='&#8360;';
 		$items['SGD']='$';
 		$items['SBD']='$';
@@ -522,7 +523,7 @@ function wppizza_order_summary($session,$options,$module=null,$ajax=null){
 		[get currency]
 	****************************************************/
 	$summary['currency']=''.$options['order']['currency_symbol'].'';/*do not add any spans or anything else to this as it gets stored in the db */
-	$summary['currencyiso']=''.$options['order']['currency'].'';
+	$summary['currencyiso']=''.wppizza_validate_letters_only($options['order']['currency'],3).'';//strip any -alt identifiers (serbian currency for example has 2 display options but the same ISO code)
 
 	/****************************************************
 		[set currency positions]

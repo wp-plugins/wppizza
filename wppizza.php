@@ -5,7 +5,7 @@ Description: Maintain your restaurant menu online and accept cash on delivery or
 Author: ollybach
 Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Author URI: http://www.wp-pizza.com
-Version: 2.8.9.9
+Version: 2.8.9.10
 License:
 
   Copyright 2012 ollybach (dev@wp-pizza.com)
@@ -66,7 +66,7 @@ class WPPizza extends WP_Widget {
 ********************************************************/
  function __construct() {
 	/**init constants***/
-	$this->pluginVersion='2.8.9.9';//increment in line with stable tag in readme and version above
+	$this->pluginVersion='2.8.9.10';//increment in line with stable tag in readme and version above
  	$this->pluginName="".WPPIZZA_NAME."";
  	$this->pluginSlug="".WPPIZZA_SLUG."";//set also in uninstall when deleting options
 	$this->pluginSlugCategoryTaxonomy="".WPPIZZA_TAXONOMY."";//also on uninstall delete wppizza_children as well as widget
@@ -75,7 +75,7 @@ class WPPizza extends WP_Widget {
 	$this->pluginOptions = get_option(WPPIZZA_SLUG,0);
 	$this->pluginOptionsNoWpml = $this->pluginOptions; //when updating some options (notably localizations) we do NOT want to have the variables messed with by WPML before we enter them into the db	
 	$this->pluginNagNotice=0;//default off->for use in updates to this plugin
-	$this->pluginPath=__FILE__;//default off->for use in updates to this plugin
+	$this->pluginPath=__FILE__;
 	/**to get the template paths, uri's and possible subdir and set vars accordingly**/
 	$pathDirUri=$this->wppizza_template_paths();
 	$this->pluginTemplateDir=$pathDirUri['template_dir'];/**to amend get_stylesheet_directory() according to whether wppizza subdir exists*/

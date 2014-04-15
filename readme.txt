@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.2, WP 3.3 
 Tested up to: 3.8.1
-Stable tag: 2.8.9.9
+Stable tag: 2.8.9.10
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -139,7 +139,13 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 
 == Changelog ==
+2.8.9.10
+* added option to not have an order form field required when self pickup is chosen (set in order form settings).  
+* amended and added alternative to Serbian Currency Symbols  
+* Added 'Authorized' ENUM value to wppizza_orders table payment_status field (might come in handy in the future)  
+15th April 2014  
 
+  
 2.8.9.9  
 * added reset_query to end of loop so as to not confuse some themes    
 * added spans to opening times to aid styling  

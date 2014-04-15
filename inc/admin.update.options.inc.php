@@ -95,6 +95,10 @@
 			if(!isset($options['order_form'][$k]['prefill'])){
 				$update_options['order_form'][$k]['prefill']=$defaultOptions['order_form'][$k]['prefill'];
 			}
+			/**add required on selfpickup, take default values from 'required' so as to have it initially working on the frontend as it did previously*/			
+			if(!isset($options['order_form'][$k]['required_on_pickup'])){
+				$update_options['order_form'][$k]['required_on_pickup']=$options['order_form'][$k]['required'];
+			}
 			/**add onregister option*/
 			if(!isset($options['order_form'][$k]['onregister'])){
 				$update_options['order_form'][$k]['onregister']=$defaultOptions['order_form'][$k]['onregister'];

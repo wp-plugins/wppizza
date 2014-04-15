@@ -323,7 +323,7 @@ $options = $this->pluginOptions;
 				asort($options[$field]);
 
 				echo"<table id='wppizza_".$field."'>";
-					echo"<tr><th>".__('Sort', $this->pluginLocale)."</th><th>".__('Label', $this->pluginLocale)."</th><th>".__('Enabled', $this->pluginLocale)."</th><th>".__('Required', $this->pluginLocale)."</th><th>".__('Prefill<br />[if known]', $this->pluginLocale)."</th><th>".__('Use when<br />Registering ?', $this->pluginLocale)."</th><th>".__('Type', $this->pluginLocale)."</th></tr>";
+					echo"<tr><th>".__('Sort', $this->pluginLocale)."</th><th>".__('Label', $this->pluginLocale)."</th><th>".__('Enabled', $this->pluginLocale)."</th><th>".__('Required', $this->pluginLocale)."</th><th>".__('Also Required<br />on Pickup', $this->pluginLocale)."</th><th>".__('Prefill<br />[if known]', $this->pluginLocale)."</th><th>".__('Use when<br />Registering ?', $this->pluginLocale)."</th><th>".__('Type', $this->pluginLocale)."</th></tr>";
 				foreach($options[$field] as $k=>$v){
 					$disableRegister=false;$disablePrefill=false;$fixedType='';$fixedTypeLabel='';
 
@@ -338,6 +338,7 @@ $options = $this->pluginOptions;
 					echo"<td><input name='".$this->pluginSlug."[".$field."][".$k."][lbl]' size='15' type='text' value='".$v['lbl']."' /></td>";
 					echo"<td><input name='".$this->pluginSlug."[".$field."][".$k."][enabled]' type='checkbox' ". checked($v['enabled'],true,false)." value='1' /></td>";
 					echo"<td><input name='".$this->pluginSlug."[".$field."][".$k."][required]' type='checkbox' ". checked($v['required'],true,false)." value='1' /></td>";
+					echo"<td><input name='".$this->pluginSlug."[".$field."][".$k."][required_on_pickup]' type='checkbox' ". checked($v['required_on_pickup'],true,false)." value='1' /></td>";
 					echo"<td>";
 						if(!$disablePrefill){echo"<input name='".$this->pluginSlug."[".$field."][".$k."][prefill]' type='checkbox' ". checked($v['prefill'],true,false)." value='1' />";}else{echo"".__('N/A', $this->pluginLocale)."";}
 					echo"</td>";
@@ -382,7 +383,7 @@ $options = $this->pluginOptions;
 					echo"</tr>";
 
 					if($v['key']=='ctips'){
-						echo"<tr class='".$v['key']."'><td colspan='7' style='margin:0;padding:0 0 0 10px'>";
+						echo"<tr class='".$v['key']."'><td colspan='8' style='margin:0;padding:0 0 0 10px'>";
 						echo"<span class='description'>";
 						echo"".__('<b>Tips/Gratuities:</b> allow the customer can enter a <b>numerical</b> amount to be used as tips/gratuities.<br />This field will not be added to the users profile and can therefore not be pre-filled or used in the registration form.', $this->pluginLocale)."";
 						/**the following notice can probably be removed in a few months**/

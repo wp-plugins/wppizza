@@ -28,10 +28,15 @@ if(is_user_logged_in() ) {
 }
 /***if we are adding get vars to the url (if a tip has been added for instance the page will be refreshed with vars appended), force prefill to be enabled and set values accordingly. ADDED IN VERSION 2.8.6**/
 /*$_GET will also include session data set in $_SESSION[$this->pluginSessionGlobal]['userdata'] as they will not be appended to the url anymore (it's just ugly). MODIFIED IN VERSION 2.8.8.3, but no changes made to this file */
+$isSelfPickup=!empty($_SESSION[$this->pluginSession]['selfPickup']) ? 1:0;/**check if self pickup has been selected and make fields required as set in order form settings, ADDED in 2.8.9.10*/
 foreach($formelements as $elmKey=>$elm){
 	if(isset($_GET[$elm['key']])){
 		$formelements[$elmKey]['prefill']=1;
 		$userMeta[$elm['key']]=$_GET[$elm['key']];
+	}
+	/**do NOT set required flag on selected elements on self-pickup. ADDED in 2.8.9.10 **/
+	if($isSelfPickup==1 && !$elm['required_on_pickup']){
+		$formelements[$elmKey]['required']=false;
 	}
 }
 ?>
@@ -138,7 +143,7 @@ foreach($formelements as $elmKey=>$elm){
 			do_action('wppizza_order_before_field_'.$elmKey.'');
 		?>
 			<?php if($elm['enabled']){?>
-				<label for="<?php echo $elm['key'] ?>"<?php echo !empty($elm['required'])?' class="wppizza-order-label-required"':'' ?>><?php echo $elm['lbl'] ?></label>
+				<label for="<?php echo $elm['key'] ?>"<?php echo !empty($elm['required']) ? ' class="wppizza-order-label-required"':'' ?>><?php echo $elm['lbl'] ?></label>
 				<?php if($elm['type']=='text'){ ?>
 					<input id="<?php echo $elm['key'] ?>" name="<?php echo $elm['key'] ?>" type="text" value="<?php echo !empty($elm['prefill']) && isset($userMeta[$elm['key']]) ? $userMeta[$elm['key']] :''  /*CHANGED IN VERSION 2.6.5.3*/ ?>" <?php echo !empty($elm['required'])?'required':'' ?>/>
 				<?php } ?>
