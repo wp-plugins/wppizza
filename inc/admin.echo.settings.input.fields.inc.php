@@ -701,10 +701,11 @@ $options = $this->pluginOptions;
 					foreach($localizeOptions as $k=>$v){
 					if(in_array($i,$bgStyle)){echo'<div>';}
 						if(in_array($k,$textArea)){
-							$editorId="".$this->pluginSlug."[".$field."][".$k."]";
+							$editorId="".strtolower($this->pluginSlug."_".$field."_".$k)."";/* WP 3.9 doesnt like brackets in id's*/
+							$editorName="".$this->pluginSlug."[".$field."][".$k."]";
 							echo"<br />".$v['descr']."";
 							echo"<div style='width:500px;'>";
-							wp_editor( $v['lbl'], $editorId,array('teeny'=>1,'wpautop'=>false) );
+							wp_editor( $v['lbl'], $editorId, array('teeny'=>1,'wpautop'=>false,'textarea_name'=>$editorName) );
 							echo"<br /></div>";
 							echo"<br />";
 						//echo "<textarea name='".$this->pluginSlug."[".$field."][".$k."]' style='width:185px;height:150px'>".$v['lbl']."</textarea>";

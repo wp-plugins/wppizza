@@ -417,7 +417,7 @@ if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='sendorder'){
 			//$thisOrderTransactionId='COD'.$now.$orderId.'';
 			$thisOrderPostVars = apply_filters('wppizza_filter_sanitize_post_vars', $params);
 			$gatewayUsed=strtoupper($thisOrderPostVars['wppizza-gateway']);
-			$thisOrderPostVars=mysql_real_escape_string(serialize($thisOrderPostVars));
+			$thisOrderPostVars=esc_sql(serialize($thisOrderPostVars));
 			$thisOrderTransactionId=$gatewayUsed.$now.$orderId.'';
 
 

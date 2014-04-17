@@ -411,8 +411,8 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 					/***********************************************
 						[customer and order details to be saved in db and displayed in history]
 					************************************************/
-					$this->customerDetails=mysql_real_escape_string($emailPlaintext['customer_details']);
-					$this->orderDetails=mysql_real_escape_string(PHP_EOL.$emailPlaintext['db_items'].PHP_EOL.$emailPlaintext['order_summary'].PHP_EOL);
+					$this->customerDetails=esc_sql($emailPlaintext['customer_details']);
+					$this->orderDetails=esc_sql(PHP_EOL.$emailPlaintext['db_items'].PHP_EOL.$emailPlaintext['order_summary'].PHP_EOL);
 					/***********************************************************
 						[set name and email of the the person that is ordering]
 					***********************************************************/
@@ -437,7 +437,7 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 					/**add timestamp to order_ini**/
 					$oIni['time']=$this->currentTime;
 
-					$wpdb->query("UPDATE ".$wpdb->prefix . $this->pluginOrderTable." SET order_date='".$orderDate."',order_ini='".mysql_real_escape_string(serialize($oIni))."' WHERE id='".$orderid."' ");
+					$wpdb->query("UPDATE ".$wpdb->prefix . $this->pluginOrderTable." SET order_date='".$orderDate."',order_ini='".esc_sql(serialize($oIni))."' WHERE id='".$orderid."' ");
 
 			}
 			return;

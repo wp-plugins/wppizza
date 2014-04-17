@@ -235,7 +235,7 @@
 		if(is_array($arr)){
 			array_walk_recursive($arr,'wppizza_sanitize_post_vars_recursive');
 		}
-		return mysql_real_escape_string(serialize($arr));
+		return esc_sql(serialize($arr));
 	}
 
 
@@ -370,6 +370,6 @@ function wppizza_inflate($arr, $divider_char = "/") {
 		/**as tips belong to order details and not customer details, we exclude them from the post vars that get stored in the db customer_ini*/
 		if(isset($arr['ctips'])){unset($arr['ctips']);}
 
-		return mysql_real_escape_string(serialize($arr));
+		return esc_sql(serialize($arr));
 	}
 ?>

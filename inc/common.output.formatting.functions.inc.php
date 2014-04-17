@@ -1113,8 +1113,8 @@ function wppizza_email_decode_entities($str,$charset,$decodeNCRs=true){
 		}
 		if($decodeNCRs){
    			$str= html_entity_decode($str,ENT_QUOTES,"".$charset."");////".get_bloginfo('charset')."
-    		$str= preg_replace('/&#(\d+);/me',"chr(\\1)",$str); //#decimal notation
-	    	$str= preg_replace('/&#x([a-f0-9]+);/mei',"chr(0x\\1)",$str);  //#hex notation
+    		$str= preg_replace('/&#(\d+);/m',"chr(\\1)",$str); //#decimal notation /*php 5.5 e modifier deleted*/
+	    	$str= preg_replace('/&#x([a-f0-9]+);/mi',"chr(0x\\1)",$str);  //#hex notation/*php 5.5 e modifier deleted*/
 	    	/**the below is - i think - an error as to how &amp; is stored in the db in the first place. ought to check that at some point*/
 	    	$str= str_replace('&amp;','&',$str);/*let's deal with &amp too quotes have already been dealt with in html_entity_decode. not using htmlspecialchars_decode as that would also convert back &lt; and &gt; which we (probably) dont want. lt's be safe.*/
 		}
@@ -1165,8 +1165,9 @@ function wppizza_echo_formfield($type='text',$id='',$name='',$value='',$placehol
 		echo'<textarea id="'.$id.'" name="'.$name.'">'.$value.'</textarea>';
 	}
 	if($type=='texteditor'){
+		$id=strtolower(str_replace(array('[',']'),'_',$name));/* WP 3.9 doesnt like brackets in id's*/
 		echo'<div style="width:550px">';
-		wp_editor( $value, $name,array('teeny'=>1,'wpautop'=>false,'media_buttons'=>false) );
+		wp_editor( $value, $id , array('teeny'=>1,'wpautop'=>false,'media_buttons'=>false,'textarea_name'=>$name) );
 		echo'</div>';
 	}
 	if($type=='select'){

@@ -5,8 +5,8 @@ Author URI: http://www.wp-pizza.com
 Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.2, WP 3.3 
-Tested up to: 3.8.1
-Stable tag: 2.8.9.10
+Tested up to: 3.9
+Stable tag: 2.8.9.11
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -131,7 +131,6 @@ If you want to contribute your own translation, feel free to send me your files 
 
 
 
-
 = Demo Icons: =
 please note that the icons used in the demo installation are <a href="http://www.iconarchive.com/show/desktop-buffet-icons-by-aha-soft.html">iconarchive.com</a> icons and not for commercial use.  
 if you do wish to use any icon from this set commercially, please follow <a href="http://www.desktop-icon.com/stock-icons/desktop-buffet-icons.htm">this link</a> to purchase it.
@@ -139,7 +138,17 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 
 == Changelog ==
-2.8.9.10
+
+
+2.8.9.11  
+* to enable updating to WP 2.9 and/or PHP 5.5+:  
+* eliminated a couple of php notices when using/updating to Wordpress 3.9 (as some things have changed in WP 3.9)  
+* replaced mysql_real_ascape_string with esc_sql (as usage of mysql has been has been deprecated in WP 3.9 in favour of mysqli when running php 5.5+)  
+* eliminated brackets from wp_editor() ID (as these are not allowed anymore in WP 3.9)
+17th April 2014  
+
+
+2.8.9.10  
 * added option to not have an order form field required when self pickup is chosen (set in order form settings).  
 * amended and added alternative to Serbian Currency Symbols  
 * Added 'Authorized' ENUM value to wppizza_orders table payment_status field (might come in handy in the future)  
