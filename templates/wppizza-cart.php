@@ -19,7 +19,7 @@ if(isset($cart['innercartinfo'])){
 		/***allow action per item - probably to use in conjunction with filter above.  ADDED 2.8.9.4****/
 		$cartContents = apply_filters('wppizza_cart_item', $item, $cartContents);	
 		
-		$cartContents.='<li class="wppizza-cart-item">';
+		$cartContents.='<li id="wppizza-cart-item-'.$k.'" class="wppizza-cart-item">';
 		/********CHANGES IN 2.5, *****alloow increase/decrease changed 2.5*************/
 		if(isset($cart['increase_decrease'])){
 			$cartContents.="<input type='text' size=3 class='wppizza-cart-incr' name='wppizza-cart-incr' value='".$item['count']."'>";
@@ -27,7 +27,14 @@ if(isset($cart['innercartinfo'])){
 		}else{
 			$cartContents.='<span id="wppizza-cart-'.$k.'" class="wppizza-remove-from-cart" title="'.$txt['remove_from_cart']['lbl'].'">x</span>';
 		}
-		$cartContents.=''.$item['count'].'x '.$item['name'].' ';
+		/********CHANGES IN 2.9: we do not need to display this really if we are already using text boxes.**/
+		if(isset($cart['increase_decrease'])){
+			$cartContents.=''.$item['name'].' ';
+		}else{
+			$cartContents.=''.$item['count'].'x '.$item['name'].' ';	
+		}
+		
+		
 		/***************************************************************/
 
 		if($item['size']!=''){

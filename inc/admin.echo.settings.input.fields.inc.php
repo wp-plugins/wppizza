@@ -694,7 +694,7 @@ $options = $this->pluginOptions;
 				echo"<div id='wppizza_".$field."'>";
 					echo"<div id='wppizza_".$field."_options'>";
 					asort($localizeOptions);
-					$lngOddEvenArray=__('0,5,12,13,16,37,45', $this->pluginLocale);
+					$lngOddEvenArray=__('0,1,6,13,14,17,38,46', $this->pluginLocale);
 					$lngOddEvan=explode(",",$lngOddEvenArray);
 					$bgStyle=$lngOddEvan;
 					$i=0;
@@ -749,7 +749,6 @@ $options = $this->pluginOptions;
 					}
 				echo"</div>";
 			}
-
 
 			if($field=='history'){
 				echo"<div id='wppizza_".$field."'>";

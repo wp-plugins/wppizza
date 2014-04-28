@@ -35,6 +35,11 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 			$this->subjectSuffix 	=	''.$this->orderTimestamp.'';
 
 
+
+			/*******thank you when returning **********/
+			add_action('gateway_order_on_thankyou', array( $this, 'gateway_order_on_thankyou_process'));
+
+
 			/************************
 				[add filters
 			************************/
@@ -49,6 +54,7 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 			add_filter('wppizza_filter_customer_details_html', array( $this, 'wppizza_filter_customer_details_html'),10,1);/*order items to html*/
 			add_filter('wppizza_filter_order_items_html', array( $this, 'wppizza_filter_order_items_html'),10,2);/*order items to html*/
 
+
 			/**filter and sort selected items by their categoryies**/
 			add_filter( 'wppizza_emailhtml_filter_items', array( $this, 'wppizza_filter_items_by_category'),10,2);
 			add_filter( 'wppizza_emailplaintext_filter_items', array( $this, 'wppizza_filter_items_by_category'),10,2);
@@ -58,6 +64,7 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 			add_action('wppizza_emailhtml_item', array( $this, 'wppizza_items_emailhtml_print_category'),10,2);
 			add_filter('wppizza_emailplaintext_item', array( $this, 'wppizza_items_emailplaintext_print_category'),10,2);
 			add_action('wppizza_show_order_item', array( $this, 'wppizza_items_show_order_print_category'));
+
 
 
 			/* we also need any overrides by extensions in the mmain class to be used here**/
@@ -636,12 +643,11 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 			/***successfully sent***/
 			if(isset($mailResults['status'])){
 				$output.="<div class='mailSuccess'><h1>".$this->pluginOptions['localization']['thank_you']['lbl']."</h1>".nl2br($this->pluginOptions['localization']['thank_you_p']['lbl'])."</div>";
-				$output.=$this->gateway_order_on_thankyou($orderId);
+				$output.=$this->gateway_order_on_thankyou_process($orderId);
 				$this->wppizza_unset_cart();
 			}
 			/***mail sending error or transaction already processes -> show error***/
 			if(!($mailResults['status']) || !isset($mailResults['status'])  ){
-
 				$output="<p class='mailError'>".$this->pluginOptions['localization']['thank_you_error']['lbl']."</p>";
 				$output.="<p class='mailError'>".$mailResults['mailer'].": ".print_r($mailResults['error'],true)."</p>";
 
@@ -653,9 +659,12 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 	/******************************************************************
 	*
 	*	[show order details to thank you page if set ]
-	*	[$order = object or id]
+	*	[$res = object or id]
 	******************************************************************/
 	function gateway_order_on_thankyou($res){
+		print"".$this->gateway_order_on_thankyou_process($res);
+	}
+	function gateway_order_on_thankyou_process($res){
 		$output='';
 		/**check if we are displaying the order on the thank you page**/
 		if($this->pluginOptions['gateways']['gateway_showorder_on_thankyou']){
@@ -751,9 +760,9 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 			/**filter old legacy additional info keys**/
 			$items = apply_filters('wppizza_filter_order_additional_info', $items);
 			/**filter new/current extend additional info keys**/
-			$items = apply_filters('wppizza_filter_order_extend', $items);
+			$items = apply_filters('wppizza_filter_order_extend', $items);/**can be run by other plugins**/
 			/**return items with html additional info**/
-			$items = apply_filters('wppizza_filter_order_items_html', $items,'additionalInfo');
+			$items = apply_filters('wppizza_filter_order_items_html', $items, 'additionalInfo');
 
 
 			/***********************************************

@@ -209,7 +209,7 @@ if(is_single()){
 			<?php if(count($meta['additives'])>0){?>
 				<sup class='<?php echo $post_type ?>-article-additives' title='<?php echo $txt['contains_additives']['lbl'] ?>'>*
 	    		<?php foreach($meta['additives'] as $k=>$v){ $additivesOnPage=true; ?>
-	    			<span id="wppizza-loop-additive-<?php echo $k ?>" class="wppizza-loop-additive">(<?php echo $k ?>)</span>
+	    			<span id="wppizza-loop-additive-<?php echo $postId ?>-<?php echo $k ?>" class="wppizza-loop-additive wppizza-loop-additive-<?php echo $k ?>">(<?php echo $k ?>)</span>
 	    		<?php } ?>
 				</sup>
 			<?php } ?>

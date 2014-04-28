@@ -88,6 +88,24 @@ if($type=='orderpage'){
 	}
 }
 /**********************************************
+	[orderhistory]
+	possible attributes:
+		type='orderhistory' 			(required [str])
+	example: 		[wppizza type='orderhistory']
+**********************************************/
+if($type=='orderhistory'){
+	/*disable orderpage when disable_online_order is set */
+	if(isset($this->pluginOptions['layout']['disable_online_order']) && $this->pluginOptions['layout']['disable_online_order']==1){
+		$markup='';
+		return $markup;
+	}else{
+		ob_start();
+		$this->wppizza_include_shortcode_template($type);
+		$markup = ob_get_clean();
+	return $markup;
+	}
+}
+/**********************************************
 	[openingtimes]
 	possible attributes:
 	type='openingtimes' (required [str])

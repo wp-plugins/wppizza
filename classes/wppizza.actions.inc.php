@@ -1,9 +1,12 @@
 <?php
 if (!class_exists( 'WPPizza' ) ) {return ;}
 class WPPIZZA_ACTIONS extends WPPIZZA {
+
+      private static $_this;
+
       function __construct() {
     	parent::__construct();
-
+		self::$_this = $this;
 		/************************************************************************
 			[runs in front AND backend]
 		*************************************************************************/
@@ -11,7 +14,7 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 			add_filter('get_terms', array(&$this,'wppizza_do_sort_custom_posts_category'), 10, 2);
 	    	add_action('init', array( $this, 'wppizza_require_common_input_validation_functions'));/*include input validation functions**/
 	    	add_action('init', array( $this, 'wppizza_require_common_output_formatting_functions'));/*include output formatting functions**/
-	    	add_action('init', array( $this, 'wppizza_require_common_helper_functions'));/*include output formatting functions**/
+	    	add_action('init', array( $this, 'wppizza_require_common_helper_functions'));
 	    	add_action('init', array( $this, 'wppizza_register_custom_posttypes'));/*register custom posttype*/
 			add_action('init', array( $this, 'wppizza_register_custom_taxonomies'));/*register taxonomies*/
 			add_action('init', array( $this,'wppizza_init_sessions'));/*needed for admin AND frontend***/			/**add sessions to keep track of shippingcart***/
@@ -64,7 +67,7 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 			add_action('wppizza_gateway_choice_before', array( $this, 'wppizza_create_user_option'));/**continue and register or as guest**/
 
 			/***reset loop query***/
-			add_action('wppizza_loop_outside_end', array( $this, 'wppizza_reset_loop_query'));/**needed by some themes **/
+			add_action('wppizza_loop_template_end', array( $this, 'wppizza_reset_loop_query'));/**needed by some themes **/
 
 		}
 		/************************************************************************
@@ -98,18 +101,30 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 
 			/**allow custom order status fields. priority must be<10**/
 			add_action( 'admin_init', array( $this, 'wppizza_set_order_status' ),9);
+
+			/**reports**/
+			add_action( 'admin_init', array( $this, 'wppizza_reports'));
 		}
 
 
 		/************************************************************************************************************************
-			[sort by and print categories to order page and cart
+			[sort by and print categories to order page, cart and history
 		*************************************************************************************************************************/
 		if(!is_admin()){
 			/**filter and sort selected items by their categoryies in order page **/
-			add_filter( 'wppizza_order_form_filter_items', array( $this, 'wppizza_filter_items_by_category'),10,2);
+			add_filter('wppizza_order_form_filter_items', array( $this, 'wppizza_filter_items_by_category'),10,2);
+			add_filter('wppizza_orderhistory_filter_items', array( $this, 'wppizza_filter_items_by_category'),10,2);
 			/**print category **/
 			add_action('wppizza_order_form_item', array( $this, 'wppizza_items_order_form_print_category'));
+			add_action('wppizza_orderhistory_item', array( $this, 'wppizza_items_show_order_print_category'));
+
+			/******************order history******************/
+			add_action('wppizza_get_orderhistory', array( $this, 'wppizza_get_orderhistory'));
+			add_action('wppizza_history_after_orders', array( $this, 'wppizza_orderhistory_pagination'),10,2);
+			add_filter('wppizza_filter_orderhistory_additional_info', array( $this, 'wppizza_filter_order_additional_info'),10,1);
+			add_filter('wppizza_filter_orderhistory_items_html', array( $this, 'wppizza_filter_order_items_html'),10,2);
 		}
+
 		/**cart is ajax too so has to be available from is_admin**/
 		add_filter( 'wppizza_cart_filter_items', array( $this, 'wppizza_filter_items_by_category'),10,2);
 		/**print category **/
@@ -123,7 +138,14 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 		add_action('wp_ajax_nopriv_wppizza_json', array(&$this,'wppizza_json') );
       }
 
-
+/*********************************************************
+*
+*	[allow others to hook into this]
+*
+*********************************************************/
+	static function this() {
+    	return self::$_this;
+ 	}
 /*********************************************************************************
 *
 *	[filters and actions for order page: login, logout[currently omitted], register, continue as guest]
@@ -132,26 +154,29 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 	/************************************************************************
 		[output login form or logout link on order page]
 	************************************************************************/
-	function wppizza_do_login_form($cart){
+	function wppizza_do_login_form($cart,$orderhistory=false){
 		if(get_option('users_can_register')==0){return;}
 
-		$items=count($cart['items']);
+
 		$txt=$this->pluginOptions['localization'];
-		/**logged in users - i dont think a logout link belongs there really. let's not do this for now**/
-		if(is_user_logged_in() && (int)$items>0) {
-			$html='';
-		//	$html.='<div id="wppizza-user-logout"><a href="'.wp_logout_url( $_SERVER['REQUEST_URI'] ).'" title="'.__( 'Log Out' ).'">'.__( 'Log Out' ).'</a></div>';
-			echo $html;
-			return;
+		/**skip if we just want to show the login**/
+		if($orderhistory){$items=1;}
+		if(!$orderhistory){
+			$items=count($cart['items']);
+			/**logged in users - i dont think a logout link belongs there really. let's not do this for now**/
+			if(is_user_logged_in() && (int)$items>0) {
+				$html='';
+			//	$html.='<div id="wppizza-user-logout"><a href="'.wp_logout_url( $_SERVER['REQUEST_URI'] ).'" title="'.__( 'Log Out' ).'">'.__( 'Log Out' ).'</a></div>';
+				echo $html;
+				return;
+			}
+			/**as someone might be using previous versions of the wppizza-order.php template copied to their theme
+				it might not have that variable defined in the do_action, so let's assume a default of 1 as otherwsie the login would just never be displayed
+				caveat being, that it also gets displayed when there's nothing in the cart (although it isn't necessarily a problem
+				having a login option even if the cart is empty. just my personal preference not to have it.)
+			**/
+			if(!is_int($items)){$items=1;}
 		}
-
-
-		/**as someone might be using previous versions of the wppizza-order.php template copied to their theme
-			it might not have that variable defined in the do_action, so let's assume a default of 1 as otherwsie the login would just never be displayed
-			caveat being, that it also gets displayed when there's nothing in the cart (although it isn't necessarily a problem
-			having a login option even if the cart is empty. just my personal preference not to have it.)
-		**/
-		if(!is_int($items)){$items=1;}
 
 		/**non logged in users**/
 		if(!is_user_logged_in() && $items>0) {
@@ -740,8 +765,11 @@ public function admin_manage_order_history(){
 public function admin_manage_tools(){
 	require_once(WPPIZZA_PATH .'inc/admin.echo.manage_tools.inc.php');
 }
-public function admin_manage_access_Rights(){
+public function admin_manage_access_rights(){
 	require_once(WPPIZZA_PATH .'inc/admin.echo.manage_access_rights.inc.php');
+}
+public function admin_manage_reports(){
+	require_once(WPPIZZA_PATH .'inc/admin.echo.manage_reports.inc.php');
 }
 public function admin_manage_layout(){
 	require_once(WPPIZZA_PATH .'inc/admin.echo.manage_layout.inc.php');
@@ -764,6 +792,32 @@ public function admin_manage_gateways(){
 public function wppizza_admin_settings_input($field='') {
 	require(WPPIZZA_PATH .'inc/admin.echo.settings.input.fields.inc.php');
 }
+
+/*********************************************************
+*
+*		[reports]
+*
+*********************************************************/
+/**get the data**/
+function wppizza_reports(){
+	global $typenow,$pagenow;
+	if($typenow==WPPIZZA_POST_TYPE && $pagenow=='edit.php' && isset($_GET['page']) && $_GET['page']=='wppizza-reports'){
+		add_action('admin_init', array( $this, 'wppizza_require_report_functions'),11);
+		add_action('admin_init', array( $this, 'wppizza_export_report'),12);
+		//add_action( 'current_screen', array( $this, 'wppizza_show_report'));
+	}
+}
+/***export**/
+function wppizza_export_report(){
+	if(isset($_GET['export'])){
+		$data=wppizza_report_dataset($this->pluginOptions,$this->pluginLocale,$this->pluginOrderTable);
+		wppizza_report_export($data['dataset']);/*exits**/
+	}
+}
+/***include required functions**/
+function wppizza_require_report_functions(){
+	require_once(WPPIZZA_PATH .'inc/admin.report.functions.php');
+}
 /*********************************************************
 *
 *		[array of wp capabilities]
@@ -781,6 +835,7 @@ function wppizza_set_capabilities($get_user_caps=false){
 	$tabs['localization']=array('name'=>__('Localization',$this->pluginLocale),'cap'=>'wppizza_cap_localization');
 	$tabs['order-history']=array('name'=>__('Order History',$this->pluginLocale),'cap'=>'wppizza_cap_order_history');
 	$tabs['access']=array('name'=>__('Access Rights',$this->pluginLocale),'cap'=>'wppizza_cap_access');
+	$tabs['reports']=array('name'=>__('Reports',$this->pluginLocale),'cap'=>'wppizza_cap_reports');
 	$tabs['tools']=array('name'=>__('Tools',$this->pluginLocale),'cap'=>'wppizza_cap_tools');
 	$tabs['delete-order']=array('name'=>__('Delete Orders',$this->pluginLocale),'cap'=>'wppizza_cap_delete_order');
 
@@ -950,7 +1005,7 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 			[include category loop template]
 		***************************************/
 		if($type=='category'){
-		static $countCategory=0;$countCategory++;
+			static $countCategory=0;$countCategory++;
 			$options = $this->pluginOptions;
 
 			/*********************************************************************
@@ -1035,6 +1090,7 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 			/*include template from theme if exists*/
 			if ($template_file = locate_template( array ($this->pluginLocateDir.'wppizza-loop'.$loStyle.'.php' ))){
 				include($template_file);
+				do_action('wppizza_loop_template_end');
 				return;
 			}
 			/*if template not in theme, fallback to template in plugin*/
@@ -1042,6 +1098,7 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 			if (is_file(''.WPPIZZA_PATH.'templates/wppizza-loop'.$loStyle.'.php' )){
 				$template_file=''.WPPIZZA_PATH.'templates/wppizza-loop'.$loStyle.'.php';
 				include($template_file);
+				do_action('wppizza_loop_template_end');
 				return;
 			}
 		}
@@ -1174,6 +1231,22 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 					return;
 				}
 		}
+
+		/***************************************
+			[include orderhistory template]
+		***************************************/
+		if($type=='orderhistory'){
+			/**just show the login form and return if user is not logged in**/
+			if(!is_user_logged_in() ) {
+				$this->wppizza_do_login_form(null, true);
+				return;
+			}else{
+				global $current_user ;
+				$current_user->ID;
+				do_action('wppizza_get_orderhistory',$current_user->ID);
+			}
+		}
+
 		/***************************************
 			[include confirmation page template]
 		***************************************/
@@ -1265,8 +1338,6 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 				return;
 			}
 
-
-
 		}
 }
 function wppizza_additives_remap($meta){
@@ -1304,7 +1375,6 @@ public function wppizza_require_common_input_validation_functions(){
 	public function wppizza_require_common_output_formatting_functions(){
 		require_once(WPPIZZA_PATH .'inc/common.output.formatting.functions.inc.php');
 	}
-
 /*********************************************************
 *
 *	[common helper functions]
@@ -1548,6 +1618,29 @@ public function wppizza_require_common_input_validation_functions(){
 		if ( get_post_type() == $this->pluginSlug ) {
 			$post_type=get_post_type();
 			$options = $this->pluginOptions;
+
+			/*********************************************************************
+				[as we have changed in v.2.8.7.4 to have the additives as array
+				so we can custom sort them but dont really want to screw up
+				anyones edited templates, re-map key and name]
+			*******************************************************************/
+				$mapAdditives=array();
+				if(isset($options['additives']) && is_array($options['additives'])){
+					foreach($options['additives'] as $o=>$a){
+						if(is_array($a)){
+							if($a['sort']==''){$a['sort']=$o;}
+							$mapAdditives[$a['sort']]=$a['name'];
+						}else{
+							/**in case we have not yet re-saved the additives**/
+							$mapAdditives[$o]=$a;
+						}
+					}
+				}
+				ksort($mapAdditives,SORT_STRING);
+				$options['additives']=$mapAdditives;
+
+
+
 			/*exclude header*/
 			if($options['layout']['suppress_loop_headers']){
 				$noheader=1;
@@ -1604,6 +1697,7 @@ public function wppizza_require_common_input_validation_functions(){
 	***************/
     public function wppizza_register_scripts_and_styles_admin($hook) {
         if(is_admin()) {// && ($hook=='settings_page_'.$this->pluginSlug || $hook=='widgets.php')
+            global $current_screen, $wp_styles ;
             /**css**/
             	if (file_exists( $this->pluginTemplateDir . '/wppizza-admin.css')){
 					/**copy stylesheet to template directory to keep settings**/
@@ -1617,10 +1711,18 @@ public function wppizza_require_common_input_validation_functions(){
 					wp_enqueue_style($this->pluginSlug.'-admin-custom');
 				}
 				/**for timepicker etc*/
-				wp_enqueue_style('jquery-style', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.1/themes/smoothness/jquery-ui.css');
+				wp_enqueue_style('jquery-style', '//ajax.googleapis.com/ajax/libs/jqueryui/1.10.1/themes/smoothness/jquery-ui.css');
  				wp_enqueue_style($this->pluginSlug.'-admin');
 
       		/**js***/
+      			/**include reporting js**/
+      			if($current_screen->id==''.$this->pluginSlug.'_page_'.$this->pluginSlug.'-reports'){
+      				wp_register_script($this->pluginSlug.'-flot', plugins_url( 'js/jquery.flot.min.js', $this->pluginPath ), array('jquery'), $this->pluginVersion ,true);
+      				wp_enqueue_script($this->pluginSlug.'-flot');
+      				wp_register_script($this->pluginSlug.'-flotcats', plugins_url( 'js/jquery.flot.categories.min.js', $this->pluginPath ), array('jquery'), $this->pluginVersion ,true);
+      				wp_enqueue_script($this->pluginSlug.'-flotcats');
+      			}
+
       			wp_enqueue_script('jquery-ui-sortable');
             	wp_enqueue_script('jquery-ui-datepicker');
             	wp_register_script($this->pluginSlug, plugins_url( 'js/scripts.admin.js', $this->pluginPath ), array('jquery'), $this->pluginVersion ,true);
@@ -1949,6 +2051,7 @@ public function wppizza_require_common_input_validation_functions(){
 			/*set current cat hierarchy to avoid double display**/
 			$existingCatHierarchy[]=$itemCatHierarchy;
 		}
+
 		return $itemsCategorySort;
 	}
 	/*******************************************************************
@@ -2133,7 +2236,6 @@ function wppizza_cat_parents( $id, $separator =' &raquo; ', $page , $taxonomy = 
 
 
 	function wppizza_filter_order_items_html($orderItems,$returnKey){
-
 		/**set originals**/
 		$oItems=$orderItems;
 		if(isset($orderItems) && is_array($orderItems)){
@@ -2149,9 +2251,6 @@ function wppizza_cat_parents( $id, $separator =' &raquo; ', $page , $taxonomy = 
 		}}
 		return $oItems;
 	}
-
-
-
 
 	function wppizza_filter_customer_details_html($cDetails){
 		if(isset($cDetails) && is_array($cDetails)){
@@ -2201,7 +2300,201 @@ function wppizza_cat_parents( $id, $separator =' &raquo; ', $page , $taxonomy = 
 		return $orderItems;
 	}
 
+	/******************************************************************
+	*	[show order history]
+	*	[$order = object or id]
+	******************************************************************/
+	function wppizza_get_orderhistory($userid){
+		global $wpdb;
+		$orders=array();
+		$ordersPerPage=10;
+		$ordersPerPage = apply_filters('wppizza_history_ordersperpage', $ordersPerPage);
 
+		if(!isset($_GET['pg']) || (int)$_GET['pg']<1){
+			$limitOffset=0;
+		}else{
+			$limitOffset=(int)($_GET['pg']-1)*$ordersPerPage;
+		}
+		/**run the query**/
+		$historyQuery="SELECT id,transaction_id,order_ini,customer_ini,initiator FROM ".$wpdb->prefix . $this->pluginOrderTable." WHERE payment_status IN ('COD','COMPLETED') AND ";
+		$historyQuery.="wp_user_id=".$userid." ";//0
+		$historyQuery.="ORDER BY order_date DESC ";
+		$historyQuery.="limit ".$limitOffset.",".$ordersPerPage."";
+		$historyRes = $wpdb->get_results($historyQuery);
+
+
+		$historyCount="SELECT count(*) as count FROM ".$wpdb->prefix . $this->pluginOrderTable." WHERE payment_status IN ('COD','COMPLETED') AND wp_user_id=".$userid." ";
+		$historyCount = $wpdb->get_results($historyCount);
+
+		if(count($historyRes>0)){
+			/***********************************************
+				[set some global localization vars]
+			************************************************/
+			$orderlbl=array();
+			foreach($this->pluginOptions['localization'] as $k=>$v){
+				if($k=='taxes_included'){
+					$orderlbl[$k]=sprintf(''.$v['lbl'].'',$this->pluginOptions['order']['item_tax']);
+				}else{
+					$orderlbl[$k]=$v['lbl'];
+				}
+			}
+
+
+			$output='';
+			foreach($historyRes as $k=>$res){
+				/**********************************************************
+					[get relevant vars out of db
+				**********************************************************/
+				$thisCustomerDetails=maybe_unserialize($res->customer_ini);
+				$thisOrderDetails=maybe_unserialize($res->order_ini);
+				$thisOrderDetails = apply_filters('wppizza_filter_order_db_return', $thisOrderDetails);
+
+				if(isset($thisOrderDetails['total'])){/*just to be sure*/
+
+					/***initialize array of this order**/
+					$orders[$res->id]=array();
+
+
+					/**********************************************************
+						[organize vars to make them easier to use in template]
+					**********************************************************/
+					$order['transaction_id']=$res->transaction_id;
+					if($this->pluginOptions['order']['append_internal_id_to_transaction_id']){
+						$order['transaction_id'].='/'.$res->id.'';
+					}
+					$order['transaction_date_time']="".date_i18n(get_option('date_format'),$thisOrderDetails['time'])." ".date_i18n(get_option('time_format'),$thisOrderDetails['time'])."";
+
+					$order['gatewayUsed']=$res->initiator;
+
+					/**get gateway frontend label instead of just COD or similar**/
+					$order['gatewayLabel']=$res->initiator;
+						$wppizzaGateways=new WPPIZZA_GATEWAYS();
+						$this->pluginGateways=$wppizzaGateways->wppizza_instanciate_gateways_frontend();
+						$gwIni=strtoupper($res->initiator);
+					if(isset($this->pluginGateways[$gwIni])){
+						$order['gatewayLabel']=!empty($this->pluginGateways[$gwIni]->gatewayOptions['gateway_label']) ? $this->pluginGateways[$gwIni]->gatewayOptions['gateway_label'] : $order['gatewayLabel'];
+					}
+
+					/**********************/
+					$order['currency']=$thisOrderDetails['currency'];
+					/****************************************************
+						[set currency positions]
+					****************************************************/
+					$order['currency_left']=$thisOrderDetails['currency'].' ';
+					$order['currency_right']='';
+					if($this->pluginOptions['layout']['currency_symbol_position']=='right'){/*right aligned*/
+						$order['currency_left']='';
+						$order['currency_right']=' '.$thisOrderDetails['currency'];
+					}
+
+					$order['currencyiso']=$thisOrderDetails['currencyiso'];
+
+
+					/***********************************************
+						[order items]
+					***********************************************/
+					$items=$thisOrderDetails['item'];
+					/**filter old legacy additional info keys**/
+					$items = apply_filters('wppizza_filter_orderhistory_additional_info', $items);
+					/**filter new/current extend additional info keys**/
+					$items = apply_filters('wppizza_filter_order_extend', $items);
+					/**return items with html additional info**/
+					$items = apply_filters('wppizza_filter_orderhistory_items_html', $items,'additionalInfo');
+
+					/***********************************************
+						[order summary
+					***********************************************/
+					$summary['total_price_items']=$thisOrderDetails['total_price_items'];
+					$summary['discount']=$thisOrderDetails['discount'];
+					$summary['item_tax']=wppizza_output_format_price($thisOrderDetails['item_tax'],$this->pluginOptions['layout']['hide_decimals']);
+					$summary['taxes_included']=wppizza_output_format_price($thisOrderDetails['taxes_included'],$this->pluginOptions['layout']['hide_decimals']);
+					if($this->pluginOptions['order']['delivery_selected']!='no_delivery'){/*delivery disabled*/
+						$summary['delivery_charges']=$thisOrderDetails['delivery_charges'];
+					}
+					$summary['total_price_items']=$thisOrderDetails['total_price_items'];
+					$summary['selfPickup']=$thisOrderDetails['selfPickup'];
+					$summary['total']=$thisOrderDetails['total'];
+					$summary['tax_applied']='items_only';
+					if($this->pluginOptions['order']['shipping_tax']){
+						$summary['tax_applied']='items_and_shipping';
+					}
+					if($this->pluginOptions['order']['taxes_included']){
+						$summary['tax_applied']='taxes_included';
+					}
+
+					if(isset($thisOrderDetails['handling_charge']) && $thisOrderDetails['handling_charge']>0){
+						$summary['handling_charge']=wppizza_output_format_price($thisOrderDetails['handling_charge'],$this->pluginOptions['layout']['hide_decimals']);
+					}
+					if(isset($thisOrderDetails['tips']) && $thisOrderDetails['tips']>0){
+						$summary['tips']=wppizza_output_format_price($thisOrderDetails['tips'],$this->pluginOptions['layout']['hide_decimals']);
+					}
+
+					$orders[$res->id]['order']=$order;
+					$orders[$res->id]['items']=$items;
+					$orders[$res->id]['summary']=$summary;
+				}
+		}}
+
+
+		$ordersOnPage=count($orders);
+		$numberOfOrders=$historyCount[0]->count;
+
+		/***********************************************
+			[if template copied to theme directory use
+			that one otherwise use default]
+		***********************************************/
+		ob_start();
+		if (file_exists( $this->pluginTemplateDir . '/wppizza-orderhistory.php')){
+			include($this->pluginTemplateDir . '/wppizza-orderhistory.php');
+		}else{
+			include(WPPIZZA_PATH.'templates/wppizza-orderhistory.php');
+		}
+		$output .= ob_get_clean();
+
+
+		print"".$output;
+	}
+
+	function wppizza_orderhistory_pagination($numberOfOrders,$ordersOnPage){
+		$ordersPerPage=10;
+		$ordersPerPage = apply_filters('wppizza_history_ordersperpage', $ordersPerPage);
+		
+		$total_page=ceil($numberOfOrders/$ordersPerPage);
+		$currentPageLink=get_permalink();
+
+
+		if(!isset($_GET['pg'])){
+			$page_cur=1;
+		}else{
+			$page_cur=(int)$_GET['pg'];
+		}
+
+
+		echo'<div class="wppizza-history-pagination-wrap">';
+		if($page_cur>1){
+			$link= add_query_arg(array('pg' => ($page_cur-1)), $currentPageLink );
+			echo '<a href="'.$link.'" class="wppizza-history-pagination-txt">'.__('Previous').'</a>';
+		}else{
+			echo '<a class="wppizza-history-pagination-txt-disabled" disabled="disabled">'.__('Previous').'</a>';
+		}
+
+		for($i=1;$i<=$total_page;$i++){
+			if($page_cur==$i){
+				echo '<a href="javascript:void(0)" class="wppizza-history-pagination-selected">'.$i.'</a>';
+			}else{
+				$link= add_query_arg(array('pg' => $i), $currentPageLink );
+				echo '<a href="'.$link.'" class="wppizza-history-pagination">'.$i.'</a>';
+			}
+		}
+
+		if($page_cur<$total_page){
+			$link= add_query_arg(array('pg' => ($page_cur+1)), $currentPageLink );
+			echo '<a href="'.$link.'" class="wppizza-history-pagination-txt">'.__('Next').'</a>';
+		}else{
+			echo '<a class="wppizza-history-pagination-txt-disabled" disabled="disabled">'.__('Next').'</a>';
+		}
+		echo'</div>';
+	}
 /*******************************************************
 *
 *	[filter: allow order statuses to be changed]

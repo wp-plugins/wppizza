@@ -90,6 +90,11 @@
 		/**order history**/
 		add_settings_section('history', '',  array( $this, 'wppizza_admin_page_text_header'), 'history');
 		add_settings_field('history', '', array( $this, 'wppizza_admin_settings_input'), 'history', 'history', 'history' );
+
+		/**order reports**/
+		add_settings_section('reports', '',  array( $this, 'wppizza_admin_page_text_header'), 'reports');
+		//add_settings_field('reports', 'or this', array( $this, 'wppizza_admin_settings_input'), 'reports', 'reports', 'reports' );
+
 		/**access rights**/
 		add_settings_section('access', '',  array( $this, 'wppizza_admin_page_text_header'), 'access');
 		add_settings_field('access', '', array( $this, 'wppizza_admin_settings_input'), 'access', 'access', 'access' );

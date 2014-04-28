@@ -558,6 +558,10 @@
 					'descr'=>__('Shoppingcart - Self Pickup: javascript alert when customer selects self pickup (if enabled)', $this->pluginLocale),
 					'lbl'=>__('You have chosen to pickup the order yourself. This order will not be delivered. Please allow 30 min. for us to prepare your order.', $this->pluginLocale)
 				),
+				'history_no_previous_orders'=>array(
+					'descr'=>__('History Page: Text to display when the user has not had any previous orders', $this->pluginLocale),
+					'lbl'=>__('you have no previous orders', $this->pluginLocale)
+				),					
 				'your_order'=>array(
 					'descr'=>__('Order Page: label above itemised order', $this->pluginLocale),
 					'lbl'=>__('your order', $this->pluginLocale)
@@ -722,7 +726,7 @@
 		plugin added to start off with, after which they can be edited in the acees rights tab
 		(provided the user has access to that tab of course)
 	**********************/
-	if(!isset($options['admin_access_caps'])){
+	if(!isset($options['admin_access_caps'])){	
 		global $wp_roles;
 		$wppizzaCaps=$this->wppizza_set_capabilities();
 
@@ -746,6 +750,52 @@
 		/*might as well save the role->caps array. might come in handy one day**/
 		$defaultOptions['admin_access_caps']=$setCaps;
 	}else{
+		global $wp_roles;
+		/******************************************
+			[check for newly added capabilities
+			end enable for roles that have
+			ALL previous caps set]
+		******************************************/
+		$wppizzaCaps=$this->wppizza_set_capabilities();
+		
+		$capsAvailable=array();
+		foreach($wppizzaCaps as $caps){
+			$capsAvailable[]=$caps['cap'];	
+		}		
+		/**make an array with all unique roles**/
+		$previousCaps=array();
+		foreach($options['admin_access_caps'] as $rName=>$rVal){
+			foreach($rVal as $cap){
+				$previousCaps[$cap]=$cap;
+			}
+		}
+		/**count number of prev caps**/
+		$prevCapsCount=count($previousCaps);
+		
+		/**get newly added caps**/
+		$newCaps=array_diff($capsAvailable,$previousCaps);
+		
+		/**if there are new caps add them**/
+		if(is_array($newCaps) && count($newCaps)>0){
+			/*get all roles that had ALL previous caps enabled and add this new one**/
+			foreach($wp_roles->roles as $rName=>$rVal){
+				$userRole = get_role($rName);
+				$capsCount=0;
+				foreach($previousCaps as $pCaps){
+					if(isset($rVal['capabilities'][$pCaps])){
+						$capsCount++;	
+					}
+				}
+				/***role has ALL previous caps, add new ones***/
+				if($capsCount==$prevCapsCount){
+					foreach($newCaps as $nCap){
+						$userRole->add_cap($nCap);
+						/***add to options too**/
+						$options['admin_access_caps'][$rName][]=$nCap;				
+					}
+				}
+			}
+		}
 		$defaultOptions['admin_access_caps']=$options['admin_access_caps'];
 	}
 ?>

@@ -33,6 +33,7 @@ function delete_wppizza_custom_roles(){
 	$wppizzaRoleCap[]='wppizza_cap_localization';
 	$wppizzaRoleCap[]='wppizza_cap_order_history';
 	$wppizzaRoleCap[]='wppizza_cap_access';
+	$wppizzaRoleCap[]='wppizza_cap_reports';
 	$wppizzaRoleCap[]='wppizza_cap_tools';	
 	$wppizzaRoleCap[]='wppizza_cap_delete_order';
 	

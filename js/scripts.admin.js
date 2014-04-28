@@ -100,6 +100,64 @@ jQuery(document).ready(function($){
     	e.preventDefault();
     	$(this).datepicker({dateFormat : 'dd M yy'}).datepicker( "show" );
     });
+    
+    /*******************************
+	*
+	*
+	*	[reports]
+	*
+	*
+	*******************************/    
+    /*******************************
+	*	[reports - date picker]
+	*******************************/
+	$(document).on('click', '#wppizza_reports_start_date,#wppizza_reports_end_date', function(e){    
+    	e.preventDefault();
+    	$(this).datepicker({dateFormat : 'yy-mm-dd'}).datepicker( "show" );
+    });    
+	/******************************
+	*	[reports - default options range select - onchange]
+	******************************/
+	$(document).on('change', '#wppizza-reports-set-range', function(e){
+		var self=$(this);
+		var selVal=self.val();
+		var theUrl=window.location.href.split('?')[0];
+		var redirUrl=theUrl+'?post_type=wppizza&page=wppizza-reports';
+		if(selVal!=''){
+			redirUrl+='&report=' + selVal;
+		}
+		window.location.href=redirUrl;
+	});    
+	/******************************
+	*	[reports - custom range]
+	******************************/    
+	$(document).on('click', '#wppizza_reports_custom_range', function(e){
+		var theUrl=window.location.href.split('?')[0];
+		var redirUrl=theUrl+'?post_type=wppizza&page=wppizza-reports';
+		var startDate=$('#wppizza_reports_start_date').val();
+		var endDate=$('#wppizza_reports_end_date').val();
+		if(startDate!='' && endDate!=''){
+			redirUrl+='&from=' + startDate;
+			redirUrl+='&to=' + endDate;
+		}
+		window.location.href=redirUrl;
+	});       
+	/******************************
+	*	[reports - export]
+	******************************/    
+	$(document).on('click', '#wppizza_reports_export', function(e){
+		var theUrl=window.location.href.split('?')[0];
+		var redirUrl=theUrl+'?post_type=wppizza&page=wppizza-reports';
+		var startDate=$('#wppizza_reports_start_date').val();
+		var endDate=$('#wppizza_reports_end_date').val();
+		if(startDate!='' && endDate!=''){
+			redirUrl+='&from=' + startDate;
+			redirUrl+='&to=' + endDate;
+		}
+			redirUrl+='&export=true';
+		window.location.href=redirUrl;
+	});     
+    
 	/*******************************
 		[opening times - add new]
 	*******************************/

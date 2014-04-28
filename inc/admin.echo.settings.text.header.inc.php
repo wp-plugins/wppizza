@@ -31,6 +31,10 @@
 			echo"<h4>".__('Set the roles that are allowed to access these pages', $this->pluginLocale)."</h4>";
 			echo"<span class='description'>".__('Menu Items and Categories are accessible just like "normal" posts', $this->pluginLocale)."</span>";			
 		}	
+		if($v['id']=='reports'){
+			//currently not in use
+			//echo '<h4>'.__('', $this->pluginLocale).'</h4>';
+		}
 		if($v['id']=='localization'){
 			//currently not in use
 			//echo '<h4>'.__('', $this->pluginLocale).'</h4>';

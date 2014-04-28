@@ -48,7 +48,7 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 
 		/**display surcharges pre order**/
 		$this->showSurchageBeforOrder=false;
-		
+
 		/**get the selected gateway and associated classname*/
 		$wppizzaGatewayCount=0;
 		$wppizzaGateway=array();
@@ -59,8 +59,8 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 				$gatewayClass="WPPIZZA_GATEWAY_".strtoupper($gw);
 				$wppizzaGateway[$gw]=new $gatewayClass;
 				$wppizzaGatewayOptions[$gw]=$wppizzaGateway[$gw];
-				
-				
+
+
 				/***  to display surcharges in orderpage prior to ordering****/
 				/**set first gateway**/
 				if($wppizzaGatewayCount==0){
@@ -69,9 +69,9 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 				/***check if surcharges are calculated by the gateway rather than set by admin**/
 				//$wppizzaGateway[$gw]->gatewaySurchargeAtCheckout=false;
 				if(isset($wppizzaGateway[$gw]->gatewaySurchargeAtCheckout)){
-					$this->showSurchageBeforOrder=true;	
+					$this->showSurchageBeforOrder=true;
 				}
-				
+
 
 				/***check (for legacy reasons) if we have the relevant vars in gateway plugin to calculate surcharges on order page **/
 				if(isset($wppizzaGateway[$gw]->gatewaySurchargePercent) && isset($wppizzaGateway[$gw]->gatewaySurchargeFixed)){
@@ -84,7 +84,7 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 				}else{
 						$wppizzaGateway[$gw]->surchargePc=0;
 						$wppizzaGateway[$gw]->surchargeFixed=0;
-				}				
+				}
 			$wppizzaGatewayCount++;
 			}
 		}}
@@ -95,7 +95,7 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 			$_SESSION[$this->pluginSession]['gateway-selected']['surchargePc']=$wppizzaGateway[$this->pluginGatewaySelected]->surchargePc;
 			$_SESSION[$this->pluginSession]['gateway-selected']['surchargeFixed']=$wppizzaGateway[$this->pluginGatewaySelected]->surchargeFixed;
 			$_SESSION[$this->pluginSession]['gateway-selected']['surchargeAtCheckout']=!empty($wppizzaGateway[$this->pluginGatewaySelected]->gatewaySurchargeAtCheckout) ? true:false;
-		}	
+		}
 		/***switch gw via ajax and reload page*****/
 		if(isset($_SESSION[$this->pluginSessionGlobal]['userdata']['gateway'])){
 			$selGw=$_SESSION[$this->pluginSessionGlobal]['userdata']['gateway'];
@@ -110,7 +110,7 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 				$_SESSION[$this->pluginSession]['gateway-selected']['surchargeAtCheckout']=!empty($wppizzaGateway[$selGw]->gatewaySurchargeAtCheckout) ? true:false;
 			}
 		}
-			
+
 		/**add a hidden flag in frontend to display surcharges on gateway change and set initial session**/
 		if($this->showSurchageBeforOrder){
 			add_action('wppizza_choose_gateway',array($this,'wppizza_recalculate_handling'));
@@ -127,7 +127,7 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 *	[check if we need to recalculate handling charges on order page]
 ****************************************************************************/
 	function wppizza_recalculate_handling(){
-		print"<input type='hidden' id='wppizza_calc_handling' />";	
+		print"<input type='hidden' id='wppizza_calc_handling' />";
 	}
 /***********************************************
 	[include default COD "gateway"]
@@ -189,7 +189,7 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 							}
 							if(isset($gw->gatewayTypeSubmit) && $gw->gatewayTypeSubmit=='custom'){/*customised*/
 								$gwAddClass=' class="wppizzaGwCustom"';
-							}						
+							}
 							print"<div id='wppizza-gw-".$key."' class='wppizza-gw-button button'>";
 									print"<label>";
 									print"<input type='radio' name='wppizza-gateway' id='wppizza-gateway-".$key."' ".$gwAddClass." value='".$key."' ".checked($_SESSION[$this->pluginSession]['gateway-selected']['gw'],$key,false)."/> ";
@@ -221,7 +221,7 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 					}
 					if(isset($gw->gatewayTypeSubmit) && $gw->gatewayTypeSubmit=='custom'){/*customised*/
 								$gwAddClass=' class="wppizzaGwCustom"';
-					}					
+					}
 					/**add hidden value so the ajax call knows whether its cod or anything else*/
 					print"<input type='hidden' name='wppizza-gateway' id='wppizza-gateway-".$key."' ".$gwAddClass." value='".$key."' /> ";
 					/**if this method has not been defined in class or is empty, display standard button**/

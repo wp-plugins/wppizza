@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.2, WP 3.3 
 Tested up to: 3.9
-Stable tag: 2.8.9.11
+Stable tag: 2.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -139,7 +139,17 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 == Changelog ==
 
+2.9  
+* added reporting (admin)  
+* added order history (and template) to display users previously bought items (use appropriate shortcode - see faq's)  
+* closed some - erroneously - not closed span elements in loop templates  
+* added distinct id's in cart li elements  to aid possible css declarations   
+* added classes and id's as appropriate to additives display in frontend  
+* removed superflous menu item count in cart when allowing input/textbox to to multiply cart items  
+* added ability to add/remove actions etc used in wppizza_actions class in a themes function.php file if required [e.g. remove_action( [action-hook], array( WPPIZZA_ACTIONS::this() , [action] )); ]  
+28th April 2014  
 
+  
 2.8.9.11  
 * to enable updating to WP 2.9 and/or PHP 5.5+:  
 * eliminated a couple of php notices when using/updating to Wordpress 3.9 (as some things have changed in WP 3.9)  
@@ -899,6 +909,16 @@ in case where you cannot or do not want to use a widget, here are the correspond
 
 	example: 		[wppizza type='navigation' title='some title' parent='slug-name' exclude='6,5,8']  
 
+
+
+- **display the users order history** (displays login form if not logged in, "anyone can register" has to be enabled):  
+	
+	attributes:  
+	- type='orderhistory' 		(required [str])  	
+
+	example: 		[wppizza type='orderhistory']  
+
+	note: you would probably want to disable comments etc on that page  
 
 
 = Shortcodes do not work in widgets ? =  
