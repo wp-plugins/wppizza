@@ -133,7 +133,13 @@ $output='';
 		$totalPriceOfShown=0;
 		global $wpdb;
 		if($_POST['vars']['limit']>0){$limit=' limit 0,'.$_POST['vars']['limit'].'';}else{$limit='';}
-		$allOrders = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix . $this->pluginOrderTable." WHERE payment_status IN ('COD','COMPLETED') ORDER BY id DESC ".$limit." ");
+		
+		if($_POST['vars']['orderstatus']!=''){$orderstatus=' AND order_status="'.$_POST['vars']['orderstatus'].'" ';}else{$orderstatus='';}
+		
+		$allOrders = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix . $this->pluginOrderTable." WHERE payment_status IN ('COD','COMPLETED') ".$orderstatus." ORDER BY id DESC ".$limit." ");
+		
+		
+		
 		if(is_array($allOrders) && count($allOrders)>0){
 			/*admin only*/
 			if (current_user_can('wppizza_cap_delete_order')){

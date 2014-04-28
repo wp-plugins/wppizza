@@ -359,7 +359,8 @@ jQuery(document).ready(function($){
 	$(document).on('click', '#history_get_orders', function(e){
 		e.preventDefault();
 		var limit=$('#history_orders_limit').val();
-		jQuery.post(ajaxurl , {action :'wppizza_admin_json',vars:{'field':'get_orders','limit':limit}}, function(response) {
+		var orderstatus=$('#history_orders_status').val();
+		jQuery.post(ajaxurl , {action :'wppizza_admin_json',vars:{'field':'get_orders','limit':limit,'orderstatus':orderstatus}}, function(response) {
 			$('#wppizza_history_orders').html(response.orders);
 			$('#wppizza_history_totals').html(response.totals);
 			$('#wppizza-orders-polling').removeClass();

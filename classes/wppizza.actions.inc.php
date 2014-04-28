@@ -2308,7 +2308,7 @@ function wppizza_cat_parents( $id, $separator =' &raquo; ', $page , $taxonomy = 
 		global $wpdb;
 		$orders=array();
 		$ordersPerPage=10;
-		$ordersPerPage = apply_filters('wppizza_history_ordersperpage', $ordersPerPage);
+		$ordersPerPage = apply_filters('wppizza_history_ordersperpage_filter', $ordersPerPage);
 
 		if(!isset($_GET['pg']) || (int)$_GET['pg']<1){
 			$limitOffset=0;
@@ -2316,10 +2316,18 @@ function wppizza_cat_parents( $id, $separator =' &raquo; ', $page , $taxonomy = 
 			$limitOffset=(int)($_GET['pg']-1)*$ordersPerPage;
 		}
 		/**run the query**/
-		$historyQuery="SELECT id,transaction_id,order_ini,customer_ini,initiator FROM ".$wpdb->prefix . $this->pluginOrderTable." WHERE payment_status IN ('COD','COMPLETED') AND ";
-		$historyQuery.="wp_user_id=".$userid." ";//0
+		$historyQuery="SELECT id,transaction_id,order_status,order_ini,customer_ini,initiator FROM ".$wpdb->prefix . $this->pluginOrderTable." WHERE payment_status IN ('COD','COMPLETED') ";
+
+		/*allow another where condition**/
+		$historyQuery = apply_filters('wppizza_history_query_where_filter', $historyQuery);
+		
+		/**limit to user**/
+		$historyQuery.="AND wp_user_id=".$userid." ";
+		/**sort**/
 		$historyQuery.="ORDER BY order_date DESC ";
+		/**limit**/
 		$historyQuery.="limit ".$limitOffset.",".$ordersPerPage."";
+		
 		$historyRes = $wpdb->get_results($historyQuery);
 
 
@@ -2359,6 +2367,7 @@ function wppizza_cat_parents( $id, $separator =' &raquo; ', $page , $taxonomy = 
 						[organize vars to make them easier to use in template]
 					**********************************************************/
 					$order['transaction_id']=$res->transaction_id;
+					$order['order_status']=$res->order_status;
 					if($this->pluginOptions['order']['append_internal_id_to_transaction_id']){
 						$order['transaction_id'].='/'.$res->id.'';
 					}
@@ -2457,7 +2466,7 @@ function wppizza_cat_parents( $id, $separator =' &raquo; ', $page , $taxonomy = 
 
 	function wppizza_orderhistory_pagination($numberOfOrders,$ordersOnPage){
 		$ordersPerPage=10;
-		$ordersPerPage = apply_filters('wppizza_history_ordersperpage', $ordersPerPage);
+		$ordersPerPage = apply_filters('wppizza_history_ordersperpage_filter', $ordersPerPage);
 		
 		$total_page=ceil($numberOfOrders/$ordersPerPage);
 		$currentPageLink=get_permalink();
