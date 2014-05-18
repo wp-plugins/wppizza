@@ -699,8 +699,8 @@
 					'lbl'=>__('Sales Tax', $this->pluginLocale)
 				),
 				'taxes_included'=>array(
-					'descr'=>__('Price Labels (Sub)Totals: text before sum of tax applied if prices have been entered *inclusive* of tax (if > 0) [%d%% will be replaced by taxrate applied - i.e 10%]', $this->pluginLocale),
-					'lbl'=>__('incl. tax at %d%%', $this->pluginLocale)
+					'descr'=>__('Price Labels (Sub)Totals: text before sum of tax applied if prices have been entered *inclusive* of tax (if > 0) [%s%% will be replaced by taxrate applied - i.e 10%]', $this->pluginLocale),
+					'lbl'=>__('incl. tax at %s%%', $this->pluginLocale)
 				),	
 				'order_total'=>array(
 					'descr'=>__('Price Labels (Sub)Totals: text before total sum of ORDER', $this->pluginLocale),

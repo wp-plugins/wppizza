@@ -1494,7 +1494,7 @@ public function wppizza_require_common_input_validation_functions(){
 	/********************************************************
 		[lets attempt to get rid of WPPizza Categories in title tag
 	*********************************************************/
-	function wppizza_filter_title_tag($title, $sep ,$loc){
+	function wppizza_filter_title_tag($title, $sep=false , $loc='right'){
 		if(get_post_type()==WPPIZZA_POST_TYPE){
 			$titleOrig=$title;
 			$strSearch=__('WPPizza Categories',$this->pluginLocale);
@@ -1606,7 +1606,7 @@ public function wppizza_require_common_input_validation_functions(){
     * reset loop query. some themes need this
     ******************************************************/
 	function wppizza_reset_loop_query(){
-		wp_reset_query();
+		wp_reset_postdata();
 	}
 
     /*****************************************************
@@ -1711,7 +1711,9 @@ public function wppizza_require_common_input_validation_functions(){
 					wp_enqueue_style($this->pluginSlug.'-admin-custom');
 				}
 				/**for timepicker etc*/
-				wp_enqueue_style('jquery-style', '//ajax.googleapis.com/ajax/libs/jqueryui/1.10.1/themes/smoothness/jquery-ui.css');
+				if(get_current_screen()->post_type==$this->pluginSlug){
+					wp_enqueue_style('jquery-style', '//ajax.googleapis.com/ajax/libs/jqueryui/1.10.1/themes/smoothness/jquery-ui.css');
+				}
  				wp_enqueue_style($this->pluginSlug.'-admin');
 
       		/**js***/
@@ -1913,6 +1915,9 @@ public function wppizza_require_common_input_validation_functions(){
 			$cat=$args['get']['wppizza_category_sort'];
 		}else{
 			$cat=$this->pluginOptions['layout']['category_sort'];
+		}
+		if(!isset($cat)){
+		return $pieces;
 		}
 		asort($cat);
 		$sort=implode(",",array_keys($cat));
@@ -2320,14 +2325,14 @@ function wppizza_cat_parents( $id, $separator =' &raquo; ', $page , $taxonomy = 
 
 		/*allow another where condition**/
 		$historyQuery = apply_filters('wppizza_history_query_where_filter', $historyQuery);
-		
+
 		/**limit to user**/
 		$historyQuery.="AND wp_user_id=".$userid." ";
 		/**sort**/
 		$historyQuery.="ORDER BY order_date DESC ";
 		/**limit**/
 		$historyQuery.="limit ".$limitOffset.",".$ordersPerPage."";
-		
+
 		$historyRes = $wpdb->get_results($historyQuery);
 
 
@@ -2413,16 +2418,16 @@ function wppizza_cat_parents( $id, $separator =' &raquo; ', $page , $taxonomy = 
 					/***********************************************
 						[order summary
 					***********************************************/
-					$summary['total_price_items']=$thisOrderDetails['total_price_items'];
+					//$summary['total_price_items']=$thisOrderDetails['total_price_items'];
 					$summary['discount']=$thisOrderDetails['discount'];
 					$summary['item_tax']=wppizza_output_format_price($thisOrderDetails['item_tax'],$this->pluginOptions['layout']['hide_decimals']);
 					$summary['taxes_included']=wppizza_output_format_price($thisOrderDetails['taxes_included'],$this->pluginOptions['layout']['hide_decimals']);
 					if($this->pluginOptions['order']['delivery_selected']!='no_delivery'){/*delivery disabled*/
 						$summary['delivery_charges']=$thisOrderDetails['delivery_charges'];
 					}
-					$summary['total_price_items']=$thisOrderDetails['total_price_items'];
+					$summary['total_price_items']=wppizza_output_format_price($thisOrderDetails['total_price_items'],$this->pluginOptions['layout']['hide_decimals']);
 					$summary['selfPickup']=$thisOrderDetails['selfPickup'];
-					$summary['total']=$thisOrderDetails['total'];
+					$summary['total']=wppizza_output_format_price($thisOrderDetails['total'],$this->pluginOptions['layout']['hide_decimals']);
 					$summary['tax_applied']='items_only';
 					if($this->pluginOptions['order']['shipping_tax']){
 						$summary['tax_applied']='items_and_shipping';
@@ -2467,7 +2472,7 @@ function wppizza_cat_parents( $id, $separator =' &raquo; ', $page , $taxonomy = 
 	function wppizza_orderhistory_pagination($numberOfOrders,$ordersOnPage){
 		$ordersPerPage=10;
 		$ordersPerPage = apply_filters('wppizza_history_ordersperpage_filter', $ordersPerPage);
-		
+
 		$total_page=ceil($numberOfOrders/$ordersPerPage);
 		$currentPageLink=get_permalink();
 

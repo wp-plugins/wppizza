@@ -16,7 +16,14 @@
 		$bool=filter_var($inp, FILTER_VALIDATE_BOOLEAN);
 		return $bool;
 	}	
-	
+/*****************************************************
+* Validates url
+* @str the input to check
+******************************************************/
+	function wppizza_validate_url($inp){
+		$url=filter_var($inp, FILTER_VALIDATE_URL);
+		return $url;
+	}	
 /*****************************************************
 * Validates float [no negatives]
 * @str the input to check, @round [int] to round
@@ -86,6 +93,15 @@
 		$str=(preg_replace("/[^a-zA-Z0-9\-_]/","",$str));
 		return $str;
 	}
+/*****************************************************
+* Validates css declarations #a-zA-Z0-9% no spaces or commas etc
+* @str the input to check
+******************************************************/
+	function wppizza_validate_css($str){
+		$str=(preg_replace("/[^a-zA-Z0-9#%]/","",$str));
+		$str=strtolower($str);
+		return $str;
+	}	
 /*****************************************************
 * Validate and returns 24 hour time (02:55)
 * @str the input to check

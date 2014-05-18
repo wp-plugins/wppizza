@@ -389,7 +389,7 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 	function gateway_db_initialize_order() {
 		global $wpdb,$current_user;
 		get_currentuserinfo();
-		$wpdb->hide_errors();
+		//$wpdb->hide_errors();
 		$wpdb->query( $wpdb->prepare( "INSERT INTO ".$wpdb->prefix . $this->pluginOrderTable." ( wp_user_id, hash, order_ini, payment_status )VALUES ( %s, %s, %s , %s )", array($current_user->ID, $this->gatewayOrderDetails['hash'], $this->gatewayOrderDetails['order_ini'],'INITIALIZED')));
 		$this->gatewayOrderId=$wpdb->insert_id;
 	}
@@ -419,7 +419,7 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 	}
 	/******************************************************************
 	*
-	*	[output order on thank you page]
+	*	[output unset cart]
 	*
 	******************************************************************/
 	function gateway_unset_cart() {
@@ -431,5 +431,582 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 	    /**gratuities**/
 	    $_SESSION[$this->pluginSession]['tips']=0;
 	}
+/****************************************************************************************************************************
+*
+*
+*
+*	[methods - new as of v2.9.3 - to aid gateway development]
+*	be aware that these - for the moment - are still subject to change !!!
+*
+*
+*****************************************************************************************************************************/
+
+	/**************************************************************************
+	*
+	*	[install/update gateway options - update runs when version number increases]
+	*
+	**************************************************************************/
+	function wppizza_gateway_admin_init(){
+		/*first install*/
+		if($this->gatewayOptions==0){
+			$editableOptions = $this->gateway_settings(true);
+			$nonEditableOptions = $this->gateway_settings_non_editable();
+			$defaultOptions=array_merge($editableOptions,$nonEditableOptions);
+			/**insert options**/
+			update_option($this->gatewayOptionsName, $defaultOptions );
+		}else{
+			/*update options if version is higher than current*/
+			//$forceUpdate=1;//development only
+			if(!isset($this->gatewayOptions['version']) || version_compare($this->gatewayOptions['version'],$this->gatewayVersion , '<' ) || isset($forceUpdate)){
+				/**currently set options**/
+				$currentOptions=$this->gatewayOptions;
+
+				/*get and merge editable and uneditable**/
+				$editableOptions = $this->gateway_settings(true);
+				$nonEditableOptions = $this->gateway_settings_non_editable();
+				$defaultOptions=array_merge($editableOptions,$nonEditableOptions);
+
+				/*get and add all newly added options**/
+				$addedOptions=array_diff_key($defaultOptions,$currentOptions);/**get new options**/
+				$updateOptions=$currentOptions;
+				foreach($addedOptions as $k=>$v){
+					$updateOptions[$k]=$v;/*add new options*/
+				}
+				/*overwrite noneditable/fixed options**/
+				foreach($nonEditableOptions as $k=>$v){
+					$updateOptions[$k]=$v;
+				}
+				/**now update the options***/
+				update_option($this->gatewayOptionsName, $updateOptions );
+			}
+		}
+
+	}
+
+	/**************************************************************************
+	*
+	*	[get order by hash and/or id and blogid (if set) and payment status (if set)
+	*	and initiator (if set) and unserialize order_details and customer_details]
+	*
+	**************************************************************************/
+	function wppizza_gateway_get_order_details($orderhash=false, $orderId=false, $blogid=false, $payment_status=false, $initiator=false){
+		if(!$orderhash && !$orderId){
+			return false;
+		}
+		global $wpdb;
+		//$wpdb->hide_errors();
+		/**sanitize hash**/
+		if($orderhash){
+			$orderhash=wppizza_validate_alpha_only($orderhash);
+		}
+		/**sanitize id**/
+		if($orderId){
+			$orderId=(int)$orderId;
+		}
+		/**select the right blog table if set **/
+		if($blogid &&  (int)$blogid>1){
+			$wpdb->prefix=$wpdb->base_prefix . $blogid.'_';
+		}
+		/**set payment status query **/
+		if($payment_status && is_array($payment_status)){
+			$psQuery=" AND payment_status IN ('".implode("','",$payment_status)."') ";
+		}else{
+			$psQuery="";
+		}
+		/**initiator query **/
+		$iniQuery="";
+		if($initiator){
+			$iniQuery=" AND initiator='".esc_sql($initiator)."' ";
+		}
+
+		/**build where query**/
+		$wQuery='';
+		if($orderId && !$orderhash){$wQuery=" id='".$orderId."' ";}
+		if(!$orderId && $orderhash){$wQuery=" hash='".$orderhash."' ";}
+		if($orderId && $orderhash){$wQuery=" hash='".$orderhash."' AND id='".$orderId."' ";}
+
+
+		$getOrderDetails = $wpdb->get_row("SELECT wp_user_id, id, hash, order_ini as order_details, customer_ini as customer_details, payment_status FROM " . $wpdb->prefix . $this->pluginOrderTable . " WHERE ".$wQuery." ".$psQuery." ".$iniQuery." LIMIT 0,1 ");
+		if(is_object($getOrderDetails)){
+			/**unserialize order**/
+			$getOrderDetails->order_details=maybe_unserialize($getOrderDetails->order_details);
+			/**unserialize customer**/
+			$getOrderDetails->customer_details=maybe_unserialize($getOrderDetails->customer_details);
+			/**return details**/
+			return	$getOrderDetails;
+		}else{
+			return false;
+		}
+	}
+
+
+	/******************************************************************
+	*
+	*	[update db entry with order variables]
+	*
+	******************************************************************/
+	function wppizza_gateway_update_order_details($orderId, $orderValues=false){
+		global $wpdb;
+		//$wpdb->hide_errors();
+		$orderId=(int)$orderId;
+		//			order_ini='".esc_sql(serialize($orderValues))."',
+		$wpdb->query("UPDATE ".$wpdb->prefix . $this->pluginOrderTable." SET
+			customer_ini='".wppizza_filter_sanitize_post_vars($_POST)."',
+			initiator='".esc_sql($this->gatewayName)."'  WHERE id='".$orderId."' ");
+	}
+	/******************************************************************
+	*
+	*	[update db entry with POSTed (customer) vars]
+	*
+	******************************************************************/
+	function wppizza_gateway_update_customer_details($orderId, $postVars){
+		global $wpdb;
+		//$wpdb->hide_errors();
+		$orderId=(int)$orderId;
+		/**sanitize post vars**/
+		$thisOrderPostVars = apply_filters('wppizza_filter_sanitize_post_vars', $postVars);
+		$thisOrderPostVars=esc_sql(serialize($thisOrderPostVars));
+		/*update db**/
+		$wpdb->query("UPDATE ".$wpdb->prefix . $this->pluginOrderTable." SET customer_ini='".$thisOrderPostVars."' WHERE id='".$orderId."' ");
+	}
+	/******************************************************************
+	*
+	*	[order has been successfully charged and captured]
+	*
+	******************************************************************/
+	function wppizza_gateway_order_payment_captured($orderid, $blogid=false, $transaction_id, $transaction_details){
+		global $wpdb;
+		//$wpdb->hide_errors();
+		/**select the right blog table */
+		if($blogid && is_int($blogid) && $blogid>1){$wpdb->prefix=$wpdb->base_prefix . $blogid.'_';}
+		$wpdb->update(
+			$wpdb->prefix  .  $this->pluginOrderTable,
+			array('payment_status' => 'CAPTURED','transaction_id' => $transaction_id, 'transaction_details' => maybe_serialize($transaction_details), 'initiator' => esc_sql($this->gatewayName)),
+			array('id' => $orderid ),
+			array('%s','%s','%s','%s'),
+			array('%d')
+		);
+	}
+	/******************************************************************
+	*
+	*	[payment invalid (mismatched amount or currency for example)]
+	*
+	******************************************************************/
+	function wppizza_gateway_order_payment_invalid($orderid, $blogid=false, $transaction_id, $transaction_details){
+		global $wpdb;
+		//$wpdb->hide_errors();
+		$transaction_id=wppizza_validate_string($transaction_id);/**sanitize**/
+		/**select the right blog table */
+		if($blogid && is_int($blogid) && $blogid>1){$wpdb->prefix=$wpdb->base_prefix . $blogid.'_';}
+		$wpdb->update(
+			$wpdb->prefix . $this->pluginOrderTable,
+			array('payment_status' => 'INVALID','transaction_id' => $transaction_id, 'transaction_details' => maybe_serialize($transaction_details), 'initiator' => esc_sql($this->gatewayName)),
+			array('id' => $orderid ),
+			array('%s','%s','%s'),
+			array('%d')
+		);
+	}
+	/******************************************************************
+	*
+	*	[order payment has failed->update db entry]
+	*
+	******************************************************************/
+	function wppizza_gateway_order_payment_failed($orderid, $blogid=false, $error){
+		global $wpdb;
+		/**select the right blog table */
+		if($blogid && is_int($blogid) && $blogid>1){$wpdb->prefix=$wpdb->base_prefix . $blogid.'_';}
+		//$wpdb->hide_errors();
+		$wpdb->update(
+			$wpdb->prefix . $this->pluginOrderTable,
+			array('payment_status' => 'FAILED', 'initiator' => esc_sql($this->gatewayName), 'transaction_errors' => maybe_serialize($error)),
+			array('id' => $orderid ),
+			array('%s','%s','%s'),
+			array('%d')
+		);
+	}
+	/******************************************************************
+	*
+	*	[order has been cancelled using GET vars-> display txt]
+	*
+	******************************************************************/
+	function wppizza_gateway_order_cancelled($orderhash, $blogid=false, $cancelTxt='', $delete=false){
+		global $wpdb;
+		//$wpdb->hide_errors();
+		$orderhash=wppizza_validate_alpha_only($orderhash);/**sanitize**/
+		/**select the right blog table */
+		if($blogid && is_int($blogid) && $blogid>1){$wpdb->prefix=$wpdb->base_prefix . $blogid.'_';}
+
+		/***check if order exists**/
+		$res = $this->wppizza_gateway_get_order_details($orderhash, false, $blogid, array('INITIALIZED','CANCELLED'), $this->gatewayName);
+		if($res){
+			/**delete cancelled order**/
+			if($delete){
+				$wpdb->query("DELETE FROM ".$wpdb->prefix . $this->pluginOrderTable." WHERE id=".$res->id."");
+			}
+			/**update order as cancelled**/
+			if(!$delete){
+				$wpdb->query("UPDATE ".$wpdb->prefix . $this->pluginOrderTable." SET payment_status='CANCELLED' WHERE id=".$res->id." ");
+			}
+
+			print"<div class='wppizza-gateway-success'>".$cancelTxt."</div>";
+
+		}else{
+			print"<div class='wppizza-gateway-error'>error [".$this->gatewayIdent."-1101]: ".__('nothing to do !',$this->pluginLocale)."</div>";
+		}
+		return;
+	}
+
+	/******************************************************************
+	*
+	*	[order has been cancelled by ipn request -> no output]
+	*	NB: $delete should probably be always false here, so the user can
+	*	get feedback when being returned to the cancel URL by gateway
+	*
+	******************************************************************/
+	function wppizza_gateway_order_cancelled_ipn($orderId, $blogid=false, $delete=false){
+		global $wpdb;
+		$orderId=(int)$orderId;
+		/**select the right blog table */
+		if($blogid && is_int($blogid) && $blogid>1){$wpdb->prefix=$wpdb->base_prefix . $blogid.'_';}
+		/**delete cancelled order**/
+		if($delete){
+			$res=$wpdb->query( $wpdb->prepare( "DELETE FROM ".$wpdb->prefix . $this->pluginOrderTable." WHERE id=%s AND payment_status=%s AND initiator=%s ", $orderId, 'INITIALIZED', esc_sql($this->gatewayName)));
+		}
+		/**update order as cancelled**/
+		if(!$delete){
+			$res=$wpdb->query("UPDATE ".$wpdb->prefix . $this->pluginOrderTable." SET payment_status='CANCELLED' WHERE id='".$orderId."' AND payment_status='INITIALIZED' AND initiator='".esc_sql($this->gatewayName)."' ");
+		}
+
+	}
+
+	/******************************************************************
+	*
+	*	[order has been completed -> display txt]
+	*
+	******************************************************************/
+	function wppizza_gateway_order_completed($orderhash, $blogid=false, $txtPending=false, $txtCancelled=false){
+		$orderhash=wppizza_validate_alpha_only($orderhash);/**sanitize**/
+		$res = $this->wppizza_gateway_get_order_details($orderhash, false, $blogid);
+
+		if($res){
+			/**done**/
+			if($res->payment_status=='COMPLETED'){
+				print"<div class='wppizza-gateway-success'><h1>".$this->pluginOptions['localization']['thank_you']['lbl']."</h1>".nl2br($this->pluginOptions['localization']['thank_you_p']['lbl'])."</div>";
+				/**display order details (if enabled)**/
+				print"".$this->gateway_order_on_thankyou($res->id)."";
+				return;
+			}
+			/**waiting for ipn response**/
+			if($res->payment_status!='COMPLETED' && ($res->payment_status=='CAPTURED' || $res->payment_status=='AUTHORIZED') ){
+				print"<div class='wppizza-gateway-success'>".$txtPending."<p><b>ID:".$res->id."</b></p></div>";
+				print'<script>setInterval(function(){window.location.href=window.location.href;},5000);</script>';
+				return;
+			}
+			/**done**/
+			if($res->payment_status=='CANCELLED'){
+				/*maybe redirect to orderpage without GET vars or homepage ??*/
+				print"<div class='wppizza-gateway-success'>".$txtCancelled."</div>";
+				return;
+			}
+			/**all others**/
+			//$errors="ORDER ID: ".$res->id."<br />";
+			//$errors.="TRANSACTION ID: ".$res->transaction_id."<br />";
+			//$errors.="TRANSACTION STATUS: ".$res->payment_status."<br />";
+			//".nl2br(print_r(unserialize($res->transaction_errors),true))."
+			//print"<div class='wppizza-gateway-error'>error [".$this->gatewayIdent."-1101]: ".__('Sorry, there was an error processing your order. please contact us, providing the details below !',$this->pluginLocale)."<br /><br />".$errors."</div>";
+
+
+			/**actually lets make this a generic page without too much info**/
+			print"<div class='wppizza-gateway-error'>error [".$this->gatewayIdent."-1102]: ".__('Sorry, this order has already been processed or does not exist !',$this->pluginLocale)."</div>";
+
+			return;
+		}else{
+			print"<div class='wppizza-gateway-error'>error [".$this->gatewayIdent."-1103]: ".__('Sorry, this order does not exist !',$this->pluginLocale)."</div>";
+		}
+		return;
+	}
+	/******************************************************************
+	*
+	*	[complete order by sending emails etc]
+	*
+	******************************************************************/
+	function wppizza_gateway_complete_order($orderId, $blogid=false, $logging=false, $sendAdminErrors=false){
+		global $wpdb;
+		$orderId=(int)$orderId;
+		/**select the right blog table */
+		if($blogid && is_int($blogid) && $blogid>1){$wpdb->prefix=$wpdb->base_prefix . $blogid.'_';}
+
+		/**********new send order email class**************/
+		$sendEmail=new WPPIZZA_SEND_ORDER_EMAILS();
+
+		/************************************************************
+		*
+		*	[send the emails returns array
+		*	['status']->true/false
+		*	['error']->''/msg
+		*	['mailer']->mail function name
+		*
+		************************************************************/
+		$mailResults=$sendEmail->wppizza_order_send_email($orderId, $blogid);
+		/********************************************************************
+		*
+		*	[depending on $mailResults['status'],
+		*	will insert order into db and output "thankyou"
+		*	or justs displays error]
+		*
+		********************************************************************/
+		/*update db*/
+		$dbupd['customer_details']		= 	''.$sendEmail->customerDetails.'';
+		$dbupd['order_details']			= 	''.$sendEmail->orderDetails.'';
+		$dbupd['payment_status']		=	'COMPLETED';
+		//$dbupd['transaction_details']	=	esc_sql(serialize($gatewayReply));
+		$dbupd['transaction_errors']	=	'';
+		$dbupd['mail_sent']				=	!empty($mailResults['status']) ? 'Y' : 'N';
+		$dbupd['mail_error']			=	!empty($mailResults['error']) ? esc_sql($mailResults['error']) : '';
+
+		$fields='';
+		$i=0;
+		foreach($dbupd as $k=>$v){
+			if($i>0){$fields.=", ";}
+			$fields.="".$k."='".$v."'";
+		$i++;
+		}
+		$sql="UPDATE ".$wpdb->prefix  . $this->pluginOrderTable." SET ".$fields." WHERE id='".$orderId."' ";
+		$wpdb->query($sql);
+
+		/**do additional stuff when order has been executed*/
+		do_action('wppizza_on_order_executed', $orderId, $this->pluginOrderTable);
+
+		if(!$mailResults['status'] && $sendAdminErrors){
+			$this->wppizza_gateway_send_errors_to_admin(true, $blogid, $orderId, false, $mailResults);
+		}
+
+		/**logging**/
+		if(!$mailResults['status']){
+			$this->wppizza_gateway_logging($logging, $blogid, $orderId, $mailResults, 'mail-error');
+		}else{
+			$this->wppizza_gateway_logging($logging, $blogid, $orderId,'Order ID:'.$orderId . PHP_EOL .'Customer Details:'.PHP_EOL.print_r($sendEmail->customerDetails,true).PHP_EOL.'Order Details:'.PHP_EOL.print_r($sendEmail->orderDetails,true).PHP_EOL.PHP_EOL, 'success');
+		}
+	}
+	/******************************************************************
+	*
+	*	[send errors to admin]
+	*
+	******************************************************************/
+	function wppizza_gateway_send_errors_to_admin($sendErrors=false, $blogid=false, $orderId=false, $setError=false,$mailResults=false){
+			if($sendErrors){/**error sending enabled**/
+
+				if(!$setError && $orderId){
+					$orderDetails=$this->wppizza_gateway_get_order_details(false, $orderId, $blogid);
+					if($mailResults){/**only when email could not be sent**/
+						/**mail error AFTER payment !!! let's try and send another email to the admin to investigate***/
+						$warningMessage="Sorry, something has gone wrong sending the order/confirmation email, so - as a last resort - the system has tried to send this email to the email address of the main administrator of the site !!!".PHP_EOL;
+						$warningMessage.="An order - details below - has been made, paid and verified via ".$this->gatewayName.". However, the order could not be sent to your shops email address.".PHP_EOL;
+						$warningMessage.="Email Error: ".print_r($mailResults['error'],true).PHP_EOL;
+						$warningMessage.="Please take the necessary steps to rectify this situation and possibly contact the customer directly using the details provided below".PHP_EOL;
+						$warningMessage.="You might also want to check your ".$this->gatewayName." account in relation to the transaction below.".PHP_EOL;
+
+						/**blogid is set and >1**/
+						if($blogid && (int)$blogid>1){
+							$warningMessage.='BLOG ID: '.(int)$blogid.''.PHP_EOL;
+						}
+						/**blogid==false , get current and add if >1**/
+						if(!$blogid && get_current_blog_id()>1){
+							$warningMessage.='BLOG ID: '.get_current_blog_id().''.PHP_EOL;
+						}
+						if($orderDetails){
+							$warningMessage.="ORDER ID: ".print_r($orderDetails->id,true).PHP_EOL;
+							$warningMessage.="Customer: ".print_r($orderDetails->customer_details,true).PHP_EOL;
+							$warningMessage.="Order Details: ".print_r($orderDetails->order_details,true).PHP_EOL;
+							$warningMessage.="Gateway Transaction ID: ".print_r(maybe_unserialize($orderDetails->transaction_id),true).PHP_EOL;
+							$warningMessage.="Gateway Transaction Details: ".print_r(maybe_unserialize($orderDetails->transaction_details),true).PHP_EOL;
+							$warningMessage.="Gateway Transaction Errors (if any): ".print_r(maybe_unserialize($orderDetails->transaction_errors),true).PHP_EOL.PHP_EOL;
+						}else{
+							/**should not really ever happen**/
+							$warningMessage.="ORDER COULD NOT BE FOUND: ".print_r($orderId,true).PHP_EOL;
+						}
+
+						mail(''.get_option('admin_email').'', 'Warning: ['.$this->gatewayName.'] - Order Paid  but could not send Email', $warningMessage);
+					}
+				}
+
+
+
+				/**no mail results set, but order id and error set**/
+				if(!$mailResults && $setError && $orderId){/**only when email could not be sent**/
+					$orderDetails=$this->wppizza_gateway_get_order_details(false, $orderId, $blogid);
+
+					$warningMessage="".$setError.PHP_EOL;
+
+					if($orderDetails){
+						$warningMessage.="ID: ".print_r($orderDetails->id,true).PHP_EOL;
+						$warningMessage.="Customer: ".print_r($orderDetails->customer_details,true).PHP_EOL;
+						$warningMessage.="Order Details: ".print_r($orderDetails->order_details,true).PHP_EOL;
+						$warningMessage.="Gateway Transaction ID (if any): ".print_r(maybe_unserialize($orderDetails->transaction_id),true).PHP_EOL;
+						$warningMessage.="Gateway Transaction Details (if any): ".print_r(maybe_unserialize($orderDetails->transaction_details),true).PHP_EOL;
+						$warningMessage.="Gateway Transaction Errors (if any): ".print_r(maybe_unserialize($orderDetails->transaction_errors),true).PHP_EOL.PHP_EOL;
+					}else{
+						/**should not really ever happen**/
+						$warningMessage.="ORDER COULD NOT BE FOUND: ".print_r($orderId,true).PHP_EOL;
+					}
+					mail(''.get_option('admin_email').'', 'Warning: ['.$this->gatewayName.'] - Order could not be verified', $warningMessage);
+
+				}
+
+
+				if($sendErrors && $setError && !$orderId){/**send specified error if no orderid**/
+					mail(''.get_option('admin_email').'', 'Warning: ['.$this->gatewayName.'] - Error', ''.print_r($setError,true).PHP_EOL.'');
+				}
+			}
+
+	}
+	/******************************************************************
+	*
+	*	[check min wppizza requirements for gateway and display notice]
+	*
+	******************************************************************/
+	function wppizza_gateway_check_requirements(){
+		if( version_compare( $this->pluginVersion, $this->gatewayMinWppizzaVersion , '<' )) {
+			add_action('admin_notices', array( $this, 'wppizza_gateway_req_notice') );
+		}
+	}
+	function wppizza_gateway_req_notice() {
+		$dbpReqNotice='';
+		$dbpReqNotice.='<div id="message" class="error wppizza_admin_notice" style="padding:20px;">';
+			$dbpReqNotice.='<strong>'.$this->gatewayName.' Gateway for WPPizza requires WPPizza Version '.$this->gatewayMinWppizzaVersion.'+ to work reliably. Please update WPPizza ! </strong>';
+			$dbpReqNotice.='<br/><br/> This notice will disappear as soon as you have updated';
+			$dbpReqNotice.='<br/> Thank you';
+		$dbpReqNotice.='</div>';
+		echo"".$dbpReqNotice."";
+	}
+
+	/******************************************************************
+	*
+	*	[orderpage wpml]
+	*	helper to return if we are on the orderpage (checking wpml too)
+	*	returns true / false
+	*
+	******************************************************************/
+	function wppizza_gateway_current_is_orderpage($isOrderpage=false){
+		global $post;
+		$currentPage=$post->ID;
+		$setOrderPage=$this->pluginOptions['order']['orderpage'];
+		/**wpml select of order page**/
+		if($setOrderPage>0 && function_exists('icl_object_id')) {
+			$setOrderPage=icl_object_id($setOrderPage,'page');
+		}
+		if($currentPage==$setOrderPage){
+			$isOrderpage=true;
+		}
+		return $isOrderpage;
+	}
+	/******************************************************************
+	*
+	*	[get orderpage wpml]
+	*	returns permalink of orderpage
+	*
+	******************************************************************/
+	function wppizza_gateway_orderpage(){
+		$orderpage=$this->pluginOptions['order']['orderpage'];
+		/**wpml select of order page**/
+		if($orderpage>0 && function_exists('icl_object_id')) {
+			$orderpage=icl_object_id($orderpage,'page');
+		}
+		$oPagePermalink=get_permalink($orderpage);
+		return $oPagePermalink;
+	}
+	/******************************************************************
+	*
+	*	[get language wpml]
+	*	returns language
+	*
+	******************************************************************/
+	function wppizza_gateway_language(){
+		$lang='en_US';
+		if(WPLANG!=''){
+			$lang=WPLANG;
+		}
+		/**wpml select of full locale**/
+		if(function_exists('icl_object_id') && defined('ICL_LANGUAGE_CODE')) {
+			$lang=$sitepress->get_locale(ICL_LANGUAGE_CODE);/**get full  locale**/
+		}
+
+		return $lang;
+	}
+	/******************************************************************
+	*
+	*	[log gateway responses to /logs/]
+	*
+	******************************************************************/
+	function wppizza_gateway_logging($logging=false, $blogid=false,  $id=false, $data=false, $ident='general'){
+		if($logging){
+			$addBlogId='';
+			/**blogid is set and >1**/
+			if($blogid && (int)$blogid>1){
+				$addBlogId='( BLOG ID: '.(int)$blogid.')';
+			}
+			/**blogid==false , get current and add if >1**/
+			if(!$blogid && get_current_blog_id()>1){
+				$addBlogId='( BLOG ID: '.get_current_blog_id().')';
+			}
+
+			$timeStamp= current_time('timestamp');
+			//$setTimeStamp="".date_i18n(get_option('date_format'),$timeStamp)." ".date_i18n(get_option('time_format'),$timeStamp)."";
+			$setTimeStamp="".date('Y-m-d H:i:s', $timeStamp)."";
+
+			if($id){
+				file_put_contents($this->gatewayBasePath.'logs/'.$this->gatewayIdent.'-'.strtolower($ident).'-'.wp_hash($this->gatewayIdent).'.log',' ['.$setTimeStamp.']' . PHP_EOL . $id . $addBlogId.':'. PHP_EOL . print_r($data,true).''.PHP_EOL.PHP_EOL,FILE_APPEND);
+			}
+			/**non order related errors as long as the class is loaded, -> just use WPDEBUG**/
+			if(!$id && !$data){
+				ini_set('log_errors', true);
+				ini_set('error_log', $this->gatewayBasePath.'/logs/'.$this->gatewayIdent.'-error-'.wp_hash($this->gatewayIdent).'.log');
+			}
+			/*general ipn request and get vars**/
+			if(!$id && $data){
+				file_put_contents($this->gatewayBasePath.'logs/'.$this->gatewayIdent.'-'.strtolower($ident).'-'.wp_hash($this->gatewayIdent).'.log','['.$setTimeStamp.']' . $addBlogId . PHP_EOL . print_r($data,true).''.PHP_EOL.PHP_EOL,FILE_APPEND);
+			}
+
+		}
+	}
+	/******************************************************************
+	*
+	*	[gateway helper to be able to - more easily - map order form fields to gateway form fields]
+	*
+	******************************************************************/
+	function wppizza_gateway_map_formfields_setup($ff){
+		$mapVars='';
+		foreach($this->pluginOptions['order_form'] as $k => $v){
+			if($v['enabled'] && !in_array($v['key'],array('ctips')) && in_array($v['type'],array('email','text','textarea')) ){
+				$optSelected=!empty($this->gatewayOptions[$ff['key']][$k]) ? $this->gatewayOptions[$ff['key']][$k] : '';
+				$mapVars.="<tr><td style='margin:0;padding:0 5px 0 0'>".$v['lbl']."</td><td style='margin:0;padding:0'>";
+				$mapVars.="<select name='wppizza[gateways][wppizza_gateway_".$this->gatewaySelect."][".$ff['key']."][".$k."]'>";
+					$mapVars.="<option value=''>---".$this->gatewayName." ".__('form fields',$this->pluginLocale)."-----</option>";
+					foreach($ff['values'] as $mKey=>$mVal){
+						$mapVars.="<option value='".$mKey."' ".selected($optSelected,$mKey,false).">".$mVal."</option>";
+					}
+				$mapVars.="</select></td></tr>";
+			}
+		}
+		return $mapVars;
+	}
+
+	function wppizza_gateway_map_formfields_return($ff){
+		$optSelected=array();
+		foreach($this->pluginOptions['order_form'] as $k => $v){
+			if($v['enabled'] && !in_array($v['key'],array('ctips')) && in_array($v['type'],array('email','text','textarea')) ){
+				!empty($ff[$k]) && !empty($_POST[$v['key']]) ? $optSelected[$ff[$k]]=$_POST[$v['key']] : null;
+			}
+		}
+		return $optSelected;
+	}
+	/****************************************************************************************************************************
+	*
+	*
+	*	[ END additional gateway methods]
+	*
+	*
+	*****************************************************************************************************************************/
+
 }
 ?>

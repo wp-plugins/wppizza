@@ -3,6 +3,7 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 
 	class WPPIZZA_SEND_ORDER_EMAILS extends WPPIZZA_ACTIONS {
 
+
 		function __construct() {
 			parent::__construct();
 			/**do some  wpml**/
@@ -94,8 +95,11 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 		*	[construct plaintext and html email from fields in db]
 		*
 		*****************************************************************************************************************************/
-		function wppizza_order_email($orderid){
+		function wppizza_order_email($orderid,$blogid=false){
 			global $wpdb;
+			/**select the right blog table */
+			if($blogid && is_int($blogid) && $blogid>1){$wpdb->prefix=$wpdb->base_prefix . $blogid.'_';}
+
 			$res = $wpdb->get_row("SELECT * FROM ".$wpdb->prefix . $this->pluginOrderTable." WHERE id='".$orderid."' ");
 
 			/*initialize vars**/
@@ -444,7 +448,7 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 					/**add timestamp to order_ini**/
 					$oIni['time']=$this->currentTime;
 
-					$wpdb->query("UPDATE ".$wpdb->prefix . $this->pluginOrderTable." SET order_date='".$orderDate."',order_ini='".esc_sql(serialize($oIni))."' WHERE id='".$orderid."' ");
+					$wpdb->query("UPDATE ".$wpdb->prefix  . $this->pluginOrderTable." SET order_date='".$orderDate."',order_ini='".esc_sql(serialize($oIni))."' WHERE id='".$orderid."' ");
 
 			}
 			return;
@@ -458,10 +462,10 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 		*	[if false, will return error message and var[mailer] to indicate which function was used]
 		*
 		*****************************************************************************************************************************/
-		function wppizza_order_send_email($orderid=false){
+		function wppizza_order_send_email($orderid=false, $blogid=false){
 
 			/***create/set email html and plaintext strings***/
-			$this->wppizza_order_email($orderid);
+			$this->wppizza_order_email($orderid, $blogid);
 			/*avoid some strict notices**/
 			$phpVersion=phpversion();
 			/*overwrite from and from name with static values if set**/

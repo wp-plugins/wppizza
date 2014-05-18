@@ -5,8 +5,8 @@ Author URI: http://www.wp-pizza.com
 Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.2, WP 3.3 
-Tested up to: 3.9
-Stable tag: 2.9.1
+Tested up to: 3.9.1
+Stable tag: 2.9.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -138,6 +138,19 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 
 == Changelog ==
+
+2.9.2  
+* changed tax display default value from "incl. tax at %d%%" to "incl. tax at %s%%"  to also display decimals accurately  
+* added CAPTURED as payment_status  
+* fixed number/price formatting on history page  
+* fix: replaced wp_reset_query with wp_reset_postdata after end of loop  
+* load smoothness jQuery UI theme (used in timepicker) in admin only when post_type == wppizza to not interfere with other plugins layouts/css    
+* added a bunch of helper functions in wppizza.gateways.inc.php that can be used in gateways to make development of other/future gateways easier  
+* added default vars when filtering wp_title to eliminate some possible php notices/warnings regarding missing arguments  
+* some maintenance/tidy up in places  
+17th May 2014  
+
+
 
 2.9.1  
 * all filtering of order history by order status (admin)  
