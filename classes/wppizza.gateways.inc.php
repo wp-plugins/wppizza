@@ -545,14 +545,46 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 	*	[update db entry with order variables]
 	*
 	******************************************************************/
-	function wppizza_gateway_update_order_details($orderId, $orderValues=false){
+	function wppizza_gateway_update_order_details($order, $blogid=false){
 		global $wpdb;
 		//$wpdb->hide_errors();
-		$orderId=(int)$orderId;
-		//			order_ini='".esc_sql(serialize($orderValues))."',
-		$wpdb->query("UPDATE ".$wpdb->prefix . $this->pluginOrderTable." SET
-			customer_ini='".wppizza_filter_sanitize_post_vars($_POST)."',
-			initiator='".esc_sql($this->gatewayName)."'  WHERE id='".$orderId."' ");
+		$orderId=$order->id;
+		/**select the right blog table */
+		if($blogid && is_int($blogid) && $blogid>1){$wpdb->prefix=$wpdb->base_prefix . $blogid.'_';}
+		
+		/***check if surcharges are enabled***/
+		if(isset($this->gatewaySurchargePercent) || isset($this->gatewaySurchargeFixed) ){
+			/***************************
+		 		[get tips (if any)]
+			***************************/
+			$tips=0;
+			if(isset($order->order_details['tips']) && $order->order_details['tips']>0){
+				$tips=$order->order_details['tips'];
+			}		
+			/*********************************************************
+			 	[add % handling fee to total, but not on tips if percentage]
+			*********************************************************/			
+			$ppSurcharge=0;
+			$appliedSurcharge=0;
+			$order->order_details['surcharge']=0;
+			/**calculate surcharge percentages**/			
+			if(isset($this->gatewayOptions[$this->gatewaySurchargePercent]) && $this->gatewayOptions[$this->gatewaySurchargePercent]>0){	
+				$ppSurcharge+=($order->order_details['total']-$tips)/100*abs($this->gatewayOptions[$this->gatewaySurchargePercent]);
+			}
+			/**calculate surcharge fixed**/	
+			if(isset($this->gatewayOptions[$this->gatewaySurchargeFixed]) && $this->gatewayOptions[$this->gatewaySurchargeFixed]>0){
+				$ppSurcharge+=$this->gatewayOptions[$this->gatewaySurchargeFixed];
+			}
+			/**add to order details**/
+			if($ppSurcharge>0){
+				$appliedSurcharge=wppizza_round_up($ppSurcharge,2);
+				$order->order_details['total']=$order->order_details['total']+$appliedSurcharge;
+				$order->order_details['handling_charge']=$appliedSurcharge;
+			}
+		}
+		$wpdb->query("UPDATE ".$wpdb->prefix . $this->pluginOrderTable." SET customer_ini='".wppizza_filter_sanitize_post_vars($_POST)."', initiator='".esc_sql($this->gatewayName)."' , order_ini='".esc_sql(serialize($order->order_details))."'   WHERE id='".$orderId."' ");
+	
+		return $order;
 	}
 	/******************************************************************
 	*
