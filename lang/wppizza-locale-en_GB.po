@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WPPizza\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-05-17 16:58-0000\n"
-"PO-Revision-Date: 2014-05-17 16:58-0000\n"
+"POT-Creation-Date: 2014-05-24 16:02-0000\n"
+"PO-Revision-Date: 2014-05-24 16:02-0000\n"
 "Last-Translator: ollybach <dev@1000db.com>\n"
 "Language-Team: \n"
 "Language: en_GB\n"
@@ -54,55 +54,55 @@ msgstr "Customer Details"
 msgid "Order Details"
 msgstr "Order Details"
 
-#: ../ajax/admin-get-json.php:186 ../ajax/admin-get-json.php:187
+#: ../ajax/admin-get-json.php:186 ../ajax/admin-get-json.php:188
 msgid "Payment By"
 msgstr "Payment By"
 
-#: ../ajax/admin-get-json.php:198
+#: ../ajax/admin-get-json.php:199
 msgid "Status"
 msgstr "Status"
 
-#: ../ajax/admin-get-json.php:211
+#: ../ajax/admin-get-json.php:212
 msgid "Last Status Update"
 msgstr "Last Status Update"
 
-#: ../ajax/admin-get-json.php:232 ../inc/admin.echo.get_additives.inc.php:16
+#: ../ajax/admin-get-json.php:233 ../inc/admin.echo.get_additives.inc.php:16
 #: ../inc/admin.echo.get_mealsizes.inc.php:55
 #: ../inc/admin.echo.get_openingtimes.inc.php:14
 #: ../inc/admin.echo.get_timesclosed.inc.php:22
 msgid "delete"
 msgstr "delete"
 
-#: ../ajax/admin-get-json.php:236
+#: ../ajax/admin-get-json.php:237
 msgid "print order"
 msgstr "print order"
 
-#: ../ajax/admin-get-json.php:244
+#: ../ajax/admin-get-json.php:245
 msgid "add notes"
 msgstr "add notes"
 
-#: ../ajax/admin-get-json.php:251
+#: ../ajax/admin-get-json.php:252
 msgid "notes:"
 msgstr "notes:"
 
-#: ../ajax/admin-get-json.php:252
+#: ../ajax/admin-get-json.php:253
 #: ../inc/admin.setup.default.options.inc.php:623
 msgid "ok"
 msgstr "ok"
 
-#: ../ajax/admin-get-json.php:258
+#: ../ajax/admin-get-json.php:259
 msgid "no orders yet :("
 msgstr "no orders yet :("
 
-#: ../ajax/admin-get-json.php:263
+#: ../ajax/admin-get-json.php:264
 msgid "Total of shown orders"
 msgstr "Total of shown orders"
 
-#: ../ajax/admin-get-json.php:264
+#: ../ajax/admin-get-json.php:265
 msgid "show total of all orders"
 msgstr "show total of all orders"
 
-#: ../ajax/admin-get-json.php:286
+#: ../ajax/admin-get-json.php:287
 msgid "total all orders"
 msgstr "total all orders"
 
@@ -425,19 +425,19 @@ msgstr "License active"
 msgid "License in-active"
 msgstr "License in-active"
 
-#: ../classes/wppizza.gateways.inc.php:654
+#: ../classes/wppizza.gateways.inc.php:726
 msgid "nothing to do !"
 msgstr "nothing to do !"
 
-#: ../classes/wppizza.gateways.inc.php:720
+#: ../classes/wppizza.gateways.inc.php:792
 msgid "Sorry, this order has already been processed or does not exist !"
 msgstr "Sorry, this order has already been processed or does not exist !"
 
-#: ../classes/wppizza.gateways.inc.php:724
+#: ../classes/wppizza.gateways.inc.php:796
 msgid "Sorry, this order does not exist !"
 msgstr "Sorry, this order does not exist !"
 
-#: ../classes/wppizza.gateways.inc.php:984
+#: ../classes/wppizza.gateways.inc.php:1062
 msgid "form fields"
 msgstr "form fields"
 
@@ -1361,42 +1361,46 @@ msgid "rejected"
 msgstr "rejected"
 
 #: ../inc/admin.echo.settings.input.fields.inc.php:770
+msgid "refunded"
+msgstr "refunded"
+
+#: ../inc/admin.echo.settings.input.fields.inc.php:771
 msgid "other"
 msgstr "other"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:772
+#: ../inc/admin.echo.settings.input.fields.inc.php:773
 msgid "maximum results [0 to show all]"
 msgstr "maximum results [0 to show all]"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:775
+#: ../inc/admin.echo.settings.input.fields.inc.php:776
 msgid "poll for new orders every"
 msgstr "poll for new orders every"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:775
+#: ../inc/admin.echo.settings.input.fields.inc.php:776
 msgid "seconds"
 msgstr "seconds"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:776
+#: ../inc/admin.echo.settings.input.fields.inc.php:777
 msgid "on/off"
 msgstr "on/off"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:788
+#: ../inc/admin.echo.settings.input.fields.inc.php:789
 msgid "Delete abandoned/cancelled orders from database older than"
 msgstr "Delete abandoned/cancelled orders from database older than"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:790
+#: ../inc/admin.echo.settings.input.fields.inc.php:791
 msgid "Days (minimum: 1)"
 msgstr "Days (minimum: 1)"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:792
+#: ../inc/admin.echo.settings.input.fields.inc.php:793
 msgid "delete failed, tampered or otherwise invalid entries too."
 msgstr "delete failed, tampered or otherwise invalid entries too."
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:793
+#: ../inc/admin.echo.settings.input.fields.inc.php:794
 msgid "go"
 msgstr "go"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:794
+#: ../inc/admin.echo.settings.input.fields.inc.php:795
 msgid ""
 "As soon as customers go to the order page an order will be initialized and "
 "stored in the db to be checked against when going through with the purchase "
@@ -1412,7 +1416,7 @@ msgstr ""
 "order orphaned in the db.Click the \"ok\" button to clean your db of these "
 "entries (it will NOT affect any completed or pending orders)"
 
-#: ../inc/admin.echo.settings.input.fields.inc.php:795
+#: ../inc/admin.echo.settings.input.fields.inc.php:796
 msgid ""
 "Note: This will delete these entries PERMANENTLY from the db and is not "
 "reversable."

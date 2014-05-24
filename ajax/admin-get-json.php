@@ -136,7 +136,7 @@ $output='';
 		
 		if($_POST['vars']['orderstatus']!=''){$orderstatus=' AND order_status="'.$_POST['vars']['orderstatus'].'" ';}else{$orderstatus='';}
 		
-		$allOrders = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix . $this->pluginOrderTable." WHERE payment_status IN ('COD','COMPLETED') ".$orderstatus." ORDER BY id DESC ".$limit." ");
+		$allOrders = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix . $this->pluginOrderTable." WHERE payment_status IN ('COD','COMPLETED','REFUNDED') ".$orderstatus." ORDER BY id DESC ".$limit." ");
 		
 		
 		
@@ -184,6 +184,7 @@ $output='';
 									}
 								}
 								$output.="<input type='hidden' id='wppizza_order_initiator_".$orders->id."' value='".__('Payment By', $this->pluginLocale).": ". $gwIdent ."' />";
+								$output.="<input type='hidden' id='wppizza_order_initiator_ident_".$orders->id."' value='". $gwIdent ."' />";
 								$output.="<br/>".__('Payment By', $this->pluginLocale).": ". $gwIdent ."";
 							}
 							if($orders->transaction_id!=''){
@@ -292,7 +293,21 @@ $output='';
 	********************************************/
 	if($_POST['vars']['field']=='orderstatuschange' && isset($_POST['vars']['id']) && $_POST['vars']['id']>=0){
 		global $wpdb;
-		$res=$wpdb->query("UPDATE ".$wpdb->prefix . $this->pluginOrderTable." SET order_status='".$_POST['vars']['selVal']."',order_update=NULL WHERE id=".$_POST['vars']['id']." ");
+		
+		/****update if set to refunded***/
+		$order_status=$_POST['vars']['selVal'];
+		if($order_status=='REFUNDED'){
+			$payment_status='REFUNDED';
+		}else{
+		/**set back payment status if not refunded to what it was**/
+			$initiator=$_POST['vars']['initiator'];
+			if($initiator=='COD'){
+				$payment_status='COD';
+			}else{
+				$payment_status='COMPLETED';
+			}
+		}
+		$res=$wpdb->query("UPDATE ".$wpdb->prefix . $this->pluginOrderTable." SET order_status='".$_POST['vars']['selVal']."',payment_status='".$payment_status."',order_update=NULL WHERE id=".$_POST['vars']['id']." ");
 		$thisOrder = $wpdb->get_results("SELECT order_update FROM ".$wpdb->prefix . $this->pluginOrderTable." WHERE id=".$_POST['vars']['id']."");
 
 		$output= date("d-M-Y H:i:s",strtotime($thisOrder[0]->order_update));

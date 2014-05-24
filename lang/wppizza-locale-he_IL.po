@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WPPizza v2.5.4.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-05-17 17:00-0000\n"
-"PO-Revision-Date: 2014-05-17 17:00-0000\n"
+"POT-Creation-Date: 2014-05-24 16:02-0000\n"
+"PO-Revision-Date: 2014-05-24 16:02-0000\n"
 "Last-Translator: ollybach <dev@1000db.com>\n"
 "Language-Team: Yair - Halev.sites <halev.sites@gmail.com>\n"
 "Language: he_IL\n"
@@ -63,21 +63,21 @@ msgstr "פרטי לקוח"
 msgid "Order Details"
 msgstr "פרטי הזמנה"
 
-#: ajax/admin-get-json.php:186 ajax/admin-get-json.php:187
+#: ajax/admin-get-json.php:186 ajax/admin-get-json.php:188
 msgid "Payment By"
 msgstr "תשלום ע\"י"
 
 # @ wppizza-locale
-#: ajax/admin-get-json.php:198
+#: ajax/admin-get-json.php:199
 msgid "Status"
 msgstr "סטטוס"
 
-#: ajax/admin-get-json.php:211
+#: ajax/admin-get-json.php:212
 msgid "Last Status Update"
 msgstr "סטטוס אחרון עודכן "
 
 # @ wppizza-locale
-#: ajax/admin-get-json.php:232 inc/admin.echo.get_additives.inc.php:16
+#: ajax/admin-get-json.php:233 inc/admin.echo.get_additives.inc.php:16
 #: inc/admin.echo.get_mealsizes.inc.php:55
 #: inc/admin.echo.get_openingtimes.inc.php:14
 #: inc/admin.echo.get_timesclosed.inc.php:22
@@ -85,37 +85,37 @@ msgid "delete"
 msgstr "למחוק"
 
 # @ wppizza-locale
-#: ajax/admin-get-json.php:236
+#: ajax/admin-get-json.php:237
 msgid "print order"
 msgstr "הדפס הזמנה"
 
 # @ wppizza-locale
-#: ajax/admin-get-json.php:244
+#: ajax/admin-get-json.php:245
 msgid "add notes"
 msgstr "add notes"
 
-#: ajax/admin-get-json.php:251
+#: ajax/admin-get-json.php:252
 msgid "notes:"
 msgstr "notes:"
 
-#: ajax/admin-get-json.php:252 inc/admin.setup.default.options.inc.php:623
+#: ajax/admin-get-json.php:253 inc/admin.setup.default.options.inc.php:623
 msgid "ok"
 msgstr "ok"
 
 # @ wppizza-locale
-#: ajax/admin-get-json.php:258
+#: ajax/admin-get-json.php:259
 msgid "no orders yet :("
 msgstr "אין הזמנות עדיין: ("
 
-#: ajax/admin-get-json.php:263
+#: ajax/admin-get-json.php:264
 msgid "Total of shown orders"
 msgstr "Total of shown orders"
 
-#: ajax/admin-get-json.php:264
+#: ajax/admin-get-json.php:265
 msgid "show total of all orders"
 msgstr "show total of all orders"
 
-#: ajax/admin-get-json.php:286
+#: ajax/admin-get-json.php:287
 msgid "total all orders"
 msgstr "total all orders"
 
@@ -493,21 +493,21 @@ msgstr "רשיון פעיל"
 msgid "License in-active"
 msgstr "רשיון פעיל"
 
-#: classes/wppizza.gateways.inc.php:654
+#: classes/wppizza.gateways.inc.php:726
 msgid "nothing to do !"
 msgstr "nothing to do !"
 
 # @ wppizza-locale
-#: classes/wppizza.gateways.inc.php:720
+#: classes/wppizza.gateways.inc.php:792
 msgid "Sorry, this order has already been processed or does not exist !"
 msgstr "Sorry, this order has already been processed or does not exist !"
 
-#: classes/wppizza.gateways.inc.php:724
+#: classes/wppizza.gateways.inc.php:796
 msgid "Sorry, this order does not exist !"
 msgstr "Sorry, this order does not exist !"
 
 # @ wppizza-locale
-#: classes/wppizza.gateways.inc.php:984
+#: classes/wppizza.gateways.inc.php:1062
 msgid "form fields"
 msgstr "form fields"
 
@@ -1546,51 +1546,55 @@ msgid "rejected"
 msgstr "rejected"
 
 #: inc/admin.echo.settings.input.fields.inc.php:770
+msgid "refunded"
+msgstr "refunded"
+
+#: inc/admin.echo.settings.input.fields.inc.php:771
 msgid "other"
 msgstr "other"
 
 # @ wppizza-locale
-#: inc/admin.echo.settings.input.fields.inc.php:772
+#: inc/admin.echo.settings.input.fields.inc.php:773
 msgid "maximum results [0 to show all]"
 msgstr "תוצאות מרביות [0 להציג הכל]"
 
 # @ wppizza-locale
-#: inc/admin.echo.settings.input.fields.inc.php:775
+#: inc/admin.echo.settings.input.fields.inc.php:776
 msgid "poll for new orders every"
 msgstr "סקר עבור הזמנות חדשות בכל"
 
 # @ wppizza-locale
-#: inc/admin.echo.settings.input.fields.inc.php:775
+#: inc/admin.echo.settings.input.fields.inc.php:776
 msgid "seconds"
 msgstr "שניות"
 
 # @ wppizza-locale
-#: inc/admin.echo.settings.input.fields.inc.php:776
+#: inc/admin.echo.settings.input.fields.inc.php:777
 msgid "on/off"
 msgstr "הפעלה / כיבוי"
 
 # @ wppizza-locale
-#: inc/admin.echo.settings.input.fields.inc.php:788
+#: inc/admin.echo.settings.input.fields.inc.php:789
 msgid "Delete abandoned/cancelled orders from database older than"
 msgstr "למחוק הזמנות נטושות / מבוטלות ממסד הנתונים אם ישנות יותר מ"
 
 # @ wppizza-locale
-#: inc/admin.echo.settings.input.fields.inc.php:790
+#: inc/admin.echo.settings.input.fields.inc.php:791
 msgid "Days (minimum: 1)"
 msgstr "ימים (מינימום: 1)"
 
 # @ wppizza-locale
-#: inc/admin.echo.settings.input.fields.inc.php:792
+#: inc/admin.echo.settings.input.fields.inc.php:793
 msgid "delete failed, tampered or otherwise invalid entries too."
 msgstr "למחוק אם נכשלו, או ערכים אחרים לא חוקיים."
 
 # @ wppizza-locale
-#: inc/admin.echo.settings.input.fields.inc.php:793
+#: inc/admin.echo.settings.input.fields.inc.php:794
 msgid "go"
 msgstr "עבור"
 
 # @ wppizza-locale
-#: inc/admin.echo.settings.input.fields.inc.php:794
+#: inc/admin.echo.settings.input.fields.inc.php:795
 msgid ""
 "As soon as customers go to the order page an order will be initialized and "
 "stored in the db to be checked against when going through with the purchase "
@@ -1605,7 +1609,7 @@ msgstr ""
 "ערכים אלה (זה לא ישפיע על כל הזמנות שהושלמו או תלויות ועומדות)"
 
 # @ wppizza-locale
-#: inc/admin.echo.settings.input.fields.inc.php:795
+#: inc/admin.echo.settings.input.fields.inc.php:796
 msgid ""
 "Note: This will delete these entries PERMANENTLY from the db and is not "
 "reversable."

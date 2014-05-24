@@ -584,6 +584,10 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 		}
 		$wpdb->query("UPDATE ".$wpdb->prefix . $this->pluginOrderTable." SET customer_ini='".wppizza_filter_sanitize_post_vars($_POST)."', initiator='".esc_sql($this->gatewayName)."' , order_ini='".esc_sql(serialize($order->order_details))."'   WHERE id='".$orderId."' ");
 	
+		/**filter order items**/
+		$order->order_details['item'] = apply_filters('wppizza_filter_order_extend', $order->order_details['item']);
+	
+	
 		return $order;
 	}
 	/******************************************************************
@@ -619,6 +623,42 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 			array('%d')
 		);
 	}
+	/******************************************************************
+	*
+	*	[order has been refunded]
+	*
+	******************************************************************/
+	function wppizza_gateway_order_payment_refunded($orderid, $blogid=false, $transaction_id, $transaction_details){
+		global $wpdb;
+		//$wpdb->hide_errors();
+		/**select the right blog table */
+		if($blogid && is_int($blogid) && $blogid>1){$wpdb->prefix=$wpdb->base_prefix . $blogid.'_';}
+		$wpdb->update(
+			$wpdb->prefix  .  $this->pluginOrderTable,
+			array('payment_status' => 'REFUNDED','order_status' => 'REFUNDED', 'transaction_id' => $transaction_id, 'transaction_details' => maybe_serialize($transaction_details), 'initiator' => esc_sql($this->gatewayName)),
+			array('id' => $orderid ),
+			array('%s','%s','%s','%s','%s'),
+			array('%d')
+		);
+	}	
+	/******************************************************************
+	*
+	*	[order set to pending]
+	*
+	******************************************************************/
+	function wppizza_gateway_order_payment_pending($orderid, $blogid=false, $transaction_id, $transaction_details){
+		global $wpdb;
+		//$wpdb->hide_errors();
+		/**select the right blog table */
+		if($blogid && is_int($blogid) && $blogid>1){$wpdb->prefix=$wpdb->base_prefix . $blogid.'_';}
+		$wpdb->update(
+			$wpdb->prefix  .  $this->pluginOrderTable,
+			array('payment_status' => 'PENDING','transaction_id' => $transaction_id, 'transaction_details' => maybe_serialize($transaction_details), 'initiator' => esc_sql($this->gatewayName)),
+			array('id' => $orderid ),
+			array('%s','%s','%s','%s'),
+			array('%d')
+		);
+	}	
 	/******************************************************************
 	*
 	*	[payment invalid (mismatched amount or currency for example)]
@@ -921,6 +961,7 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 	******************************************************************/
 	function wppizza_gateway_current_is_orderpage($isOrderpage=false){
 		global $post;
+		if(!is_object($post)){return;}
 		$currentPage=$post->ID;
 		$setOrderPage=$this->pluginOptions['order']['orderpage'];
 		/**wpml select of order page**/
@@ -950,10 +991,10 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 	/******************************************************************
 	*
 	*	[get language wpml]
-	*	returns language
+	*	returns language if base==true returns only first 2 chars lowercase
 	*
 	******************************************************************/
-	function wppizza_gateway_language(){
+	function wppizza_gateway_language($base=false){
 		$lang='en_US';
 		if(WPLANG!=''){
 			$lang=WPLANG;
@@ -962,7 +1003,11 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 		if(function_exists('icl_object_id') && defined('ICL_LANGUAGE_CODE')) {
 			$lang=$sitepress->get_locale(ICL_LANGUAGE_CODE);/**get full  locale**/
 		}
-
+		/**only first 2**/
+		if($base){
+			$lang=strtolower(substr($lang,0,2));
+			
+		}
 		return $lang;
 	}
 	/******************************************************************
@@ -1008,8 +1053,9 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 	******************************************************************/
 	function wppizza_gateway_map_formfields_setup($ff){
 		$mapVars='';
+		asort($this->pluginOptions['order_form']);//sort
 		foreach($this->pluginOptions['order_form'] as $k => $v){
-			if($v['enabled'] && !in_array($v['key'],array('ctips')) && in_array($v['type'],array('email','text','textarea')) ){
+			if($v['enabled'] && !in_array($v['key'],array('ctips')) && in_array($v['type'],array('email','text','textarea','select')) ){
 				$optSelected=!empty($this->gatewayOptions[$ff['key']][$k]) ? $this->gatewayOptions[$ff['key']][$k] : '';
 				$mapVars.="<tr><td style='margin:0;padding:0 5px 0 0'>".$v['lbl']."</td><td style='margin:0;padding:0'>";
 				$mapVars.="<select name='wppizza[gateways][wppizza_gateway_".$this->gatewaySelect."][".$ff['key']."][".$k."]'>";
@@ -1023,11 +1069,15 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 		return $mapVars;
 	}
 
-	function wppizza_gateway_map_formfields_return($ff){
+	function wppizza_gateway_map_formfields_return($ff,$asarray=false){
 		$optSelected=array();
 		foreach($this->pluginOptions['order_form'] as $k => $v){
-			if($v['enabled'] && !in_array($v['key'],array('ctips')) && in_array($v['type'],array('email','text','textarea')) ){
-				!empty($ff[$k]) && !empty($_POST[$v['key']]) ? $optSelected[$ff[$k]]=$_POST[$v['key']] : null;
+			if($v['enabled'] && !in_array($v['key'],array('ctips')) && in_array($v['type'],array('email','text','textarea','select')) ){
+				if(!$asarray){
+					!empty($ff[$k]) && !empty($_POST[$v['key']]) ? $optSelected[$ff[$k]]=$_POST[$v['key']] : null;
+				}else{
+					!empty($ff[$k]) ? $optSelected[$ff[$k]]=$v['key'] : null;
+				}
 			}
 		}
 		return $optSelected;

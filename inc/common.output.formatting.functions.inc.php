@@ -38,7 +38,7 @@
 
 	/**default order status*/
 	function wppizza_order_status_default(){
-		$orderStatus=array('NEW','ACKNOWLEDGED','ON_HOLD','PROCESSED','DELIVERED','REJECTED','OTHER');
+		$orderStatus=array('NEW','ACKNOWLEDGED','ON_HOLD','PROCESSED','DELIVERED','REJECTED','REFUNDED','OTHER');
 		return $orderStatus;
 	}
 	/**allow filtering of default**/

@@ -767,6 +767,7 @@ $options = $this->pluginOptions;
 							echo"<option value='PROCESSED'>".__('processed', $this->pluginLocale)."</option>";
 							echo"<option value='DELIVERED'>".__('delivered', $this->pluginLocale)."</option>";
 							echo"<option value='REJECTED'>".__('rejected', $this->pluginLocale)."</option>";
+							echo"<option value='REFUNDED'>".__('refunded', $this->pluginLocale)."</option>";
 							echo"<option value='OTHER'>".__('other', $this->pluginLocale)."</option>";
 						echo "</select>";						
 						echo " ".__('maximum results [0 to show all]', $this->pluginLocale)."<input id='".$field."_orders_limit' size='3' type='text' value='20' />";

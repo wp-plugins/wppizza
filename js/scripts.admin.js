@@ -323,8 +323,9 @@ jQuery(document).ready(function($){
 		var self=$(this);
 		var selId=self.attr('id').split("-").pop(-1);
 		var selVal=self.val();
+		var initiator=$('#wppizza_order_initiator_ident_'+selId+'').val();
 		var selClass=selVal.toLowerCase();
-		jQuery.post(ajaxurl , {action :'wppizza_admin_json',vars:{'field':'orderstatuschange','id':selId,'selVal':selVal}}, function(response) {
+		jQuery.post(ajaxurl , {action :'wppizza_admin_json',vars:{'field':'orderstatuschange','id':selId,'selVal':selVal,'initiator':initiator}}, function(response) {
 			self.closest('tr').removeClass().addClass('wppizza-ord-status-'+selClass+'');
 			$('#wppizza_order_update-'+selId).html(response);
 		},'html').error(function(jqXHR, textStatus, errorThrown) {alert("error : " + errorThrown);});

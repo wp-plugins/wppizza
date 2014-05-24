@@ -16,12 +16,6 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 			//$this->orderTimestamp =date("d-M-Y H:i:s", current_time('timestamp'));
 			$this->orderTimestamp ="".date_i18n(get_option('date_format'),$this->currentTime)." ".date_i18n(get_option('time_format'),$this->currentTime)."";
 
-			/**set shop name and email*/
-			$this->orderShopName 	='';/**not in use currently it seems*/
-			$this->orderShopEmail 	=$this->pluginOptions['order']['order_email_to'][0];
-
-			/**who to bcc the order to*/
-			$this->orderShopBcc 	=$this->pluginOptions['order']['order_email_bcc'];
 
 			/**name and email of whoever is ordering*/
 			$this->orderClientName 	='';
@@ -478,6 +472,12 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 				$orderFromEmail=$this->pluginOptions['order']['order_email_from'];
 			}
 
+			/**who to send the order to. put it in a var so we can reuse it**/
+			$this->orderShopEmail='';/**set default to admin email perhaps ? like so get_option('admin_email')**/
+			if(count($this->pluginOptions['order']['order_email_to'])>0){
+				$this->orderShopEmail=implode(",",$this->pluginOptions['order']['order_email_to']);/*trying to get rid of strict errors->passed by reference*/
+			}
+
 			/**send order using mail**/
 			if($this->pluginOptions['plugin_data']['mail_type']=='mail'){
 				/************set headers*************/
@@ -494,8 +494,8 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 					'X-Mailer: PHP/' . $phpVersion;
 					$header .= PHP_EOL;
 				}
-				if(count($this->orderShopBcc)>0){
-					$bccs=implode(",",$this->orderShopBcc);/*trying to get rid of strict errors->passed by reference*/
+				if(count($this->pluginOptions['order']['order_email_bcc'])>0){
+					$bccs=implode(",",$this->pluginOptions['order']['order_email_bcc']);/*trying to get rid of strict errors->passed by reference*/
 					$header .= 'Bcc: '.$bccs.'' . PHP_EOL;
 				}
 				$header .= 'MIME-Version: 1.0' . PHP_EOL;
@@ -521,8 +521,9 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 				}else{
 					$wpMailHeaders[] = 'From: -------- <>';
 				}
-				if(count($this->orderShopBcc)>0){
-					$bccs=implode(",",$this->orderShopBcc);/*trying to get rid of strict errors->passed by reference*/
+				
+				if(count($this->pluginOptions['order']['order_email_bcc'])>0){
+					$bccs=implode(",",$this->pluginOptions['order']['order_email_bcc']);/*trying to get rid of strict errors->passed by reference*/
 					$wpMailHeaders[]= 'Bcc: '.$bccs.'';
 				}
 				$wpMailHeaders[] = 'Reply-To: '.$this->orderClientEmail.'';
