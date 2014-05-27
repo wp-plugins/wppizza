@@ -613,6 +613,7 @@ jQuery(document).ready(function($){
 		var wppizzaNoCacheAttr=$('#wppizza-cart-nocache-attributes').val();
 		jQuery.post(wppizza.ajaxurl , {action :'wppizza_json',vars:{'type':'hasCachePlugin','attributes':wppizzaNoCacheAttr}}, function(response) {
 			$('.wppizza-cart-nocache').html(response);
+			wppizzaCartRefreshed(wppizza.funcCartRefr);/**also run any cart refreshed functions**/
 		},'html').complete(
 			function(){wppizzaCartStickyLoad();}/*on complete, exec sticky cart if enabled*/
 		).error(function(jqXHR, textStatus, errorThrown) {alert("error : " + errorThrown);console.log(jqXHR.responseText);});
