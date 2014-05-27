@@ -427,7 +427,7 @@ jQuery(document).ready(function($){
 		$("#wppizza-user-login-action").toggle(300);
 		$("#wppizza-user-login-option>span>a").toggle();
 	});
-	$(document).on(''+wppizzaClickEvent+'', '#wppizza_btn_login', function(e){
+	$(document).on('click', '#wppizza_btn_login', function(e){/**changed to click so iphone understands it too*/
 		$("#wppizza-user-login-action").append('<div id="wppizza-loading"></div>');
 	});
 	$(document).on('change', '#wppizza_account', function(e){
