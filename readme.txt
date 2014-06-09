@@ -4,9 +4,9 @@ Donate link: http://www.wp-pizza.com/
 Author URI: http://www.wp-pizza.com
 Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
-Requires at least: PHP 5.2, WP 3.3 
+Requires at least: PHP 5.3, WP 3.3 
 Tested up to: 3.9.1
-Stable tag: 2.9.4.2
+Stable tag: 2.9.4.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -138,6 +138,15 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 
 == Changelog ==
+
+2.9.4.3  
+* added turkish lira to currencies  
+* only load admin js when actually required  
+* added filter - wppizza_custom_transaction_id - to append or prepend things to the transaction id as required  
+* now using WPPIZZA_LOCALE constant in load_plugin_textdomain to make some other plugins happy   
+* upped minimum php requirement to 5.3 ('Requires at least' display only)  
+9th June 2014  
+
 
 2.9.4.2  
 * bugfix: any distinctly set js functions to run on cart refresh by external plugins were not run when "I am using a cache plugin" is/was enabled  

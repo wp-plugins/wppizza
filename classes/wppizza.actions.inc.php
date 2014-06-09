@@ -125,6 +125,8 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 			add_filter('wppizza_filter_orderhistory_items_html', array( $this, 'wppizza_filter_order_items_html'),10,2);
 		}
 
+		/****filter transaction id's******/
+		add_filter( 'wppizza_filter_transaction_id', array( $this, 'wppizza_filter_transaction_id'),10,2);
 		/**cart is ajax too so has to be available from is_admin**/
 		add_filter( 'wppizza_cart_filter_items', array( $this, 'wppizza_filter_items_by_category'),10,2);
 		/**print category **/
@@ -1724,13 +1726,15 @@ public function wppizza_require_common_input_validation_functions(){
       				wp_register_script($this->pluginSlug.'-flotcats', plugins_url( 'js/jquery.flot.categories.min.js', $this->pluginPath ), array('jquery'), $this->pluginVersion ,true);
       				wp_enqueue_script($this->pluginSlug.'-flotcats');
       			}
-
-      			wp_enqueue_script('jquery-ui-sortable');
-            	wp_enqueue_script('jquery-ui-datepicker');
-            	wp_register_script($this->pluginSlug, plugins_url( 'js/scripts.admin.js', $this->pluginPath ), array('jquery'), $this->pluginVersion ,true);
-            	wp_register_script($this->pluginSlug.'-timepick', plugins_url( 'js/jquery.ui.timepicker.js', $this->pluginPath ), array('jquery'), $this->pluginVersion ,true);
-            	wp_enqueue_script($this->pluginSlug);
-            	wp_enqueue_script($this->pluginSlug.'-timepick');
+      			/**only include on wppizza post type**/
+				if(get_current_screen()->post_type==$this->pluginSlug){
+	      			wp_enqueue_script('jquery-ui-sortable');
+            		wp_enqueue_script('jquery-ui-datepicker');
+            		wp_register_script($this->pluginSlug, plugins_url( 'js/scripts.admin.js', $this->pluginPath ), array('jquery'), $this->pluginVersion ,true);
+            		wp_register_script($this->pluginSlug.'-timepick', plugins_url( 'js/jquery.ui.timepicker.js', $this->pluginPath ), array('jquery'), $this->pluginVersion ,true);
+            		wp_enqueue_script($this->pluginSlug);
+            		wp_enqueue_script($this->pluginSlug.'-timepick');
+				}
         }
     }
     /**************
@@ -2022,6 +2026,18 @@ public function wppizza_require_common_input_validation_functions(){
 *	order page, thank you page and emails if enabled]
 *
 *********************************************************************************/
+	/*******************
+	* filter transaction id
+	*******************/
+	function wppizza_filter_transaction_id($transactionId, $orderId){
+		/**allow custom filter**/
+		$transactionId = apply_filters('wppizza_custom_transaction_id', $transactionId, $orderId);
+		/**add id to end**/
+		if($this->pluginOptions['order']['append_internal_id_to_transaction_id']){
+			$transactionId.='/'.$orderId.'';
+		}
+		return $transactionId;
+	}
 	/*******************
 	* sort by category
 	*******************/
@@ -2373,9 +2389,8 @@ function wppizza_cat_parents( $id, $separator =' &raquo; ', $page , $taxonomy = 
 					**********************************************************/
 					$order['transaction_id']=$res->transaction_id;
 					$order['order_status']=$res->order_status;
-					if($this->pluginOptions['order']['append_internal_id_to_transaction_id']){
-						$order['transaction_id'].='/'.$res->id.'';
-					}
+					/**filter as required**/
+					$order['transaction_id'] = apply_filters('wppizza_filter_transaction_id', $order['transaction_id'], $res->id );					
 					$order['transaction_date_time']="".date_i18n(get_option('date_format'),$thisOrderDetails['time'])." ".date_i18n(get_option('time_format'),$thisOrderDetails['time'])."";
 
 					$order['gatewayUsed']=$res->initiator;

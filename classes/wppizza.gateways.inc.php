@@ -53,6 +53,8 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 		$wppizzaGatewayCount=0;
 		$wppizzaGateway=array();
 		$wppizzaGatewayOptions=array();
+		
+				
 		if(isset($this->pluginOptions['gateways']['gateway_selected']) && is_array($this->pluginOptions['gateways']['gateway_selected'])){
 		foreach($this->pluginOptions['gateways']['gateway_selected'] as $gw=>$enbld){
 			if($enbld){/**only add enabled gateways**/
@@ -88,9 +90,16 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 			$wppizzaGatewayCount++;
 			}
 		}}
-
-		/**if we have not yet set a gateway , use the first one **/
-		if(!isset($_SESSION[$this->pluginSessionGlobal]['userdata']['gateway'])){
+		/**all gateways have been disabled, set some defaults**/
+		if(!isset($this->pluginGatewaySelected)){
+			$_SESSION[$this->pluginSession]['gateway-selected']['gw']='--nogatewayavailable--';
+			$_SESSION[$this->pluginSession]['gateway-selected']['surchargePc']=0;
+			$_SESSION[$this->pluginSession]['gateway-selected']['surchargeFixed']=0;
+			$_SESSION[$this->pluginSession]['gateway-selected']['surchargeAtCheckout']=false;		
+		
+		}
+		/**if we have not yet set a gateway , use the first available one **/
+		if(!isset($_SESSION[$this->pluginSessionGlobal]['userdata']['gateway']) && isset($this->pluginGatewaySelected)){
 			$_SESSION[$this->pluginSession]['gateway-selected']['gw']=strtolower($this->pluginGatewaySelected);
 			$_SESSION[$this->pluginSession]['gateway-selected']['surchargePc']=$wppizzaGateway[$this->pluginGatewaySelected]->surchargePc;
 			$_SESSION[$this->pluginSession]['gateway-selected']['surchargeFixed']=$wppizzaGateway[$this->pluginGatewaySelected]->surchargeFixed;
@@ -1069,14 +1078,22 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 		return $mapVars;
 	}
 
-	function wppizza_gateway_map_formfields_return($ff,$asarray=false){
+	function wppizza_gateway_map_formfields_return($ff,$asarray=false,$omitempty=true){
 		$optSelected=array();
 		foreach($this->pluginOptions['order_form'] as $k => $v){
 			if($v['enabled'] && !in_array($v['key'],array('ctips')) && in_array($v['type'],array('email','text','textarea','select')) ){
 				if(!$asarray){
-					!empty($ff[$k]) && !empty($_POST[$v['key']]) ? $optSelected[$ff[$k]]=$_POST[$v['key']] : null;
+					if(!$omitempty){
+						$optSelected[$ff[$k]]=$_POST[$v['key']];
+					}else{
+						!empty($ff[$k]) && !empty($_POST[$v['key']]) ? $optSelected[$ff[$k]]=$_POST[$v['key']] : null;
+					}
 				}else{
-					!empty($ff[$k]) ? $optSelected[$ff[$k]]=$v['key'] : null;
+					if(!$omitempty){
+						$optSelected[$ff[$k]]=$v['key'];
+					}else{
+						!empty($ff[$k]) ? $optSelected[$ff[$k]]=$v['key'] : null;	
+					}
 				}
 			}
 		}

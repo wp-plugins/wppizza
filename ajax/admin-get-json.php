@@ -67,7 +67,7 @@ $output='';
 		/**do or dont delete all non completed orders**/
 			$pStatusQuery=" IN ('INITIALIZED','CANCELLED')";
 		if($_POST['vars']['failed']=='true'){
-			$pStatusQuery=" NOT IN ('COMPLETED','PENDING')";
+			$pStatusQuery=" NOT IN ('COMPLETED','PENDING','CAPTURED','COD','AUTHORIZED')";
 		}
 		$sql="DELETE FROM ".$wpdb->prefix . $this->pluginOrderTable." WHERE order_date < TIMESTAMPADD(DAY,-".$days.",NOW()) AND payment_status ".$pStatusQuery."";
 		$res=$wpdb->query( $wpdb->prepare($sql));
@@ -188,12 +188,9 @@ $output='';
 								$output.="<br/>".__('Payment By', $this->pluginLocale).": ". $gwIdent ."";
 							}
 							if($orders->transaction_id!=''){
-								$appendId='';
-								if($options['order']['append_internal_id_to_transaction_id']){
-									$appendId='/'.$orders->id.'';	
-								}
-								$output.="<input type='hidden' id='wppizza_order_transaction_id_".$orders->id."' value='ID: ". $orders->transaction_id .$appendId."' />";
-								$output.="<br/>ID: ". $orders->transaction_id . $appendId. "";
+								$orders->transaction_id = apply_filters('wppizza_filter_transaction_id', $orders->transaction_id, $orders->id );
+								$output.="<input type='hidden' id='wppizza_order_transaction_id_".$orders->id."' value='ID: ". $orders->transaction_id ."' />";
+								$output.="<br/>ID: ". $orders->transaction_id . "";
 							}
 							$output.="<br/>";
 							$output.="<label>".__('Status', $this->pluginLocale)."";

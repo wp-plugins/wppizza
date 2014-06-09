@@ -41,6 +41,9 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 			/**filter order items when returned from db as its all stored in a array**/
 			add_filter('wppizza_filter_order_db_return', array( $this, 'wppizza_filter_order_db_return'),10,1);
 
+			/****filter transaction id's******/
+			add_filter( 'wppizza_email_filter_transaction_id', array( $this, 'wppizza_filter_transaction_id'),10,2);
+
 			/**filter vars after they've come out of the db***/
 			add_filter('wppizza_filter_order_additional_info', array( $this, 'wppizza_filter_order_additional_info'),10,1);/*customer details to plaintext str*/
 			add_filter('wppizza_filter_customer_details_to_plaintext', array( $this, 'wppizza_filter_customer_details_to_plaintext'),10,1);/*customer details to plaintext str*/
@@ -355,9 +358,9 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 					/**********************/
 
 					$transactionId=$res->transaction_id;
-					if($pOptions['order']['append_internal_id_to_transaction_id']){
-						$transactionId.='/'.$res->id.'';
-					}
+					/**filter as required**/
+					$transactionId = apply_filters('wppizza_email_filter_transaction_id', $transactionId, $res->id );
+
 					$nowdate=$this->orderTimestamp;
 					$orderLabel=$this->orderLabels['plaintext'];
 
@@ -566,9 +569,9 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 				/**to be used in html template**/
 				$nowdate=$this->orderTimestamp;
 				$transactionId=$this->orderTransactionId;
-				if($this->pluginOptions['order']['append_internal_id_to_transaction_id']){
-					$transactionId.='/'.$orderid.'';
-				}
+				/**filter as required**/
+				$transactionId = apply_filters('wppizza_email_filter_transaction_id', $transactionId, $orderid );
+			
 				$gatewayUsed=$this->orderGatewayUsed;
 				/**get gateway frontend label instead of just COD or similar**/
 				$gatewayLabel=$this->orderGatewayUsed;
@@ -670,6 +673,8 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 		print"".$this->gateway_order_on_thankyou_process($res);
 	}
 	function gateway_order_on_thankyou_process($res){
+		//static $process=0;$process++;
+		
 		$output='';
 		/**check if we are displaying the order on the thank you page**/
 		if($this->pluginOptions['gateways']['gateway_showorder_on_thankyou']){
@@ -689,9 +694,8 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 				[organize vars to make them easier to use in template]
 			**********************************************************/
 			$order['transaction_id']=$res->transaction_id;
-			if($this->pluginOptions['order']['append_internal_id_to_transaction_id']){
-				$order['transaction_id'].='/'.$res->id.'';
-			}
+			/**filter as required**/
+			$order['transaction_id'] = apply_filters('wppizza_email_filter_transaction_id', $order['transaction_id'], $res->id, 'order on thank you' );
 			$order['transaction_date_time']="".date_i18n(get_option('date_format'),$thisOrderDetails['time'])." ".date_i18n(get_option('time_format'),$thisOrderDetails['time'])."";
 
 			$order['gatewayUsed']=$res->initiator;

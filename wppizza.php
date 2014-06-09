@@ -5,7 +5,7 @@ Description: Maintain your restaurant menu online and accept cash on delivery or
 Author: ollybach
 Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Author URI: http://www.wp-pizza.com
-Version: 2.9.4.2
+Version: 2.9.4.3
 License:
 
   Copyright 2012 ollybach (dev@wp-pizza.com)
@@ -31,7 +31,7 @@ if(!defined('WPPIZZA_NAME')){
 }
 define('WPPIZZA_CLASS', 'WPPizza');
 define('WPPIZZA_SLUG', 'wppizza');/* DON NOT EVEN THINK ABOUT CHANGING THIS*/
-define('WPPIZZA_LOCALE', ''.WPPIZZA_SLUG.'-locale');
+define('WPPIZZA_LOCALE', 'wppizza-locale');
 define('WPPIZZA_POST_TYPE', ''.WPPIZZA_SLUG.'');
 define('WPPIZZA_TAXONOMY', ''.WPPIZZA_POST_TYPE.'_menu');
 define('WPPIZZA_PATH', plugin_dir_path(__FILE__) );
@@ -66,7 +66,7 @@ class WPPizza extends WP_Widget {
 ********************************************************/
  function __construct() {
 	/**init constants***/
-	$this->pluginVersion='2.9.4.2';//increment in line with stable tag in readme and version above
+	$this->pluginVersion='2.9.4.3';//increment in line with stable tag in readme and version above
  	$this->pluginName="".WPPIZZA_NAME."";
  	$this->pluginSlug="".WPPIZZA_SLUG."";//set also in uninstall when deleting options
 	$this->pluginSlugCategoryTaxonomy="".WPPIZZA_TAXONOMY."";//also on uninstall delete wppizza_children as well as widget
@@ -107,7 +107,7 @@ class WPPizza extends WP_Widget {
     );
 
     $this->WP_Widget(false, $name=$this->pluginName, $widget_opts);
-    load_plugin_textdomain($this->pluginLocale, false, dirname(plugin_basename( __FILE__ ) ) . '/lang' );
+    load_plugin_textdomain(WPPIZZA_LOCALE, false, dirname(plugin_basename( __FILE__ ) ) . '/lang' );
 
     /**allow overwriting of pluginVars in seperate class*/
     add_action('init', array( $this, 'wppizza_extend'),1);

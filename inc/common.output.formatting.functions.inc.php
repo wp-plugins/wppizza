@@ -171,6 +171,8 @@
 		$items['VND']='&#8363;';
 		$items['YER']='&#65020;';
 		$items['ZWD']='Z$';
+		$items['TRY']='&#8378;';
+		
 
 		if(!$returnValue){
 		ksort($items);
