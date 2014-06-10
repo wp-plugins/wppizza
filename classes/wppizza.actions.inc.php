@@ -111,6 +111,10 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 			[sort by and print categories to order page, cart and history
 		*************************************************************************************************************************/
 		if(!is_admin()){
+			/**registration fields if using themed profile***/
+			add_action( 'show_user_profile', array( $this, 'wppizza_user_info') );
+			add_action( 'personal_options_update', array( $this, 'wppizza_user_update_meta' ));
+
 			/**filter and sort selected items by their categoryies in order page **/
 			add_filter('wppizza_order_form_filter_items', array( $this, 'wppizza_filter_items_by_category'),10,2);
 			add_filter('wppizza_orderhistory_filter_items', array( $this, 'wppizza_filter_items_by_category'),10,2);

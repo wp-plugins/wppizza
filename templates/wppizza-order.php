@@ -46,6 +46,9 @@ foreach($formelements as $elmKey=>$elm){
 	do_action('wppizza_order_form_before',$cart);
 ?>
 <form id='wppizza-send-order' method='post' action='' accept-charset="<?php echo get_bloginfo('charset') /*accept charset NEW IN VERSION 2.0 */ ?>">
+<?php
+	do_action('wppizza_order_form_inside_top',$cart);
+?>
 	<fieldset id="wppizza-cart-contents">
 		<legend><?php echo $txt['your_order']['lbl'] ?></legend>
 		<?php if(count($cart['items'])>0){/*make sure there's stuff to order***/?>
@@ -192,6 +195,9 @@ foreach($formelements as $elmKey=>$elm){
 			do_action('wppizza_gateway_choice_after');
 		?>
 	<?php } ?>
+<?php
+	do_action('wppizza_order_form_inside_bottom',$cart);
+?>
 </form>
 <?php
 	/*AMENDED in 2.8.9 to take account of no of items*/
