@@ -1,3 +1,4 @@
+/**only loaded when post_type == wppizza**/
 jQuery(document).ready(function($){
 	/**if we are on the category edit page, make it sortable and update on new sort**/
 	if(pagenow=='edit-wppizza_menu'){
@@ -242,15 +243,6 @@ jQuery(document).ready(function($){
 			self.closest('.wppizza_option').find('.wppizza_pricetiers').empty().html(response);
 		},'html').error(function(jqXHR, textStatus, errorThrown) {alert("error : " + errorThrown);});
 	});
-	/******************************
-	*	[widget type has changed, show relevant option]
-	******************************/
-	$(document).on('change', '.wppizza-select', function(e){
-		self=$(this);
-		self.closest('div').find('.wppizza-selected>p').hide();
-		self.closest('div').find('.wppizza-selected>.wppizza-selected-'+self.val()+'').fadeIn();
-	});
-
 
 	/******************************
 	*	[order form field type select - onchange]

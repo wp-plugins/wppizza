@@ -739,6 +739,39 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 
 	/******************************************************************
 	*
+	*	[order has failed using GET vars-> display txt]
+	*
+	******************************************************************/
+	function wppizza_gateway_payment_failed($orderhash, $blogid=false, $failTxt='', $delete=false){
+		global $wpdb;
+		//$wpdb->hide_errors();
+		$orderhash=wppizza_validate_alpha_only($orderhash);/**sanitize**/
+		/**select the right blog table */
+		if($blogid && is_int($blogid) && $blogid>1){$wpdb->prefix=$wpdb->base_prefix . $blogid.'_';}
+
+		/***check if order exists**/
+		$res = $this->wppizza_gateway_get_order_details($orderhash, false, $blogid, array('FAILED'), $this->gatewayName);
+		if($res){
+			/**delete failed order**/
+			if($delete){
+				$wpdb->query("DELETE FROM ".$wpdb->prefix . $this->pluginOrderTable." WHERE id=".$res->id."");
+			}
+			/**now update order as invalid to not display the same thing twice on reload**/
+			if(!$delete){
+				$wpdb->query("UPDATE ".$wpdb->prefix . $this->pluginOrderTable." SET payment_status='INVALID' WHERE id=".$res->id." ");
+			}
+
+			print"<div class='wppizza-gateway-error'>".$failTxt."</div>";
+
+		}else{
+			print"<div class='wppizza-gateway-error'>error [".$this->gatewayIdent."-1101]: ".__('nothing to do !',$this->pluginLocale)."</div>";
+		}
+		return;
+	}
+
+
+	/******************************************************************
+	*
 	*	[order has been cancelled by ipn request -> no output]
 	*	NB: $delete should probably be always false here, so the user can
 	*	get feedback when being returned to the cancel URL by gateway

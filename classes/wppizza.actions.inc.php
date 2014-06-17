@@ -1739,6 +1739,9 @@ public function wppizza_require_common_input_validation_functions(){
             		wp_enqueue_script($this->pluginSlug);
             		wp_enqueue_script($this->pluginSlug.'-timepick');
 				}
+				/**include everywhere (expecially widget pages)*/
+				wp_register_script($this->pluginSlug.'-global', plugins_url( 'js/scripts.admin.global.js', $this->pluginPath ), array('jquery'), $this->pluginVersion ,true);
+				wp_enqueue_script($this->pluginSlug.'-global');
         }
     }
     /**************
