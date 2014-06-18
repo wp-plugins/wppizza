@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.3, WP 3.3 
 Tested up to: 3.9.1
-Stable tag: 2.9.4.5
+Stable tag: 2.9.4.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -139,6 +139,10 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 
 == Changelog ==
+
+2.9.4.6  
+* added filter (wppizza_filter_formfields_order, wppizza_filter_formfields_register, wppizza_filter_formfields_profile) to filter customer form elements on order page  and (if used) confirmation page as well as profile and/or registration   
+20th June 2014  
 
 2.9.4.5  
 * BUGFIX: (admin) previous version only loaded admin js when post_type == wppizza although some js functions where required in widgets page too, so there's now a distinct scripts.admin.global.js  

@@ -140,7 +140,7 @@ foreach($formelements as $elmKey=>$elm){
 	<?php if(count($cart['items'])>0){/*make sure there's stuff to order***/?>
 	<fieldset>
 		<legend><?php echo $txt['order_form_legend']['lbl'] ?></legend>
-		<?php foreach($formelements as $elmKey=>$elm){?>
+		<?php foreach($formelements as $elmKey=>$elm){ ?>
 		<?php
 			/*NEW IN VERSION 2.4 */
 			do_action('wppizza_order_before_field_'.$elmKey.'');

@@ -17,7 +17,7 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 	    	add_action('init', array( $this, 'wppizza_require_common_helper_functions'));
 	    	add_action('init', array( $this, 'wppizza_register_custom_posttypes'));/*register custom posttype*/
 			add_action('init', array( $this, 'wppizza_register_custom_taxonomies'));/*register taxonomies*/
-			add_action('init', array( $this,'wppizza_init_sessions'));/*needed for admin AND frontend***/			/**add sessions to keep track of shippingcart***/
+			add_action('init', array( $this,'wppizza_init_sessions'));/*needed for admin AND frontend***/			/**add sessions to keep track of shoppingcart***/
 			add_shortcode($this->pluginSlug, array($this, 'wppizza_add_shortcode'));//used in ajax request for cart contents so must be available when ajax and on front AND backend!
 
 			/*class to send order emails used via ajax too so must be avialable from bckend too*/
@@ -55,7 +55,7 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 			add_filter('wppizza_filter_loop', array( $this, 'wppizza_filter_loop'),10,2);
 
 			/***exclude selected order page from navigation */
-			add_filter('get_pages', array(&$this,'wppizza_exclude_order_page_from_navigation'));
+			add_filter('get_pages', array($this,'wppizza_exclude_order_page_from_navigation'));
 
 			/***dont put WPPizza Categories intitle tag */
 			add_filter( 'wp_title', array( $this, 'wppizza_filter_title_tag'),20,3);
@@ -348,6 +348,8 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 	function wppizza_user_info($user){
 		$userMetaData=get_user_meta( $user->ID );
 		$ff=$this->pluginOptions['order_form'];
+	    /**allow filtering of order form form elements**/
+		$ff = apply_filters('wppizza_filter_formfields_profile', $ff);		
 		asort($ff);
 		print"<h3> ".__('Additional information',$this->pluginLocale)."</h3>";
 		print"<table class='form-table'>";
@@ -397,6 +399,9 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 	function wppizza_user_register_form_display_fields(){
 
 	    $ff=$this->pluginOptions['order_form'];
+	    /**allow filtering of order form form elements**/
+		$ff = apply_filters('wppizza_filter_formfields_register', $ff);
+		
 		asort($ff);
 	    foreach( $ff as $field ) {
 	    	if(!empty($field['enabled']) && !empty($field['onregister'])) {
@@ -1217,6 +1222,9 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 			$txt = $options['localization'];
 			/**formelements from settings->order form*/
 			$formelements=$options['order_form'];
+			/**allow filtering of order form form elements**/
+			$formelements = apply_filters('wppizza_filter_formfields_order', $formelements);
+			
 			/**set session user vars as get vars to prefill form fields***/
 			if(isset($_SESSION[$this->pluginSessionGlobal]['userdata']) && is_array($_SESSION[$this->pluginSessionGlobal]['userdata'])){
 				foreach($_SESSION[$this->pluginSessionGlobal]['userdata'] as $k=>$v){
@@ -1282,6 +1290,9 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 
 			/**formelements from settings->order form*/
 			$formelements=$options['order_form'];
+			/**allow filtering of order form form elements**/
+			$formelements = apply_filters('wppizza_filter_formfields_order', $formelements);
+						
 			sort($formelements);
 			foreach($formelements as $k=>$oForm){
 				$key=$oForm['key'];
