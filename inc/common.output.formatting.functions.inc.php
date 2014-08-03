@@ -8,7 +8,7 @@
 		if($type=='hidedecimals'){
 			$str=sprintf('%01.0f',$str);
 		}
-		
+
 		return $str;
 	}
 
@@ -172,7 +172,7 @@
 		$items['YER']='&#65020;';
 		$items['ZWD']='Z$';
 		$items['TRY']='&#8378;';
-		
+
 
 		if(!$returnValue){
 		ksort($items);
@@ -210,7 +210,7 @@
 		asort($grouped);
 		foreach($grouped as $k=>$v){
 			foreach(explode(",",$v['consecutivedays']) as $b=>$c){
-				$str.='<span>';				
+				$str.='<span class="wppizza-optm-'.$c.'">';
 					$consec=explode("-",$c);
 					$open=explode("|",$k);
 					if(count($consec)==2){
@@ -221,9 +221,9 @@
 						$str.=''.wpizza_format_weekday($consec[0],'D').'';
 					}
 					if($open[0]==$open[1]){
-						$str.=' '.$options['localization']['openinghours_closed']['lbl'].'';
+						$str.=' <span>'.$options['localization']['openinghours_closed']['lbl'].'</span>';
 					}else{
-						$str.=' '.wpizza_format_time($open[0],$options['opening_times_format']).'-'.wpizza_format_time($open[1],$options['opening_times_format']).'';//loose leading zeros
+						$str.=' <span>'.wpizza_format_time($open[0],$options['opening_times_format']).'-'.wpizza_format_time($open[1],$options['opening_times_format']).'</span>';//loose leading zeros
 					}
 				$str.='</span> ';
 			}
@@ -507,7 +507,7 @@ function wppizza_order_summary($session,$options,$module=null,$ajax=null){
 	/**allow filtering of options and session**/
 	$session = apply_filters('wppizza_filter_order_summary_session', $session);
 	$options = apply_filters('wppizza_filter_order_summary_options', $options);
-	
+
 	/***************************************************
 		[in i some vars if undefined]
 	***************************************************/
@@ -565,6 +565,8 @@ function wppizza_order_summary($session,$options,$module=null,$ajax=null){
 			}
 		}
 	}
+
+
 	foreach($cartItems as $k=>$v){
 		$groupedItems[$k]=array(
 			'sortname'=>$cartItems[$k][0]['sortname'],
@@ -582,11 +584,19 @@ function wppizza_order_summary($session,$options,$module=null,$ajax=null){
 		);
 	}
 	asort($groupedItems);
+
 	/**output items sorted by name and size**/
 	foreach($groupedItems as $k=>$v){
 		/*get categories**/
 		$catObj = get_the_terms($v['postId'], WPPIZZA_TAXONOMY);
 		$catArray=json_decode(json_encode($catObj), true);
+		/*get meta value**/
+		$objMeta = get_post_meta($v['postId'], WPPIZZA_SLUG);
+		$taxRate=$options['order']['item_tax'];
+		// check if we are using alt tax value
+		if( ! empty( $objMeta[0]['item_tax_alt'] ) ) {
+  			$taxRate=$options['order']['item_tax_alt'];
+		}
 		/*******************************************************************************************
 			if other extensions have yet to add selcatid, just add the first one
 			the item is categorised in.
@@ -597,10 +607,9 @@ function wppizza_order_summary($session,$options,$module=null,$ajax=null){
 		if($v['catIdSelected']==''){
 			$firstCat=reset($catArray);
 			$v['catIdSelected']=$firstCat['term_id'];
-		}		
-		$summary['items'][$k]=array('name'=>$v['printname'],'count'=>$v['count'],'size'=>$v['sizename'],'price'=>wppizza_output_format_price($v['price'],$optionsDecimals),'pricetotal'=>wppizza_output_format_price($v['total'],$optionsDecimals),'categories'=>$catArray,'additionalinfo'=>$v['additionalinfo'],'extend'=>$v['extend'],'extenddata'=>$v['extenddata'],'postId'=>$v['postId'],'catIdSelected'=>$v['catIdSelected']);
+		}
+		$summary['items'][$k]=array('name'=>$v['printname'],'count'=>$v['count'],'size'=>$v['sizename'],'price'=>wppizza_output_format_price($v['price'],$optionsDecimals),'pricetotal'=>wppizza_output_format_price($v['total'],$optionsDecimals),'categories'=>$catArray,'taxrate'=>$taxRate,'additionalinfo'=>$v['additionalinfo'],'extend'=>$v['extend'],'extenddata'=>$v['extenddata'],'postId'=>$v['postId'],'catIdSelected'=>$v['catIdSelected']);
 	}
-
 
 	/****************************************************
 		[if ajax request get items from template to keep formatting consistent]
@@ -794,17 +803,33 @@ function wppizza_order_summary($session,$options,$module=null,$ajax=null){
 				}
 			}
 
-
-			/**minimum order value set but not reached***/
-			if($options['order']['order_min_for_delivery']>0 && $options['order']['order_min_for_delivery']>$session['total_price_calc_delivery'] ){//&& (!isset($summary['selfPickup']) ||  isset($summary['no_delivery']))
-				$placeOrderDisabled=true;
-
-				/**set min_total value to be min order for delivery**/
-				$options['order']['delivery']['minimum_total']['min_total']=$options['order']['order_min_for_delivery'];
-
-				$options['localization']['minimum_order']['lbl']=$options['localization']['minimum_order']['lbl'];
+			/*******************************************
+			*	set min order values (delivery/pickup)
+			******************************************/
+			/**minimum order value set but not reached -> on delivery***/
+			if(!isset($session['selfPickup'])){
+				if($options['order']['order_min_for_delivery']>0 && $options['order']['order_min_for_delivery']>$session['total_price_calc_delivery'] ){
+					/*disable place order button**/
+					$placeOrderDisabled=true;
+					/**set min_total value to be min order for delivery**/
+					$options['order']['delivery']['minimum_total']['min_total']=$options['order']['order_min_for_delivery'];
+					/**set min order info txt**/
+					$options['localization']['minimum_order']['lbl']=$options['localization']['minimum_order']['lbl'];
+				}
 			}
 
+			/**minimum order value set but not reached -> on pickup***/
+			if(isset($session['selfPickup'])){
+				/**minimum order value set but not reached -> self pickup***/
+				if($options['order']['order_min_for_pickup']>0 && $options['order']['order_min_for_pickup']>0 && $options['order']['order_min_for_pickup']>$session['total_price_calc_delivery'] ){
+					/*disable place order button**/
+					$placeOrderDisabled=true;
+					/**set min_total value to be min order for pickup**/
+					$options['order']['delivery']['minimum_total']['min_total']=$options['order']['order_min_for_pickup'];
+					/**set min order info txt**/
+					$options['localization']['minimum_order']['lbl']=$options['localization']['minimum_order']['lbl'];
+				}
+			}
 			/*************************************************************************
 			*
 			*
@@ -816,26 +841,51 @@ function wppizza_order_summary($session,$options,$module=null,$ajax=null){
 				/****************************************************
 					[tax on sum of all items BEFORE discounts. currently not in use]
 				****************************************************/
-				//	$summary['total_items_tax']=wppizza_round_up($session['total_items_tax'],2);
-
 				$itemTax=0;/**ini as 0**/
 				$taxesIncluded=0;/**ini as 0**/
 				$summary['taxrate']=$options['order']['item_tax'];/*capture/set taxrate**/
+				$summary['taxrate_alt']=$options['order']['item_tax_alt'];/*capture/set alternative taxrate**/
+
 				/**********************************************************
 				*
 				*	[tax NOT included in set prices]
 				*
 				**********************************************************/
 				if(!$options['order']['taxes_included']){
+
+					/***********************************************************
+					*	as we may have different taxrates on different items
+					*	and need to make sure that dicounts - as they are before tax -
+					*	are applied correctly, we must calculate the resulting taxrate
+					***********************************************************/
+					$calcTaxSum=0;
+					$calcItemsSum=0;
+					foreach($summary['items'] as $item){
+						$calcTaxSum+=$item['pricetotal']/100*$item['taxrate'];
+						$calcItemsSum+=$item['pricetotal'];
+					}
+					/***if cart is empty, use defaults to avoid division by zero notice***/
+					if($calcItemsSum<=0){
+						$avgTaxRate=0;
+					}else{
+						$avgTaxRate=$calcTaxSum/($calcItemsSum/100);
+					}
+
+					$summary['taxrate_avg']=$avgTaxRate;/*capture/set average taxrate**/
+
+
+					/****************************************************
+						[set var for ident later if necessary]
+					****************************************************/
+					$summary['tax_applied']='items_only';
 					/****************************************************
 						[item tax AFTER discounts]
 					****************************************************/
-					$summary['tax_applied']='items_only';
-					if($options['order']['item_tax']>0){
+					if($options['order']['item_tax']>0 || $options['order']['item_tax_alt']>0 ){
 						$summary['tax_enabled']=1;
 						$totalSales=$session['total_price_items']-(float)$discountValue;
 						/*round up decimals**/
-						$itemTax=wppizza_round_up($totalSales/100*$options['order']['item_tax'],2);
+						$itemTax=wppizza_round_up($totalSales/100*$avgTaxRate,2);
 
 						/****************************************************
 							[add tax to shipping too]
@@ -844,7 +894,9 @@ function wppizza_order_summary($session,$options,$module=null,$ajax=null){
 							$summary['tax_applied']='items_and_shipping';/*set location*/
 						}
 						if($options['order']['shipping_tax'] && $deliveryCharges!='' && (int)$deliveryCharges>0){
-							$itemTax=wppizza_round_up(($totalSales+$deliveryCharges)/100*$options['order']['item_tax'],2);
+							// ???????????? check
+							$itemTax=wppizza_round_up(($totalSales/100*$avgTaxRate)+($deliveryCharges/100*$options['order']['shipping_tax_rate']),2);
+
 						}
 					}
 				}
@@ -854,42 +906,74 @@ function wppizza_order_summary($session,$options,$module=null,$ajax=null){
 				*
 				**********************************************************/
 				if($options['order']['taxes_included']){
+
+					/***********************************************************
+					*	as we may have different taxrates on different items
+					*	and need to make sure that dicounts - as they are before tax -
+					*	are applied correctly, we must calculate the resulting taxrate
+					***********************************************************/
+					$calcTaxSum=0;
+					$calcItemsSumBeforeTax=0;
+					foreach($summary['items'] as $item){
+						$calcTaxItem=$item['pricetotal']/(100+$item['taxrate'])*$item['taxrate'];/*tax on this item**/
+						$calcTaxSum+=$calcTaxItem;
+						$calcItemsSumBeforeTax+=$item['pricetotal']-$calcTaxItem;
+					}
+					/***if cart is empty, use defaults to avoid division by zero notice***/
+					if($calcItemsSumBeforeTax<=0){
+						$avgTaxRate=0;
+					}else{
+						$avgTaxRate=$calcTaxSum/($calcItemsSumBeforeTax/100);
+					}
+					/**we need to recalculate the tax included if we are also applying a discount to the total (alrady taxed) items***/
+					if((float)$discountValue>0){
+						$calcTaxSum-=($discountValue/(100+$avgTaxRate)*$avgTaxRate);//take the average tax and use it to get the included tax on the discount to substract
+					}
+
+					/****************************************************
+						[set var for ident later if necessary]
+					****************************************************/
 					$summary['tax_applied']='taxes_included';
 					/****************************************************
 						[add tax to items only]
 					****************************************************/
-					if($options['order']['item_tax']>0){
+					if($options['order']['item_tax']>0 || $options['order']['item_tax_alt']>0 ){
 						$summary['tax_enabled']=1;
 						$totalSales=$session['total_price_items']-(float)$discountValue;
-						$taxesIncluded=wppizza_round_up($totalSales/(100+$options['order']['item_tax'])*$options['order']['item_tax'],2);
+						$taxesIncluded=wppizza_round_up($calcTaxSum,2);
 					}
 					/****************************************************
 						[add tax to shipping too]
 					****************************************************/
 					if($options['order']['shipping_tax'] && $deliveryCharges!='' && (int)$deliveryCharges>0){
-						$taxesIncluded=wppizza_round_up(($totalSales+$deliveryCharges)/(100+$options['order']['item_tax'])*$options['order']['item_tax'],2);
+						if($options['order']['shipping_tax_rate']>0){/***avoid division by zero notice***/
+							$deliveryChargesTax=$deliveryCharges/(100+$options['order']['shipping_tax_rate'])*$options['order']['shipping_tax_rate'];
+						}else{
+							$deliveryChargesTax=0;
+						}
+						$taxesIncluded=wppizza_round_up($calcTaxSum+$deliveryChargesTax,2);
 					}
 				}
-				
+
 			/*********************************************************************
 			*
 			*
 			*	[surcharges handling charges]
 			*
 			*
-			**********************************************************************/				
+			**********************************************************************/
 				/****************************************************
 					[total order before tips]
 				****************************************************/
 				$totalOrderBeforeTips=$session['total_price_items']-(float)$discountValue+(float)$deliveryCharges+(float)$itemTax;
-				
+
 				/****************************************************
 					[surcharges]
 				****************************************************/
 				$surcharges=0;
 				$surchargePcVal=$session['gateway-selected']['surchargePc'];
 				$surchargeFixedVal=$session['gateway-selected']['surchargeFixed'];
-				
+
 				/*charges percent*/
 				if($surchargePcVal>0){
 					$surcharges+=$totalOrderBeforeTips/100*abs($surchargePcVal);
@@ -929,10 +1013,10 @@ function wppizza_order_summary($session,$options,$module=null,$ajax=null){
 		'discount'=>array('lbl'=>$discountLabel,'val'=>$discountValuePrint),
 		'total'=>array('lbl'=>$options['localization']['order_total']['lbl'],'val'=>wppizza_output_format_price(wppizza_output_format_float($totalOrder),$optionsDecimals))
 	);
-	
+
 	/*******************************************************
 		[gateways must handle surcharges themselves and
-		update the db accordingly. However, to display 
+		update the db accordingly. However, to display
 		surcharges on gateway change in the orderpage
 		we overwrite the total here for display before
 		actually processing and without adding them to the db]
@@ -940,11 +1024,11 @@ function wppizza_order_summary($session,$options,$module=null,$ajax=null){
 	if($surcharges>0 && ($module=='orderpage' || $module=='confirmationpage' )){
 		$summary['order_value']['total']=array('lbl'=>$options['localization']['order_total']['lbl'],'val'=>wppizza_output_format_price(wppizza_output_format_float($totalOrder+$surcharges),$optionsDecimals));
 		$summary['order_value']['handling_charge']=array('lbl'=>$options['localization']['order_page_handling']['lbl'],'val'=>wppizza_output_format_price(wppizza_output_format_float($surcharges),$optionsDecimals));
-	}	
+	}
 	if($session['gateway-selected']['surchargeAtCheckout'] && ($module=='orderpage' || $module=='confirmationpage' )){
 		$summary['order_value']['handling_charge']=array('lbl'=>$options['localization']['order_page_handling']['lbl'],'str'=>$options['localization']['order_page_handling_oncheckout']['lbl']);
 	}
-	
+
 
 	/****************************************************
 		[check if we are open]
@@ -953,7 +1037,7 @@ function wppizza_order_summary($session,$options,$module=null,$ajax=null){
 	if(!isset($options['times_closed_standard'])){$options['times_closed_standard']=array();}/*get rid of some php notices*/
 
 	$isOpen=wpizza_are_we_open($options['opening_times_standard'],$options['opening_times_custom'],$options['times_closed_standard']);
-	
+
 	/***allow filtering of is_open**/
 	$options = apply_filters('wppizza_filter_order_summary_options_open', $options, $isOpen);
 	$session = apply_filters('wppizza_filter_order_summary_session_open', $session, $isOpen);
@@ -997,17 +1081,17 @@ function wppizza_order_summary($session,$options,$module=null,$ajax=null){
 							$options['confirmation_form_amend_order_link']=icl_object_id($options['confirmation_form_amend_order_link'],'page');
 						}
 					}
-					
-					
+
+
 					$summary['orderpagelink']=get_page_link($options['order']['orderpage']);
 					/*confirmation page -> amend order link**/
 					if($options['confirmation_form_amend_order_link']>0){
 						$summary['amendorderlink']=get_page_link($options['confirmation_form_amend_order_link']);
 					}else{
-						$summary['amendorderlink']='';	
+						$summary['amendorderlink']='';
 					}
-					
-					
+
+
 					$summary['button']='<a href="'.$summary['orderpagelink'].'">';
 					$summary['button'].='<input class="btn btn-primary" type="button" value="'.$options['localization']['place_your_order']['lbl'].'" />';
 					$summary['button'].='</a>';

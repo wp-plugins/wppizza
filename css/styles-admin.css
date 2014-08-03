@@ -18,7 +18,8 @@
 /*******************
 	[metaboxes]
 ********************/
-.wppizza-meta-label{float:left;min-width:125px;line-height:200%}
+.wppizza-meta-label{float:left;min-width:165px;line-height:200%}
+.wppizza_option>span{line-height:28px}
 
 /******************
 	[meals]
@@ -230,5 +231,5 @@
 #wppizza-settings .form-table tr:nth-child(odd){background:#F9F9F9;}
 #wppizza-settings .form-table tr:nth-child(even){background:#FFFFFF;}
 #wppizza-settings .form-table th{vertical-align:top;padding:5px;margin:5px;font-size:95%;text-shadow:none}
-#wppizza-settings .form-table td{vertical-align:top;padding:5px;margin:5px;font-size:95%;text-shadow:none}
+#wppizza-settings .form-table td{vertical-align:inherit;padding:5px;margin:5px;font-size:95%;text-shadow:none}
 #wppizza-settings .form-table input[type=text],#wppizza-settings .form-table select{padding:2px;margin:3px;font-size:100%;line-height:100%;height:auto}

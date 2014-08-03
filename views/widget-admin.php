@@ -22,13 +22,18 @@
   	//$openingtimes = $instance['openingtimes'] ? 'checked="checked"' : '';
   	$openingtimes = checked($instance['openingtimes'],true,false);
   	//$stickycart = checked($instance['stickycart'],true,false);
-  	
   	$stickycart = !empty($instance['stickycart']) ? true : false;
-  	
   	//$orderinfo = $instance['orderinfo'] ? 'checked="checked"' : '';
   	$orderinfo = checked($instance['orderinfo'],true,false);
   	$width = $instance['width'] ?  esc_attr($instance['width']) : '';
   	$height = $instance['height'] ?  absint($instance['height']) : '';
+  	
+  	
+  	$posttypewppizza = !empty($instance['wppizza']) ? true : false;
+  	$posttypepost = !empty($instance['post']) ? true : false;
+  	$posttypepage = !empty($instance['page']) ? true : false;
+  	$loggedinonly = !empty($instance['loggedinonly']) ? true : false;
+	
 ?>
 <div id="<?php echo $this->id; ?>" class="<?php echo $this->pluginSlug; ?>">
 
@@ -118,11 +123,28 @@
 				<input class="checkbox" type="checkbox" id="<?php echo $this->get_field_id('stickycart'); ?>" name="<?php echo $this->get_field_name('stickycart'); ?>" <?php checked($stickycart,true,true) ?> value="1" />
 		    	<label for="<?php echo $this->get_field_id( 'stickycart' ); ?>"><?php _e("Cart visible on page when scrolling ?", $this->pluginLocale); ?></label><br/>
 		    	<small style="margin-left:10px"><?php _e("See also WPPizza->Layout for additional options", $this->pluginLocale); ?></small>
-		    			    	
+			</p>
+			
+			<p class="<?php echo $this->pluginSlug; ?>-selected-search" <?php if($type=='search'){echo "style='display:block'";}else{echo "style='display:none'";} ?>>
+		    	<label><?php _e("include the following in search results:", $this->pluginLocale); ?></label><br />
 		    	
+		    	<input class="checkbox" type="checkbox" id="<?php echo $this->get_field_id('wppizza'); ?>" name="<?php echo $this->get_field_name('wppizza'); ?>" <?php checked($posttypewppizza,true,true) ?> value="1" />
+		    	<label for="<?php echo $this->get_field_id( 'wppizza' ); ?>"><?php _e("wppizza menu items", $this->pluginLocale); ?></label><br/>
+
+		    	<input class="checkbox" type="checkbox" id="<?php echo $this->get_field_id('post'); ?>" name="<?php echo $this->get_field_name('post'); ?>" <?php checked($posttypepost,true,true) ?> value="1" />
+		    	<label for="<?php echo $this->get_field_id( 'post' ); ?>"><?php _e("blog posts", $this->pluginLocale); ?></label><br/>
 		    	
-		    	
-			</p>		
+		    	<input class="checkbox" type="checkbox" id="<?php echo $this->get_field_id('page'); ?>" name="<?php echo $this->get_field_name('page'); ?>" <?php checked($posttypepage,true,true) ?> value="1" />
+		    	<label for="<?php echo $this->get_field_id( 'page' ); ?>"><?php _e("pages", $this->pluginLocale); ?></label><br/>		    			    	
+
+		    	<input class="checkbox" type="checkbox" id="<?php echo $this->get_field_id('loggedinonly'); ?>" name="<?php echo $this->get_field_name('loggedinonly'); ?>" <?php checked($loggedinonly,true,true) ?> value="1" />
+		    	<label for="<?php echo $this->get_field_id( 'loggedinonly' ); ?>"><?php _e("show only for logged in users ?", $this->pluginLocale); ?></label><br/>		 
+
+
+
+			</p>				
+			
+					
 
 		</div>
 </div>

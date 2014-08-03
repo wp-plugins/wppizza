@@ -25,14 +25,18 @@
 			$options['plugin_data']['wp_multisite_session_per_site'] = !empty($input['plugin_data']['wp_multisite_session_per_site']) ? true : false;
 			$options['plugin_data']['using_cache_plugin'] = !empty($input['plugin_data']['using_cache_plugin']) ? true : false;
 			$options['plugin_data']['mail_type'] = wppizza_validate_alpha_only($input['plugin_data']['mail_type']);
+			$options['plugin_data']['search_include'] = !empty($input['plugin_data']['search_include']) ? true : false;
+		}
+
+
+		/**what temaplate are we using for single results ?**/
+		if(isset($input['plugin_data']['post_single_template'])){
+			$options['plugin_data']['post_single_template'] = !empty($input['plugin_data']['post_single_template']) ? (int)$input['plugin_data']['post_single_template'] : '';
 		}
 
 		/**sets custom menu as child of a parent page**/
 		if(isset($input['plugin_data']['category_parent_page'])){
 			$options['plugin_data']['category_parent_page'] = !empty($input['plugin_data']['category_parent_page']) ? (int)$input['plugin_data']['category_parent_page'] : '';
-			//$options['plugin_data']['category_parent_page'] = wppizza_validate_alpha_only($input['plugin_data']['category_parent_page']);
-
-
 		}
 		if(isset($input['layout']['category_sort'])){
 			$options['layout']['category_sort']=$input['layout']['category_sort'];
@@ -145,7 +149,7 @@
 			$options['order']['order_pickup_alert']=!empty($input['order']['order_pickup_alert']) ? true : false;
 			$options['order']['order_pickup_discount']=wppizza_validate_float_pc($input['order']['order_pickup_discount']);
 			$options['order']['order_min_for_delivery']=wppizza_validate_float_only($input['order']['order_min_for_delivery']);
-
+			$options['order']['order_min_for_pickup']=wppizza_validate_float_only($input['order']['order_min_for_pickup']);
 			$options['order']['order_pickup_display_location'] = wppizza_validate_int_only($input['order']['order_pickup_display_location']);
 
 			$options['order']['delivery_selected'] = wppizza_validate_alpha_only($input['order']['delivery_selected']);
@@ -185,8 +189,10 @@
 
 			$options['order']['delivery_calculation_exclude_item'] = !empty($input['order']['delivery_calculation_exclude_item']) ? $input['order']['delivery_calculation_exclude_item'] : array();
 			$options['order']['item_tax']=wppizza_validate_float_pc($input['order']['item_tax'],5);//5 decimals should really be enough i would have thought
+			$options['order']['item_tax_alt']=wppizza_validate_float_pc($input['order']['item_tax_alt'],5);//5 decimals should really be enough i would have thought
 			$options['order']['taxes_included'] = !empty($input['order']['taxes_included']) ? true : false;
 			$options['order']['shipping_tax'] = !empty($input['order']['shipping_tax']) ? true : false;
+			$options['order']['shipping_tax_rate']=wppizza_validate_float_pc($input['order']['shipping_tax_rate'],5);//5 decimals should really be enough i would have thought
 			$options['order']['append_internal_id_to_transaction_id'] = !empty($input['order']['append_internal_id_to_transaction_id']) ? true : false;
 
 

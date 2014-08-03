@@ -195,11 +195,11 @@ if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='confirmorder'){
 			$atts['hash']=!empty($param['wppizza_hash']) ? wppizza_validate_string($param['wppizza_hash']) : '';
 			/**add used gateway*/
 			$atts['gateway']=!empty($param['wppizza-gateway']) ? wppizza_validate_string($param['wppizza-gateway']) : '';
-		}		
+		}
 		ob_start();
 		$this->wppizza_include_shortcode_template('confirmationpage',$atts);
 		$markup = ob_get_clean();
-		
+
 	print"".$markup;
 	exit();
 }
@@ -353,11 +353,11 @@ exit();
 *
 ************************************************************************************************/
 if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='wppizza-select-gateway'){
-	
+
 	if(count($_POST['vars']['data'])>0){
 		$this->wppizza_sessionise_userdata($_POST['vars']['data'],$options['order_form']);
 	}
-	
+
 	if(isset($_SESSION[$this->pluginSessionGlobal]['userdata']['gateway'])){
 		unset($_SESSION[$this->pluginSessionGlobal]['userdata']['gateway']);
 	}
@@ -414,6 +414,7 @@ if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='sendorder'){
 
 			/**update the db**/
 			$now=time();
+
 			//$thisOrderTransactionId='COD'.$now.$orderId.'';
 			$thisOrderPostVars = apply_filters('wppizza_filter_sanitize_post_vars', $params);
 			$gatewayUsed=strtoupper($thisOrderPostVars['wppizza-gateway']);

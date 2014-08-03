@@ -7,7 +7,15 @@
 	$meta_values = $meta_values[0];
 
 	$str='';
-
+	/****  alternative taxrate ***/
+	$str.="<div class='".$this->pluginSlug."_option'>";
+	$str.="<div class='wppizza-meta-label'>".sprintf( __( 'alternative taxrate (%s%%)', $this->pluginLocale ), $options['order']['item_tax_alt'] )." ?</div> ";	
+	$str.="<label class='button'>";
+	$str.="<input name='".$this->pluginSlug."[item_tax_alt]' size='5' ". checked(!empty($meta_values['item_tax_alt']),true,false)." type='checkbox' value='1' /> ".__( 'yes/no', $this->pluginLocale )."";//". checked(in_array($s,$meta_values['additives']),true,false)."
+	$str.="</label>";
+	$str.=" <span class='description'>[".__('set in wppizza->order settings', $this->pluginLocale)."]</span>";	
+	$str.="</div>";	
+	
 	/****  pricetiers and prices ***/
 	$str.="<div class='".$this->pluginSlug."_option'>";
 	$str.="<div class='wppizza-meta-label'>".__('price tier and prices', $this->pluginLocale).":</div> ";

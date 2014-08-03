@@ -304,6 +304,8 @@
 				'version' => $this->pluginVersion,
 				'js_in_footer' => false,
 				'mail_type' => 'mail',
+				'search_include' => false,
+				'post_single_template' => array(),
 				'category_parent_page' => array(),
 				'empty_category_and_items' => false,
 				'wp_multisite_session_per_site' => true,
@@ -378,6 +380,7 @@
 				'order_pickup_alert' => false,
 				'order_pickup_discount' => 0,
 				'order_min_for_delivery' => 0,
+				'order_min_for_pickup' => !empty($options['order']['order_min_for_delivery']) ? $options['order']['order_min_for_delivery'] : 0 ,/**on updates, use order_min_for_delivery settings so as to not modify th ebehaviousr in the frontend**/
 				'order_pickup_display_location' => 1,
 				'delivery'=>array(
 					'no_delivery'=>'',
@@ -402,8 +405,10 @@
 					)
 				),
 				'item_tax'=>0,
+				'item_tax_alt'=>0,
 				'taxes_included'=>false,
 				'shipping_tax'=>false,
+				'shipping_tax_rate' => !empty($options['order']['item_tax']) ? $options['order']['item_tax'] : 0 ,/**on updates, use item_tax settings so as to not modify the initial behaviour in the frontend if enabled**/
 				'append_internal_id_to_transaction_id'=>false,
 				'order_email_to'=>array(''.get_option('admin_email').''),
 				'order_email_bcc'=>array(),
@@ -699,7 +704,7 @@
 					'lbl'=>__('Sales Tax', $this->pluginLocale)
 				),
 				'taxes_included'=>array(
-					'descr'=>__('Price Labels (Sub)Totals: text before sum of tax applied if prices have been entered *inclusive* of tax (if > 0) [%s%% will be replaced by taxrate applied - i.e 10%]', $this->pluginLocale),
+					'descr'=>__('Price Labels (Sub)Totals: text before sum of tax applied if prices have been entered *inclusive* of tax (if > 0) [%s%% will be replaced by main taxrate applied - if you are using different taxrates, enter text as appropriate]', $this->pluginLocale),
 					'lbl'=>__('incl. tax at %s%%', $this->pluginLocale)
 				),	
 				'order_total'=>array(

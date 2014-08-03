@@ -281,7 +281,7 @@
 								$orderDetails['order_items_count']=0;
 								/**sanitize the items**/
 								$itemDetails=array();
-
+								if(isset($orderDetails['item'])){
 								foreach($orderDetails['item'] as $k=>$uniqueItems){
 									//$itemDetails[$k]['postId']=$uniqueItems['postId'];
 									$itemDetails[$k]['name']=$uniqueItems['name'];
@@ -291,7 +291,7 @@
 									$itemDetails[$k]['pricetotal']=$uniqueItems['pricetotal'];
 									/**add count of items in this order**/
 									$orderDetails['order_items_count']+=$uniqueItems['quantity'];
-								}
+								}}
 								/**add relevant item info to array**/
 								$orderDetails['item']=$itemDetails;
 

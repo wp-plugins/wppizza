@@ -5,7 +5,7 @@ Description: Maintain your restaurant menu online and accept cash on delivery or
 Author: ollybach
 Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Author URI: http://www.wp-pizza.com
-Version: 2.9.4.6
+Version: 2.10
 License:
 
   Copyright 2012 ollybach (dev@wp-pizza.com)
@@ -28,6 +28,13 @@ License:
 /**although some/most of these are not necessary anymore, let's keep them for legacy reasons as they might have been used in extensions (notably add-ingredients < v1.1)*/
 if(!defined('WPPIZZA_NAME')){
 	define('WPPIZZA_NAME', 'WPPizza');/*allow change of name in admin, just set define('WPPIZZA_NAME', 'New Name') in the wp-config.php*/
+}
+/*
+to save us having to mess around with templates for single items (when linked from search results for example set an identifier in permalinks
+to change the variable (in case there are namespace clashes or just if one prefers another var,  set define('WPPIZZA_SINGLE_VAR', 'new-var') in the wp-config.php (lowercase , no spaces)
+*/
+if(!defined('WPPIZZA_SINGLE_PERMALINK_VAR')){
+	define('WPPIZZA_SINGLE_PERMALINK_VAR', 'menu_item');
 }
 define('WPPIZZA_CLASS', 'WPPizza');
 define('WPPIZZA_SLUG', 'wppizza');/* DON NOT EVEN THINK ABOUT CHANGING THIS*/
@@ -66,14 +73,14 @@ class WPPizza extends WP_Widget {
 ********************************************************/
  function __construct() {
 	/**init constants***/
-	$this->pluginVersion='2.9.4.6';//increment in line with stable tag in readme and version above
+	$this->pluginVersion='2.10';//increment in line with stable tag in readme and version above
  	$this->pluginName="".WPPIZZA_NAME."";
  	$this->pluginSlug="".WPPIZZA_SLUG."";//set also in uninstall when deleting options
 	$this->pluginSlugCategoryTaxonomy="".WPPIZZA_TAXONOMY."";//also on uninstall delete wppizza_children as well as widget
 	$this->pluginOrderTable="".WPPIZZA_SLUG."_orders";
 	$this->pluginLocale="".WPPIZZA_LOCALE."";
 	$this->pluginOptions = get_option(WPPIZZA_SLUG,0);
-	$this->pluginOptionsNoWpml = $this->pluginOptions; //when updating some options (notably localizations) we do NOT want to have the variables messed with by WPML before we enter them into the db	
+	$this->pluginOptionsNoWpml = $this->pluginOptions; //when updating some options (notably localizations) we do NOT want to have the variables messed with by WPML before we enter them into the db
 	$this->pluginNagNotice=0;//default off->for use in updates to this plugin
 	$this->pluginPath=__FILE__;
 	/**to get the template paths, uri's and possible subdir and set vars accordingly**/
@@ -85,7 +92,7 @@ class WPPizza extends WP_Widget {
 	$this->blogCharset=get_bloginfo('charset');
 
 	/********************************************************************************************
-		set session per blogid when multisite and enabled to avoid having same cart 
+		set session per blogid when multisite and enabled to avoid having same cart
 		contents between different network sites
 	*********************************************************************************************/
 	if(is_multisite() && $this->pluginOptions['plugin_data']['wp_multisite_session_per_site']){
@@ -96,8 +103,8 @@ class WPPizza extends WP_Widget {
 	}
 	/**session name for user data for example such as address etc that keeps it's values across multisites**/
 		$this->pluginSessionGlobal=$this->pluginSlug.'Global';
-		
-		
+
+
 	/***************************************
 		classname and description
 	***************************************/
@@ -168,6 +175,7 @@ class WPPizza extends WP_Widget {
 			$items['cart']=__('Cart', $this->pluginLocale);
 			$items['orderpage']=__('Orderpage', $this->pluginLocale);
 			$items['openingtimes']=__('Openingtimes', $this->pluginLocale);
+			$items['search']=__('Search', $this->pluginLocale);
 		return $items;
 	}
 	/****************************************************************
@@ -181,19 +189,19 @@ class WPPizza extends WP_Widget {
 		$paths['locate_dir']='';
 		$dir=get_stylesheet_directory();
 		$uri=get_stylesheet_directory_uri();
-		
+
 		if(is_dir($dir.'/'.WPPIZZA_SLUG)){
-			$paths['template_dir']=$dir.'/'.WPPIZZA_SLUG;	
-			$paths['template_uri']=$uri.'/'.WPPIZZA_SLUG;	
+			$paths['template_dir']=$dir.'/'.WPPIZZA_SLUG;
+			$paths['template_uri']=$uri.'/'.WPPIZZA_SLUG;
 			$paths['locate_dir']=WPPIZZA_SLUG.'/';
 		}else{
-			$paths['template_dir']=$dir;	
+			$paths['template_dir']=$dir;
 			$paths['template_uri']=$uri;
 			$paths['locate_dir']='';
 		}
-	
+
 		return $paths;
-	}	
+	}
 	/*******************************************************
 	*
 	*	[WPML : make strings wpml compatible]
@@ -201,7 +209,7 @@ class WPPizza extends WP_Widget {
 	******************************************************/
 	function wppizza_wpml_localization() {
 		require(WPPIZZA_PATH .'inc/wpml.inc.php');
-	}	
+	}
 	/*******************************************************
      *
      *	[EXTEND : class must start with WPPIZZA_EXTEND_]
@@ -230,7 +238,7 @@ function wppizza_all_actions() {
 	$WPPIZZA_ACTIONS=new WPPIZZA_ACTIONS();
 }
 add_action('plugins_loaded', 'wppizza_get_gateways');
-function wppizza_get_gateways() {	
+function wppizza_get_gateways() {
 require_once(WPPIZZA_PATH .'classes/wppizza.gateways.inc.php');
 	$WPPIZZA_GATEWAYS=new WPPIZZA_GATEWAYS();
 }

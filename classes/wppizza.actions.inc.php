@@ -16,6 +16,8 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 	    	add_action('init', array( $this, 'wppizza_require_common_output_formatting_functions'));/*include output formatting functions**/
 	    	add_action('init', array( $this, 'wppizza_require_common_helper_functions'));
 	    	add_action('init', array( $this, 'wppizza_register_custom_posttypes'));/*register custom posttype*/
+
+
 			add_action('init', array( $this, 'wppizza_register_custom_taxonomies'));/*register taxonomies*/
 			add_action('init', array( $this,'wppizza_init_sessions'));/*needed for admin AND frontend***/			/**add sessions to keep track of shoppingcart***/
 			add_shortcode($this->pluginSlug, array($this, 'wppizza_add_shortcode'));//used in ajax request for cart contents so must be available when ajax and on front AND backend!
@@ -51,6 +53,11 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 			***************/
 			/*include template**/
 			add_filter('template_include', array( $this,'wppizza_include_template'), 1 );
+
+			/**set possibly missing vars if using templates **/
+			add_filter('wppizza_loop_top', array( $this,'wppizza_loop_include_vars'), 1 );
+
+
 			/***use loop for single post***/
 			add_filter('wppizza_filter_loop', array( $this, 'wppizza_filter_loop'),10,2);
 
@@ -69,7 +76,27 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 			/***reset loop query***/
 			add_action('wppizza_loop_template_end', array( $this, 'wppizza_reset_loop_query'));/**needed by some themes **/
 
+			/***alter search query if/when required**/
+			add_filter( 'pre_get_posts', array( $this, 'wppizza_set_search_query' ));//filter search to include wppizza
+
+			/**filter order items when returned from db as its all stored in a array**/
+			add_filter('wppizza_filter_order_db_return', array( $this, 'wppizza_filter_order_db_return'),10,1);
+			/****************************************************************
+				[single menu items]
+				if we are using a template (single-wppizza.php) or default
+				we can ignore the below, otherwise we will have to rewrite
+				some vars and disaply it in a chosen page.
+				(in case we do not want to or are not capable to deal with templates, it's at least something)
+			****************************************************************/
+			if(isset($this->pluginOptions['plugin_data']['post_single_template']) && $this->pluginOptions['plugin_data']['post_single_template']>0){
+				/**change te permalink of any wppizza menu item to use loop template for single item instead of having to create a different template*/
+				add_filter('the_permalink', array( $this, 'wppizza_search_results_permalink'));
+				/**change the loop query when dealing with single menu items**/
+				add_filter('pre_get_posts', array( $this, 'wppizza_single_items'));/**use loop template to also display single items**/
+			}
 		}
+
+
 		/************************************************************************
 			[runs only for admin]
 		*************************************************************************/
@@ -349,7 +376,7 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 		$userMetaData=get_user_meta( $user->ID );
 		$ff=$this->pluginOptions['order_form'];
 	    /**allow filtering of order form form elements**/
-		$ff = apply_filters('wppizza_filter_formfields_profile', $ff);		
+		$ff = apply_filters('wppizza_filter_formfields_profile', $ff);
 		asort($ff);
 		print"<h3> ".__('Additional information',$this->pluginLocale)."</h3>";
 		print"<table class='form-table'>";
@@ -401,7 +428,7 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 	    $ff=$this->pluginOptions['order_form'];
 	    /**allow filtering of order form form elements**/
 		$ff = apply_filters('wppizza_filter_formfields_register', $ff);
-		
+
 		asort($ff);
 	    foreach( $ff as $field ) {
 	    	if(!empty($field['enabled']) && !empty($field['onregister'])) {
@@ -718,6 +745,12 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 		    		$itemMeta['additives'][$k]				= (int)$_POST[$this->pluginSlug]['additives'][$k];
 		    	}}
 
+		    	/**alt tax rate**/
+		    	$itemMeta['item_tax_alt']							= false;
+		    	if(isset($_POST[$this->pluginSlug]['item_tax_alt'])){
+		    	$itemMeta['item_tax_alt']							= true;
+		    	}
+
 		    	/**set some default values (namely sizes and prices) when adding new page**/
 		    	if(!isset($_POST[$this->pluginSlug]['sizes'])){
 					$options = $this->pluginOptions;
@@ -1007,6 +1040,16 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 		die();//needed !!!
 	}
 
+	/*****************************************************
+	* bestseller loop arguments filter
+	* @args    The array query arguments
+	* sort output according to populariry (i.e how many times an item has been bought)
+	*****************************************************/
+	function wppizza_filter_shortcode_post_in_args($args){
+		$args['orderby']='post__in';
+		return $args;
+	}
+
     /*****************************************************
     * include relevant template depending on shortcode
     * [see header of template for details]
@@ -1036,7 +1079,7 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 						}
 					}
 				}
-				ksort($mapAdditives,SORT_STRING);
+				ksort($mapAdditives,SORT_NATURAL);
 				$options['additives']=$mapAdditives;
 				/*******re-map additives inside loop too **************************/
 				add_filter('wppizza_filter_loop_meta', array( $this, 'wppizza_additives_remap'),10,1);
@@ -1046,8 +1089,101 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 			*
 			********************************************************************/
 
-			/*select first category if none selected->used when using shortcode without category*/
-			if(!isset($atts['category'])){
+			/***top 10 (or whatever) -> bestsellers****/
+			if(isset($atts['bestsellers'])){
+				global $wpdb;
+				/**wppizza posts to compare against, making sure posts still exists**/
+				$wppPostsQuery="SELECT ID FROM ".$wpdb->prefix ."posts where post_type='wppizza' AND post_status='publish' ";
+				$wppPostsRes = $wpdb->get_results($wppPostsQuery,OBJECT_K );
+
+				/**run the query**/
+				$bestsellersQuery="SELECT id,order_ini FROM ".$wpdb->prefix . $this->pluginOrderTable." WHERE payment_status='COMPLETED' ";
+				$bestsellersRes = $wpdb->get_results($bestsellersQuery);
+				$bestsellers=array();
+				/**loop through items and get quantities**/
+				foreach($bestsellersRes as $b=>$bs){
+					$thisOrderDetails=maybe_unserialize($bs->order_ini);
+					if(isset($thisOrderDetails['item']) && is_array($thisOrderDetails['item'])){
+						foreach($thisOrderDetails['item'] as $item){
+							/**make sure this post still exists and has been sold more than 0 times**/
+							if(isset($wppPostsRes[$item['postId']]) && $item['quantity']>0){
+								if(!isset($bestsellers[$item['postId']])){
+									$bestsellers[$item['postId']]=$item['quantity'];
+								}else{
+									$bestsellers[$item['postId']]+=$item['quantity'];
+								}
+							}
+						}
+					}
+				}
+
+				/*sort by quantity*/
+				arsort($bestsellers);
+				/*chunk to required bits*/
+				$chunks=(int)$atts['bestsellers'];
+				$bestsellers=array_chunk($bestsellers, $chunks, true);
+
+
+
+				if(count($bestsellers)>0){
+					/**required bestsellers**/
+					$bestsellersFlip=array_flip($bestsellers[0]);
+					$bestsellersIncl=implode(',',$bestsellersFlip);
+				}else{
+					$bestsellersIncl='';
+				}
+
+				/**get/set  id's **/
+				$inclAtts=array();
+				if($bestsellersIncl!=''){
+					$inclAtts[]=$bestsellersIncl;
+				}
+				/**add distinctly set includes (if any)**/
+				if(isset($atts['include'])){
+					$inclAtts[]=$atts['include'];
+				}
+
+				/**finally set the includes id's**/
+				$atts['include']=implode(',',$inclAtts);
+
+
+				/***add a filter that can be used if required for alternative sorting for example*****/
+				$atts['include'] = apply_filters('wppizza_filter_bestsellers_include', $atts['include']);
+
+				//alternatives if empty*/
+				if((!isset($atts['include']) || $atts['include']=='') && isset($atts['ifempty'])){
+					$atts['include'] = 	$atts['ifempty'];
+				}
+
+				/*distincly unset any category and header**/
+				unset($atts['category']);/*unset all categories as query_vars below will hold an array of all the categories**/
+				$atts['noheader']=1;/**omit header**/
+
+				/*get and set all terms in the taxonomy and convert to array of all slugs for tax query */
+				$terms = get_terms( $this->pluginSlugCategoryTaxonomy );
+				$query_var = wp_list_pluck( $terms, 'slug' );
+
+				/** filter arguments -> sort output according to populariry (i.e how many tims an item has been bought)**/
+				add_filter('wppizza_filter_loop', array( $this, 'wppizza_filter_shortcode_post_in_args'),10,1);
+			}
+
+			/***single item ***/
+			if(isset($atts['single'])){
+				$atts['include']=$atts['single'];
+				unset($atts['category']);/*unset all categories as query_vars below will hold an array of all the categories**/
+				$atts['noheader']=1;/**omit header**/
+				/*get and set all terms in the taxonomy and convert to array of all slugs for tax query */
+				$terms = get_terms( $this->pluginSlugCategoryTaxonomy );
+				$query_var = wp_list_pluck( $terms, 'slug' );
+
+				/** filter arguments -> sort output according to populariry (i.e how many tims an item has been bought)**/
+				add_filter('wppizza_filter_loop', array( $this, 'wppizza_filter_shortcode_post_in_args'),10,1);
+			}
+
+
+
+			/*select first category if none selected->used when using shortcode without category, unless we are looking for bestsellers*/
+			if(!isset($atts['category']) && !isset($atts['bestsellers']) && !isset($atts['single']) ){
 				$termSort=$options['layout']['category_sort'];
 				asort($termSort);
 				reset($termSort);
@@ -1073,7 +1209,7 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 				$showadditives=$atts['showadditives'];
 			}
 
-			if($query){
+			if(isset($query) && $query){
 			$query_var=''.$query->slug.'';
 			}
 
@@ -1084,6 +1220,7 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 					$exclude[$exclId]=$exclId;
 				}
 			}
+
 			/*include specific items only -> overrides exclude*****/
 			$include=array();
 			if(isset($atts['include'])){
@@ -1224,7 +1361,7 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 			$formelements=$options['order_form'];
 			/**allow filtering of order form form elements**/
 			$formelements = apply_filters('wppizza_filter_formfields_order', $formelements);
-			
+
 			/**set session user vars as get vars to prefill form fields***/
 			if(isset($_SESSION[$this->pluginSessionGlobal]['userdata']) && is_array($_SESSION[$this->pluginSessionGlobal]['userdata'])){
 				foreach($_SESSION[$this->pluginSessionGlobal]['userdata'] as $k=>$v){
@@ -1267,11 +1404,11 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 		if($type=='confirmationpage'){
 			/*******get the variables***/
 			$options = $this->pluginOptions;
+
 			$cart=wppizza_order_summary($_SESSION[$this->pluginSession],$options,$type);
 			$cart = apply_filters('wppizza_filter_order_summary', $cart);
 			/**check if tax was included in prices**/
 			$taxIncluded=$options['order']['item_tax_included'];
-
 
 			/**txt variables from settings->localization additional vars > localization_confirmation_form*/
 			$localize = array_merge($options['localization'],$options['localization_confirmation_form']);
@@ -1291,8 +1428,8 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 			/**formelements from settings->order form*/
 			$formelements=$options['order_form'];
 			/**allow filtering of order form form elements**/
-			$formelements = apply_filters('wppizza_filter_formfields_order', $formelements);
-						
+			$formelements = apply_filters('wppizza_filter_formfields_confirmation', $formelements);
+
 			sort($formelements);
 			foreach($formelements as $k=>$oForm){
 				$key=$oForm['key'];
@@ -1356,6 +1493,24 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 			}
 
 		}
+
+		/*********************************************************
+			[include search box (using shortcode/widget)]
+			uses class to filter/add search variables
+		*********************************************************/
+		if($type=='search'){
+			/**only display for logged in users**/
+			if(isset($atts['loggedinonly']) && !is_user_logged_in()){
+				return;
+			}
+			/**use class to filter/add search variables when using**/
+			$searchvars = new WPPIZZA_SEARCH_VARS();
+			$searchvars->atts = $atts;
+			add_filter( 'get_search_form', array( $searchvars, 'searchvars' ) );/**add hidden wppizza input elm**/
+			get_search_form();/*output - now altered - search form**/
+			remove_filter('get_search_form',array( $searchvars, 'searchvars' ));//** reset to original or we will always have the post_type appended to the serach form once it has been run**/
+			return;
+		}
 }
 function wppizza_additives_remap($meta){
 	$convAdditives=array();
@@ -1372,7 +1527,7 @@ function wppizza_additives_remap($meta){
 		}
 	}
 	}
-	ksort($convAdditives,SORT_STRING);
+	ksort($convAdditives,SORT_NATURAL);
 	$meta['additives']=$convAdditives;
 	return $meta;
 }
@@ -1436,11 +1591,13 @@ public function wppizza_require_common_input_validation_functions(){
 			'supports'      => array( 'title', 'editor', 'author','thumbnail','page-attributes','comments'),
 			'taxonomies'    => array('') /* 'post_tag' for example*/
 		);
+
 		/**add a filter to arguments if you want to**/
 		$args = apply_filters('wppizza_cpt_args', $args);
 
 		register_post_type( $this->pluginSlug, $args );
 	}
+
 	/*******************************************************
 		[register taxonomy + taxonomy related functions]
 	******************************************************/
@@ -1508,6 +1665,103 @@ public function wppizza_require_common_input_validation_functions(){
 		return $hierarchy;
 	}
 
+
+	function wppizza_set_search_query( $query ) {
+    	if (is_search() && $query->is_main_query()) {
+			/*******************************************************************
+				exclude wppizza cpt from search results if not enabled
+
+				furthermore, if no post_type var has been set in query, set all other used ones
+				if they HAVE been set, we should not need to do anything
+				as the wppizza cpt will be specifically set/added or not
+			*******************************************************************/
+			if(!$this->pluginOptions['plugin_data']['search_include'] && !isset($_REQUEST['post_type'])){
+				if(!isset($query->query_vars['post_type']) ){
+					/**get all queryable and exclude/unset wppizza***/
+					$post_types = get_post_types( array('public' => true,'exclude_from_search' => false), 'names' );
+					unset($post_types[WPPIZZA_POST_TYPE]);
+					$query->set('post_type',$post_types);
+				}
+			}
+			/**post types set when using shortcodes/widget etc**/
+			if(isset($_REQUEST['post_type'])){
+				$request_types=explode(",",$_REQUEST['post_type'])	;
+				/**get all queryable and get intersection just to be tidy and stop people from entering random query vars***/
+				$post_types = get_post_types( array('public' => true,'exclude_from_search' => false), 'names' );
+				$result = array_intersect($request_types, $post_types);
+				$query->set( 'post_type', $result);
+			}
+    	}
+    	$query = apply_filters('wppizza_filter_search', $query);
+    	return $query;
+	}
+	/*******************************************************
+		[wppizza modify permalink in search results to use
+		wppizza loop template when clicking on link instead
+		of normal blog layout - only used when no proper single-wppizza.php
+		template is in use]
+	******************************************************/
+	function wppizza_search_results_permalink($url) {
+		if(is_search() && get_post_type()==WPPIZZA_POST_TYPE){
+			/*get slug**/
+			$post_data = get_post(get_the_ID(), ARRAY_A);
+			$slug = $post_data['post_name'];
+			/*set args**/
+    		$args=array();
+    		$args['page_id']=$this->pluginOptions['plugin_data']['post_single_template'];/*use selected page to display things in to keep layout*/
+    		$args['wppizza']=false;
+    		$args[WPPIZZA_SINGLE_PERMALINK_VAR]=''.$slug.'';//'.$slug.'
+    		/**amend permalink**/
+    		return add_query_arg($args, $url);
+		}else{
+			return	$url;
+		}
+	}
+
+
+	/***************************************************************
+		filter loop when using single item (for example a link from
+		searchresults) to only display this single item
+		if not using dedicated single-wppizza.php template
+	****************************************************************/
+	function wppizza_single_items($query){/**add relevant filters*/
+		global $post;
+		if(isset($_GET[WPPIZZA_SINGLE_PERMALINK_VAR]) && $query->is_main_query()){
+		add_filter('wppizza_filter_loop', array( $this, 'wppizza_filter_single_item'),10,1);
+		add_filter('the_content', array( $this, 'wppizza_show_single_item'),0);
+		}
+	}
+	/**run the filter on loop query **/
+	function wppizza_filter_single_item($args){
+		if(isset($_GET[WPPIZZA_SINGLE_PERMALINK_VAR])){
+			$args=array(
+			  'name' => $_GET[WPPIZZA_SINGLE_PERMALINK_VAR],
+			  'post_type' => WPPIZZA_POST_TYPE,
+			  'post_status' => 'publish',
+			  'numberposts' => 1
+			);
+			$menuItem = get_posts($args);
+			if( $menuItem ) {
+				$args['post__in']=array($menuItem[0]->ID);
+				unset($args['tax_query']);
+			}
+		}
+		return $args;
+	}
+	/*filter content*/
+	function  wppizza_show_single_item($content){
+		global $post;
+		/*replace the content od this page with relevant shortcode*/
+		if($post->ID==$this->pluginOptions['plugin_data']['post_single_template']){
+			ob_start();
+			$content='';
+	        echo do_shortcode( '[wppizza noheader=1]' );/*no need to add any other atts as the query takes care of the rest*/
+			$content = ob_get_clean();
+			return $content;
+		}else{
+			return $content;
+		}
+	}
 	/********************************************************
 		[lets attempt to get rid of WPPizza Categories in title tag
 	*********************************************************/
@@ -1591,6 +1845,8 @@ public function wppizza_require_common_input_validation_functions(){
 					}
 				}
 			}
+			/**allow filtering of session data**/
+			$_SESSION[$this->pluginSessionGlobal]['userdata'] = apply_filters('wppizza_filter_sessionise_userdata', $_SESSION[$this->pluginSessionGlobal]['userdata'],$params);
 
 		return $params;
 	}
@@ -1618,21 +1874,43 @@ public function wppizza_require_common_input_validation_functions(){
 *	otherwise use the one in plugin template directory]
 *
 ************************************************************************************************/
+	/**set possibly missing vars if using templates **/
+	function wppizza_loop_include_vars($options){
+		if(!$options){
+			$options=$this->pluginOptions;
 
+				$mapAdditives=array();
+				if(isset($options['additives']) && is_array($options['additives'])){
+					foreach($options['additives'] as $o=>$a){
+						if(is_array($a)){
+							if($a['sort']==''){$a['sort']=$o;}
+							$mapAdditives[$a['sort']]=$a['name'];
+						}else{
+							/**in case we have not yet re-saved the additives**/
+							$mapAdditives[$o]=$a;
+						}
+					}
+				}
+				ksort($mapAdditives,SORT_NATURAL);
+				$options['additives']=$mapAdditives;
+				/*******re-map additives inside loop too **************************/
+				add_filter('wppizza_filter_loop_meta', array( $this, 'wppizza_additives_remap'),10,1);
+		}
+		return $options;
+	}
     /*****************************************************
     * reset loop query. some themes need this
     ******************************************************/
 	function wppizza_reset_loop_query(){
 		wp_reset_postdata();
 	}
-
     /*****************************************************
      * Wrapper template when displying items in custom post type category
      * [see header of templates/wppizza-wrapper.php for details]
      ******************************************************/
 	public function wppizza_include_template($template_path){
-		/******list of all items in this particular taxonomy category(term)******/
-		if ( get_post_type() == $this->pluginSlug ) {
+		/******list of all items in this particular taxonomy category(term), provided ist not a search query******/
+		if ( get_post_type() == $this->pluginSlug && !is_search()) {
 			$post_type=get_post_type();
 			$options = $this->pluginOptions;
 
@@ -1653,10 +1931,8 @@ public function wppizza_require_common_input_validation_functions(){
 						}
 					}
 				}
-				ksort($mapAdditives,SORT_STRING);
+				ksort($mapAdditives,SORT_NATURAL);
 				$options['additives']=$mapAdditives;
-
-
 
 			/*exclude header*/
 			if($options['layout']['suppress_loop_headers']){
@@ -1786,8 +2062,6 @@ public function wppizza_require_common_input_validation_functions(){
 				wp_enqueue_style($this->pluginSlug.'-custom');
 			}
 		}
-
-
 
 		/****************
 			js
@@ -2035,6 +2309,12 @@ public function wppizza_require_common_input_validation_functions(){
 		$orderDetails['delivery_charges']=!empty($oDetails['delivery_charges']) ? wppizza_output_format_price($oDetails['delivery_charges'],$this->pluginOptions['layout']['hide_decimals']) : '';
 		$orderDetails['selfPickup']=!empty($oDetails['selfPickup']) ? wppizza_validate_int_only($oDetails['selfPickup']) : 0;
 		$orderDetails['total']=wppizza_output_format_price($oDetails['total'],$this->pluginOptions['layout']['hide_decimals']);
+		if(isset($oDetails['handling_charge'])){
+		$orderDetails['handling_charge']=wppizza_output_format_price($oDetails['handling_charge'],$this->pluginOptions['layout']['hide_decimals']);
+		}
+		if(isset($tips['tips'])){
+		$orderDetails['tips']=wppizza_output_format_price($tips['tips'],$this->pluginOptions['layout']['hide_decimals']);
+		}
 
 	return $orderDetails;
 	}
@@ -2307,6 +2587,10 @@ function wppizza_cat_parents( $id, $separator =' &raquo; ', $page , $taxonomy = 
 				$pad=74;
 				$orderSummaryString='';
 				foreach($orderSummary as $k=>$v){
+						/**add - symbol to discount**/
+						if($k=='discount'){
+							$v['price']='-'.$v['price'];
+						}
 						if($k=='self_pickup'){
 							$strPartLeft=PHP_EOL.wordwrap(strip_tags(wppizza_email_decode_entities($v['label'],$this->blogCharset)), $pad, "\n", true).PHP_EOL;
 						}else{
@@ -2408,7 +2692,7 @@ function wppizza_cat_parents( $id, $separator =' &raquo; ', $page , $taxonomy = 
 					$order['transaction_id']=$res->transaction_id;
 					$order['order_status']=$res->order_status;
 					/**filter as required**/
-					$order['transaction_id'] = apply_filters('wppizza_filter_transaction_id', $order['transaction_id'], $res->id );					
+					$order['transaction_id'] = apply_filters('wppizza_filter_transaction_id', $order['transaction_id'], $res->id );
 					$order['transaction_date_time']="".date_i18n(get_option('date_format'),$thisOrderDetails['time'])." ".date_i18n(get_option('time_format'),$thisOrderDetails['time'])."";
 
 					$order['gatewayUsed']=$res->initiator;
@@ -2453,14 +2737,14 @@ function wppizza_cat_parents( $id, $separator =' &raquo; ', $page , $taxonomy = 
 					***********************************************/
 					//$summary['total_price_items']=$thisOrderDetails['total_price_items'];
 					$summary['discount']=$thisOrderDetails['discount'];
-					$summary['item_tax']=wppizza_output_format_price($thisOrderDetails['item_tax'],$this->pluginOptions['layout']['hide_decimals']);
-					$summary['taxes_included']=wppizza_output_format_price($thisOrderDetails['taxes_included'],$this->pluginOptions['layout']['hide_decimals']);
+					$summary['item_tax']=$thisOrderDetails['item_tax'];
+					$summary['taxes_included']=$thisOrderDetails['taxes_included'];
 					if($this->pluginOptions['order']['delivery_selected']!='no_delivery'){/*delivery disabled*/
 						$summary['delivery_charges']=$thisOrderDetails['delivery_charges'];
 					}
-					$summary['total_price_items']=wppizza_output_format_price($thisOrderDetails['total_price_items'],$this->pluginOptions['layout']['hide_decimals']);
+					$summary['total_price_items']=$thisOrderDetails['total_price_items'];
 					$summary['selfPickup']=$thisOrderDetails['selfPickup'];
-					$summary['total']=wppizza_output_format_price($thisOrderDetails['total'],$this->pluginOptions['layout']['hide_decimals']);
+					$summary['total']=$thisOrderDetails['total'];
 					$summary['tax_applied']='items_only';
 					if($this->pluginOptions['order']['shipping_tax']){
 						$summary['tax_applied']='items_and_shipping';
@@ -2470,10 +2754,10 @@ function wppizza_cat_parents( $id, $separator =' &raquo; ', $page , $taxonomy = 
 					}
 
 					if(isset($thisOrderDetails['handling_charge']) && $thisOrderDetails['handling_charge']>0){
-						$summary['handling_charge']=wppizza_output_format_price($thisOrderDetails['handling_charge'],$this->pluginOptions['layout']['hide_decimals']);
+						$summary['handling_charge']=$thisOrderDetails['handling_charge'];
 					}
 					if(isset($thisOrderDetails['tips']) && $thisOrderDetails['tips']>0){
-						$summary['tips']=wppizza_output_format_price($thisOrderDetails['tips'],$this->pluginOptions['layout']['hide_decimals']);
+						$summary['tips']=$thisOrderDetails['tips'];
 					}
 
 					$orders[$res->id]['order']=$order;
@@ -2576,5 +2860,25 @@ function wppizza_cat_parents( $id, $separator =' &raquo; ', $page , $taxonomy = 
 			require_once(WPPIZZA_PATH .'inc/admin.create.order.table.inc.php');
 		}
 	}
+}
+/************************************************************************************************************
+*
+*	[helper class: add hidden wppizza field defining what post type to search for
+*	to search form when using shortcode/widget]
+*
+*************************************************************************************************************/
+class WPPIZZA_SEARCH_VARS {
+    public $atts = '';
+    function searchvars( $form ) {
+    	if(isset($this->atts['include']) && $this->atts['include']!=''){
+    		$val=$this->atts['include'];
+    		$inc=explode(",",$this->atts['include']);
+    		if(in_array(WPPIZZA_POST_TYPE,$inc)){
+    			$hiddenWppField='<input type="hidden" name="post_type" value="'.$val.'" />'.PHP_EOL.'</form';/*leave form tag open here to allow for spaces**/
+				$form=str_ireplace('</form',$hiddenWppField,$form);
+    		}
+    	}
+        return $form;
+    }
 }
 ?>

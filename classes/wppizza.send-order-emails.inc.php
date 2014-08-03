@@ -29,7 +29,10 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 			$this->subject 			=	wppizza_email_decode_entities(''.$this->pluginOptions['localization']['your_order']['lbl'].'',$this->blogCharset).' ';
 			$this->subjectSuffix 	=	''.$this->orderTimestamp.'';
 
-
+			/**make subject filterable**/
+			$this->subjectPrefix = apply_filters('wppizza_filter_email_subject_prefix', $this->subjectPrefix);
+			$this->subject = apply_filters('wppizza_filter_email_subject', $this->subject);
+			$this->subjectSuffix = apply_filters('wppizza_filter_email_subject_suffix', $this->subjectSuffix);
 
 			/*******thank you when returning **********/
 			add_action('gateway_order_on_thankyou', array( $this, 'gateway_order_on_thankyou_process'));
@@ -176,6 +179,7 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 				foreach($this->pluginOptions['order_form'] as $k=>$v){
 					$protectedKeys[$v['key']]=$v;
 				}
+				$protectedKeys = apply_filters('wppizza_filter_order_form_fields', $protectedKeys);
 
 				$i=0;
 				foreach($cDetails as $k=>$v){
@@ -184,6 +188,14 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 						$wppizzaEmailCustomerDetails[]=array('label'=>$protectedKeys[$k]['lbl'],'value'=>$cDetails[$k],'type'=>$protectedKeys[$k]['type']);
 					}
 
+					/**********************************************************************************************************
+					*
+					*
+					*	THIS BIT BELOW SHOULD NOW BE REDUNDANT NOW AS WE CAN UST USE THE FILTER ABOVE TO ADD TO THE - SO CALLED - PROTECTED KEYS
+					*	let's leave it here for now, but it will probably be removed in future versions, as it has never been documnted publicly anyway
+					*	as far as i know......
+					*
+					**********************************************************************************************************/
 					/*********************************************************************
 						if another plugin/extension wants to add field value pairs, make sure
 						its an array having [label] and [value] to display in email
@@ -292,7 +304,6 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 						$wppizzaEmailOrderSummary['self_pickup']=array('label'=>($pOptions['localization']['order_page_no_delivery']['lbl']),'price'=>'','currency'=>'' );
 					}
 				}
-
 
 		/*********************************************************************************************************************************
 		*
@@ -524,7 +535,7 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 				}else{
 					$wpMailHeaders[] = 'From: -------- <>';
 				}
-				
+
 				if(count($this->pluginOptions['order']['order_email_bcc'])>0){
 					$bccs=implode(",",$this->pluginOptions['order']['order_email_bcc']);/*trying to get rid of strict errors->passed by reference*/
 					$wpMailHeaders[]= 'Bcc: '.$bccs.'';
@@ -571,7 +582,7 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 				$transactionId=$this->orderTransactionId;
 				/**filter as required**/
 				$transactionId = apply_filters('wppizza_email_filter_transaction_id', $transactionId, $orderid );
-			
+
 				$gatewayUsed=$this->orderGatewayUsed;
 				/**get gateway frontend label instead of just COD or similar**/
 				$gatewayLabel=$this->orderGatewayUsed;
@@ -674,7 +685,7 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 	}
 	function gateway_order_on_thankyou_process($res){
 		//static $process=0;$process++;
-		
+
 		$output='';
 		/**check if we are displaying the order on the thank you page**/
 		if($this->pluginOptions['gateways']['gateway_showorder_on_thankyou']){
@@ -747,6 +758,8 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 			foreach($this->pluginOptions['order_form'] as $k=>$v){
 				$protectedKeys[$v['key']]=$v;
 			}
+			$protectedKeys = apply_filters('wppizza_filter_order_form_fields', $protectedKeys);
+
 			foreach($thisCustomerDetails as $k=>$v){
 				/*****default input fields of this plugin*****/
 				if(isset($protectedKeys[$k])){
@@ -757,6 +770,14 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 						$customer[$k]='<div class="wppizza-order-textarea">'.nl2br($v).'</div>';
 					}
 				}
+				/**********************************************************************************************************
+				*
+				*
+				*	THIS BIT BELOW SHOULD NOW BE REDUNDANT NOW AS WE CAN UST USE THE FILTER ABOVE TO ADD TO THE - SO CALLED - PROTECTED KEYS
+				*	let's leave it here for now, but it will probably be removed in future versions, as it has never been documnted publicly anyway
+				*	as far as i know......
+				*
+				**********************************************************************************************************/
 				if(!isset($protectedKeys[$k]) && is_array($v) && isset($v['label']) && isset($v['value'])){
 					$customer[''.$v['label'].'']=$v['value'];
 					$customerlbl[''.$v['label'].'']=$v['label'];

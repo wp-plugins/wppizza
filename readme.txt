@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.3, WP 3.3 
 Tested up to: 3.9.1
-Stable tag: 2.9.4.6
+Stable tag: 2.10
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -59,7 +59,7 @@ Note: you might want to start with  Option 1 first, as you can always use Option
 	- some default categories
 	- some default menu items per category
 	- pages that display the items in any given category (including the required shortcode)  
-	- an order page to send any orders to you via email (including the required shortcode)
+	- an order page to send any orders to you via email (including the required shortcode)  
 	- a default list of additives that a menu item might have 
 	- a selection of available meal sizes
 	- as well as default opening times, order settings etc.
@@ -81,7 +81,7 @@ Note: you might want to start with  Option 1 first, as you can always use Option
 	- open /wppizza/templates/wppizza-wrapper.php and copy everything between 	[copy from here .....] to [...........copy to here]
 	- place this snippet in the 'wppizza-wrapper.php' file we created above in your theme directory, REPLACING the original loop (including the while ( have_posts() ) : the_post(); or similar part) 
 	- display the navigation by either using the widget (type:navigation) or a shortcode [wppizza type='navigation']
-	- ensure you still have an order page that includes the following shortcode [wppizza type='orderpage'] and wppizza->settings->order settings: 'order page' is set to use this page (you might have to re-save your permalink settings)  
+	- **ensure you still have an order page that includes the following shortcode [wppizza type='orderpage'] and wppizza->settings->order settings: 'order page' is set to use this page (you might have to re-save your permalink settings)**  
 	- ensure - as outlined in Option 1 - that you are displaying your shopping cart  
 	- if you wish , you can now delete all wppizza default pages EXCEPT THE ORDER PAGE. However,if using permalinks, you might want to keep the parent page (default: Our Menu) and set the permalinks in wppizza->settings to this page. If you do, make sure to update permalinks structure once.
 
@@ -139,15 +139,37 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 
 == Changelog ==
+2.10  
+* added optional alternative tax rate (to be set on a per item basis)  
+* added dedicated shipping tax rate  
+* added option to set distinct minimum order value on pickup  
+* added shortcode for bestsellers (see faq's -> shortcodes)  
+* added shortcode for single menu items (see faq's -> shortcodes)  
+* added ability to include menu items in general search results [wppizza->settings]  
+* added dedicated search widget/shortcode for customisation of search parameters  
+* added filter (wppizza_filter_email_subject_prefix, wppizza_filter_email_subject, wppizza_filter_email_subject_suffix) to enable filter/customisation of email subject   
+* added span tag to opening times around times themselves as well as classes to aid formatting/styling if required  
+* added "end" (key 35) to also confirm changed quantity in shoppingcart (when textbox is enabled for quantities)  
+* added filter (wppizza_filter_order_form_fields) to enable addon plugins (such as "delivery by postcode" and the forthcoming "preorder" plugin) to add and add other form fields more easily and consistently to order page and confirmation page (if used)  
+* minor alterations to frontend css (set lineheight for additives at bottom of page so list of additives that break over 2 or more lines are not that squished)  
+* minor alterations to admin css  
+* BUGFIX: wppizza stopped inbuilt WP search from working properly  
+* BUGFIX: additives sorting when using id's did sort by string instead of number/natural  
+* BUGFIX: added missing minus sign in order history before any applied discounts values  
+* BUGFIX: got rid of some strict notices when uninstalling the plugin  
+02nd August 2014  
+
 
 2.9.4.6  
 * added filter (wppizza_filter_formfields_order, wppizza_filter_formfields_register, wppizza_filter_formfields_profile) to filter customer form elements on order page  and (if used) confirmation page as well as profile and/or registration   
 20th June 2014  
 
+
 2.9.4.5  
 * BUGFIX: (admin) previous version only loaded admin js when post_type == wppizza although some js functions where required in widgets page too, so there's now a distinct scripts.admin.global.js  
 * added some more gateway functions to use in future gateway development    
 17th June 2014  
+
 
 2.9.4.4  
 * added: enabled wppizza order form fields now also displaying in user profile when using a themed/frontend profile page (for instance when used in conjunction with "theme my login" plugin)   
@@ -943,6 +965,25 @@ in case where you cannot or do not want to use a widget, here are the correspond
 	
 	example: 		[wppizza category='pizza' noheader='1' showadditives='0' exclude='6,5,8']
 
+- **display single menu item **   
+
+	attributes:  
+	- single='11' 		(required [str] - id of menu item to display)  	
+
+	example: 		[wppizza single='11']  
+
+
+- **display bestsellers** (from ALL categories, sorted by number of sales descending. only items with sales >=1 are included )  
+
+	attributes:  
+	- bestsellers='10' 		(required: integer of how many items to display). 
+	- showadditives='0' 	(optional: '0' or '1'. if omitted, a list of additives will be displayed if any of the items has additives added. if set (0 or 1): force to display/hide additives list. useful when displaying more than 1 category on a page)  
+	- include='6,5,8' 		(optional [comma separated menu item id's]): ADDITIONALLY include these id's to the bestsellers already displayed    
+	- ifempty='5,9,8,11'		(optional [comma separated menu item id's]): if no sales have been made yet and no include have been defined - mainly for new installations - set the menu item id's you want to have displayed instead - ignores include attribute of appicable)  
+	
+	example: 		[wppizza bestsellers='10' ifempty='5,9,8,11' showadditives='0' include='6,5,8']
+	
+
 
 - **display openingtimes** (returns grouped opening times in a string):
 
@@ -987,6 +1028,17 @@ in case where you cannot or do not want to use a widget, here are the correspond
 	note: you would probably want to disable comments etc on that page  
 
 
+- **display a searchbox **   
+
+	attributes:  
+	- type='search' 		(required [str])  	
+	- include='wppizza,post,page,attachment,revision,nav_menu_item' (optional[str]: include menu items, posts, pages and/or other cpts respectively)  
+	- loggedinonly='1' (optional[bool]: anything. if defined searchform only gets displayed for logged in users)  
+
+	example: 		[wppizza type='search'  include='wppizza,post,page' loggedinonly='1']
+
+	
+
 = Shortcodes do not work in widgets ? =  
 
 Some Themes do not have shortcode support enabled in text widgets.  
@@ -1027,6 +1079,58 @@ if the auther doesnt want to or cannot do anything about it, you can also try ju
 * to change the name (i.e WPPizza) just add "define('WPPIZZA_NAME', 'The Name You Want');" to your wp-config.php 
 * to change the WPPizza Menu Icon in Admin Panel next to the Name just add "define('WPPIZZA_MENU_ICON', 'http://path/to/icon.png');" to your wp-config.php 
 	  
+
+= single wppizza menu items display =  
+
+if you have NOT enabled "Include wppizza menu items in regular search results" (wppizza->settings), are NOT using the wppizza search widget (selectable in the wppizza widget) or - if using the widget - have NOT enabled "wppizza menu items" in the search widget, the following is irrelevant.
+however, if any of the above is true, please read on with regards to the "how to display single wppizza menu items" settings/template/page to use in wppizza->settings->Include wppizza menu items in regular search results .
+
+assuming you *are* including wppizza menu items in your search results, you will get a list of results with links (typically the title, but it depends on the theme you are using) to that particular menu item alongside excerpts/content amd/or an associated featured image.  
+clicking on said link will display the single menu item in its own page according to how your theme's templates display normal blogposts  
+
+if you would like this single item to display like all your other wppizza menu items, there are two choices:
+	
+**preferred (and really the right way to do this when working with wordpress)**  
+- set/leave the selected option at "default or custom template [single-wppizza.php if exists]"
+- your theme has (should have) a file called single.php  
+- make a copy of this file in the same directory, renaming it to single-wppizza.php  
+- this file is likely to have something like the following (between some coding like "while ( have_posts() ) : the_post(); .... endwhile "):
+	
+
+	get_template_part( 'content', get_post_format() );
+
+
+or similar 
+
+REPLACE this bit of coding (leaving the while/endwhile intact) with :  
+
+	if ($template_file = locate_template( array ('wppizza-loop.php' ))){  
+		include_once($template_file);  
+	}else{  
+		include_once(''.WPPIZZA_PATH.'templates/wppizza-loop.php');  
+	}  
+
+and your single menu items should now display as any other menu item  
+(if you are using the responsive style - "wppizza->layout->Which style to use" -  use wppizza-loop-responsive.php instead of wppizza-loop.php in the code above )  
+
+additionally , you could of course make any other edits to that file (like removing comment templates if added by your theme etc ) as you wish  
+	
+
+
+**alternative (in case you are not able to or are comfortable with editing/copying theme templates)**  
+set a page you want to use from the dropdown list of pages provided (still talking about wppizza->settings->Include wppizza menu items in regular search results : "how to display single wppizza menu items")  
+
+this in turn will "hijack" this page and it's contents when displaying single wppizza menu items while keeping any other formatting, sidebars etc you are using for your pages   
+
+however, the chances are / caveat is , that your theme will probably still display at least the page title somewhere, so this really is just an added option on not really the way this sort of thing should be done with wordpress  
+
+you can of course also create a new, empty page and use that one (the above still aplies though and you would probably / via a plugin or some such, want to exclude this page from your normal wordpress page menu as it would be blank if it does not display a single menu item coming from a link of a search result) 
+
+
+
+
+as ever, if you have any questions or need help with this, leave a message in the support forum here or on wp-pizza.com  
+
 
 
 = using a cache plugin =  

@@ -204,8 +204,8 @@ jQuery(document).ready(function($){
 	/**only allow integers in cart increase/decrease**/
 	$(document).on('keyup', '.wppizza-cart-incr', function(e){
 		this.value = this.value.replace(/[^0-9]/g,'');
-		/**when using textbox in cart to incr/decr allow enter as well as clicking on button */
-		if(e.keyCode == 13){
+		/**when using textbox in cart to incr/decr allow enter/end (iphone) as well as clicking on button */
+		if(e.keyCode == 13 || e.keyCode == 35){
 			$(this).closest('li').find('.wppizza-cart-increment').trigger(''+wppizzaClickEvent+'');
 		}
 	})

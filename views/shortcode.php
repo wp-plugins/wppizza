@@ -9,6 +9,7 @@ extract(shortcode_atts(array('type' => ''), $atts));
 		showadditives='1' 		(optional[bool]: 0 or 1)
 		exclude='6,5,8' 		(optional [comma separated menu item id's]): exclude some id's
 		include='6,5,8' 		(optional [comma separated menu item id's]): include only these id's (overrides exclude)
+		bestsellers='11' 		(optional: integer - shows n number of bestsellers, sorted by number of purchases desc)
 	example: 		[wppizza category='pizza' noheader='1' exclude='6,7,8']
 	or
 	example: 		[wppizza category='pizza' noheader='1' include='6,7,8']
@@ -16,6 +17,18 @@ extract(shortcode_atts(array('type' => ''), $atts));
 if($type==''){
 	ob_start();
 	$this->wppizza_include_shortcode_template('category',$atts);
+	$markup = ob_get_clean();
+return $markup;
+}
+/**********************************************
+	[single]
+		possible attributes:
+		single='11' 		(required [str] single id of menu item)
+	example: 		[wppizza single='11' ]
+**********************************************/
+if($type=='single'){
+	ob_start();
+	$this->wppizza_include_shortcode_template($type,$atts);
 	$markup = ob_get_clean();
 return $markup;
 }
@@ -115,5 +128,19 @@ if($type=='orderhistory'){
 if($type=='openingtimes'){
 	$options = $this->pluginOptions;
 	$markup = wppizza_frontendOpeningTimes($options);
+}
+/**********************************************
+	[searchbox]
+		possible attributes:
+		type='search' 		(required [str])
+	 	include='wppizza,post,page,attachment,revision,nav_menu_item' (optional[str]: include menu items, posts, pages and/or other cpts respectively)
+	 	loggedinonly='1' (optional[bool]: anything. if defined searchform only gets displayed for logged in users)
+	example: 		[wppizza type='search'  include='wppizza,post,page' loggedinonly='1']
+**********************************************/
+if($type=='search'){
+	ob_start();
+	$this->wppizza_include_shortcode_template($type,$atts);
+	$markup = ob_get_clean();
+return $markup;
 }
 ?>

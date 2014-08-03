@@ -95,7 +95,8 @@ if( !class_exists( 'wpPluginJanitor' ) ){
 		
   		include_once( 'inc/admin.plugin.uninstall.janitor.php' );
 		// Call uninstall cleanup method.
-		wpPluginJanitor::cleanup( $opt, $cpt, $tax );
+		$wpPluginJanitor=new wpPluginJanitor();
+		$wpPluginJanitor->cleanup( $opt, $cpt, $tax );
 		/*delete wppizza order table**/
 		$table = $wpdb->prefix."wppizza_orders";
 		$wpdb->query("DROP TABLE IF EXISTS $table");	

@@ -29,6 +29,25 @@ $options = $this->pluginOptions;
 					echo"<option value='phpmailer' ".selected($options['plugin_data'][$field],"phpmailer",false).">".__('HTML and Plaintext [uses PHPMailer]', $this->pluginLocale)."</option>";
 				echo "</select>";
 			}
+			if($field=='search_include' ){
+				echo "<input id='".$field."' name='".$this->pluginSlug."[plugin_data][".$field."]' type='checkbox'  ". checked($options['plugin_data'][$field],true,false)." value='1' />";
+				echo" <span class='description'>".__('you could also leave this off and use the wppizza widget/shortcode for a dedicated search box', $this->pluginLocale)."</span>";
+				
+				/**which single post template ?*/
+				echo"<br />"; 
+				/*get all pages**/
+				$pages=get_pages(array('post_type'=> 'page','echo'=>0,'title_li'=>''));
+				echo "<select name='".$this->pluginSlug."[plugin_data][post_single_template]' />";
+					echo"<option value=''>".__('default or custom template [single-wppizza.php if exists]', $this->pluginLocale)."</option>";
+				foreach($pages as $k=>$v){
+					if(isset($options['plugin_data']['post_single_template']) && $options['plugin_data']['post_single_template']==$v->ID){$sel=' selected="selected"';}else{$sel='';}					
+					echo"<option value='".$v->ID."' ".$sel.">".$v->post_title."</option>";
+				}
+				echo "</select>";
+				echo" <span class='description'>".__('how to display single wppizza menu items.', $this->pluginLocale)."</span>";
+				echo" <span class='description' style='color:blue'>".__('please see the <a href="http://wordpress.org/plugins/wppizza/faq/">faq\'s -> single wppizza menu items display</a> for details as to how this works', $this->pluginLocale)."</span>";
+			}			
+			
 			if($field=='category_parent_page'){
 				/*get all pages**/
 				$pages=get_pages(array('post_type'=> 'page','echo'=>0,'title_li'=>''));
@@ -67,6 +86,7 @@ $options = $this->pluginOptions;
 				echo "<br />".__('By default, the stylesheet will be loaded AFTER the main theme stylesheet (which should have a priority of "10"). If you experience strange behaviour or layout issues (in conjunction with other plugins for example), you can try adjusting this priority here (the bigger the number, the later it gets loaded).', $this->pluginLocale)."";
 
 			}
+						
 			if($field=='hide_decimals' ){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[layout][".$field."]' type='checkbox'  ". checked($options['layout'][$field],true,false)." value='1' />";
 			}
@@ -513,9 +533,14 @@ $options = $this->pluginOptions;
 				/**min order for delivery**/
 				echo "<span class='wppizza_option' style='margin-top:20px'>";
 				echo"<input name='".$this->pluginSlug."[order][order_min_for_delivery]' size='3' type='text' value='".wppizza_output_format_price($options['order']['order_min_for_delivery'],$optionsDecimals)."' />";
-				echo" ".__('minimum order value [will disable "place order" button in cart and order page until set order value (before any discounts etc) has been reached. 0 to disable.]', $this->pluginLocale)."<br />";
+				echo" ".__('minimum order value - *on delivery* [will disable "place order" button in cart and order page until set order value (before any discounts etc) has been reached. 0 to disable.]', $this->pluginLocale)."<br />";
 				echo" <span class='description'>".__('Customer can still choose "self-pickup" (if enabled / applicable).', $this->pluginLocale)."</span>";
-				echo "</span>";
+				
+				/**min order for pickup**/
+				echo"<br />";
+				echo"<input name='".$this->pluginSlug."[order][order_min_for_pickup]' size='3' type='text' value='".wppizza_output_format_price($options['order']['order_min_for_pickup'],$optionsDecimals)."' />";
+				echo" ".__('minimum order value - *on self pickup* [will disable "place order" button in cart and order page until set order value (before any discounts etc) has been reached. 0 to disable.]', $this->pluginLocale)."<br />";
+				echo "</span>";				
 
 				/**Exclude following menu items when calculating if free delivery**/
 				echo "<span class='wppizza_option' style='margin:20px 0'>";
@@ -617,12 +642,17 @@ $options = $this->pluginOptions;
 			if($field=='item_tax'){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[order][".$field."]' size='5' type='text' value='".wppizza_output_format_float($options['order'][$field],'percent')."' />%";
 				echo"<br />";
+				echo "<input id='".$field."' name='".$this->pluginSlug."[order][item_tax_alt]' size='5' type='text' value='".wppizza_output_format_float($options['order']['item_tax_alt'],'percent')."' />%";
+				echo" <span class='description'>".__('alternative taxrate [assign on a per menu item basis]', $this->pluginLocale)."</span>";
+				echo"<br />";
 				echo"<input name='".$this->pluginSlug."[order][shipping_tax]' type='checkbox'  ". checked($options['order']['shipping_tax'],true,false)." value='1' />";
-				echo" ".__('apply tax to delivery/shipping  too', $this->pluginLocale)."";
+				echo" ".__('apply tax to delivery/shipping too at', $this->pluginLocale)."";
+				echo "<input id='".$field."' name='".$this->pluginSlug."[order][shipping_tax_rate]' size='5' type='text' value='".wppizza_output_format_float($options['order']['shipping_tax_rate'],'percent')."' />%";
 				echo"<br />";
 				echo"<input name='".$this->pluginSlug."[order][taxes_included]' type='checkbox'  ". checked($options['order']['taxes_included'],true,false)." value='1' />";
 				echo" ".__('all prices are entered including tax, but I distinctly need to display the sum of taxes applied', $this->pluginLocale)."";
 				echo"<br /><span class='description'>".__('if enabled, the sum of applicable taxes will be displayed separately without however adding it to the total (if taxrate > 0%).', $this->pluginLocale)."</span>";
+				echo"<br /><span class='description' style='color:red'>".__('if you set different taxrates, make sure to set your text in wppizza->localization regarding taxes as appropriate', $this->pluginLocale)."</span>";
 			}
 			if($field=='sizes'){
 				echo"<div id='wppizza_".$field."'>";

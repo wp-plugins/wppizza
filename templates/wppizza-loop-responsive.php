@@ -7,6 +7,10 @@
  *
  *
  ****************************************************************************************/
+	/*ADDED IN VERSION 2.9.5*/
+	/**to - for example - allow to set options when using this file as template part as options might not be set yet**/
+	$options=apply_filters('wppizza_loop_top',$options=!empty($options) ? $options : false);
+	
 	/******************************************
 	if we are trying to get the loop from a shortcode/widget in another page
 	not related to the wppizza custom post type we will have a different post type,
@@ -81,7 +85,7 @@
 			array(
 				'taxonomy' => ''.WPPIZZA_TAXONOMY.'',
 				'field' => 'slug',
-				'terms' => ''.$termSlug.'',
+				'terms' => $termSlug,
 				'include_children' => false
 			)
 		),
