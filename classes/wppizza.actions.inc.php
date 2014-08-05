@@ -1079,7 +1079,9 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 						}
 					}
 				}
-				ksort($mapAdditives,SORT_NATURAL);
+				//ksort($mapAdditives,SORT_NATURAL);//php 5.4 only
+				uksort($mapAdditives, 'strnatcmp');
+				
 				$options['additives']=$mapAdditives;
 				/*******re-map additives inside loop too **************************/
 				add_filter('wppizza_filter_loop_meta', array( $this, 'wppizza_additives_remap'),10,1);
@@ -1527,7 +1529,9 @@ function wppizza_additives_remap($meta){
 		}
 	}
 	}
-	ksort($convAdditives,SORT_NATURAL);
+	//ksort($convAdditives,SORT_NATURAL);//php 5.4 only
+	uksort($convAdditives, 'strnatcmp');	
+	
 	$meta['additives']=$convAdditives;
 	return $meta;
 }
@@ -1891,7 +1895,9 @@ public function wppizza_require_common_input_validation_functions(){
 						}
 					}
 				}
-				ksort($mapAdditives,SORT_NATURAL);
+				//ksort($mapAdditives,SORT_NATURAL);//php 5.4 only
+				uksort($mapAdditives, 'strnatcmp');
+				
 				$options['additives']=$mapAdditives;
 				/*******re-map additives inside loop too **************************/
 				add_filter('wppizza_filter_loop_meta', array( $this, 'wppizza_additives_remap'),10,1);
@@ -1931,7 +1937,9 @@ public function wppizza_require_common_input_validation_functions(){
 						}
 					}
 				}
-				ksort($mapAdditives,SORT_NATURAL);
+				//ksort($mapAdditives,SORT_NATURAL);//php 5.4 only
+				uksort($mapAdditives, 'strnatcmp');
+								
 				$options['additives']=$mapAdditives;
 
 			/*exclude header*/

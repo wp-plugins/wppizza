@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.3, WP 3.3 
 Tested up to: 3.9.1
-Stable tag: 2.10
+Stable tag: 2.10.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -139,6 +139,11 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 
 == Changelog ==
+2.10.0.1  
+* revert to using uksort($array, 'strnatcmp') when sorting additives as ksort($array,SORT_NATURAL); is only available for php 5.4+  
+5th August 2014  
+
+
 2.10  
 * added optional alternative tax rate (to be set on a per item basis)  
 * added dedicated shipping tax rate  
