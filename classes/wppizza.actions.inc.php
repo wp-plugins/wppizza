@@ -413,6 +413,7 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 	function wppizza_user_update_meta($user_id){
 		if ( !current_user_can( 'edit_user', $user_id ) ) { return false; }
 	    $ff=$this->pluginOptions['order_form'];
+	    $ff = apply_filters('wppizza_filter_user_update_meta', $ff);
 		foreach( $ff as $field ) {
 		if(!empty($field['enabled']) && $field['key']!='cemail') {
 			$sanitizeInput=wppizza_validate_string($_POST['wppizza_'.$field['key']]);
@@ -428,7 +429,6 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 	    $ff=$this->pluginOptions['order_form'];
 	    /**allow filtering of order form form elements**/
 		$ff = apply_filters('wppizza_filter_formfields_register', $ff);
-
 		asort($ff);
 	    foreach( $ff as $field ) {
 	    	if(!empty($field['enabled']) && !empty($field['onregister'])) {
@@ -460,6 +460,7 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 		$userdata['ID'] = $user_id;
 
 	    $ff=$this->pluginOptions['order_form'];
+	    $ff = apply_filters('wppizza_filter_formfields_register_save', $ff);
 		asort($ff);
 	    foreach( $ff as $field ) {
 	    if(!empty($field['enabled']) && !empty($field['onregister']) && isset($_POST['wppizza_'.$field['key']])) {
@@ -478,6 +479,7 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 	/****update/add user meta when registering via "order page" **/
 	function wppizza_user_register_order_page( $user_id, $password = '', $meta = array() ){
 	    $ff=$this->pluginOptions['order_form'];
+	    $ff = apply_filters('wppizza_filter_formfields_register_save_onorder', $ff);
 	    foreach( $ff as $field ) {
 	    if(!empty($field['enabled']) && $field['type']!='cemail' && $field['type']!='tips') {
 	    		/**selects should be stored by index**/
@@ -1081,7 +1083,7 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 				}
 				//ksort($mapAdditives,SORT_NATURAL);//php 5.4 only
 				uksort($mapAdditives, 'strnatcmp');
-				
+
 				$options['additives']=$mapAdditives;
 				/*******re-map additives inside loop too **************************/
 				add_filter('wppizza_filter_loop_meta', array( $this, 'wppizza_additives_remap'),10,1);
@@ -1370,18 +1372,23 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 					$_GET[$k]=$v;
 				}
 			}
-
 			sort($formelements);
-				/*check if the file exists in the theme, otherwise serve the file from the plugin directory if possible*/
-				if ($template_file = locate_template( array ($this->pluginLocateDir.''.$this->pluginSlug.'-order.php' ))){
-				include($template_file);
-					return;
-				}
-				/*check if it exists in plugin directory, otherwise we will have to serve defaults**/
-				if (is_file(''.WPPIZZA_PATH.'templates/'.$this->pluginSlug.'-order.php')){
-					$template_file =''.WPPIZZA_PATH.'templates/'.$this->pluginSlug.'-order.php';
+				
+				if($cart['shopopen']){
+					/*check if the file exists in the theme, otherwise serve the file from the plugin directory if possible*/
+					if ($template_file = locate_template( array ($this->pluginLocateDir.''.$this->pluginSlug.'-order.php' ))){
 					include($template_file);
-					return;
+						return;
+					}
+					/*check if it exists in plugin directory, otherwise we will have to serve defaults**/
+					if (is_file(''.WPPIZZA_PATH.'templates/'.$this->pluginSlug.'-order.php')){
+						$template_file =''.WPPIZZA_PATH.'templates/'.$this->pluginSlug.'-order.php';
+						include($template_file);
+						return;
+					}
+				}else{
+					/**shop closed->to stop still active sessions**/
+					print"<div class='wpppizza-order-shopclosed'><p>".$cart['innercartinfo']."</p></div>";					
 				}
 		}
 
@@ -1530,8 +1537,8 @@ function wppizza_additives_remap($meta){
 	}
 	}
 	//ksort($convAdditives,SORT_NATURAL);//php 5.4 only
-	uksort($convAdditives, 'strnatcmp');	
-	
+	uksort($convAdditives, 'strnatcmp');
+
 	$meta['additives']=$convAdditives;
 	return $meta;
 }
@@ -1849,6 +1856,8 @@ public function wppizza_require_common_input_validation_functions(){
 					}
 				}
 			}
+			/***eliminate notice of undefined index userdata**/
+			if(!isset($_SESSION[$this->pluginSessionGlobal]['userdata'])){$_SESSION[$this->pluginSessionGlobal]['userdata']=array();}
 			/**allow filtering of session data**/
 			$_SESSION[$this->pluginSessionGlobal]['userdata'] = apply_filters('wppizza_filter_sessionise_userdata', $_SESSION[$this->pluginSessionGlobal]['userdata'],$params);
 
@@ -1897,7 +1906,7 @@ public function wppizza_require_common_input_validation_functions(){
 				}
 				//ksort($mapAdditives,SORT_NATURAL);//php 5.4 only
 				uksort($mapAdditives, 'strnatcmp');
-				
+
 				$options['additives']=$mapAdditives;
 				/*******re-map additives inside loop too **************************/
 				add_filter('wppizza_filter_loop_meta', array( $this, 'wppizza_additives_remap'),10,1);
@@ -1939,7 +1948,7 @@ public function wppizza_require_common_input_validation_functions(){
 				}
 				//ksort($mapAdditives,SORT_NATURAL);//php 5.4 only
 				uksort($mapAdditives, 'strnatcmp');
-								
+
 				$options['additives']=$mapAdditives;
 
 			/*exclude header*/

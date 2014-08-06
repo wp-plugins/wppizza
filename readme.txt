@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.3, WP 3.3 
 Tested up to: 3.9.1
-Stable tag: 2.10.0.1
+Stable tag: 2.10.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -139,6 +139,14 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 
 == Changelog ==
+2.10.1  
+* added possible adding (via filters) of placeholders in order form form fields  
+* added various filters to add addiional fields to registration and profile pages   
+* TWEAK: set distinct css text color when displaying categories in cart above menu items (as some dark themes might have a light text color there on a light background which would make this unreadable)  
+* BUGFIX: added "shop closed" display and disable sending of order in orderpage when shop is closed (previously it was still possible send order at a later date/time when menu items still existed in cart/session even though shop was closed)  
+* BUGFIX: eliminated some more possible php notices  
+5th August 2014  
+
 2.10.0.1  
 * revert to using uksort($array, 'strnatcmp') when sorting additives as ksort($array,SORT_NATURAL); is only available for php 5.4+  
 5th August 2014  

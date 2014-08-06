@@ -103,6 +103,10 @@
 			if(!isset($options['order_form'][$k]['onregister'])){
 				$update_options['order_form'][$k]['onregister']=$defaultOptions['order_form'][$k]['onregister'];
 			}
+			/**add placeholder option*/
+			if(!isset($options['order_form'][$k]['placeholder'])){
+				$update_options['order_form'][$k]['placeholder']=$defaultOptions['order_form'][$k]['placeholder'];
+			}			
 		}
 	}
 	if(isset($options['confirmation_form'])){

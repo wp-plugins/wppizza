@@ -1,7 +1,7 @@
 <?php
 /*
 * WordPress Plugin Uninstall
-* 
+*
 * Uses the wpPluginJanitor class for standardized & secure database cleanup.
 *
 * @package    wpPluginFramework <https://github.com/sscovil/wpPluginFramework>
@@ -34,9 +34,9 @@ function delete_wppizza_custom_roles(){
 	$wppizzaRoleCap[]='wppizza_cap_order_history';
 	$wppizzaRoleCap[]='wppizza_cap_access';
 	$wppizzaRoleCap[]='wppizza_cap_reports';
-	$wppizzaRoleCap[]='wppizza_cap_tools';	
+	$wppizzaRoleCap[]='wppizza_cap_tools';
 	$wppizzaRoleCap[]='wppizza_cap_delete_order';
-	
+
 	foreach($wp_roles->roles as $roleName=>$v){
 		$userRole = get_role($roleName);
 		foreach($wppizzaRoleCap as $cap){
@@ -59,11 +59,11 @@ function delete_wppizza_user_metadata($blogid){
     $metaKeys[]='wppizza_ccustom4';
     $metaKeys[]='wppizza_ccustom5';
     $metaKeys[]='wppizza_ccustom6';
-    
+
  	$blogusers = get_users('blog_id='.$blogid.'');
     foreach ($blogusers as $user) {
     	foreach($metaKeys as $mKey){
-    		delete_user_meta( $user->ID,$mKey); 
+    		delete_user_meta( $user->ID,$mKey);
     	}
     }
 }
@@ -72,12 +72,12 @@ function delete_wppizza_user_metadata($blogid){
 
 // Register wpPluginJanitor class only if it does not already exist.
 if( !class_exists( 'wpPluginJanitor' ) ){
-	
+
 	if ( is_multisite() ) {
  	   	$blogs = $wpdb->get_results("SELECT blog_id FROM {$wpdb->blogs}", ARRAY_A);
  	   		if ($blogs) {
         	foreach($blogs as $blog) {
-           		switch_to_blog($blog['blog_id']);	
+           		switch_to_blog($blog['blog_id']);
 		  		include_once( 'inc/admin.plugin.uninstall.janitor.php' );
 				// Call uninstall cleanup method.
 				wpPluginJanitor::cleanup( $opt, $cpt, $tax );
@@ -89,21 +89,21 @@ if( !class_exists( 'wpPluginJanitor' ) ){
 				/*delete user meta*/
 				delete_wppizza_user_metadata($blog['blog_id']);
 			}
-			restore_current_blog();		
+			restore_current_blog();
  	   		}
 	}else{
-		
+
   		include_once( 'inc/admin.plugin.uninstall.janitor.php' );
 		// Call uninstall cleanup method.
 		$wpPluginJanitor=new wpPluginJanitor();
 		$wpPluginJanitor->cleanup( $opt, $cpt, $tax );
 		/*delete wppizza order table**/
 		$table = $wpdb->prefix."wppizza_orders";
-		$wpdb->query("DROP TABLE IF EXISTS $table");	
+		$wpdb->query("DROP TABLE IF EXISTS $table");
 		/*delete custom roles*/
-		delete_wppizza_custom_roles();	
+		delete_wppizza_custom_roles();
 		/*delete user meta*/
-		delete_wppizza_user_metadata($GLOBALS['blog_id']);		
+		delete_wppizza_user_metadata($GLOBALS['blog_id']);
 	}
 }
 ?>

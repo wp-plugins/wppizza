@@ -148,7 +148,7 @@ foreach($formelements as $elmKey=>$elm){
 			<?php if($elm['enabled']){?>
 				<label for="<?php echo $elm['key'] ?>"<?php echo !empty($elm['required']) ? ' class="wppizza-order-label-required"':'' ?>><?php echo $elm['lbl'] ?></label>
 				<?php if($elm['type']=='text'){ ?>
-					<input id="<?php echo $elm['key'] ?>" name="<?php echo $elm['key'] ?>" type="text" value="<?php echo !empty($elm['prefill']) && isset($userMeta[$elm['key']]) ? $userMeta[$elm['key']] :''  /*CHANGED IN VERSION 2.6.5.3*/ ?>" <?php echo !empty($elm['required'])?'required':'' ?>/>
+					<input id="<?php echo $elm['key'] ?>" name="<?php echo $elm['key'] ?>" type="text" value="<?php echo !empty($elm['prefill']) && isset($userMeta[$elm['key']]) ? $userMeta[$elm['key']] :''  /*CHANGED IN VERSION 2.6.5.3*/ ?>"<?php echo !empty($elm['placeholder']) ? ' placeholder="'.$elm['placeholder'].'" ' : ''  /*ADDED IN VERSION 2.10.0.2*/ ?><?php echo !empty($elm['required'])?'required':'' ?>/>
 				<?php } ?>
 				<?php if($elm['type']=='tips'){ /*ADDED IN VERSION 2.8.4 */ ?>
 					<div id="wppizza-<?php echo $elm['key'] ?>-wrap-outer"><span id="wppizza-<?php echo $elm['key'] ?>-wrap-inner">
@@ -161,11 +161,11 @@ foreach($formelements as $elmKey=>$elm){
 					<input id="<?php echo $elm['key'] ?>" name="<?php echo $elm['key'] ?>" type="email" value="<?php echo !empty($elm['prefill']) && isset($userMeta[$elm['key']]) ? $userMeta[$elm['key']] :''  /*CHANGED IN VERSION 2.6.5.3*/ ?>" <?php echo !empty($elm['required'])?'required':'' ?>/>
 				<?php } ?>
 				<?php if($elm['type']=='textarea'){?>
-					<textarea id="<?php echo $elm['key'] ?>" name="<?php echo $elm['key'] ?>" <?php echo !empty($elm['required'])?'required':'' ?>><?php echo !empty($elm['prefill']) && isset($userMeta[$elm['key']]) ? $userMeta[$elm['key']] :''  /*CHANGED IN VERSION 2.6.5.3*/ ?></textarea>
+					<textarea id="<?php echo $elm['key'] ?>" name="<?php echo $elm['key'] ?>" <?php echo !empty($elm['required'])?'required':'' ?> <?php echo !empty($elm['placeholder']) ? ' placeholder="'.$elm['placeholder'].'" ' : ''  /*ADDED IN VERSION 2.10.0.2*/ ?>><?php echo !empty($elm['prefill']) && isset($userMeta[$elm['key']]) ? $userMeta[$elm['key']] :''  /*CHANGED IN VERSION 2.6.5.3*/ ?></textarea>
 				<?php } ?>
 				<?php if($elm['type']=='select'){?>
 					<select id="<?php echo $elm['key'] ?>" name="<?php echo $elm['key'] ?>" <?php echo !empty($elm['required'])?'required':'' ?>>
-						<option value="">--------</option>
+						<option value=""><?php echo !empty($elm['placeholder']) ? ''.$elm['placeholder'].'' : '--------'  /*ADDED IN VERSION 2.10.0.2*/ ?></option>
 						<?php foreach($elm['value'] as $a=>$b){?>
 						<option value="<?php echo wppizza_validate_string($b) ?>" <?php echo !empty($elm['prefill']) && isset($userMeta[$elm['key']]) && $userMeta[$elm['key']]==wppizza_validate_string($a) ? 'selected="selected"' :''  /*CHANGED IN VERSION 2.6.5.3*/ ?>><?php echo $b ?></option>
 						<?php } ?>
