@@ -6,15 +6,17 @@
 			$this->pluginOptions['localization'][$k]['lbl'] = icl_translate(WPPIZZA_SLUG,''. $k.'', $arr['lbl']);
 		}
 		/**additives**/
+		if(isset($this->pluginOptions['additives']) && is_array($this->pluginOptions['additives'])){
 		foreach($this->pluginOptions['additives'] as $k=>$str){
 			$this->pluginOptions['additives'][$k] = icl_translate(WPPIZZA_SLUG,'additives_'. $k.'', $str);
-		}
+		}}
 		/**sizes**/
+		if(isset($this->pluginOptions['sizes']) && is_array($this->pluginOptions['sizes'])){
 		foreach($this->pluginOptions['sizes'] as $k=>$arr){
 			foreach($arr as $sKey=>$sArr){
 				$this->pluginOptions['sizes'][$k][$sKey]['lbl'] = icl_translate(WPPIZZA_SLUG,'sizes_'. $k.'_'.$sKey.'', $sArr['lbl']);
 			}
-		}		
+		}}
 		/**order_form**/
 		foreach($this->pluginOptions['order_form'] as $k=>$arr){
 			$this->pluginOptions['order_form'][$k]['lbl'] = icl_translate(WPPIZZA_SLUG,'order_form_'. $k.'', $arr['lbl']);

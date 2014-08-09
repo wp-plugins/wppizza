@@ -80,6 +80,9 @@
 			$options['layout']['currency_symbol_position'] = preg_replace("/[^a-z]/","",$input['layout']['currency_symbol_position']);
 			$options['layout']['show_currency_with_price'] = wppizza_validate_int_only($input['layout']['show_currency_with_price']);
 			$options['layout']['cart_increase'] = !empty($input['layout']['cart_increase']) ? true : false;
+			$options['layout']['order_page_quantity_change'] = !empty($input['layout']['order_page_quantity_change']) ? true : false;
+			$options['layout']['order_page_quantity_change_left'] = !empty($input['layout']['order_page_quantity_change_left']) ? true : false;
+			$options['layout']['order_page_quantity_change_style']=wppizza_validate_string($input['layout']['order_page_quantity_change_style']);
 			$options['layout']['prettyPhoto'] = !empty($input['layout']['prettyPhoto']) ? true : false;
 			$options['layout']['prettyPhotoStyle']=wppizza_validate_string($input['layout']['prettyPhotoStyle']);
 			$options['layout']['empty_cart_button'] = !empty($input['layout']['empty_cart_button']) ? true : false;

@@ -471,6 +471,7 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 		*
 		*****************************************************************************************************************************/
 		function wppizza_order_send_email($orderid=false, $blogid=false){
+			$options=$this->pluginOptions;
 
 			/***create/set email html and plaintext strings***/
 			$this->wppizza_order_email($orderid, $blogid);
@@ -479,21 +480,21 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 			/*overwrite from and from name with static values if set**/
 			$orderFromName=$this->orderClientName;
 			$orderFromEmail=$this->orderClientEmail;
-			if($this->pluginOptions['order']['order_email_from_name']!=''){
-				$orderFromName=$this->pluginOptions['order']['order_email_from_name'];
+			if($options['order']['order_email_from_name']!=''){
+				$orderFromName=$options['order']['order_email_from_name'];
 			}
-			if($this->pluginOptions['order']['order_email_from']!=''){
-				$orderFromEmail=$this->pluginOptions['order']['order_email_from'];
+			if($options['order']['order_email_from']!=''){
+				$orderFromEmail=$options['order']['order_email_from'];
 			}
 
 			/**who to send the order to. put it in a var so we can reuse it**/
 			$this->orderShopEmail='';/**set default to admin email perhaps ? like so get_option('admin_email')**/
-			if(count($this->pluginOptions['order']['order_email_to'])>0){
-				$this->orderShopEmail=implode(",",$this->pluginOptions['order']['order_email_to']);/*trying to get rid of strict errors->passed by reference*/
+			if(count($options['order']['order_email_to'])>0){
+				$this->orderShopEmail=implode(",",$options['order']['order_email_to']);/*trying to get rid of strict errors->passed by reference*/
 			}
 
 			/**send order using mail**/
-			if($this->pluginOptions['plugin_data']['mail_type']=='mail'){
+			if($options['plugin_data']['mail_type']=='mail'){
 				/************set headers*************/
 				$header = '';
 				if($orderFromEmail!=''){
@@ -508,8 +509,8 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 					'X-Mailer: PHP/' . $phpVersion;
 					$header .= PHP_EOL;
 				}
-				if(count($this->pluginOptions['order']['order_email_bcc'])>0){
-					$bccs=implode(",",$this->pluginOptions['order']['order_email_bcc']);/*trying to get rid of strict errors->passed by reference*/
+				if(count($options['order']['order_email_bcc'])>0){
+					$bccs=implode(",",$options['order']['order_email_bcc']);/*trying to get rid of strict errors->passed by reference*/
 					$header .= 'Bcc: '.$bccs.'' . PHP_EOL;
 				}
 				$header .= 'MIME-Version: 1.0' . PHP_EOL;
@@ -526,7 +527,7 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 				$sendMail['mailer']='mail';
 			}
 			/**send order using wp_mail**/
-			if($this->pluginOptions['plugin_data']['mail_type']=='wp_mail'){
+			if($options['plugin_data']['mail_type']=='wp_mail'){
 				/************set headers*************/
 				$wpMailHeaders=array();
 				if($orderFromEmail!=''){
@@ -536,8 +537,8 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 					$wpMailHeaders[] = 'From: -------- <>';
 				}
 
-				if(count($this->pluginOptions['order']['order_email_bcc'])>0){
-					$bccs=implode(",",$this->pluginOptions['order']['order_email_bcc']);/*trying to get rid of strict errors->passed by reference*/
+				if(count($options['order']['order_email_bcc'])>0){
+					$bccs=implode(",",$options['order']['order_email_bcc']);/*trying to get rid of strict errors->passed by reference*/
 					$wpMailHeaders[]= 'Bcc: '.$bccs.'';
 				}
 				$wpMailHeaders[] = 'Reply-To: '.$this->orderClientEmail.'';
@@ -545,8 +546,8 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 				/***attachments***/
 				$wpMailAttachments = array();
 				/**any attachments set in options ?**/
-				if(count($this->pluginOptions['order']['order_email_attachments'])>0){
-					foreach($this->pluginOptions['order']['order_email_attachments'] as $attachment){
+				if(count($options['order']['order_email_attachments'])>0){
+					foreach($options['order']['order_email_attachments'] as $attachment){
 						if(is_file($attachment)){
 							$wpMailAttachments[]=$attachment;
 						}
@@ -566,9 +567,8 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 
 
 			/**send order using phpmailer**/
-			if($this->pluginOptions['plugin_data']['mail_type']=='phpmailer'){
+			if($options['plugin_data']['mail_type']=='phpmailer'){
 				require_once ABSPATH . WPINC . '/class-phpmailer.php';
-				//$options=$this->pluginOptions;
 
 				/************************************************************************
 				*	for legacy reasons, in case templates and settings from
@@ -596,7 +596,7 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 				****************************************************/
 				$currency_left=$this->orderCurrency.' ';
 				$currency_right='';
-				if($this->pluginOptions['layout']['currency_symbol_position']=='right'){/*right aligned*/
+				if($options['layout']['currency_symbol_position']=='right'){/*right aligned*/
 					$currency_left='';
 					$currency_right=' '.$this->orderCurrency;
 				}
@@ -612,7 +612,7 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 				$order_items = apply_filters('wppizza_filter_order_items_html', $order_items, 'additional_info');
 				$order_summary=$this->orderMessage['html']['order_summary'];
 				$order_summary['tax_applied']='items_only';
-				if($this->pluginOptions['order']['shipping_tax']){
+				if($options['order']['shipping_tax']){
 					$order_summary['tax_applied']='items_and_shipping';
 				}
 
@@ -684,11 +684,11 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 		print"".$this->gateway_order_on_thankyou_process($res);
 	}
 	function gateway_order_on_thankyou_process($res){
-		//static $process=0;$process++;
+		$options=$this->pluginOptions;
 
 		$output='';
 		/**check if we are displaying the order on the thank you page**/
-		if($this->pluginOptions['gateways']['gateway_showorder_on_thankyou']){
+		if($options['gateways']['gateway_showorder_on_thankyou']){
 			/*if we are only passing the id, try and get the order from the db first**/
 			if(!is_object($res) && is_numeric($res)){
 				global $wpdb;
@@ -727,7 +727,7 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 			****************************************************/
 			$order['currency_left']=$thisOrderDetails['currency'].' ';
 			$order['currency_right']='';
-			if($this->pluginOptions['layout']['currency_symbol_position']=='right'){/*right aligned*/
+			if($options['layout']['currency_symbol_position']=='right'){/*right aligned*/
 				$order['currency_left']='';
 				$order['currency_right']=' '.$thisOrderDetails['currency'];
 			}
@@ -738,9 +738,9 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 				[set localization vars]
 			************************************************/
 			$orderlbl=array();
-			foreach($this->pluginOptions['localization'] as $k=>$v){
+			foreach($options['localization'] as $k=>$v){
 				if($k=='taxes_included'){
-					$orderlbl[$k]=sprintf(''.$v['lbl'].'',$this->pluginOptions['order']['item_tax']);
+					$orderlbl[$k]=sprintf(''.$v['lbl'].'',$options['order']['item_tax']);
 				}else{
 					$orderlbl[$k]=$v['lbl'];
 				}
@@ -755,7 +755,7 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 			$customer=array();
 			$customerlbl=array();
 			$protectedKeys=array();
-			foreach($this->pluginOptions['order_form'] as $k=>$v){
+			foreach($options['order_form'] as $k=>$v){
 				$protectedKeys[$v['key']]=$v;
 			}
 			$protectedKeys = apply_filters('wppizza_filter_order_form_fields', $protectedKeys);
@@ -802,27 +802,27 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 			$summary['discount']=$thisOrderDetails['discount'];
 			$summary['item_tax']=$thisOrderDetails['item_tax'];
 			$summary['taxes_included']=$thisOrderDetails['taxes_included'];
-			if($this->pluginOptions['order']['delivery_selected']!='no_delivery'){/*delivery disabled*/
+			if($options['order']['delivery_selected']!='no_delivery'){/*delivery disabled*/
 				$summary['delivery_charges']=$thisOrderDetails['delivery_charges'];
 			}
 			$summary['total_price_items']=$thisOrderDetails['total_price_items'];
 			$summary['selfPickup']=$thisOrderDetails['selfPickup'];
 			$summary['total']=$thisOrderDetails['total'];
 			$summary['tax_applied']='items_only';
-			if($this->pluginOptions['order']['shipping_tax']){
+			if($options['order']['shipping_tax']){
 				$summary['tax_applied']='items_and_shipping';
 			}
-			if($this->pluginOptions['order']['taxes_included']){
+			if($options['order']['taxes_included']){
 				$summary['tax_applied']='taxes_included';
 			}
 
 
 
 			if(isset($thisOrderDetails['handling_charge']) && $thisOrderDetails['handling_charge']>0){
-				$summary['handling_charge']=wppizza_output_format_price($thisOrderDetails['handling_charge'],$this->pluginOptions['layout']['hide_decimals']);
+				$summary['handling_charge']=wppizza_output_format_price($thisOrderDetails['handling_charge'],$options['layout']['hide_decimals']);
 			}
 			if(isset($thisOrderDetails['tips']) && $thisOrderDetails['tips']>0){
-				$summary['tips']=wppizza_output_format_price($thisOrderDetails['tips'],$this->pluginOptions['layout']['hide_decimals']);
+				$summary['tips']=wppizza_output_format_price($thisOrderDetails['tips'],$options['layout']['hide_decimals']);
 			}
 
 

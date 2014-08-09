@@ -54,7 +54,7 @@
 .wppizza-order>ul.wppizza-cart-contents>.wppizza-cart-item {text-align:left;background: none !important; margin:0 auto !important; padding:2px 0 !important;clear:both;border-bottom:1px dotted #DEDEDE;overflow:auto;font-size:90%;width:99%;line-height:110%}
 .wppizza-order>ul.wppizza-cart-contents>.wppizza-cart-item:before {content:'';}
 .wppizza-order>ul.wppizza-cart-contents>.wppizza-cart-item:after {content:'';}
-.wppizza-order>ul.wppizza-cart-contents>.wppizza-item-category{color:#666666;width:100%;background:#FCFCFC;padding:0; margin:0;border:none;line-height:150% }/**added 2.8.9.4*/
+.wppizza-order>ul.wppizza-cart-contents>.wppizza-item-category{color:#666666;width:100%;background:#FCFCFC;padding:0 !important; margin:0;border:none;line-height:150%;}/**added 2.8.9.4*/
 .wppizza-order>ul.wppizza-cart-contents>.wppizza-item-category>span{font-weight:normal;font-size:80%;margin:0;line-height:100%;padding:2px;border:none;}
 
 /*lets also try to remove before and after if in sidebar*/
@@ -196,6 +196,18 @@
 #wppizza-send-order #wppizza-ctips-btn{margin:2px 1px;width:auto;min-width:0;height:auto !important; padding:5px 7px !important;line-height:100%;float:right}
 #wppizza-send-order #wppizza-ctips-wrap-inner label.error{display:block}
 
+/****allow update quantities in order page***/
+/**update quantities button**/
+.wppizza-update-quantity{overflow: hidden;margin:5px 0 30px 0 ;padding:0;padding-top:10px;border-top:1px dotted #CECECE;}
+.wppizza-update-order {float: right;padding:0;margin:0}
+/**spinner**/
+#wppizza-cart-contents .ui-spinner{margin:2px 10px 5px 0; padding:0; font-family:inherit !important;font-size:inherit !important;float:none !important}
+#wppizza-cart-contents .wppizza-quantity-wrap>.ui-spinner{margin:0 0 5px 10px;}/**right align**/
+#wppizza-cart-contents .wppizza-item-quantity{padding:0 2px;margin:-3px 0 0 0; width:40px;font-family:inherit;font-size:inherit;}
+
+
+
+
 /*NEW IN VERSION 2.8.9*/
 /*************************************************
 *
@@ -219,8 +231,8 @@
 
 #wppizza-cart-contents{border:1px dotted #CECECE;padding:10px;}
 #wppizza-cart-contents>ul{margin:0 0 10px 0 ;padding:0;list-style-position:inside}
-#wppizza-cart-contents>ul>li{margin:0;line-height:130%;clear:both}
-#wppizza-cart-contents>ul>li.wppizza-item-category{list-style-type: none;border-bottom:1px dotted #cecece;display:inline-block;margin-top:5px;padding:0}
+#wppizza-cart-contents>ul>li{margin:0;line-height:150%;clear:both;overflow:auto}
+#wppizza-cart-contents>ul>li.wppizza-item-category{list-style-type: none;border-bottom:1px dotted #cecece;display:inline-block;margin-top:5px;padding:0;overflow:hidden;}
 #wppizza-cart-contents>ul>li>span{float:right}
 #wppizza-cart-contents>ul>li>span.wppizza-price-single{float:none}
 
@@ -266,7 +278,7 @@
 #wppizza-confirm-itemmised-details{padding:0;margin: 5px 0;border:none;}
 #wppizza-confirm-itemmised-details th{font-weight:600;}
 #wppizza-confirm-itemmised-details th,#wppizza-confirm-itemmised-details td{padding:3px;margin:3px;border:none; border-bottom:1px solid #CECECE;}
-.wppizza-confirm-item-price-total-th,.wppizza-confirm-item-price-total{text-align:right;padding:}
+.wppizza-confirm-item-price-total-th,.wppizza-confirm-item-price-total{text-align:right;}
 .wppizza-confirm-item-price,.wppizza-confirm-item-price-total,.wppizza-confirm-item-quantity{white-space:nowrap}
 /**sub total table*/
 #wppizza-confirm-cart-subtotals-wrap{overflow:auto;margin:0;padding:0}

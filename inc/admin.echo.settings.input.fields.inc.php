@@ -131,6 +131,24 @@ $options = $this->pluginOptions;
 			if($field=='cart_increase'){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[layout][".$field."]' type='checkbox'  ". checked($options['layout'][$field],true,false)." value='1' />";
 			}
+			if($field=='order_page_quantity_change'){
+				echo "<input id='".$field."' name='".$this->pluginSlug."[layout][".$field."]' type='checkbox'  ". checked($options['layout'][$field],true,false)." value='1' />";
+				
+				echo"<br />";
+				echo "<input name='".$this->pluginSlug."[layout][order_page_quantity_change_left]' type='checkbox' ". checked($options['layout']['order_page_quantity_change_left'],true,false)." value='1' />";
+				echo" <span class='description'>".__('display left of the item(s) [by default it will be on the right]', $this->pluginLocale)."</span>";
+				
+				echo"<br />";
+				$uiStyle=array('ui-lightness','ui-darkness','smoothness','start','redmond','sunny','overcast','le-frog','flick','pepper-grinder','eggplant','dark-hive','cupertino','south-street','blitzer','humanity','hot-sneaks','excite-bike','vader','dot-luv','mint-choc','black-tie','trontastic','swanky-purse');
+				sort($uiStyle);
+				echo "<select name='".$this->pluginSlug."[layout][order_page_quantity_change_style]'>";
+					foreach($uiStyle as $k=>$style){
+					echo "<option value='".$style."' ".selected($options['layout']['order_page_quantity_change_style'],$style,false).">".$style."</option>";	
+					}
+					echo "<option value='' ".selected($options['layout']['order_page_quantity_change_style'],'',false).">".__('a (themeroller) style is already loaded / I provide my own style', $this->pluginLocale)."</option>";
+				echo "</select>";
+				echo" <span class='description'>".__('style to use', $this->pluginLocale)."</span>";
+			}
 
 			if($field=='items_per_loop' ){
 				echo "<input name='".$this->pluginSlug."[layout][".$field."]' size='2' type='text'  value='{$options['layout'][$field]}' />";

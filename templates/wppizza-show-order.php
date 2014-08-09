@@ -27,7 +27,10 @@
 	<div id="wppizza-transaction-head"><?php echo $orderlbl['your_order'] ?>  <span id="wppizza-transaction-id"><?php echo $orderlbl['order_paid_by'] ?> <?php echo $order['gatewayLabel']; ?> [<?php echo $order['transaction_id'] ?>]</span><?php do_action('wppizza_show_order_head');/*do something*/ ?></div>
 	<div id="wppizza-transaction-time"><?php echo $order['transaction_date_time'] ?> <br/><br/></div>
 
-
+<?php
+	/**do somthing if you want (like print order button or something)**/
+	do_action('wppizza_show_order_before_customer_details');
+?>
 
 <?php	/**customer details**/ 	?>
 <?php if(isset($customer) && is_array($customer)){ ?>
@@ -37,10 +40,16 @@
 	<?php }} ?>
 	</ul>
 <?php } ?>
-
-
+<?php
+	/**do somthing if you want (like print order button or something)**/
+	do_action('wppizza_show_order_after_customer_details');
+?>
 <?php	/**order items details**/ 	?>
 	<ul id="wppizza-item-details">
+<?php
+	/**do somthing if you want (like print order button or something)**/
+	do_action('wppizza_show_order_form_first_item');
+?>
 	<?php
 		/***allow filtering of items (sort, add categories and whatnot)****/
 		$items = apply_filters('wppizza_show_order_filter_items', $items, 'showorder');
@@ -48,17 +57,38 @@
 		/***allow action per item - probably to use in conjunction with filter above****/
 		do_action('wppizza_show_order_item',$item);
 	?>
-		<li><?php echo''.$item['quantity'].'x '.$item['name'].' '.$item['size'].' <span class="wppizza-price-single">['.$order['currency_left'].''.$item['price'].''.$order['currency_right'].']</span>' ?> <span><?php echo''.$order['currency_left'].''.$item['pricetotal'].''.$order['currency_right']; ?></span>
-		<?php if(isset($item['additionalInfo']) && $item['additionalInfo']!=''){?>
-			<div class="wppizza-item-additionalinfo">
-				<span><?php echo $item['additionalInfo'] ?></span>
-			</div>
-		<?php } ?>
-		</li>
+	<li><?php
+			/**added 2.10.2*/
+			/**construct the markup display of this item**/
+			$itemMarkup=array();
+			$itemMarkup['quantity']		=''.$item['quantity'].'x ';
+			$itemMarkup['name']			=''.$item['name'].' ';
+			$itemMarkup['size']			=''.$item['size'].' ';
+			$itemMarkup['price']		='<span class="wppizza-price-single">['.$order['currency_left'].''.$item['price'].''.$order['currency_right'].']</span> ';
+			$itemMarkup['price_total']	='<span class="wppizza-price">'.$order['currency_left'].''.$item['pricetotal'].''.$order['currency_right'].'</span>';
+			if(isset($item['additionalInfo']) && $item['additionalInfo']!=''){
+				$itemMarkup['additionalinfo']='<div class="wppizza-item-additionalinfo"><span>'.$item['additionalInfo'].'</span></div>';
+			}
+			/**************************************************************************************************
+				[added filter for customisation  v2.10.2]
+				if you wish to customise the output, i would suggest you use the filter below in
+				your functions.php instead of editing this file (or a copy thereof in your themes directory)
+			/**************************************************************************************************/
+			$itemMarkup = apply_filters('wppizza_filter_show_order_item_markup', $itemMarkup, $item, $k, $options['order']);
+			/**output markup**/
+			echo''.implode("",$itemMarkup).'';
+		?>
+	</li>
 	<?php } ?>
+<?php
+	/**do somthing if you want (like print order button or something)**/
+	do_action('wppizza_show_order_form_last_item');
+?>
 	</ul>
-
-
+<?php
+	/**added 2.10.2*/
+	do_action('wppizza_show_order_form_after_items');
+?>
 <?php	/**order summary**/ 	?>
 	<ul id="wppizza-cart-subtotals">
 

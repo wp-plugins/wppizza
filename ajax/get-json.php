@@ -17,7 +17,7 @@ $options=$this->pluginOptions;
 *
 *
 ***************************************************************/
-if(isset($_POST['vars']['type']) && (($_POST['vars']['type']=='add' || $_POST['vars']['type']=='remove' || $_POST['vars']['type']=='removeall' || $_POST['vars']['type']=='increment') && $_POST['vars']['id']!='')||  $_POST['vars']['type']=='refresh'){
+if(isset($_POST['vars']['type']) && (($_POST['vars']['type']=='add' || $_POST['vars']['type']=='remove' || $_POST['vars']['type']=='removeall' || $_POST['vars']['type']=='increment') && $_POST['vars']['id']!='') ||  $_POST['vars']['type']=='refresh' || $_POST['vars']['type']=='wppizza-update-order'){
 
 	/**set count as int*********/
 	$itemCount=1;
@@ -73,7 +73,6 @@ if(isset($_POST['vars']['type']) && (($_POST['vars']['type']=='add' || $_POST['v
 		}
 	}
 
-
 	/**remove from cart -> just unset**/
 	if($_POST['vars']['type']=='remove'){
 		/**explode and get last in array (the id)**/
@@ -92,6 +91,28 @@ if(isset($_POST['vars']['type']) && (($_POST['vars']['type']=='add' || $_POST['v
 		$_SESSION[$this->pluginSession]['items']=array();
 	}
 
+	/**update from orderpage*/
+	if($_POST['vars']['type']=='wppizza-update-order'){
+		foreach($_POST['vars']['data'] as $groupId=>$quantity){
+			$currentCount=count($_SESSION[$this->pluginSession]['items'][$groupId]);
+			if($quantity==0){
+				unset($_SESSION[$this->pluginSession]['items'][$groupId]);
+			}else{
+				//**fewer items than before, just shorten**
+				if($quantity<$currentCount){
+					$_SESSION[$this->pluginSession]['items'][$groupId] = array_slice($_SESSION[$this->pluginSession]['items'][$groupId], 0, $quantity);
+				}
+				//**more items than before, add the required multiple times**
+				if($quantity>$currentCount){
+					$addCount=$quantity-$currentCount;
+					for($i=0;$i<$addCount;$i++){
+						array_push($_SESSION[$this->pluginSession]['items'][$groupId], $_SESSION[$this->pluginSession]['items'][$groupId][0]);
+					}
+				}
+				///same no of items -> just ignore
+			}
+		}
+	}
 
 	/*total price*/
 	foreach($_SESSION[$this->pluginSession]['items'] as $k=>$group){

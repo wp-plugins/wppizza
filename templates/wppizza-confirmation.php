@@ -113,33 +113,51 @@
 		<?php if(count($cart['items'])>0){/*make sure there's stuff to order***/?>
 			<table id="wppizza-confirm-itemmised-details">
 				<tr class="wppizza-confirm-itemised-th">
-					<th class="wppizza-confirm-item-th"><?php echo $txt['header_itemised_article'] ?></th>
-					<th class="wppizza-confirm-item-price-th"><?php echo $txt['header_itemised_price_single'] ?></th>
-					<th class="wppizza-confirm-item-quantity-th"><?php echo $txt['header_itemised_quantity'] ?></th>
-					<th class="wppizza-confirm-item-price-total-th"><?php echo $txt['header_itemised_price'] ?></th>
+					<?php
+					/**added 2.10.2*/
+					/**construct the markup display of header**/
+					$headerMarkup=array();
+					$headerMarkup['item']='<th class="wppizza-confirm-item-th">'.$txt['header_itemised_article'].'</th>';
+					$headerMarkup['price']='<th class="wppizza-confirm-item-price-th">'.$txt['header_itemised_price_single'].'</th>';
+					$headerMarkup['quantity']='<th class="wppizza-confirm-item-quantity-th">'.$txt['header_itemised_quantity'].'</th>';
+					$headerMarkup['total']='<th class="wppizza-confirm-item-price-total-th">'.$txt['header_itemised_price'].'</th>';
+					/**filter if necessary*/
+					$headerMarkup = apply_filters('wppizza_filter_confirmation_item_header_markup', $headerMarkup, $txt);	
+					/**output markup**/
+					echo''.implode("",$headerMarkup).'';				
+					?>
 				</tr>
 				
-				<?php foreach($cart['items'] as $item){ ?>
+				<?php foreach($cart['items'] as $itemKey=>$item){ ?>
 				<tr class="wppizza-confirm-itemised">
-					<td class="wppizza-confirm-item">
-						<?php echo''.$item['name'].' '.$item['size'].''; ?>
-						<?php if(is_array($item['additionalinfo']) && count($item['additionalinfo'])>0){?>
-							<div class="wppizza-item-additionalinfo">
-								<?php foreach($item['additionalinfo'] as $additionalInfo){?>
-									<span><?php echo $additionalInfo ?></span>
-								<?php } ?>
-							</div>
-						<?php } ?>						
-					</td>
-					<td class="wppizza-confirm-item-price">
-						<?php echo''.$cart['currency_left'].''.$item['price'].''.$cart['currency_right'].''; ?>
-					</td>
-					<td class="wppizza-confirm-item-quantity">
-						<?php echo''.$item['count'].'x'; ?>
-					</td>
-					<td class="wppizza-confirm-item-price-total">
-						<?php echo''.$cart['currency_left'].''.$item['pricetotal'].''.$cart['currency_right'].''; ?>
-					</td>
+				<?php
+					/**added 2.10.2*/
+					/**construct the markup display of this item**/
+					$itemMarkup=array();
+					$itemMarkup['tdopen']='<td class="wppizza-confirm-item">';
+					$itemMarkup['name']=''.$item['name'].'';
+					$itemMarkup['size']=' '.$item['size'].'';
+					$itemMarkup['additionalinfo']='';
+					if(is_array($item['additionalinfo']) && count($item['additionalinfo'])>0){
+						$itemMarkup['additionalinfo'].='<div class="wppizza-item-additionalinfo">';
+							foreach($item['additionalinfo'] as $additionalInfo){
+								$itemMarkup['additionalinfo'].='<span>'.$additionalInfo.'</span>';
+							}
+						$itemMarkup['additionalinfo'].='</div>';
+					}
+					$itemMarkup['tdclose']='</td>';
+					$itemMarkup['price']='<td class="wppizza-confirm-item-price">'.$cart['currency_left'].''.$item['price'].''.$cart['currency_right'].'</td>';
+					$itemMarkup['quantity']='<td class="wppizza-confirm-item-quantity">'.$item['count'].'x</td>';
+					$itemMarkup['price_total']='<td class="wppizza-confirm-item-price-total">'.$cart['currency_left'].''.$item['pricetotal'].''.$cart['currency_right'].'</td>';
+					/**************************************************************************************************
+						[added filter for customisation  v2.10.2]
+						if you wish to customise the output, i would suggest you use the filter below in 
+						your functions.php instead of editing this file (or a copy thereof in your themes directory)
+					/**************************************************************************************************/
+					$itemMarkup = apply_filters('wppizza_filter_confirmation_item_markup', $itemMarkup, $item, $itemKey ,$options['order']);	
+					/**output markup**/
+					echo''.implode("",$itemMarkup).'';
+				?>
 				</tr>
 				<?php } ?>
 			</table>

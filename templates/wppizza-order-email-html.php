@@ -109,15 +109,34 @@ $htmlEmailStyle = apply_filters('wppizza_filter_html_email_style', $htmlEmailSty
 <?php
 		/***allow filtering of items (sort, add categories and whatnot)****/
 		$order_items = apply_filters('wppizza_emailhtml_filter_items', $order_items, 'htmlemail');
-		foreach($order_items as $k=>$v){
+		foreach($order_items as $itemKey=>$item){
 		/***allow action per item - probably to use in conjunction with filter above****/
-		do_action('wppizza_emailhtml_item',$v,$htmlEmailStyle);
-?>
-							<tr><td style="<?php echo $htmlEmailStyle['mailPadding']['2x15'] ?>"><?php echo $v['label']; ?></td><td><?php echo $v['value']; ?></td></tr>
-		<?php if($v['additional_info']!=''){ /*only print if there's something to print*/ ?>
-							<tr><td colspan="2" style="<?php echo $htmlEmailStyle['mailPadding']['0x15x15x30'] ?>;font-size:90%"><?php echo $v['additional_info']; ?></td></tr>
+		do_action('wppizza_emailhtml_item', $item, $htmlEmailStyle);
 
-		<?php } ?>
+			/**added 2.10.2*/
+			/**construct the markup display of this item**/
+			$itemMarkup=array();
+			$itemMarkup['trtd']			='<tr><td style="'.$htmlEmailStyle['mailPadding']['2x15'].'">';
+				$itemMarkup['quantity']		=''.$item['quantity'].'x ';
+				$itemMarkup['name']			=''.$item['name'].' ';
+				$itemMarkup['size']			=''.$item['size'].' ';
+				$itemMarkup['price']		='['.$currency_left.''.$item['price'].''.$currency_right.']';
+			$itemMarkup['tdtd']			='</td><td>';
+				$itemMarkup['price_total']	=''.$currency_left.''.$item['pricetotal'].''.$currency_right.'';
+			$itemMarkup['tdtr']			='</td></tr>';
+
+			if($item['additional_info']!=''){
+				$itemMarkup['additionalinfo']='<tr><td colspan="2" style="'.$htmlEmailStyle['mailPadding']['0x15x15x30'].';font-size:90%">'. $item['additional_info'].'</td></tr>';
+			}
+			/**************************************************************************************************
+				[added filter for customisation  v2.10.2]
+				if you wish to customise the output, i would suggest you use the filter below in
+				your functions.php instead of editing this file (or a copy thereof in your themes directory)
+			/**************************************************************************************************/
+			$itemMarkup = apply_filters('wppizza_filter_htmlemail_item_markup', $itemMarkup, $item, $itemKey, $options['order']);
+			/**output markup**/
+			echo''.implode("",$itemMarkup).'';
+		?>
 <?php } ?>
 							<tr><td colspan="2" style="<?php echo $htmlEmailStyle['mailDivider'] ?>">&nbsp;</td></tr><?php /*add devider**/ ?>
 

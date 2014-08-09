@@ -94,6 +94,13 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 				/**change the loop query when dealing with single menu items**/
 				add_filter('pre_get_posts', array( $this, 'wppizza_single_items'));/**use loop template to also display single items**/
 			}
+			/***allow quantities to be changed or order page***/
+			if($this->pluginOptions['layout']['order_page_quantity_change']){
+				/**filter output to add spinner/text input*/
+				add_filter('wppizza_filter_order_item_markup', array( $this, 'wppizza_order_form_item_quantity_update'),10,3);
+				/**add update button to page**/
+				add_action('wppizza_order_form_last_item', array( $this, 'wppizza_order_form_item_quantity_update_button'));
+			}
 		}
 
 
@@ -184,6 +191,28 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 *	[filters and actions for order page: login, logout[currently omitted], register, continue as guest]
 *
 *********************************************************************************/
+	/************************************************************************
+		[order page add spinner/input to be able to update quantity (if enabled)]
+	************************************************************************/
+	function wppizza_order_form_item_quantity_update($markup,$item,$itemKey){
+		$pos='right';
+		/**disaply left**/
+		if($this->pluginOptions['layout']['order_page_quantity_change_left']){
+			$pos='left';
+		}
+		if($pos=='left'){
+			$markup['quantity']='<input type="text" size="1" id="wppizza-qkey-'.($itemKey).'" class="wppizza-item-quantity" value="'.$item['count'].'" />';
+		}else{
+			$markup['price_total']='<span class="wppizza-quantity-wrap"><input type="text" size="1" id="wppizza-qkey-'.($itemKey).'" class="wppizza-item-quantity" value="'.$item['count'].'" /></span>'.$markup['price_total'];
+		}
+		return $markup;
+	}
+	/************************************************************************
+		[order page add button to be able to update quantity (if enabled)]
+	************************************************************************/
+	function wppizza_order_form_item_quantity_update_button($item){
+		print"<div class='wppizza-update-quantity'><input type='button' class='submit wppizza-update-order' value='".$this->pluginOptions['localization']['update_order']['lbl']."' /></div>";
+	}
 	/************************************************************************
 		[output login form or logout link on order page]
 	************************************************************************/
@@ -1375,6 +1404,35 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 			sort($formelements);
 				
 				if($cart['shopopen']){
+					
+					/**if the user is logged in , pre-enter the info we have (if prefill is selected in wppizza->order form settings. CHANGED IN VERSION 2.6.5.3***/
+					if(is_user_logged_in() ) {
+						global $current_user;
+						$getUserMeta=get_user_meta( $current_user->ID );
+						foreach($getUserMeta as $k=>$v){
+							/**for legacy reasons, strip wppizza_ from key*/
+							if(substr($k,0,8)=='wppizza_'){
+								$k=substr($k,8);
+							}
+							$userMeta[$k]=$v[0];
+						}
+					}
+					/***if we are adding get vars to the url (if a tip has been added for instance the page will be refreshed with vars appended), force prefill to be enabled and set values accordingly. ADDED IN VERSION 2.8.6**/
+					/*$_GET will also include session data set in $_SESSION[$this->pluginSessionGlobal]['userdata'] as they will not be appended to the url anymore (it's just ugly). MODIFIED IN VERSION 2.8.8.3, but no changes made to this file */
+					$isSelfPickup=!empty($_SESSION[$this->pluginSession]['selfPickup']) ? 1:0;/**check if self pickup has been selected and make fields required as set in order form settings, ADDED in 2.8.9.10*/
+					foreach($formelements as $elmKey=>$elm){
+						if(isset($_GET[$elm['key']])){
+							$formelements[$elmKey]['prefill']=1;
+							$userMeta[$elm['key']]=$_GET[$elm['key']];
+						}
+						/**do NOT set required flag on selected elements on self-pickup. ADDED in 2.8.9.10 **/
+						if($isSelfPickup==1 && !$elm['required_on_pickup']){
+							$formelements[$elmKey]['required']=false;
+						}
+					}					
+					
+					
+					
 					/*check if the file exists in the theme, otherwise serve the file from the plugin directory if possible*/
 					if ($template_file = locate_template( array ($this->pluginLocateDir.''.$this->pluginSlug.'-order.php' ))){
 					include($template_file);
@@ -1417,7 +1475,7 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 			$cart=wppizza_order_summary($_SESSION[$this->pluginSession],$options,$type);
 			$cart = apply_filters('wppizza_filter_order_summary', $cart);
 			/**check if tax was included in prices**/
-			$taxIncluded=$options['order']['item_tax_included'];
+			$taxIncluded=!empty($options['order']['item_tax_included']) ? true:false;
 
 			/**txt variables from settings->localization additional vars > localization_confirmation_form*/
 			$localize = array_merge($options['localization'],$options['localization_confirmation_form']);
@@ -2052,6 +2110,7 @@ public function wppizza_require_common_input_validation_functions(){
      	[Frontend]
 	***************/
     public function wppizza_register_scripts_and_styles($hook) {
+    	global $wp_scripts;
 		$options = $this->pluginOptions;
     	/**************
     		css
@@ -2079,10 +2138,18 @@ public function wppizza_require_common_input_validation_functions(){
 				wp_enqueue_style($this->pluginSlug.'-custom');
 			}
 		}
-
+		/**include spinner css on orderpage if enabled**/
+		if($options['layout']['order_page_quantity_change'] && $options['order']['orderpage']==get_the_ID() && $options['layout']['order_page_quantity_change_style']!=''){
+			$ui = $wp_scripts->query('jquery-ui-spinner');
+			wp_enqueue_style('jquery-ui-'.$options['layout']['order_page_quantity_change_style'].'', "//ajax.googleapis.com/ajax/libs/jqueryui/".$ui->ver."/themes/".$options['layout']['order_page_quantity_change_style']."/jquery-ui.min.css", false, null);
+		}
 		/****************
 			js
 		****************/
+		/**include spinner js on orderpage if enabled**/
+		if($options['layout']['order_page_quantity_change'] && $options['order']['orderpage']==get_the_ID()){
+			wp_enqueue_script("jquery-ui-spinner");
+		}
 		/*only load easing if necessary**/
 		if(!in_array($options['layout']['sticky_cart_animation_style'],array('','swing','linear')) && $options['layout']['sticky_cart_animation']>0){
 			wp_enqueue_script("jquery-effects-core");
@@ -2133,6 +2200,11 @@ public function wppizza_require_common_input_validation_functions(){
 		if($options['confirmation_form_enabled']){
 			$localized_array['cfrm']=1;
 		}
+		/**do we want to be able to still change quantities on order page**/
+		if($options['layout']['order_page_quantity_change'] && $options['order']['orderpage']==get_the_ID()){
+			$localized_array['ofqc']=1;
+		}
+		
 		/**sticky cart settings**/
 			$localized_array['crt']=array();
 			$localized_array['crt']['anim']=$options['layout']['sticky_cart_animation'];
@@ -2645,6 +2717,9 @@ function wppizza_cat_parents( $id, $separator =' &raquo; ', $page , $taxonomy = 
 	*	[$order = object or id]
 	******************************************************************/
 	function wppizza_get_orderhistory($userid){
+		/*******get the variables***/
+		$options = $this->pluginOptions;
+		
 		global $wpdb;
 		$orders=array();
 		$ordersPerPage=10;

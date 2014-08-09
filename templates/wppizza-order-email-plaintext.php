@@ -51,19 +51,38 @@ $output='';
 /***allow filtering of items (sort, add categories and whatnot)****/
 $emailPlaintext['items'] = apply_filters('wppizza_emailplaintext_filter_items', $emailPlaintext['items'], 'plaintextemail');
 
-foreach($emailPlaintext['items'] as $k=>$v){
+foreach($emailPlaintext['items'] as $itemKey=>$item){
 	/***allow action per item - probably to use in conjunction with filter above****/
-	$output = apply_filters('wppizza_emailplaintext_item', $v, $output);	
+	$output = apply_filters('wppizza_emailplaintext_item', $item, $output);
 
-	$strPartLeft=''.$v['label'].'';/*made up of => '.$v['quantity'].'x '.$v['name'].' '.$v['size'].' ['.$v['currency'].' '.$v['price'].']'*/
-	$spaces=75-strlen($strPartLeft);
-	$strPartRight=''.$v['value'].'';/*made up of => '.$v['currency'].' '.$v['pricetotal'].'*/
+	/**added 2.10.2*/
+	/**construct the markup display of this item**/
+	$itemMarkup=array();
+	$itemMarkup['quantity']		=''.$item['quantity'].'x ';
+	$itemMarkup['name']			=''.$item['name'].' ';
+	$itemMarkup['size']			=''.$item['size'].' ';
+	$itemMarkup['price']		='['.$currency_left.''.$item['price'].''.$currency_right.']';
 
-	/**add to string, spacing left and right out somewhat and put linebreak before any additional info**/
-	$output.=''.$strPartLeft.''.str_pad($strPartRight,$spaces," ",STR_PAD_LEFT).''.PHP_EOL.'';
+	/**try to add some even spaces between things**/
+	$spaces=75-strlen(implode("",$itemMarkup));
+	$itemMarkup['spacer']=str_pad('', $spaces);
 
-	/**NOTE: DO NOT DELETE OR ALTER THE ADDITIONAL INFO DECLARATIONS OR YOU MIGHT BREAK THINGS. IF NOT NOW THAN POSSIBLY IN THE FUTURE AS OTHER EXTENSIONS MAY RELY ON THIS!!!*/
-	if(isset($v['additional_info']) && trim($v['additional_info'])!=''){$output.=''.$v['additional_info'].''.PHP_EOL.'';}
+	$itemMarkup['price_total']	=''.$currency_left.''.$item['pricetotal'].''.$currency_right.'';
+
+	$itemMarkup['linebreak']=PHP_EOL;
+
+	if(isset($item['additional_info']) && trim($item['additional_info'])!=''){
+		$itemMarkup['additionalinfo']=''.$item['additional_info'].''.PHP_EOL.'';
+	}
+
+	/**************************************************************************************************
+		[added filter for customisation  v2.10.2]
+		if you wish to customise the output, i would suggest you use the filter below in
+		your functions.php instead of editing this file (or a copy thereof in your themes directory)
+	/**************************************************************************************************/
+	$itemMarkup = apply_filters('wppizza_filter_plaintextemail_item_markup', $itemMarkup, $item, $itemKey, $options['order']);
+	/**output markup**/
+	$output.=implode("",$itemMarkup);
 
 	/**add additional line break as spacer between items**/
 	//$output.=PHP_EOL;

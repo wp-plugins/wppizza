@@ -51,12 +51,28 @@
 		/***allow action per item - probably to use in conjunction with filter above****/
 		do_action('wppizza_orderhistory_item',$item);
 	?>
-		<li><?php echo''.$item['quantity'].'x '.$item['name'].' '.$item['size'].' <span class="wppizza-price-item-single">['.$order['currency_left'].''.$item['price'].''.$order['currency_right'].']</span>' ?> <span class="wppizza-price-item-total"><?php echo''.$order['currency_left'].''.$item['pricetotal'].''.$order['currency_right']; ?></span>
-		<?php if(isset($item['additionalInfo']) && $item['additionalInfo']!=''){?>
-			<div class="wppizza-item-additionalinfo">
-				<span><?php echo $item['additionalInfo'] ?></span>
-			</div>
-		<?php } ?>
+		<li>
+		<?php
+			/**added 2.10.2*/
+			/**construct the markup display of this item**/
+			$itemMarkup=array();
+			$itemMarkup['quantity']		=''.$item['quantity'].'x ';
+			$itemMarkup['name']			=''.$item['name'].' ';
+			$itemMarkup['size']			=''.$item['size'].' ';
+			$itemMarkup['price']		='<span class="wppizza-price-item-single">['.$order['currency_left'].''.$item['price'].''.$order['currency_right'].']</span> ';
+			$itemMarkup['price_total']	='<span class="wppizza-price-item-total">'.$order['currency_left'].''.$item['pricetotal'].''.$order['currency_right'].'</span>';
+			if(isset($item['additionalInfo']) && $item['additionalInfo']!=''){
+				$itemMarkup['additionalinfo']='<div class="wppizza-item-additionalinfo"><span>'.$item['additionalInfo'].'</span></div>';
+			}
+			/**************************************************************************************************
+				[added filter for customisation  v2.10.2]
+				if you wish to customise the output, i would suggest you use the filter below in
+				your functions.php instead of editing this file (or a copy thereof in your themes directory)
+			/**************************************************************************************************/
+			$itemMarkup = apply_filters('wppizza_filter_orderhistory_item_markup', $itemMarkup, $item, $k, $options['order']);
+			/**output markup**/
+			echo''.implode("",$itemMarkup).'';
+		?>
 		</li>
 	<?php } ?>
 	</ul>

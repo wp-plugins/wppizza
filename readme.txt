@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.3, WP 3.3 
 Tested up to: 3.9.1
-Stable tag: 2.10.1
+Stable tag: 2.10.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -139,6 +139,16 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 
 == Changelog ==
+
+2.10.2  
+* added: allow change of quantities in order page      
+* added: some more filters in order page, confirmation page, thank you page, order history and email (html/plaintext) templates to allow output filtering of items display (for example: don't display single item prices) without having to edit the templates directly (see wp-pizza.com support->codesnippets)  
+* added: some more action hooks in template pages  
+* minor css tweaks  
+* some tidy up in places and php notices/warning eliminations    
+9th August 2014  
+
+
 2.10.1  
 * added possible adding (via filters) of placeholders in order form form fields  
 * added various filters to add addiional fields to registration and profile pages   

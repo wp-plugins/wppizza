@@ -332,6 +332,9 @@
 				'currency_symbol_left' => false,
 				'currency_symbol_position' => 'left',
 				'cart_increase' => false,
+				'order_page_quantity_change' => false,
+				'order_page_quantity_change_left' => false,
+				'order_page_quantity_change_style' =>'smoothness',
 				'empty_cart_button' => false,
 				'prettyPhoto' => false,
 				'prettyPhotoStyle' => 'pp_default',
@@ -575,6 +578,10 @@
 					'descr'=>__('Order Page: button label for sending order', $this->pluginLocale),
 					'lbl'=>__('send order', $this->pluginLocale)
 				),
+				'update_order'=>array(
+					'descr'=>__('Order Page: button label for updating order [if enabled]', $this->pluginLocale),
+					'lbl'=>__('update order', $this->pluginLocale)
+				),					
 				'order_form_legend'=>array(
 					'descr'=>__('Order Page: label above personal info', $this->pluginLocale),
 					'lbl'=>__('please enter the required information below', $this->pluginLocale)

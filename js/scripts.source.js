@@ -197,7 +197,32 @@ jQuery(document).ready(function($){
 			});
 		}
 	}
-
+	/*******************************************************
+	*
+	*	[add spinner to order page for increase/decrease of items if enabled] 
+	*
+	*******************************************************/
+  	if(typeof wppizza.ofqc!=='undefined'){
+       $( "#wppizza-send-order .wppizza-item-quantity" ).spinner({ min: 0});
+       /**do the update**/
+       $(document).on(''+wppizzaClickEvent+'', '.wppizza-update-order', function(e){
+       	/*get the elemenst and create a key value array to send to ajax**/
+       	var wppizzaCartCurrElms=$(".wppizza-item-quantity");
+       	var updtElms={};
+       	$.each(wppizzaCartCurrElms,function(e,v){
+       		var self=$(this);
+       		var id=$(this).attr('id').split('-');
+       		var val=$(this).val();
+       		updtElms[id[2]]=val;       		
+       	});
+       	$('html').css({'position':'relative'});/*stretch html to make loading cover whole page*/
+     	$('body').prepend('<div id="wppizza-loading" style="opacity:0.8"></div>');
+     	/**now send ajax to update**/
+		jQuery.post(wppizza.ajaxurl , {action :'wppizza_json',vars:{'type':'wppizza-update-order','data':updtElms}}, function(response) {
+			window.location.href=window.location.href;/*make sure page gest reloaded without confirm*/
+		},'json').error(function(jqXHR, textStatus, errorThrown) {	$('body>#wppizza-loading').remove(); alert("error : " + errorThrown);console.log(jqXHR.responseText);});
+       });
+  	}
 	/*******************************
 	*	[add to cart / remove from cart]
 	*******************************/
