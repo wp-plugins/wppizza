@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WPPizza\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-08-09 14:26-0000\n"
-"PO-Revision-Date: 2014-08-09 14:27-0000\n"
+"POT-Creation-Date: 2014-08-11 15:33-0000\n"
+"PO-Revision-Date: 2014-08-11 15:33-0000\n"
 "Last-Translator: ollybach <dev@1000db.com>\n"
 "Language-Team: \n"
 "Language: en_GB\n"
@@ -259,115 +259,115 @@ msgstr "Delete Orders"
 msgid "Nothing here"
 msgstr "Nothing here"
 
-#: ../classes/wppizza.actions.inc.php:1632
+#: ../classes/wppizza.actions.inc.php:1637
 msgid "Menu Items"
 msgstr "Menu Items"
 
-#: ../classes/wppizza.actions.inc.php:1633
+#: ../classes/wppizza.actions.inc.php:1638
 msgid "WPPizza Menu Item"
 msgstr "WPPizza Menu Item"
 
-#: ../classes/wppizza.actions.inc.php:1634
+#: ../classes/wppizza.actions.inc.php:1639
 msgid "Add New"
 msgstr "Add New"
 
-#: ../classes/wppizza.actions.inc.php:1635
+#: ../classes/wppizza.actions.inc.php:1640
 msgid "Add New Menu Item"
 msgstr "Add New Menu Item"
 
-#: ../classes/wppizza.actions.inc.php:1636
+#: ../classes/wppizza.actions.inc.php:1641
 msgid "Edit"
 msgstr "Edit"
 
-#: ../classes/wppizza.actions.inc.php:1637
+#: ../classes/wppizza.actions.inc.php:1642
 msgid "Edit Menu Item"
 msgstr "Edit Menu Item"
 
-#: ../classes/wppizza.actions.inc.php:1638
+#: ../classes/wppizza.actions.inc.php:1643
 msgid "New Menu Item"
 msgstr "New Menu Item"
 
-#: ../classes/wppizza.actions.inc.php:1639
+#: ../classes/wppizza.actions.inc.php:1644
 msgid "All Menu Items"
 msgstr "All Menu Items"
 
-#: ../classes/wppizza.actions.inc.php:1640
+#: ../classes/wppizza.actions.inc.php:1645
 msgid "View"
 msgstr "View"
 
-#: ../classes/wppizza.actions.inc.php:1641
+#: ../classes/wppizza.actions.inc.php:1646
 msgid "View Menu Items"
 msgstr "View Menu Items"
 
-#: ../classes/wppizza.actions.inc.php:1642
+#: ../classes/wppizza.actions.inc.php:1647
 msgid "Search Menu Items"
 msgstr "Search Menu Items"
 
-#: ../classes/wppizza.actions.inc.php:1643
+#: ../classes/wppizza.actions.inc.php:1648
 msgid "No items found"
 msgstr "No items found"
 
-#: ../classes/wppizza.actions.inc.php:1644
+#: ../classes/wppizza.actions.inc.php:1649
 msgid "No items found in the Trash"
 msgstr "No items found in the Trash"
 
-#: ../classes/wppizza.actions.inc.php:1653
+#: ../classes/wppizza.actions.inc.php:1658
 #, php-format
 msgid "Holds %1$s  menu items data"
 msgstr "Holds %1$s  menu items data"
 
-#: ../classes/wppizza.actions.inc.php:1692
-#: ../classes/wppizza.actions.inc.php:1840
+#: ../classes/wppizza.actions.inc.php:1697
+#: ../classes/wppizza.actions.inc.php:1845
 msgid "WPPizza Categories"
 msgstr "WPPizza Categories"
 
-#: ../classes/wppizza.actions.inc.php:1693
+#: ../classes/wppizza.actions.inc.php:1698
 msgid "Category"
 msgstr "Category"
 
-#: ../classes/wppizza.actions.inc.php:1694
+#: ../classes/wppizza.actions.inc.php:1699
 msgid "Search Categories"
 msgstr "Search Categories"
 
-#: ../classes/wppizza.actions.inc.php:1695
+#: ../classes/wppizza.actions.inc.php:1700
 msgid "All Categories"
 msgstr "All Categories"
 
-#: ../classes/wppizza.actions.inc.php:1696
+#: ../classes/wppizza.actions.inc.php:1701
 msgid "Parent Category"
 msgstr "Parent Category"
 
-#: ../classes/wppizza.actions.inc.php:1697
+#: ../classes/wppizza.actions.inc.php:1702
 msgid "Parent Category:"
 msgstr "Parent Category:"
 
-#: ../classes/wppizza.actions.inc.php:1698
+#: ../classes/wppizza.actions.inc.php:1703
 msgid "Edit Category"
 msgstr "Edit Category"
 
-#: ../classes/wppizza.actions.inc.php:1699
+#: ../classes/wppizza.actions.inc.php:1704
 msgid "Update Category"
 msgstr "Update Category"
 
-#: ../classes/wppizza.actions.inc.php:1700
+#: ../classes/wppizza.actions.inc.php:1705
 msgid "Add New Category"
 msgstr "Add New Category"
 
-#: ../classes/wppizza.actions.inc.php:1701
+#: ../classes/wppizza.actions.inc.php:1706
 msgid "New Category Name"
 msgstr "New Category Name"
 
-#: ../classes/wppizza.actions.inc.php:1702
+#: ../classes/wppizza.actions.inc.php:1707
 msgid "Categories"
 msgstr "Categories"
 
-#: ../classes/wppizza.actions.inc.php:2896
-#: ../classes/wppizza.actions.inc.php:2898
+#: ../classes/wppizza.actions.inc.php:2904
+#: ../classes/wppizza.actions.inc.php:2906
 msgid "Previous"
 msgstr "Previous"
 
-#: ../classes/wppizza.actions.inc.php:2912
-#: ../classes/wppizza.actions.inc.php:2914
+#: ../classes/wppizza.actions.inc.php:2920
+#: ../classes/wppizza.actions.inc.php:2922
 msgid "Next"
 msgstr "Next"
 
@@ -438,7 +438,7 @@ msgstr "Sorry, this order has already been processed or does not exist !"
 msgid "Sorry, this order does not exist !"
 msgstr "Sorry, this order does not exist !"
 
-#: ../classes/wppizza.gateways.inc.php:1104
+#: ../classes/wppizza.gateways.inc.php:1108
 msgid "form fields"
 msgstr "form fields"
 
@@ -1040,13 +1040,12 @@ msgid "Enabled"
 msgstr "Enabled"
 
 #: ../inc/admin.echo.settings.input.fields.inc.php:364
-#: ../inc/admin.echo.settings.input.fields.inc.php:457
-msgid "Required"
-msgstr "Required"
+msgid "Required:<br />on Delivery"
+msgstr "Required:<br />on Delivery"
 
 #: ../inc/admin.echo.settings.input.fields.inc.php:364
-msgid "Also Required<br />on Pickup"
-msgstr "Also Required<br />on Pickup"
+msgid "Required:<br />on Pickup"
+msgstr "Required:<br />on Pickup"
 
 #: ../inc/admin.echo.settings.input.fields.inc.php:364
 msgid "Prefill<br />[if known]"
@@ -1113,6 +1112,10 @@ msgstr ""
 #: ../inc/admin.echo.settings.input.fields.inc.php:457
 msgid "Label [html allowed]"
 msgstr "Label [html allowed]"
+
+#: ../inc/admin.echo.settings.input.fields.inc.php:457
+msgid "Required"
+msgstr "Required"
 
 #: ../inc/admin.echo.settings.input.fields.inc.php:466
 msgid "checkbox"

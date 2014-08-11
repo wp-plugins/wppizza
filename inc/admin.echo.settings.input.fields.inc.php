@@ -361,7 +361,7 @@ $options = $this->pluginOptions;
 				asort($options[$field]);
 
 				echo"<table id='wppizza_".$field."'>";
-					echo"<tr><th>".__('Sort', $this->pluginLocale)."</th><th>".__('Label', $this->pluginLocale)."</th><th>".__('Enabled', $this->pluginLocale)."</th><th>".__('Required', $this->pluginLocale)."</th><th>".__('Also Required<br />on Pickup', $this->pluginLocale)."</th><th>".__('Prefill<br />[if known]', $this->pluginLocale)."</th><th>".__('Use when<br />Registering ?', $this->pluginLocale)."</th><th>".__('Type', $this->pluginLocale)."</th></tr>";
+					echo"<tr><th>".__('Sort', $this->pluginLocale)."</th><th>".__('Label', $this->pluginLocale)."</th><th>".__('Enabled', $this->pluginLocale)."</th><th>".__('Required:<br />on Delivery', $this->pluginLocale)."</th><th>".__('Required:<br />on Pickup', $this->pluginLocale)."</th><th>".__('Prefill<br />[if known]', $this->pluginLocale)."</th><th>".__('Use when<br />Registering ?', $this->pluginLocale)."</th><th>".__('Type', $this->pluginLocale)."</th></tr>";
 				foreach($options[$field] as $k=>$v){
 					$disableRegister=false;$disablePrefill=false;$fixedType='';$fixedTypeLabel='';
 

@@ -1093,11 +1093,15 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 	*	[gateway helper to be able to - more easily - map order form fields to gateway form fields]
 	*
 	******************************************************************/
-	function wppizza_gateway_map_formfields_setup($ff){
+	function wppizza_gateway_map_formfields_setup($ff,$formkey=false){
 		$mapVars='';
 		asort($this->pluginOptions['order_form']);//sort
+		/**filter added 2.10.2.1 to allow other gateways to add to formfields**/
+		$this->pluginOptions['order_form'] = apply_filters('wppizza_filter_gateway_form_fields', $this->pluginOptions['order_form']);
 		foreach($this->pluginOptions['order_form'] as $k => $v){
 			if($v['enabled'] && !in_array($v['key'],array('ctips')) && in_array($v['type'],array('email','text','textarea','select')) ){
+				/**index by key instead of numerical added 2.10.2.1 **/
+				if($formkey){$k=$v['key'];}
 				$optSelected=!empty($this->gatewayOptions[$ff['key']][$k]) ? $this->gatewayOptions[$ff['key']][$k] : '';
 				$mapVars.="<tr><td style='margin:0;padding:0 5px 0 0'>".$v['lbl']."</td><td style='margin:0;padding:0'>";
 				$mapVars.="<select name='wppizza[gateways][wppizza_gateway_".$this->gatewaySelect."][".$ff['key']."][".$k."]'>";

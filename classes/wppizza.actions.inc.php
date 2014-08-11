@@ -1402,9 +1402,9 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 				}
 			}
 			sort($formelements);
-				
+
 				if($cart['shopopen']){
-					
+
 					/**if the user is logged in , pre-enter the info we have (if prefill is selected in wppizza->order form settings. CHANGED IN VERSION 2.6.5.3***/
 					if(is_user_logged_in() ) {
 						global $current_user;
@@ -1429,10 +1429,15 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 						if($isSelfPickup==1 && !$elm['required_on_pickup']){
 							$formelements[$elmKey]['required']=false;
 						}
-					}					
-					
-					
-					
+
+						/**DO set required flag on selected elements on self-pickup even if main required is false. ADDED in 2.10.2.1 **/
+						if($isSelfPickup==1 && $elm['required_on_pickup']){
+							$formelements[$elmKey]['required']=true;
+						}
+					}
+
+
+
 					/*check if the file exists in the theme, otherwise serve the file from the plugin directory if possible*/
 					if ($template_file = locate_template( array ($this->pluginLocateDir.''.$this->pluginSlug.'-order.php' ))){
 					include($template_file);
@@ -1446,7 +1451,7 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 					}
 				}else{
 					/**shop closed->to stop still active sessions**/
-					print"<div class='wpppizza-order-shopclosed'><p>".$cart['innercartinfo']."</p></div>";					
+					print"<div class='wpppizza-order-shopclosed'><p>".$cart['innercartinfo']."</p></div>";
 				}
 		}
 
@@ -2204,7 +2209,7 @@ public function wppizza_require_common_input_validation_functions(){
 		if($options['layout']['order_page_quantity_change'] && $options['order']['orderpage']==get_the_ID()){
 			$localized_array['ofqc']=1;
 		}
-		
+
 		/**sticky cart settings**/
 			$localized_array['crt']=array();
 			$localized_array['crt']['anim']=$options['layout']['sticky_cart_animation'];
@@ -2719,7 +2724,7 @@ function wppizza_cat_parents( $id, $separator =' &raquo; ', $page , $taxonomy = 
 	function wppizza_get_orderhistory($userid){
 		/*******get the variables***/
 		$options = $this->pluginOptions;
-		
+
 		global $wpdb;
 		$orders=array();
 		$ordersPerPage=10;
