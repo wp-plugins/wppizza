@@ -218,6 +218,7 @@
 #wppizza-login-frm{overflow:auto;}
 #wppizza-login-frm>span{display:inline-block;float:left;padding:5px 5px 5px 0;margin:0;}
 #wppizza-login-frm>span>div{font-size:80%;margin:0;padding:0;padding-left:5px}
+#wppizza-login-frm>span.wppizza-unpw-lostpw{clear:both}
 #wppizza-user-login-option span{display:inline-block;}
 #wppizza-user-login-action input{float:left;}
 #wppizza-user-login-action label.error{float:left;clear:both;color:#FF0000;padding:0 0 5px 0;font-size:90%}

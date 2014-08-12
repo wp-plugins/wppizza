@@ -147,7 +147,7 @@
 	</fieldset>
 
 	<?php if(count($cart['items'])>0){/*make sure there's stuff to order***/?>
-	<fieldset>
+	<fieldset id="wppizza-customer-details">
 		<legend><?php echo $txt['order_form_legend']['lbl'] ?></legend>
 		<?php foreach($formelements as $elmKey=>$elm){ ?>
 		<?php

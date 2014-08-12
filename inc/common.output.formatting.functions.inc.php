@@ -106,6 +106,7 @@
 		$items['HUF']='Ft';
 		$items['ISK']='kr';
 		$items['IDR']='Rp';
+		$items['INR']='&#8377;';
 		$items['IRR']='&#65020;';
 		$items['IMP']='£';
 		$items['ILS']='&#8362;';

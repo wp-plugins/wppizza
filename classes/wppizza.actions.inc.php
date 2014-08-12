@@ -138,6 +138,9 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 
 			/**reports**/
 			add_action( 'admin_init', array( $this, 'wppizza_reports'));
+			
+			/**dashboard widget**/
+			add_action( 'wp_dashboard_setup', array( $this, 'wppizza_dashboard_widget'));
 		}
 
 
@@ -267,8 +270,9 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
             			$html.='<span><div class="wppizza-unpw-lbl">'.__( 'Username' ).'</div><input type="text" name="log" id="user_login" class="input wppizza_user_login" size="15" value="" placeholder="'.__( 'Username' ).'" required="required" /></span>';
             			$html.='<span><div class="wppizza-unpw-lbl">'.__( 'Password' ).'</div><input type="password" name="pwd" id="user_pass" class="input wppizza_user_pass"  size="15" value="" placeholder="'.__( 'Password' ).'" required="required" /></span>';
                 		$html.='<span><div class="wppizza-unpw-lbl">&nbsp;</div><input type="submit" value="'.__( 'Log In' ).'" id="wppizza_btn_login" /></span>';
+                		$html.='<span class="wppizza-unpw-lostpw"><div class="wppizza-unpw-lbl"><a href="'.wp_lostpassword_url( get_permalink() ).'" title="'.__( 'Lost Password' ).'">'.__( 'Lost Password' ).'</a></div></span>';
                 		$html.=''.wp_nonce_field( 'wppizza_nonce_login','wppizza_nonce_login',true,false).'';
-            		$html.='</form>';
+            		$html.='</form>';					
 					$html.=$error;/**add errors if any**/
 				$html.='</div>';
 			$html.='</div>';
@@ -892,6 +896,91 @@ function wppizza_export_report(){
 /***include required functions**/
 function wppizza_require_report_functions(){
 	require_once(WPPIZZA_PATH .'inc/admin.report.functions.php');
+}
+
+/*********************************************************
+*
+*		[dashboard widget]
+*
+*********************************************************/
+function wppizza_dashboard_widget(){
+	wp_add_dashboard_widget('wppizza_dashboard_widget',WPPIZZA_NAME.' '.__('Overview',$this->pluginLocale),array($this,'wppizza_do_dashboard_widget'));
+}
+function wppizza_do_dashboard_widget() {
+	/**number of posts**/
+	$count_posts = wp_count_posts(WPPIZZA_POST_TYPE);
+	
+	/*number of categories**/
+	$taxonomy = WPPIZZA_TAXONOMY;
+	$terms = get_terms($taxonomy); 
+	$count_categories=0;
+	if ( $terms && !is_wp_error( $terms ) ){
+	$count_categories=count($terms);
+	}
+
+	/***sales***/	
+	require_once(WPPIZZA_PATH .'inc/admin.report.functions.php');
+	$data=wppizza_report_dataset($this->pluginOptions,$this->pluginLocale,$this->pluginOrderTable);
+	//print_r($data['dataset']);
+		
+	/**totals**/
+	$totalSalesValue=$data['dataset']['sales_value_total'];
+	$totalSalesCount=$data['dataset']['sales_count_total'];
+	$totalItemsCount=$data['dataset']['items_count_total'];
+	/**today**/
+	$totalSalesValueToday=0;
+	$totalSalesCountToday=0;
+	$totalItemsCountToday=0;
+	if(isset($data['dataset']['sales'][date("Y-m-d")])){
+	$totalSalesValueToday=$data['dataset']['sales'][date("Y-m-d")]['sales_value_total'];
+	$totalSalesCountToday=$data['dataset']['sales'][date("Y-m-d")]['sales_count_total'];
+	$totalItemsCountToday=$data['dataset']['sales'][date("Y-m-d")]['items_count_total'];
+	}
+	echo'
+			<table class="wppizza-dash wppizza-dash-sales">
+				<thead>
+					<tr>
+						<th>&nbsp;</th>
+						<th>'.__('Total',$this->pluginLocale).'</th>
+						<th>'.__('Today',$this->pluginLocale).'</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>'.__('Earnings',$this->pluginLocale).'</td>
+						<td>'.$data['currency'].' '.$totalSalesValue.'</td>
+						<td>'.$data['currency'].' '.$totalSalesValueToday.'</td>
+					</tr>
+					<tr>
+						<td>'.__('Sales',$this->pluginLocale).'</td>
+						<td>'.$totalSalesCount.'</td>
+						<td>'.$totalSalesCountToday.'</td>
+					</tr>
+					<tr>
+						<td>'.__('Items Sold',$this->pluginLocale).'</td>
+						<td>'.$totalItemsCount.'</td>
+						<td>'.$totalItemsCountToday.'</td>
+					</tr>					
+				</tbody>
+			</table>
+			
+			<table class="wppizza-dash wppizza-dash-items">
+				<thead>
+					<tr>
+						<th>'.__('Menu Items (active)',$this->pluginLocale).'</th>
+						<th>'.__('Categories',$this->pluginLocale).'</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>'.$count_posts->publish.'</td>
+						<td>'.$count_categories.'</td>
+					</tr>					
+				</tbody>
+			</table>			
+			
+
+	';
 }
 /*********************************************************
 *

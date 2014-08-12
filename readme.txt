@@ -5,8 +5,8 @@ Author URI: http://www.wp-pizza.com
 Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.3, WP 3.3 
-Tested up to: 3.9.1
-Stable tag: 2.10.2.1
+Tested up to: 3.9.2
+Stable tag: 2.10.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -139,6 +139,12 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 
 == Changelog ==
+
+2.10.3  
+* added admin dashboard overview widget  
+* added missing symbol/currency for indian rupee  
+* added lost password link under login on order page  
+12th August 2014  
 
 2.10.2.1  
 * added: allow form fields to be required only on pickup and not on delivery (and still vice versa)  

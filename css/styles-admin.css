@@ -224,6 +224,15 @@
 .wppizza-sidebar-right{float:right}
 */
 /*******************
+	[dashboard]
+*******************/
+.wppizza-dash{margin:10px auto;border:1px solid #999999;min-width:300px} 
+.wppizza-dash th{background:#F9F9F9;padding:5px;text-align:center;}
+.wppizza-dash-sales>tbody>tr>td:nth-child(n+2){text-align:center}
+.wppizza-dash-items>tbody>tr>td{text-align:center}
+
+nth-child(3n+0)
+/*******************
 	[wppizza admin  general]
 *********************/
 #wppizza-settings h4{margin-top:10px;margin-bottom:3px}

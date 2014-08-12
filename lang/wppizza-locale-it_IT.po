@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WPPizza\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-08-11 15:34-0000\n"
-"PO-Revision-Date: 2014-08-11 15:34-0000\n"
+"POT-Creation-Date: 2014-08-12 15:13-0000\n"
+"PO-Revision-Date: 2014-08-12 15:13-0000\n"
 "Last-Translator: ollybach <dev@1000db.com>\n"
 "Language-Team: \n"
 "Language: it_IT\n"
@@ -127,32 +127,36 @@ msgstr "FALLITO : Invio della Mail Fallito"
 msgid "Cash on Delivery"
 msgstr "Contanti alla Consegna"
 
-#: ../classes/wppizza.actions.inc.php:252
+#: ../classes/wppizza.actions.inc.php:255
 msgid "<strong>ERROR</strong>: Invalid username or incorrect password."
 msgstr "<strong>ERROR</strong>: Invalid username or incorrect password."
 
-#: ../classes/wppizza.actions.inc.php:262
-#: ../classes/wppizza.actions.inc.php:269
+#: ../classes/wppizza.actions.inc.php:265
+#: ../classes/wppizza.actions.inc.php:272
 msgid "Log In"
 msgstr "Log In"
 
-#: ../classes/wppizza.actions.inc.php:263
+#: ../classes/wppizza.actions.inc.php:266
 msgid "Cancel"
 msgstr "Cancel"
 
-#: ../classes/wppizza.actions.inc.php:267
+#: ../classes/wppizza.actions.inc.php:270
 msgid "Username"
 msgstr "Username"
 
-#: ../classes/wppizza.actions.inc.php:268
+#: ../classes/wppizza.actions.inc.php:271
 msgid "Password"
 msgstr "Password"
 
-#: ../classes/wppizza.actions.inc.php:410
+#: ../classes/wppizza.actions.inc.php:273
+msgid "Lost Password"
+msgstr "Lost Password"
+
+#: ../classes/wppizza.actions.inc.php:414
 msgid "Additional information"
 msgstr "Informazioni addizionali"
 
-#: ../classes/wppizza.actions.inc.php:545
+#: ../classes/wppizza.actions.inc.php:549
 msgid ""
 "WPPizza requires the server on which your site resides to be running PHP 5.2 "
 "or higher. As of version 3.2, WordPress itself will also <a href=\"http://"
@@ -166,11 +170,11 @@ msgstr ""
 "contattare il tuo provider web e chiedere di aggiornare la versione di PHP."
 "<br /><br /><a href=\""
 
-#: ../classes/wppizza.actions.inc.php:550
+#: ../classes/wppizza.actions.inc.php:554
 msgid "ATTENTION:"
 msgstr "ATTENTION:"
 
-#: ../classes/wppizza.actions.inc.php:551
+#: ../classes/wppizza.actions.inc.php:555
 msgid ""
 "WPPizza requires the <b>\"mbstring\"</b> extension in your php installation "
 "to be available/installed to work reliably. Please enable this module. If "
@@ -180,195 +184,225 @@ msgstr ""
 "to be available/installed to work reliably. Please enable this module. If "
 "you do not know how to, speak to your hostinng provider"
 
-#: ../classes/wppizza.actions.inc.php:552
+#: ../classes/wppizza.actions.inc.php:556
 msgid "This notice will disappear as soon as mbstring is available."
 msgstr "This notice will disappear as soon as mbstring is available."
 
-#: ../classes/wppizza.actions.inc.php:756
+#: ../classes/wppizza.actions.inc.php:760
 msgid "Set Item Options"
 msgstr "Imposta le opzioni articolo : "
 
-#: ../classes/wppizza.actions.inc.php:902
+#: ../classes/wppizza.actions.inc.php:907
+#: ../inc/admin.echo.manage_reports.inc.php:34
+msgid "Overview"
+msgstr "Overview"
+
+#: ../classes/wppizza.actions.inc.php:944
+msgid "Total"
+msgstr "Total"
+
+#: ../classes/wppizza.actions.inc.php:945
+msgid "Today"
+msgstr "Today"
+
+#: ../classes/wppizza.actions.inc.php:950
+msgid "Earnings"
+msgstr "Earnings"
+
+#: ../classes/wppizza.actions.inc.php:955
+msgid "Sales"
+msgstr "Sales"
+
+#: ../classes/wppizza.actions.inc.php:960
+msgid "Items Sold"
+msgstr "Items Sold"
+
+#: ../classes/wppizza.actions.inc.php:970
+msgid "Menu Items (active)"
+msgstr "Menu Items (active)"
+
+#: ../classes/wppizza.actions.inc.php:971
+#: ../classes/wppizza.actions.inc.php:1796
+msgid "Categories"
+msgstr "Categorie"
+
+#: ../classes/wppizza.actions.inc.php:991
 #: ../inc/admin.echo.register.submenu.pages.inc.php:3
 msgid "Settings"
 msgstr "Impostazioni "
 
-#: ../classes/wppizza.actions.inc.php:903
+#: ../classes/wppizza.actions.inc.php:992
 msgid "Order Settings"
 msgstr "Impostazioni Ordine"
 
-#: ../classes/wppizza.actions.inc.php:904
+#: ../classes/wppizza.actions.inc.php:993
 msgid "Gateways"
 msgstr "Gateways di pagamento"
 
-#: ../classes/wppizza.actions.inc.php:905
+#: ../classes/wppizza.actions.inc.php:994
 msgid "Order Form Settings"
 msgstr "Impostazione Modulo Ordine"
 
-#: ../classes/wppizza.actions.inc.php:906
+#: ../classes/wppizza.actions.inc.php:995
 #: ../inc/admin.echo.manage_opening_times.inc.php:3
 msgid "Opening Times"
 msgstr "Orari di Apertura"
 
-#: ../classes/wppizza.actions.inc.php:907
+#: ../classes/wppizza.actions.inc.php:996
 #: ../inc/admin.echo.manage_meal_sizes.inc.php:3
 msgid "Meal Sizes"
 msgstr "Formato Piatti"
 
-#: ../classes/wppizza.actions.inc.php:908
+#: ../classes/wppizza.actions.inc.php:997
 #: ../inc/admin.echo.manage_additives.inc.php:4
 msgid "Additives"
 msgstr "Additivi"
 
-#: ../classes/wppizza.actions.inc.php:909
+#: ../classes/wppizza.actions.inc.php:998
 #: ../inc/admin.echo.manage_layout.inc.php:3
 msgid "Layout"
 msgstr "Layout "
 
-#: ../classes/wppizza.actions.inc.php:910
+#: ../classes/wppizza.actions.inc.php:999
 #: ../inc/admin.echo.settings.input.fields.inc.php:486
 msgid "Localization"
 msgstr "Localizzazione"
 
-#: ../classes/wppizza.actions.inc.php:911
+#: ../classes/wppizza.actions.inc.php:1000
 #: ../inc/admin.echo.manage_order_history.inc.php:3
 msgid "Order History"
 msgstr "Storico Ordini"
 
-#: ../classes/wppizza.actions.inc.php:912
+#: ../classes/wppizza.actions.inc.php:1001
 #: ../inc/admin.echo.manage_access_rights.inc.php:3
 msgid "Access Rights"
 msgstr "Diritti di Accesso"
 
-#: ../classes/wppizza.actions.inc.php:913
+#: ../classes/wppizza.actions.inc.php:1002
 #: ../inc/admin.echo.manage_reports.inc.php:23
 #: ../inc/admin.echo.register.submenu.pages.inc.php:13
 msgid "Reports"
 msgstr "Reports"
 
-#: ../classes/wppizza.actions.inc.php:914
+#: ../classes/wppizza.actions.inc.php:1003
 #: ../inc/admin.echo.manage_tools.inc.php:3
 #: ../inc/admin.echo.register.submenu.pages.inc.php:15
 msgid "Tools"
 msgstr "Strumenti"
 
-#: ../classes/wppizza.actions.inc.php:915
+#: ../classes/wppizza.actions.inc.php:1004
 msgid "Delete Orders"
 msgstr "Cancella Ordini"
 
-#: ../classes/wppizza.actions.inc.php:1313
+#: ../classes/wppizza.actions.inc.php:1402
 msgid "Nothing here"
 msgstr "Niente qui"
 
-#: ../classes/wppizza.actions.inc.php:1637
+#: ../classes/wppizza.actions.inc.php:1726
 msgid "Menu Items"
 msgstr "Menu Articoli"
 
-#: ../classes/wppizza.actions.inc.php:1638
+#: ../classes/wppizza.actions.inc.php:1727
 msgid "WPPizza Menu Item"
 msgstr "Menu Articoli WPPizza"
 
-#: ../classes/wppizza.actions.inc.php:1639
+#: ../classes/wppizza.actions.inc.php:1728
 msgid "Add New"
 msgstr "Aggiungi Nuovo"
 
-#: ../classes/wppizza.actions.inc.php:1640
+#: ../classes/wppizza.actions.inc.php:1729
 msgid "Add New Menu Item"
 msgstr "Aggiungi Nuovo Articolo di Menu "
 
-#: ../classes/wppizza.actions.inc.php:1641
+#: ../classes/wppizza.actions.inc.php:1730
 msgid "Edit"
 msgstr "Modifica"
 
-#: ../classes/wppizza.actions.inc.php:1642
+#: ../classes/wppizza.actions.inc.php:1731
 msgid "Edit Menu Item"
 msgstr "Modifica Articolo di menu"
 
-#: ../classes/wppizza.actions.inc.php:1643
+#: ../classes/wppizza.actions.inc.php:1732
 msgid "New Menu Item"
 msgstr "Nuova Voce Menu"
 
-#: ../classes/wppizza.actions.inc.php:1644
+#: ../classes/wppizza.actions.inc.php:1733
 msgid "All Menu Items"
 msgstr "Tutti gli Articoli di Menu"
 
-#: ../classes/wppizza.actions.inc.php:1645
+#: ../classes/wppizza.actions.inc.php:1734
 msgid "View"
 msgstr "Visualizza"
 
-#: ../classes/wppizza.actions.inc.php:1646
+#: ../classes/wppizza.actions.inc.php:1735
 msgid "View Menu Items"
 msgstr "Visualizza Voci Menu"
 
-#: ../classes/wppizza.actions.inc.php:1647
+#: ../classes/wppizza.actions.inc.php:1736
 msgid "Search Menu Items"
 msgstr "Cerca Voci di Menu"
 
-#: ../classes/wppizza.actions.inc.php:1648
+#: ../classes/wppizza.actions.inc.php:1737
 msgid "No items found"
 msgstr "Nessun Articolo Trovato"
 
-#: ../classes/wppizza.actions.inc.php:1649
+#: ../classes/wppizza.actions.inc.php:1738
 msgid "No items found in the Trash"
 msgstr "Nessun Articolo trovato nel cestino"
 
-#: ../classes/wppizza.actions.inc.php:1658
+#: ../classes/wppizza.actions.inc.php:1747
 #, php-format
 msgid "Holds %1$s  menu items data"
 msgstr "Holds %1$s  menu items data"
 
-#: ../classes/wppizza.actions.inc.php:1697
-#: ../classes/wppizza.actions.inc.php:1845
+#: ../classes/wppizza.actions.inc.php:1786
+#: ../classes/wppizza.actions.inc.php:1934
 msgid "WPPizza Categories"
 msgstr "Categorie WPPizza"
 
-#: ../classes/wppizza.actions.inc.php:1698
+#: ../classes/wppizza.actions.inc.php:1787
 msgid "Category"
 msgstr "Categoria"
 
-#: ../classes/wppizza.actions.inc.php:1699
+#: ../classes/wppizza.actions.inc.php:1788
 msgid "Search Categories"
 msgstr "Cerca Categorie"
 
-#: ../classes/wppizza.actions.inc.php:1700
+#: ../classes/wppizza.actions.inc.php:1789
 msgid "All Categories"
 msgstr "Tutte le Categorie"
 
-#: ../classes/wppizza.actions.inc.php:1701
+#: ../classes/wppizza.actions.inc.php:1790
 msgid "Parent Category"
 msgstr "Categoria Principale"
 
-#: ../classes/wppizza.actions.inc.php:1702
+#: ../classes/wppizza.actions.inc.php:1791
 msgid "Parent Category:"
 msgstr "Categoria Principale:"
 
-#: ../classes/wppizza.actions.inc.php:1703
+#: ../classes/wppizza.actions.inc.php:1792
 msgid "Edit Category"
 msgstr "Modifica Categoria"
 
-#: ../classes/wppizza.actions.inc.php:1704
+#: ../classes/wppizza.actions.inc.php:1793
 msgid "Update Category"
 msgstr "Aggiorna la Categoria"
 
-#: ../classes/wppizza.actions.inc.php:1705
+#: ../classes/wppizza.actions.inc.php:1794
 msgid "Add New Category"
 msgstr "Aggiungi Nuova Categoria"
 
-#: ../classes/wppizza.actions.inc.php:1706
+#: ../classes/wppizza.actions.inc.php:1795
 msgid "New Category Name"
 msgstr "Nuova Categoria"
 
-#: ../classes/wppizza.actions.inc.php:1707
-msgid "Categories"
-msgstr "Categorie"
-
-#: ../classes/wppizza.actions.inc.php:2904
-#: ../classes/wppizza.actions.inc.php:2906
+#: ../classes/wppizza.actions.inc.php:2993
+#: ../classes/wppizza.actions.inc.php:2995
 msgid "Previous"
 msgstr "Previous"
 
-#: ../classes/wppizza.actions.inc.php:2920
-#: ../classes/wppizza.actions.inc.php:2922
+#: ../classes/wppizza.actions.inc.php:3009
+#: ../classes/wppizza.actions.inc.php:3011
 msgid "Next"
 msgstr "Next"
 
@@ -575,10 +609,6 @@ msgstr "Export Range"
 #: ../inc/admin.echo.manage_reports.inc.php:30
 msgid "Report"
 msgstr "Report"
-
-#: ../inc/admin.echo.manage_reports.inc.php:34
-msgid "Overview"
-msgstr "Overview"
 
 #: ../inc/admin.echo.manage_reports.inc.php:39
 msgid "Custom Range"
@@ -3246,39 +3276,39 @@ msgstr ""
 msgid "closed"
 msgstr "chiuso"
 
-#: ../inc/common.output.formatting.functions.inc.php:448
+#: ../inc/common.output.formatting.functions.inc.php:449
 msgid "Mondays"
 msgstr "Lunedì"
 
-#: ../inc/common.output.formatting.functions.inc.php:449
+#: ../inc/common.output.formatting.functions.inc.php:450
 msgid "Tuesdays"
 msgstr "Martedi"
 
-#: ../inc/common.output.formatting.functions.inc.php:450
+#: ../inc/common.output.formatting.functions.inc.php:451
 msgid "Wednesdays"
 msgstr "Mercoledì"
 
-#: ../inc/common.output.formatting.functions.inc.php:451
+#: ../inc/common.output.formatting.functions.inc.php:452
 msgid "Thursdays"
 msgstr "Giovedì"
 
-#: ../inc/common.output.formatting.functions.inc.php:452
+#: ../inc/common.output.formatting.functions.inc.php:453
 msgid "Fridays"
 msgstr "Venerdì"
 
-#: ../inc/common.output.formatting.functions.inc.php:453
+#: ../inc/common.output.formatting.functions.inc.php:454
 msgid "Saturdays"
 msgstr "Sabato"
 
-#: ../inc/common.output.formatting.functions.inc.php:454
+#: ../inc/common.output.formatting.functions.inc.php:455
 msgid "Sundays"
 msgstr "Domenica"
 
-#: ../inc/common.output.formatting.functions.inc.php:462
+#: ../inc/common.output.formatting.functions.inc.php:463
 msgid "Default"
 msgstr "Default"
 
-#: ../inc/common.output.formatting.functions.inc.php:463
+#: ../inc/common.output.formatting.functions.inc.php:464
 msgid "Responsive [Experimental]"
 msgstr "Responsive [Sperimentale]"
 
