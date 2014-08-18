@@ -1812,7 +1812,7 @@ public function wppizza_require_common_input_validation_functions(){
 		[rewrite single item slug/permalink]
 	******************************************************/	
 	function wppizza_single_item_permalink_rewrite($args){
-		if($this->pluginOptions['plugin_data']['single_item_permalink_rewrite']!=''){
+		if(isset($this->pluginOptions['plugin_data']['single_item_permalink_rewrite']) && $this->pluginOptions['plugin_data']['single_item_permalink_rewrite']!=''){
 			/**change single item post slug from wppizza to selected slug**/
 			$args['rewrite'] = array( 'slug' => sprintf( __( '%s', $this->pluginLocale ), $this->pluginOptions['plugin_data']['single_item_permalink_rewrite'] ) );	
 		}
@@ -1864,7 +1864,7 @@ public function wppizza_require_common_input_validation_functions(){
 			if(isset($_REQUEST['post_type'])){
 				$request_types=explode(",",$_REQUEST['post_type']);
 				/**if we have set another permalink for single mnu items, rewrite this here so the query finds wppizza after all**/
-				if($this->pluginOptions['plugin_data']['single_item_permalink_rewrite']!='' && in_array($this->pluginOptions['plugin_data']['single_item_permalink_rewrite'],$request_types)){
+				if(isset($this->pluginOptions['plugin_data']['single_item_permalink_rewrite']) && $this->pluginOptions['plugin_data']['single_item_permalink_rewrite']!='' && in_array($this->pluginOptions['plugin_data']['single_item_permalink_rewrite'],$request_types)){
 					$key = array_search($this->pluginOptions['plugin_data']['single_item_permalink_rewrite'], $request_types);
 					$request_types[$key]=WPPIZZA_POST_TYPE;	
 				}

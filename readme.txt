@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.3, WP 3.3 
 Tested up to: 3.9.2
-Stable tag: 2.10.4
+Stable tag: 2.10.4.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -140,6 +140,10 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 == Changelog ==
 
+2.10.4.1
+* eliminated a (one time and inconsequential) php notice on updating plugin regarding single_item_permalink_rewrite   
+18th August 2014  
+  
 2.10.4  
 * increased varchar for transaction_id in wppizza_orders table from 32 to 48 chars as some gateways have longer transaction ids  
 * fixed issue where currencies defined as hex values where not displayed properly next to menu items in plaintext emails  
