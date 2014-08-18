@@ -307,6 +307,7 @@
 				'search_include' => false,
 				'post_single_template' => array(),
 				'category_parent_page' => array(),
+				'single_item_permalink_rewrite'=>'',
 				'empty_category_and_items' => false,
 				'wp_multisite_session_per_site' => true,
 				'using_cache_plugin' => false,

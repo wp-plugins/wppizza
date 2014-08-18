@@ -41,6 +41,10 @@
 		foreach($this->pluginOptions['order']['order_email_attachments'] as $k=>$arr){
 			$this->pluginOptions['order']['order_email_attachments'][$k] = icl_translate(WPPIZZA_SLUG,'order_email_attachments_'. $k.'', $arr);
 		}}		
+
+
+		/**single item permalink**/
+		$this->pluginOptions['plugin_data']['single_item_permalink_rewrite'] = icl_translate(WPPIZZA_SLUG,'single_item_permalink_rewrite', $this->pluginOptions['plugin_data']['single_item_permalink_rewrite']);
 	
 		/**gateways select label**/
 		$this->pluginOptions['gateways']['gateway_select_label'] = icl_translate(WPPIZZA_SLUG,'gateway_select_label', $this->pluginOptions['gateways']['gateway_select_label']);

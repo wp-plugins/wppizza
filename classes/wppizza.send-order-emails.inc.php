@@ -123,11 +123,11 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 				*		[currency position]
 				*
 				*********************************************************************/
-				$currency_left=$oDetails['currency'].' ';
+				$currency_left=wppizza_email_decode_entities($oDetails['currency'],$this->blogCharset).' ';
 				$currency_right='';
 				if($this->pluginOptions['layout']['currency_symbol_position']=='right'){/*right aligned*/
 					$currency_left='';
-					$currency_right=' '.$oDetails['currency'];
+					$currency_right=' '.wppizza_email_decode_entities($oDetails['currency'],$this->blogCharset);
 				}
 
 

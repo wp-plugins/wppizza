@@ -41,6 +41,9 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 			add_action( 'register_form', array( $this,'wppizza_user_register_form_display_fields') );
 			add_action( 'user_register', array( $this,'wppizza_user_register_form_save_fields'), 100 );
 
+			/**allow rewriting of single item permalinks**/
+			add_filter('wppizza_cpt_args',array( $this,'wppizza_single_item_permalink_rewrite'));
+
 
 		/************************************************************************
 			[runs only for frontend]
@@ -1667,6 +1670,7 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 			/**use class to filter/add search variables when using**/
 			$searchvars = new WPPIZZA_SEARCH_VARS();
 			$searchvars->atts = $atts;
+			$searchvars->options = $this->pluginOptions;
 			add_filter( 'get_search_form', array( $searchvars, 'searchvars' ) );/**add hidden wppizza input elm**/
 			get_search_form();/*output - now altered - search form**/
 			remove_filter('get_search_form',array( $searchvars, 'searchvars' ));//** reset to original or we will always have the post_type appended to the serach form once it has been run**/
@@ -1805,6 +1809,16 @@ public function wppizza_require_common_input_validation_functions(){
 		  ));
 	}
 	/*******************************************************
+		[rewrite single item slug/permalink]
+	******************************************************/	
+	function wppizza_single_item_permalink_rewrite($args){
+		if($this->pluginOptions['plugin_data']['single_item_permalink_rewrite']!=''){
+			/**change single item post slug from wppizza to selected slug**/
+			$args['rewrite'] = array( 'slug' => sprintf( __( '%s', $this->pluginLocale ), $this->pluginOptions['plugin_data']['single_item_permalink_rewrite'] ) );	
+		}
+		return $args;
+	}
+	/*******************************************************
 		[get fully sorted hierarchy of wppizza categories]
 	******************************************************/
 	function wppizza_complete_sorted_hierarchy($catsort=array()){
@@ -1848,7 +1862,12 @@ public function wppizza_require_common_input_validation_functions(){
 			}
 			/**post types set when using shortcodes/widget etc**/
 			if(isset($_REQUEST['post_type'])){
-				$request_types=explode(",",$_REQUEST['post_type'])	;
+				$request_types=explode(",",$_REQUEST['post_type']);
+				/**if we have set another permalink for single mnu items, rewrite this here so the query finds wppizza after all**/
+				if($this->pluginOptions['plugin_data']['single_item_permalink_rewrite']!='' && in_array($this->pluginOptions['plugin_data']['single_item_permalink_rewrite'],$request_types)){
+					$key = array_search($this->pluginOptions['plugin_data']['single_item_permalink_rewrite'], $request_types);
+					$request_types[$key]=WPPIZZA_POST_TYPE;	
+				}
 				/**get all queryable and get intersection just to be tidy and stop people from entering random query vars***/
 				$post_types = get_post_types( array('public' => true,'exclude_from_search' => false), 'names' );
 				$result = array_intersect($request_types, $post_types);
@@ -3055,11 +3074,18 @@ function wppizza_cat_parents( $id, $separator =' &raquo; ', $page , $taxonomy = 
 *************************************************************************************************************/
 class WPPIZZA_SEARCH_VARS {
     public $atts = '';
+    public $options = '';
     function searchvars( $form ) {
     	if(isset($this->atts['include']) && $this->atts['include']!=''){
     		$val=$this->atts['include'];
     		$inc=explode(",",$this->atts['include']);
     		if(in_array(WPPIZZA_POST_TYPE,$inc)){
+    			/**if we have set another permalink for single mnu items, rewrite this here so the query finds wppizza after all**/
+				if($this->options['plugin_data']['single_item_permalink_rewrite']!=''){
+					$key = array_search(WPPIZZA_POST_TYPE, $inc);
+					$inc[$key]=$this->options['plugin_data']['single_item_permalink_rewrite'];
+					$val=implode(",",$inc);
+				}
     			$hiddenWppField='<input type="hidden" name="post_type" value="'.$val.'" />'.PHP_EOL.'</form';/*leave form tag open here to allow for spaces**/
 				$form=str_ireplace('</form',$hiddenWppField,$form);
     		}

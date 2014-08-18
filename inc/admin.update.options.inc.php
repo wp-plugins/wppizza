@@ -122,6 +122,11 @@
 	if(isset($options['plugin_data']['category_parent_page'])){
 		$update_options['plugin_data']['category_parent_page']=$options['plugin_data']['category_parent_page'];
 	}
+	if(isset($options['plugin_data']['single_item_permalink_rewrite'])){
+		$update_options['plugin_data']['single_item_permalink_rewrite']=$options['plugin_data']['single_item_permalink_rewrite'];
+	}	
+	
+	
 	if(isset($options['gateways']['gateway_selected'])){
 		$update_options['gateways']['gateway_selected']=$options['gateways']['gateway_selected'];
 	}

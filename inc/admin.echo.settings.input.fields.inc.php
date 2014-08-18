@@ -72,6 +72,12 @@ $options = $this->pluginOptions;
 				}
 				echo "</select>";
 			}
+			if($field=='single_item_permalink_rewrite'){
+				echo "<input name='".$this->pluginSlug."[plugin_data][".$field."]' size='20' type='text'  value='{$options['plugin_data'][$field]}' />";
+				echo " ".__('defaults to "wppizza" if left empty. Any value used here cannot not be used in any other custom post type', $this->pluginLocale)."";
+				echo "<br />".__('Note: by default, wppizza templates/shortcodes do not link to any single menu items. However, if you are including mneu items in search results for example or have edited a/the template(s) to include links to individual menu items you will also (probably) want to edit the single item template. see http://wordpress.org/plugins/wppizza/faq/ ->single wppizza menu items display', $this->pluginLocale)."";
+
+			}
 			if($field=='empty_category_and_items'){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[plugin_data][".$field."]' type='checkbox'  value='1' />";
 				echo" ".__('delete images too ?', $this->pluginLocale)."";

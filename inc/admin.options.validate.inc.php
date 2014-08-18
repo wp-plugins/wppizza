@@ -38,6 +38,14 @@
 		if(isset($input['plugin_data']['category_parent_page'])){
 			$options['plugin_data']['category_parent_page'] = !empty($input['plugin_data']['category_parent_page']) ? (int)$input['plugin_data']['category_parent_page'] : '';
 		}
+		
+		
+		/**sets single item permalink**/
+		if(isset($input['plugin_data']['single_item_permalink_rewrite'])){
+			$options['plugin_data']['single_item_permalink_rewrite'] = sanitize_title($input['plugin_data']['single_item_permalink_rewrite']);
+		}		
+		
+		
 		if(isset($input['layout']['category_sort'])){
 			$options['layout']['category_sort']=$input['layout']['category_sort'];
 		}

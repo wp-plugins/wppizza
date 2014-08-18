@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.3, WP 3.3 
 Tested up to: 3.9.2
-Stable tag: 2.10.3
+Stable tag: 2.10.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -82,7 +82,7 @@ Note: you might want to start with  Option 1 first, as you can always use Option
 	- place this snippet in the 'wppizza-wrapper.php' file we created above in your theme directory, REPLACING the original loop (including the while ( have_posts() ) : the_post(); or similar part) 
 	- display the navigation by either using the widget (type:navigation) or a shortcode [wppizza type='navigation']
 	- **ensure you still have an order page that includes the following shortcode [wppizza type='orderpage'] and wppizza->settings->order settings: 'order page' is set to use this page (you might have to re-save your permalink settings)**  
-	- ensure - as outlined in Option 1 - that you are displaying your shopping cart  
+	- **ensure - as outlined in Option 1 - that you are displaying your shopping cart**  
 	- if you wish , you can now delete all wppizza default pages EXCEPT THE ORDER PAGE. However,if using permalinks, you might want to keep the parent page (default: Our Menu) and set the permalinks in wppizza->settings to this page. If you do, make sure to update permalinks structure once.
 
 	Now you do not have to maintain any wppizza category pages, or navigation when adding new categories or menu items to wppizza as it's all taken care of automagically.
@@ -140,11 +140,18 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 == Changelog ==
 
+2.10.4  
+* increased varchar for transaction_id in wppizza_orders table from 32 to 48 chars as some gateways have longer transaction ids  
+* fixed issue where currencies defined as hex values where not displayed properly next to menu items in plaintext emails  
+* added option to set single menu item permalink to something other than "wppizza"    
+18th August 2014  
+
+
 2.10.3  
 * added admin dashboard overview widget  
 * added missing symbol/currency for indian rupee  
 * added lost password link under login on order page  
-12th August 2014  
+11th August 2014  
 
 2.10.2.1  
 * added: allow form fields to be required only on pickup and not on delivery (and still vice versa)  

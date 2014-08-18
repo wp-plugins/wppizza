@@ -40,7 +40,7 @@ $sql="CREATE TABLE ".$wpdb->prefix ."wppizza_orders (
 	order_ini TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	customer_ini TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	payment_status ENUM('INITIALIZED','COMPLETED','PENDING','REFUNDED','AUTHORIZED','FAILED','INVALID','CANCELLED','OTHER','CAPTURED','COD','NOTAPPLICABLE') NULL DEFAULT 'COD',
-	transaction_id VARCHAR(32) NULL DEFAULT NULL,
+	transaction_id VARCHAR(48) NULL DEFAULT NULL,
 	transaction_details TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	transaction_errors TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	initiator VARCHAR(32) NULL DEFAULT 'COD',
