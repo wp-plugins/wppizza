@@ -1225,6 +1225,7 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 				$bestsellersQuery="SELECT id,order_ini FROM ".$wpdb->prefix . $this->pluginOrderTable." WHERE payment_status='COMPLETED' ";
 				$bestsellersRes = $wpdb->get_results($bestsellersQuery);
 				$bestsellers=array();
+
 				/**loop through items and get quantities**/
 				foreach($bestsellersRes as $b=>$bs){
 					$thisOrderDetails=maybe_unserialize($bs->order_ini);
@@ -1244,16 +1245,15 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 
 				/*sort by quantity*/
 				arsort($bestsellers);
+
 				/*chunk to required bits*/
 				$chunks=(int)$atts['bestsellers'];
 				$bestsellers=array_chunk($bestsellers, $chunks, true);
 
 
-
 				if(count($bestsellers)>0){
 					/**required bestsellers**/
-					$bestsellersFlip=array_flip($bestsellers[0]);
-					$bestsellersIncl=implode(',',$bestsellersFlip);
+					$bestsellersIncl=implode(',',array_keys($bestsellers[0]));
 				}else{
 					$bestsellersIncl='';
 				}

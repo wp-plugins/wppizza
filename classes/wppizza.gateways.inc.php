@@ -382,12 +382,12 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 	*
 	********************************************************************/
 	function gateway_set_order_details(){
-		/*In case microtime is available use it*/
-		if(function_exists('microtime')){
-			$timestamp=microtime(true);
-		}else{
-			$timestamp=time();
-		}
+		/*In case microtime is available use it->deprecated as of 2.10.4.2*/
+		//if(function_exists('microtime')){
+		//	$timestamp=microtime(true);
+		//}else{
+			$timestamp=current_time('timestamp');
+		//}
 		$this->gatewayOrderDetails=$this->wppizza_gateway_order_details(array('time'=>$timestamp));
 	}
 	/******************************************************************

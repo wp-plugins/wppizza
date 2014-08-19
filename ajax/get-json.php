@@ -434,7 +434,7 @@ if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='sendorder'){
 		if($orderStatus=='INITIALIZED'){
 
 			/**update the db**/
-			$now=time();
+			$now=current_time('timestamp');
 
 			//$thisOrderTransactionId='COD'.$now.$orderId.'';
 			$thisOrderPostVars = apply_filters('wppizza_filter_sanitize_post_vars', $params);

@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.3, WP 3.3 
 Tested up to: 3.9.2
-Stable tag: 2.10.4.1
+Stable tag: 2.10.4.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -140,7 +140,13 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 == Changelog ==
 
-2.10.4.1
+2.10.4.2  
+* fixed error when using bestseller shortcode as items with the same number of sales only displayed the last one    
+* fixed time discrepancy in reports if php.ini timezone settings are - for some reason - different to wordpress timezone settings  
+* maintenance: now always using a straight forward timestamp associated with the time of order when initializing/adding order to the db (instead of attempting to use microtime if available - as it's just overkill)  
+19th August 2014  
+
+2.10.4.1  
 * eliminated a (one time and inconsequential) php notice on updating plugin regarding single_item_permalink_rewrite   
 18th August 2014  
   
