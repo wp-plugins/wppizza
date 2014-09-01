@@ -140,6 +140,7 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 					/**update profile**/
 					if(!empty($oIni['update_profile'])){
 	    				$ff=$pOptions['order_form'];
+	    				$ff = apply_filters('wppizza_filter_formfields_update_profile', $ff);
 						foreach( $ff as $field ) {
 						if(!empty($field['enabled'])) {
 							if( $field['type']!='select'){

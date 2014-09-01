@@ -19,7 +19,7 @@
 ?>
 <?php
 	/**do somthing if you want (like print order button or something)**/
-	do_action('wppizza_show_order_before');
+	do_action('wppizza_show_order_before',$order,$summary);
 ?>
 <div id="wppizza-cart-contents" class="wppizza-cart-thankyou">
 
@@ -29,7 +29,7 @@
 
 <?php
 	/**do somthing if you want (like print order button or something)**/
-	do_action('wppizza_show_order_before_customer_details');
+	do_action('wppizza_show_order_before_customer_details',$order,$summary);
 ?>
 
 <?php	/**customer details**/ 	?>
@@ -42,13 +42,13 @@
 <?php } ?>
 <?php
 	/**do somthing if you want (like print order button or something)**/
-	do_action('wppizza_show_order_after_customer_details');
+	do_action('wppizza_show_order_after_customer_details',$order,$summary);
 ?>
 <?php	/**order items details**/ 	?>
 	<ul id="wppizza-item-details">
 <?php
 	/**do somthing if you want (like print order button or something)**/
-	do_action('wppizza_show_order_form_first_item');
+	do_action('wppizza_show_order_form_first_item',$order,$summary);
 ?>
 	<?php
 		/***allow filtering of items (sort, add categories and whatnot)****/
@@ -82,12 +82,12 @@
 	<?php } ?>
 <?php
 	/**do somthing if you want (like print order button or something)**/
-	do_action('wppizza_show_order_form_last_item');
+	do_action('wppizza_show_order_form_last_item',$order,$summary);
 ?>
 	</ul>
 <?php
 	/**added 2.10.2*/
-	do_action('wppizza_show_order_form_after_items');
+	do_action('wppizza_show_order_form_after_items',$order,$summary);
 ?>
 <?php	/**order summary**/ 	?>
 	<ul id="wppizza-cart-subtotals">
@@ -140,5 +140,5 @@
 </div>
 <?php
 	/**do somthing if you want (like print order button or something)**/
-	do_action('wppizza_show_order_after');
+	do_action('wppizza_show_order_after',$order,$summary);
 ?>

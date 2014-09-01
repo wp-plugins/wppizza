@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.3, WP 3.3 
 Tested up to: 3.9.2
-Stable tag: 2.10.4.2
+Stable tag: 2.10.4.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -139,6 +139,12 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 
 == Changelog ==
+
+2.10.4.3  
+* Maintenence: also delete (if any) wpml string translations from wpml db when uninstalling plugin to avoid orphaned/redundant db entries  
+* added missing filter to also allow other plugins to update/save user meta values when checking "update my details" on order page  
+* added some variables to do_action hooks in show order template  
+1st September 2014  
 
 2.10.4.2  
 * fixed error when using bestseller shortcode as items with the same number of sales only displayed the last one    

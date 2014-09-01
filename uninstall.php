@@ -69,6 +69,65 @@ function delete_wppizza_user_metadata($blogid){
 }
 
 
+function delete_wppizza_wpmlstrings(){
+	/**deregister wpml strings**/
+	if(function_exists('icl_translate')){
+	$options=get_option('wppizza');
+		/*localization*/
+		foreach($options['localization'] as $k=>$arr){
+		  	icl_unregister_string('wppizza',$k);
+		}
+		/**additives**/
+		if(isset($options['additives']) && is_array($options['additives'])){
+		foreach($options['additives'] as $k=>$str){
+			icl_unregister_string('wppizza','additives_'. $k.'');
+		}}
+		/**sizes**/
+		if(isset($options['sizes']) && is_array($options['sizes'])){
+		foreach($options['sizes'] as $k=>$arr){
+			foreach($arr as $sKey=>$sArr){
+				icl_unregister_string('wppizza','sizes_'. $k.'_'.$sKey.'');
+			}
+		}}
+		/**order_form**/
+		foreach($options['order_form'] as $k=>$arr){
+			icl_unregister_string('wppizza','order_form_'. $k.'');
+		}
+		/**confirmation_form**/
+		foreach($options['confirmation_form'] as $k=>$arr){
+			icl_unregister_string('wppizza','confirmation_form_'. $k.'');
+		}		
+		
+		/**order**/
+		icl_unregister_string('wppizza','order_email_from');
+		icl_unregister_string('wppizza','order_email_from_name');
+		/**order email to **/
+		if(isset($options['order']['order_email_to']) && is_array($options['order']['order_email_to'])){
+		foreach($options['order']['order_email_to'] as $k=>$arr){
+			icl_unregister_string('wppizza','order_email_to_'.$k.'');
+		}}
+		/**order email bcc **/
+		if(isset($options['order']['order_email_bcc']) && is_array($options['order']['order_email_bcc'])){
+		foreach($options['order']['order_email_bcc'] as $k=>$arr){
+			icl_unregister_string('wppizza','order_email_bcc_'. $k.'');
+		}}
+		/**order email attachments **/
+		if(isset($options['order']['order_email_attachments']) && is_array($options['order']['order_email_attachments'])){
+		foreach($options['order']['order_email_attachments'] as $k=>$arr){
+			icl_unregister_string('wppizza','order_email_attachments_'. $k.'');
+		}}		
+
+		/**single item permalink**/
+		icl_unregister_string('wppizza','single_item_permalink_rewrite');
+	
+		/**gateways select label**/
+		icl_unregister_string('wppizza','gateway_select_label');
+		
+		/**cod gateway***/		
+		icl_unregister_string('wppizza_gateways','cod_gateway_label');		
+		
+	}         
+}
 
 // Register wpPluginJanitor class only if it does not already exist.
 if( !class_exists( 'wpPluginJanitor' ) ){
@@ -78,6 +137,9 @@ if( !class_exists( 'wpPluginJanitor' ) ){
  	   		if ($blogs) {
         	foreach($blogs as $blog) {
            		switch_to_blog($blog['blog_id']);
+				/**deregister wpml strings**/
+				delete_wppizza_wpmlstrings();
+				
 		  		include_once( 'inc/admin.plugin.uninstall.janitor.php' );
 				// Call uninstall cleanup method.
 				wpPluginJanitor::cleanup( $opt, $cpt, $tax );
@@ -92,7 +154,9 @@ if( !class_exists( 'wpPluginJanitor' ) ){
 			restore_current_blog();
  	   		}
 	}else{
-
+		/**deregister wpml strings**/
+		delete_wppizza_wpmlstrings();
+  		
   		include_once( 'inc/admin.plugin.uninstall.janitor.php' );
 		// Call uninstall cleanup method.
 		$wpPluginJanitor=new wpPluginJanitor();
