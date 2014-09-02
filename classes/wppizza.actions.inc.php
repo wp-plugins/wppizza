@@ -907,7 +907,9 @@ function wppizza_require_report_functions(){
 *
 *********************************************************/
 function wppizza_dashboard_widget(){
-	wp_add_dashboard_widget('wppizza_dashboard_widget',WPPIZZA_NAME.' '.__('Overview',$this->pluginLocale),array($this,'wppizza_do_dashboard_widget'));
+	if (current_user_can('wppizza_cap_reports')){
+		wp_add_dashboard_widget('wppizza_dashboard_widget',WPPIZZA_NAME.' '.__('Overview',$this->pluginLocale),array($this,'wppizza_do_dashboard_widget'));
+	}
 }
 function wppizza_do_dashboard_widget() {
 	/**number of posts**/

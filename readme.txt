@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.3, WP 3.3 
 Tested up to: 3.9.2
-Stable tag: 2.10.4.3
+Stable tag: 2.10.4.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -139,6 +139,12 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 
 == Changelog ==
+
+2.10.4.4  
+fix: dashboard sales widget was available/visible to all when it should only have been visible to users with "reports" access  
+updated readme  
+2nd September 2014  
+
 
 2.10.4.3  
 * Maintenence: also delete (if any) wpml string translations from wpml db when uninstalling plugin to avoid orphaned/redundant db entries  
@@ -972,10 +978,14 @@ alternatively, add " add_theme_support( 'post-thumbnails'); " (without the quote
 = Can I just display the menu without offering online order  ? =
 
 Sure.  
-Just don't display the shoppingcart anywhere. If you choose to do this, you might also want to delete any orderpage you might have (as there's nothing to order).  
-Alternatively, if you still want to show the cart (to show combined prices/taxes/discounts) but want to disable ordering, you could copy wppizza-custom.css to your them directory and add ".wppizza-cart-button{display:none}" without the quotes to it.
-You can probably also achieve the same thing by using a combination of the layout and/or order setting options available from within the plugin.
-You would still probably want to delete/hide your order page or at least disable all your gateways  
+There are various options/possibilities depending what you want to achieve:
+	
+	- Just don't display the shoppingcart anywhere. If you choose to do this, you might also want to delete any orderpage you might have (as there's nothing to order). 	
+	- If you still want to show the cart (to show combined prices/taxes/discounts) but want to disable ordering, go to wppizza->order settings and do not select an order page 
+	- you can also go to wppizza->layout and check "Completely disable online order"  
+	- and/or goto wppizza->gateways and disable all gateways 
+
+if necessary - depending how you want this setup exactly - you might also want to consider deleting your orderpage entirely if it's not needed.  
 
 
 = I'm using the plugin with xyz theme and it's all messed up  =
