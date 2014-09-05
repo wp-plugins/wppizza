@@ -397,13 +397,17 @@ function wpizza_get_opening_times($starttime,$endtime,$d,$m,$Y,$day='today'){
   if($starttime==$endtime) {
 	$openingtime=false;
  }
+ 
+/*
+changed in 2.10.4.5 for an easier way to check if opening/closing times cross midnight. 
+uses gmmktime to make it dst agnostic (as we are only dealing with hours and minutes)
+*/
+$calcStart=gmmktime((int)$start[0], (int)$start[1], 0 , 1 ,1 ,2000);
+$calcEnd=gmmktime((int)$end[0], (int)$end[1], 0 , 1 ,1 ,2000);
+if($calcEnd<$calcStart) {
+ 	$openingTimesCrossMidnight=1; 	
+}
 
- /*for easier comparison, change 00 in endtime hour to 24 if thats the case*/
- if((int)$end[0]==0){$end24=24;}else{$end24=$end[0];}
- /*compare. if start hour>end hour OR starthour==endhour AND startminute>endminute , opening times are crossing midnight**/
- if((int)$start[0]>$end24 ||  ($start[0]==$end[0] && $start[1]>$end[1])) {
- 	$openingTimesCrossMidnight=1;
- }
  if(isset($openingTimesCrossMidnight)){
  	if($day=='today'){
  		$openingtime['start']=mktime($start[0],$start[1],0,$m,$d,$Y);

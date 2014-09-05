@@ -5,8 +5,8 @@ Author URI: http://www.wp-pizza.com
 Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.3, WP 3.3 
-Tested up to: 3.9.2
-Stable tag: 2.10.4.4
+Tested up to: 4.0
+Stable tag: 2.10.4.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -140,9 +140,20 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 == Changelog ==
 
+2.10.4.5  
+* checked for compatibility with WP 4.0 (nothing to do :))  
+* doublecheck when submitting order that shop is still open (in case someone stayed on the orderpage for ages without doing anything)  
+* added filter in admin order history to be able to customise output if required  
+* added action hooks to admin-get-json.php and get-json.php    
+* added missing class to wrapper div of menu item text and pricetiers in responsive css  
+* bugfix: closingtimes between 00:00 and 00:59 were not recognised properly (surprised noone noticed this before)  
+* updated readme  
+4th September 2014  
+
+
 2.10.4.4  
-fix: dashboard sales widget was available/visible to all when it should only have been visible to users with "reports" access  
-updated readme  
+* fix: dashboard sales widget was available/visible to all when it should only have been visible to users with "reports" access  
+* updated readme  
 2nd September 2014  
 
 
@@ -980,10 +991,10 @@ alternatively, add " add_theme_support( 'post-thumbnails'); " (without the quote
 Sure.  
 There are various options/possibilities depending what you want to achieve:
 	
-	- Just don't display the shoppingcart anywhere. If you choose to do this, you might also want to delete any orderpage you might have (as there's nothing to order). 	
-	- If you still want to show the cart (to show combined prices/taxes/discounts) but want to disable ordering, go to wppizza->order settings and do not select an order page 
-	- you can also go to wppizza->layout and check "Completely disable online order"  
-	- and/or goto wppizza->gateways and disable all gateways 
+* Just don't display the shoppingcart anywhere. If you choose to do this, you might also want to delete any orderpage you might have (as there's nothing to order). 	
+* If you still want to show the cart (to show combined prices/taxes/discounts) but want to disable ordering, go to wppizza->order settings and do not select an order page 
+* you can also go to wppizza->layout and check "Completely disable online order"  
+* and/or goto wppizza->gateways and disable all gateways 
 
 if necessary - depending how you want this setup exactly - you might also want to consider deleting your orderpage entirely if it's not needed.  
 
@@ -1145,20 +1156,31 @@ if the auther doesnt want to or cannot do anything about it, you can also try ju
 
 * to change the name (i.e WPPizza) just add "define('WPPIZZA_NAME', 'The Name You Want');" to your wp-config.php 
 * to change the WPPizza Menu Icon in Admin Panel next to the Name just add "define('WPPIZZA_MENU_ICON', 'http://path/to/icon.png');" to your wp-config.php 
+* to change the urls to something more suitable go to wppizza->settings and change the permalinks as appropriate (if linking to single items, make sure you read the notes below and in the plugin) 
 	  
 
 = single wppizza menu items display =  
 
-if you have NOT enabled "Include wppizza menu items in regular search results" (wppizza->settings), are NOT using the wppizza search widget (selectable in the wppizza widget) or - if using the widget - have NOT enabled "wppizza menu items" in the search widget, the following is irrelevant.
-however, if any of the above is true, please read on with regards to the "how to display single wppizza menu items" settings/template/page to use in wppizza->settings->Include wppizza menu items in regular search results .
+if you did 
 
-assuming you *are* including wppizza menu items in your search results, you will get a list of results with links (typically the title, but it depends on the theme you are using) to that particular menu item alongside excerpts/content amd/or an associated featured image.  
+* NOT enable "Include wppizza menu items in regular search results" (wppizza->settings),  
+* are NOT using the wppizza search widget (selectable in the wppizza widget)  
+* or - if using the search widget - have NOT enabled "wppizza menu items" in the widget  
+* have NOT edited the templates to link to single menu items  
+* and are NOT using a sitemap generation plugin that automatically indexes single posts/menu items (or are excluding those single menu items from the sitemap)  
+
+the *following is irrelevant*.
+
+
+*however*, if any of the above is true, please read on with regards to the "how to display single wppizza menu items" settings/template/page to use in wppizza->settings->Include wppizza menu items in regular search results .
+
+assuming you *are* including wppizza menu items in your search results for example, you will get a list of results with links (typically the title, but it depends on the theme you are using) to that particular menu item alongside excerpts/content amd/or an associated featured image.  
 clicking on said link will display the single menu item in its own page according to how your theme's templates display normal blogposts  
 
 if you would like this single item to display like all your other wppizza menu items, there are two choices:
 	
 **preferred (and really the right way to do this when working with wordpress)**  
-- set/leave the selected option at "default or custom template [single-wppizza.php if exists]"
+- set/leave the selected option in "wppizza->settings->Include wppizza menu items in regular search results" at "default or custom template [single-wppizza.php if exists]"
 - your theme has (should have) a file called single.php  
 - make a copy of this file in the same directory, renaming it to single-wppizza.php  
 - this file is likely to have something like the following (between some coding like "while ( have_posts() ) : the_post(); .... endwhile "):
@@ -1209,7 +1231,7 @@ as ever, if you have any questions or need help with this, leave a message in th
 
 = How can I submit a bug, ask for help or request a new feature? =
 
-	- leave a message on the <a href="http://wordpress.org/support/plugin/wppizza">wordpress forum</a> and I'll respond asap.  
-	- send an email to dev[at]wp-pizza.com with as much info as you can give me or 
-	- use the "contact us" or "feature request" page on <a href="http://www.wp-pizza.com/">www.wp-pizza.com</a>
+- leave a message on the <a href="http://wordpress.org/support/plugin/wppizza">wordpress forum</a> and I'll respond asap.  
+- send an email to dev[at]wp-pizza.com with as much info as you can give me or 
+- use the "contact us" or "feature request" page on <a href="http://www.wp-pizza.com/">www.wp-pizza.com</a>
 

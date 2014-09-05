@@ -261,7 +261,7 @@ if(is_single()){
 		[prices and info]
 **********************************************/
 ?>
-	<div>
+	<div class="<?php echo $post_type ?>-article-content">
 <?php
 	if(!isset($hidePrices)){
 ?>

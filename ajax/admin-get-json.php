@@ -147,32 +147,54 @@ $output='';
 			}
 			$output.="<div style='color:red'>".__('"Status" is solely for your internal reference. Updating/changing the value will have no other effects but might help you to identify which orders have not been processed.', $this->pluginLocale)."</div>";
 			$output.="<table>";
+				/****************************************************************************
+					[header row]
+				****************************************************************************/
 				$output.="<tr class='wppizza-orders-head'>";
-					$output.="<td>";
-						$output.="".__('Order', $this->pluginLocale)."";
-					$output.="</td>";
-					$output.="<td>";
-						$output.="".__('Customer Details', $this->pluginLocale)."";
-					$output.="</td>";
-					$output.="<td>";
-						$output.="".__('Order Details', $this->pluginLocale)."";
-					$output.="</td>";
-					$output.="<td>";
-						$output.="";
-					$output.="</td>";
+					
+					$header['column_order']="<td>";
+						$header['column_order'].="".__('Order', $this->pluginLocale)."";
+					$header['column_order'].="</td>";
+					
+					$header['column_customer']="<td>";
+						$header['column_customer'].="".__('Customer Details', $this->pluginLocale)."";
+					$header['column_customer'].="</td>";
+					
+					$header['column_details']="<td>";
+						$header['column_details'].="".__('Order Details', $this->pluginLocale)."";
+					$header['column_details'].="</td>";
+					
+					$header['column_empty']="<td>";
+						$header['column_empty'].="";
+					$header['column_empty'].="</td>";
+				
+				/**allow filtering**/	
+				$header= apply_filters('wppizza_filter_orderhistory_header', $header );	
+				$output.=implode('',$header);
+					
+					
+					
 				$output.="</tr>";
 
 
 				$customOrderStatus=wppizza_custom_order_status();
 				foreach ( $allOrders as $orders ){
 					/**add to total ordered amount of shown items**/
+					$customerDet=maybe_unserialize($orders->customer_ini);
 					$orderDet=maybe_unserialize($orders->order_ini);
 					$totalPriceOfShown+=(float)$orderDet['total'];
 					/*******************************************/
 					
 					$output.="<tr class='wppizza-ord-status-".strtolower($orders->order_status)."'>";
-						$output.="<td style='white-space:nowrap'>";
-							$output.= date("d-M-Y H:i:s",strtotime($orders->order_date));
+						
+						
+						/****************************************************************************
+							[first column, order info (id, transaction id etc)]
+						****************************************************************************/
+						$orderinfo=array();/*reset*/
+						
+						$orderinfo['tdopen']="<td style='white-space:nowrap'>";
+							$orderinfo['date']= date("d-M-Y H:i:s",strtotime($orders->order_date));
 							if($orders->initiator!=''){
 								/**get label from gateway class**/
 								$gwIdent=$orders->initiator;
@@ -183,73 +205,114 @@ $output='';
 									$gwIdent=$gw->gatewayOptions['gateway_label'];
 									}
 								}
-								$output.="<input type='hidden' id='wppizza_order_initiator_".$orders->id."' value='".__('Payment By', $this->pluginLocale).": ". $gwIdent ."' />";
-								$output.="<input type='hidden' id='wppizza_order_initiator_ident_".$orders->id."' value='". $gwIdent ."' />";
-								$output.="<br/>".__('Payment By', $this->pluginLocale).": ". $gwIdent ."";
+								$orderinfo['hiddeninput_payment']="<input type='hidden' id='wppizza_order_initiator_".$orders->id."' value='".__('Payment By', $this->pluginLocale).": ". $gwIdent ."' />";
+								$orderinfo['hiddeninput_payment'].="<input type='hidden' id='wppizza_order_initiator_ident_".$orders->id."' value='". $gwIdent ."' />";
+								
+								$orderinfo['payment']="<br/>".__('Payment By', $this->pluginLocale).": ". $gwIdent ."";
 							}
 							if($orders->transaction_id!=''){
 								$orders->transaction_id = apply_filters('wppizza_filter_transaction_id', $orders->transaction_id, $orders->id );
-								$output.="<input type='hidden' id='wppizza_order_transaction_id_".$orders->id."' value='ID: ". $orders->transaction_id ."' />";
-								$output.="<br/>ID: ". $orders->transaction_id . "";
+								$orderinfo['hiddeninput_txid']="<input type='hidden' id='wppizza_order_transaction_id_".$orders->id."' value='ID: ". $orders->transaction_id ."' />";
+								$orderinfo['transaction_id']="<br/>ID: ". $orders->transaction_id . "";
 							}
-							$output.="<br/>";
-							$output.="<label>".__('Status', $this->pluginLocale)."";
-							$output.="<select id='wppizza_order_status-".$orders->id."' name='wppizza_order_status-".$orders->id."' class='wppizza_order_status'>";
+							$orderinfo['status']="<br/>";
+							$orderinfo['status'].="<label>".__('Status', $this->pluginLocale)."";
+							$orderinfo['status'].="<select id='wppizza_order_status-".$orders->id."' name='wppizza_order_status-".$orders->id."' class='wppizza_order_status'>";
 								foreach($customOrderStatus as $s){
-									$output.="<option value='".$s."' ".selected($orders->order_status,$s,false).">".__($s, $this->pluginLocale)."</option>";
+									$orderinfo['status'].="<option value='".$s."' ".selected($orders->order_status,$s,false).">".__($s, $this->pluginLocale)."</option>";
 								}
-							$output.="</select></label>";
+							$orderinfo['status'].="</select>";
+							$orderinfo['status'].="</label>";
 
-							//$output.="<br/>";
-							//$output.="<a href='javascript:void()' id='wppizza_order_reject'>".__('Reject with email to customer', $this->pluginLocale)."</a>";
-							//$output.="<span id='wppizza_order_rejected-".$orders->id."'>";
-							//$output.="</span>";
+							//$orderinfo[]="<br/>";
+							//$orderinfo[]="<a href='javascript:void()' id='wppizza_order_reject'>".__('Reject with email to customer', $this->pluginLocale)."</a>";
+							//$orderinfo[]="<span id='wppizza_order_rejected-".$orders->id."'>";
+							//$orderinfo[]="</span>";
 
-							$output.="<br/>";
-							$output.="".__('Last Status Update', $this->pluginLocale).":<br />";
-							$output.="<span id='wppizza_order_update-".$orders->id."'>";
+							$orderinfo['last_update']="<br/>";
+							$orderinfo['last_update'].="".__('Last Status Update', $this->pluginLocale).":<br />";
+							$orderinfo['last_update'].="<span id='wppizza_order_update-".$orders->id."'>";
 							if($orders->order_update!='0000-00-00 00:00:00'){
-								$output.= date("d-M-Y H:i:s",strtotime($orders->order_update));
+								$orderinfo['last_update'].= date("d-M-Y H:i:s",strtotime($orders->order_update));
 							}else{
-								$output.= date("d-M-Y H:i:s",strtotime($orders->order_date));
+								$orderinfo['last_update'].= date("d-M-Y H:i:s",strtotime($orders->order_date));
 							}
-							$output.="</span>";
+							$orderinfo['last_update'].="</span>";
+						$orderinfo['tdclose']="</td>";
+						
+						/**allow filtering**/	
+						$orderinfo= apply_filters('wppizza_filter_orderhistory_order_info', $orderinfo, $orders->id, $customerDet, $orderDet);	
+						$output.=implode('',$orderinfo);						
+						
+						
+						/****************************************************************************
+							[second column -> customer details
+						****************************************************************************/						
+						$customer_details=array();/*reset*/
+						$customer_details[]="<td>";
+							$customer_details[]="<textarea id='wppizza_order_customer_details_".$orders->id."' class='wppizza_order_customer_details'>". $orders->customer_details ."</textarea>";
+						$customer_details[]="</td>";
+						/**allow filtering**/	
+						$customer_details= apply_filters('wppizza_filter_orderhistory_customer_details', $customer_details, $orders->id, $customerDet, $orderDet);	
+						$output.=implode('',$customer_details);						
 
-
-
-						$output.="</td>";
-						$output.="<td>";
-							$output.="<textarea id='wppizza_order_customer_details_".$orders->id."' class='wppizza_order_customer_details'>". $orders->customer_details ."</textarea>";
-						$output.="</td>";
-						$output.="<td>";
-							$output.="<textarea id='wppizza_order_details_".$orders->id."' class='wppizza_order_details' >". $orders->order_details ."</textarea>";
-						$output.="</td>";
-						$output.="<td>";
+						/****************************************************************************
+							[third column -> order details
+						****************************************************************************/	
+						$order_details=array();/*reset*/
+						$order_details[]="<td>";
+							$order_details[]="<textarea id='wppizza_order_details_".$orders->id."' class='wppizza_order_details' >". $orders->order_details ."</textarea>";
+						$order_details[]="</td>";
+						/**allow filtering**/	
+						$order_details= apply_filters('wppizza_filter_orderhistory_order_details', $order_details, $orders->id, $customerDet, $orderDet);	
+						$output.=implode('',$order_details);							
+						
+						/****************************************************************************
+							[fourth column -> delete, print, add notes
+						****************************************************************************/						
+						$actions=array();/*reset*/
+						$actions['tdopen']="<td>";
 							/*admin only*/
 							if (current_user_can('wppizza_cap_delete_order')){
-								$output.="<a href='#' id='wppizza_order_".$orders->id."' class='wppizza_order_delete'>".__('delete', $this->pluginLocale)."</a>";
-								$output.="<br/>";
+								$actions['delete']="<a href='#' id='wppizza_order_".$orders->id."' class='wppizza_order_delete'>".__('delete', $this->pluginLocale)."</a>";
+								$actions['deletebr']="<br/>";
 							}
 							/*print order*/
-							$output.="<a href='javascript:void(0);'  id='wppizza-print-order-".$orders->id."' class='wppizza-print-order button'>".__('print order', $this->pluginLocale)."</a>";
+							$actions['print']="<a href='javascript:void(0);'  id='wppizza-print-order-".$orders->id."' class='wppizza-print-order button'>".__('print order', $this->pluginLocale)."</a>";
 							/*add edit notes*/
-								$output.="<br/>";
+								$actions['printbr']="<br/>";
 								if(trim($orders->notes)==''){
-									$nbtrClass='wppizza-order-notes-tr';$notesBtnSty='block';
+									$nbtrClass='wppizza-order-notes-tr';$notesBtnSty='block;';
 								}else{
 									$nbtrClass='wppizza-order-has-notes-tr';$notesBtnSty='none';
 								}
-								$output.="<a href='javascript:void(0);'  id='wppizza-order-add-notes-".$orders->id."' class='wppizza-order-add-notes button' style='display:".$notesBtnSty."'>".__('add notes', $this->pluginLocale)."</a>";
-						$output.="</td>";
+								$actions['notes']="<a href='javascript:void(0);'  id='wppizza-order-add-notes-".$orders->id."' class='wppizza-order-add-notes button' style='display:".$notesBtnSty."'>".__('add notes', $this->pluginLocale)."</a>";
+						$actions['tdclose']="</td>";
+						/**allow filtering**/	
+						$actions= apply_filters('wppizza_filter_orderhistory_actions', $actions, $orders->id, $customerDet, $orderDet );	
+						$output.=implode('',$actions);							
+					
+					
+					
 					$output.="</tr>";
 
-					/**order notes**/
-					$output.="<tr id='".$nbtrClass."-".$orders->id."' class='".$nbtrClass."'>";
-						$output.="<td colspan='4'>";
-							$output.="<textarea id='wppizza-order-notes-".$orders->id."' class='wppizza-order-notes' placeholder='".__('notes:', $this->pluginLocale)."'>".$orders->notes."</textarea>";
-							$output.="<a href='javascript:void(0);'  id='wppizza-order-do-notes-".$orders->id."' class='wppizza-order-do-notes button'>".__('ok', $this->pluginLocale)."</a>";
-						$output.="</td>";
-					$output.="</tr>";
+
+					/****************************************************************************
+						[second row -> order notes
+					****************************************************************************/					
+					$notes=array();/*reset*/
+					$notes['tropen']="<tr id='".$nbtrClass."-".$orders->id."' class='".$nbtrClass."'>";
+						$notes['tdopen']="<td colspan='4'>";
+							$notes['textarea_notes']="<textarea id='wppizza-order-notes-".$orders->id."' class='wppizza-order-notes' placeholder='".__('notes:', $this->pluginLocale)."'>".$orders->notes."</textarea>";
+							$notes['textarea_notes_ok']="<a href='javascript:void(0);'  id='wppizza-order-do-notes-".$orders->id."' class='wppizza-order-do-notes button'>".__('ok', $this->pluginLocale)."</a>";
+						$notes['tdclose']="</td>";
+					$notes['trclose']="</tr>";
+					
+					/**allow filtering**/	
+					$notes= apply_filters('wppizza_filter_orderhistory_notes', $notes, $orders->id, $customerDet, $orderDet );	
+					$output.=implode('',$notes);						
+					
+					
 				}
 			$output.="</table>";
 		}else{
@@ -336,8 +399,13 @@ $output='';
 				$output.="<input name='".$_POST['vars']['inpname']."[prices][]' type='text' size='5' value='".$price."'>";
 		}}
 	}
-
-
+	/************************************************************************************************
+	*
+	*	[in case one wants to do/add more things in functions.php]
+	*
+	************************************************************************************************/
+	do_action('wppizza_ajax_action_admin',$_POST);
+	
 print"".$output."";
 exit();
 ?>

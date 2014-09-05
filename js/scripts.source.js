@@ -199,7 +199,7 @@ jQuery(document).ready(function($){
 	}
 	/*******************************************************
 	*
-	*	[add spinner to order page for increase/decrease of items if enabled] 
+	*	[add spinner to order page for increase/decrease of items if enabled]
 	*
 	*******************************************************/
   	if(typeof wppizza.ofqc!=='undefined'){
@@ -213,7 +213,7 @@ jQuery(document).ready(function($){
        		var self=$(this);
        		var id=$(this).attr('id').split('-');
        		var val=$(this).val();
-       		updtElms[id[2]]=val;       		
+       		updtElms[id[2]]=val;
        	});
        	$('html').css({'position':'relative'});/*stretch html to make loading cover whole page*/
      	$('body').prepend('<div id="wppizza-loading" style="opacity:0.8"></div>');
@@ -395,7 +395,7 @@ jQuery(document).ready(function($){
 				window.location.href=res.location;/*make sure page gest reloaded without confirm*/
 			},'json').error(function(jqXHR, textStatus, errorThrown) {alert("error : " + errorThrown);console.log(jqXHR.responseText);});
 	}});
-	
+
 	/******************************************************
 	*
 	*	[changing gateways, re-calculate handling charges
@@ -576,32 +576,43 @@ jQuery(document).ready(function($){
 	var wppizzaSelectSubmitType=function(self,currVal,hasClassAjax,hasClassCustom){
 		/*****confirmation page enabled*****/
 		if(typeof wppizza.cfrm!=='undefined' && !self.hasClass('wppizza-confirm-order')){
-			$('#wppizza-user-login').empty().remove();			
+			$('#wppizza-user-login').empty().remove();
 			self.prepend('<div id="wppizza-loading"></div>');
 			jQuery.post(wppizza.ajaxurl , {action :'wppizza_json',vars:{'type':'confirmorder','data':self.serialize()}}, function(response) {
 						self.html(response);//replace the form contents
-						self.addClass('wppizza-confirm-order');/*set class so we dont do this again**/			
+						self.addClass('wppizza-confirm-order');/*set class so we dont do this again**/
 						$('#wppizza-send-order #wppizza-loading').remove();
-			},'html').error(function(jqXHR, textStatus, errorThrown) {$('#wppizza-send-order #wppizza-loading').remove();alert("error : " + errorThrown);console.log(jqXHR.responseText);});					
-			return;
-		}
-		/**customised submit/payment via js window/overlay for example - will have to provide its own script**/
-		if(hasClassCustom){
-			window['wppizza' + currVal + 'payment']();
-			return;
-		}
-		/**cod->transmit form via ajax if cod or forced by gw settings (i.e $this->gatewayTypeSubmit = 'ajax')*/
-		if(currVal=='cod' || hasClassAjax){
-			self.prepend('<div id="wppizza-loading"></div>');
-			$('#wppizza-user-login').empty().remove();
-			jQuery.post(wppizza.ajaxurl , {action :'wppizza_json',vars:{'type':'sendorder','data':self.serialize()}}, function(response) {
-				$('#wppizza-send-order #wppizza-loading').remove();
-				self.html('<div id="wppizza-order-received">'+response+'</div>');
 			},'html').error(function(jqXHR, textStatus, errorThrown) {$('#wppizza-send-order #wppizza-loading').remove();alert("error : " + errorThrown);console.log(jqXHR.responseText);});
-		}else{
-			self.prepend('<div id="wppizza-loading" style="opacity:0.8;"></div>');
-			form.submit();
+			return;
 		}
+
+		/**first make sure we are still open, as a customer may have been staying on th eoreder page for ages and shop is now closed**/
+		jQuery.post(wppizza.ajaxurl , {action :'wppizza_json',vars:{'type':'checkifopen'}}, function(response) {
+			if(typeof response.isclosed!=='undefined'){
+				alert(response.isclosed);
+				window.location.href=window.location.href;/*make sure page gest reloaded without confirm*/
+				return;
+			}
+
+			/**customised submit/payment via js window/overlay for example - will have to provide its own script**/
+			if(hasClassCustom){
+				window['wppizza' + currVal + 'payment']();
+				return;
+			}
+			/**cod->transmit form via ajax if cod or forced by gw settings (i.e $this->gatewayTypeSubmit = 'ajax')*/
+			if(currVal=='cod' || hasClassAjax){
+				self.prepend('<div id="wppizza-loading"></div>');
+				$('#wppizza-user-login').empty().remove();
+				jQuery.post(wppizza.ajaxurl , {action :'wppizza_json',vars:{'type':'sendorder','data':self.serialize()}}, function(response) {
+					$('#wppizza-send-order #wppizza-loading').remove();
+					self.html('<div id="wppizza-order-received">'+response+'</div>');
+				},'html').error(function(jqXHR, textStatus, errorThrown) {$('#wppizza-send-order #wppizza-loading').remove();alert("error : " + errorThrown);console.log(jqXHR.responseText);});
+			}else{
+				self.prepend('<div id="wppizza-loading" style="opacity:0.8;"></div>');
+				form.submit();
+			}
+
+		},'json').error(function(jqXHR, textStatus, errorThrown) {$('#wppizza-send-order #wppizza-loading').remove();alert("error : " + errorThrown);console.log(jqXHR.responseText);});
 
 	};
 	/******************************
