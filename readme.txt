@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.3, WP 3.3 
 Tested up to: 4.0
-Stable tag: 2.10.4.5
+Stable tag: 2.10.4.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -104,6 +104,7 @@ the same goes for the 3 example icons that come with this plugin as you might ha
 Please update to version 2.5.7+ asap as metadata might get lost when using *quickedit* in wppizza custom post type
 (if you are currently using wppizza <2.4 you should definitely update to the latest version as there were also some security flaws in version <2.4)
 
+PLEASE UPDATE IF YOU ARE USING 2.10.4.5 and payment gateway as the redirection was broken for some of them  
 
 
 == Screenshots ==
@@ -140,6 +141,11 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 == Changelog ==
 
+2.10.4.6  
+* BUGFIX: 2.10.4.5 broke redirection of some gatways  , PLEASE UPDATE IF YOU ARE USING 2.10.4.5  
+5th September 2014  
+
+4th September 2014  
 2.10.4.5  
 * checked for compatibility with WP 4.0 (nothing to do :))  
 * doublecheck when submitting order that shop is still open (in case someone stayed on the orderpage for ages without doing anything)  

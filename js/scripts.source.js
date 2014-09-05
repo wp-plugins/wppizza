@@ -558,13 +558,13 @@ jQuery(document).ready(function($){
 						}
 						/***all is well. go ahead with stuff**/
 						if(typeof response.error==='undefined'){
-							wppizzaSelectSubmitType(self,currVal,hasClassAjax,hasClassCustom);
+							wppizzaSelectSubmitType(self,currVal,hasClassAjax,hasClassCustom,form);
 						}
 					},'json');
 					return;
 				}else{
 					/**we are not registering a new account, so just submit as planned**/
-					wppizzaSelectSubmitType(self,currVal,hasClassAjax,hasClassCustom);
+					wppizzaSelectSubmitType(self,currVal,hasClassAjax,hasClassCustom,form);
 				}
 			}
 		})
@@ -573,7 +573,7 @@ jQuery(document).ready(function($){
 	/******************************
 	* submit via ajax or send form
 	*******************************/
-	var wppizzaSelectSubmitType=function(self,currVal,hasClassAjax,hasClassCustom){
+	var wppizzaSelectSubmitType=function(self,currVal,hasClassAjax,hasClassCustom,form){
 		/*****confirmation page enabled*****/
 		if(typeof wppizza.cfrm!=='undefined' && !self.hasClass('wppizza-confirm-order')){
 			$('#wppizza-user-login').empty().remove();
@@ -610,6 +610,7 @@ jQuery(document).ready(function($){
 			}else{
 				self.prepend('<div id="wppizza-loading" style="opacity:0.8;"></div>');
 				form.submit();
+				return;
 			}
 
 		},'json').error(function(jqXHR, textStatus, errorThrown) {$('#wppizza-send-order #wppizza-loading').remove();alert("error : " + errorThrown);console.log(jqXHR.responseText);});
