@@ -10,7 +10,7 @@
 	/*ADDED IN VERSION 2.9.5*/
 	/**to - for example - allow to set options when using this file as template part as options might not be set yet**/
 	$options=apply_filters('wppizza_loop_top',$options=!empty($options) ? $options : false);
-	
+
 	/******************************************
 	if we are trying to get the loop from a shortcode/widget in another page
 	not related to the wppizza custom post type we will have a different post type,
@@ -94,7 +94,7 @@
 	);
 	/**new in version 2.5. currenly used to display single posts***/
 	$args = apply_filters('wppizza_filter_loop', $args);
-	/**execute query**/	
+	/**execute query**/
 	$the_query = new WP_Query( $args );
 ?>
 <?php
@@ -140,14 +140,14 @@
 	/**changed to not run function multiple times unnecessarily -> replaced all other get_the_ID() further down**/
 	$postId=get_the_ID();
 	/***new in 2.5.6 ->prettyPhoto (store get_the_title() in var so we can use it multiple times without running function more than once **/
-	$postTitle=get_the_title();	
+	$postTitle=get_the_title();
 	/**get permalink*****/
 	$permalink = get_permalink( $postId );
 	/*get meta data for this post**/
 	$meta=get_post_meta($postId, $post_type, true );
 
 	/**added in 2.5 to enable messing around with output below if required***/
-	$meta = apply_filters('wppizza_filter_loop_meta', $meta, $postId);
+	$meta = apply_filters('wppizza_filter_loop_meta', $meta, $postId , $this->pluginSession);
 
 	/***********************************************************
 	*
@@ -192,7 +192,7 @@
 	/*Selected category ADDED IN VERSION 2.8.9.4*/
 	if($dataCatId>0){?>
 	<input type="hidden" id="wppizza-category-<?php the_ID(); ?>" value="<?php echo $dataCatId ?>" />
-<?php } ?>	
+<?php } ?>
 <?php
 /*********************************************
 	[single items entry content end]
@@ -221,7 +221,7 @@ if(is_single()){
 <?php
 	/*ADDED IN VERSION 2.8.5*/
 	do_action('wppizza_loop_inside_after_title',$postId);
-?>		
+?>
 <?php
 /*********************************************
 			[thumbnails]
@@ -235,14 +235,14 @@ if(is_single()){
 				$full_image_data = wp_get_attachment_image_src(get_post_thumbnail_id(), 'full' );
 				print'<a href="'.$full_image_data[0].'" rel="wppizzaPrettyPhoto" title="'.$postTitle.'">';
 			}
-			?>			
+			?>
 			<?php the_post_thumbnail( 'thumbnail', array('class' => ''.$post_type.'-article-img-thumb', 'title'=>$postTitle)); ?>
 			<?php
 			/**new in 2.5.6 ->prettyPhoto if enabled**/
 			if($options['layout']['prettyPhoto']){
 				print"</a>";
 			}
-			?>			
+			?>
 			</div>
 		<?php
 			}else{
@@ -255,7 +255,7 @@ if(is_single()){
 <?php
 	/*ADDED IN VERSION 2.8.5*/
 	do_action('wppizza_loop_inside_after_thumbnails',$postId);
-?>	
+?>
 <?php
 /*********************************************
 		[prices and info]
@@ -324,15 +324,15 @@ if(is_single()){
 <?php
 	/*ADDED IN VERSION 2.8.5*/
 	do_action('wppizza_loop_inside_after_article',$postId);
-?>	
+?>
 <?php
 /*************************************************
 	[comments box - if single item view and enabled of course]
 **************************************************/
-if(is_single()){	
-	comments_template( '', true ); 
+if(is_single()){
+	comments_template( '', true );
 }
-?>	
+?>
 <?php
 	/*ADDED IN VERSION 2.8.5*/
 	do_action('wppizza_loop_inside_after_comments',$postId);

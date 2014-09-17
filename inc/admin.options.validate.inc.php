@@ -1,6 +1,6 @@
 <?php
 	/**get previously saved options**/
-	$options = $this->pluginOptionsNoWpml;
+	$options = $this->pluginOptions;
 
 		/**lets not forget static, uneditable options **/
 		$options['plugin_data']['version'] = $this->pluginVersion;
@@ -38,22 +38,22 @@
 		if(isset($input['plugin_data']['category_parent_page'])){
 			$options['plugin_data']['category_parent_page'] = !empty($input['plugin_data']['category_parent_page']) ? (int)$input['plugin_data']['category_parent_page'] : '';
 		}
-		
-		
+
+
 		/**sets single item permalink**/
 		if(isset($input['plugin_data']['single_item_permalink_rewrite'])){
 			$options['plugin_data']['single_item_permalink_rewrite'] = sanitize_title($input['plugin_data']['single_item_permalink_rewrite']);
-		}		
-		
-		
+		}
+
+
 		if(isset($input['layout']['category_sort'])){
 			$options['layout']['category_sort']=$input['layout']['category_sort'];
 		}
-		
+
 		if(isset($input['layout']['category_sort_hierarchy'])){
 			$options['layout']['category_sort_hierarchy']=$input['layout']['category_sort_hierarchy'];
-		}		
-		
+		}
+
 		/*set number of items per loop. must be >= get_option('posts_per_page ')*/
 		if(isset($input['layout']['items_per_loop'])){
 			/*if minus=>set to -1**/
@@ -158,6 +158,7 @@
 			$options['order']['orderpage_exclude']=!empty($input['order']['orderpage_exclude']) ? true : false;
 			$options['order']['order_pickup']=!empty($input['order']['order_pickup']) ? true : false;
 			$options['order']['order_pickup_alert']=!empty($input['order']['order_pickup_alert']) ? true : false;
+			$options['order']['order_pickup_alert_confirm']=!empty($input['order']['order_pickup_alert_confirm']) ? true : false;
 			$options['order']['order_pickup_discount']=wppizza_validate_float_pc($input['order']['order_pickup_discount']);
 			$options['order']['order_min_for_delivery']=wppizza_validate_float_only($input['order']['order_min_for_delivery']);
 			$options['order']['order_min_for_pickup']=wppizza_validate_float_only($input['order']['order_min_for_pickup']);
@@ -228,8 +229,8 @@
 				$options['order_form'][$a]['onregister'] = !empty($input['order_form'][$a]['onregister']) ? true : false;
 				$options['order_form'][$a]['value'] = wppizza_strtoarray($input['order_form'][$a]['value']);
 			}
-		
-			
+
+
 			$options['confirmation_form_enabled'] = !empty($input['confirmation_form_enabled']) ? true : false;
 			if(isset($input['confirmation_form']) && is_array($input['confirmation_form'])){
 			$options['confirmation_form_amend_order_link'] = (int)$input['confirmation_form_amend_order_link'];
@@ -239,13 +240,13 @@
 				$options['confirmation_form'][$a]['lbl'] = wppizza_validate_string($input['confirmation_form'][$a]['lbl'],true);
 				$options['confirmation_form'][$a]['type'] = wppizza_validate_letters_only($input['confirmation_form'][$a]['type']);
 				$options['confirmation_form'][$a]['enabled'] = !empty($input['confirmation_form'][$a]['enabled']) ? true : false;
-				$options['confirmation_form'][$a]['required'] = !empty($input['confirmation_form'][$a]['required']) ? true : false;			
-			}}else{			
+				$options['confirmation_form'][$a]['required'] = !empty($input['confirmation_form'][$a]['required']) ? true : false;
+			}}else{
 				$input['confirmation_form']=array();
 				$options['confirmation_form_amend_order_link'] = '';
 			}
-			
-			
+
+
 			if(isset($input['confirmation_form']) && is_array($input['confirmation_form'])){
 				if(isset($input['localization_confirmation_form'])){
 				//$allowHtml=array('thank_you_p','jquery_fb_add_to_cart_info');/*array of items to allow html (such as tinymce textareas) */
@@ -254,8 +255,8 @@
 					$html=false;
 					//if(in_array($a,$allowHtml)){$html=1;}
 					$options['localization_confirmation_form'][$a]=array('lbl'=>wppizza_validate_string($b,$html));
-				}}			
-			}		
+				}}
+			}
 		}
 
 		/**validate sizes settings***/
@@ -288,7 +289,7 @@
 				}
 			}}
 		}
-	
+
 		/**validate localization ***/
 		if(isset($_POST[''.$this->pluginSlug.'_localization'])){
 			if(isset($input['localization'])){
@@ -374,6 +375,10 @@
 						$updateGatewayOptions[$neKey]=$neVal;
 					}
 				}
+				/********update wpml******/
+				$gwclass=new WPPIZZA_GATEWAYS();
+				$gwclass->wppizza_gateway_register_wpml_variables($v['ident'],$v['gatewaySettings'], $updateGatewayOptions,true);
+				/********update options******/
 				update_option($v['gatewayOptionsName'],$updateGatewayOptions);
 			}
 		}

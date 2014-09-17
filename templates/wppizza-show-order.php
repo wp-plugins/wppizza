@@ -82,12 +82,12 @@
 	<?php } ?>
 <?php
 	/**do somthing if you want (like print order button or something)**/
-	do_action('wppizza_show_order_form_last_item',$order,$summary);
+	do_action('wppizza_show_order_form_last_item',$order,$summary,$items);
 ?>
 	</ul>
 <?php
 	/**added 2.10.2*/
-	do_action('wppizza_show_order_form_after_items',$order,$summary);
+	do_action('wppizza_show_order_form_after_items',$order,$summary,$items);
 ?>
 <?php	/**order summary**/ 	?>
 	<ul id="wppizza-cart-subtotals">
@@ -140,5 +140,5 @@
 </div>
 <?php
 	/**do somthing if you want (like print order button or something)**/
-	do_action('wppizza_show_order_after',$order,$summary);
+	do_action('wppizza_show_order_after',$order,$summary,$items);
 ?>

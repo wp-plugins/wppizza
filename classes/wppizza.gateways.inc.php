@@ -1,9 +1,9 @@
 <?php
 if (!class_exists( 'WPPizza' ) ) {return ;}
 class WPPIZZA_GATEWAYS extends WPPIZZA {
-	protected $pluginGateways;
 	private $gatewayOrderDetails;
 	private $gatewayOrderId;
+
 	function __construct() {
     	parent::__construct();
 
@@ -11,8 +11,10 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 		/************************************************************************
 			[runs only for frontend]
 		*************************************************************************/
-		if(!is_admin()){
+
 			add_action('init', array( $this, 'wppizza_instanciate_gateways_frontend'));
+
+		if(!is_admin()){
 			add_action('init', array( $this, 'wppizza_do_gateways'));/**output available gateway choices on order page**/
 			add_action('init', array( $this,'wppizza_gateway_initialize_order'));/*initialize oder into db */
 		}
@@ -20,28 +22,16 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 		/************************************************************************
 			[load wpml from parent. used in ajax call, so must be available front and backend ]
 		*************************************************************************/
-		add_action('init', array( $this, 'wppizza_wpml_localization'),99);
+		add_action('init', array( $this, 'wppizza_wpml_localization_gateways'),99);
 
 		/************************************************************************
 			[runs only in backend]
 		*************************************************************************/
 		add_action('admin_init', array( $this, 'wppizza_available_gateways'),1);/**check if a gateways has been (un)installed and if so, update option**/
-		add_action('admin_init', array( $this, 'wppizza_load_gateways_admin'));
-
 	}
 
 	function wppizza_do_gateways() {
 		add_action('wppizza_choose_gateway', array( $this, 'wppizza_choose_gateway'));
-	}
-
-	function wppizza_load_gateways_admin() {
-		$allClasses=get_declared_classes();
-		foreach ($allClasses AS $class){
-			$chkStr=substr($class,0,16);
-			if($chkStr=='WPPIZZA_GATEWAY_'){
-				$c=new $class;
-			}
-		}
 	}
 
 	function wppizza_instanciate_gateways_frontend() {
@@ -53,24 +43,23 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 		$wppizzaGatewayCount=0;
 		$wppizzaGateway=array();
 		$wppizzaGatewayOptions=array();
-		
-				
+
+
 		if(isset($this->pluginOptions['gateways']['gateway_selected']) && is_array($this->pluginOptions['gateways']['gateway_selected'])){
 		foreach($this->pluginOptions['gateways']['gateway_selected'] as $gw=>$enbld){
-			if($enbld){/**only add enabled gateways**/
-				$gatewayClass="WPPIZZA_GATEWAY_".strtoupper($gw);
+			$gatewayClass="WPPIZZA_GATEWAY_".strtoupper($gw);
+			if($enbld && class_exists($gatewayClass)){/**only add enabled and activated gateways**/
+
 				$wppizzaGateway[$gw]=new $gatewayClass;
 				$wppizzaGatewayOptions[$gw]=$wppizzaGateway[$gw];
-
 
 				/***  to display surcharges in orderpage prior to ordering****/
 				/**set first gateway**/
 				if($wppizzaGatewayCount==0){
 					$this->pluginGatewaySelected=$gw;
 				}
-				/***check if surcharges are calculated by the gateway rather than set by admin**/
-				//$wppizzaGateway[$gw]->gatewaySurchargeAtCheckout=false;
-				if(isset($wppizzaGateway[$gw]->gatewaySurchargeAtCheckout)){
+				/***check if surcharges are calculated (or flag os distinctly set) by the gateway which forces page reload to calculate surcharges or - for example - adds some additional fields depending on gateway selected**/
+				if(isset($wppizzaGateway[$gw]->gatewaySurchargeAtCheckout) || isset($wppizzaGateway[$gw]->gatewayForceOrderPageReloadOnChange)){
 					$this->showSurchageBeforOrder=true;
 				}
 
@@ -95,8 +84,8 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 			$_SESSION[$this->pluginSession]['gateway-selected']['gw']='--nogatewayavailable--';
 			$_SESSION[$this->pluginSession]['gateway-selected']['surchargePc']=0;
 			$_SESSION[$this->pluginSession]['gateway-selected']['surchargeFixed']=0;
-			$_SESSION[$this->pluginSession]['gateway-selected']['surchargeAtCheckout']=false;		
-		
+			$_SESSION[$this->pluginSession]['gateway-selected']['surchargeAtCheckout']=false;
+
 		}
 		/**if we have not yet set a gateway , use the first available one **/
 		if(!isset($_SESSION[$this->pluginSessionGlobal]['userdata']['gateway']) && isset($this->pluginGatewaySelected)){
@@ -382,12 +371,7 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 	*
 	********************************************************************/
 	function gateway_set_order_details(){
-		/*In case microtime is available use it->deprecated as of 2.10.4.2*/
-		//if(function_exists('microtime')){
-		//	$timestamp=microtime(true);
-		//}else{
-			$timestamp=current_time('timestamp');
-		//}
+		$timestamp=current_time('timestamp');
 		$this->gatewayOrderDetails=$this->wppizza_gateway_order_details(array('time'=>$timestamp));
 	}
 	/******************************************************************
@@ -421,9 +405,10 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 	*	[output order on thank you page]
 	*
 	******************************************************************/
-	function gateway_order_on_thankyou($id){
+	function gateway_order_on_thankyou($id,$pluginOptions){
 		$orderEmails=new WPPIZZA_SEND_ORDER_EMAILS;
-		$orderDetails=$orderEmails->gateway_order_on_thankyou($id);
+		$orderDetails=$orderEmails->gateway_order_on_thankyou($id,$pluginOptions);
+
 		return	$orderDetails;
 	}
 	/******************************************************************
@@ -461,6 +446,8 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 			$editableOptions = $this->gateway_settings(true);
 			$nonEditableOptions = $this->gateway_settings_non_editable();
 			$defaultOptions=array_merge($editableOptions,$nonEditableOptions);
+			/***register wpml variables***/
+			$this->wppizza_gateway_register_wpml_variables($this->gatewayIdent, $this->gateway_settings(),$editableOptions);
 			/**insert options**/
 			update_option($this->gatewayOptionsName, $defaultOptions );
 		}else{
@@ -481,15 +468,19 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 				foreach($addedOptions as $k=>$v){
 					$updateOptions[$k]=$v;/*add new options*/
 				}
+				/**reset editable options**/
+				$editableOptions = $updateOptions;
+
 				/*overwrite noneditable/fixed options**/
 				foreach($nonEditableOptions as $k=>$v){
 					$updateOptions[$k]=$v;
 				}
+				/***register/update wpml variables***/
+				$this->wppizza_gateway_register_wpml_variables($this->gatewayIdent, $this->gateway_settings(),$editableOptions,true);
 				/**now update the options***/
 				update_option($this->gatewayOptionsName, $updateOptions );
 			}
 		}
-
 	}
 
 	/**************************************************************************
@@ -554,13 +545,13 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 	*	[update db entry with order variables]
 	*
 	******************************************************************/
-	function wppizza_gateway_update_order_details($order, $blogid=false){
+	function wppizza_gateway_update_order_details($order, $blogid=false, $updateSession=true){
 		global $wpdb;
 		//$wpdb->hide_errors();
 		$orderId=$order->id;
 		/**select the right blog table */
 		if($blogid && is_int($blogid) && $blogid>1){$wpdb->prefix=$wpdb->base_prefix . $blogid.'_';}
-		
+
 		/***check if surcharges are enabled***/
 		if(isset($this->gatewaySurchargePercent) || isset($this->gatewaySurchargeFixed) ){
 			/***************************
@@ -569,18 +560,18 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 			$tips=0;
 			if(isset($order->order_details['tips']) && $order->order_details['tips']>0){
 				$tips=$order->order_details['tips'];
-			}		
+			}
 			/*********************************************************
 			 	[add % handling fee to total, but not on tips if percentage]
-			*********************************************************/			
+			*********************************************************/
 			$ppSurcharge=0;
 			$appliedSurcharge=0;
 			$order->order_details['surcharge']=0;
-			/**calculate surcharge percentages**/			
-			if(isset($this->gatewayOptions[$this->gatewaySurchargePercent]) && $this->gatewayOptions[$this->gatewaySurchargePercent]>0){	
+			/**calculate surcharge percentages**/
+			if(isset($this->gatewayOptions[$this->gatewaySurchargePercent]) && $this->gatewayOptions[$this->gatewaySurchargePercent]>0){
 				$ppSurcharge+=($order->order_details['total']-$tips)/100*abs($this->gatewayOptions[$this->gatewaySurchargePercent]);
 			}
-			/**calculate surcharge fixed**/	
+			/**calculate surcharge fixed**/
 			if(isset($this->gatewayOptions[$this->gatewaySurchargeFixed]) && $this->gatewayOptions[$this->gatewaySurchargeFixed]>0){
 				$ppSurcharge+=$this->gatewayOptions[$this->gatewaySurchargeFixed];
 			}
@@ -591,12 +582,26 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 				$order->order_details['handling_charge']=$appliedSurcharge;
 			}
 		}
-		$wpdb->query("UPDATE ".$wpdb->prefix . $this->pluginOrderTable." SET customer_ini='".wppizza_filter_sanitize_post_vars($_POST)."', initiator='".esc_sql($this->gatewayName)."' , order_ini='".esc_sql(serialize($order->order_details))."'   WHERE id='".$orderId."' ");
-	
+
+		/**add wpml language code to db customer_ini we can send emails in the right language**/
+		if(defined('ICL_LANGUAGE_CODE')){
+			$_POST['wppizza_wpml_lang']=ICL_LANGUAGE_CODE;
+		}
+		$thisOrderPostVars=wppizza_filter_sanitize_post_vars($_POST);
+
+		$wpdb->query("UPDATE ".$wpdb->prefix . $this->pluginOrderTable." SET customer_ini='".$thisOrderPostVars."', initiator='".esc_sql($this->gatewayName)."' , order_ini='".esc_sql(serialize($order->order_details))."'   WHERE id='".$orderId."' ");
+
 		/**filter order items**/
 		$order->order_details['item'] = apply_filters('wppizza_filter_order_extend', $order->order_details['item']);
-	
-	
+
+
+		/**save session vars before sending to gw (if we are using confirmation page, this was already done)**/
+		if($updateSession && empty($this->pluginOptions['confirmation_form_enabled'])){
+			/**unescaped, unserialized and stringyfied**/
+			$thisOrderPostVars = apply_filters('wppizza_filter_sanitize_post_vars', $_POST);
+			$thisOrderPostVars = http_build_query($thisOrderPostVars, '', '&');
+			$this->wppizza_sessionise_userdata($thisOrderPostVars,$this->pluginOptions['order_form']);
+		}
 		return $order;
 	}
 	/******************************************************************
@@ -649,7 +654,7 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 			array('%s','%s','%s','%s','%s'),
 			array('%d')
 		);
-	}	
+	}
 	/******************************************************************
 	*
 	*	[order set to pending]
@@ -667,7 +672,7 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 			array('%s','%s','%s','%s'),
 			array('%d')
 		);
-	}	
+	}
 	/******************************************************************
 	*
 	*	[payment invalid (mismatched amount or currency for example)]
@@ -692,16 +697,34 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 	*	[order payment has failed->update db entry]
 	*
 	******************************************************************/
-	function wppizza_gateway_order_payment_failed($orderid, $blogid=false, $error){
+	function wppizza_gateway_order_payment_failed($orderid, $blogid=false, $error , $txId='--n/a--'){
 		global $wpdb;
 		/**select the right blog table */
 		if($blogid && is_int($blogid) && $blogid>1){$wpdb->prefix=$wpdb->base_prefix . $blogid.'_';}
 		//$wpdb->hide_errors();
 		$wpdb->update(
 			$wpdb->prefix . $this->pluginOrderTable,
-			array('payment_status' => 'FAILED', 'initiator' => esc_sql($this->gatewayName), 'transaction_errors' => maybe_serialize($error)),
+			array('payment_status' => 'FAILED', 'initiator' => esc_sql($this->gatewayName), 'transaction_errors' => maybe_serialize($error),'transaction_id' => maybe_serialize($txId)),
 			array('id' => $orderid ),
-			array('%s','%s','%s'),
+			array('%s','%s','%s','%s'),
+			array('%d')
+		);
+	}
+	/******************************************************************
+	*
+	*	[order payment has failed->update db entry]
+	*
+	******************************************************************/
+	function wppizza_gateway_order_payment_expired($orderid, $blogid=false, $response , $txId='--n/a--'){
+		global $wpdb;
+		/**select the right blog table */
+		if($blogid && is_int($blogid) && $blogid>1){$wpdb->prefix=$wpdb->base_prefix . $blogid.'_';}
+		//$wpdb->hide_errors();
+		$wpdb->update(
+			$wpdb->prefix . $this->pluginOrderTable,
+			array('payment_status' => 'EXPIRED', 'initiator' => esc_sql($this->gatewayName), 'transaction_details' => maybe_serialize($response),'transaction_id' => maybe_serialize($txId)),
+			array('id' => $orderid ),
+			array('%s','%s','%s','%s'),
 			array('%d')
 		);
 	}
@@ -807,7 +830,7 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 			if($res->payment_status=='COMPLETED'){
 				print"<div class='wppizza-gateway-success'><h1>".$this->pluginOptions['localization']['thank_you']['lbl']."</h1>".nl2br($this->pluginOptions['localization']['thank_you_p']['lbl'])."</div>";
 				/**display order details (if enabled)**/
-				print"".$this->gateway_order_on_thankyou($res->id)."";
+				print"".$this->gateway_order_on_thankyou($res->id,$this->pluginOptions);
 				return;
 			}
 			/**waiting for ipn response**/
@@ -1048,9 +1071,78 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 		/**only first 2**/
 		if($base){
 			$lang=strtolower(substr($lang,0,2));
-			
+
 		}
 		return $lang;
+	}
+	/******************************************************************
+	*
+	*	[register wpml variables of gateway (on install,
+	*	version update and
+	* 	variables update (as the var might or might not be empty anymore)
+	*
+	******************************************************************/
+	function wppizza_gateway_register_wpml_variables($gatewayIdent, $gatewaySettings, $editableOptions, $update=false){
+		if (function_exists('icl_translate') && is_admin() && ( !defined( 'DOING_AJAX' ) || !DOING_AJAX ) ){
+			$gatewayIdent=strtolower($gatewayIdent);
+			$registeredWpmlString=array();
+			/**loop through array and regsiter strings as required**/
+			foreach($gatewaySettings as $gwOptKey=>$gwPars){
+				/**loose edd stuff first of all***/
+				if(!in_array($gwPars['key'],array('GatewayEDDLicense','GatewayEDDStatus'))){
+					/**add to wpml regsitration strings if not set at all , or , if isset and set to true  - for legacy reasons old gateways (prior 10th sep 2014) we omit , rather than add*/
+					if(!isset($gwPars['wpml']) || (isset($gwPars['wpml']) && $gwPars['wpml']===true)){
+						/**exclude anything that isn't a string or is empty->legacy reasons old gateways (prior 10th sep 2014) **/
+						if(is_string($editableOptions[$gwPars['key']]) && $editableOptions[$gwPars['key']]!=''){
+							/**now register this string to be available in admin string translations***/
+							icl_register_string(WPPIZZA_SLUG.'_gateway_'.$gatewayIdent,strtolower($gwPars['key']), __($editableOptions[$gwPars['key']], $this->pluginLocale));
+							if($update){
+								/**keep track of registered wpml vars, so we can unregister unused ones further down**/
+								$registeredWpmlString[]=strtolower($gwPars['key']);
+							}
+						}
+					}
+				}
+				/**distinctly add fontend label and info provided they are not empty**/
+				if($editableOptions['gateway_label']!=''){
+					icl_register_string(WPPIZZA_SLUG.'_gateway_'.$gatewayIdent,'gateway_label', __($editableOptions['gateway_label'], $this->pluginLocale));
+					$registeredWpmlString[]='gateway_label';
+				}
+				if($editableOptions['gateway_info']!=''){
+					icl_register_string(WPPIZZA_SLUG.'_gateway_'.$gatewayIdent,'gateway_info', __($editableOptions['gateway_info'], $this->pluginLocale));
+					$registeredWpmlString[]='gateway_info';
+				}
+			}
+			/**unregister unused/redundant on update. no point to fill up the wpml database with obsolete stuff**/
+			if($update){
+				foreach($editableOptions as $gwOptKey=>$gwPars){
+					if(!in_array(strtolower($gwOptKey),$registeredWpmlString)){
+						icl_unregister_string(WPPIZZA_SLUG.'_gateway_'.$gatewayIdent, strtolower($gwOptKey));
+					}
+				}
+			}
+		}
+	}
+	/******************************************************************
+	*
+	*	[translate wpml variables of gateway (fontend)
+	*
+	******************************************************************/
+	function wppizza_gateway_translate_wpml_variables($gwIdent,$gwo){
+		$editableOptions=$gwo->gatewayOptions;
+		$gw=$gwo->gateway_settings();
+		/**distinctly add label and info**/
+		$gw[]=array('key'=>'gateway_label','value'=>$editableOptions['gateway_label'],'wpml'=>true);
+		$gw[]=array('key'=>'gateway_info','value'=>$editableOptions['gateway_info'],'wpml'=>true);
+		foreach($gw as $g=>$gwsetting){
+			/**translate strings if not set at all , or , if isset and set to true  - for legacy reasons old gateways (prior 10th sep 2014) we omit , rather than add*/
+			if(!isset($gwsetting['wpml']) || (isset($gwsetting['wpml']) && $gwsetting['wpml']===true)){
+				if(is_string($editableOptions[$gwsetting['key']]) && $editableOptions[$gwsetting['key']]!=''){/*legacy for old gateways (prior 10th sep 2014)*/
+					/****translate**/
+					$gwo->gatewayOptions[$gwsetting['key']] = icl_translate(WPPIZZA_SLUG.'_gateway_'.strtolower($gwIdent),strtolower($gwsetting['key']), __($editableOptions[$gwsetting['key']], $this->pluginLocale));
+				}
+			}
+		}
 	}
 	/******************************************************************
 	*
@@ -1129,7 +1221,7 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 					if(!$omitempty){
 						$optSelected[$ff[$k]]=$v['key'];
 					}else{
-						!empty($ff[$k]) ? $optSelected[$ff[$k]]=$v['key'] : null;	
+						!empty($ff[$k]) ? $optSelected[$ff[$k]]=$v['key'] : null;
 					}
 				}
 			}

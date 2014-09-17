@@ -49,6 +49,9 @@ if(isset($_POST['vars']['type']) && (($_POST['vars']['type']=='add' || $_POST['v
 
 		/*get item set meta values to get price for this size**/
 		$meta_values = get_post_meta($itemVars[1],$this->pluginSlug,true);
+		$meta_values = apply_filters('wppizza_filter_loop_meta_ajax', $meta_values, $itemVars[1], $this->pluginSession);
+
+
 		$itemSizePrice=$meta_values['prices'][$itemVars[3]];
 		/**are we hiding pricetier name if only one available ?**/
 		if(count($meta_values['prices'])<=1 && $options['layout']['hide_single_pricetier']==1){
@@ -155,12 +158,9 @@ if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='order-pickup'){
 	/*****************************************
 		[set session variable]
 	*****************************************/
+	$pickup=false;
 	if($_POST['vars']['value']=='true'){
-		$_SESSION[$this->pluginSession]['selfPickup']=1;
-	}else{
-		if(isset($_SESSION[$this->pluginSession]['selfPickup'])){
-			unset($_SESSION[$this->pluginSession]['selfPickup']);
-		}
+		$pickup=true;
 	}
 	/*****************************************
 		set default location -> to be overwritten below if required
@@ -192,8 +192,20 @@ if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='order-pickup'){
 
 	}
 
-
 	$vars['location']=$location;
+
+	/***do action of som sort***/
+	do_action('wppizza_pickup_toggle',$pickup);
+
+
+	/**set session to be pickup true or false**/
+	if($pickup){
+		$_SESSION[$this->pluginSession]['selfPickup']=1;
+	}else{
+		if(isset($_SESSION[$this->pluginSession]['selfPickup'])){
+			unset($_SESSION[$this->pluginSession]['selfPickup']);
+		}
+	}
 
 	print"".json_encode($vars)."";
 exit();
@@ -216,6 +228,14 @@ if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='confirmorder'){
 			$atts['hash']=!empty($param['wppizza_hash']) ? wppizza_validate_string($param['wppizza_hash']) : '';
 			/**add used gateway*/
 			$atts['gateway']=!empty($param['wppizza-gateway']) ? wppizza_validate_string($param['wppizza-gateway']) : '';
+			/**ajax**/
+			if($_POST['vars']['hasClassAjax']=='true'){
+				$atts['hasClassAjax']=1;
+			}
+			/**custom**/
+			if($_POST['vars']['hasClassCustom']=='true'){
+				$atts['hasClassCustom']=1;
+			}
 		}
 		ob_start();
 		$this->wppizza_include_shortcode_template('confirmationpage',$atts);
@@ -374,15 +394,9 @@ exit();
 *
 ****************************************************************************************************************************************/
 if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='wppizza-select-gateway'){
-
 	if(count($_POST['vars']['data'])>0){
 		$this->wppizza_sessionise_userdata($_POST['vars']['data'],$options['order_form']);
 	}
-
-	if(isset($_SESSION[$this->pluginSessionGlobal]['userdata']['gateway'])){
-		unset($_SESSION[$this->pluginSessionGlobal]['userdata']['gateway']);
-	}
-	$_SESSION[$this->pluginSessionGlobal]['userdata']['gateway']=strtoupper(wppizza_validate_string($_POST['vars']['selgw']));
 	print"".json_encode($_SESSION[$this->pluginSessionGlobal]['userdata'])."";/*not being output anywhere though*/
 	exit();
 }
@@ -396,6 +410,11 @@ if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='wppizza-select-gate
 if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='sendorder'){
 	/**********set header********************/
 	header('Content-type: text/plain');
+
+	/***************************************************************
+		[get and parse all user post variables and save in session and return parsed $params
+	***************************************************************/
+	$this->wppizza_sessionise_userdata($_POST['vars']['data'],$options['order_form']);
 
 	/*****************************************
 		[get and parse all post variables
@@ -417,7 +436,6 @@ if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='sendorder'){
 		[new send order email class]
 	********************************************/
 	$sendEmail=new WPPIZZA_SEND_ORDER_EMAILS;
-
 	/************************************************************
 	*	[provided we have a valid order id AND its set
 	*	to INITIALIZE send the emails and update db]
@@ -438,6 +456,12 @@ if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='sendorder'){
 
 			//$thisOrderTransactionId='COD'.$now.$orderId.'';
 			$thisOrderPostVars = apply_filters('wppizza_filter_sanitize_post_vars', $params);
+
+			/**add wpml language code so we can send emails in the right language**/
+			if(defined('ICL_LANGUAGE_CODE')){
+			$thisOrderPostVars['wppizza_wpml_lang']=ICL_LANGUAGE_CODE;
+			}
+						
 			$gatewayUsed=strtoupper($thisOrderPostVars['wppizza-gateway']);
 			$thisOrderPostVars=esc_sql(serialize($thisOrderPostVars));
 			$thisOrderTransactionId=$gatewayUsed.$now.$orderId.'';
@@ -449,9 +473,8 @@ if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='sendorder'){
 			customer_ini='".$thisOrderPostVars."'
 			WHERE id='".$orderId."' ");
 
-
 			/**send the email***/
-			$mailResults=$sendEmail->wppizza_order_send_email($orderId);
+			$mailResults=$sendEmail->wppizza_order_send_email($orderId);//orig
 
 			/**update again to see if mail was sent successfully**/
 			$updateDb=true;
@@ -487,8 +510,6 @@ if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='sendorder'){
 		do_action('wppizza_on_order_executed', $orderId , $this->pluginOrderTable);
 
 	}
-
-
 	/********************************************************************
 	*
 	*	[depending on $mailResults['status'],
@@ -497,7 +518,6 @@ if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='sendorder'){
 	*
 	********************************************************************/
 	$output=$sendEmail->wppizza_order_results($mailResults,$orderId);
-
 	print"".$output."";
 exit();
 }
@@ -530,7 +550,9 @@ if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='checkifopen'){
 	if($isOpen==0){//closed -> alert
 		$res['isclosed']=''.$options['localization']['alert_closed']['lbl'].'';
 	}
-	print"".json_encode($res)."";	
+	print"".json_encode($res)."";
+
+exit();
 }
 /************************************************************************************************
 *
@@ -540,6 +562,6 @@ if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='checkifopen'){
 *
 ************************************************************************************************/
 do_action('wppizza_ajax_action',$_POST);
-	
+
 exit();
 ?>

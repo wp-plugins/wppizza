@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.3, WP 3.3 
 Tested up to: 4.0
-Stable tag: 2.10.4.6
+Stable tag: 2.11
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -140,6 +140,30 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 
 == Changelog ==
+
+2.11    
+* added 'EXPIRED' ENUM value to wppizza_orders table payment_status field   
+* added filter to payment method fieldset "wppizza_filter_paymentmethod_confirmation" on confirmation page that could be used if required  
+* added action (wppizza_pickup_toggle,true/false) that runs after selection of pickup/no-pickup selection changes  
+* added (missing) filter for menu item meta data in ajax requests "wppizza_filter_loop_meta_ajax,$meta,$id" that - most probably - would be used in conjunction with "wppizza_filter_loop_meta,$meta,$id"  
+* added some more gateway functions for ease of use in future gateway development    
+* added option that forces the user to confirm or cancel (rather than just clicking ok) when changing from pickup to delivery and vice versa  
+* added third argument ($items) to relevant do_action hooks in "wppizza-show-order.php" template  
+* maintenance/internal: as per gettext/wp guidelines loading textdomain on init as opposed to in __construct  
+* more consistent saving of userdata sessions  
+* made gateway that use overlays for example as opposed to redirect also work when using confirmation page  
+* maintenance/internal: some possible phpnotices on first gateway activations/installations fixed  
+* WPML: added missing confirmation form strings (on confirmation page if used) to WPML string translation  
+* WPML: fixed spinner (updating quantities on order page) not displaying in secondary languages when using WPML  
+* WPML: customer value labels (telephone, address etc for example ) are also now being sent/shown in the right language in emails and on thankyou pages etc  
+* WPML: automatically register all relevant gateway extensions settings in wpml string translation  
+* WPML: maintenance/internal: eliminated (wpml related) variable that more or less duplicated all the option data (should help memory consumption somewhat)  
+* WPML: maintenance/internal: changed registration and translation of wpml strings to automatically register any gateway strings and only load those on order page (saves a few unnecessary queries on some pages)   
+* WPML: maintenance/internal: using if(function_exists('icl_translate')) BEFORE including wpml related files to avoid unnecessary file access calls  
+* WPML: maintenance/internal: using require_once (as opposed to require) if possible/appropriate for wpml includes (mainly admin registration of wpml strings) to reduce database queries  
+* WPML: Note: this whole WPML thing is getting a bit unwieldy/messy now and should at some point be re-factured (However, that's quite a big job, so no ETA yet, as it all seems to work for the time being)  
+15th September 2014  
+
 
 2.10.4.6  
 * BUGFIX: 2.10.4.5 broke redirection of some gatways  , PLEASE UPDATE IF YOU ARE USING 2.10.4.5  

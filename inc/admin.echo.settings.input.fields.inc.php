@@ -596,6 +596,8 @@ $options = $this->pluginOptions;
 				echo "<br />".__('Discount for self-pickup ?', $this->pluginLocale)." <input id='order_pickup_discount' name='".$this->pluginSlug."[order][order_pickup_discount]' size='5' type='text' value='".wppizza_output_format_float($options['order']['order_pickup_discount'],'percent')."' /> ".__('in % - 0 to disable', $this->pluginLocale)."";
 
 				echo "<br /><input id='order_pickup_alert' name='".$this->pluginSlug."[order][order_pickup_alert]' type='checkbox'  ". checked($options['order']['order_pickup_alert'],true,false)." value='1' /> ".__('enable javascript alert when user selects self pickup (set corresponding text in localization)', $this->pluginLocale)."";
+				
+				echo "<br /><input id='order_pickup_alert_confirm' name='".$this->pluginSlug."[order][order_pickup_alert_confirm]' type='checkbox'  ". checked($options['order']['order_pickup_alert_confirm'],true,false)." value='1' /> ".__('make user *confirm* change of pickup/delivery', $this->pluginLocale)."";
 			}
 			if($field=='order_pickup_display_location'){
 				echo "".__('under cart only', $this->pluginLocale)."<input id='".$field."' name='".$this->pluginSlug."[order][".$field."]' type='radio'  ".checked($options['order'][$field],1,false)." value='1' /> ";

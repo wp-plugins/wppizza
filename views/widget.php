@@ -95,8 +95,8 @@
 		}
 		if(isset($instance['loggedinonly'])){
 			$wdgArgs[]='loggedinonly="1"';
-		}		
-		
+		}
+
 		/*loggedinonly*/
 		if(isset($instance['loggedinonly'])  && !is_user_logged_in()){
 			$widgetOutput='';

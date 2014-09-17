@@ -149,7 +149,7 @@
 	$meta=get_post_meta($postId, $post_type, true );
 
 	/**added in 2.5 to enable messing around with output below if required***/
-	$meta = apply_filters('wppizza_filter_loop_meta', $meta, $postId);
+	$meta = apply_filters('wppizza_filter_loop_meta', $meta, $postId, $this->pluginSession);
 
 	/***********************************************************
 	*

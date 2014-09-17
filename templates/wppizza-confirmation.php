@@ -72,6 +72,13 @@
 			<span>
 				<?php echo $gatewayLabel ?>
 			</span>
+			<?php foreach($paymentmethod as $elmKey=>$elm){/*in case a filter wants to add things*/?>
+			<div>
+				<label for="<?php echo $elm['key'] ?>"><?php echo $elm['lbl'] ?></label>
+				<span><?php echo $elm['userVal'] ?></span>
+				<input name="<?php echo $elm['key'] ?>" type="hidden" value="<?php echo $elm['userVal'] ?>" />
+			</div>
+			<?php } ?>			
 		</div>	
 	</fieldset>
 <?php } ?>

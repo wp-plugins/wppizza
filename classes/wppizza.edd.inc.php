@@ -23,15 +23,24 @@ class WPPIZZA_EDD_SL{
 	********************************************************************************/
 
 	/***********************************************
-	*	
+	*
 	*	[add edd sl updater class tooo gateways]
 	*
-	***********************************************/	
+	***********************************************/
 	function gateway_edd_updater($gwEddLicenseKey,$gwEddUrl,$gwEddVersion,$gwEddName){
 		/*include class*/
 		if( !class_exists( 'WPPIZZA_EDD_SL_PLUGIN_UPDATER' ) ) {
 			require_once(WPPIZZA_PATH.'classes/wppizza.edd.plugin.updater.inc.php');
-		}				
+		}
+		/*******
+		passing along array of options as opposed to single value (as it might still be undefined before saving the first time)
+		also check that we are passing the whole options array for legacy / old gateways that only pass on GatewayEDDLicense array.
+		although old gateways will still throw a (inconsequential) phpnotice before first save
+		********/
+		if(isset($gwEddLicenseKey['GatewayEDDLicense'])){
+			$gwEddLicenseKey=$gwEddLicenseKey['GatewayEDDLicense'];
+		}
+
 		/*retrieve our license key from the DB*/
 		$license_key=empty($gwEddLicenseKey) ? '' : $gwEddLicenseKey;
 
@@ -42,31 +51,31 @@ class WPPIZZA_EDD_SL{
 			'item_name'		=> $gwEddName, 	// name of this plugin
 			'author'		=> 'ollybach'  // author of this plugin
 			)
-		);						
+		);
 	}
-	
+
 	/***********************************************
-	*	
+	*
 	*	[toogle edd activation in gateways]
 	*
 	***********************************************/
 	function gateway_edd_toggle($gatewayOptions,$gatewayOptionsName,$gwEddName,$gwEddUrl){//$this->gatewayOptions,$this->gatewayOptionsName
 		global $pagenow;
-		
+
 		/*********update and (de)-activate license when saving*******/
 		if($pagenow=='options.php' && isset($_POST['wppizza']['gateways'][$gatewayOptionsName]['GatewayEDDLicense'])){
 
-			$licenseCurrent=$gatewayOptions['GatewayEDDLicense'] ;/*current license number**/
+			$licenseCurrent=!empty($gatewayOptions['GatewayEDDLicense']) ? $gatewayOptions['GatewayEDDLicense'] : '' ;/*current license number**/
 			$licenseNew=trim(wppizza_validate_string($_POST['wppizza']['gateways'][$gatewayOptionsName]['GatewayEDDLicense']));/*posted license number**/
-			/**defaults/previously set vars,  if no action taken**/	
+			/**defaults/previously set vars,  if no action taken**/
 			$edd['error']=false;
-			$edd['status']=!empty($gatewayOptions['GatewayEDDStatus']['lState']) ? $gatewayOptions['GatewayEDDStatus']['lState'] : '';/*current license status**/					
+			$edd['status']=!empty($gatewayOptions['GatewayEDDStatus']['lState']) ? $gatewayOptions['GatewayEDDStatus']['lState'] : '';/*current license status**/
 			/***deactivate currently set license first, if it was not '' anyway and new one is different***/
 			if($licenseCurrent!='' && $licenseNew!=$licenseCurrent && $edd['status']=='valid'){
 				$edd=$this->edd_action('deactivate_license',$licenseCurrent,$gwEddName,$gwEddUrl);
 			}
-			
-			/***if new different license has been set and we had no error (otherwise we'll just keep the original settings and desplay error****/				
+
+			/***if new different license has been set and we had no error (otherwise we'll just keep the original settings and desplay error****/
 			if($licenseNew!='' && !$edd['error']){
 				/**its a new key, so lets reset  the status***/
 				if($licenseNew!=$licenseCurrent){
@@ -81,17 +90,17 @@ class WPPIZZA_EDD_SL{
 					$edd=$this->edd_action('deactivate_license',$licenseNew,$gwEddName,$gwEddUrl);
 				}
 			}
-						
+
 			/**set the new license option vars***/
 			if(!$edd['error']){$edd['license']=$licenseNew;}else{$edd['license']=$licenseCurrent;}/*if there was an error, keep old license and display error message */
 			$_POST['wppizza']['gateways'][$gatewayOptionsName]['GatewayEDDLicense']=$edd['license'];
 			$_POST['wppizza']['gateways'][$gatewayOptionsName]['GatewayEDDStatus']=array('lState'=>$edd['status'],'eState'=>$edd['error']);
 		}
-	}	
-	
-	
+	}
+
+
 	/***********************************************
-	*	
+	*
 	*	[add edd settings fields to gateways]
 	*
 	***********************************************/
@@ -116,10 +125,9 @@ class WPPIZZA_EDD_SL{
 				$licenseStatus.=''. __('There was a connection error, when trying to check your license.<br />Please try again.', WPPIZZA_LOCALE).'';
 			$licenseStatus.='</p>';
 		}
-		
-		
+
 			$gwSettings=$gatewaySettings;
-		
+
 			/**add edd fields to gateway edit screen*/
 			$gwSettings[]=array(
 				'key'=>'GatewayEDDLicense',
@@ -156,61 +164,61 @@ class WPPIZZA_EDD_SL{
 	*
 	*
 	********************************************************************************/
-	
+
 	/***********************************************
-	*	
+	*
 	*	[add edd settings fields]
 	*
 	***********************************************/
 	function echo_edd_settings($slug,$fieldName,$license,$status){
 		echo"<input name='".$fieldName."' type='text' placeholder='".__('Enter your license key')."' size='30' class='regular-text' value='".$license."' />";
 		echo' '.__('License Key', WPPIZZA_LOCALE).'<br />';
-		
+
 		/**print activate or de-activate button**/
-		if( $status !== false && $status == 'valid' ) {	
+		if( $status !== false && $status == 'valid' ) {
 			echo"<label class='button-secondary'><input name='".$slug."[license][action]' type='checkbox' value='deactivate' /> ".__('De-Activate License', WPPIZZA_LOCALE)."</label>";
 		}else{
-			echo"<label class='button-secondary'><input name='".$slug."[license][action]' type='checkbox' value='activate' /> ".__('Activate License', WPPIZZA_LOCALE)."</label>";	
+			echo"<label class='button-secondary'><input name='".$slug."[license][action]' type='checkbox' value='activate' /> ".__('Activate License', WPPIZZA_LOCALE)."</label>";
 		}
 		/**print status info**/
-		if( $status !== false && $status == 'valid' ) {	
+		if( $status !== false && $status == 'valid' ) {
 			echo'<span style="color:green;"> '. __('License active', WPPIZZA_LOCALE).'</span>';
-		}		
-		if( $status !== false && $status !='' && $status != 'valid' ) {	
+		}
+		if( $status !== false && $status !='' && $status != 'valid' ) {
 			echo'<span style="color:red;"> '. __('License in-active', WPPIZZA_LOCALE).' ['.$status.']</span>';
 		}
-		echo'<br/>'.__('Please note: entering and activating the license is optional, but if you choose not to do so, you will not be informed of any future bugfixes and/or updates.', WPPIZZA_LOCALE).'<br />';		
+		echo'<br/>'.__('Please note: entering and activating the license is optional, but if you choose not to do so, you will not be informed of any future bugfixes and/or updates.', WPPIZZA_LOCALE).'<br />';
 	}
 	/***********************************************
-	*	
+	*
 	*	[toogle edd activation in non gateways]
 	*
-	***********************************************/	
+	***********************************************/
 	function edd_toggle($current,$licenseNew,$action,$eddName,$eddUrl){
 		$licenseCurrent=$current['key'] ;/*current license number**/
 		$statusCurrent=$current['status'] ;/*current status**/
 		$errorCurrent=$current['error'] ;/*current / last error**/
-		
-		
-		/**defaults/previously set vars,  if no action taken**/	
+
+
+		/**defaults/previously set vars,  if no action taken**/
 		$edd['error']=false;
 		$edd['status']=$statusCurrent;
-		
+
 		/***deactivate currently set license first, if it was not '' anyway and new one is different***/
 		if($licenseCurrent!='' && $licenseNew!=$licenseCurrent && $statusCurrent=='valid'){
 			$edd=$this->edd_action('deactivate_license',$licenseCurrent,$eddName,$eddUrl);
 		}
-		
+
 		if($licenseNew==''){
 			$edd['error']=false;
 			$edd['status']='';
 		}
-		
+
 		/***if new different license has been set and we had no error (otherwise we'll just keep the original settings and desplay error****/
 		if($licenseNew!='' && !$edd['error']){
 			/**its a new key, so lets reset  the status***/
 			if($licenseNew!=$licenseCurrent){
-				$edd['status']='';	
+				$edd['status']='';
 			}
 			/**if we are activating**/
 			if($action=='activate'){
@@ -223,7 +231,7 @@ class WPPIZZA_EDD_SL{
 		}
 		/**set the new license option vars***/
 		if(!$edd['error']){$edd['key']=$licenseNew;}else{$edd['key']=$licenseCurrent;}
-	
+
 	return $edd;
 	}
 

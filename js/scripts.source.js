@@ -385,11 +385,28 @@ jQuery(document).ready(function($){
 	$(document).on('click', '#wppizza-order-pickup-sel,#wppizza-order-pickup-js', function(e){
 		if (($(".wppizza-open").length > 0 &&  $(".wppizza-cart").length > 0) || $("#wppizza-send-order").length>0){
 			var self=$(this);
-			self.attr("disabled", "true");/*disable checkbox to give ajax time to do things*/
+			self.attr("disabled", true);/*disable checkbox to give ajax time to do things*/
 			var selfValue=self.is(':checked');
 			/*js alert if enabled*/
-			if(self.attr('id')=='wppizza-order-pickup-js' && selfValue==true){
-				alert(wppizza.msg.pickup);
+			if(self.attr('id')=='wppizza-order-pickup-js'){
+				/**make user confirm**/
+				if(typeof wppizza.opt.pickupConfirm!=='undefined'){
+					if(confirm(wppizza.msg.pickup)){
+					//just continue
+					}else{
+						if(selfValue){
+							self.attr('checked',false);//restore cheked attribute
+						}else{
+							self.attr('checked',true);//restore cheked attribute
+						}
+						self.attr("disabled", false);//make it selectable again
+					return;
+					}
+				}else{
+					if(selfValue==true){
+						alert(wppizza.msg.pickup);
+					}
+				}
 			}
 			jQuery.post(wppizza.ajaxurl , {action :'wppizza_json',vars:{'type':'order-pickup','value':selfValue,'data':$('#wppizza-send-order').serialize(),'locHref':location.href,'urlGetVars':location.search}}, function(res) {
 				window.location.href=res.location;/*make sure page gest reloaded without confirm*/
@@ -527,6 +544,7 @@ jQuery(document).ready(function($){
 					hasClassAjax=$("select[name='wppizza-gateway'] option:selected").hasClass("wppizzaGwAjaxSubmit");
 					hasClassCustom=$("select[name='wppizza-gateway'] option:selected").hasClass("wppizzaGwCustom");
 				}
+
 				var self=$('#wppizza-send-order');
 				var currVal = selected.val();
 				var profileUpdate=$("#wppizza_profile_update").is(':checked');
@@ -578,7 +596,7 @@ jQuery(document).ready(function($){
 		if(typeof wppizza.cfrm!=='undefined' && !self.hasClass('wppizza-confirm-order')){
 			$('#wppizza-user-login').empty().remove();
 			self.prepend('<div id="wppizza-loading"></div>');
-			jQuery.post(wppizza.ajaxurl , {action :'wppizza_json',vars:{'type':'confirmorder','data':self.serialize()}}, function(response) {
+			jQuery.post(wppizza.ajaxurl , {action :'wppizza_json',vars:{'type':'confirmorder','data':self.serialize(),'hasClassAjax':hasClassAjax,'hasClassCustom':hasClassCustom}}, function(response) {
 						self.html(response);//replace the form contents
 						self.addClass('wppizza-confirm-order');/*set class so we dont do this again**/
 						$('#wppizza-send-order #wppizza-loading').remove();
@@ -599,6 +617,10 @@ jQuery(document).ready(function($){
 				window['wppizza' + currVal + 'payment']();
 				return;
 			}
+
+
+
+
 			/**cod->transmit form via ajax if cod or forced by gw settings (i.e $this->gatewayTypeSubmit = 'ajax')*/
 			if(currVal=='cod' || hasClassAjax){
 				self.prepend('<div id="wppizza-loading"></div>');

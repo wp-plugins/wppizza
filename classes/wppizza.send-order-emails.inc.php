@@ -3,11 +3,9 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 
 	class WPPIZZA_SEND_ORDER_EMAILS extends WPPIZZA_ACTIONS {
 
-
 		function __construct() {
 			parent::__construct();
-			/**do some  wpml**/
-			$this->wppizza_wpml_localization();
+
 			/**extend**/
 			$this->wppizza_order_emails_extend();
 
@@ -34,8 +32,8 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 			$this->subject = apply_filters('wppizza_filter_email_subject', $this->subject);
 			$this->subjectSuffix = apply_filters('wppizza_filter_email_subject_suffix', $this->subjectSuffix);
 
-			/*******thank you when returning **********/
-			add_action('gateway_order_on_thankyou', array( $this, 'gateway_order_on_thankyou_process'));
+			/*******thank you when returning : totally superflous i think, but leave it here for the moment**********/
+			//add_action('gateway_order_on_thankyou', array( $this, 'gateway_order_on_thankyou_process'));
 
 
 			/************************
@@ -67,10 +65,15 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 			add_action('wppizza_show_order_item', array( $this, 'wppizza_items_show_order_print_category'));
 
 
+			/**wpml**/
+			add_action('init', array( $this, 'wppizza_wpml_localization'),99);
+			add_action('init', array( $this, 'wppizza_wpml_localization_gateways'),99);
+
 
 			/* we also need any overrides by extensions in the mmain class to be used here**/
 			$this->wppizza_extend();
 		}
+
 		/***************************************************************
 			[allow some extension classes to allow to modify variables]
 			class must start with 'WPPIZZA_ORDER_EMAILS_EXTEND_'
@@ -104,7 +107,7 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 
 			/*initialize vars**/
 			if($res){
-				$options=$this->pluginOptions;
+
 				/*********************************************************************
 				*
 				*
@@ -112,9 +115,27 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 				*
 				*
 				**********************************************************************/
-				$pOptions=$this->pluginOptions;
 				/*cutstomer details**/
 				$cDetails=maybe_unserialize($res->customer_ini);
+
+
+				/****************************************************************
+					include wpml to also send store/emails translated.
+					will not affect items (they will always be the translated one's
+					or - more accurately - be the ones that were put in the cart
+					don't use require once
+				****************************************************************/
+				/**set appropriate language. as this can be a language agnostic ipn request, set it specifically depending on what was stored in the db**/
+				if(function_exists('icl_translate') && isset($cDetails['wppizza_wpml_lang']) && $cDetails['wppizza_wpml_lang']!=''){
+						global $sitepress;
+						$sitepress->switch_lang($cDetails['wppizza_wpml_lang']);
+						require(WPPIZZA_PATH .'inc/wpml.inc.php');
+						require(WPPIZZA_PATH .'inc/wpml.gateways.inc.php');
+				}
+				/***get (possibly wpml'ed) options**/
+				$pOptions=$this->pluginOptions;
+
+
 				/*order details: unserialize and filter**/
 				$oIni=maybe_unserialize($res->order_ini);
 				$oDetails = apply_filters('wppizza_filter_order_db_return', $oIni);
@@ -188,7 +209,6 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 					if(isset($protectedKeys[$k])){
 						$wppizzaEmailCustomerDetails[]=array('label'=>$protectedKeys[$k]['lbl'],'value'=>$cDetails[$k],'type'=>$protectedKeys[$k]['type']);
 					}
-
 					/**********************************************************************************************************
 					*
 					*
@@ -255,7 +275,7 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 				/**********************************************************
 				*	[delivery charges - no self pickup enabled or selected]
 				**********************************************************/
-				if($options['order']['delivery_selected']!='no_delivery'){/*delivery disabled*/
+				if($pOptions['order']['delivery_selected']!='no_delivery'){/*delivery disabled*/
 				if(!isset($oDetails['selfPickup']) || $oDetails['selfPickup']==0){
 					if($oDetails['delivery_charges']!=''){
 						$wppizzaEmailOrderSummary['delivery']=array('label'=>($pOptions['localization']['delivery_charges']['lbl']),'price'=>$oDetails['delivery_charges'],'currency'=>$oDetails['currency'] );
@@ -341,7 +361,7 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 					/***********************************************
 						[set localization vars]
 					************************************************/
-					foreach($options['localization'] as $k=>$v){
+					foreach($pOptions['localization'] as $k=>$v){
 						$orderLabel['html'][$k]=$v['lbl'];
 						$orderLabel['plaintext'][$k]=wppizza_email_decode_entities($v['lbl'],$this->blogCharset);
 					}
@@ -471,11 +491,14 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 		*	[if false, will return error message and var[mailer] to indicate which function was used]
 		*
 		*****************************************************************************************************************************/
-		function wppizza_order_send_email($orderid=false, $blogid=false){
+		function wppizza_order_send_email($orderid=false, $blogid=false){//,$options=false
+
 			$options=$this->pluginOptions;
 
 			/***create/set email html and plaintext strings***/
 			$this->wppizza_order_email($orderid, $blogid);
+
+
 			/*avoid some strict notices**/
 			$phpVersion=phpversion();
 			/*overwrite from and from name with static values if set**/
@@ -577,7 +600,7 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 				*	we create some static vars here which
 				*	also makes it a bit easier/obvious to edit the template
 				***********************************************************************/
-				$mail = new PHPMailer(true);
+				$mail = new PHPMailer(true);/*will return $sendMail array**/
 				/**to be used in html template**/
 				$nowdate=$this->orderTimestamp;
 				$transactionId=$this->orderTransactionId;
@@ -659,11 +682,17 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 		*
 		********************************************************************************************/
 		function wppizza_order_results($mailResults,$orderId){
+
+			/**include wpml dont use require once  **/
+			if(function_exists('icl_translate')){
+				require(WPPIZZA_PATH .'inc/wpml.inc.php');
+				//require(WPPIZZA_PATH .'inc/wpml.gateways.inc.php');
+			}
 			$output='';
 			/***successfully sent***/
 			if(isset($mailResults['status'])){
 				$output.="<div class='mailSuccess'><h1>".$this->pluginOptions['localization']['thank_you']['lbl']."</h1>".nl2br($this->pluginOptions['localization']['thank_you_p']['lbl'])."</div>";
-				$output.=$this->gateway_order_on_thankyou_process($orderId);
+				$output.=$this->gateway_order_on_thankyou_process($orderId,$this->pluginOptions);
 				$this->wppizza_unset_cart();
 			}
 			/***mail sending error or transaction already processes -> show error***/
@@ -678,16 +707,23 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 
 	/******************************************************************
 	*
-	*	[show order details to thank you page if set ]
+	*	[show order details on thank you page if set ]
 	*	[$res = object or id]
 	******************************************************************/
-	function gateway_order_on_thankyou($res){
-		print"".$this->gateway_order_on_thankyou_process($res);
+	function gateway_order_on_thankyou($res,$options=false){
+		/**legacy**/
+		if(!$options){
+			$options=$this->pluginOptions;
+		}
+		print"".$this->gateway_order_on_thankyou_process($res,$options);
 	}
-	function gateway_order_on_thankyou_process($res){
-		$options=$this->pluginOptions;
-
+	function gateway_order_on_thankyou_process($res,$options=false){
 		$output='';
+		/**legacy**/
+		if(!$options){
+			$options=$this->pluginOptions;
+		}
+
 		/**check if we are displaying the order on the thank you page**/
 		if($options['gateways']['gateway_showorder_on_thankyou']){
 			/*if we are only passing the id, try and get the order from the db first**/
@@ -716,7 +752,14 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 			$order['gatewayLabel']=$res->initiator;
 				$wppizzaGateways=new WPPIZZA_GATEWAYS();
 				$this->pluginGateways=$wppizzaGateways->wppizza_instanciate_gateways_frontend();
+				/**
+					get wpml vars of gatewway (label and info essentially)- should be done better one day using action hooks), but for the moment this will have to do.
+				**/
+				$wppizzaGateways->wppizza_wpml_localization_gateways();
+
 				$gwIni=strtoupper($res->initiator);
+
+
 			if(isset($this->pluginGateways[$gwIni])){
 				$order['gatewayLabel']=!empty($this->pluginGateways[$gwIni]->gatewayOptions['gateway_label']) ? $this->pluginGateways[$gwIni]->gatewayOptions['gateway_label'] : $order['gatewayLabel'];
 			}

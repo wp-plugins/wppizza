@@ -382,6 +382,7 @@
 				'discount_selected'=>'none',
 				'order_pickup' => false,
 				'order_pickup_alert' => false,
+				'order_pickup_alert_confirm' => false,
 				'order_pickup_discount' => 0,
 				'order_min_for_delivery' => 0,
 				'order_min_for_pickup' => !empty($options['order']['order_min_for_delivery']) ? $options['order']['order_min_for_delivery'] : 0 ,/**on updates, use order_min_for_delivery settings so as to not modify th ebehaviousr in the frontend**/

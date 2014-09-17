@@ -5,7 +5,7 @@ Description: Maintain your restaurant menu online and accept cash on delivery or
 Author: ollybach
 Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Author URI: http://www.wp-pizza.com
-Version: 2.10.4.6
+Version: 2.11
 License:
 
   Copyright 2012 ollybach (dev@wp-pizza.com)
@@ -50,11 +50,13 @@ register_uninstall_hook( __FILE__, 'wppizza_uninstall' );
 if ( ! class_exists( ''.WPPIZZA_CLASS.'' ) ) {
 class WPPizza extends WP_Widget {
 
+
+
+
 	public $pluginVersion;
 	protected $pluginSlug;
 	protected $pluginLocale;
 	public $pluginOptions;
-	protected $pluginOptionsNoWpml;
 	protected $pluginSession;
 	protected $pluginName;
 	protected $pluginSlugCategoryTaxonomy;
@@ -72,15 +74,15 @@ class WPPizza extends WP_Widget {
 *
 ********************************************************/
  function __construct() {
+
 	/**init constants***/
-	$this->pluginVersion='2.10.4.6';//increment in line with stable tag in readme and version above
+	$this->pluginVersion='2.11';//increment in line with stable tag in readme and version above
  	$this->pluginName="".WPPIZZA_NAME."";
  	$this->pluginSlug="".WPPIZZA_SLUG."";//set also in uninstall when deleting options
 	$this->pluginSlugCategoryTaxonomy="".WPPIZZA_TAXONOMY."";//also on uninstall delete wppizza_children as well as widget
 	$this->pluginOrderTable="".WPPIZZA_SLUG."_orders";
 	$this->pluginLocale="".WPPIZZA_LOCALE."";
 	$this->pluginOptions = get_option(WPPIZZA_SLUG,0);
-	$this->pluginOptionsNoWpml = $this->pluginOptions; //when updating some options (notably localizations) we do NOT want to have the variables messed with by WPML before we enter them into the db
 	$this->pluginNagNotice=0;//default off->for use in updates to this plugin
 	$this->pluginPath=__FILE__;
 	/**to get the template paths, uri's and possible subdir and set vars accordingly**/
@@ -114,13 +116,16 @@ class WPPizza extends WP_Widget {
     );
 
     $this->WP_Widget(false, $name=$this->pluginName, $widget_opts);
-    load_plugin_textdomain(WPPIZZA_LOCALE, false, dirname(plugin_basename( __FILE__ ) ) . '/lang' );
+
+
+    add_action('init', array($this, 'wppizza_load_plugin_textdomain'));
 
     /**allow overwriting of pluginVars in seperate class*/
     add_action('init', array( $this, 'wppizza_extend'),1);
 
 	/**add wpml . must run front and backend (ajax request)***/
 	add_action('init', array( $this, 'wppizza_wpml_localization'),99);
+
 }
 
 /*****************************************************************************************************************
@@ -131,6 +136,12 @@ class WPPizza extends WP_Widget {
 *
 *
 ******************************************************************************************************************/
+    /*****************************************************
+     * load text domain on init.
+     ******************************************************/
+  	public function wppizza_load_plugin_textdomain(){
+        load_plugin_textdomain(WPPIZZA_LOCALE, false, dirname(plugin_basename( __FILE__ ) ) . '/lang' );
+    }
     /*****************************************************
      * Generates the administration form for the widget.
      * @instance    The array of keys and values for the widget.
@@ -202,13 +213,81 @@ class WPPizza extends WP_Widget {
 
 		return $paths;
 	}
+
 	/*******************************************************
 	*
-	*	[WPML : make strings wpml compatible]
 	*
+	*	[set/save submitted user post data in session, exclude tips though ]
+	*	[moved from actions to be available throughout]
+	*	
 	******************************************************/
-	function wppizza_wpml_localization() {
-		require(WPPIZZA_PATH .'inc/wpml.inc.php');
+	function wppizza_sessionise_userdata($postUserData,$orderFormOptions) {
+			if (!session_id()) {session_start();}
+			$params = array();
+			parse_str($postUserData, $params);
+			/**selects are zero indexed*/
+			foreach($orderFormOptions as $elmKey=>$elm){
+				if($elm['type']=='select' && isset($params[$elm['key']])){
+					foreach($elm['value'] as $a=>$b){
+						if($params[$elm['key']]==$b){
+							$params[$elm['key']]=''.$a.'';
+						}
+					}
+				}
+			}
+			/******************************************
+				[get entered data to re-populate input fields but loose irrelevant vars
+			********************************************/
+			/**empty first and start over**/
+			if(isset($_SESSION[$this->pluginSessionGlobal]['userdata'])){
+				unset($_SESSION[$this->pluginSessionGlobal]['userdata']);
+			}
+			foreach($orderFormOptions as $oForm){
+				if($oForm['key']!='ctips'){/**tips should not be in the global user session**/
+					if(isset($params[$oForm['key']])){
+						$_SESSION[$this->pluginSessionGlobal]['userdata'][$oForm['key']]=$params[$oForm['key']];
+					}
+				}
+			}
+			/***eliminate notice of undefined index userdata**/
+			if(!isset($_SESSION[$this->pluginSessionGlobal]['userdata'])){$_SESSION[$this->pluginSessionGlobal]['userdata']=array();}
+
+
+			/*also keep selected gateway in session*/
+			if(isset($_SESSION[$this->pluginSessionGlobal]['userdata']['gateway'])){
+				unset($_SESSION[$this->pluginSessionGlobal]['userdata']['gateway']);
+			}
+			$selectedGateway=!empty($params['wppizza-gateway']) ? strtoupper(wppizza_validate_string($params['wppizza-gateway'])) : '';
+			$_SESSION[$this->pluginSessionGlobal]['userdata']['gateway']=$selectedGateway;
+
+			/**allow filtering of session data**/
+			$_SESSION[$this->pluginSessionGlobal]['userdata'] = apply_filters('wppizza_filter_sessionise_userdata', $_SESSION[$this->pluginSessionGlobal]['userdata'],$params);
+
+		return $params;
+	}
+	/*********************************************************************************
+	*
+	*	[WPML : make strings wpml compatible]
+	*	only include if icl_translate exists
+	* 	only include once in admin to register strings (as it saves a ton of icl queries)
+	********************************************************************************/
+	function wppizza_wpml_localization(){
+		if(function_exists('icl_translate')){
+			if( is_admin() && ( !defined( 'DOING_AJAX' ) || !DOING_AJAX )){
+				require_once(WPPIZZA_PATH .'inc/wpml.inc.php');
+			}else{
+				require(WPPIZZA_PATH .'inc/wpml.inc.php');
+			}
+		}
+	}
+	function wppizza_wpml_localization_gateways(){
+		if(function_exists('icl_translate')){/*only if wpml*/
+			if( is_admin() && ( !defined( 'DOING_AJAX' ) || !DOING_AJAX )){
+				require_once(WPPIZZA_PATH .'inc/wpml.gateways.inc.php');
+			}else{
+				require(WPPIZZA_PATH .'inc/wpml.gateways.inc.php');
+			}
+		}
 	}
 	/*******************************************************
      *
@@ -239,7 +318,7 @@ function wppizza_all_actions() {
 }
 add_action('plugins_loaded', 'wppizza_get_gateways');
 function wppizza_get_gateways() {
-require_once(WPPIZZA_PATH .'classes/wppizza.gateways.inc.php');
+	require_once(WPPIZZA_PATH .'classes/wppizza.gateways.inc.php');
 	$WPPIZZA_GATEWAYS=new WPPIZZA_GATEWAYS();
 }
 /*=======================================================================================*/
