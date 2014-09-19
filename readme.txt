@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.3, WP 3.3 
 Tested up to: 4.0
-Stable tag: 2.11
+Stable tag: 2.11.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -141,6 +141,14 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 == Changelog ==
 
+2.11.1    
+JUST SOME GENERAL INTERNAL FILTERS, METHODS AND ACTION HOOKS ADDITIONS (USER REQUESTS) - NOTHING MAJOR
+* added filter - wppizza_filter_order_summary_exclude_item_from_count -  to order summary function (affecting cart and order etc) that lets the total count of items (used for calculating delivery charges on a per item basis ) be filtered  
+* added action hook - wppizza_gateway_button_append_{gatewayIdent} - that could be used to print stuff/formfields after a specific gateway button (if not using dropdown for gateway selection) 
+* added method to gateway class  - wppizza_gateway_append_formfields - to output/append a passed formfields array suitably html formatted (labels/required/input etc) somewhere (for example i conjunction with  wppizza_gateway_button_append_{gatewayIdent} hook  
+* maintenence: load gateway classes and variables conditionally in admin and frontend  
+19th September 2014  
+ 
 2.11    
 * added 'EXPIRED' ENUM value to wppizza_orders table payment_status field   
 * added filter to payment method fieldset "wppizza_filter_paymentmethod_confirmation" on confirmation page that could be used if required  

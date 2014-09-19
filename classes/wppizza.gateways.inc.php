@@ -11,8 +11,9 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 		/************************************************************************
 			[runs only for frontend]
 		*************************************************************************/
-
+		if ( !is_admin()){//|| ( defined( 'DOING_AJAX' ) && DOING_AJAX )
 			add_action('init', array( $this, 'wppizza_instanciate_gateways_frontend'));
+		}
 
 		if(!is_admin()){
 			add_action('init', array( $this, 'wppizza_do_gateways'));/**output available gateway choices on order page**/
@@ -27,13 +28,22 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 		/************************************************************************
 			[runs only in backend]
 		*************************************************************************/
+		add_action('admin_init', array( $this, 'wppizza_load_gateways_admin'));
 		add_action('admin_init', array( $this, 'wppizza_available_gateways'),1);/**check if a gateways has been (un)installed and if so, update option**/
 	}
 
 	function wppizza_do_gateways() {
 		add_action('wppizza_choose_gateway', array( $this, 'wppizza_choose_gateway'));
 	}
-
+	function wppizza_load_gateways_admin() {
+		$allClasses=get_declared_classes();
+		foreach ($allClasses AS $class){
+			$chkStr=substr($class,0,16);
+			if($chkStr=='WPPIZZA_GATEWAY_'){
+				$c=new $class;
+			}
+		}
+	}	
 	function wppizza_instanciate_gateways_frontend() {
 
 		/**display surcharges pre order**/
@@ -188,14 +198,19 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 							if(isset($gw->gatewayTypeSubmit) && $gw->gatewayTypeSubmit=='custom'){/*customised*/
 								$gwAddClass=' class="wppizzaGwCustom"';
 							}
-							print"<div id='wppizza-gw-".$key."' class='wppizza-gw-button button'>";
-									print"<label>";
-									print"<input type='radio' name='wppizza-gateway' id='wppizza-gateway-".$key."' ".$gwAddClass." value='".$key."' ".checked($_SESSION[$this->pluginSession]['gateway-selected']['gw'],$key,false)."/> ";
-									print"".!empty($gw->gatewayImage) ? $gw->gatewayImage : '' ." ";
-									print"".empty($gw->gatewayOptions['gateway_label']) ? $gw->gatewayName : $gw->gatewayOptions['gateway_label'] ." ";
-									print"</label>";
-									print"".!empty($gw->gatewayOptions['gateway_info']) ? '<span class="wppizza-gateway-addinfo">'.$gw->gatewayOptions['gateway_info'].'</span>' : '' ." ";
-							print"</div>";
+							$gwPrint="<div id='wppizza-gw-".$key."' class='wppizza-gw-button button'>";
+									$gwPrint.="<label>";
+									$gwPrint.="<input type='radio' name='wppizza-gateway' id='wppizza-gateway-".$key."' ".$gwAddClass." value='".$key."' ".checked($_SESSION[$this->pluginSession]['gateway-selected']['gw'],$key,false)."/> ";
+									$gwPrint.="".!empty($gw->gatewayImage) ? $gw->gatewayImage : '' ." ";
+									$gwPrint.="".empty($gw->gatewayOptions['gateway_label']) ? $gw->gatewayName : $gw->gatewayOptions['gateway_label'] ." ";
+									$gwPrint.="</label>";
+									$gwPrint.="".!empty($gw->gatewayOptions['gateway_info']) ? '<span class="wppizza-gateway-addinfo">'.$gw->gatewayOptions['gateway_info'].'</span>' : '' ." ";
+							$gwPrint.="</div>";
+							echo $gwPrint;
+							
+							/**do something after we have echoed the gateway button. $key being the gatewayIdent**/
+							do_action('wppizza_gateway_button_append_'.$key.'');
+
 						$i++;
 						}
 					}
@@ -244,6 +259,52 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 			$standardButton='<input class="submit wppizza-ordernow" type="submit" style="display:block" value="'.$this->pluginOptions['localization']['send_order']['lbl'].'" />';
 		}
 		return $standardButton;
+	}
+	/***********************************************
+	if we want to add some formfields under a gateway button,
+	as opposed to under / in between customer input formfields
+	print them according to settings
+	***********************************************/	
+	function wppizza_gateway_append_formfields($formfields,$key){
+		if(isset($formfields) && is_array($formfields)){
+		$userSession=array();
+		if(isset($_SESSION[$this->pluginSessionGlobal]['userdata'])){
+			$userSession=$_SESSION[$this->pluginSessionGlobal]['userdata'];
+		}
+		echo'<fieldset id="wppizza-ff-'.$key.'" class="wppizza-ff">';
+		foreach($formfields as $elmKey=>$elm){
+			if($elm['enabled']){
+				$labelclass=!empty($elm['required']) ? ' class="wppizza-order-label-required"':'';
+				$prefill=!empty($elm['prefill']) && isset($userSession[$elm['key']]) ? $userSession[$elm['key']] :'';
+				$required=!empty($elm['required'])? 'required':'';
+				$placeholder=!empty($elm['placeholder']) ? ' placeholder="'.$elm['placeholder'].'" ' : '';
+				
+				echo'<label for="'.$elm['key'].'" '.$labelclass.'>'.$elm['lbl'].'</label>';
+				
+				if($elm['type']=='text'){
+					echo'<input id="'.$elm['key'].'" name="'.$elm['key'].'" type="text" value="'.$prefill.'" '.$placeholder.' '.$required.'/>';
+				}
+				if($elm['type']=='email'){
+					echo'<input id="'.$elm['key'].'" name="'.$elm['key'].'" type="email" value="'.$prefill.'" '.$placeholder.' '.$required.'/>';					
+				}
+				if($elm['type']=='textarea'){
+					echo'<textarea id="'.$elm['key'].'" name="'.$elm['key'].'" '.$required.' '.$placeholder.'>'.$prefill.'</textarea>';
+					
+				}				
+				if($elm['type']=='select'){
+					echo'<select id="'.$elm['key'].'" name="'.$elm['key'].'" '.$required.'>';
+					$placeholder=!empty($elm['placeholder']) ? ''.$elm['placeholder'].'' : '--------';
+					echo'<option value="">'.$placeholder.'</option>';
+					foreach($elm['value'] as $a=>$b){
+						$selected=!empty($elm['prefill']) && isset($userSession[$elm['key']]) && $userSession[$elm['key']]==wppizza_validate_string($a) ? 'selected="selected"' :'';
+						echo'<option value="'.wppizza_validate_string($b).'" '.$selected.'>'.$b.'</option>';
+					}
+					echo'</select>';
+				}
+			}
+		}
+		echo'</fieldset>';
+		}
 	}
 	/***********************************************
 	*

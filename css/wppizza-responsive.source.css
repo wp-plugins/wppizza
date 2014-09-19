@@ -200,7 +200,9 @@
 #wppizza-cart-contents .ui-spinner{margin:2px 10px 5px 0; padding:0; font-family:inherit !important;font-size:inherit !important;float:none !important}
 #wppizza-cart-contents .wppizza-quantity-wrap>.ui-spinner{margin:0 0 5px 10px;}/**right align**/
 #wppizza-cart-contents .wppizza-item-quantity{padding:0 2px;margin:-3px 0 0 0; width:40px;font-family:inherit;font-size:inherit;}
-
+/**generic formfields (for instance under gateway buttons)**/
+fieldset.wppizza-ff>label{display:block}
+fieldset.wppizza-ff>input, fieldset.wppizza-ff>select, fieldset.wppizza-ff>textarea{margin-bottom: 3px;width: 100%;min-width: 100%;padding-left: 0;padding-right: 0;}
 
 
 

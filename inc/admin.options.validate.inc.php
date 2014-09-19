@@ -336,9 +336,14 @@
 			asort($input['gateways']['gateway_order']);
 
 			$options['gateways']['gateway_selected']=array();
+			$gwEnabledCount=0;
 			foreach($input['gateways']['gateway_order'] as $gw=>$sort){
 				$options['gateways']['gateway_selected'][$gw]=!empty($input['gateways']['gateway_selected'][$gw])? true : false;
+				if(!empty($input['gateways']['gateway_selected'][$gw])){
+				$gwEnabledCount++;	
+				}
 			}
+			$options['gateways']['gateway_enabled_count']=$gwEnabledCount;
 
 			/**selected gateway*/
 			$gateways=$this->wppizza_get_registered_gateways();

@@ -194,7 +194,7 @@ if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='order-pickup'){
 
 	$vars['location']=$location;
 
-	/***do action of som sort***/
+	/***do action of some sort***/
 	do_action('wppizza_pickup_toggle',$pickup);
 
 

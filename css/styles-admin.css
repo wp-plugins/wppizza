@@ -136,6 +136,7 @@
 .wppizza-gateway-show-options{float:right;cursor:pointer;color:blue;font-size:110%;padding:0 5px}
 /*initialize settings hidden*/
 .wppizza-gateway-settings{display:none}
+.wppizza-gateway-settings .description{}
 #wppizza_gateways_options>div,#wppizza_gateways_options>div>div,.wppizza-gateway-settings>div{overflow:auto;margin-bottom:5px;padding:5px;}
 #wppizza_gateways_options>div{padding:2px;}
 .wppizza-gateway-settings>div{border-bottom:1px dotted #CECECE;}
@@ -149,6 +150,8 @@
 #wppizza_gateways_options .wp-editor-container{background:#FFFFFF}
 #wppizza_gateways_options .wp-editor-container textarea{width:100%}
 #wppizza_gateways_options .wppizza-gateway{background:#FCFCFC;border:1px solid #ECECEC;margin-bottom:10px;padding:0}
+
+
 
 /******************
 	[access rights]

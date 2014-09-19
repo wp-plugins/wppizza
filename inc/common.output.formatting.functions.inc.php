@@ -556,7 +556,14 @@ function wppizza_order_summary($session,$options,$module=null,$ajax=null){
 	/**lets group items by id and sizes***/
 	foreach($session['items'] as $groupid=>$groupitems){
 		foreach($groupitems as $v){
-			$cartItemsCount++;
+			
+			$excludeFromCount=false;
+			/**allow items to be excluded from count when calculating delivery prices per item**/
+			$excludeFromCount = apply_filters('wppizza_filter_order_summary_exclude_item_from_count', $excludeFromCount, $v);
+			if(!$excludeFromCount){
+				$cartItemsCount++;//advance counter if not excluded (in case we want to not charge per item on this )
+			}
+			
 			/**really only for legacy reasons, future versions will only have extend key**/
 			if(!isset($v['additionalinfo'])){$v['additionalinfo']=array();}
 			if(!isset($v['extend'])){$v['extend']=array();}
@@ -570,7 +577,6 @@ function wppizza_order_summary($session,$options,$module=null,$ajax=null){
 			}
 		}
 	}
-
 
 	foreach($cartItems as $k=>$v){
 		$groupedItems[$k]=array(

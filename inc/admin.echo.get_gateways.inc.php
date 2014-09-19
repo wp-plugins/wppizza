@@ -59,7 +59,7 @@
 					print"<label>".$val['label']."</label>";
 						$selected=!empty($val['selected']) ? $val['selected'] : '' ;
 						wppizza_echo_formfield($val['type'],$val['key'],$this->pluginSlug."[gateways][".$gw['gatewayOptionsName']."][".$val['key']."]",$val['value'],$val['placeholder'],$val['options'],$selected);
-					print"<br/><span class='description'>".$val['descr']."</span>";
+					print"<span class='description'>".$val['descr']."</span>";
 				print"</div>";
 				}
 			}
