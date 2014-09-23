@@ -50,8 +50,10 @@ try {
 		
 		
 		$mail->SetFrom(''.$orderFromEmail.'',''.$fromName.'');/*by default, these are the customer submitted name/email. However these might also be statically set in order settings*/
+		if($this->orderClientEmail!=''){/*as order form might not have any cemail field*/
 		$mail->AddReplyTo(''.$this->orderClientEmail.'', ''.$replyToCCName.'');
 		$mail->AddCC(''.$this->orderClientEmail.'',''.$replyToCCName.'');
+		}
 	}
 	/**the subject**/
 	$mail->Subject = '' . $this->subjectPrefix . $this->subject .  $this->subjectSuffix . '';

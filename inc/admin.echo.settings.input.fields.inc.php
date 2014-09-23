@@ -750,7 +750,7 @@ $options = $this->pluginOptions;
 				echo"<div id='wppizza_".$field."'>";
 					echo"<div id='wppizza_".$field."_options'>";
 					asort($localizeOptions);
-					$lngOddEvenArray=__('0,1,6,13,14,17,38,46', $this->pluginLocale);
+					$lngOddEvenArray=__('0,1,6,13,14,17,40,48', $this->pluginLocale);
 					$lngOddEvan=explode(",",$lngOddEvenArray);
 					$bgStyle=$lngOddEvan;
 					$i=0;

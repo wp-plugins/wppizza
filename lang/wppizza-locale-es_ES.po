@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WPPizza\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-15 18:58-0000\n"
-"PO-Revision-Date: 2014-09-15 18:58-0000\n"
+"POT-Creation-Date: 2014-09-23 15:17-0000\n"
+"PO-Revision-Date: 2014-09-23 15:17-0000\n"
 "Last-Translator: ollybach <dev@1000db.com>\n"
 "Language-Team: \n"
 "Language: es_ES\n"
@@ -87,7 +87,7 @@ msgid "notes:"
 msgstr "notas:"
 
 #: ../ajax/admin-get-json.php:307
-#: ../inc/admin.setup.default.options.inc.php:637
+#: ../inc/admin.setup.default.options.inc.php:641
 msgid "ok"
 msgstr "ok"
 
@@ -107,19 +107,19 @@ msgstr "mostrar total de todos los pedidos"
 msgid "total all orders"
 msgstr "Totales Todas las órdenes"
 
-#: ../ajax/get-json.php:436
+#: ../ajax/get-json.php:449
 msgid "Sorry, we could not find this order."
 msgstr "(Lo sentimos, en este momento no pudimos encontrar este pedido."
 
-#: ../ajax/get-json.php:470
+#: ../ajax/get-json.php:483
 msgid "This order has already been processed"
 msgstr "Este pedido ya ha sido procesado"
 
-#: ../ajax/get-json.php:479
+#: ../ajax/get-json.php:492
 msgid "SUCCESS"
 msgstr "ÉXITO"
 
-#: ../ajax/get-json.php:484
+#: ../ajax/get-json.php:497
 msgid "FAILED: Sending of Mail Failed"
 msgstr "FALLIDO: Envío de correo Falló"
 
@@ -223,7 +223,7 @@ msgid "Menu Items (active)"
 msgstr "Menu Items (active)"
 
 #: ../classes/wppizza.actions.inc.php:980
-#: ../classes/wppizza.actions.inc.php:1849
+#: ../classes/wppizza.actions.inc.php:1858
 msgid "Categories"
 msgstr "Categorías"
 
@@ -299,116 +299,116 @@ msgstr "Eliminar pedidos"
 msgid "Nothing here"
 msgstr "Nada aquí"
 
-#: ../classes/wppizza.actions.inc.php:1775
+#: ../classes/wppizza.actions.inc.php:1784
 msgid "Menu Items"
 msgstr "Elementos de menú"
 
-#: ../classes/wppizza.actions.inc.php:1776
+#: ../classes/wppizza.actions.inc.php:1785
 msgid "WPPizza Menu Item"
 msgstr "Elemento de menú WPPizza"
 
-#: ../classes/wppizza.actions.inc.php:1777
+#: ../classes/wppizza.actions.inc.php:1786
 msgid "Add New"
 msgstr "Agregar Nuevo"
 
-#: ../classes/wppizza.actions.inc.php:1778
+#: ../classes/wppizza.actions.inc.php:1787
 msgid "Add New Menu Item"
 msgstr "Agregar Nuevo elemento de menú"
 
-#: ../classes/wppizza.actions.inc.php:1779
+#: ../classes/wppizza.actions.inc.php:1788
 msgid "Edit"
 msgstr "Editar"
 
-#: ../classes/wppizza.actions.inc.php:1780
+#: ../classes/wppizza.actions.inc.php:1789
 msgid "Edit Menu Item"
 msgstr "Editar Elemento del Menú"
 
-#: ../classes/wppizza.actions.inc.php:1781
+#: ../classes/wppizza.actions.inc.php:1790
 msgid "New Menu Item"
 msgstr "Nuevo Elemento del Menú"
 
-#: ../classes/wppizza.actions.inc.php:1782
+#: ../classes/wppizza.actions.inc.php:1791
 msgid "All Menu Items"
 msgstr "Todos los elementos del menú"
 
-#: ../classes/wppizza.actions.inc.php:1783
+#: ../classes/wppizza.actions.inc.php:1792
 msgid "View"
 msgstr "Ver"
 
-#: ../classes/wppizza.actions.inc.php:1784
+#: ../classes/wppizza.actions.inc.php:1793
 msgid "View Menu Items"
 msgstr "Ver elementos del Menú"
 
-#: ../classes/wppizza.actions.inc.php:1785
+#: ../classes/wppizza.actions.inc.php:1794
 msgid "Search Menu Items"
 msgstr "Buscar elementos del menú"
 
-#: ../classes/wppizza.actions.inc.php:1786
+#: ../classes/wppizza.actions.inc.php:1795
 msgid "No items found"
 msgstr "No se encontraron elementos"
 
-#: ../classes/wppizza.actions.inc.php:1787
+#: ../classes/wppizza.actions.inc.php:1796
 msgid "No items found in the Trash"
 msgstr "No se han encontrado elementos en la Papelera"
 
-#: ../classes/wppizza.actions.inc.php:1796
+#: ../classes/wppizza.actions.inc.php:1805
 #, php-format
 msgid "Holds %1$s  menu items data"
 msgstr "Sostiene %1$s datos de elementos del menú"
 
-#: ../classes/wppizza.actions.inc.php:1839
-#: ../classes/wppizza.actions.inc.php:2002
+#: ../classes/wppizza.actions.inc.php:1848
+#: ../classes/wppizza.actions.inc.php:2011
 msgid "WPPizza Categories"
 msgstr "Categorías WPPizza"
 
-#: ../classes/wppizza.actions.inc.php:1840
+#: ../classes/wppizza.actions.inc.php:1849
 msgid "Category"
 msgstr "Categoría"
 
-#: ../classes/wppizza.actions.inc.php:1841
+#: ../classes/wppizza.actions.inc.php:1850
 msgid "Search Categories"
 msgstr "Búsqueda Categorías"
 
-#: ../classes/wppizza.actions.inc.php:1842
+#: ../classes/wppizza.actions.inc.php:1851
 msgid "All Categories"
 msgstr "Todas las categorías"
 
-#: ../classes/wppizza.actions.inc.php:1843
+#: ../classes/wppizza.actions.inc.php:1852
 msgid "Parent Category"
 msgstr "Categoría Padre"
 
-#: ../classes/wppizza.actions.inc.php:1844
+#: ../classes/wppizza.actions.inc.php:1853
 msgid "Parent Category:"
 msgstr "Categoría Padre:"
 
-#: ../classes/wppizza.actions.inc.php:1845
+#: ../classes/wppizza.actions.inc.php:1854
 msgid "Edit Category"
 msgstr "Editar categoría"
 
-#: ../classes/wppizza.actions.inc.php:1846
+#: ../classes/wppizza.actions.inc.php:1855
 msgid "Update Category"
 msgstr "Actualizar Categoría"
 
-#: ../classes/wppizza.actions.inc.php:1847
+#: ../classes/wppizza.actions.inc.php:1856
 msgid "Add New Category"
 msgstr "Agregar nueva Categoría"
 
-#: ../classes/wppizza.actions.inc.php:1848
+#: ../classes/wppizza.actions.inc.php:1857
 msgid "New Category Name"
 msgstr "Nuevo Nombre Categoría"
 
-#: ../classes/wppizza.actions.inc.php:1866
+#: ../classes/wppizza.actions.inc.php:1875
 #, php-format
 msgid "%s"
 msgstr "%s"
 
-#: ../classes/wppizza.actions.inc.php:3082
-#: ../classes/wppizza.actions.inc.php:3084
+#: ../classes/wppizza.actions.inc.php:3044
+#: ../classes/wppizza.actions.inc.php:3046
 msgid "Previous"
 msgstr "Previous"
 
-#: ../classes/wppizza.actions.inc.php:3098
-#: ../classes/wppizza.actions.inc.php:3100
+#: ../classes/wppizza.actions.inc.php:3060
+#: ../classes/wppizza.actions.inc.php:3062
 msgid "Next"
 msgstr "Next"
 
@@ -466,20 +466,20 @@ msgstr "Licencia activa"
 msgid "License in-active"
 msgstr "Licencia  no activa"
 
-#: ../classes/wppizza.gateways.inc.php:751
-#: ../classes/wppizza.gateways.inc.php:783
+#: ../classes/wppizza.gateways.inc.php:819
+#: ../classes/wppizza.gateways.inc.php:851
 msgid "nothing to do !"
 msgstr "nothing to do !"
 
-#: ../classes/wppizza.gateways.inc.php:850
+#: ../classes/wppizza.gateways.inc.php:918
 msgid "Sorry, this order has already been processed or does not exist !"
 msgstr "Sorry, this order has already been processed or does not exist !"
 
-#: ../classes/wppizza.gateways.inc.php:854
+#: ../classes/wppizza.gateways.inc.php:922
 msgid "Sorry, this order does not exist !"
 msgstr "Sorry, this order does not exist !"
 
-#: ../classes/wppizza.gateways.inc.php:1193
+#: ../classes/wppizza.gateways.inc.php:1261
 msgid "form fields"
 msgstr "Campos de Formulario:"
 
@@ -1359,7 +1359,7 @@ msgid "If order total >"
 msgstr "Si el total del pedido>"
 
 #: ../inc/admin.echo.settings.input.fields.inc.php:622
-#: ../inc/admin.setup.default.options.inc.php:709
+#: ../inc/admin.setup.default.options.inc.php:713
 msgid "discount"
 msgstr "descuento"
 
@@ -1469,8 +1469,8 @@ msgstr ""
 
 # set  comma seperated numbers as to where you want your odd/even rows in the localization page
 #: ../inc/admin.echo.settings.input.fields.inc.php:753
-msgid "0,1,6,13,14,17,38,46"
-msgstr "0,1,6,13,14,17,38,46"
+msgid "0,1,6,13,14,17,40,48"
+msgstr "0,1,6,13,14,17,40,48"
 
 #: ../inc/admin.echo.settings.input.fields.inc.php:816
 msgid "show most recent *confirmed* orders"
@@ -2722,7 +2722,7 @@ msgid "Confirmation Form - [section header]: order details"
 msgstr "Confirmation Form - [section header]: order details"
 
 #: ../inc/admin.setup.default.options.inc.php:474
-#: ../inc/admin.setup.default.options.inc.php:665
+#: ../inc/admin.setup.default.options.inc.php:669
 msgid "order details"
 msgstr "Detalles de la orden"
 
@@ -3039,35 +3039,43 @@ msgid "this is a required field"
 msgstr "éste es un campo requerido"
 
 #: ../inc/admin.setup.default.options.inc.php:612
+msgid "Order Page: message when email address is invalid"
+msgstr "Order Page: message when email address is invalid"
+
+#: ../inc/admin.setup.default.options.inc.php:613
+msgid "invalid email address"
+msgstr "invalid email address"
+
+#: ../inc/admin.setup.default.options.inc.php:616
 msgid "Order Page: message when field should be a decimal number"
 msgstr "Página Pedido: mensaje cuando el campo debe ser un número decimal"
 
-#: ../inc/admin.setup.default.options.inc.php:613
+#: ../inc/admin.setup.default.options.inc.php:617
 msgid "decimal numbers only please"
 msgstr "Sólo números decimales por favor"
 
-#: ../inc/admin.setup.default.options.inc.php:616
+#: ../inc/admin.setup.default.options.inc.php:620
 msgid "Order Page: label of thank you page after order has been sent"
 msgstr ""
 "Página Pedido: etiqueta de página de agradecimiento después de que la orden "
 "se ha enviado"
 
-#: ../inc/admin.setup.default.options.inc.php:617
+#: ../inc/admin.setup.default.options.inc.php:621
 msgid "thank you"
 msgstr "muchas gracias"
 
-#: ../inc/admin.setup.default.options.inc.php:620
+#: ../inc/admin.setup.default.options.inc.php:624
 msgid ""
 "Order Page: text of thank you page after order has been successfully sent"
 msgstr ""
 "Página Pedido: texto de página de agradecimiento después de que la orden se "
 "ha enviado con éxito"
 
-#: ../inc/admin.setup.default.options.inc.php:621
+#: ../inc/admin.setup.default.options.inc.php:625
 msgid "thank you, we have received your order"
 msgstr "gracias, hemos recibido su orden"
 
-#: ../inc/admin.setup.default.options.inc.php:624
+#: ../inc/admin.setup.default.options.inc.php:628
 msgid ""
 "Order Page: text on \"thank you\" page if there was an *error* sending order "
 "emails "
@@ -3075,66 +3083,66 @@ msgstr ""
 "Página Pedido: texto en página de \"gracias\" si hubo un *error* enviando "
 "correos electrónicos de pedido"
 
-#: ../inc/admin.setup.default.options.inc.php:625
+#: ../inc/admin.setup.default.options.inc.php:629
 msgid "Apologies. There was an error receiving your order. Please try again."
 msgstr ""
 "Disculpas. Hubo un error al recibir su pedido, por favor vuelva a intentarlo."
 
-#: ../inc/admin.setup.default.options.inc.php:628
+#: ../inc/admin.setup.default.options.inc.php:632
 msgid "Order Page: label next to checkbox text to allow user to update profile"
 msgstr ""
 "Página Pedido: etiqueta junto al texto de la casilla para permitir al "
 "usuario actualizar perfil"
 
-#: ../inc/admin.setup.default.options.inc.php:629
+#: ../inc/admin.setup.default.options.inc.php:633
 msgid "update my user data with the details above"
 msgstr "Actualizar mis datos de usuario con los datos mencionados,"
 
-#: ../inc/admin.setup.default.options.inc.php:632
+#: ../inc/admin.setup.default.options.inc.php:636
 msgid "Order Page: Tips/Gratuities"
 msgstr "Página Pedido: Propinas"
 
-#: ../inc/admin.setup.default.options.inc.php:633
+#: ../inc/admin.setup.default.options.inc.php:637
 msgid "tips/gratuities"
 msgstr "propinas"
 
-#: ../inc/admin.setup.default.options.inc.php:636
+#: ../inc/admin.setup.default.options.inc.php:640
 msgid "Order Page: Tips/Gratuities confirm button"
 msgstr "Página Pedido: Botón de confirmación de propinas"
 
-#: ../inc/admin.setup.default.options.inc.php:640
+#: ../inc/admin.setup.default.options.inc.php:644
 msgid "Order Page [login/logout]: text before login link"
 msgstr "Página Pedido [login/logout]: text before login link"
 
-#: ../inc/admin.setup.default.options.inc.php:641
+#: ../inc/admin.setup.default.options.inc.php:645
 msgid "already registered ?"
 msgstr "already registered ?"
 
-#: ../inc/admin.setup.default.options.inc.php:644
+#: ../inc/admin.setup.default.options.inc.php:648
 msgid "Order Page [register]: text label register or continue as guest"
 msgstr "Página Pedido [register]: text label register or continue as guest"
 
-#: ../inc/admin.setup.default.options.inc.php:645
+#: ../inc/admin.setup.default.options.inc.php:649
 msgid "continue as :"
 msgstr "continuar como :"
 
-#: ../inc/admin.setup.default.options.inc.php:648
+#: ../inc/admin.setup.default.options.inc.php:652
 msgid "Order Page [register]: register option -> as guest"
 msgstr "Página Pedido [register]: register option -> as guest"
 
-#: ../inc/admin.setup.default.options.inc.php:649
+#: ../inc/admin.setup.default.options.inc.php:653
 msgid "guest"
 msgstr "guest"
 
-#: ../inc/admin.setup.default.options.inc.php:652
+#: ../inc/admin.setup.default.options.inc.php:656
 msgid "Order Page [register]: register option -> create account"
 msgstr "Página Pedido [register]: register option -> create account"
 
-#: ../inc/admin.setup.default.options.inc.php:653
+#: ../inc/admin.setup.default.options.inc.php:657
 msgid "create account"
 msgstr "crear cuenta"
 
-#: ../inc/admin.setup.default.options.inc.php:656
+#: ../inc/admin.setup.default.options.inc.php:660
 msgid ""
 "Order Page [register]: additional info when create account option is chosen "
 "[html allowed]"
@@ -3142,7 +3150,7 @@ msgstr ""
 "Página Pedido [register]: additional info when create account option is "
 "chosen [html allowed]"
 
-#: ../inc/admin.setup.default.options.inc.php:657
+#: ../inc/admin.setup.default.options.inc.php:661
 msgid ""
 "Please ensure your email address is correct. A password will be emailed to "
 "you."
@@ -3150,14 +3158,14 @@ msgstr ""
 "Please ensure your email address is correct. A password will be emailed to "
 "you."
 
-#: ../inc/admin.setup.default.options.inc.php:660
+#: ../inc/admin.setup.default.options.inc.php:664
 msgid ""
 "Order Page [register]: error if email was already registered [html allowed]"
 msgstr ""
 "Página Pedido [register]: error if email was already registered [html "
 "allowed]"
 
-#: ../inc/admin.setup.default.options.inc.php:661
+#: ../inc/admin.setup.default.options.inc.php:665
 msgid ""
 "This email address has already been registered. Please either <a href="
 "\"#login\">login</a>, use a different email address or continue as guest."
@@ -3165,20 +3173,20 @@ msgstr ""
 "This email address has already been registered. Please either <a href="
 "\"#login\">login</a>, use a different email address or continue as guest."
 
-#: ../inc/admin.setup.default.options.inc.php:664
+#: ../inc/admin.setup.default.options.inc.php:668
 msgid "Order Email: label for order details"
 msgstr "Correo electrónico de Pedido: Etiqueta para los detalles de la  Orden"
 
-#: ../inc/admin.setup.default.options.inc.php:668
+#: ../inc/admin.setup.default.options.inc.php:672
 msgid "Order Email: label to identify how the order was paid for"
 msgstr ""
 "Email de pedido: etiqueta para identificar la forma en que se pagó el pedido"
 
-#: ../inc/admin.setup.default.options.inc.php:669
+#: ../inc/admin.setup.default.options.inc.php:673
 msgid "Paid By:"
 msgstr "Pagado por:"
 
-#: ../inc/admin.setup.default.options.inc.php:672
+#: ../inc/admin.setup.default.options.inc.php:676
 msgid ""
 "Order Email: Text you would like to display at the end of emails after "
 "everything else."
@@ -3186,44 +3194,44 @@ msgstr ""
 "Correo electrónico Pedido:. Texto que desea mostrar al final de mensajes de "
 "correo electrónico después de todo lo demás"
 
-#: ../inc/admin.setup.default.options.inc.php:676
+#: ../inc/admin.setup.default.options.inc.php:680
 msgid "Label Discount (Spend): i.e \"spend\" 50.00 save 10.00"
 msgstr "Etiqueta Descuento (Gastar): es decir, \"gastar\" 50.00 ahorro 10,00"
 
-#: ../inc/admin.setup.default.options.inc.php:677
+#: ../inc/admin.setup.default.options.inc.php:681
 msgid "spend"
 msgstr "Gastar"
 
-#: ../inc/admin.setup.default.options.inc.php:680
+#: ../inc/admin.setup.default.options.inc.php:684
 msgid "Label Discount (Save): i.e spend 50.00 \"save\" 10.00"
 msgstr ""
 "Etiqueta de Descuento (Guardar): es decir, gastar 50,00 \"ahorrar\" 10.00"
 
-#: ../inc/admin.setup.default.options.inc.php:681
+#: ../inc/admin.setup.default.options.inc.php:685
 msgid "save"
 msgstr "Ahorrar"
 
-#: ../inc/admin.setup.default.options.inc.php:684
+#: ../inc/admin.setup.default.options.inc.php:688
 msgid "Label Info: i.e. \"free delivery for orders over\"..."
 msgstr ""
 "Información de Etiqueta: es decir, \"entrega gratuita para pedidos "
 "superiores a\" ..."
 
-#: ../inc/admin.setup.default.options.inc.php:685
+#: ../inc/admin.setup.default.options.inc.php:689
 msgid "free delivery for orders over"
 msgstr "entrega gratuita para pedidos superiores"
 
-#: ../inc/admin.setup.default.options.inc.php:688
+#: ../inc/admin.setup.default.options.inc.php:692
 msgid "Label Info: required minimum order value (displayed if applicable)"
 msgstr ""
 "Información de Etiqueta: valor mínimo requerido del pedido (se muestra si es "
 "aplicable)"
 
-#: ../inc/admin.setup.default.options.inc.php:689
+#: ../inc/admin.setup.default.options.inc.php:693
 msgid "minimum order"
 msgstr "Pedido mínimo"
 
-#: ../inc/admin.setup.default.options.inc.php:692
+#: ../inc/admin.setup.default.options.inc.php:696
 msgid ""
 "Label Info: required minimum order value for delivery (displayed if "
 "applicable)"
@@ -3231,21 +3239,21 @@ msgstr ""
 "Pedido mínimoInformación de Etiqueta: valor mínimo requerido para la entrega "
 "(mostrar en su caso)"
 
-#: ../inc/admin.setup.default.options.inc.php:693
+#: ../inc/admin.setup.default.options.inc.php:697
 msgid "minimum order for delivery"
 msgstr "orden mínima para envío"
 
-#: ../inc/admin.setup.default.options.inc.php:696
+#: ../inc/admin.setup.default.options.inc.php:700
 msgid "Price Labels (Sub)Totals: text to display when free delivery applies"
 msgstr ""
 "Etiquetas Precio (Sub) Totales: texto a mostrar cuando la entrega gratuita "
 "se aplica"
 
-#: ../inc/admin.setup.default.options.inc.php:697
+#: ../inc/admin.setup.default.options.inc.php:701
 msgid "free delivery"
 msgstr "entrega gratuita"
 
-#: ../inc/admin.setup.default.options.inc.php:700
+#: ../inc/admin.setup.default.options.inc.php:704
 msgid ""
 "Price Labels (Sub)Totals: text delivery charges - when set to \"Fixed\" or "
 "\"Free delivery over\" (if applicable)"
@@ -3253,11 +3261,11 @@ msgstr ""
 "Etiquetas Precio (Sub) Totales: texto de gastos de envío - cuando se "
 "establece en \"Fijo\" o \"Entrega gratuita sobre\" (si es aplicable)"
 
-#: ../inc/admin.setup.default.options.inc.php:701
+#: ../inc/admin.setup.default.options.inc.php:705
 msgid "delivery charges"
 msgstr "gastos de envío"
 
-#: ../inc/admin.setup.default.options.inc.php:704
+#: ../inc/admin.setup.default.options.inc.php:708
 msgid ""
 "Price Labels (Sub)Totals: text delivery when set to \"Delivery Charges per "
 "item\" (if applicable)"
@@ -3265,28 +3273,28 @@ msgstr ""
 "Etiquetas Precio (Sub) Totales: texto de entrega cuando se establece en "
 "\"Gastos Envío por artículo\" (en su caso)"
 
-#: ../inc/admin.setup.default.options.inc.php:705
+#: ../inc/admin.setup.default.options.inc.php:709
 msgid "delivery charges per item"
 msgstr "gastos de envío por artículo"
 
-#: ../inc/admin.setup.default.options.inc.php:708
+#: ../inc/admin.setup.default.options.inc.php:712
 msgid "Price Labels (Sub)Totals: text before sum of discounts applied(if any)"
 msgstr ""
 "Etiquetas Precio (Sub) Totales: texto antes de sumar los descuentos "
 "aplicados (si los hay)"
 
-#: ../inc/admin.setup.default.options.inc.php:712
+#: ../inc/admin.setup.default.options.inc.php:716
 msgid ""
 "Price Labels (Sub)Totals: text before sum of tax applied to all items(if > 0)"
 msgstr ""
 "Etiquetas Precio (Sub) Totales: texto antes de sumar el impuesto aplicado a "
 "todos los elementos (si> 0)"
 
-#: ../inc/admin.setup.default.options.inc.php:713
+#: ../inc/admin.setup.default.options.inc.php:717
 msgid "Sales Tax"
 msgstr "Impuesto a las Ventas"
 
-#: ../inc/admin.setup.default.options.inc.php:716
+#: ../inc/admin.setup.default.options.inc.php:720
 #, php-format
 msgid ""
 "Price Labels (Sub)Totals: text before sum of tax applied if prices have been "
@@ -3297,36 +3305,36 @@ msgstr ""
 "entered *inclusive* of tax (if > 0) [%s%% will be replaced by main taxrate "
 "applied - if you are using different taxrates, enter text as appropriate]"
 
-#: ../inc/admin.setup.default.options.inc.php:717
+#: ../inc/admin.setup.default.options.inc.php:721
 #, php-format
 msgid "incl. tax at %s%%"
 msgstr "incl. tax at %s%%"
 
-#: ../inc/admin.setup.default.options.inc.php:720
+#: ../inc/admin.setup.default.options.inc.php:724
 msgid "Price Labels (Sub)Totals: text before total sum of ORDER"
 msgstr ""
 "Etiquetas Precio (Sub) Totales: texto antes de la suma total del PEDIDO"
 
-#: ../inc/admin.setup.default.options.inc.php:721
+#: ../inc/admin.setup.default.options.inc.php:725
 msgid "total"
 msgstr "Total"
 
-#: ../inc/admin.setup.default.options.inc.php:724
+#: ../inc/admin.setup.default.options.inc.php:728
 msgid "Price Labels (Sub)Totals: text before total sum of ITEMS in cart"
 msgstr ""
 "Etiquetas Precio (Sub) Totales: texto antes de la suma total de ARTÍCULOS en "
 "el carrito"
 
-#: ../inc/admin.setup.default.options.inc.php:725
+#: ../inc/admin.setup.default.options.inc.php:729
 msgid "your items"
 msgstr "sus artículos"
 
-#: ../inc/admin.setup.default.options.inc.php:728
+#: ../inc/admin.setup.default.options.inc.php:732
 msgid "Openinghours: text to display when shop is closed that day "
 msgstr ""
 "Horario de apertura: texto a mostrar cuando la tienda está cerrada ese día"
 
-#: ../inc/admin.setup.default.options.inc.php:729
+#: ../inc/admin.setup.default.options.inc.php:733
 msgid "closed"
 msgstr "Cerrado"
 

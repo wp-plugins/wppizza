@@ -608,6 +608,10 @@
 					'descr'=>__('Order Page: message when required field is missing', $this->pluginLocale),
 					'lbl'=>__('this is a required field', $this->pluginLocale)
 				),
+				'required_field_email'=>array(
+					'descr'=>__('Order Page: message when email address is invalid', $this->pluginLocale),
+					'lbl'=>__('invalid email address', $this->pluginLocale)
+				),						
 				'required_field_decimal'=>array(
 					'descr'=>__('Order Page: message when field should be a decimal number', $this->pluginLocale),
 					'lbl'=>__('decimal numbers only please', $this->pluginLocale)

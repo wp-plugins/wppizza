@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.3, WP 3.3 
 Tested up to: 4.0
-Stable tag: 2.11.1
+Stable tag: 2.11.1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -140,6 +140,12 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 
 == Changelog ==
+
+2.11.1.1    
+* fix: emails could not be sent if setting a fixed from address but not enabling email field to be present on order form when using phpmailer  
+* added distinct error message for email formfield (as opposed to just "this is a required field")  
+23th September 2014  
+
 
 2.11.1    
 JUST SOME GENERAL INTERNAL FILTERS, METHODS AND ACTION HOOKS ADDITIONS (USER REQUESTS) - NOTHING MAJOR

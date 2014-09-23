@@ -2329,7 +2329,7 @@ public function wppizza_require_common_input_validation_functions(){
 		$jsExtend['jsExtend']=array();
 		$jsExtend['jsExtend'] = apply_filters('wppizza_filter_js_extend', $jsExtend['jsExtend']);
 
-		$localized_array = array( 'ajaxurl' =>admin_url('admin-ajax.php'),'validate_error'=>array('email'=>''.$options['localization']['required_field']['lbl'].'','required'=>''.$options['localization']['required_field']['lbl'].'','decimal'=>''.$options['localization']['required_field_decimal']['lbl'].''),'msg'=>$jsMessages,'funcCartRefr'=>$jsCartRefreshCompleteFunctions['functionsCartRefresh'],'extend'=>$jsExtend['jsExtend']);
+		$localized_array = array( 'ajaxurl' =>admin_url('admin-ajax.php'),'validate_error'=>array('email'=>''.$options['localization']['required_field_email']['lbl'].'','required'=>''.$options['localization']['required_field']['lbl'].'','decimal'=>''.$options['localization']['required_field_decimal']['lbl'].''),'msg'=>$jsMessages,'funcCartRefr'=>$jsCartRefreshCompleteFunctions['functionsCartRefresh'],'extend'=>$jsExtend['jsExtend']);
 		/**are we using a cache plugin ?**/
 		if($options['plugin_data']['using_cache_plugin']){
 			$localized_array['usingCache']=1;
