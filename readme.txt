@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.3, WP 3.3 
 Tested up to: 4.0
-Stable tag: 2.11.1.1
+Stable tag: 2.11.1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -65,8 +65,11 @@ Note: you might want to start with  Option 1 first, as you can always use Option
 	- as well as default opening times, order settings etc.
 	- display the shoppingcart somewhere on those pages (typically in a sidebar) using the wppizza widget (using type:cart) or the following shortcode: [wppizza type='cart']  
 		
-	**to be able to add items to your shopping cart make sure that ALL pages that display your menu items have the shopping cart displayed somewhere**  
-	**However, you will most likely NOT want to display the shopping cart on the final order page. If your theme does not allow to adjust this - via templates for example -  use one of the many WP plugins available that lets you choose which widget to display on which page**  
+	>**to be able to add items to your shopping cart make sure that ALL pages that display your menu items have the shopping cart displayed somewhere**  
+	>
+	>**However, you will most likely NOT want to display the shopping cart on the final order page.**   
+	>
+	>If your theme does not allow to adjust this - via templates for example -  use one of the many WP plugins available that lets you choose which widget to display on which page  
 	
 	- if the cart displays "currently closed" adjust your opening times in wppizza->settings->openingtimes (and make sure your timezone settings are correct)
 	- make sure the navigation to those pages gets displayed somewhere (this will normally already be the case - usually by some pagelist or menu ).
@@ -140,6 +143,10 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 
 == Changelog ==
+
+2.11.1.2    
+* fix: javascript error when switching from self pickup to delivery (and vice versa)  
+30th September 2014  
 
 2.11.1.1    
 * fix: emails could not be sent if setting a fixed from address but not enabling email field to be present on order form when using phpmailer  
@@ -1245,6 +1252,14 @@ REPLACE this bit of coding (leaving the while/endwhile intact) with :
 
 and your single menu items should now display as any other menu item  
 (if you are using the responsive style - "wppizza->layout->Which style to use" -  use wppizza-loop-responsive.php instead of wppizza-loop.php in the code above )  
+
+in short:  
+
+* make sure option is set to "default or custom template [single-wppizza.php if exists]"  
+* copy your single.php as single-wppizza.php  
+* edit/replace the loop code in that single-wppizza.php file as described above  
+* save  
+
 
 additionally , you could of course make any other edits to that file (like removing comment templates if added by your theme etc ) as you wish  
 	

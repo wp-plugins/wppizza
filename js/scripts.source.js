@@ -390,7 +390,7 @@ jQuery(document).ready(function($){
 			/*js alert if enabled*/
 			if(self.attr('id')=='wppizza-order-pickup-js'){
 				/**make user confirm**/
-				if(typeof wppizza.opt.pickupConfirm!=='undefined'){
+				if(typeof wppizza.opt!=='undefined' && typeof wppizza.opt.pickupConfirm!=='undefined'){
 					if(confirm(wppizza.msg.pickup)){
 					//just continue
 					}else{
