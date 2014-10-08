@@ -7,7 +7,7 @@
  */
 ?>
 <?php
-	do_action('wppizza_history_before_orders',$numberOfOrders,$ordersOnPage);
+	do_action('wppizza_history_before_orders', $numberOfOrders, $ordersOnPage, $atts);
 ?>
 <div id="wppizza-history-wrap">
 <?php
@@ -36,7 +36,7 @@
 	do_action('wppizza_history_loop_before_legend',$oId,$j);
 ?>
 <?php	/**header with time and transaction id**/ ?>
-	<legend class="wppizza-history-legend"><span class="wppizza-history-date"><?php echo $order['transaction_date_time'] ?></span></legend>
+	<legend class="wppizza-history-legend"><span class="wppizza-history-date"><?php echo $order['transaction_date_time'] ?></span><?php echo $order['site_title'] /*might be useful to display in multisite setups(when sitetitle=1).*/ ?></legend>
 <?php
 	do_action('wppizza_history_loop_before_items',$oId,$j);
 ?>
@@ -46,7 +46,7 @@
 	<ul class="wppizza-item-details">
 	<?php
 		/***allow filtering of items (sort, add categories and whatnot)****/
-		$items = apply_filters('wppizza_orderhistory_filter_items', $items, 'showorder');
+		$items = apply_filters('wppizza_orderhistory_filter_items', $items, 'showorder' , $oDetails['options'] , $oDetails['blogid']);
 		foreach($items as $k=>$item){
 		/***allow action per item - probably to use in conjunction with filter above****/
 		do_action('wppizza_orderhistory_item',$item);
@@ -144,5 +144,5 @@
 </div>
 <?php
 	/*****************output pagination****************************************/
-	do_action('wppizza_history_after_orders',$numberOfOrders,$ordersOnPage);
+	do_action('wppizza_history_after_orders', $numberOfOrders, $ordersOnPage, $atts);
 ?>

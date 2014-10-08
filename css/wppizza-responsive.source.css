@@ -188,7 +188,7 @@
 /*tips/gratuities field and button NEW IN VERSION 2.8.4 to have the error/validation message in a sensible place we have to mess around with floats etc **/
 #wppizza-send-order #wppizza-ctips-wrap-outer{overflow:auto;}
 #wppizza-send-order #wppizza-ctips-wrap-inner{float:left}
-#wppizza-send-order #ctips{float:right}
+#wppizza-send-order #ctips{width:auto;float:right}
 #wppizza-send-order #wppizza-ctips-btn{margin:2px 1px;width:auto;min-width:0;height:auto !important; padding:5px 7px !important;line-height:100%;float:right}
 #wppizza-send-order #wppizza-ctips-wrap-inner label.error{display:block}
 
@@ -304,6 +304,7 @@ h2.wppizza-article-title{padding-bottom:0;margin:0}
 .wppizza-article-info{clear:right}
 .wppizza-article-info h2,.wppizza-article-info h3{display:inline;display:inline-block;padding-bottom:0;margin:0}
 .wppizza-article-additives{font-size:60%;margin:0 5px}
+.wppizza-article-additives:before{content:'*'}
 /****prices and labels*****/
 .wppizza-article-price{float:left;text-align:center;padding:3px;font-size:120%;}
 .wppizza-article-price:hover{cursor:pointer;}
@@ -364,7 +365,9 @@ h2.wppizza-article-title{padding-bottom:0;margin:0}
 #wppizza-history-wrap .wppizza-history-subtotals>li>span {float: right;}
 #wppizza-history-wrap .wppizza-history-payment{margin:0;padding:0;text-align:right;font-size:90%;display:none}
 #wppizza-history-wrap .wppizza-item-additionalinfo{padding-left:25px;padding-bottom:5px;font-size:90%}/*[additional info for ordered items history ]*/
-
+#wppizza-history-wrap .wppizza-history-sitetitle{padding:0 0 0 10px;font-size:80%;margin:0;font-weight:normal}
+#wppizza-history-wrap .wppizza-history-sitetitle:before{content:'['}
+#wppizza-history-wrap .wppizza-history-sitetitle:after{content:']'}
 
 /************************
 *

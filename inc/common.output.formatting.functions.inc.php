@@ -191,10 +191,12 @@
 		that provided the original if i find it again, i insert the address here...
 	* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
 	function wppizza_frontendOpeningTimes($options){
+		$weekDayStart=get_option('start_of_week',7); 
+		
 		$str='';
 		/**group identical opening times**/
 		foreach($options['opening_times_standard'] as $k=>$v){
-			if($k==0){$k=7;}/*for sorting reasons , set sunday temporarily to 7 here**/
+			if($k==0 && $weekDayStart!=0){$k=7;}/*for sorting reasons , set sunday temporarily to 7 here unless weekstart is set to sunday anyway**/
 			if(!isset($times[''.$v['open'].'|'.$v['close'].''])){
 				$times[''.$v['open'].'|'.$v['close'].'']=array();
 				$times[''.$v['open'].'|'.$v['close'].''][]=$k;
@@ -202,32 +204,46 @@
 				$times[''.$v['open'].'|'.$v['close'].''][]=$k;
 			}
 		}
+
 		foreach($times as $k=>$arr){
 			/*to have sundays last when sorting, set it to 7*/
 			asort($arr);
-			$grouped[$k]=array('firstday'=>$arr[0],'days'=>$arr,'consecutivedays'=>wpizza_days_concat($arr));
+			$grouped[$k]=array('firstday'=>reset($arr),'days'=>$arr,'consecutivedays'=>wpizza_days_concat($arr));
 		}
+
 		/**sort by first day in array so we start with a monday regardless**/
 		asort($grouped);
+
 		foreach($grouped as $k=>$v){
-			foreach(explode(",",$v['consecutivedays']) as $b=>$c){
-				$str.='<span class="wppizza-optm-'.$c.'">';
-					$consec=explode("-",$c);
-					$open=explode("|",$k);
-					if(count($consec)==2){
-						if(($consec[0]+1)==$consec[1]){$seperator=', ';}else{$seperator='-';}
-						$str.=''.wpizza_format_weekday($consec[0],'D').''.$seperator.''.wpizza_format_weekday($consec[1],'D').'';
+			$nonConsec=explode(",",$v['consecutivedays']);
+			$groupClasses='';
+			$groupDays='';
+			foreach($nonConsec as $b=>$c){
+				$groupClasses.=' wppizza-optm-'.$c.'';	
+				$consecDays=explode("-",$c);
+				if($b>0){$groupDays.=', ';}
+				if(count($consecDays)>1){
+					/**create appropriate seperator**/
+					if(($consecDays[0]+1)==$consecDays[1]){$seperator=', ';}else{$seperator='-';}
+					foreach($consecDays as $cc=>$cd){
+						if($cc>0){
+							$groupDays.=$seperator;
+						}
+						$groupDays.=wpizza_format_weekday($cd,'D');	
 					}
-					if(count($consec)==1){
-						$str.=''.wpizza_format_weekday($consec[0],'D').'';
-					}
-					if($open[0]==$open[1]){
-						$str.=' <span>'.$options['localization']['openinghours_closed']['lbl'].'</span>';
-					}else{
-						$str.=' <span>'.wpizza_format_time($open[0],$options['opening_times_format']).'-'.wpizza_format_time($open[1],$options['opening_times_format']).'</span>';//loose leading zeros
-					}
-				$str.='</span> ';
+				}else{
+						$groupDays.=wpizza_format_weekday($consecDays[0],'D');	
+				}
 			}
+			$str.='<span class="'.trim($groupClasses).'">';
+			$str.=$groupDays;
+			$open=explode("|",$k);
+			if($open[0]==$open[1]){
+				$str.=' <span>'.$options['localization']['openinghours_closed']['lbl'].'</span>';
+			}else{
+				$str.=' <span>'.wpizza_format_time($open[0],$options['opening_times_format']).'-'.wpizza_format_time($open[1],$options['opening_times_format']).'</span>';//loose leading zeros
+			}
+			$str.='</span> ';		
 		}
 		return trim($str);
 	}
@@ -271,7 +287,7 @@
 function wpizza_days_concat( Array $days ){
 
     // Define all days of the week, st sun(0) to 7
-    static $all_days = array('1', '2', '3', '4', '5', '6','7');
+    static $all_days = array('0','1', '2', '3', '4', '5', '6','7');
 
     // prepare our output
     $output = array();

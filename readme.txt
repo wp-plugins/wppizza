@@ -4,9 +4,9 @@ Donate link: http://www.wp-pizza.com/
 Author URI: http://www.wp-pizza.com
 Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
-Requires at least: PHP 5.3, WP 3.3 
+Requires at least: PHP 5.3+, WP 3.3+ 
 Tested up to: 4.0
-Stable tag: 2.11.1.2
+Stable tag: 2.11.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -143,6 +143,23 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 
 == Changelog ==
+
+2.11.2    
+* added more shortcode options to order history display (see shortcodes in faqs)  
+* added more shortcode options for category display to - for example - select all or comma separated list of categories in a single shortcode (see shortcodes in faqs)  
+* added title attribute on additives in loop  
+* added and using permalinks filter  to be able to add item more reliably to the correct category when "group by category" has been enabled and item belongs to more than one category  
+* added hidden input (used when group by category has been enabled) via action hook instead of it being hardcoded into loop templates  
+* added more parameters (slug, categoryid, options) to all action hooks in loop templates  
+* added notice when using php <5.3 in reports 
+* reformatted opening hours widget/shortcode output a little bit to also account for sunday weekstart in a somewhat more sensible manner   
+* prevent accidental double click on order submit button  
+* tidy up in loop templates (using include/require for consistency)  
+* set "*" before additives in loop to be css controlled instead of hardcoded  
+* minor css tweaks  
+7th October 2014  
+
+
 
 2.11.1.2    
 * fix: javascript error when switching from self pickup to delivery (and vice versa)  
@@ -1036,6 +1053,11 @@ the size of the featured image displayed will depend on your thumbnail size set 
 if your theme does not allow featured images, and you are adding pictures directly into the description, you might want to turn off "display placeholder image" in wppizza->settings->layout  
 alternatively, add " add_theme_support( 'post-thumbnails'); " (without the quotes) to your themes function.php file  
 
+= How do I sort the menu items ? =
+
+just use the order attribute (which btw is also available in quick edit). if you cannot see it in individual posts/menu items, you might have to click on "screen options" and check "attributes" first  
+there is also a variety of drag and drop (custom) post type plugins available on wordpress if you prefer to sort the order that way  
+
 
 = Can I just display the menu without offering online order  ? =
 
@@ -1085,14 +1107,18 @@ in case where you cannot or do not want to use a widget, here are the correspond
 - **display items** in category 
 
 	attributes:  
-	- category='pizza' 		(optional: '[category-slug]'. if omitted, will display the first category)  
+	- category='pizza' 		(optional: (string|array|!all). single slug, comma separated slugs or !all to display all (in conjunction with !all, you can also exclude categories by prefixing with "-" [minus]).  if omitted entirely, will display the first category)  
 	- noheader='1' 			(optional: 'anything'. omit attribute to show header. will suppress header (category title and description) in wppizza-loop.php. you can globally hide all category headers by setting "suppress headers" in wppizza->settings->layout.)  
 	- showadditives='0' 	(optional: '0' or '1'. if omitted, a list of additives will be displayed if any of the category items has additives added. if set (0 or 1): force to display/hide additives list. useful when displaying more than 1 category on a page)  
 	- exclude='6,5,8' 		(optional [comma separated menu item id's]): exclude some id's  
 	- include='6,5,8' 		(optional [comma separated menu item id's]): include only these id's (overrides exclude)  
 	- note: if you want to edit the category loop and/or headers, copy wppizza-loop.php from the plugins template directory into your theme directory and edit it there.  
 	
-	example: 		[wppizza category='pizza' noheader='1' showadditives='0' exclude='6,5,8']
+	example: 		[wppizza] =>will display all items in first category that has more than zero items   
+	example: 		[wppizza category='pizza' noheader='1' showadditives='0' exclude='6,5,8'] => will display all items in category with slug "pizza", not showing headers or additives list and  excluding items 6,5 and 8  
+	example: 		[wppizza category='pizza,pasta'] => will display all items in category with slug "pizza" or "pasta"  
+	example: 		[wppizza category='!all' exclude='6,5,8'] => will display all items in all categories but excluding items with id 6,5,8  
+	example: 		[wppizza category='!all,-pizza,-drinks'] => will display all categories except "pizza" and "drinks".     
 
 - **display single menu item **   
 
@@ -1151,8 +1177,15 @@ in case where you cannot or do not want to use a widget, here are the correspond
 	
 	attributes:  
 	- type='orderhistory' 		(required [str])  	
-
+	- maxpp='5' 				(optional [int]: how many orders to display per page - default=10)  
+	- multisite='1' 			(optional [str|int]: display orders from all blogs/sites - will be ignored in non-multiste setups.  )  
+	- sitetitle='1' 			(optional [str|int]: display site/blog title for identification purposes next to order date on history page - will be ignored in non-multiste setups.)  
+	
+		
 	example: 		[wppizza type='orderhistory']  
+	example: 		[wppizza type='orderhistory' maxpp='5'] => will display 5 orders per page  
+	example: 		[wppizza type='orderhistory' multisite='1'] => will display all orders from all blogs for this user in a multisite setup  
+	example: 		[wppizza type='orderhistory' multisite='1' sitetitle='1'] => will display all orders from all blogs for this user in a multisite setup and will display relevant blog/site title next to order date   
 
 	note: you would probably want to disable comments etc on that page  
 

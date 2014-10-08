@@ -6,98 +6,15 @@
  *	IF YOU MUST EDIT THIS, READ THE COMMENTS
  *	
  *
- ****************************************************************************************/
-	/*ADDED IN VERSION 2.9.5*/
-	/**to - for example - allow to set options when using this file as template part as options might not be set yet**/
-	$options=apply_filters('wppizza_loop_top',$options=!empty($options) ? $options : false);
-
-	/******************************************
-	if we are trying to get the loop from a shortcode/widget in another page
-	not related to the wppizza custom post type we will have a different post type,
-	so we explicitly set it here to generate the right classes etc
-	*******************************************/ 
-	$post_type=WPPIZZA_POST_TYPE;
-	
-	/*********** plugin options **************/
-	$currency=$options['order']['currency_symbol'];//put currency into a shorter variable. just easier to deal with further down
-	$optionsDecimals=$options['layout']['hide_decimals'];
-	$txt=$options['localization'];/**put localization vars into a shorter variable
-	
-	/**check if we have set the headers to be suppressed in wppizza->settings->layout**/
-	if($options['layout']['suppress_loop_headers']){
-		$noheader=1;	
-	}
-	/*check if we are showing prices*/
-	if($options['layout']['hide_prices']){$hidePrices=1;}
-	/*check currency to left of price*/
-	if($options['layout']['currency_symbol_left']){$currencyLeft=1;}
-	/*check if we are hiding pricetiers if there's only one*/
-	if($options['layout']['hide_single_pricetier']){$hidePricetier=1;}
-	/*check if we are showing cart icon*/
-	if($options['layout']['hide_cart_icon']){$hideCartIcon=' '.$post_type.'-no-cart';}else{$hideCartIcon='';}
-	/*check if we are showing currency next to item*/
-	if($options['layout']['hide_item_currency_symbol']){$hideCurrencySymbol=1;}	
-	/*check if online order has been enabled and if so , remove title and classes to disable adding to cart js*/
-	if($options['layout']['disable_online_order']){$priceClass=''; $priceTitle='';}else{$priceClass=' '.$post_type.'-add-to-cart'; $priceTitle=' title="'.$txt['add_to_cart']['lbl'].'"';}
-	/**add trigger adding to cart from title (h2) when there's only one pricetier***/
-	if($options['layout']['add_to_cart_on_title_click']){$clickTrigger=1;}
-
-
-	/****************************************************************
-	also, if we are retrieving the loop via a shortcode/widget 
-	not on a page with this custom post type
-	we will have set set the query variable explicitly to this category
-	otherwise just get the one we have
-	*****************************************************************/
-	if(isset($query_var)){
-		$termSlug=$query_var;
-	}else{
-		$termSlug=get_query_var( WPPIZZA_TAXONOMY );
-	}
-	/*************************************************************
-	now lets get term descriptions , names etc only needs to run
-	when noheader is not set or we want to add categories to emails etc
-	*************************************************************/
-	if(!isset($noheader) || isset($getSlugDetails)){
-		$termDetails = get_term_by( 'slug', $termSlug, WPPIZZA_TAXONOMY);
-	}
-
-	/**************************************************************************
-	 add a cat id to class so we can identify which category we are currently
-	 in when adding an item (if required)added as hidden input instead of class
-	 somewhere as we can otherwise break all sorts of other things
-	**************************************************************************/
-	$dataCatId=0;
-	if(isset($getSlugDetails)){
-		$dataCatId=$termDetails->term_id;
-	}
-
+ ****************************************************************************************/	
 	/*************************************************************	
-	build and run the query
+		[TIDYUP in 2.11.2 using includes to get plugin options
+		, get/set vars and run query in loop and loop responsive
 	*************************************************************/
-	$paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
-	$args = array(
-		'post_type' => ''.WPPIZZA_POST_TYPE.'',
-		'posts_per_page' => $options['layout']['items_per_loop'],
-		'paged' => $paged ,
-		'post__not_in' => !empty($exclude) ? $exclude : '' , /*ADDED in v.2.7.3*/
-		'post__in' => !empty($include) ? $include : '' , /*ADDED in v.2.8.9.7*/
-		'tax_query' => array(
-			array(
-				'taxonomy' => ''.WPPIZZA_TAXONOMY.'',
-				'field' => 'slug',
-				'terms' => $termSlug,
-				'include_children' => false
-			)
-		),
-		'orderby'=>'menu_order',
-		'order'=>'ASC'
-	);
-	/**new in version 2.5. currenly used to display single posts***/
-	$args = apply_filters('wppizza_filter_loop', $args);
-
-	/**execute query**/	
-	$the_query = new WP_Query( $args );
+	/**get / add plugin options 1x max**/
+	require_once(WPPIZZA_PATH.'inc/frontend.require.once.options.inc.php');/*returns plugin options, filterable via wppizza_loop_top**/
+	/**get / set vars and run query **/
+	require(WPPIZZA_PATH.'inc/frontend.require.loop-query.inc.php');/*query arguments filterable via wppizza_filter_loop */
 ?>
 <?php
 /********************************************
@@ -111,10 +28,10 @@
 ?>
 <?php
 	/*ADDED IN VERSION 2.8.5*/
-	do_action('wppizza_loop_outside_start',$the_query);
+	do_action('wppizza_loop_outside_start', $the_query, $options,  $termSlug, $categoryId);
 ?>
-<?php if(!isset($noheader) && $termDetails){ /*exclude header if set*/?>
-	<header class="page-header entry-header <?php echo $post_type ?>-header">
+<?php if(!is_single() && !isset($noheader) && $termDetails){ /*exclude header if set or is single */?>
+	<header id="<?php echo $post_type ?>-header-<?php echo $termSlug ?>-<?php echo $categoryId ?>" class="page-header entry-header <?php echo $post_type ?>-header <?php echo $post_type ?>-header-<?php echo $termSlug ?>">
 		<h1 class="page-title entry-title <?php echo $post_type ?>-title"><?php echo $termDetails->name ?></h1>
 		<?php if ( $termDetails->description!='' ) :?>
 		<div class="entry-meta <?php echo $post_type ?>-header-meta"><?php echo $termDetails->description; ?></div>
@@ -123,7 +40,7 @@
 <?php } ?>
 <?php
 	/*ADDED IN VERSION 2.8.5*/
-	do_action('wppizza_loop_outside_before',$the_query);
+	do_action('wppizza_loop_outside_before', $the_query, $options, $termSlug, $categoryId);
 ?>
 <?php
 /********************************************
@@ -143,13 +60,14 @@
 	$postId=get_the_ID();
 	/***new in 2.5.6 ->prettyPhoto (store get_the_title() in var so we can use it multiple times without running function more than once **/
 	$postTitle=get_the_title();
-	/**get permalink*****/
+	/**get permalink*****/	
 	$permalink = get_permalink( $postId );
+	/**filter to add category id to permalink so we can identify which category it came from if we have "group by category" enabled;**/
+	$permalink = apply_filters('wppizza_filter_loop_permalink', $postId, $permalink, $termDetails, $categoryId);
 	/*get meta data for this post**/
 	$meta=get_post_meta($postId, $post_type, true );
-
 	/**added in 2.5 to enable messing around with output below if required***/
-	$meta = apply_filters('wppizza_filter_loop_meta', $meta, $postId, $this->pluginSession);
+	$meta = apply_filters('wppizza_filter_loop_meta', $meta, $postId);
 
 	/***********************************************************
 	*
@@ -157,19 +75,17 @@
 	*	the following and put it in the loop where required
 	*
 	************************************************************/
-//		$terms = get_the_terms($postId, WPPIZZA_TAXONOMY);
+//		$postterms = get_the_terms($postId, WPPIZZA_TAXONOMY);
 //		/*example what to do with it. edit as required***/
 //		$categoryNames='';
-//		if ($terms && ! is_wp_error($terms)){
+//		if ($postterms && ! is_wp_error($postterms)){
 //			$term_category=array();
-//			foreach ($terms as $term) {
+//			foreach ($postterms as $term) {
 //				$term_category[]= $term->name;
 //			}
 //			$categoryNames = implode(" / ",$term_category);
 //		}
 //		/*now output $categoryNames somewhere***/
-
-	/**end changed / added in 2.5***/
 	
 	
 	$numberOfSizes=count($options['sizes'][$meta['sizes']]);
@@ -189,14 +105,9 @@
 ?>
 <?php
 	/*ADDED IN VERSION 2.8.5*/
-	do_action('wppizza_loop_inside_before_article',$postId);
+	do_action('wppizza_loop_inside_before_article', $postId,  $options, $termSlug, $categoryId);
 ?>
-	<article id="post-<?php the_ID(); ?>" <?php post_class(array(''.$post_type.'-article','entry-content')); ?>>
-<?php
-	/*Selected category ADDED IN VERSION 2.8.9.4*/
-	if($dataCatId>0){?>
-	<input type="hidden" id="wppizza-category-<?php the_ID(); ?>" value="<?php echo $dataCatId ?>" />
-<?php } ?>
+	<article id="post-<?php echo $postId ?>" <?php post_class(array(''.$post_type.'-article','entry-content',''.$post_type.'-article-'.$termSlug.'-'.$categoryId)); ?>>
 <?php
 /*********************************************
 	[single items entry content]
@@ -239,7 +150,7 @@ if(is_single()){
 		<?php } } ?>
 <?php
 	/*ADDED IN VERSION 2.8.5*/
-	do_action('wppizza_loop_inside_after_thumbnails',$postId);
+	do_action('wppizza_loop_inside_after_thumbnails', $postId,  $options, $termSlug, $categoryId);
 ?>		
 <?php
 /*********************************************
@@ -272,7 +183,7 @@ if(is_single()){
 
 <?php
 	/*ADDED IN VERSION 2.8.5*/
-	do_action('wppizza_loop_inside_after_prices',$postId);
+	do_action('wppizza_loop_inside_after_prices', $postId,  $options, $termSlug, $categoryId);
 ?>
 <?php
 /*********************************************
@@ -283,23 +194,23 @@ if(is_single()){
 		<h2<?php echo $clickTriggerId ?> class="<?php echo $post_type ?>-article-title<?php echo $clickTriggerClass ?>">
 			<?php echo $postTitle ?>
 			<?php if(count($meta['additives'])>0){?>
-				<sup class='<?php echo $post_type ?>-article-additives' title='<?php echo $txt['contains_additives']['lbl'] ?>'>*
+				<sup class='<?php echo $post_type ?>-article-additives' title='<?php echo $txt['contains_additives']['lbl'] ?>'>
 	    		<?php foreach($meta['additives'] as $k=>$v){ $additivesOnPage=true; ?>
-	    			<span id="wppizza-loop-additive-<?php echo $postId ?>-<?php echo $k ?>" class="wppizza-loop-additive wppizza-loop-additive-<?php echo $k ?>">(<?php echo $k ?>)</span>
+	    			<span id="wppizza-loop-additive-<?php echo $postId ?>-<?php echo $k ?>" title="<?php echo $v ?>" class="wppizza-loop-additive wppizza-loop-additive-<?php echo $k ?>">(<?php echo $k ?>)</span>
 	    		<?php } ?>
 				</sup>
 			<?php } ?>
 		</h2>
 <?php
 	/*ADDED IN VERSION 2.8.5*/
-	do_action('wppizza_loop_inside_after_title',$postId);
+	do_action('wppizza_loop_inside_after_title', $postId,  $options, $termSlug, $categoryId);
 ?>			
 		<?php the_content();?>
 		</div>
 
 <?php
 	/*ADDED IN VERSION 2.8.5*/
-	do_action('wppizza_loop_inside_after_content',$postId);
+	do_action('wppizza_loop_inside_after_content', $postId, $options,  $termSlug, $categoryId);
 ?>
 <?php
 /*********************************************
@@ -317,7 +228,7 @@ if(is_single()){
 	</article>
 <?php
 	/*ADDED IN VERSION 2.8.5*/
-	do_action('wppizza_loop_inside_after_article',$postId);
+	do_action('wppizza_loop_inside_after_article', $postId,  $options, $termSlug, $categoryId);
 ?>
 <?php
 /*************************************************
@@ -329,12 +240,12 @@ if(is_single()){
 ?>	
 <?php
 	/*ADDED IN VERSION 2.8.5*/
-	do_action('wppizza_loop_inside_after_comments',$postId);
+	do_action('wppizza_loop_inside_after_comments', $postId,  $options, $termSlug, $categoryId);
 ?>
 <?php endwhile;	?>
 <?php
 	/*ADDED IN VERSION 2.8.5*/
-	do_action('wppizza_loop_outside_after',$the_query);
+	do_action('wppizza_loop_outside_after', $the_query,  $options, $termSlug, $categoryId);
 ?>
 <?php
 /********************************************
@@ -348,13 +259,13 @@ if(isset($additivesOnPage) || (isset($showadditives) && $showadditives==1)){
 ?>
 	<div class='<?php echo $post_type ?>-contains-additives'>
 	<?php foreach($options['additives'] as $k=>$v){?>
-		<span id="wppizza-additive-<?php echo $k ?>" class="wppizza-additive"><sup>(<?php echo $k ?>)</sup><?php echo $v ?></span>
+		<span id="wppizza-additive-<?php echo $k ?>" class="wppizza-additive wppizza-additive-<?php echo $k ?>"><sup>(<?php echo $k ?>)</sup><?php echo $v ?></span>
 	<?php } ?>
 	</div>
 <?php }} ?>
 <?php
 	/*ADDED IN VERSION 2.8.5*/
-	do_action('wppizza_loop_outside_after_additives',$the_query);
+	do_action('wppizza_loop_outside_after_additives', $the_query, $options,  $termSlug, $categoryId);
 ?>
 <?php
 /*************************************************
@@ -369,5 +280,5 @@ if(!is_single() && $the_query->max_num_pages>1){
 <?php } ?>
 <?php
 	/*ADDED IN VERSION 2.8.5*/
-	do_action('wppizza_loop_outside_end',$the_query);
+	do_action('wppizza_loop_outside_end', $the_query,  $options, $termSlug, $categoryId);
 ?>

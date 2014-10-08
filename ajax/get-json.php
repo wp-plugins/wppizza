@@ -49,7 +49,7 @@ if(isset($_POST['vars']['type']) && (($_POST['vars']['type']=='add' || $_POST['v
 
 		/*get item set meta values to get price for this size**/
 		$meta_values = get_post_meta($itemVars[1],$this->pluginSlug,true);
-		$meta_values = apply_filters('wppizza_filter_loop_meta_ajax', $meta_values, $itemVars[1], $this->pluginSession);
+		$meta_values = apply_filters('wppizza_filter_loop_meta_ajax', $meta_values, $itemVars[1]);
 
 
 		$itemSizePrice=$meta_values['prices'][$itemVars[3]];

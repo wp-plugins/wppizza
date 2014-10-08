@@ -106,6 +106,14 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 				/**add update button to page**/
 				add_action('wppizza_order_form_last_item', array( $this, 'wppizza_order_form_item_quantity_update_button'));
 			}
+
+			/***
+				if we want to be able to pass the currently selected category for this item to be able to group and sort items by category in emails etc
+				we add a hidden field to the individual items.
+			**/
+			add_action('wppizza_loop_inside_after_content', array( $this, 'wppizza_add_category_hidden_field'),10,4);
+			/**add category to permalink if necessary**/
+			add_filter('wppizza_filter_loop_permalink', array($this,'wppizza_permalink_append_category'), 10, 4);
 		}
 
 
@@ -160,14 +168,14 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 
 			/**filter and sort selected items by their categoryies in order page **/
 			add_filter('wppizza_order_form_filter_items', array( $this, 'wppizza_filter_items_by_category'),10,2);
-			add_filter('wppizza_orderhistory_filter_items', array( $this, 'wppizza_filter_items_by_category'),10,2);
+			add_filter('wppizza_orderhistory_filter_items', array( $this, 'wppizza_filter_items_by_category'),10,4);
 			/**print category **/
 			add_action('wppizza_order_form_item', array( $this, 'wppizza_items_order_form_print_category'));
 			add_action('wppizza_orderhistory_item', array( $this, 'wppizza_items_show_order_print_category'));
 
 			/******************order history******************/
-			add_action('wppizza_get_orderhistory', array( $this, 'wppizza_get_orderhistory'));
-			add_action('wppizza_history_after_orders', array( $this, 'wppizza_orderhistory_pagination'),10,2);
+			add_action('wppizza_get_orderhistory', array( $this, 'wppizza_get_orderhistory'),10,2);
+			add_action('wppizza_history_after_orders', array( $this, 'wppizza_orderhistory_pagination'),10,3);
 			add_filter('wppizza_filter_orderhistory_additional_info', array( $this, 'wppizza_filter_order_additional_info'),10,1);
 			add_filter('wppizza_filter_orderhistory_items_html', array( $this, 'wppizza_filter_order_items_html'),10,2);
 		}
@@ -1313,7 +1321,7 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 			}
 
 
-
+			$querys=array();
 			/*select first category if none selected->used when using shortcode without category, unless we are looking for bestsellers*/
 			if(!isset($atts['category']) && !isset($atts['bestsellers']) && !isset($atts['single']) ){
 				$termSort=$options['layout']['category_sort'];
@@ -1321,28 +1329,50 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 				reset($termSort);
 				$firstTermId=key($termSort);
 				/*get slug and taxonomy from id*/
-				$query=get_term_by('id',$firstTermId,$this->pluginSlugCategoryTaxonomy);
+				$querys[]=get_term_by('id',$firstTermId,$this->pluginSlugCategoryTaxonomy);
 			}
-			/*a category has been selected*/
+
+			/*category(ies) has/have been selected*/
 			if(isset($atts['category'])){
-				/*get slug and taxonomy from slug*/
-				$query=get_term_by('slug',$atts['category'],$this->pluginSlugCategoryTaxonomy);
+				$catSlugsToArray=explode(',',$atts['category']);
+				if(in_array('!all',$catSlugsToArray)){
+
+					/**check if we are excluding some categories**/
+					$excludeCategory=array();
+					foreach($catSlugsToArray as $sKey=>$slug){
+						if(substr($slug,0,1)=='-'){
+							$thisCategory=get_term_by('slug',$slug,$this->pluginSlugCategoryTaxonomy);
+							$excludeCategory[$thisCategory->term_id]=$thisCategory->term_id;
+						}
+					}
+					/**get all*/
+					$termSort=$options['layout']['category_sort'];
+					asort($termSort);
+					foreach($termSort as $termId=>$sorter){
+						if(!isset($excludeCategory[$termId])){//exclude if necessary
+						$querys[]=get_term_by('id',$termId,$this->pluginSlugCategoryTaxonomy);
+						}
+					}
+				}else{
+					foreach($catSlugsToArray as $sKey=>$slug){
+						/*get slug and taxonomy from slug*/
+						$querys[]=get_term_by('slug',$slug,$this->pluginSlugCategoryTaxonomy);
+					}
+				}
 			}
+
 			/*exclude header*/
 			if(isset($atts['noheader']) || $options['layout']['suppress_loop_headers']){
 				$noheader=1;
 			}
 			/**if we want to capture the category id a menu item is currently in **/
+			/**DEPRECATED ->this is not required anymore, but we'll leave it here in case someone is using an old customised loop template that wants this variable**/
 			if($options['layout']['items_group_sort_print_by_category']){
 				$getSlugDetails=1;
 			}
 			/*show.hide additives at bottom of loop*/
 			if(isset($atts['showadditives'])){
 				$showadditives=$atts['showadditives'];
-			}
-
-			if(isset($query) && $query){
-			$query_var=''.$query->slug.'';
 			}
 
 			$exclude=array();
@@ -1367,20 +1397,30 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 			if($options['layout']['style']!='default'){
 				$loStyle='-'.$options['layout']['style'].''	;
 			}
-			/*include template from theme if exists*/
-			if ($template_file = locate_template( array ($this->pluginLocateDir.'wppizza-loop'.$loStyle.'.php' ))){
-				include($template_file);
-				do_action('wppizza_loop_template_end');
-				return;
+
+			/**loop through selected categories (might be one , many or all**/
+			foreach($querys as $query){
+
+				/**q vars**/
+				if(isset($query) && $query){
+					$query_var=''.$query->slug.'';
+				}
+				/*include template from theme if exists*/
+				if ($template_file = locate_template( array ($this->pluginLocateDir.'wppizza-loop'.$loStyle.'.php' ))){
+					include($template_file);
+					do_action('wppizza_loop_template_end');
+					//return;
+				}
+				/*if template not in theme, fallback to template in plugin*/
+				/* it really should BE there */
+				if (is_file(''.WPPIZZA_PATH.'templates/wppizza-loop'.$loStyle.'.php' )){
+					$template_file=''.WPPIZZA_PATH.'templates/wppizza-loop'.$loStyle.'.php';
+					include($template_file);
+					do_action('wppizza_loop_template_end');
+					//return;
+				}
 			}
-			/*if template not in theme, fallback to template in plugin*/
-			/* it really should BE there */
-			if (is_file(''.WPPIZZA_PATH.'templates/wppizza-loop'.$loStyle.'.php' )){
-				$template_file=''.WPPIZZA_PATH.'templates/wppizza-loop'.$loStyle.'.php';
-				include($template_file);
-				do_action('wppizza_loop_template_end');
-				return;
-			}
+			return;//after loop
 		}
 		/***************************************
 			[include navigation template]
@@ -1565,7 +1605,7 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 			}else{
 				global $current_user ;
 				$current_user->ID;
-				do_action('wppizza_get_orderhistory',$current_user->ID);
+				do_action('wppizza_get_orderhistory',$current_user->ID,$atts);
 			}
 		}
 
@@ -2082,12 +2122,11 @@ public function wppizza_require_common_input_validation_functions(){
 	function wppizza_loop_include_vars($options){
 		if(!$options){
 			$options=$this->pluginOptions;
-
 				$mapAdditives=array();
 				if(isset($options['additives']) && is_array($options['additives'])){
 					foreach($options['additives'] as $o=>$a){
 						if(is_array($a)){
-							if($a['sort']==''){$a['sort']=$o;}
+							if($a['sort']===''){$a['sort']=$o;}
 							$mapAdditives[$a['sort']]=$a['name'];
 						}else{
 							/**in case we have not yet re-saved the additives**/
@@ -2147,6 +2186,7 @@ public function wppizza_require_common_input_validation_functions(){
 				$noheader=1;
 			}
 			/**if we want to capture the category id a menu item is currently in **/
+			/**DEPRECATED ->this is not required anymore, but we'll leave it here in case someone is using an old customised loop template that wants this variable**/
 			if($options['layout']['items_group_sort_print_by_category']){
 				$getSlugDetails=1;
 			}
@@ -2570,10 +2610,54 @@ public function wppizza_require_common_input_validation_functions(){
 		}
 		return $transactionId;
 	}
+
+	/*************************************************
+	* add hidden field to loop to identify selected category (as an iten could be in 2 or more, when wanting to group items by category in emails etc)
+	*************************************************/
+	function wppizza_add_category_hidden_field($postId,  $options, $termSlug, $categoryId){
+		if($options['layout']['items_group_sort_print_by_category'] && $categoryId>0){
+			print'<input type="hidden" id="wppizza-category-'.$postId.'" value="'.$categoryId.'" />';
+		}
+	}
+	/*************************************************************
+	* add identifiable category id to item permalink if
+	grouping by category and item is assigned to more than one category
+	*************************************************************/
+	function wppizza_permalink_append_category($postId, $permalink, $termDetails, $categoryId){
+		if ($this->pluginOptions['layout']['items_group_sort_print_by_category']) {
+
+			$termDetails = wp_get_post_terms( $postId, WPPIZZA_TAXONOMY);
+			$taxonomies=array();
+			if ($termDetails && ! is_wp_error($termDetails)){
+				$taxonomies = wp_list_pluck( $termDetails, 'slug', 'term_id');
+			}
+			/********************************************************
+			check if selected item is in more than one category
+			and if so, append selected category to permalink so we
+			can reliably add idden input field to be able to add item
+			to cart under selected grouped category
+			*******************************************************/
+			$multiTaxonomy=false;
+			if(count($taxonomies)>1){
+				$multiTaxonomy=true;
+				$setTaxonomy=$taxonomies[$categoryId];
+			}
+			if($multiTaxonomy){
+				$params = array( 'c' => $setTaxonomy );//$setTaxonomy//$categoryId
+				$permalink = add_query_arg( $params, $permalink );
+			}
+		}
+		return $permalink;
+	}
 	/*******************
 	* sort by category
 	*******************/
-	function wppizza_filter_items_by_category($items,$page){
+	function wppizza_filter_items_by_category($items, $page, $options=false, $blogid=false){
+		/*if using multisite in order history, set the options according to that sites settings**/
+		if($options){
+			$this->pluginOptions=$options;
+		}
+
 		/*skip the whole thing if not enabled**/
 		if(!$this->pluginOptions['layout']['items_group_sort_print_by_category']){
 			return $items;
@@ -2596,7 +2680,7 @@ public function wppizza_require_common_input_validation_functions(){
 
 		/***reiterate over items and display category name if first time****/
 		foreach($itemsCategorySort as $k=>$v){
-			$itemCatHierarchy=$this->wppizza_cat_parents( $v['catIdSelected'], $separator , $page);
+			$itemCatHierarchy=$this->wppizza_cat_parents($this->pluginOptions, $blogid, $v['catIdSelected'], $separator , $page );
 			/**set catnames to be empty if it's the same again as we only want to print  this the first time as header so to speak**/
 			if(!in_array($itemCatHierarchy,$existingCatHierarchy)){$setCatHierarchy=$itemCatHierarchy;}else{$setCatHierarchy='';}
 			/**append category hierarchy**/
@@ -2652,7 +2736,7 @@ public function wppizza_require_common_input_validation_functions(){
  * Modified version of get_category_parents()
  * @return string
  */
-function wppizza_cat_parents( $id, $separator =' &raquo; ', $page , $taxonomy = 'wppizza_menu', $visited = array()  ) {
+function wppizza_cat_parents($options, $blogid, $id, $separator =' &raquo; ', $page , $taxonomy = 'wppizza_menu', $visited = array()) {
 	$topmost=false;
 	$parentOnly=false;
 
@@ -2660,35 +2744,43 @@ function wppizza_cat_parents( $id, $separator =' &raquo; ', $page , $taxonomy = 
 	/**cart**/
 	if($page=='cart'){
 		/*no display*/
-		if($this->pluginOptions['layout']['items_category_hierarchy_cart']=='none'){
+		if($options['layout']['items_category_hierarchy_cart']=='none'){
 			return;
 		}
 		/*topmost category only*/
-		if($this->pluginOptions['layout']['items_category_hierarchy_cart']=='topmost'){
+		if($options['layout']['items_category_hierarchy_cart']=='topmost'){
 			$topmost=true;
 		}
 		/*direct parent cat only*/
-		if($this->pluginOptions['layout']['items_category_hierarchy_cart']=='parent'){
+		if($options['layout']['items_category_hierarchy_cart']=='parent'){
 			$parentOnly=true;
 		}
 	}
 	/**all others**/
 	if($page!='cart'){
 		/*topmost category only*/
-		if($this->pluginOptions['layout']['items_category_hierarchy']=='topmost'){
+		if($options['layout']['items_category_hierarchy']=='topmost'){
 			$topmost=true;
 		}
 		/*direct parent cat only*/
-		if($this->pluginOptions['layout']['items_category_hierarchy']=='parent'){
+		if($options['layout']['items_category_hierarchy']=='parent'){
 			$parentOnly=true;
 		}
 	}
 
-
 	$c=0;
 	$chain = '';
 	$name = '';
+
+	/**mutlisite ->switch (only order history might have the blogid set via multisite attribute in shortcode**/
+	if($blogid){switch_to_blog($blogid);}
+
+	/**get term**/
 	$parent = get_term( $id, $taxonomy);
+
+	/**mutlisite -> restore current **/
+	if($blogid){restore_current_blog();}
+
 
 	if ( is_wp_error( $parent ) ){
 		return;
@@ -2704,9 +2796,9 @@ function wppizza_cat_parents( $id, $separator =' &raquo; ', $page , $taxonomy = 
 	if ( $parent->parent && ( $parent->parent != $parent->term_id ) && !in_array( $parent->parent, $visited ) ) {
 		$visited[] = $parent->parent;
 		if($topmost){/**topmost (grand) parent only**/
-			$name = $this->wppizza_cat_parents( $parent->parent, $separator, $page ,$taxonomy, $visited );
+			$name = $this->wppizza_cat_parents($options, $blogid, $parent->parent, $separator, $page ,$taxonomy, $visited );
 		}else{/**full hierarchy**/
-			$chain .= $this->wppizza_cat_parents( $parent->parent, $separator, $page, $taxonomy, $visited );
+			$chain .= $this->wppizza_cat_parents($options, $blogid, $parent->parent, $separator, $page, $taxonomy, $visited );
 		}
 	$c++;
 	}
@@ -2861,38 +2953,100 @@ function wppizza_cat_parents( $id, $separator =' &raquo; ', $page , $taxonomy = 
 	*	[show order history]
 	*	[$order = object or id]
 	******************************************************************/
-	function wppizza_get_orderhistory($userid){
+	function wppizza_get_orderhistory($userid,$atts){
+		global $wpdb;
+
 		/*******get the variables***/
 		$options = $this->pluginOptions;
-
-		global $wpdb;
+		/**initialize some defaults**/
 		$orders=array();
 		$ordersPerPage=10;
+		/*set attribute max per page**/
+		if(isset($atts['maxpp']) && (int)$atts['maxpp']>0){
+			$ordersPerPage=(int)$atts['maxpp'];
+		}
 		$ordersPerPage = apply_filters('wppizza_history_ordersperpage_filter', $ordersPerPage);
+
 
 		if(!isset($_GET['pg']) || (int)$_GET['pg']<1){
 			$limitOffset=0;
 		}else{
 			$limitOffset=(int)($_GET['pg']-1)*$ordersPerPage;
 		}
-		/**run the query**/
-		$historyQuery="SELECT id,transaction_id,order_status,order_ini,customer_ini,initiator FROM ".$wpdb->prefix . $this->pluginOrderTable." WHERE payment_status IN ('COD','COMPLETED') ";
-
-		/*allow another where condition**/
-		$historyQuery = apply_filters('wppizza_history_query_where_filter', $historyQuery);
-
-		/**limit to user**/
-		$historyQuery.="AND wp_user_id=".$userid." ";
-		/**sort**/
-		$historyQuery.="ORDER BY order_date DESC ";
-		/**limit**/
-		$historyQuery.="limit ".$limitOffset.",".$ordersPerPage."";
-
-		$historyRes = $wpdb->get_results($historyQuery);
 
 
-		$historyCount="SELECT count(*) as count FROM ".$wpdb->prefix . $this->pluginOrderTable." WHERE payment_status IN ('COD','COMPLETED') AND wp_user_id=".$userid." ";
-		$historyCount = $wpdb->get_results($historyCount);
+		/**multisite get all orders from all sites*/
+		$ordersMultisite=false;
+		if(is_multisite() && isset($atts['multisite']) ){
+			/*set flag*/
+			$ordersMultisite=true;
+
+			$historyRes=array();
+			$blogs = $wpdb->get_results("SELECT blog_id FROM {$wpdb->blogs}", ARRAY_A);
+			if ($blogs) {
+				foreach($blogs as $blog){
+					$blogid=$blog['blog_id'];
+					$details=get_blog_details($blogid);
+					switch_to_blog($blogid);
+
+					$multiQuery="SELECT order_date, id,transaction_id,order_status,order_ini,customer_ini,initiator FROM ".$wpdb->prefix . $this->pluginOrderTable." WHERE payment_status IN ('COD','COMPLETED') ";
+					/*allow another where condition**/
+					$multiQuery = apply_filters('wppizza_history_query_where_filter', $multiQuery);
+					/**limit to user**/
+					$multiQuery.="AND wp_user_id=".$userid." ";
+					/**sort**/
+					$multiQuery.="ORDER BY order_date DESC ";
+
+					/**get the results and add to array**/
+					$multiQueryRes = $wpdb->get_results($multiQuery);
+					foreach($multiQueryRes as $qRes){
+						$orderBlogId=$qRes->id.'_'.$blogid;//concat order id and blog id to make sure we have a unique id
+						$historyRes[$orderBlogId]=$qRes;
+						$historyRes[$orderBlogId]->blogid=$blogid;
+						$historyRes[$orderBlogId]->blogname=$details->blogname;
+					}
+
+					/**we also need the blog options**/
+					$blogoptions[$blogid]=get_option(WPPIZZA_SLUG);
+
+				/*restore current*/
+				restore_current_blog();
+				}
+			}
+			/*get count**/
+			$historyCount=count($historyRes);
+			/*sort by date in reverse**/
+			arsort($historyRes);
+			/**slice to get max per page on page**/
+			$historyRes = array_slice($historyRes, $limitOffset, $ordersPerPage);
+		}
+
+		/******************************
+			not using multisite
+		******************************/
+		if(!$ordersMultisite){
+				/**run the query**/
+				$historyQuery="SELECT id,transaction_id,order_status,order_ini,customer_ini,initiator FROM ".$wpdb->prefix . $this->pluginOrderTable." WHERE payment_status IN ('COD','COMPLETED') ";
+
+				/*allow another where condition**/
+				$historyQuery = apply_filters('wppizza_history_query_where_filter', $historyQuery);
+
+				/**limit to user**/
+				$historyQuery.="AND wp_user_id=".$userid." ";
+				/**sort**/
+				$historyQuery.="ORDER BY order_date DESC ";
+				/**limit**/
+				$historyQuery.="limit ".$limitOffset.",".$ordersPerPage."";
+
+				$historyRes = $wpdb->get_results($historyQuery);
+
+				/*get count**/
+				$historyCount="SELECT count(*) as count FROM ".$wpdb->prefix . $this->pluginOrderTable." WHERE payment_status IN ('COD','COMPLETED') AND wp_user_id=".$userid." ";
+				$historyCount = $wpdb->get_results($historyCount);
+				$historyCount=$historyCount[0]->count;
+		}
+
+
 
 		if(count($historyRes>0)){
 			/***********************************************
@@ -2922,7 +3076,14 @@ function wppizza_cat_parents( $id, $separator =' &raquo; ', $page , $taxonomy = 
 					/***initialize array of this order**/
 					$orders[$res->id]=array();
 
-
+					/**multisite , get option of appropriate site otherwise use options of this site**/
+					if(isset($res->blogid) && isset($atts['sitetitle']) && isset($blogoptions[$res->blogid])){
+						$options=$blogoptions[$res->blogid];
+						$blogid=$res->blogid;
+					}else{
+						$options=$this->pluginOptions;
+						$blogid=false;
+					}
 					/**********************************************************
 						[organize vars to make them easier to use in template]
 					**********************************************************/
@@ -2931,6 +3092,12 @@ function wppizza_cat_parents( $id, $separator =' &raquo; ', $page , $taxonomy = 
 					/**filter as required**/
 					$order['transaction_id'] = apply_filters('wppizza_filter_transaction_id', $order['transaction_id'], $res->id );
 					$order['transaction_date_time']="".date_i18n(get_option('date_format'),$thisOrderDetails['time'])." ".date_i18n(get_option('time_format'),$thisOrderDetails['time'])."";
+					
+					/*useful in multisite perhaps to identify which site the order was made on**/
+					$order['site_title']='';
+					if(isset($res->blogname) && isset($atts['sitetitle'])){
+						$order['site_title']=' <span class="wppizza-history-sitetitle wppizza-history-site-'.$res->blogid.'">'.$res->blogname.'</span>';
+					}
 
 					$order['gatewayUsed']=$res->initiator;
 
@@ -2950,7 +3117,7 @@ function wppizza_cat_parents( $id, $separator =' &raquo; ', $page , $taxonomy = 
 					****************************************************/
 					$order['currency_left']=$thisOrderDetails['currency'].' ';
 					$order['currency_right']='';
-					if($this->pluginOptions['layout']['currency_symbol_position']=='right'){/*right aligned*/
+					if($options['layout']['currency_symbol_position']=='right'){/*right aligned*/
 						$order['currency_left']='';
 						$order['currency_right']=' '.$thisOrderDetails['currency'];
 					}
@@ -2967,7 +3134,7 @@ function wppizza_cat_parents( $id, $separator =' &raquo; ', $page , $taxonomy = 
 					/**filter new/current extend additional info keys**/
 					$items = apply_filters('wppizza_filter_order_extend', $items);
 					/**return items with html additional info**/
-					$items = apply_filters('wppizza_filter_orderhistory_items_html', $items,'additionalInfo');
+					$items = apply_filters('wppizza_filter_orderhistory_items_html', $items, 'additionalInfo');
 
 					/***********************************************
 						[order summary
@@ -2976,17 +3143,17 @@ function wppizza_cat_parents( $id, $separator =' &raquo; ', $page , $taxonomy = 
 					$summary['discount']=$thisOrderDetails['discount'];
 					$summary['item_tax']=$thisOrderDetails['item_tax'];
 					$summary['taxes_included']=$thisOrderDetails['taxes_included'];
-					if($this->pluginOptions['order']['delivery_selected']!='no_delivery'){/*delivery disabled*/
+					if($options['order']['delivery_selected']!='no_delivery'){/*delivery disabled*/
 						$summary['delivery_charges']=$thisOrderDetails['delivery_charges'];
 					}
 					$summary['total_price_items']=$thisOrderDetails['total_price_items'];
 					$summary['selfPickup']=$thisOrderDetails['selfPickup'];
 					$summary['total']=$thisOrderDetails['total'];
 					$summary['tax_applied']='items_only';
-					if($this->pluginOptions['order']['shipping_tax']){
+					if($options['order']['shipping_tax']){
 						$summary['tax_applied']='items_and_shipping';
 					}
-					if($this->pluginOptions['order']['taxes_included']){
+					if($options['order']['taxes_included']){
 						$summary['tax_applied']='taxes_included';
 					}
 
@@ -3000,12 +3167,13 @@ function wppizza_cat_parents( $id, $separator =' &raquo; ', $page , $taxonomy = 
 					$orders[$res->id]['order']=$order;
 					$orders[$res->id]['items']=$items;
 					$orders[$res->id]['summary']=$summary;
+					$orders[$res->id]['options']=$options;
+					$orders[$res->id]['blogid']=$blogid;
 				}
 		}}
 
-
 		$ordersOnPage=count($orders);
-		$numberOfOrders=$historyCount[0]->count;
+		$numberOfOrders=$historyCount;
 
 		/***********************************************
 			[if template copied to theme directory use
@@ -3019,24 +3187,25 @@ function wppizza_cat_parents( $id, $separator =' &raquo; ', $page , $taxonomy = 
 		}
 		$output .= ob_get_clean();
 
-
 		print"".$output;
 	}
 
-	function wppizza_orderhistory_pagination($numberOfOrders,$ordersOnPage){
+	function wppizza_orderhistory_pagination($numberOfOrders,$ordersOnPage,$atts=array()){
 		$ordersPerPage=10;
+		if(isset($atts['maxpp']) && (int)$atts['maxpp']>0){
+			$ordersPerPage=(int)$atts['maxpp'];
+		}
 		$ordersPerPage = apply_filters('wppizza_history_ordersperpage_filter', $ordersPerPage);
+
 
 		$total_page=ceil($numberOfOrders/$ordersPerPage);
 		$currentPageLink=get_permalink();
-
 
 		if(!isset($_GET['pg'])){
 			$page_cur=1;
 		}else{
 			$page_cur=(int)$_GET['pg'];
 		}
-
 
 		echo'<div class="wppizza-history-pagination-wrap">';
 		if($page_cur>1){

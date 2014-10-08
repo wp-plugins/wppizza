@@ -104,6 +104,7 @@ if($type=='orderpage'){
 	[orderhistory]
 	possible attributes:
 		type='orderhistory' 			(required [str])
+		multisite='1' 					(optional [str])
 	example: 		[wppizza type='orderhistory']
 **********************************************/
 if($type=='orderhistory'){
@@ -113,7 +114,7 @@ if($type=='orderhistory'){
 		return $markup;
 	}else{
 		ob_start();
-		$this->wppizza_include_shortcode_template($type);
+		$this->wppizza_include_shortcode_template($type,$atts);
 		$markup = ob_get_clean();
 	return $markup;
 	}

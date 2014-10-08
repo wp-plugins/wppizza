@@ -268,8 +268,8 @@ jQuery(document).ready(function($){
 		var catId='';
 		if(self.hasClass('wppizza-add-to-cart')){
 			type='add';
-			var postId = selfId.split('-');
-			var catdata = $('#wppizza-category-'+postId[1]+'').val();
+			var postCatId = selfId.split('-');
+			var catdata = self.closest('article').find('#wppizza-category-'+postCatId[1]+'').val();
 			if(typeof catdata!=='undefined'){/*some customised templates may not have catid added, so check first*/
 				catId=catdata;
 			}
@@ -527,7 +527,8 @@ jQuery(document).ready(function($){
 	      			number: true
 	    		}
 	  		},
-			submitHandler: function(form) {
+			submitHandler: function(form) {			
+				$('.wppizza-ordernow').attr('disabled', 'true');//stop double clicks 
 				var hasClassAjax=false;
 				var hasClassCustom=false;
 				if($("input[name='wppizza-gateway']").length>0){
