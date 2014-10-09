@@ -80,7 +80,7 @@ foreach($emailPlaintext['items'] as $itemKey=>$item){
 		if you wish to customise the output, i would suggest you use the filter below in
 		your functions.php instead of editing this file (or a copy thereof in your themes directory)
 	/**************************************************************************************************/
-	$itemMarkup = apply_filters('wppizza_filter_plaintextemail_item_markup', $itemMarkup, $item, $itemKey, $options['order']);
+	$itemMarkup = apply_filters('wppizza_filter_plaintextemail_item_markup', $itemMarkup, $item, $itemKey, $pOptions['order']);
 	/**output markup**/
 	$output.=implode("",$itemMarkup);
 

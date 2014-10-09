@@ -30,7 +30,7 @@
 	/*ADDED IN VERSION 2.8.5*/
 	do_action('wppizza_loop_outside_start', $the_query, $options,  $termSlug, $categoryId);
 ?>
-<?php if(!is_single() && !isset($noheader) && $termDetails){ /*exclude header if set or is single */?>
+<?php if(!is_single() && !isset($noheader) && $termDetails && $the_query->found_posts>0){ /*exclude header if set or is single or <=0 posts */?>
 	<header id="<?php echo $post_type ?>-header-<?php echo $termSlug ?>-<?php echo $categoryId ?>" class="page-header entry-header <?php echo $post_type ?>-header <?php echo $post_type ?>-header-<?php echo $termSlug ?>">
 		<h1 class="page-title entry-title <?php echo $post_type ?>-title"><?php echo $termDetails->name ?></h1>
 		<?php if ( $termDetails->description!='' ) :?>

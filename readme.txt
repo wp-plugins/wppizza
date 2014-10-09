@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.3+, WP 3.3+ 
 Tested up to: 4.0
-Stable tag: 2.11.2
+Stable tag: 2.11.2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -143,6 +143,14 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 
 == Changelog ==
+
+2.11.2.1    
+* MAINTENANCE - nothing dramatic  
+* added missing option variable to wppizza_filter_plaintextemail_item_markup to avoid some phpnotices    
+* added option to select order by hash when setting a payment to failed in method wppizza_gateway_order_payment_failed to allow us to save some unnecessary db selects in payment gateways (if required)  
+* added conditional to not display header either in loop if found_post<=0  
+9th October 2014  
+
 
 2.11.2    
 * added more shortcode options to order history display (see shortcodes in faqs)  
@@ -1234,6 +1242,8 @@ if you do not have this options it's either hidden (go to "screen options" at th
 if the auther doesnt want to or cannot do anything about it, you can also try just to put the following code at the bottom of your themes function file (before the closing ?> if any )
 	
 	add_theme_support('post-thumbnails');
+
+if you do *not* want to display *any* images, delete any featured images that may be associated with your menu items and uncheck "Display placeholder image when no image associated with meal item:" in wppizza->layout  
 
 
 = My shop doesn't do Pizzas, how do I change the name and icon in the administration panel ? =

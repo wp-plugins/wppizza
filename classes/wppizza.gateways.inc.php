@@ -466,7 +466,10 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 	*	[output order on thank you page]
 	*
 	******************************************************************/
-	function gateway_order_on_thankyou($id,$pluginOptions){
+	function gateway_order_on_thankyou($id,$pluginOptions=false){
+		if(!$pluginOptions){
+			$pluginOptions=$this->pluginOptions;
+		}
 		$orderEmails=new WPPIZZA_SEND_ORDER_EMAILS;
 		$orderDetails=$orderEmails->gateway_order_on_thankyou($id,$pluginOptions);
 
@@ -756,19 +759,28 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 	/******************************************************************
 	*
 	*	[order payment has failed->update db entry]
-	*
+	*	[for legacy reasons add option to use hash at end]
 	******************************************************************/
-	function wppizza_gateway_order_payment_failed($orderid, $blogid=false, $error , $txId='--n/a--'){
+	function wppizza_gateway_order_payment_failed($orderid, $blogid=false, $error , $txId='--n/a--', $orderhash=false){
 		global $wpdb;
+		$idField='id';
+		$idValue=(int)$orderid;
+		/*using hash instead**/
+		if($orderhash){
+			$orderhash=wppizza_validate_alpha_only($orderhash);/**sanitize**/
+			$idField='hash';
+			$idValue=$orderhash;			
+		}
+		
 		/**select the right blog table */
 		if($blogid && is_int($blogid) && $blogid>1){$wpdb->prefix=$wpdb->base_prefix . $blogid.'_';}
 		//$wpdb->hide_errors();
 		$wpdb->update(
 			$wpdb->prefix . $this->pluginOrderTable,
 			array('payment_status' => 'FAILED', 'initiator' => esc_sql($this->gatewayName), 'transaction_errors' => maybe_serialize($error),'transaction_id' => maybe_serialize($txId)),
-			array('id' => $orderid ),
+			array(''.$idField.'' => $idValue ),
 			array('%s','%s','%s','%s'),
-			array('%d')
+			array('%s')
 		);
 	}
 	/******************************************************************
