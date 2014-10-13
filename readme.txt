@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.3+, WP 3.3+ 
 Tested up to: 4.0
-Stable tag: 2.11.2.1
+Stable tag: 2.11.2.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -117,16 +117,17 @@ PLEASE UPDATE IF YOU ARE USING 2.10.4.5 and payment gateway as the redirection w
 3. administration - categories
 4. administration - menu item
 5. administration - order settings (one of many option screens)
-
+  
 
 == Other Notes ==
 
 = Translations provided by: =
 
-- Italien:  Silvia Palandri  
-- Hebrew:  Yair10 [&#1492;&#1500;&#1489;&#32;&#1489;&#1504;&#1497;&#1497;&#1514;&#32;&#1488;&#1514;&#1512;&#1497;&#1501;&#32;]  
-- Dutch:  Jelmer  
-- Spanish:  Andrew Kurtis at <a href="http://www.webhostinghub.com/">WebHostingHub</a>  
+* Italien:  Silvia Palandri  
+* Hebrew:  Yair10 [&#1492;&#1500;&#1489;&#32;&#1489;&#1504;&#1497;&#1497;&#1514;&#32;&#1488;&#1514;&#1512;&#1497;&#1501;&#32;]  
+* Dutch:  Jelmer  
+* Spanish:  Andrew Kurtis at <a href="http://www.webhostinghub.com/">WebHostingHub</a>  
+* German:  Franz Rufnak  
 
 Many, many thanks guys and girls.  
 
@@ -135,14 +136,19 @@ Note: As the plugin gets updated over time and has some other strings and featur
 If you want to contribute your own translation, feel free to send me your files and I will be more than happy to include them.  
 
 
-
 = Demo Icons: =
 please note that the icons used in the demo installation are <a href="http://www.iconarchive.com/show/desktop-buffet-icons-by-aha-soft.html">iconarchive.com</a> icons and not for commercial use.  
-if you do wish to use any icon from this set commercially, please follow <a href="http://www.desktop-icon.com/stock-icons/desktop-buffet-icons.htm">this link</a> to purchase it.
-
+if you do wish to use any icon from this set commercially, please follow <a href="http://www.desktop-icon.com/stock-icons/desktop-buffet-icons.htm">this link</a> to purchase it.  
 
 
 == Changelog ==
+
+2.11.2.2  
+* added german translation  
+* stopped exiting of dashboard functions when php <5.3 (athough it clearly states a min version of php 5.3 required)  
+* some minor css tweaks  
+13th October 2014  
+
 
 2.11.2.1    
 * MAINTENANCE - nothing dramatic  

@@ -924,6 +924,12 @@ function wppizza_dashboard_widget(){
 	}
 }
 function wppizza_do_dashboard_widget() {
+
+	if( version_compare( PHP_VERSION, '5.3', '<' )) {
+		print"<div style='text-align:center;margin:50px 0'>Sorry, reporting is only available with php >=5.3</div>";	
+		return;
+	}
+
 	/**number of posts**/
 	$count_posts = wp_count_posts(WPPIZZA_POST_TYPE);
 

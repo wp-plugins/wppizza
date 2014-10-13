@@ -345,7 +345,7 @@ h2.wppizza-article-title{padding-bottom:0;margin:0}
 .wppizza-gateways{margin:5px 0}
 .wppizza-gw-button{position:relative;margin-bottom:3px;padding:10px 5px;color: #5e5e5e;background-color: #ebebeb;background-repeat: repeat-x;background-image: -moz-linear-gradient(top, #f9f9f9, #ebebeb);background-image: -ms-linear-gradient(top, #f9f9f9, #ebebeb);background-image: -webkit-linear-gradient(top, #f9f9f9, #ebebeb);background-image: -o-linear-gradient(top, #f9f9f9, #ebebeb);background-image: linear-gradient(top, #f9f9f9, #ebebeb);border: 1px solid #d2d2d2;border-radius: 3px;box-shadow: 0 1px 2px rgba(64, 64, 64, 0.1);}
 .wppizza-gw-button>label{cursor:pointer}
-.wppizza-gateway-img{vertical-align:bottom;margin-right:5px}
+.wppizza-gw-button .wppizza-gateway-img{vertical-align:bottom;margin:0;margin-right:5px}
 .wppizza-gateway-addinfo{display:block;font-size:80%;padding-left:25px}
 
 /**-----NEW IN VERSION 2.9----***/

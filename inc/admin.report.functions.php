@@ -461,7 +461,7 @@
 				$box[]=array('id'=>'wppizza-report-info','lbl'=>__('Range',$locale),'val'=>'<p>'.$firstDateFormatted.' - '.$lastDateFormatted.'<br />'.$daysSelected.' '.__('days',$locale).'<br />'.$monthAvgDivider.' '.__('months',$locale).'</p>');
 
 				$boxrt[]=array('id'=>'wppizza-report-top10-volume','lbl'=>__('Bestsellers by Volume - All',$locale),'val'=>$htmlBsVol);
-				$boxrt[]=array('id'=>'wppizza-report-top10-volume','lbl'=>__('Bestsellers by Value - All (% of order total)',$locale),'val'=>$htmlBsVal);
+				$boxrt[]=array('id'=>'wppizza-report-top10-volume','lbl'=>__('Bestsellers by Value - All (percent of order total)',$locale),'val'=>$htmlBsVal);
 			}
 			if(!$overview || $customrange){
 				$box[]=array('id'=>'wppizza-report-val-total','lbl'=>__('Sales Total [in range]',$locale),'val'=>'<p>'.$reportCurrency.' '.wppizza_output_format_price($datasets['sales_value_total'],$hideDecimals).'<br /><span class="description">'.__('incl. taxes, charges and discounts',$locale).'</span></p>');
@@ -471,7 +471,7 @@
 				$box[]=array('id'=>'wppizza-report-info','lbl'=>__('Range',$locale),'val'=>'<p>'.$firstDateFormatted.' - '.$lastDateFormatted.'<br />'.$daysSelected.' '.__('days',$locale).'<br />'.$monthAvgDivider.' '.__('months',$locale).'</p>');
 
 				$boxrt[]=array('id'=>'wppizza-report-top10-volume','lbl'=>__('Bestsellers by Volume [in range]',$locale),'val'=>$htmlBsVol);
-				$boxrt[]=array('id'=>'wppizza-report-top10-volume','lbl'=>__('Bestsellers by Value [% of all orders in range]',$locale),'val'=>$htmlBsVal);
+				$boxrt[]=array('id'=>'wppizza-report-top10-volume','lbl'=>__('Bestsellers by Value [percent of all orders in range]',$locale),'val'=>$htmlBsVal);
 			}
 			/******************************************************************************************************************************************************
 			*

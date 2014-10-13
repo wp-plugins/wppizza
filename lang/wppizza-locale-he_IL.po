@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WPPizza v2.5.4.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-23 15:17-0000\n"
-"PO-Revision-Date: 2014-09-23 15:18-0000\n"
+"POT-Creation-Date: 2014-10-13 14:02-0000\n"
+"PO-Revision-Date: 2014-10-13 14:03-0000\n"
 "Last-Translator: ollybach <dev@1000db.com>\n"
 "Language-Team: Yair - Halev.sites <halev.sites@gmail.com>\n"
 "Language: he_IL\n"
@@ -144,37 +144,37 @@ msgstr "נכשל: שליחת הדואר נכשלה"
 msgid "Cash on Delivery"
 msgstr "במזומן במשלוח"
 
-#: classes/wppizza.actions.inc.php:262
+#: classes/wppizza.actions.inc.php:270
 msgid "<strong>ERROR</strong>: Invalid username or incorrect password."
 msgstr "<strong>ERROR</strong>: Invalid username or incorrect password."
 
-#: classes/wppizza.actions.inc.php:272 classes/wppizza.actions.inc.php:279
+#: classes/wppizza.actions.inc.php:280 classes/wppizza.actions.inc.php:287
 msgid "Log In"
 msgstr "Log In"
 
-#: classes/wppizza.actions.inc.php:273
+#: classes/wppizza.actions.inc.php:281
 msgid "Cancel"
 msgstr "Cancel"
 
-#: classes/wppizza.actions.inc.php:277
+#: classes/wppizza.actions.inc.php:285
 msgid "Username"
 msgstr "Username"
 
-#: classes/wppizza.actions.inc.php:278
+#: classes/wppizza.actions.inc.php:286
 msgid "Password"
 msgstr "Password"
 
-#: classes/wppizza.actions.inc.php:280
+#: classes/wppizza.actions.inc.php:288
 msgid "Lost Password"
 msgstr "Lost Password"
 
 # @ wppizza-locale
-#: classes/wppizza.actions.inc.php:421
+#: classes/wppizza.actions.inc.php:429
 msgid "Additional information"
 msgstr "מידע נוסף"
 
 # optional really
-#: classes/wppizza.actions.inc.php:556
+#: classes/wppizza.actions.inc.php:564
 msgid ""
 "WPPizza requires the server on which your site resides to be running PHP 5.2 "
 "or higher. As of version 3.2, WordPress itself will also <a href=\"http://"
@@ -187,11 +187,11 @@ msgstr ""
 "php4-and-mysql4\">לדרישה זו</a>. ייתכן שעליך ליצור קשר עם האיחסון שלך ולבקש "
 "מהם לשדרג את גירסת ה PHP.<br /><br /><a href=\""
 
-#: classes/wppizza.actions.inc.php:561
+#: classes/wppizza.actions.inc.php:569
 msgid "ATTENTION:"
 msgstr "ATTENTION:"
 
-#: classes/wppizza.actions.inc.php:562
+#: classes/wppizza.actions.inc.php:570
 msgid ""
 "WPPizza requires the <b>\"mbstring\"</b> extension in your php installation "
 "to be available/installed to work reliably. Please enable this module. If "
@@ -201,275 +201,275 @@ msgstr ""
 "to be available/installed to work reliably. Please enable this module. If "
 "you do not know how to, speak to your hostinng provider"
 
-#: classes/wppizza.actions.inc.php:563
+#: classes/wppizza.actions.inc.php:571
 msgid "This notice will disappear as soon as mbstring is available."
 msgstr "This notice will disappear as soon as mbstring is available."
 
 # @ wppizza-locale
-#: classes/wppizza.actions.inc.php:767
+#: classes/wppizza.actions.inc.php:775
 msgid "Set Item Options"
 msgstr "אפשרויות הגדרת פריט"
 
-#: classes/wppizza.actions.inc.php:915
+#: classes/wppizza.actions.inc.php:923
 #: inc/admin.echo.manage_reports.inc.php:34
 msgid "Overview"
 msgstr "Overview"
 
 # @ wppizza-locale
-#: classes/wppizza.actions.inc.php:953
+#: classes/wppizza.actions.inc.php:967
 msgid "Total"
 msgstr "Total"
 
-#: classes/wppizza.actions.inc.php:954
+#: classes/wppizza.actions.inc.php:968
 msgid "Today"
 msgstr "Today"
 
-#: classes/wppizza.actions.inc.php:959
+#: classes/wppizza.actions.inc.php:973
 msgid "Earnings"
 msgstr "Earnings"
 
 # @ wppizza-locale
-#: classes/wppizza.actions.inc.php:964
+#: classes/wppizza.actions.inc.php:978
 msgid "Sales"
 msgstr "Sales"
 
 # @ wppizza-locale
-#: classes/wppizza.actions.inc.php:969
+#: classes/wppizza.actions.inc.php:983
 msgid "Items Sold"
 msgstr "Items Sold"
 
 # @ wppizza-locale
-#: classes/wppizza.actions.inc.php:979
+#: classes/wppizza.actions.inc.php:993
 msgid "Menu Items (active)"
 msgstr "Menu Items (active)"
 
 # @ default
-#: classes/wppizza.actions.inc.php:980 classes/wppizza.actions.inc.php:1858
+#: classes/wppizza.actions.inc.php:994 classes/wppizza.actions.inc.php:1904
 msgid "Categories"
 msgstr "קטגוריות"
 
 # @ wppizza-locale
-#: classes/wppizza.actions.inc.php:1000
+#: classes/wppizza.actions.inc.php:1014
 #: inc/admin.echo.register.submenu.pages.inc.php:3
 msgid "Settings"
 msgstr "הגדרות"
 
 # @ wppizza-locale
-#: classes/wppizza.actions.inc.php:1001
+#: classes/wppizza.actions.inc.php:1015
 msgid "Order Settings"
 msgstr "הגדרות הזמנה"
 
 # @ wppizza-locale
-#: classes/wppizza.actions.inc.php:1002
+#: classes/wppizza.actions.inc.php:1016
 msgid "Gateways"
 msgstr "שערים"
 
 # @ wppizza-locale
-#: classes/wppizza.actions.inc.php:1003
+#: classes/wppizza.actions.inc.php:1017
 msgid "Order Form Settings"
 msgstr "הגדרות טופס הזמנה"
 
 # @ wppizza-locale
-#: classes/wppizza.actions.inc.php:1004
+#: classes/wppizza.actions.inc.php:1018
 #: inc/admin.echo.manage_opening_times.inc.php:3
 msgid "Opening Times"
 msgstr "שעות פתיחה"
 
 # @ wppizza-locale
-#: classes/wppizza.actions.inc.php:1005
+#: classes/wppizza.actions.inc.php:1019
 #: inc/admin.echo.manage_meal_sizes.inc.php:3
 msgid "Meal Sizes"
 msgstr "גדלי ארוחה"
 
 # @ wppizza-locale
-#: classes/wppizza.actions.inc.php:1006
+#: classes/wppizza.actions.inc.php:1020
 #: inc/admin.echo.manage_additives.inc.php:4
 msgid "Additives"
 msgstr "תוספות"
 
 # @ wppizza-locale
-#: classes/wppizza.actions.inc.php:1007 inc/admin.echo.manage_layout.inc.php:3
+#: classes/wppizza.actions.inc.php:1021 inc/admin.echo.manage_layout.inc.php:3
 msgid "Layout"
 msgstr "עימוד"
 
 # @ wppizza-locale
-#: classes/wppizza.actions.inc.php:1008
+#: classes/wppizza.actions.inc.php:1022
 #: inc/admin.echo.settings.input.fields.inc.php:492
 msgid "Localization"
 msgstr "לוקליזציה"
 
 # @ wppizza-locale
-#: classes/wppizza.actions.inc.php:1009
+#: classes/wppizza.actions.inc.php:1023
 #: inc/admin.echo.manage_order_history.inc.php:3
 msgid "Order History"
 msgstr "הסטוריית הזמנות"
 
 # @ wppizza-locale
-#: classes/wppizza.actions.inc.php:1010
+#: classes/wppizza.actions.inc.php:1024
 #: inc/admin.echo.manage_access_rights.inc.php:3
 msgid "Access Rights"
 msgstr "זכויות גישה"
 
-#: classes/wppizza.actions.inc.php:1011
+#: classes/wppizza.actions.inc.php:1025
 #: inc/admin.echo.manage_reports.inc.php:23
 #: inc/admin.echo.register.submenu.pages.inc.php:13
 msgid "Reports"
 msgstr "Reports"
 
 # @ wppizza-locale
-#: classes/wppizza.actions.inc.php:1012 inc/admin.echo.manage_tools.inc.php:3
+#: classes/wppizza.actions.inc.php:1026 inc/admin.echo.manage_tools.inc.php:3
 #: inc/admin.echo.register.submenu.pages.inc.php:15
 msgid "Tools"
 msgstr "כלי עבודה"
 
 # @ wppizza-locale
-#: classes/wppizza.actions.inc.php:1013
+#: classes/wppizza.actions.inc.php:1027
 msgid "Delete Orders"
 msgstr "מחק את ההזמנות"
 
 # @ default
-#: classes/wppizza.actions.inc.php:1412
+#: classes/wppizza.actions.inc.php:1458
 msgid "Nothing here"
 msgstr "דבר לא נמצא כאן"
 
 # @ wppizza-locale
-#: classes/wppizza.actions.inc.php:1784
+#: classes/wppizza.actions.inc.php:1830
 msgid "Menu Items"
 msgstr "פריטי תפריט"
 
 # @ wppizza-locale
-#: classes/wppizza.actions.inc.php:1785
+#: classes/wppizza.actions.inc.php:1831
 msgid "WPPizza Menu Item"
 msgstr "פריט תפריט WPPizza"
 
 # @ wppizza-locale
-#: classes/wppizza.actions.inc.php:1786
+#: classes/wppizza.actions.inc.php:1832
 msgid "Add New"
 msgstr "הוסף חדש"
 
 # @ wppizza-locale
-#: classes/wppizza.actions.inc.php:1787
+#: classes/wppizza.actions.inc.php:1833
 msgid "Add New Menu Item"
 msgstr "הוסף פריט תפריט חדש"
 
 # @ wppizza-locale
-#: classes/wppizza.actions.inc.php:1788
+#: classes/wppizza.actions.inc.php:1834
 msgid "Edit"
 msgstr "לערוך"
 
 # @ wppizza-locale
-#: classes/wppizza.actions.inc.php:1789
+#: classes/wppizza.actions.inc.php:1835
 msgid "Edit Menu Item"
 msgstr "עריכת פריט תפריט"
 
 # @ wppizza-locale
-#: classes/wppizza.actions.inc.php:1790
+#: classes/wppizza.actions.inc.php:1836
 msgid "New Menu Item"
 msgstr "פריט תפריט חדש"
 
 # @ wppizza-locale
-#: classes/wppizza.actions.inc.php:1791
+#: classes/wppizza.actions.inc.php:1837
 msgid "All Menu Items"
 msgstr "כל פריטי התפריט"
 
 # @ wppizza-locale
-#: classes/wppizza.actions.inc.php:1792
+#: classes/wppizza.actions.inc.php:1838
 msgid "View"
 msgstr "לצפות"
 
 # @ wppizza-locale
-#: classes/wppizza.actions.inc.php:1793
+#: classes/wppizza.actions.inc.php:1839
 msgid "View Menu Items"
 msgstr "צפה בפריטי תפריט"
 
 # @ wppizza-locale
-#: classes/wppizza.actions.inc.php:1794
+#: classes/wppizza.actions.inc.php:1840
 msgid "Search Menu Items"
 msgstr "חיפוש פריטי תפריט "
 
 # @ wppizza-locale
-#: classes/wppizza.actions.inc.php:1795
+#: classes/wppizza.actions.inc.php:1841
 msgid "No items found"
 msgstr "לא נמצאו פריטים"
 
 # @ wppizza-locale
-#: classes/wppizza.actions.inc.php:1796
+#: classes/wppizza.actions.inc.php:1842
 msgid "No items found in the Trash"
 msgstr "פריטים לא נמצאו בפח האשפה"
 
-#: classes/wppizza.actions.inc.php:1805
+#: classes/wppizza.actions.inc.php:1851
 #, php-format
 msgid "Holds %1$s  menu items data"
 msgstr "מחזיק תפריט %1$s  נתוני פריט"
 
 # @ default
-#: classes/wppizza.actions.inc.php:1848
+#: classes/wppizza.actions.inc.php:1894
 msgctxt "taxonomy general name"
 msgid "WPPizza Categories"
 msgstr "קטגוריות WPPizza "
 
 # @ default
-#: classes/wppizza.actions.inc.php:1849
+#: classes/wppizza.actions.inc.php:1895
 msgctxt "taxonomy singular name"
 msgid "Category"
 msgstr "קטגוריה"
 
 # @ default
-#: classes/wppizza.actions.inc.php:1850
+#: classes/wppizza.actions.inc.php:1896
 msgid "Search Categories"
 msgstr "חיפוש קטגוריות"
 
 # @ default
-#: classes/wppizza.actions.inc.php:1851
+#: classes/wppizza.actions.inc.php:1897
 msgid "All Categories"
 msgstr "כל הקטגוריות"
 
 # @ default
-#: classes/wppizza.actions.inc.php:1852
+#: classes/wppizza.actions.inc.php:1898
 msgid "Parent Category"
 msgstr "קטגורית הורה"
 
 # @ default
-#: classes/wppizza.actions.inc.php:1853
+#: classes/wppizza.actions.inc.php:1899
 msgid "Parent Category:"
 msgstr "קטגוריית הורה:"
 
 # @ default
-#: classes/wppizza.actions.inc.php:1854
+#: classes/wppizza.actions.inc.php:1900
 msgid "Edit Category"
 msgstr "ערוך קטגוריה"
 
 # @ default
-#: classes/wppizza.actions.inc.php:1855
+#: classes/wppizza.actions.inc.php:1901
 msgid "Update Category"
 msgstr "עדכן קטגוריה"
 
 # @ default
-#: classes/wppizza.actions.inc.php:1856
+#: classes/wppizza.actions.inc.php:1902
 msgid "Add New Category"
 msgstr "הוסף קטגוריה חדשה"
 
 # @ default
-#: classes/wppizza.actions.inc.php:1857
+#: classes/wppizza.actions.inc.php:1903
 msgid "New Category Name"
 msgstr "הוסף שם קטגוריה"
 
-#: classes/wppizza.actions.inc.php:1875
+#: classes/wppizza.actions.inc.php:1921
 #, php-format
 msgid "%s"
 msgstr "%s"
 
 # @ default
-#: classes/wppizza.actions.inc.php:2011
+#: classes/wppizza.actions.inc.php:2057
 msgid "WPPizza Categories"
 msgstr "WPPizza Categories"
 
 # @ wppizza-locale
-#: classes/wppizza.actions.inc.php:3044 classes/wppizza.actions.inc.php:3046
+#: classes/wppizza.actions.inc.php:3219 classes/wppizza.actions.inc.php:3221
 msgid "Previous"
 msgstr "Previous"
 
-#: classes/wppizza.actions.inc.php:3060 classes/wppizza.actions.inc.php:3062
+#: classes/wppizza.actions.inc.php:3235 classes/wppizza.actions.inc.php:3237
 msgid "Next"
 msgstr "Next"
 
@@ -535,21 +535,21 @@ msgstr "רשיון פעיל"
 msgid "License in-active"
 msgstr "רשיון פעיל"
 
-#: classes/wppizza.gateways.inc.php:819 classes/wppizza.gateways.inc.php:851
+#: classes/wppizza.gateways.inc.php:831 classes/wppizza.gateways.inc.php:863
 msgid "nothing to do !"
 msgstr "nothing to do !"
 
 # @ wppizza-locale
-#: classes/wppizza.gateways.inc.php:918
+#: classes/wppizza.gateways.inc.php:930
 msgid "Sorry, this order has already been processed or does not exist !"
 msgstr "Sorry, this order has already been processed or does not exist !"
 
-#: classes/wppizza.gateways.inc.php:922
+#: classes/wppizza.gateways.inc.php:934
 msgid "Sorry, this order does not exist !"
 msgstr "Sorry, this order does not exist !"
 
 # @ wppizza-locale
-#: classes/wppizza.gateways.inc.php:1261
+#: classes/wppizza.gateways.inc.php:1273
 msgid "form fields"
 msgstr "form fields"
 
@@ -2393,175 +2393,173 @@ msgid "Menu Items and Categories are accessible just like \"normal\" posts"
 msgstr "פריטי תפריט קטגוריות ונגישים בדיוק כמו פוסטים &quot;נורמלים&quot;"
 
 # @ wppizza-locale
-#: inc/admin.report.functions.php:17
+#: inc/admin.report.functions.php:23
 msgid "year to date"
 msgstr "year to date"
 
-#: inc/admin.report.functions.php:18
+#: inc/admin.report.functions.php:24
 msgid "last year"
 msgstr "last year"
 
-#: inc/admin.report.functions.php:19
+#: inc/admin.report.functions.php:25
 msgid "this month"
 msgstr "this month"
 
-#: inc/admin.report.functions.php:20
+#: inc/admin.report.functions.php:26
 msgid "last month"
 msgstr "last month"
 
-#: inc/admin.report.functions.php:21
+#: inc/admin.report.functions.php:27
 msgid "last 12 month"
 msgstr "last 12 month"
 
 # @ wppizza-locale
-#: inc/admin.report.functions.php:22
+#: inc/admin.report.functions.php:28
 msgid "last 7 days"
 msgstr "last 7 days"
 
-#: inc/admin.report.functions.php:23
+#: inc/admin.report.functions.php:29
 msgid "last 14 days"
 msgstr "last 14 days"
 
-#: inc/admin.report.functions.php:48
+#: inc/admin.report.functions.php:54
 msgid "Details last 30 days"
 msgstr "Details last 30 days"
 
 # @ wppizza-locale
-#: inc/admin.report.functions.php:103
+#: inc/admin.report.functions.php:109
 msgid "Year to date"
 msgstr "Year to date"
 
-#: inc/admin.report.functions.php:114
+#: inc/admin.report.functions.php:120
 msgid "Last Year"
 msgstr "Last Year"
 
-#: inc/admin.report.functions.php:125
+#: inc/admin.report.functions.php:131
 msgid "This Month"
 msgstr "This Month"
 
-#: inc/admin.report.functions.php:136
+#: inc/admin.report.functions.php:142
 msgid "Last Month"
 msgstr "Last Month"
 
-#: inc/admin.report.functions.php:148
+#: inc/admin.report.functions.php:154
 msgid "Last 12 Month"
 msgstr "Last 12 Month"
 
 # @ wppizza-locale
-#: inc/admin.report.functions.php:159
+#: inc/admin.report.functions.php:165
 msgid "Last 7 days"
 msgstr "Last 7 days"
 
-#: inc/admin.report.functions.php:170
+#: inc/admin.report.functions.php:176
 msgid "Last 14 days"
 msgstr "Last 14 days"
 
 # @ wppizza-locale
-#: inc/admin.report.functions.php:451
+#: inc/admin.report.functions.php:457
 msgid "All Sales: Total"
 msgstr "All Sales: Total"
 
-#: inc/admin.report.functions.php:451 inc/admin.report.functions.php:461
+#: inc/admin.report.functions.php:457 inc/admin.report.functions.php:467
 msgid "incl. taxes, charges and discounts"
 msgstr "incl. taxes, charges and discounts"
 
-#: inc/admin.report.functions.php:452
+#: inc/admin.report.functions.php:458
 msgid "All Sales: Averages"
 msgstr "All Sales: Averages"
 
-#: inc/admin.report.functions.php:452 inc/admin.report.functions.php:454
-#: inc/admin.report.functions.php:462 inc/admin.report.functions.php:464
+#: inc/admin.report.functions.php:458 inc/admin.report.functions.php:460
+#: inc/admin.report.functions.php:468 inc/admin.report.functions.php:470
 msgid "per day"
 msgstr "per day"
 
-#: inc/admin.report.functions.php:452 inc/admin.report.functions.php:454
-#: inc/admin.report.functions.php:462 inc/admin.report.functions.php:464
+#: inc/admin.report.functions.php:458 inc/admin.report.functions.php:460
+#: inc/admin.report.functions.php:468 inc/admin.report.functions.php:470
 msgid "per month"
 msgstr "per month"
 
-#: inc/admin.report.functions.php:453
+#: inc/admin.report.functions.php:459
 msgid "All Orders/Items: Total"
 msgstr "All Orders/Items: Total"
 
 # @ wppizza-locale
-#: inc/admin.report.functions.php:453 inc/admin.report.functions.php:454
-#: inc/admin.report.functions.php:463 inc/admin.report.functions.php:464
+#: inc/admin.report.functions.php:459 inc/admin.report.functions.php:460
+#: inc/admin.report.functions.php:469 inc/admin.report.functions.php:470
 #: inc/admin.setup.default.options.inc.php:94
 msgid "Orders"
 msgstr "הזמנות"
 
 # @ wppizza-locale
-#: inc/admin.report.functions.php:453 inc/admin.report.functions.php:454
-#: inc/admin.report.functions.php:463 inc/admin.report.functions.php:464
+#: inc/admin.report.functions.php:459 inc/admin.report.functions.php:460
+#: inc/admin.report.functions.php:469 inc/admin.report.functions.php:470
 msgid "items"
 msgstr "items"
 
-#: inc/admin.report.functions.php:453 inc/admin.report.functions.php:463
+#: inc/admin.report.functions.php:459 inc/admin.report.functions.php:469
 msgid "before taxes, charges and discounts"
 msgstr "before taxes, charges and discounts"
 
-#: inc/admin.report.functions.php:454
+#: inc/admin.report.functions.php:460
 msgid "All Orders/Items: Averages"
 msgstr "All Orders/Items: Averages"
 
-#: inc/admin.report.functions.php:455 inc/admin.report.functions.php:465
+#: inc/admin.report.functions.php:461 inc/admin.report.functions.php:471
 msgid "Range"
 msgstr "Range"
 
 # @ wppizza-locale
-#: inc/admin.report.functions.php:455 inc/admin.report.functions.php:465
+#: inc/admin.report.functions.php:461 inc/admin.report.functions.php:471
 msgid "days"
 msgstr "days"
 
-#: inc/admin.report.functions.php:455 inc/admin.report.functions.php:465
+#: inc/admin.report.functions.php:461 inc/admin.report.functions.php:471
 msgid "months"
 msgstr "months"
 
-#: inc/admin.report.functions.php:457
+#: inc/admin.report.functions.php:463
 msgid "Bestsellers by Volume - All"
 msgstr "Bestsellers by Volume - All"
 
-#: inc/admin.report.functions.php:458
-#, php-format
-msgid "Bestsellers by Value - All (% of order total)"
-msgstr "Bestsellers by Value - All (% of order total)"
+#: inc/admin.report.functions.php:464
+msgid "Bestsellers by Value - All (percent of order total)"
+msgstr "Bestsellers by Value - All (percent of order total)"
 
-#: inc/admin.report.functions.php:461
+#: inc/admin.report.functions.php:467
 msgid "Sales Total [in range]"
 msgstr "Sales Total [in range]"
 
-#: inc/admin.report.functions.php:462
+#: inc/admin.report.functions.php:468
 msgid "Sales Averages [in range]"
 msgstr "Sales Averages [in range]"
 
-#: inc/admin.report.functions.php:463
+#: inc/admin.report.functions.php:469
 msgid "Orders/Items Total [in range]"
 msgstr "Orders/Items Total [in range]"
 
-#: inc/admin.report.functions.php:464
+#: inc/admin.report.functions.php:470
 msgid "Orders/Items Averages [in range]"
 msgstr "Orders/Items Averages [in range]"
 
-#: inc/admin.report.functions.php:467
+#: inc/admin.report.functions.php:473
 msgid "Bestsellers by Volume [in range]"
 msgstr "Bestsellers by Volume [in range]"
 
-#: inc/admin.report.functions.php:468
-#, php-format
-msgid "Bestsellers by Value [% of all orders in range]"
-msgstr "Bestsellers by Value [% of all orders in range]"
+#: inc/admin.report.functions.php:474
+msgid "Bestsellers by Value [percent of all orders in range]"
+msgstr "Bestsellers by Value [percent of all orders in range]"
 
 # @ wppizza-locale
-#: inc/admin.report.functions.php:486
+#: inc/admin.report.functions.php:492
 msgid "sales value"
 msgstr "sales value"
 
-#: inc/admin.report.functions.php:496
+#: inc/admin.report.functions.php:502
 msgid "number of sales"
 msgstr "number of sales"
 
 # @ wppizza-locale
-#: inc/admin.report.functions.php:506
+#: inc/admin.report.functions.php:512
 msgid "items sold"
 msgstr "items sold"
 
@@ -3677,47 +3675,47 @@ msgid "closed"
 msgstr "סגור"
 
 # @ wppizza-locale
-#: inc/common.output.formatting.functions.inc.php:453
+#: inc/common.output.formatting.functions.inc.php:469
 msgid "Mondays"
 msgstr "יום שני"
 
 # @ wppizza-locale
-#: inc/common.output.formatting.functions.inc.php:454
+#: inc/common.output.formatting.functions.inc.php:470
 msgid "Tuesdays"
 msgstr "יום שלישי"
 
 # @ wppizza-locale
-#: inc/common.output.formatting.functions.inc.php:455
+#: inc/common.output.formatting.functions.inc.php:471
 msgid "Wednesdays"
 msgstr "ימי רביעי"
 
 # @ wppizza-locale
-#: inc/common.output.formatting.functions.inc.php:456
+#: inc/common.output.formatting.functions.inc.php:472
 msgid "Thursdays"
 msgstr "ימי חמישי"
 
 # @ wppizza-locale
-#: inc/common.output.formatting.functions.inc.php:457
+#: inc/common.output.formatting.functions.inc.php:473
 msgid "Fridays"
 msgstr "ימי שישי"
 
 # @ wppizza-locale
-#: inc/common.output.formatting.functions.inc.php:458
+#: inc/common.output.formatting.functions.inc.php:474
 msgid "Saturdays"
 msgstr "שבתות"
 
 # @ wppizza-locale
-#: inc/common.output.formatting.functions.inc.php:459
+#: inc/common.output.formatting.functions.inc.php:475
 msgid "Sundays"
 msgstr "ימי ראשון"
 
 # @ wppizza-locale
-#: inc/common.output.formatting.functions.inc.php:467
+#: inc/common.output.formatting.functions.inc.php:483
 msgid "Default"
 msgstr "ברירת מחדל"
 
 # @ wppizza-locale
-#: inc/common.output.formatting.functions.inc.php:468
+#: inc/common.output.formatting.functions.inc.php:484
 msgid "Responsive [Experimental]"
 msgstr "מותאם [ניסיון]"
 
