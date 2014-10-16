@@ -152,7 +152,9 @@
 		<?php foreach($formelements as $elmKey=>$elm){ ?>
 		<?php
 			/*NEW IN VERSION 2.4 */
-			do_action('wppizza_order_before_field_'.$elmKey.'');
+			do_action('wppizza_order_before_field_'.$elmKey.'');/**for LEGACY REASONS ONLY, use wppizza_order_before_field_'.$elm['key'].' instead as this will be deprecated at some point**/
+			/*NEW IN VERSION 2.11.2.3 */
+			do_action('wppizza_order_before_field_'.$elm['key'].'');
 		?>
 			<?php if($elm['enabled']){?>
 				<label for="<?php echo $elm['key'] ?>"<?php echo !empty($elm['required']) ? ' class="wppizza-order-label-required"':'' ?>><?php echo $elm['lbl'] ?></label>
@@ -181,6 +183,10 @@
 					</select>
 				<?php } ?>
 			<?php } ?>
+		<?php
+			/*NEW IN VERSION 2.11.2.3 */
+			do_action('wppizza_order_after_field_'.$elm['key'].'');
+		?>			
 		<?php } ?>
 		<?php
 			/**added 2.10.2*/

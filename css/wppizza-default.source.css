@@ -314,7 +314,7 @@ fieldset.wppizza-ff>input, fieldset.wppizza-ff>select, fieldset.wppizza-ff>texta
 .wppizza-article-img .wppizza-article-img-thumb{width:auto;max-width:none !important}
 /****info/txt/*****/
 .wppizza-article-info{}
-.wppizza-article-info h2,.wppizza-article-info h3{display:inline;display:inline-block;padding-bottom:0;margin:0}
+.wppizza-article-info h2,.wppizza-article-info h3{display:inline;padding-bottom:0;margin:0}
 .wppizza-article-additives{font-size:60%;margin:0 5px}
 .wppizza-article-additives:before{content:'*'}
 /****prices and labels*****/
