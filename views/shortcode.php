@@ -79,6 +79,7 @@ if($type=='cart'){
 			$this->wppizza_include_shortcode_template($type,$atts);
 			$markup = ob_get_clean();
 		}
+		$markup=apply_filters('wppizza_after_cart_markup',$markup);
 	return $markup;
 	}
 }

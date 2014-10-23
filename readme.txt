@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.3+, WP 3.3+ 
 Tested up to: 4.0
-Stable tag: 2.11.2.3
+Stable tag: 2.11.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -142,6 +142,14 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 
 == Changelog ==
+2.11.3    
+* added paymentstatus_userid(payment_status,wp_user_id) index on orders table  
+* added some more action/filter hooks to order, confirmation, history , email , opening times and cart templates  
+* added filter (wppizza_filter_order_ini_add_vars) to be able to add additional parameters to wppizza_orders order_ini field  
+* added system info to wppizza->tools to aid debuggging  
+* added enabling of wp_cron schedule to clean up orders table periodically (wppizza->tools)   
+23rd October 2014
+
 
 2.11.2.3  
 * added action to order page (wppizza_order_after_field_'.$elmKey.'')  

@@ -125,9 +125,15 @@
 		<?php if($summary['taxes_included']>0 && $summary['tax_applied']=='taxes_included' ){/*taxes included NEW IN VERSION  v2.8.9.3*/ ?>
 			<li class="wppizza-order-item-tax"><?php echo $orderlbl['taxes_included'] ?><span><?php echo $order['currency_left'].''.$summary['taxes_included'].''.$order['currency_right']; ?></span></li>
 		<?php } ?>
-
+		<?php
+			/**added 2.11.2.4*/
+			do_action('wppizza_show_order_before_totals',$order,$summary,$items);
+		?>
 			<li id="wppizza-cart-total"><?php echo $orderlbl['order_total'] ?><span><?php echo $order['currency_left'].''.$summary['total'].''.$order['currency_right']; ?></span></li>
-
+		<?php
+			/**added 2.11.2.4*/
+			do_action('wppizza_show_order_after_totals',$order,$summary,$items);
+		?>
 		<?php if(isset($summary['selfPickup']) &&  $summary['selfPickup']==1 && $orderlbl['order_page_self_pickup']!=''){ /*self pickup conditional-> no delivery charges : NEW IN VERSION 1.4.1**/ ?>
 			<li id="wppizza-self-pickup"><?php echo $orderlbl['order_page_self_pickup'] ?></li>
 		<?php } ?>

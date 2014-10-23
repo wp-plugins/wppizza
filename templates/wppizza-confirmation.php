@@ -215,10 +215,16 @@
 					<tr class="wppizza-order-item-tax"><td><?php echo $txt['item_tax_total'] ?></td><td><?php echo $cart['currency_left'].''.$cart['order_value']['item_tax']['val'].''.$cart['currency_right']; ?></td></tr>
 				<?php } ?>
 				
-
+			<?php
+				/**added 2.11.2.4*/
+				do_action('wppizza_confirmationpage_before_totals',$cart);
+			?>
 	
 				<tr class="wppizza-cart-total"><td><?php echo $txt['order_total'] ?></td><td><?php echo $cart['currency_left'].''.$cart['order_value']['total']['val'].''.$cart['currency_right']; ?></td></tr>
-			
+			<?php
+				/**added 2.11.2.4*/
+				do_action('wppizza_confirmationpage_after_totals',$cart);
+			?>			
 			</table>
 			</div>
 			

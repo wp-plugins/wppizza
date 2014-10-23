@@ -5,7 +5,7 @@ Description: Maintain your restaurant menu online and accept cash on delivery or
 Author: ollybach
 Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Author URI: http://www.wp-pizza.com
-Version: 2.11.2.3
+Version: 2.11.3
 License:
 
   Copyright 2012 ollybach (dev@wp-pizza.com)
@@ -45,13 +45,31 @@ define('WPPIZZA_PATH', plugin_dir_path(__FILE__) );
 define('WPPIZZA_URL', plugin_dir_url(__FILE__) );
 
 add_action('widgets_init', create_function('', 'register_widget("'.WPPIZZA_CLASS.'");'));
+/***************************************************************
+*
+*	[uninstall]
+*
+***************************************************************/
 register_uninstall_hook( __FILE__, 'wppizza_uninstall' );
+/***************************************************************
+*
+*	[deactivate]
+*
+***************************************************************/
+register_deactivation_hook( __FILE__, 'wppizza_deactivate' );
+/***remove cronjobs****/
+function wppizza_deactivate() {
+	wp_clear_scheduled_hook( 'wppizza_cron' );
+}
+
+/***************************************************************
+*
+*	[CLASS]
+*
+***************************************************************/
 
 if ( ! class_exists( ''.WPPIZZA_CLASS.'' ) ) {
 class WPPizza extends WP_Widget {
-
-
-
 
 	public $pluginVersion;
 	protected $pluginSlug;
@@ -76,7 +94,7 @@ class WPPizza extends WP_Widget {
  function __construct() {
 
 	/**init constants***/
-	$this->pluginVersion='2.11.2.3';//increment in line with stable tag in readme and version above
+	$this->pluginVersion='2.11.3';//increment in line with stable tag in readme and version above
  	$this->pluginName="".WPPIZZA_NAME."";
  	$this->pluginSlug="".WPPIZZA_SLUG."";//set also in uninstall when deleting options
 	$this->pluginSlugCategoryTaxonomy="".WPPIZZA_TAXONOMY."";//also on uninstall delete wppizza_children as well as widget

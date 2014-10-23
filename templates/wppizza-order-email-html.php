@@ -178,6 +178,11 @@ $htmlEmailStyle = apply_filters('wppizza_filter_html_email_style', $htmlEmailSty
 		<?php if(isset($order_summary['taxes_included'])){ ?>
 							<tr><td style="<?php echo $htmlEmailStyle['mailPadding']['0x5'] ?>"><?php echo $order_summary['taxes_included']['label']; ?></td><td><?php echo $currency_left.''.$order_summary['taxes_included']['price'].''.$currency_right; ?></td></tr>
 		<?php } ?>
+		
+		<?php
+			/**added 2.11.2.4*/
+			do_action('wppizza_emailhtml_before_totals',$order_summary,$order_items,$htmlEmailStyle);
+		?>		
 
 		<?php /*add devider**/ ?>
 							<tr><td colspan="2" style="<?php echo $htmlEmailStyle['mailDivider'] ?>">&nbsp;</td></tr>
@@ -185,6 +190,10 @@ $htmlEmailStyle = apply_filters('wppizza_filter_html_email_style', $htmlEmailSty
 		<?php /**total**/ ?>
 							<tr><td style="<?php echo $htmlEmailStyle['mailPadding']['5'] ?>;font-weight:600"><?php echo $order_summary['total']['label']; ?></td><td style="font-weight:600"><?php echo $currency_left.''.$order_summary['total']['price'].''.$currency_right; ?></td></tr>
 
+		<?php
+			/**added 2.11.2.4*/
+			do_action('wppizza_emailhtml_after_totals',$order_summary,$order_items,$htmlEmailStyle);
+		?>
 		<?php /**self pickup if selected. NEW IN VERSION 1.4.1**/ ?>
 		<?php if(isset($order_summary['self_pickup'])){?>
 							<tr><td style="<?php echo $htmlEmailStyle['mailPadding']['10x5'] ?>;font-weight:600;color:#ff3333" colspan="2"><?php echo $order_summary['self_pickup']['label']; ?></td></tr>

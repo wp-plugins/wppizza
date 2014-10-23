@@ -245,6 +245,9 @@
 			}
 			$str.='</span> ';		
 		}
+		/**filter output**/
+		$str=apply_filters('wppizza_after_opening_times',$str);
+		
 		return trim($str);
 	}
 	/**format time output**/
@@ -700,12 +703,19 @@ function wppizza_order_summary($session,$options,$module=null,$ajax=null){
 			$discountApply=$discountApply+($session['total_price_items']/100*$options['order']['order_pickup_discount']);
 		}
 
+		/**allow filtering of discounts**/
+		$discountApply = apply_filters('wppizza_filter_discount', $discountApply, $session, $module);
+		
 
 		if(isset($discountApply) && $discountApply>0){
 			$discountLabel=$options['localization']['discount']['lbl'];
 			$discountValue=(wppizza_output_format_float($discountApply));
 			$discountValuePrint=wppizza_output_format_price($discountValue,$optionsDecimals);
 		}
+
+
+
+
 
 			/**********************************
 				[delivery]

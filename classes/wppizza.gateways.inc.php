@@ -356,7 +356,10 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 		foreach($addVars as $k=>$v){
 			$gatewayOrder[$k]=$v;
 		}
-
+		/****add a filter for adding other data to order_ini****/
+		$gatewayOrder = apply_filters('wppizza_filter_order_ini_add_vars', $gatewayOrder);	
+		
+		
 		/*****created and return checkable hash**/
 		$cartHash=wppizza_mkHash($gatewayOrder);/*make unique hash*/
 		$gatewayOrder['hash']=$cartHash['hash'];/*add hash to array*/

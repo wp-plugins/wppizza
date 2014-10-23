@@ -120,6 +120,10 @@
 				<li class="wppizza-order-tips"><?php echo $txt['tips']['lbl'] ?><span><span></span><?php echo $cart['currency_left'].''.$cart['tips']['val'].''.$cart['currency_right']; ?></span></li>
 			<?php } ?>
 
+			<?php
+				/**added 2.11.2.4*/
+				do_action('wppizza_order_form_before_totals',$cart);
+			?>
 				<li id="wppizza-cart-total"><?php echo $txt['order_total']['lbl'] ?><span><?php echo $cart['currency_left'].''.$cart['order_value']['total']['val'].''.$cart['currency_right']; ?></span></li>
 
 			<?php if(isset($cart['self_pickup_enabled']) &&  $cart['selfPickup']==1 && $txt['order_page_self_pickup']['lbl']!=''){ /*self pickup conditional-> no delivery charges : NEW IN VERSION 1.4.1**/ ?>

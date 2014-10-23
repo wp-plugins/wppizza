@@ -840,18 +840,45 @@ $options = $this->pluginOptions;
 
 			}
 			if($field=='tools'){
+				if(!isset($_GET['tab']) || $_GET['tab']=='tools'){
 				echo"<div id='wppizza_".$field."'>";
 					echo"<div id='wppizza_".$field."_clear'>";
 						echo" <b>".__('Delete abandoned/cancelled orders from database older than', $this->pluginLocale)."</b> ";
-						echo"<input id='wppizza_order_days_delete' type='text' size='2' value='7' />";
+						echo"<input id='wppizza_order_days_delete' type='text' size='2' name='".$this->pluginSlug."[cron][days_delete]' value='".$options['cron']['days_delete']."' />";
 						echo" <b>".__('Days (minimum: 1)', $this->pluginLocale)."</b> ";
-						echo"<input id='wppizza_order_failed_delete' type='checkbox' value='1' />";
+						echo"<input id='wppizza_order_failed_delete' name='".$this->pluginSlug."[cron][failed_delete]' ". checked($options['cron']['failed_delete'],true,false)." type='checkbox' value='1' />";
 						echo" <b>".__('delete failed, tampered or otherwise invalid entries too.', $this->pluginLocale)."</b> ";
-						echo"<br /><span id='wppizza_order_abandoned_delete' class='button'>".__('go', $this->pluginLocale)."</span>";
+						echo"<br /><span id='wppizza_order_abandoned_delete' class='button'>".__('do it now', $this->pluginLocale)."</span>";
+
+						/*schedule cron**/
+						$cronJobs=''.print_r(get_option('cron'),true);/**if we deactivated the plugin, cron will have been disabled for this, so we set the flag accordingly**/
+						$wppizzaCronRunning = strpos($cronJobs, 'wppizza_cron');/**just search for wppizza_cron in string*/
+						if ($wppizzaCronRunning === false) {
+							$options['cron']['schedule']='';
+						}
+						echo"<br /><b>".__('schedule above to run automatically', $this->pluginLocale)."</b>";
+						echo "<select name='".$this->pluginSlug."[cron][schedule]' />";
+							echo"<option value=''>".__('do not run', $this->pluginLocale)."</option>";
+							echo"<option value='hourly' ".selected($options['cron']['schedule'],"hourly",false).">".__('hourly', $this->pluginLocale)."</option>";
+							echo"<option value='daily' ".selected($options['cron']['schedule'],"daily",false).">".__('daily', $this->pluginLocale)."</option>";
+						echo "</select>";
+						echo"".__('uses wp_cron', $this->pluginLocale)."";	
+
+
 						echo"<br />".__('As soon as customers go to the order page an order will be initialized and stored in the db to be checked against when going through with the purchase to make sure nothing has been tampered with. However, not every customer will actually go through with the purchase which leaves this initialised order orphaned in the db.Click the "ok" button to clean your db of these entries (it will NOT affect any completed or pending orders)', $this->pluginLocale)."";
-						echo"<br /><span style='color:red'>".__('Note: This will delete these entries PERMANENTLY from the db and is not reversable.', $this->pluginLocale)."</style>";
-					echo"</div>";
+						echo"<br /><br /><span style='color:red'>".__('Note: This will delete these entries PERMANENTLY from the db and is not reversable.', $this->pluginLocale)."</span>";	
+					echo"</div>";				
 				echo"</div>";
+				}
+				
+				if(isset($_GET['tab']) && $_GET['tab']=='sysinfo'){
+				echo"<div id='wppizza_".$field."_system_info'>";
+					echo"<br /><h2>".__('System Info', $this->pluginLocale)."</h2> ";
+					echo $this->wppizza_system_info_include();
+					echo"<br /><h2>".__('All wppizza options', $this->pluginLocale)."</h2> ";
+					echo"<textarea  readonly='readonly' onclick='this.focus();this.select();' style='width:100%;height:150px'>### ALL WPPIZZA VARIABLES ###".PHP_EOL.print_r($this->pluginOptions,true)."</textarea>";
+				echo"</div>";			
+				}
 			}
 
 	}

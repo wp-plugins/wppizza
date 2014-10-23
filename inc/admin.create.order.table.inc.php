@@ -56,6 +56,7 @@ $sql="CREATE TABLE ".$wpdb->prefix ."wppizza_orders (
 	KEY transaction_id (transaction_id),
 	KEY ident (hash,payment_status,initiator),
 	KEY history (wp_user_id,order_date,payment_status),
+	KEY paymentstatus_userid (payment_status,wp_user_id),
 	KEY mail_sent (mail_sent)
 ) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;";
 

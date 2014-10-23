@@ -313,6 +313,11 @@
 				'using_cache_plugin' => false,
 				'nag_notice' => $this->pluginNagNotice
 			),
+			'cron'=>array(
+				'days_delete'=>7,
+				'failed_delete'=>false,
+				'schedule'=>false
+			),				
 			'layout'=>array(
 				'category_sort' => $category_sort,
 				'category_sort_hierarchy' => $this->wppizza_complete_sorted_hierarchy($category_sort),

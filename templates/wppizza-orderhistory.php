@@ -115,8 +115,15 @@
 		<?php if($summary['taxes_included']>0 && $summary['tax_applied']=='taxes_included' ){/*taxes included NEW IN VERSION  v2.8.9.3*/ ?>
 			<li class="wppizza-order-item-tax"><?php echo $orderlbl['taxes_included'] ?><span><?php echo $order['currency_left'].''.$summary['taxes_included'].''.$order['currency_right']; ?></span></li>
 		<?php } ?>
-
+		<?php
+			/**added 2.11.2.4*/
+			do_action('wppizza_history_before_totals',$order,$summary,$items);
+		?>
 			<li id="wppizza-cart-total"><?php echo $orderlbl['order_total'] ?><span><?php echo $order['currency_left'].''.$summary['total'].''.$order['currency_right']; ?></span></li>
+		<?php
+			/**added 2.11.2.4*/
+			do_action('wppizza_history_after_totals',$order,$summary,$items);
+		?>
 	</ul>
 <?php	/**payment type (by default this is css->display:none)**/ 	?>
 	<div class="wppizza-history-payment"><span><?php echo $orderlbl['order_paid_by'] ?> <?php echo $order['gatewayLabel']; ?> [<?php echo $order['transaction_id'] ?>]</span></div>

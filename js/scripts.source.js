@@ -233,7 +233,7 @@ jQuery(document).ready(function($){
 		if(e.keyCode == 13 || e.keyCode == 35){
 			$(this).closest('li').find('.wppizza-cart-increment').trigger(''+wppizzaClickEvent+'');
 		}
-	})
+	});
 
 
 	/**run defined functions after cart refresh**/
@@ -586,7 +586,7 @@ jQuery(document).ready(function($){
 					wppizzaSelectSubmitType(self,currVal,hasClassAjax,hasClassCustom,form);
 				}
 			}
-		})
+		});
 
 
 	/******************************
@@ -681,4 +681,4 @@ jQuery(document).ready(function($){
 		/*if no cache, just exec sticky cart function*/
 		wppizzaCartStickyLoad();
 	}
-})
+});

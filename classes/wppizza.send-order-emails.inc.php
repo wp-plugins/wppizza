@@ -341,6 +341,11 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 				/**filter new/current extend additional info keys**/
 				$wppizzaEmailOrderItems = apply_filters('wppizza_filter_order_extend', $wppizzaEmailOrderItems);
 
+				/****************************************************
+					[allow filtering of summary too]
+				****************************************************/
+				$wppizzaEmailOrderSummary = apply_filters('wppizza_filter_order_summary_parameters_emails', $wppizzaEmailOrderSummary,$oDetails);
+
 
 				/***********************************************************************************************
 				*
@@ -640,8 +645,6 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 					$order_summary['tax_applied']='items_and_shipping';
 				}
 
-
-
 				/*return $orderHtml*/
 				$orderHtml='';
 				/*for legacy reasons, someone might use an old template in their theme directory***/
@@ -660,7 +663,8 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 
 
 				/** for html email checking in browser without sending any email. will only work on chrome and safari apparently*/
-				//	print'<iframe srcdoc="'.str_replace('"','\'',$orderHtml).'" src="" width="600" height="600"></iframe>';
+				//	print'<iframe srcdoc="'.str_replace('"','\'',$orderHtml).'" src="" width="600" height="600"></iframe>';//html
+				//	print'<iframe srcdoc="'.str_replace(" ","&nbsp;",nl2br(str_replace('"','\'',$this->orderMessage['plaintext']))).'" src="" width="600" height="600"></iframe>';//plaintext
 				//	exit();
 				/**/
 
@@ -869,6 +873,10 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 				$summary['tips']=wppizza_output_format_price($thisOrderDetails['tips'],$options['layout']['hide_decimals']);
 			}
 
+
+			/***allow some filtering of order and summary***/
+			$order = apply_filters('wppizza_filter_order_show_order_page', $order, $thisOrderDetails);
+			$summary = apply_filters('wppizza_filter_summary_show_order_page', $summary, $thisOrderDetails);
 
 			/***********************************************
 				[if template copied to theme directory use

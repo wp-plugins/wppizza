@@ -67,7 +67,7 @@ $output='';
 		/**do or dont delete all non completed orders**/
 			$pStatusQuery=" IN ('INITIALIZED','CANCELLED')";
 		if($_POST['vars']['failed']=='true'){
-			$pStatusQuery=" NOT IN ('COMPLETED','PENDING','CAPTURED','COD','AUTHORIZED')";
+			$pStatusQuery=" NOT IN ('COMPLETED','PENDING','REFUNDED','CAPTURED','COD','AUTHORIZED')";
 		}
 		$sql="DELETE FROM ".$wpdb->prefix . $this->pluginOrderTable." WHERE order_date < TIMESTAMPADD(DAY,-".$days.",NOW()) AND payment_status ".$pStatusQuery."";
 		$res=$wpdb->query( $wpdb->prepare($sql));

@@ -8,6 +8,20 @@
 		$options['plugin_data']['empty_category_and_items'] = false;/*we dont really want to save these settings, just execute when true*/
 		$options['plugin_data']['db_order_status_options'] = !empty($input['plugin_data']['db_order_status_options']) ? $input['plugin_data']['db_order_status_options'] : wppizza_order_status_default();
 
+		/**schedule cron**/
+		if(isset($input['cron'])){
+			$options['cron']['days_delete']= !empty($input['cron']['days_delete']) ? max(1,$input['cron']['days_delete']) : 7;
+			$options['cron']['failed_delete']= !empty($input['cron']['failed_delete']) ? true : false;
+			
+			$cronSchedule='';
+			if(isset($input['cron']['schedule']) && in_array($input['cron']['schedule'],array('hourly','daily')) ){$cronSchedule=$input['cron']['schedule'];}
+			
+			$options['cron']['schedule']= $cronSchedule;
+			/*schedule or remove cron **/
+			$this->wppizza_cron_setup_schedule($options['cron']);
+		}
+
+
 		if(isset($input['plugin_data']['empty_category_and_items']) && $input['plugin_data']['empty_category_and_items']==1){
 			$this->wppizza_empty_taxonomy(!empty($input['plugin_data']['delete_attachments']) ? true : false, !empty($input['plugin_data']['truncate_orders']) ? true : false);
 		}

@@ -155,6 +155,9 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 			/**dashboard widget**/
 			add_action( 'wp_dashboard_setup', array( $this, 'wppizza_dashboard_widget'));
 
+
+			/**cron to delete old orders**/
+			add_action( 'wppizza_cron', array( $this, 'wppizza_cron_do'));
 		}
 
 
@@ -857,6 +860,7 @@ public function admin_manage_order_history(){
 	require_once(WPPIZZA_PATH .'inc/admin.echo.manage_order_history.inc.php');
 }
 public function admin_manage_tools(){
+	$this->wppizza_admin_tabs_tools();
 	require_once(WPPIZZA_PATH .'inc/admin.echo.manage_tools.inc.php');
 }
 public function admin_manage_access_rights(){
@@ -886,6 +890,24 @@ public function admin_manage_gateways(){
 public function wppizza_admin_settings_input($field='') {
 	require(WPPIZZA_PATH .'inc/admin.echo.settings.input.fields.inc.php');
 }
+
+
+/*********************************************************
+	[Admin TABS]
+*********************************************************/
+function wppizza_admin_tabs_tools() {
+	$tabs[]=array('lbl'=>__('Tools',$this->pluginLocale),'slug'=>'tools');
+	$tabs[]=array('lbl'=>__('System Info',$this->pluginLocale),'slug'=>'sysinfo');
+	$current = !empty($_GET['tab']) ?  $_GET['tab'] : $tabs[0]['slug'];
+	echo '<div id="icon-themes" class="icon32"><br></div>';
+	echo '<h2 class="nav-tab-wrapper">';
+	foreach( $tabs as $tab => $arr ){
+	    $class = ( $arr['slug'] == $current ) ? ' nav-tab-active' : '';
+	    echo "<a class='nav-tab ".$class."' href='?post_type=".WPPIZZA_POST_TYPE."&page=wppizza-tools&tab=".$arr['slug']."'>".$arr['lbl']."</a>";
+	}
+	echo '</h2>';
+}
+
 
 /*********************************************************
 *
@@ -926,7 +948,7 @@ function wppizza_dashboard_widget(){
 function wppizza_do_dashboard_widget() {
 
 	if( version_compare( PHP_VERSION, '5.3', '<' )) {
-		print"<div style='text-align:center;margin:50px 0'>Sorry, reporting is only available with php >=5.3</div>";	
+		print"<div style='text-align:center;margin:50px 0'>Sorry, reporting is only available with php >=5.3</div>";
 		return;
 	}
 
@@ -1007,6 +1029,41 @@ function wppizza_do_dashboard_widget() {
 }
 /*********************************************************
 *
+*		[cron events]
+*
+*********************************************************/
+function wppizza_cron_setup_schedule($cronOptions) {
+	/**clear all other old schedules**/
+	wp_clear_scheduled_hook( 'wppizza_cron');
+	/*setup new**/
+	if($cronOptions['schedule']!=''){
+		if ( ! wp_next_scheduled( 'wppizza_cron' ) ) {
+			wp_schedule_event( time(), $cronOptions['schedule'], 'wppizza_cron');
+		}
+	}
+}
+
+function wppizza_cron_do() {
+	global $wpdb;
+	/*get options**/
+	$cronOptions=$this->pluginOptions['cron'];
+	/*days to delete**/
+	$days=$cronOptions['days_delete'];
+
+	/**do or dont delete all non completed orders**/
+	$pStatusQuery=" IN ('INITIALIZED','CANCELLED')";
+	if(!empty($cronOptions['failed_delete'])){
+		$pStatusQuery=" NOT IN ('COMPLETED','PENDING','REFUNDED','CAPTURED','COD','AUTHORIZED')";
+	}
+	$sql="DELETE FROM ".$wpdb->prefix . $this->pluginOrderTable." WHERE order_date < TIMESTAMPADD(DAY,-".$days.",NOW()) AND payment_status ".$pStatusQuery."";
+	$res=$wpdb->query( $wpdb->prepare($sql));
+
+	/**add to log**/
+	error_log("WPPIZZA CRON RUN");
+}
+
+/*********************************************************
+*
 *		[array of wp capabilities]
 *
 *********************************************************/
@@ -1064,9 +1121,19 @@ function wppizza_admin_option_page_capability($capability) {
 /*********************************************************
 *
 *	[admin output print functions -
-*	to consitantly add admin output sections,
+*	to consistantly add admin output sections,
 *	whether or not added via ajax]
 *********************************************************/
+/*********************************************************
+		[system info]
+*********************************************************/
+private function wppizza_system_info_include(){
+	ob_start();
+	include(WPPIZZA_PATH.'inc/admin.system-info.php');
+	$sysinfo = ob_get_clean();
+	return $sysinfo;
+}
+
 /*********************************************************
 		[opening times]
 *********************************************************/
@@ -1624,6 +1691,12 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 			$options = $this->pluginOptions;
 
 			$cart=wppizza_order_summary($_SESSION[$this->pluginSession],$options,$type);
+
+//print"==============================";
+//print_r($cart);
+//print"==============================";
+
+
 			$cart = apply_filters('wppizza_filter_order_summary', $cart);
 			/**check if tax was included in prices**/
 			$taxIncluded=!empty($options['order']['item_tax_included']) ? true:false;
@@ -2561,8 +2634,6 @@ public function wppizza_require_common_input_validation_functions(){
 *	[filter: order details returned from db]
 *
 *********************************************************************************/
-/*seems to run 2x ?! need to find out why that is reasonably soon*/
-
 	function wppizza_filter_order_db_return($oDetails){
 		$orderDetails=$oDetails;
 		//$orderDetails['items']=array();
@@ -3098,7 +3169,7 @@ function wppizza_cat_parents($options, $blogid, $id, $separator =' &raquo; ', $p
 					/**filter as required**/
 					$order['transaction_id'] = apply_filters('wppizza_filter_transaction_id', $order['transaction_id'], $res->id );
 					$order['transaction_date_time']="".date_i18n(get_option('date_format'),$thisOrderDetails['time'])." ".date_i18n(get_option('time_format'),$thisOrderDetails['time'])."";
-					
+
 					/*useful in multisite perhaps to identify which site the order was made on**/
 					$order['site_title']='';
 					if(isset($res->blogname) && isset($atts['sitetitle'])){
@@ -3130,6 +3201,8 @@ function wppizza_cat_parents($options, $blogid, $id, $separator =' &raquo; ', $p
 
 					$order['currencyiso']=$thisOrderDetails['currencyiso'];
 
+					/***allow some filtering of order and summary***/
+					$order = apply_filters('wppizza_filter_order_history', $order, $thisOrderDetails);
 
 					/***********************************************
 						[order items]
@@ -3175,6 +3248,9 @@ function wppizza_cat_parents($options, $blogid, $id, $separator =' &raquo; ', $p
 					$orders[$res->id]['summary']=$summary;
 					$orders[$res->id]['options']=$options;
 					$orders[$res->id]['blogid']=$blogid;
+
+					/***allow some filtering of order and summary***/
+					$summary = apply_filters('wppizza_filter_summary_history', $summary, $thisOrderDetails);
 				}
 		}}
 
