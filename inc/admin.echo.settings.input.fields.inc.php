@@ -746,11 +746,11 @@ $options = $this->pluginOptions;
 					$localizeOptions[$k]['lbl']=$options[$field][$k]['lbl'];
 				}
 
-				$textArea=array('thank_you_p');/*tinymce textareas*/
+				$textArea=array('thank_you_p','order_ini_additional_info');/*tinymce textareas*/
 				echo"<div id='wppizza_".$field."'>";
 					echo"<div id='wppizza_".$field."_options'>";
 					asort($localizeOptions);
-					$lngOddEvenArray=__('0,1,6,13,14,17,40,48', $this->pluginLocale);
+					$lngOddEvenArray=__('0,1,6,13,14,17,41,49', $this->pluginLocale);
 					$lngOddEvan=explode(",",$lngOddEvenArray);
 					$bgStyle=$lngOddEvan;
 					$i=0;
@@ -759,11 +759,12 @@ $options = $this->pluginOptions;
 						if(in_array($k,$textArea)){
 							$editorId="".strtolower($this->pluginSlug."_".$field."_".$k)."";/* WP 3.9 doesnt like brackets in id's*/
 							$editorName="".$this->pluginSlug."[".$field."][".$k."]";
-							echo"<br />".$v['descr']."";
-							echo"<div style='width:500px;'>";
+							echo"<div class='wppizza_localization_textarea_wrap'>";
+							echo"<span>".$v['descr']."</span>";
+							echo"<div class='wppizza_localization_textarea'>";
 							wp_editor( $v['lbl'], $editorId, array('teeny'=>1,'wpautop'=>false,'textarea_name'=>$editorName) );
-							echo"<br /></div>";
-							echo"<br />";
+							echo"</div>";
+							echo"</div><br />";
 						//echo "<textarea name='".$this->pluginSlug."[".$field."][".$k."]' style='width:185px;height:150px'>".$v['lbl']."</textarea>";
 						}else{
 						echo "<input name='".$this->pluginSlug."[".$field."][".$k."]' size='30' type='text' value='".$v['lbl']."' />";

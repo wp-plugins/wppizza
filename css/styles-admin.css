@@ -101,7 +101,14 @@
 /*******************
 	[when using textarea in localization fields]
 *********************/
-.wppizza_localization_textarea{width:250px}
+.wppizza_localization_textarea_wrap{width:500px;display:inline-block;border:1px solid #eaeaea;background:#eaeaea;padding:3px;margin:5px 3px}
+.wppizza_localization_textarea_wrap>span{padding:5px 2px;}
+.wppizza_localization_textarea_wrap .wp-media-buttons{position:relative;top:4px}
+
+
+.wppizza_localization_textarea .mce-container-body{padding-top:0}
+.wppizza_localization_textarea .wp-editor-tools:after{clear:none}
+.wppizza_localization_textarea iframe,.wppizza_localization_textarea textarea{height:200px !important;}
 #wppizza_localization_options>div{border:1px solid #AAAAAA;margin-bottom:5px}
 #wppizza_localization_options>div:nth-child(even){background:#FEFEFE;}
 #wppizza_localization_options>div:nth-child(odd){background:#F9F9F9;}

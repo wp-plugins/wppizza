@@ -620,7 +620,7 @@
 				'required_field_decimal'=>array(
 					'descr'=>__('Order Page: message when field should be a decimal number', $this->pluginLocale),
 					'lbl'=>__('decimal numbers only please', $this->pluginLocale)
-				),
+				),					
 				'thank_you'=>array(
 					'descr'=>__('Order Page: label of thank you page after order has been sent', $this->pluginLocale),
 					'lbl'=>__('thank you', $this->pluginLocale)
@@ -633,6 +633,10 @@
 					'descr'=>__('Order Page: text on "thank you" page if there was an *error* sending order emails ', $this->pluginLocale),
 					'lbl'=>__('Apologies. There was an error receiving your order. Please try again.', $this->pluginLocale)
 				),
+				'order_ini_additional_info'=>array(
+					'descr'=>__('Order Page: text optional - additional info on order page [above all other details. only displays before submitting]', $this->pluginLocale),
+					'lbl'=>''
+				),					
 				'update_profile'=>array(
 					'descr'=>__('Order Page: label next to checkbox text to allow user to update profile', $this->pluginLocale),
 					'lbl'=>__('update my user data with the details above', $this->pluginLocale)

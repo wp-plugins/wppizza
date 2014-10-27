@@ -58,6 +58,10 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 			***************/
 			/*include template**/
 			add_filter('template_include', array( $this,'wppizza_include_template'), 1 );
+			
+			/******add js functions to run after cart refresh (if using shortcode type=totals**********************************/
+			add_filter('wppizza_filter_js_cart_refresh_functions', array( $this, 'wppizza_filter_totals_js_cart_refresh_functions'),10,1);			
+			
 
 			/**set possibly missing vars if using templates **/
 			add_filter('wppizza_loop_top', array( $this,'wppizza_loop_include_vars'), 1 );
@@ -72,12 +76,16 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 			/***dont put WPPizza Categories intitle tag */
 			add_filter( 'wp_title', array( $this, 'wppizza_filter_title_tag'),20,3);
 
+
 			/***order form, login, logout, register, guest ****/
 			add_action('wppizza_order_form_before', array( $this, 'wppizza_do_login_form'));/**login/logout**/
 			add_filter('wp_authenticate', array( $this, 'wppizza_authenticate'),1,2);/*authenticate and redirect**/
 			add_filter('login_redirect', array( $this, 'wppizza_login_redirect'),10,3);/**successful login redirect**/
 			add_action('wppizza_gateway_choice_before', array( $this, 'wppizza_create_user_option'));/**continue and register or as guest**/
-
+			
+			/**add additional text to initial order form display (if not empty)**/
+			add_action('wppizza_order_form_inside_top', array( $this, 'wppizza_do_additional_info_order_form'));/**add info**/			
+			
 			/***reset loop query***/
 			add_action('wppizza_loop_template_end', array( $this, 'wppizza_reset_loop_query'));/**needed by some themes **/
 
@@ -233,6 +241,15 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 	************************************************************************/
 	function wppizza_order_form_item_quantity_update_button($item){
 		print"<div class='wppizza-update-quantity'><input type='button' class='submit wppizza-update-order' value='".$this->pluginOptions['localization']['update_order']['lbl']."' /></div>";
+	}
+	
+	/************************************************************************
+		[output some additional info before order form details before submitting]
+	************************************************************************/	
+	function wppizza_do_additional_info_order_form(){
+		if($this->pluginOptions['localization']['order_ini_additional_info']['lbl']!=''){
+			print"".$this->pluginOptions['localization']['order_ini_additional_info']['lbl']."";
+		}
 	}
 	/************************************************************************
 		[output login form or logout link on order page]
@@ -1692,11 +1709,6 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 
 			$cart=wppizza_order_summary($_SESSION[$this->pluginSession],$options,$type);
 
-//print"==============================";
-//print_r($cart);
-//print"==============================";
-
-
 			$cart = apply_filters('wppizza_filter_order_summary', $cart);
 			/**check if tax was included in prices**/
 			$taxIncluded=!empty($options['order']['item_tax_included']) ? true:false;
@@ -1850,6 +1862,17 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 			return;
 		}
 }
+
+	/*******************************************************
+     *
+     *	[add a js function when using shortcode to display totals]
+     *
+     ******************************************************/
+	function wppizza_filter_totals_js_cart_refresh_functions($array){
+		$array[]='wppizzaShortcodeTotals';
+		return $array;
+	}
+
 function wppizza_additives_remap($meta){
 	$convAdditives=array();
 	if(isset($meta['additives']) && is_array($meta['additives'])){
@@ -1900,8 +1923,8 @@ public function wppizza_require_common_input_validation_functions(){
 	******************************************************/
 	public function wppizza_register_custom_posttypes(){
 		$labels = array(
-			'name'               => __( 'Menu Items', $this->pluginLocale),
-			'singular_name'      => __( 'WPPizza Menu Item', $this->pluginLocale ),
+			'name'               => WPPIZZA_NAME.' '.__( 'Menu Items', $this->pluginLocale),
+			'singular_name'      => WPPIZZA_NAME.' '.__( 'Menu Item', $this->pluginLocale),
 			'add_new'            => __( 'Add New',  $this->pluginLocale ),
 			'add_new_item'       => __( 'Add New Menu Item',$this->pluginLocale ),
 			'edit'				 => __( 'Edit', $this->pluginLocale ),
@@ -1964,7 +1987,7 @@ public function wppizza_require_common_input_validation_functions(){
 
 		  // Add new taxonomy, make it hierarchical (like categories)
 		  $labels = array(
-		    'name' => _x( 'WPPizza Categories', 'taxonomy general name' ),
+		    'name' => WPPIZZA_NAME. ' ' ._x( 'Categories', 'taxonomy general name' ),
 		    'singular_name' => _x( 'Category', 'taxonomy singular name' ),
 		    'search_items' =>  __( 'Search Categories' ),
 		    'all_items' => __( 'All Categories' ),

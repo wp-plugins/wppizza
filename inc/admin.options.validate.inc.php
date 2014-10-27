@@ -307,7 +307,7 @@
 		/**validate localization ***/
 		if(isset($_POST[''.$this->pluginSlug.'_localization'])){
 			if(isset($input['localization'])){
-			$allowHtml=array('thank_you_p','jquery_fb_add_to_cart_info','register_option_create_account_info','register_option_create_account_error');/*array of items to allow html (such as tinymce textareas) */
+			$allowHtml=array('thank_you_p','order_ini_additional_info','jquery_fb_add_to_cart_info','register_option_create_account_info','register_option_create_account_error');/*array of items to allow html (such as tinymce textareas) */
 			foreach($input['localization'] as $a=>$b){
 				/*add new value , but keep desciption (as its not editable on frontend)*/
 				if(in_array($a,$allowHtml)){$html=1;}else{$html=false;}

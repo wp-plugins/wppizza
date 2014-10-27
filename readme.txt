@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.3+, WP 3.3+ 
 Tested up to: 4.0
-Stable tag: 2.11.3
+Stable tag: 2.11.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -142,6 +142,17 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 
 == Changelog ==
+
+2.11.4    
+* updated language files  
+* replaced erroneously hardcoded WPPizza with WPPIZZA_NAME constant in a couple of places  
+* added: optional text (set in localization) can be displayed on initial order page (before submitting) prior to other order details  
+* some admin css tweaks  
+* added shortcode to just display totals (see faq->shortcodes)  
+
+27th October 2014
+
+
 2.11.3    
 * added paymentstatus_userid(payment_status,wp_user_id) index on orders table  
 * added some more action/filter hooks to order, confirmation, history , email , opening times and cart templates  
@@ -518,6 +529,16 @@ in case where you cannot or do not want to use a widget, here are the correspond
 
 	example: 		[wppizza type='search'  include='wppizza,post,page' loggedinonly='1']
 
+
+- **display total value only**
+
+	attributes:  
+	- type='totals' 		(required [str])  
+ 	- value='items' 		(optional[str]: if set to 'items', only the total value of items will be displayed without delivery costs, discounts etc)  
+	
+	example: 		[wppizza type='totals' value='items']  
+	
+	will display a small div with totals only  
 	
 
 = Shortcodes do not work in widgets ? =  

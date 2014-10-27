@@ -250,6 +250,23 @@
 		
 		return trim($str);
 	}
+	/**show totals**/
+	function wppizza_frontendTotals($options,$atts){
+		$itemsClass='';
+		if(isset($atts['value']) && $atts['value']=='items'){
+		$itemsClass=' wppizza-total-items';	
+		}
+		
+		
+		$summary['currency_left']='<span class="wppizza-totals-currency"></span>';
+		$summary['currency_right']='';
+		if($options['layout']['currency_symbol_position']=='right'){/*right aligned*/
+			$summary['currency_left']='';
+			$summary['currency_right']='<span class="wppizza-totals-currency"></span>';
+		}
+		$str='<div class="wppizza-totals">'.$summary['currency_left'].'<span class="wppizza-total'.$itemsClass.'"></span>'.$summary['currency_right'].'</div>';
+		return $str;
+	}
 	/**format time output**/
 	function wpizza_format_time($time,$timeFormat){
 		if(!isset($timeFormat) || !is_array($timeFormat)){

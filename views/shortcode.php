@@ -132,6 +132,18 @@ if($type=='openingtimes'){
 	$markup = wppizza_frontendOpeningTimes($options);
 }
 /**********************************************
+	[totals]
+	possible attributes:
+	type='totals' (required [str])
+	value='items' (optional) - if used , only displays value of items as ooposed to totals including delivery etc 
+	example: 		[wppizza type='totals']
+	returns div that with current cart totals (loaded via js)
+**********************************************/
+if($type=='totals'){
+	$options = $this->pluginOptions;
+	$markup = wppizza_frontendTotals($options,$atts);
+}
+/**********************************************
 	[searchbox]
 		possible attributes:
 		type='search' 		(required [str])

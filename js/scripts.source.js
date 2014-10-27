@@ -1,4 +1,5 @@
 var wppizzaClickEvent='click';
+var wppizzaShortcodeTotals = function(){};
 
 jQuery(document).ready(function($){
 
@@ -527,8 +528,8 @@ jQuery(document).ready(function($){
 	      			number: true
 	    		}
 	  		},
-			submitHandler: function(form) {			
-				$('.wppizza-ordernow').attr('disabled', 'true');//stop double clicks 
+			submitHandler: function(form) {
+				$('.wppizza-ordernow').attr('disabled', 'true');//stop double clicks
 				var hasClassAjax=false;
 				var hasClassCustom=false;
 				if($("input[name='wppizza-gateway']").length>0){
@@ -681,4 +682,32 @@ jQuery(document).ready(function($){
 		/*if no cache, just exec sticky cart function*/
 		wppizzaCartStickyLoad();
 	}
+	/***********************************************
+	*
+	*	[using totals shortcode,load via js]
+	*
+	***********************************************/
+	wppizzaShortcodeTotals = function(){
+		if ($(".wppizza-totals").length > 0){
+			jQuery.post(wppizza.ajaxurl , {action :'wppizza_json',vars:{'type':'gettotals'}}, function(res) {
+				var curr=$(".wppizza-totals-currency");
+				var total=$(".wppizza-total");
+
+				/**no items in cart**/
+				if(res.items.length<=0){
+					curr.html(res.currency);
+					total.html(res.order_value.total_price_items.val);
+				}else{
+					curr.html(res.currency);
+					if ($(".wppizza-total-items").length > 0){
+						total.html(res.order_value.total_price_items.val);
+					}else{
+					total.html(res.order_value.total.val);
+					}
+				}
+			},'json').error(function(jqXHR, textStatus, errorThrown) {$('#wppizza-send-order #wppizza-loading').remove();alert("error : " + errorThrown);console.log(jqXHR.responseText);});
+		}
+	}
+	wppizzaShortcodeTotals();
+
 });
