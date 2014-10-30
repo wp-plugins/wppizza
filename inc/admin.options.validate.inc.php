@@ -6,16 +6,16 @@
 		$options['plugin_data']['version'] = $this->pluginVersion;
 		$options['plugin_data']['nag_notice'] = isset($input['plugin_data']['nag_notice']) ? $input['plugin_data']['nag_notice'] : $options['plugin_data']['nag_notice'];
 		$options['plugin_data']['empty_category_and_items'] = false;/*we dont really want to save these settings, just execute when true*/
-		$options['plugin_data']['db_order_status_options'] = !empty($input['plugin_data']['db_order_status_options']) ? $input['plugin_data']['db_order_status_options'] : wppizza_order_status_default();
+		$options['plugin_data']['db_order_status_options'] = !empty($input['plugin_data']['db_order_status_options']) ? $input['plugin_data']['db_order_status_options'] : wppizza_order_status_default('keys');
 
 		/**schedule cron**/
 		if(isset($input['cron'])){
 			$options['cron']['days_delete']= !empty($input['cron']['days_delete']) ? max(1,$input['cron']['days_delete']) : 7;
 			$options['cron']['failed_delete']= !empty($input['cron']['failed_delete']) ? true : false;
-			
+
 			$cronSchedule='';
 			if(isset($input['cron']['schedule']) && in_array($input['cron']['schedule'],array('hourly','daily')) ){$cronSchedule=$input['cron']['schedule'];}
-			
+
 			$options['cron']['schedule']= $cronSchedule;
 			/*schedule or remove cron **/
 			$this->wppizza_cron_setup_schedule($options['cron']);
@@ -214,6 +214,10 @@
 			}
 
 			$options['order']['delivery_calculation_exclude_item'] = !empty($input['order']['delivery_calculation_exclude_item']) ? $input['order']['delivery_calculation_exclude_item'] : array();
+			$options['order']['delivery_calculation_exclude_cat'] = !empty($input['order']['delivery_calculation_exclude_cat']) ? array_combine($input['order']['delivery_calculation_exclude_cat'],$input['order']['delivery_calculation_exclude_cat']) : array();/*makes keys == values*/
+			$options['order']['discount_calculation_exclude_item'] = !empty($input['order']['discount_calculation_exclude_item']) ? array_combine($input['order']['discount_calculation_exclude_item'],$input['order']['discount_calculation_exclude_item']) : array();/*makes keys == values*/
+			$options['order']['discount_calculation_exclude_cat'] = !empty($input['order']['discount_calculation_exclude_cat']) ? array_combine($input['order']['discount_calculation_exclude_cat'],$input['order']['discount_calculation_exclude_cat']) : array();/*makes keys == values*/
+
 			$options['order']['item_tax']=wppizza_validate_float_pc($input['order']['item_tax'],5);//5 decimals should really be enough i would have thought
 			$options['order']['item_tax_alt']=wppizza_validate_float_pc($input['order']['item_tax_alt'],5);//5 decimals should really be enough i would have thought
 			$options['order']['taxes_included'] = !empty($input['order']['taxes_included']) ? true : false;
@@ -354,7 +358,7 @@
 			foreach($input['gateways']['gateway_order'] as $gw=>$sort){
 				$options['gateways']['gateway_selected'][$gw]=!empty($input['gateways']['gateway_selected'][$gw])? true : false;
 				if(!empty($input['gateways']['gateway_selected'][$gw])){
-				$gwEnabledCount++;	
+				$gwEnabledCount++;
 				}
 			}
 			$options['gateways']['gateway_enabled_count']=$gwEnabledCount;

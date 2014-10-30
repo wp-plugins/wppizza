@@ -37,14 +37,47 @@
 	}
 
 	/**default order status*/
-	function wppizza_order_status_default(){
-		$orderStatus=array('NEW','ACKNOWLEDGED','ON_HOLD','PROCESSED','DELIVERED','REJECTED','REFUNDED','OTHER');
+	function wppizza_order_status_default($kv=false){
+		$orderStatus['NEW']			=__('NEW', WPPIZZA_LOCALE);
+		$orderStatus['ACKNOWLEDGED']=__('ACKNOWLEDGED', WPPIZZA_LOCALE);
+		$orderStatus['ON_HOLD']		=__('ON HOLD', WPPIZZA_LOCALE);
+		$orderStatus['PROCESSED']	=__('PROCESSED', WPPIZZA_LOCALE);
+		$orderStatus['DELIVERED']	=__('DELIVERED', WPPIZZA_LOCALE);
+		$orderStatus['REJECTED']	=__('REJECTED', WPPIZZA_LOCALE);
+		$orderStatus['REFUNDED']	=__('REFUNDED', WPPIZZA_LOCALE);
+		$orderStatus['OTHER']		=__('OTHER', WPPIZZA_LOCALE);
+
+
+		/**allow filtering**/
+		$orderStatus= apply_filters('wppizza_filter_order_status_defaults', $orderStatus);
+
+
+		/*only get keys**/
+		if($kv && $kv=='keys'){
+			$osKeys=array();
+			foreach($orderStatus as $oKey=>$oVal){
+				$osKeys[]=$oKey;
+			}
+			$orderStatus=$osKeys;
+		}
+		/*only get values**/
+		if($kv && $kv=='vals'){
+			$osKeys=array();
+			foreach($orderStatus as $oKey=>$oVal){
+				$osKeys[]=$oVal;
+			}
+			$orderStatus=$osKeys;
+		}
+
 		return $orderStatus;
 	}
 	/**allow filtering of default**/
 	function wppizza_custom_order_status(){
-		$orderStatus=wppizza_order_status_default();
+		$orderStatus=wppizza_order_status_default('keys');
+
+		/**allow filtering**/
 		$orderStatus= apply_filters('wppizza_filter_order_status', $orderStatus);
+
 		$setOrderStatus=array();
 		foreach($orderStatus as $oStatus){
 		$setOrderStatus[]=wppizza_validate_alpha_only(str_replace(" ","_",strtoupper($oStatus)));
@@ -191,8 +224,8 @@
 		that provided the original if i find it again, i insert the address here...
 	* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
 	function wppizza_frontendOpeningTimes($options){
-		$weekDayStart=get_option('start_of_week',7); 
-		
+		$weekDayStart=get_option('start_of_week',7);
+
 		$str='';
 		/**group identical opening times**/
 		foreach($options['opening_times_standard'] as $k=>$v){
@@ -219,7 +252,7 @@
 			$groupClasses='';
 			$groupDays='';
 			foreach($nonConsec as $b=>$c){
-				$groupClasses.=' wppizza-optm-'.$c.'';	
+				$groupClasses.=' wppizza-optm-'.$c.'';
 				$consecDays=explode("-",$c);
 				if($b>0){$groupDays.=', ';}
 				if(count($consecDays)>1){
@@ -229,10 +262,10 @@
 						if($cc>0){
 							$groupDays.=$seperator;
 						}
-						$groupDays.=wpizza_format_weekday($cd,'D');	
+						$groupDays.=wpizza_format_weekday($cd,'D');
 					}
 				}else{
-						$groupDays.=wpizza_format_weekday($consecDays[0],'D');	
+						$groupDays.=wpizza_format_weekday($consecDays[0],'D');
 				}
 			}
 			$str.='<span class="'.trim($groupClasses).'">';
@@ -243,21 +276,21 @@
 			}else{
 				$str.=' <span>'.wpizza_format_time($open[0],$options['opening_times_format']).'-'.wpizza_format_time($open[1],$options['opening_times_format']).'</span>';//loose leading zeros
 			}
-			$str.='</span> ';		
+			$str.='</span> ';
 		}
 		/**filter output**/
 		$str=apply_filters('wppizza_after_opening_times',$str);
-		
+
 		return trim($str);
 	}
 	/**show totals**/
 	function wppizza_frontendTotals($options,$atts){
 		$itemsClass='';
 		if(isset($atts['value']) && $atts['value']=='items'){
-		$itemsClass=' wppizza-total-items';	
+		$itemsClass=' wppizza-total-items';
 		}
-		
-		
+
+
 		$summary['currency_left']='<span class="wppizza-totals-currency"></span>';
 		$summary['currency_right']='';
 		if($options['layout']['currency_symbol_position']=='right'){/*right aligned*/
@@ -433,15 +466,15 @@ function wpizza_get_opening_times($starttime,$endtime,$d,$m,$Y,$day='today'){
   if($starttime==$endtime) {
 	$openingtime=false;
  }
- 
+
 /*
-changed in 2.10.4.5 for an easier way to check if opening/closing times cross midnight. 
+changed in 2.10.4.5 for an easier way to check if opening/closing times cross midnight.
 uses gmmktime to make it dst agnostic (as we are only dealing with hours and minutes)
 */
 $calcStart=gmmktime((int)$start[0], (int)$start[1], 0 , 1 ,1 ,2000);
 $calcEnd=gmmktime((int)$end[0], (int)$end[1], 0 , 1 ,1 ,2000);
 if($calcEnd<$calcStart) {
- 	$openingTimesCrossMidnight=1; 	
+ 	$openingTimesCrossMidnight=1;
 }
 
  if(isset($openingTimesCrossMidnight)){
@@ -592,14 +625,14 @@ function wppizza_order_summary($session,$options,$module=null,$ajax=null){
 	/**lets group items by id and sizes***/
 	foreach($session['items'] as $groupid=>$groupitems){
 		foreach($groupitems as $v){
-			
+
 			$excludeFromCount=false;
 			/**allow items to be excluded from count when calculating delivery prices per item**/
 			$excludeFromCount = apply_filters('wppizza_filter_order_summary_exclude_item_from_count', $excludeFromCount, $v);
 			if(!$excludeFromCount){
 				$cartItemsCount++;//advance counter if not excluded (in case we want to not charge per item on this )
 			}
-			
+
 			/**really only for legacy reasons, future versions will only have extend key**/
 			if(!isset($v['additionalinfo'])){$v['additionalinfo']=array();}
 			if(!isset($v['extend'])){$v['extend']=array();}
@@ -674,6 +707,7 @@ function wppizza_order_summary($session,$options,$module=null,$ajax=null){
 		if($options['order']['discount_selected']=='none'){
 				$discountApply=0;
 		}
+
 		/** percentage discount**/
 		if($options['order']['discount_selected']=='percentage'){
 			/**sort highest to lowest and check if it aplies, if it does, apply and stop loop (only want to appply one!**/
@@ -681,8 +715,8 @@ function wppizza_order_summary($session,$options,$module=null,$ajax=null){
 			/**get most relevant discount to apply to price***/
 			rsort($options['order']['discounts']['percentage']['discounts']);
 			foreach($options['order']['discounts']['percentage']['discounts'] as $k=>$v){
-				if($session['total_price_items']>=$v['min_total']){
-					$discountApply=round($session['total_price_items']/100*$v['discount'],2);
+				if($session['total_price_calc_discount']>=$v['min_total']){
+					$discountApply=round($session['total_price_calc_discount']/100*$v['discount'],2);
 				break;
 				}
 			}
@@ -702,7 +736,7 @@ function wppizza_order_summary($session,$options,$module=null,$ajax=null){
 			/**get most relevant discount to apply to price***/
 			rsort($options['order']['discounts']['standard']['discounts']);
 			foreach($options['order']['discounts']['standard']['discounts'] as $k=>$v){
-				if($session['total_price_items']>=$v['min_total']){
+				if($session['total_price_calc_discount']>=$v['min_total']){
 					$discountApply=$v['discount'];
 				break;
 				}
@@ -717,12 +751,12 @@ function wppizza_order_summary($session,$options,$module=null,$ajax=null){
 		}
 		/***self pickup discount added to other discounts (if any)**/
 		if($options['order']['order_pickup_discount']>0 && isset($session['selfPickup']) ){
-			$discountApply=$discountApply+($session['total_price_items']/100*$options['order']['order_pickup_discount']);
+			$discountApply=$discountApply+($session['total_price_calc_discount']/100*$options['order']['order_pickup_discount']);
 		}
 
 		/**allow filtering of discounts**/
 		$discountApply = apply_filters('wppizza_filter_discount', $discountApply, $session, $module);
-		
+
 
 		if(isset($discountApply) && $discountApply>0){
 			$discountLabel=$options['localization']['discount']['lbl'];
@@ -856,6 +890,9 @@ function wppizza_order_summary($session,$options,$module=null,$ajax=null){
 					$summary['selfPickupId']='wppizza-order-pickup-sel';
 				}
 			}
+
+			/**allow filtering of delivery charges**/
+			$deliveryCharges = apply_filters('wppizza_filter_delivery_charges', $deliveryCharges, $session, $options, $module);
 
 			/*******************************************
 			*	set min order values (delivery/pickup)

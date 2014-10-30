@@ -192,8 +192,10 @@ return;
 				</span>
 			</span>
 			<?php } ?>
-
-
+		<?php
+			/**added 2.11.4*/
+			do_action('wppizza_cart_before_totals',$cart);
+		?>
 			<span class="wppizza-cart-total">
 				<span class="wppizza-cart-total-label">
 					<?php if($cart['nocheckout']=='' && count($cart['items'])>0){?>
@@ -206,6 +208,10 @@ return;
 					<?php } ?>
 				</span>
 			</span>
+		<?php
+			/**added 2.11.4*/
+			do_action('wppizza_cart_after_totals',$cart);
+		?>			
 			<?php if($cart['nocheckout']=='' && isset($cart['self_pickup_enabled']) && $cart['selfPickup']==1	){ /*SELFPICKUP ENABLED AND SELECTED : ADDED/CHANGED IN V1.4.1**/ ?>
 			<span id="wppizza-cart-self-pickup">
 				<?php echo ($cart['order_self_pickup_cart']) ?>

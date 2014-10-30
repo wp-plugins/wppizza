@@ -317,7 +317,7 @@
 				'days_delete'=>7,
 				'failed_delete'=>false,
 				'schedule'=>false
-			),				
+			),
 			'layout'=>array(
 				'category_sort' => $category_sort,
 				'category_sort_hierarchy' => $this->wppizza_complete_sorted_hierarchy($category_sort),
@@ -347,7 +347,7 @@
 				'items_group_sort_print_by_category' => false,
 				'items_category_hierarchy' => 'full',
 				'items_category_hierarchy_cart' => 'parent',
-				'items_category_separator' => ' &raquo; ',					
+				'items_category_separator' => ' &raquo; ',
 				'sticky_cart_animation' =>450,
 				'sticky_cart_animation_style' =>'',
 				'sticky_cart_margin_top' =>20,
@@ -399,6 +399,7 @@
 					'per_item'=>array('delivery_charge_per_item'=>'0','delivery_per_item_free'=>'50')
 				),
 				'delivery_calculation_exclude_item'=>array(),
+				'delivery_calculation_exclude_cat'=>array(),
 				'discounts'=>array(
 					'none'=>array(),
 					'percentage'=>array(
@@ -414,6 +415,8 @@
 						)
 					)
 				),
+				'discount_calculation_exclude_item'=>array(),
+				'discount_calculation_exclude_cat'=>array(),
 				'item_tax'=>0,
 				'item_tax_alt'=>0,
 				'taxes_included'=>false,
@@ -448,7 +451,7 @@
 				1=>array('sort'=>1,'key'=>'wpppizza_confirm_2','lbl'=>__('Distance Selling Regulations ', $this->pluginLocale),'value'=>array(),'type'=>'checkbox','enabled'=>false,'required'=>false),
 				2=>array('sort'=>2,'key'=>'wpppizza_confirm_3','lbl'=>__('Other', $this->pluginLocale),'value'=>array(),'type'=>'checkbox','enabled'=>false,'required'=>false),
 				3=>array('sort'=>3,'key'=>'wpppizza_confirm_4','lbl'=>__('Other', $this->pluginLocale),'value'=>array(),'type'=>'checkbox','enabled'=>false,'required'=>false)
-			),		
+			),
 			'localization_confirmation_form'=>array(/**make sure keys are NOT used in "normal" localization vars too, as we are merging those two arrays to use in confirmation page */
 				'change_user_details'=>array(
 					'descr'=>__('Confirmation Form - [labels]: link text to use for link to return to previous page for changing personal details', $this->pluginLocale),
@@ -457,27 +460,27 @@
 				'change_order_details'=>array(
 					'descr'=>__('Confirmation Form - [labels]: text and associated link to use to direct customer to a page where he/she can amend the order.', $this->pluginLocale),
 					'lbl'=>__('amend order', $this->pluginLocale)
-				),						
+				),
 				'payment_method'=>array(
 					'descr'=>__('Confirmation Form - [labels]: label for payment method used', $this->pluginLocale),
 					'lbl'=>__('selected payment method :', $this->pluginLocale)
-				),		
+				),
 				'legend_legal'=>array(
 					'descr'=>__('Confirmation Form - [section header]: legal aspects', $this->pluginLocale),
 					'lbl'=>__('legal aspects', $this->pluginLocale)
-				),								
+				),
 				'legend_personal'=>array(
 					'descr'=>__('Confirmation Form - [section header]: personal details', $this->pluginLocale),
 					'lbl'=>__('personal information', $this->pluginLocale)
-				),								
+				),
 				'legend_payment_method'=>array(
 					'descr'=>__('Confirmation Form - [section header]: payment method', $this->pluginLocale),
 					'lbl'=>__('payment method', $this->pluginLocale)
-				),	
+				),
 				'legend_order_details'=>array(
 					'descr'=>__('Confirmation Form - [section header]: order details', $this->pluginLocale),
 					'lbl'=>__('order details', $this->pluginLocale)
-				),	
+				),
 				'confirm_now_button'=>array(
 					'descr'=>__('Confirmation Form - [labels]: label buy now button', $this->pluginLocale),
 					'lbl'=>__('buy now (legally binding)', $this->pluginLocale)
@@ -501,9 +504,9 @@
 				'subtotals_after_additional_info'=>array(
 					'descr'=>__('Confirmation Form - [miscellaneous]: additional/optional info/text to display after (sub)totals', $this->pluginLocale),
 					'lbl'=>''
-				)						
-											
-			),							
+				)
+
+			),
 			'gateways'=>array(
 				'gateway_selected'=>array('COD'=>true),
 				'gateway_select_as_dropdown'=>false,
@@ -576,7 +579,7 @@
 				'history_no_previous_orders'=>array(
 					'descr'=>__('History Page: Text to display when the user has not had any previous orders', $this->pluginLocale),
 					'lbl'=>__('you have no previous orders', $this->pluginLocale)
-				),					
+				),
 				'your_order'=>array(
 					'descr'=>__('Order Page: label above itemised order', $this->pluginLocale),
 					'lbl'=>__('your order', $this->pluginLocale)
@@ -588,7 +591,7 @@
 				'update_order'=>array(
 					'descr'=>__('Order Page: button label for updating order [if enabled]', $this->pluginLocale),
 					'lbl'=>__('update order', $this->pluginLocale)
-				),					
+				),
 				'order_form_legend'=>array(
 					'descr'=>__('Order Page: label above personal info', $this->pluginLocale),
 					'lbl'=>__('please enter the required information below', $this->pluginLocale)
@@ -608,7 +611,7 @@
 				'order_page_handling_oncheckout'=>array(
 					'descr'=>__('Order Page [Handling Charges]: text on order page if any handling charge will be calculated on checkout by a/the gateway itself', $this->pluginLocale),
 					'lbl'=>__('calculated on checkout', $this->pluginLocale)
-				),					
+				),
 				'required_field'=>array(
 					'descr'=>__('Order Page: message when required field is missing', $this->pluginLocale),
 					'lbl'=>__('this is a required field', $this->pluginLocale)
@@ -616,11 +619,11 @@
 				'required_field_email'=>array(
 					'descr'=>__('Order Page: message when email address is invalid', $this->pluginLocale),
 					'lbl'=>__('invalid email address', $this->pluginLocale)
-				),						
+				),
 				'required_field_decimal'=>array(
 					'descr'=>__('Order Page: message when field should be a decimal number', $this->pluginLocale),
 					'lbl'=>__('decimal numbers only please', $this->pluginLocale)
-				),					
+				),
 				'thank_you'=>array(
 					'descr'=>__('Order Page: label of thank you page after order has been sent', $this->pluginLocale),
 					'lbl'=>__('thank you', $this->pluginLocale)
@@ -636,7 +639,7 @@
 				'order_ini_additional_info'=>array(
 					'descr'=>__('Order Page: text optional - additional info on order page [above all other details. only displays before submitting]', $this->pluginLocale),
 					'lbl'=>''
-				),					
+				),
 				'update_profile'=>array(
 					'descr'=>__('Order Page: label next to checkbox text to allow user to update profile', $this->pluginLocale),
 					'lbl'=>__('update my user data with the details above', $this->pluginLocale)
@@ -652,11 +655,11 @@
 				'loginout_have_account'=>array(
 					'descr'=>__('Order Page [login/logout]: text before login link', $this->pluginLocale),
 					'lbl'=>__('already registered ?', $this->pluginLocale)
-				),					
+				),
 				'register_option_label'=>array(
 					'descr'=>__('Order Page [register]: text label register or continue as guest', $this->pluginLocale),
 					'lbl'=>__('continue as :', $this->pluginLocale)
-				),						
+				),
 				'register_option_guest'=>array(
 					'descr'=>__('Order Page [register]: register option -> as guest', $this->pluginLocale),
 					'lbl'=>__('guest', $this->pluginLocale)
@@ -664,7 +667,7 @@
 				'register_option_create_account'=>array(
 					'descr'=>__('Order Page [register]: register option -> create account', $this->pluginLocale),
 					'lbl'=>__('create account', $this->pluginLocale)
-				),										
+				),
 				'register_option_create_account_info'=>array(
 					'descr'=>__('Order Page [register]: additional info when create account option is chosen [html allowed]', $this->pluginLocale),
 					'lbl'=>__('Please ensure your email address is correct. A password will be emailed to you.', $this->pluginLocale)
@@ -672,7 +675,7 @@
 				'register_option_create_account_error'=>array(
 					'descr'=>__('Order Page [register]: error if email was already registered [html allowed]', $this->pluginLocale),
 					'lbl'=>__('This email address has already been registered. Please either <a href="#login">login</a>, use a different email address or continue as guest.', $this->pluginLocale)
-				),	
+				),
 				'order_details'=>array(
 					'descr'=>__('Order Email: label for order details', $this->pluginLocale),
 					'lbl'=>__('order details', $this->pluginLocale)
@@ -728,7 +731,7 @@
 				'taxes_included'=>array(
 					'descr'=>__('Price Labels (Sub)Totals: text before sum of tax applied if prices have been entered *inclusive* of tax (if > 0) [%s%% will be replaced by main taxrate applied - if you are using different taxrates, enter text as appropriate]', $this->pluginLocale),
 					'lbl'=>__('incl. tax at %s%%', $this->pluginLocale)
-				),	
+				),
 				'order_total'=>array(
 					'descr'=>__('Price Labels (Sub)Totals: text before total sum of ORDER', $this->pluginLocale),
 					'lbl'=>__('total', $this->pluginLocale)
@@ -753,7 +756,7 @@
 		plugin added to start off with, after which they can be edited in the acees rights tab
 		(provided the user has access to that tab of course)
 	**********************/
-	if(!isset($options['admin_access_caps'])){	
+	if(!isset($options['admin_access_caps'])){
 		global $wp_roles;
 		$wppizzaCaps=$this->wppizza_set_capabilities();
 
@@ -784,11 +787,11 @@
 			ALL previous caps set]
 		******************************************/
 		$wppizzaCaps=$this->wppizza_set_capabilities();
-		
+
 		$capsAvailable=array();
 		foreach($wppizzaCaps as $caps){
-			$capsAvailable[]=$caps['cap'];	
-		}		
+			$capsAvailable[]=$caps['cap'];
+		}
 		/**make an array with all unique roles**/
 		$previousCaps=array();
 		foreach($options['admin_access_caps'] as $rName=>$rVal){
@@ -798,10 +801,10 @@
 		}
 		/**count number of prev caps**/
 		$prevCapsCount=count($previousCaps);
-		
+
 		/**get newly added caps**/
 		$newCaps=array_diff($capsAvailable,$previousCaps);
-		
+
 		/**if there are new caps add them**/
 		if(is_array($newCaps) && count($newCaps)>0){
 			/*get all roles that had ALL previous caps enabled and add this new one**/
@@ -810,7 +813,7 @@
 				$capsCount=0;
 				foreach($previousCaps as $pCaps){
 					if(isset($rVal['capabilities'][$pCaps])){
-						$capsCount++;	
+						$capsCount++;
 					}
 				}
 				/***role has ALL previous caps, add new ones***/
@@ -818,7 +821,7 @@
 					foreach($newCaps as $nCap){
 						$userRole->add_cap($nCap);
 						/***add to options too**/
-						$options['admin_access_caps'][$rName][]=$nCap;				
+						$options['admin_access_caps'][$rName][]=$nCap;
 					}
 				}
 			}

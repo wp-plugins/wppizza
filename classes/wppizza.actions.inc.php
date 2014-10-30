@@ -2353,9 +2353,12 @@ public function wppizza_require_common_input_validation_functions(){
 					wp_register_style($this->pluginSlug.'-admin-custom', $this->pluginTemplateUri.'/wppizza-admin-custom.css', array(''.$this->pluginSlug.'-admin'), $this->pluginVersion);
 					wp_enqueue_style($this->pluginSlug.'-admin-custom');
 				}
-				/**for timepicker etc*/
+				/**for timepicker, chosen etc*/
 				if(get_current_screen()->post_type==$this->pluginSlug){
 					wp_enqueue_style('jquery-style', '//ajax.googleapis.com/ajax/libs/jqueryui/1.10.1/themes/smoothness/jquery-ui.css');
+					/**chosen**/
+        			wp_register_style($this->pluginSlug.'-chosen', plugins_url( 'css/wppizza-chosen.min.css', $this->pluginPath ), array(), $this->pluginVersion);
+        			wp_enqueue_style($this->pluginSlug.'-chosen');
 				}
  				wp_enqueue_style($this->pluginSlug.'-admin');
 
@@ -2373,8 +2376,11 @@ public function wppizza_require_common_input_validation_functions(){
             		wp_enqueue_script('jquery-ui-datepicker');
             		wp_register_script($this->pluginSlug, plugins_url( 'js/scripts.admin.js', $this->pluginPath ), array('jquery'), $this->pluginVersion ,true);
             		wp_register_script($this->pluginSlug.'-timepick', plugins_url( 'js/jquery.ui.timepicker.js', $this->pluginPath ), array('jquery'), $this->pluginVersion ,true);
+            		wp_register_script($this->pluginSlug.'-chosen', plugins_url( 'js/chosen.jquery.min.js', $this->pluginPath ), array('jquery'), $this->pluginVersion ,true);
+            		
             		wp_enqueue_script($this->pluginSlug);
             		wp_enqueue_script($this->pluginSlug.'-timepick');
+            		wp_enqueue_script($this->pluginSlug.'-chosen');
 				}
 				/**include everywhere (expecially widget pages)*/
 				wp_register_script($this->pluginSlug.'-global', plugins_url( 'js/scripts.admin.global.js', $this->pluginPath ), array('jquery'), $this->pluginVersion ,true);

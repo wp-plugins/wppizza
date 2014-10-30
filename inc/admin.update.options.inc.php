@@ -37,6 +37,15 @@
 	if(!isset($options['order']['delivery_calculation_exclude_item'])){
 		$update_options['order']['delivery_calculation_exclude_item']=$defaultOptions['order']['delivery_calculation_exclude_item'];
 	}
+	if(!isset($options['order']['delivery_calculation_exclude_cat'])){
+		$update_options['order']['delivery_calculation_exclude_cat']=$defaultOptions['order']['delivery_calculation_exclude_cat'];
+	}
+	if(!isset($options['order']['discount_calculation_exclude_item'])){
+		$update_options['order']['discount_calculation_exclude_item']=$defaultOptions['order']['discount_calculation_exclude_item'];
+	}
+	if(!isset($options['order']['discount_calculation_exclude_cat'])){
+		$update_options['order']['discount_calculation_exclude_cat']=$defaultOptions['order']['discount_calculation_exclude_cat'];
+	}
 	/****************************************************************************
 	$update_options now holds the old options plus the added new defaults options
 	*****************************************************************************/
@@ -95,7 +104,7 @@
 			if(!isset($options['order_form'][$k]['prefill'])){
 				$update_options['order_form'][$k]['prefill']=$defaultOptions['order_form'][$k]['prefill'];
 			}
-			/**add required on selfpickup, take default values from 'required' so as to have it initially working on the frontend as it did previously*/			
+			/**add required on selfpickup, take default values from 'required' so as to have it initially working on the frontend as it did previously*/
 			if(!isset($options['order_form'][$k]['required_on_pickup'])){
 				$update_options['order_form'][$k]['required_on_pickup']=$options['order_form'][$k]['required'];
 			}
@@ -106,7 +115,7 @@
 			/**add placeholder option*/
 			if(!isset($options['order_form'][$k]['placeholder'])){
 				$update_options['order_form'][$k]['placeholder']=$defaultOptions['order_form'][$k]['placeholder'];
-			}			
+			}
 		}
 	}
 	if(isset($options['confirmation_form'])){
@@ -124,9 +133,9 @@
 	}
 	if(isset($options['plugin_data']['single_item_permalink_rewrite'])){
 		$update_options['plugin_data']['single_item_permalink_rewrite']=$options['plugin_data']['single_item_permalink_rewrite'];
-	}	
-	
-	
+	}
+
+
 	if(isset($options['gateways']['gateway_selected'])){
 		$update_options['gateways']['gateway_selected']=$options['gateways']['gateway_selected'];
 	}

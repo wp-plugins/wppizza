@@ -178,6 +178,7 @@ $output='';
 
 
 				$customOrderStatus=wppizza_custom_order_status();
+				$customOrderStatusGetTxt=wppizza_order_status_default();
 				foreach ( $allOrders as $orders ){
 					/**add to total ordered amount of shown items**/
 					$customerDet=maybe_unserialize($orders->customer_ini);
@@ -219,7 +220,13 @@ $output='';
 							$orderinfo['status'].="<label>".__('Status', $this->pluginLocale)."";
 							$orderinfo['status'].="<select id='wppizza_order_status-".$orders->id."' name='wppizza_order_status-".$orders->id."' class='wppizza_order_status'>";
 								foreach($customOrderStatus as $s){
-									$orderinfo['status'].="<option value='".$s."' ".selected($orders->order_status,$s,false).">".__($s, $this->pluginLocale)."</option>";
+									if(isset($customOrderStatusGetTxt[$s])){/*get translation if we have any*/
+										$lbl=$customOrderStatusGetTxt[$s];	
+									}else{
+										$lbl=$s;
+									}
+									
+									$orderinfo['status'].="<option value='".$s."' ".selected($orders->order_status,$s,false).">".$lbl."</option>";
 								}
 							$orderinfo['status'].="</select>";
 							$orderinfo['status'].="</label>";

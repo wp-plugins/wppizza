@@ -101,21 +101,21 @@ jQuery(document).ready(function($){
     	e.preventDefault();
     	$(this).datepicker({dateFormat : 'dd M yy'}).datepicker( "show" );
     });
-    
+
     /*******************************
 	*
 	*
 	*	[reports]
 	*
 	*
-	*******************************/    
+	*******************************/
     /*******************************
 	*	[reports - date picker]
 	*******************************/
-	$(document).on('click', '#wppizza_reports_start_date,#wppizza_reports_end_date', function(e){    
+	$(document).on('click', '#wppizza_reports_start_date,#wppizza_reports_end_date', function(e){
     	e.preventDefault();
     	$(this).datepicker({dateFormat : 'yy-mm-dd'}).datepicker( "show" );
-    });    
+    });
 	/******************************
 	*	[reports - default options range select - onchange]
 	******************************/
@@ -128,10 +128,10 @@ jQuery(document).ready(function($){
 			redirUrl+='&report=' + selVal;
 		}
 		window.location.href=redirUrl;
-	});    
+	});
 	/******************************
 	*	[reports - custom range]
-	******************************/    
+	******************************/
 	$(document).on('click', '#wppizza_reports_custom_range', function(e){
 		var theUrl=window.location.href.split('?')[0];
 		var redirUrl=theUrl+'?post_type=wppizza&page=wppizza-reports';
@@ -142,10 +142,10 @@ jQuery(document).ready(function($){
 			redirUrl+='&to=' + endDate;
 		}
 		window.location.href=redirUrl;
-	});       
+	});
 	/******************************
 	*	[reports - export]
-	******************************/    
+	******************************/
 	$(document).on('click', '#wppizza_reports_export', function(e){
 		var theUrl=window.location.href.split('?')[0];
 		var redirUrl=theUrl+'?post_type=wppizza&page=wppizza-reports';
@@ -157,8 +157,8 @@ jQuery(document).ready(function($){
 		}
 			redirUrl+='&export=true';
 		window.location.href=redirUrl;
-	});     
-    
+	});
+
 	/*******************************
 		[opening times - add new]
 	*******************************/
@@ -368,7 +368,7 @@ jQuery(document).ready(function($){
 		jQuery.post(ajaxurl , {action :'wppizza_admin_json',vars:{'field':'get_orders_total'}}, function(response) {
 			$('#wppizza_history_totals').html(response.totals);
 		},'json').error(function(jqXHR, textStatus, errorThrown) {alert("error : " + errorThrown);});
-	});	
+	});
 	/******************************
 	*	[delete orders]
 	******************************/
@@ -409,5 +409,8 @@ jQuery(document).ready(function($){
 	$(document).on('click', '#wppizza-toggle-tgs', function(e){
 		$('#wppizza_order_form tr.ctips,#wppizza_order_form tr.csurcharges').toggle("slow");
 	});
-
+    /*******************************
+	*	[chosen]
+	*******************************/
+	$('.wppizza_delivery_calculation_exclude_item, .wppizza_delivery_calculation_exclude_cat, .wppizza_discount_calculation_exclude_item, .wppizza_discount_calculation_exclude_cat').chosen({inherit_select_classes:true,width:'95%'});
 })

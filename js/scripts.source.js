@@ -529,6 +529,13 @@ jQuery(document).ready(function($){
 	    		}
 	  		},
 			submitHandler: function(form) {
+				/**stop submitting if we are hitting enter after changing quantities and update those instead**/
+				var focussed = $(':focus');
+				if(typeof focussed!=='undefined' && focussed.hasClass('wppizza-item-quantity')){
+					$('.wppizza-update-order').trigger(''+wppizzaClickEvent+'');
+				return false;/*stop executing the rest**/
+				}
+				
 				$('.wppizza-ordernow').attr('disabled', 'true');//stop double clicks
 				var hasClassAjax=false;
 				var hasClassCustom=false;

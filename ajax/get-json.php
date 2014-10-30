@@ -29,10 +29,14 @@ if(isset($_POST['vars']['type']) && (($_POST['vars']['type']=='add' || $_POST['v
 	if(isset($_POST['vars']['catId']) && $_POST['vars']['catId']!=''){
 		$catIdSelected=(int)$_POST['vars']['catId'];
 	}
+	/**check if we want to exclude this item when calculating discounts**/
+	$exclItemFromDiscount=$options['order']['discount_calculation_exclude_item'];
+
 
 	/**initialize price array***/
 	$itemprice=array();
 	$itempricefordelivery=array();/*if we have excluded item to count towards free delivery */
+	$itempricefordiscount=array();/*if we have excluded item to count towards discount */
 	/**********set header********************/
 	header('Content-type: application/json');
 	/**add to cart**/
@@ -51,6 +55,14 @@ if(isset($_POST['vars']['type']) && (($_POST['vars']['type']=='add' || $_POST['v
 		$meta_values = get_post_meta($itemVars[1],$this->pluginSlug,true);
 		$meta_values = apply_filters('wppizza_filter_loop_meta_ajax', $meta_values, $itemVars[1]);
 
+		/**get all category id's item is assigned to**/
+		$terms = get_the_terms( $itemVars[1],WPPIZZA_TAXONOMY );
+		$itemCats=array();
+		if ( $terms && ! is_wp_error( $terms ) ) {
+			foreach($terms as $term){
+				$itemCats[$term->term_id]=$term->term_id;
+			}
+		}
 
 		$itemSizePrice=$meta_values['prices'][$itemVars[3]];
 		/**are we hiding pricetier name if only one available ?**/
@@ -61,7 +73,7 @@ if(isset($_POST['vars']['type']) && (($_POST['vars']['type']=='add' || $_POST['v
 		}
 
 		/*add item to session array. adding lowercase name first to simplify sorting with asort**/
-		$_SESSION[$this->pluginSession]['items'][$groupId][]=array('sortname'=>strtolower($itemName),'size'=>$itemVars[3],'price'=>$itemSizePrice,'sizename'=>$itemSizeName,'printname'=>$itemName,'id'=>$itemVars[1],'catIdSelected'=>$catIdSelected);
+		$_SESSION[$this->pluginSession]['items'][$groupId][]=array('sortname'=>strtolower($itemName),'size'=>$itemVars[3],'price'=>$itemSizePrice,'sizename'=>$itemSizeName,'printname'=>$itemName,'id'=>$itemVars[1],'allCatIds'=>$itemCats,'catIdSelected'=>$catIdSelected);
 	}
 
 	/**increment when using textbox**/
@@ -117,19 +129,51 @@ if(isset($_POST['vars']['type']) && (($_POST['vars']['type']=='add' || $_POST['v
 		}
 	}
 
+
 	/*total price*/
 	foreach($_SESSION[$this->pluginSession]['items'] as $k=>$group){
 		foreach($group as $v){
 			$itemprice[]=$v['price'];
+
+			$calcForDelivery=true;
 			/**exclude items that are set to be excluded from calculating whether or not free delivery applies**/
-			if(!isset($options['order']['delivery_calculation_exclude_item']) || !in_array($group[0]['id'],$options['order']['delivery_calculation_exclude_item'])){
+			if(isset($options['order']['delivery_calculation_exclude_item']) && in_array($group[0]['id'],$options['order']['delivery_calculation_exclude_item'])){
+				$calcForDelivery=false;
+			}
+			/**exclude items that are set to be excluded from calculating whether or not free delivery applies(category)**/
+			if(isset($options['order']['delivery_calculation_exclude_cat'])){
+				$intersect=array_intersect_key($v['allCatIds'],$options['order']['delivery_calculation_exclude_cat']);
+				if(count($intersect)>0){/*menu item is in category that was excluded*/
+					$calcForDelivery=false;
+				}
+			}
+			if($calcForDelivery){
 				$itempricefordelivery[]=$v['price'];
 			}
+
+
+			$calcForDiscount=true;
+			/**exclude items that are set to be excluded from calculating discount (individually)**/
+			if(isset($options['order']['discount_calculation_exclude_item']) && isset($options['order']['discount_calculation_exclude_item'][$group[0]['id']])){
+				$calcForDiscount=false;
+			}
+			/**exclude items that are set to be excluded from calculating discount (category)**/
+			if(isset($options['order']['discount_calculation_exclude_cat'])){
+				$intersect=array_intersect_key($v['allCatIds'],$options['order']['discount_calculation_exclude_cat']);
+				if(count($intersect)>0){/*menu item is in category that was excluded*/
+					$calcForDiscount=false;
+				}
+			}
+			if($calcForDiscount){
+				$itempricefordiscount[]=$v['price'];
+			}
+
 		}
 	}
 
 	$totalitemprice=array_sum($itemprice);
 	$totalitempricefordelivery=array_sum($itempricefordelivery);
+	$totalitempricefordiscount=array_sum($itempricefordiscount);
 
 	/**total tax on all items -> currently not used as we will be calculating tax AFTER any discounts**/
 	$_SESSION[$this->pluginSession]['total_items_tax']=0;
@@ -140,6 +184,7 @@ if(isset($_POST['vars']['type']) && (($_POST['vars']['type']=='add' || $_POST['v
 
 	$_SESSION[$this->pluginSession]['total_price_items']=$totalitemprice;
 	$_SESSION[$this->pluginSession]['total_price_calc_delivery']=$totalitempricefordelivery;
+	$_SESSION[$this->pluginSession]['total_price_calc_discount']=$totalitempricefordiscount;
 
 
 	print"".json_encode(wppizza_order_summary($_SESSION[$this->pluginSession],$options, 'cartajax', true))."";
@@ -461,7 +506,7 @@ if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='sendorder'){
 			if(defined('ICL_LANGUAGE_CODE')){
 			$thisOrderPostVars['wppizza_wpml_lang']=ICL_LANGUAGE_CODE;
 			}
-						
+
 			$gatewayUsed=strtoupper($thisOrderPostVars['wppizza-gateway']);
 			$thisOrderPostVars=esc_sql(serialize($thisOrderPostVars));
 			$thisOrderTransactionId=$gatewayUsed.$now.$orderId.'';
