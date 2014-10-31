@@ -204,7 +204,34 @@ jQuery(document).ready(function($){
 	*
 	*******************************************************/
   	if(typeof wppizza.ofqc!=='undefined'){
-       $( "#wppizza-send-order .wppizza-item-quantity" ).spinner({ min: 0});
+  		var spinnerElm=$( "#wppizza-send-order .wppizza-item-quantity" );
+       	spinnerElm.spinner({ min: 0});/*set min var*/
+
+		/*restrict scrollwheel to be >=0*/
+		spinnerElm.on( 'DOMMouseScroll mousewheel', function ( event ) {
+		  if( event.originalEvent.detail > 0 || event.originalEvent.wheelDelta < 0 ) { //alternative options for wheelData: wheelDeltaX & wheelDeltaY
+		    // down
+		    if (parseInt(this.value) > 0) {
+		    	this.value = parseInt(this.value, 10) - 1;
+		    }
+		  } else {
+		  	// up
+		  	this.value = parseInt(this.value, 10) + 1;
+		  }
+		  //prevent page from scrolling
+		  return false;
+		});
+
+
+		/**stop submitting if we are hitting enter after changing quantities and update those instead**/
+			spinnerElm.keydown(function(event) {
+				if(event.which == 13 || event.which == 35){
+					event.preventDefault();
+					$('.wppizza-update-order').trigger(''+wppizzaClickEvent+'');
+				return false;
+			}
+		});
+				
        /**do the update**/
        $(document).on(''+wppizzaClickEvent+'', '.wppizza-update-order', function(e){
        	/*get the elemenst and create a key value array to send to ajax**/
@@ -238,11 +265,11 @@ jQuery(document).ready(function($){
 
 
 	/**run defined functions after cart refresh**/
-	var wppizzaCartRefreshed = (function(functionArray) {
+	var wppizzaCartRefreshed = (function(functionArray, res) {
 		if(functionArray.length>0){
 			for(i=0;i<functionArray.length;i++){
 				var func = new Function("term", "return " + functionArray[i] + "(term);");
-				func();
+				func(res);
 			}
 		}
 	});
@@ -361,7 +388,7 @@ jQuery(document).ready(function($){
 
 				cartButton.removeAttr("disabled");/*re-enable place order button*/
 
-				wppizzaCartRefreshed(wppizza.funcCartRefr);
+				wppizzaCartRefreshed(wppizza.funcCartRefr,response);
 
 			},'json').error(function(jqXHR, textStatus, errorThrown) {alert("error : " + errorThrown);console.log(jqXHR.responseText);$('.wppizza-order #wppizza-loading').remove();});
 		}});
@@ -529,13 +556,6 @@ jQuery(document).ready(function($){
 	    		}
 	  		},
 			submitHandler: function(form) {
-				/**stop submitting if we are hitting enter after changing quantities and update those instead**/
-				var focussed = $(':focus');
-				if(typeof focussed!=='undefined' && focussed.hasClass('wppizza-item-quantity')){
-					$('.wppizza-update-order').trigger(''+wppizzaClickEvent+'');
-				return false;/*stop executing the rest**/
-				}
-				
 				$('.wppizza-ordernow').attr('disabled', 'true');//stop double clicks
 				var hasClassAjax=false;
 				var hasClassCustom=false;
@@ -626,10 +646,6 @@ jQuery(document).ready(function($){
 				window['wppizza' + currVal + 'payment']();
 				return;
 			}
-
-
-
-
 			/**cod->transmit form via ajax if cod or forced by gw settings (i.e $this->gatewayTypeSubmit = 'ajax')*/
 			if(currVal=='cod' || hasClassAjax){
 				self.prepend('<div id="wppizza-loading"></div>');
@@ -680,9 +696,9 @@ jQuery(document).ready(function($){
 	if(typeof wppizza.usingCache!=='undefined'){
 		var wppizzaNoCacheAttr=$('#wppizza-cart-nocache-attributes').val();
 		jQuery.post(wppizza.ajaxurl , {action :'wppizza_json',vars:{'type':'hasCachePlugin','attributes':wppizzaNoCacheAttr}}, function(response) {
-			$('.wppizza-cart-nocache').html(response);
-			wppizzaCartRefreshed(wppizza.funcCartRefr);/**also run any cart refreshed functions**/
-		},'html').complete(
+			$('.wppizza-cart-nocache').html(response.markup);
+			wppizzaCartRefreshed(wppizza.funcCartRefr,response.cart);/**also run any cart refreshed functions**/
+		},'json').complete(
 			function(){wppizzaCartStickyLoad();}/*on complete, exec sticky cart if enabled*/
 		).error(function(jqXHR, textStatus, errorThrown) {alert("error : " + errorThrown);console.log(jqXHR.responseText);});
 	}else{
@@ -699,17 +715,25 @@ jQuery(document).ready(function($){
 			jQuery.post(wppizza.ajaxurl , {action :'wppizza_json',vars:{'type':'gettotals'}}, function(res) {
 				var curr=$(".wppizza-totals-currency");
 				var total=$(".wppizza-total");
+				var itemcount=$(".wppizza-totals-itemcount");
 
 				/**no items in cart**/
 				if(res.items.length<=0){
 					curr.html(res.currency);
 					total.html(res.order_value.total_price_items.val);
+					if (itemcount.length > 0){
+						itemcount.html('&nbsp;');//empty if 0
+					}
 				}else{
 					curr.html(res.currency);
 					if ($(".wppizza-total-items").length > 0){
 						total.html(res.order_value.total_price_items.val);
 					}else{
-					total.html(res.order_value.total.val);
+						total.html(res.order_value.total.val);
+					}
+					/**item count*/
+					if (itemcount.length > 0){
+						itemcount.html(res.itemcount);
 					}
 				}
 			},'json').error(function(jqXHR, textStatus, errorThrown) {$('#wppizza-send-order #wppizza-loading').remove();alert("error : " + errorThrown);console.log(jqXHR.responseText);});

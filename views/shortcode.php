@@ -135,7 +135,8 @@ if($type=='openingtimes'){
 	[totals]
 	possible attributes:
 	type='totals' (required [str])
-	value='items' (optional) - if used , only displays value of items as ooposed to totals including delivery etc 
+	value='items' (optional[str]) - if used , only displays value of items as ooposed to totals including delivery etc 
+	itemcount='left|right'  (optional [str]) - if used , count of item will be displayed left or right of the total 
 	example: 		[wppizza type='totals']
 	returns div that with current cart totals (loaded via js)
 **********************************************/

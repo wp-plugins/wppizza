@@ -290,14 +290,25 @@
 		$itemsClass=' wppizza-total-items';
 		}
 
-
 		$summary['currency_left']='<span class="wppizza-totals-currency"></span>';
 		$summary['currency_right']='';
 		if($options['layout']['currency_symbol_position']=='right'){/*right aligned*/
 			$summary['currency_left']='';
 			$summary['currency_right']='<span class="wppizza-totals-currency"></span>';
 		}
-		$str='<div class="wppizza-totals">'.$summary['currency_left'].'<span class="wppizza-total'.$itemsClass.'"></span>'.$summary['currency_right'].'</div>';
+		
+		/*item count**/
+		$summary['itemcount_left']='';
+		$summary['itemcount_right']='';
+		if(isset($atts['itemcount'])){
+			if($atts['itemcount']=='left'){
+				$summary['itemcount_left']='<span class="wppizza-totals-itemcount"></span>';				
+			}			 
+			if($atts['itemcount']=='right'){
+				$summary['itemcount_right']='<span class="wppizza-totals-itemcount"></span>';
+			}
+		}
+		$str='<div class="wppizza-totals">'.$summary['itemcount_left'].''.$summary['currency_left'].'<span class="wppizza-total'.$itemsClass.'"></span>'.$summary['currency_right'].''.$summary['itemcount_right'].'</div>';
 		return $str;
 	}
 	/**format time output**/
@@ -707,6 +718,8 @@ function wppizza_order_summary($session,$options,$module=null,$ajax=null){
 		if($options['order']['discount_selected']=='none'){
 				$discountApply=0;
 		}
+		/*loose php notice**/
+		$session['total_price_calc_discount']=!empty($session['total_price_calc_discount']) ? $session['total_price_calc_discount'] : $session['total_price_items'];
 
 		/** percentage discount**/
 		if($options['order']['discount_selected']=='percentage'){

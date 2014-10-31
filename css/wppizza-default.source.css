@@ -423,3 +423,10 @@ fieldset.wppizza-ff>input, fieldset.wppizza-ff>select, fieldset.wppizza-ff>texta
 .wppizza-history-pagination-selected{cursor:default}
 .wppizza-history-pagination-txt,.wppizza-history-pagination-txt-disabled{padding-left:15px;padding-right:15px;}
 .wppizza-history-pagination-txt-disabled,.wppizza-history-pagination-txt-disabled:hover{color:#AAAAAA;cursor:default}
+/************************
+*
+*	[shortcode totals]
+*
+************************/
+.wppizza-total{padding:0 3px}
+.wppizza-totals-itemcount{vertical-align:super;font-size:smaller;width:15px;height:15px;padding:0 0 5px 8px;display:inline-block;margin:0 5px;}

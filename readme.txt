@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.3+, WP 3.3+ 
 Tested up to: 4.0
-Stable tag: 2.11.5
+Stable tag: 2.11.5.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -143,6 +143,14 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 == Changelog ==
 
+2.11.5.1  
+* added attribute (itemcount=[left|right]) to wppizza type=totals shortcode  
+* fix: loop template was loaded 2x when using shortcode attribute !all AND having a customised version in theme directory  
+* fix: some php notices eliminated  
+* improved mobile devices usability somewhat when allowing quantities to be changed via input field  
+* internal: now also passing cart variables to js cart refresh function  
+31st October 2014  
+
 2.11.5  
 * fix: wrong submit button label in confirmation page  
 * admin: added exclude categories/items when calculating discounts  
@@ -277,4 +285,9 @@ please see here <a href='https://www.wp-pizza.com/topic/wppizza-shortcodes/'>htt
 - leave a message on the <a href="http://wordpress.org/support/plugin/wppizza">wordpress forum</a> and I'll respond asap.  
 - send an email to dev[at]wp-pizza.com with as much info as you can give me or 
 - use the <a href="https://www.wp-pizza.com/contact/">"contact" form</a>, <a href="https://www.wp-pizza.com/forum/feature-requests/">"feature request" page </a> or <a href="http://www.wp-pizza.com/support/">support forum</a> on <a href="http://www.wp-pizza.com/">www.wp-pizza.com</a>
+
+
+	>		
+	>**additional premium add-ons can be found at <a href="https://www.wp-pizza.com/">www.wp-pizza.com</a>**  
+	>
 

@@ -22,7 +22,7 @@ if(isset($cart['innercartinfo'])){
 		$cartContents.='<li id="wppizza-cart-item-'.$k.'" class="wppizza-cart-item">';
 		/********CHANGES IN 2.5, *****alloow increase/decrease changed 2.5*************/
 		if(isset($cart['increase_decrease'])){
-			$cartContents.="<input type='text' size=3 class='wppizza-cart-incr' name='wppizza-cart-incr' value='".$item['count']."'>";
+			$cartContents.="<input type='number' size=3 class='wppizza-cart-incr' name='wppizza-cart-incr' value='".$item['count']."'>";
 			$cartContents.='<span id="wppizza-cart-'.$k.'" class="wppizza-cart-increment" title="">&#10003;</span>';
 		}else{
 			$cartContents.='<span id="wppizza-cart-'.$k.'" class="wppizza-remove-from-cart" title="'.$txt['remove_from_cart']['lbl'].'">x</span>';

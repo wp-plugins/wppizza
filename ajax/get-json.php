@@ -574,11 +574,18 @@ exit();
 *
 ************************************************************************************************/
 if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='hasCachePlugin'){
+		/**********set header********************/
+		header('Content-type: application/json');
+	
 		ob_start();
 		$attributes=json_decode(stripslashes($_POST['vars']['attributes']),true);
-		$this->wppizza_include_shortcode_template('cart',$attributes);
+		$cart=$this->wppizza_include_shortcode_template('cart',$attributes);
 		$markup = ob_get_clean();
-	print"".$markup."";
+		/*return html and cart separately*/
+		$res['markup']=$markup;		
+		$res['cart']=$cart;
+		
+	print"".json_encode($res)."";
 exit();
 }
 /************************************************************************************************
@@ -589,7 +596,14 @@ exit();
 *
 ************************************************************************************************/
 if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='gettotals'){
+	/**********set header********************/
+	header('Content-type: application/json');
 	$res=wppizza_order_summary($_SESSION[$this->pluginSession],$options);
+	
+	$res['itemcount']=0;
+	foreach($res['items'] as $item){
+	$res['itemcount']+=$item['count'];	
+	}
 	print"".json_encode($res)."";
 exit();
 }

@@ -230,9 +230,9 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 			$pos='left';
 		}
 		if($pos=='left'){
-			$markup['quantity']='<input type="text" size="1" id="wppizza-qkey-'.($itemKey).'" class="wppizza-item-quantity" value="'.$item['count'].'" />';
+			$markup['quantity']='<input type="number" size="1" id="wppizza-qkey-'.($itemKey).'" class="wppizza-item-quantity" value="'.$item['count'].'" />';
 		}else{
-			$markup['price_total']='<span class="wppizza-quantity-wrap"><input type="text" size="1" id="wppizza-qkey-'.($itemKey).'" class="wppizza-item-quantity" value="'.$item['count'].'" /></span>'.$markup['price_total'];
+			$markup['price_total']='<span class="wppizza-quantity-wrap"><input type="number" size="1" id="wppizza-qkey-'.($itemKey).'" class="wppizza-item-quantity" value="'.$item['count'].'" /></span>'.$markup['price_total'];
 		}
 		return $markup;
 	}
@@ -1488,6 +1488,15 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 				$loStyle='-'.$options['layout']['style'].''	;
 			}
 
+			/**check which template to use**/
+			/*include template from theme if exists*/
+			if ($template_file = locate_template( array ($this->pluginLocateDir.'wppizza-loop'.$loStyle.'.php' ))){
+
+			}else{
+			/*if template not in theme, fallback to template in plugin*/
+				$template_file=''.WPPIZZA_PATH.'templates/wppizza-loop'.$loStyle.'.php';
+			}			
+
 			/**loop through selected categories (might be one , many or all**/
 			foreach($querys as $query){
 
@@ -1495,20 +1504,10 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 				if(isset($query) && $query){
 					$query_var=''.$query->slug.'';
 				}
-				/*include template from theme if exists*/
-				if ($template_file = locate_template( array ($this->pluginLocateDir.'wppizza-loop'.$loStyle.'.php' ))){
-					include($template_file);
-					do_action('wppizza_loop_template_end');
-					//return;
-				}
-				/*if template not in theme, fallback to template in plugin*/
-				/* it really should BE there */
-				if (is_file(''.WPPIZZA_PATH.'templates/wppizza-loop'.$loStyle.'.php' )){
-					$template_file=''.WPPIZZA_PATH.'templates/wppizza-loop'.$loStyle.'.php';
-					include($template_file);
-					do_action('wppizza_loop_template_end');
-					//return;
-				}
+				/*include the template**/
+				include($template_file);
+				do_action('wppizza_loop_template_end');
+				
 			}
 			return;//after loop
 		}
@@ -1600,13 +1599,13 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 			/*check if the file exists in the theme, otherwise serve the file from the plugin directory if possible*/
 			if ($template_file = locate_template( array ($this->pluginLocateDir.''.$this->pluginSlug.'-cart.php'))){
 				include($template_file);
-				return;
+				return $cart;
 			}
 			/*check if it exists in plugin directory, otherwise we will have to serve defaults**/
 			if (is_file(''.WPPIZZA_PATH.'templates/'.$this->pluginSlug.'-cart.php')){
 				$template_file=''.WPPIZZA_PATH.'templates/'.$this->pluginSlug.'-cart.php';
 				include($template_file);
-				return;
+				return $cart;
 			}
 		}
 		/***************************************
@@ -2473,6 +2472,8 @@ public function wppizza_require_common_input_validation_functions(){
 		/*add functions (names) to run when cart has been refreshed**/
 		$jsCartRefreshCompleteFunctions['functionsCartRefresh']=array();
 		$jsCartRefreshCompleteFunctions['functionsCartRefresh'] = apply_filters('wppizza_filter_js_cart_refresh_functions', $jsCartRefreshCompleteFunctions['functionsCartRefresh']);
+		$jsCartRefreshCompleteFunctions['functionsCartRefresh'] = array_keys(array_flip($jsCartRefreshCompleteFunctions['functionsCartRefresh']));/*flip to make unique, keys to just get the function name to sanitise things*/
+		
 		/**allow adding of veriables for extending plugins**/
 		$jsExtend['jsExtend']=array();
 		$jsExtend['jsExtend'] = apply_filters('wppizza_filter_js_extend', $jsExtend['jsExtend']);
