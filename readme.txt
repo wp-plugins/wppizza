@@ -287,7 +287,6 @@ please see here <a href='https://www.wp-pizza.com/topic/wppizza-shortcodes/'>htt
 - use the <a href="https://www.wp-pizza.com/contact/">"contact" form</a>, <a href="https://www.wp-pizza.com/forum/feature-requests/">"feature request" page </a> or <a href="http://www.wp-pizza.com/support/">support forum</a> on <a href="http://www.wp-pizza.com/">www.wp-pizza.com</a>
 
 
-	>		
 	>**additional premium add-ons can be found at <a href="https://www.wp-pizza.com/">www.wp-pizza.com</a>**  
-	>
+
 
