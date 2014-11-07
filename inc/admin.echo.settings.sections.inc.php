@@ -11,6 +11,8 @@
 //		add_settings_field('install_sample_data', '<b>'.__('Install Sample data:', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'global', 'global', 'install_sample_data' );
 		add_settings_field('wp_multisite_session_per_site', '<b>'.__('Multisite Only:', $this->pluginLocale).'</b><br/>'.__('Set cart contents and order on a per site basis when using subdirectories. This has no effect/relevance when there\'s no multisite setup or using different domains per site on the network. Chances are that you want this on when you have a multisite/network install. THERE ARE ONLY VERY FEW SECENARIOS WHERE YOU MIGHT WANT THIS OFF', $this->pluginLocale).'', array( $this, 'wppizza_admin_settings_input'), 'global', 'global', 'wp_multisite_session_per_site' );
 		add_settings_field('using_cache_plugin', '<b>'.__('I am using a caching plugin:', $this->pluginLocale).'<br /><span class="description">'.__('Experimental. please let me know if you experience problems with this.', $this->pluginLocale).'</span>', array( $this, 'wppizza_admin_settings_input'), 'global', 'global', 'using_cache_plugin' );
+		add_settings_field('dequeue_scripts', '<b>'.__('dequeue wppizza scripts:', $this->pluginLocale).'</b><br /><span style="color:red">'.__('NOTE: if you dequeue any script other plugins rely on you WILL break things', $this->pluginLocale).'</span>', array( $this, 'wppizza_admin_settings_input'), 'global', 'global', 'dequeue_scripts' );
+		
 		add_settings_field('category_parent_page', ''.__('<b>Permalinks - Categories/Pages:<br/>(only used and relevant when using widget or shortcode to display wppizza category navigation !!!)<br/><span style="color:red">when changing this setting, you MUST re-save your permalink settings</span></b><br/>(page cannot be used as static post page (wp settings) or have any children', $this->pluginLocale).'', array( $this, 'wppizza_admin_settings_input'), 'global', 'global', 'category_parent_page' );
 		add_settings_field('single_item_permalink_rewrite', ''.__('<b>Permalinks - Single Menu Items:<br/>(only used and relevant when actually linking to a single item from anywhere)<br/><span style="color:red">when changing this setting, you MUST re-save your permalink settings</span></b>', $this->pluginLocale).'', array( $this, 'wppizza_admin_settings_input'), 'global', 'global', 'single_item_permalink_rewrite' );
 
@@ -96,7 +98,6 @@
 
 		/**order reports**/
 		add_settings_section('reports', '',  array( $this, 'wppizza_admin_page_text_header'), 'reports');
-		//add_settings_field('reports', 'or this', array( $this, 'wppizza_admin_settings_input'), 'reports', 'reports', 'reports' );
 
 		/**access rights**/
 		add_settings_section('access', '',  array( $this, 'wppizza_admin_page_text_header'), 'access');

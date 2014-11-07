@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.3+, WP 3.3+ 
 Tested up to: 4.0
-Stable tag: 2.11.5.1
+Stable tag: 2.11.5.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -142,6 +142,12 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 
 == Changelog ==
+
+2.11.5.2  
+* updated spanish language  
+* added option to dequeue scripts (wppizza->settings)  
+* Some maintenance 
+6th November 2014  
 
 2.11.5.1  
 * added attribute (itemcount=[left|right]) to wppizza type=totals shortcode  
@@ -287,6 +293,7 @@ please see here <a href='https://www.wp-pizza.com/topic/wppizza-shortcodes/'>htt
 - use the <a href="https://www.wp-pizza.com/contact/">"contact" form</a>, <a href="https://www.wp-pizza.com/forum/feature-requests/">"feature request" page </a> or <a href="http://www.wp-pizza.com/support/">support forum</a> on <a href="http://www.wp-pizza.com/">www.wp-pizza.com</a>
 
 
+	>		
 	>**additional premium add-ons can be found at <a href="https://www.wp-pizza.com/">www.wp-pizza.com</a>**  
-
+	>
 

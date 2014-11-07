@@ -24,22 +24,26 @@ get_header();
 		<div id="content" role="main">
 <?php 
 /******************************************************************************
-	[copy from here .....]
+*
+*	[copy from here .....]
+*
 *****************************************************************************/		
 
 		/****************************************************************
-		if the loop template has been copied to the theme folder we get template part
+		if the loop template has been copied to the theme folder we get the template part
 		otherwise, include from plugin template directory
 		if using a wppizza subdirectory, change array ('wppizza-loop.php') to array ('wppizza/wppizza-loop.php' )
 		****************************************************************/
-		if ($template_file = locate_template( array ('wppizza-loop.php' ))){
+		if ($template_file = locate_template( array ('wppizza-loop.php' ))){/*use wppizza-loop-responsive.php instead if using the responsive css/layout in wppizza->settings*/
 			include_once($template_file);
 		}else{
-			include_once(''.WPPIZZA_PATH.'templates/wppizza-loop.php');			
+			include_once(''.WPPIZZA_PATH.'templates/wppizza-loop.php');/*use wppizza-loop-responsive.php instead if using the responsive css/layout in wppizza->settings*/			
 		}
 
 /******************************************************************************
-	[...........copy to here]
+*
+*	[...........copy to here]
+*	
 *****************************************************************************/
 ?>
 		</div><!-- #content -->

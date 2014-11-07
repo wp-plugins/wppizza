@@ -34,6 +34,16 @@ $options = $this->pluginOptions;
 					echo"<option value='phpmailer' ".selected($options['plugin_data'][$field],"phpmailer",false).">".__('HTML and Plaintext [uses PHPMailer]', $this->pluginLocale)."</option>";
 				echo "</select>";
 			}
+			
+			if($field=='dequeue_scripts'){
+				echo "<select name='".$this->pluginSlug."[plugin_data][".$field."]' />";
+					echo"<option value='' ".selected($options['plugin_data'][$field],"",false).">".__('leave as is', $this->pluginLocale)."</option>";
+					echo"<option value='all' ".selected($options['plugin_data'][$field],"all",false).">".__('dequeue both, main wppizza and jquery validation', $this->pluginLocale)."</option>";
+					echo"<option value='validation' ".selected($options['plugin_data'][$field],"validation",false).">".__('dequeue jquery validation only', $this->pluginLocale)."</option>";
+				echo "</select>";
+				echo"<br /><span class='description'><b>".__('If you are *certain* you do not require the main wppizza javascript and jquery validation and nothing else depends on them, or another plugin is already including jquery validation elsewhere, use the settings above as required. if you do not now, just leave it as is', $this->pluginLocale)."</b></span>";
+			}			
+
 			if($field=='search_include' ){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[plugin_data][".$field."]' type='checkbox'  ". checked($options['plugin_data'][$field],true,false)." value='1' />";
 				echo" <span class='description'>".__('you could also leave this off and use the wppizza widget/shortcode for a dedicated search box', $this->pluginLocale)."</span>";

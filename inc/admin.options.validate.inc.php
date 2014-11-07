@@ -39,6 +39,7 @@
 			$options['plugin_data']['wp_multisite_session_per_site'] = !empty($input['plugin_data']['wp_multisite_session_per_site']) ? true : false;
 			$options['plugin_data']['using_cache_plugin'] = !empty($input['plugin_data']['using_cache_plugin']) ? true : false;
 			$options['plugin_data']['mail_type'] = wppizza_validate_alpha_only($input['plugin_data']['mail_type']);
+			$options['plugin_data']['dequeue_scripts'] = wppizza_validate_alpha_only($input['plugin_data']['dequeue_scripts']);			
 			$options['plugin_data']['search_include'] = !empty($input['plugin_data']['search_include']) ? true : false;
 		}
 

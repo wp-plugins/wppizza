@@ -143,6 +143,7 @@ WPPIZZA VARIABLES
 Order Page:               <?php echo !empty( $this->pluginOptions['order']['orderpage'] ) ? get_permalink( $this->pluginOptions['order']['orderpage'] ) . "\n" : "\n" ?>
 Mail Type:                <?php echo $this->pluginOptions['plugin_data']['mail_type'] . PHP_EOL ?>
 Using Cache:              <?php echo !empty( $this->pluginOptions['plugin_data']['using_cache_plugin']) ? 'Yes'. PHP_EOL:'No' . PHP_EOL ?>
+Dequeue scripts:          <?php echo !empty( $this->pluginOptions['plugin_data']['dequeue_scripts']) ? $this->pluginOptions['plugin_data']['dequeue_scripts'] . PHP_EOL : '---' . PHP_EOL ?>
 Style:                    <?php echo $this->pluginOptions['layout']['style'] . PHP_EOL ?>
 Style Enabled:            <?php echo !empty( $this->pluginOptions['layout']['include_css']) ? 'Yes'. PHP_EOL :'No' . PHP_EOL ?>
 Confirmation Form:        <?php echo !empty( $this->pluginOptions['order_form']['confirmation_form_enabled']) ? 'Yes' . PHP_EOL :'No' . PHP_EOL ?>

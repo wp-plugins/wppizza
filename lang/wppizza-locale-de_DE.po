@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WPPizza\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-10-30 12:22-0000\n"
-"PO-Revision-Date: 2014-10-30 12:26-0000\n"
+"POT-Creation-Date: 2014-11-05 19:50-0000\n"
+"PO-Revision-Date: 2014-11-05 19:50-0000\n"
 "Last-Translator: ollybach <dev@1000db.com>\n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -234,8 +234,8 @@ msgid "Menu Items (active)"
 msgstr "Gerichte (aktiv)"
 
 #: ../classes/wppizza.actions.inc.php:1033
-#: ../classes/wppizza.actions.inc.php:1990
-#: ../classes/wppizza.actions.inc.php:2000
+#: ../classes/wppizza.actions.inc.php:1989
+#: ../classes/wppizza.actions.inc.php:1999
 msgid "Categories"
 msgstr "Kategorien"
 
@@ -301,119 +301,119 @@ msgstr "Berichte"
 msgid "Delete Orders"
 msgstr "Bestellungen löschen"
 
-#: ../classes/wppizza.actions.inc.php:1542
+#: ../classes/wppizza.actions.inc.php:1541
 msgid "Nothing here"
 msgstr "Nichts hier"
 
-#: ../classes/wppizza.actions.inc.php:1926
+#: ../classes/wppizza.actions.inc.php:1925
 msgid "Menu Items"
 msgstr "Gerichte"
 
-#: ../classes/wppizza.actions.inc.php:1927
+#: ../classes/wppizza.actions.inc.php:1926
 msgid "Menu Item"
 msgstr "Menü Artikel"
 
-#: ../classes/wppizza.actions.inc.php:1928
+#: ../classes/wppizza.actions.inc.php:1927
 msgid "Add New"
 msgstr "Neu hinzufügen"
 
-#: ../classes/wppizza.actions.inc.php:1929
+#: ../classes/wppizza.actions.inc.php:1928
 msgid "Add New Menu Item"
 msgstr "Neues Gericht hinzufügen"
 
-#: ../classes/wppizza.actions.inc.php:1930
+#: ../classes/wppizza.actions.inc.php:1929
 msgid "Edit"
 msgstr "Bearbeiten"
 
-#: ../classes/wppizza.actions.inc.php:1931
+#: ../classes/wppizza.actions.inc.php:1930
 msgid "Edit Menu Item"
 msgstr "Menü Artikel bearbeiten"
 
-#: ../classes/wppizza.actions.inc.php:1932
+#: ../classes/wppizza.actions.inc.php:1931
 msgid "New Menu Item"
 msgstr "neues Gericht"
 
-#: ../classes/wppizza.actions.inc.php:1933
+#: ../classes/wppizza.actions.inc.php:1932
 msgid "All Menu Items"
 msgstr "Alle Gerichte"
 
-#: ../classes/wppizza.actions.inc.php:1934
+#: ../classes/wppizza.actions.inc.php:1933
 msgid "View"
 msgstr "Anzeigen"
 
-#: ../classes/wppizza.actions.inc.php:1935
-msgid "View Menu Items"
-msgstr "Gerichte anzeigen"
+#: ../classes/wppizza.actions.inc.php:1934
+msgid "View Menu Item"
+msgstr "Gericht anzeigen"
 
-#: ../classes/wppizza.actions.inc.php:1936
+#: ../classes/wppizza.actions.inc.php:1935
 msgid "Search Menu Items"
 msgstr "Gerichte durchsuchen"
 
-#: ../classes/wppizza.actions.inc.php:1937
+#: ../classes/wppizza.actions.inc.php:1936
 msgid "No items found"
 msgstr "keine Gerichte gefunden"
 
-#: ../classes/wppizza.actions.inc.php:1938
+#: ../classes/wppizza.actions.inc.php:1937
 msgid "No items found in the Trash"
 msgstr "keine Gerichte im Papierkorb gefunden"
 
-#: ../classes/wppizza.actions.inc.php:1947
+#: ../classes/wppizza.actions.inc.php:1946
 #, php-format
 msgid "Holds %1$s  menu items data"
 msgstr "Enthält %1$s  Gerichte Daten"
 
-#: ../classes/wppizza.actions.inc.php:1991
+#: ../classes/wppizza.actions.inc.php:1990
 msgid "Category"
 msgstr "Kategorie"
 
-#: ../classes/wppizza.actions.inc.php:1992
+#: ../classes/wppizza.actions.inc.php:1991
 msgid "Search Categories"
 msgstr "Kategorien durchsuchen"
 
-#: ../classes/wppizza.actions.inc.php:1993
+#: ../classes/wppizza.actions.inc.php:1992
 msgid "All Categories"
 msgstr "Alle Kategorien"
 
-#: ../classes/wppizza.actions.inc.php:1994
+#: ../classes/wppizza.actions.inc.php:1993
 msgid "Parent Category"
 msgstr "Haupt Kategorie"
 
-#: ../classes/wppizza.actions.inc.php:1995
+#: ../classes/wppizza.actions.inc.php:1994
 msgid "Parent Category:"
 msgstr "Haupt Kategorie:"
 
-#: ../classes/wppizza.actions.inc.php:1996
+#: ../classes/wppizza.actions.inc.php:1995
 msgid "Edit Category"
 msgstr "Kategorie bearbeiten"
 
-#: ../classes/wppizza.actions.inc.php:1997
+#: ../classes/wppizza.actions.inc.php:1996
 msgid "Update Category"
 msgstr "Kategorie aktualisieren"
 
-#: ../classes/wppizza.actions.inc.php:1998
+#: ../classes/wppizza.actions.inc.php:1997
 msgid "Add New Category"
 msgstr "Neue Kategorie hinzufügen"
 
-#: ../classes/wppizza.actions.inc.php:1999
+#: ../classes/wppizza.actions.inc.php:1998
 msgid "New Category Name"
 msgstr "Neuer Kategorie Name"
 
-#: ../classes/wppizza.actions.inc.php:2017
+#: ../classes/wppizza.actions.inc.php:2016
 #, php-format
 msgid "%s"
 msgstr "%s"
 
-#: ../classes/wppizza.actions.inc.php:2153
+#: ../classes/wppizza.actions.inc.php:2152
 msgid "WPPizza Categories"
 msgstr "WPPizza Kategorien"
 
-#: ../classes/wppizza.actions.inc.php:3324
-#: ../classes/wppizza.actions.inc.php:3326
+#: ../classes/wppizza.actions.inc.php:3325
+#: ../classes/wppizza.actions.inc.php:3327
 msgid "Previous"
 msgstr "vorher"
 
-#: ../classes/wppizza.actions.inc.php:3340
-#: ../classes/wppizza.actions.inc.php:3342
+#: ../classes/wppizza.actions.inc.php:3341
+#: ../classes/wppizza.actions.inc.php:3343
 msgid "Next"
 msgstr "nächster"
 
@@ -3406,39 +3406,39 @@ msgstr "ERSTATTET"
 msgid "OTHER"
 msgstr "ANDERE"
 
-#: ../inc/common.output.formatting.functions.inc.php:522
+#: ../inc/common.output.formatting.functions.inc.php:533
 msgid "Mondays"
 msgstr "Montags"
 
-#: ../inc/common.output.formatting.functions.inc.php:523
+#: ../inc/common.output.formatting.functions.inc.php:534
 msgid "Tuesdays"
 msgstr "Dienstags"
 
-#: ../inc/common.output.formatting.functions.inc.php:524
+#: ../inc/common.output.formatting.functions.inc.php:535
 msgid "Wednesdays"
 msgstr "Mittwochs"
 
-#: ../inc/common.output.formatting.functions.inc.php:525
+#: ../inc/common.output.formatting.functions.inc.php:536
 msgid "Thursdays"
 msgstr "Donnerstags"
 
-#: ../inc/common.output.formatting.functions.inc.php:526
+#: ../inc/common.output.formatting.functions.inc.php:537
 msgid "Fridays"
 msgstr "Freitags"
 
-#: ../inc/common.output.formatting.functions.inc.php:527
+#: ../inc/common.output.formatting.functions.inc.php:538
 msgid "Saturdays"
 msgstr "Samstags"
 
-#: ../inc/common.output.formatting.functions.inc.php:528
+#: ../inc/common.output.formatting.functions.inc.php:539
 msgid "Sundays"
 msgstr "Sonntags"
 
-#: ../inc/common.output.formatting.functions.inc.php:536
+#: ../inc/common.output.formatting.functions.inc.php:547
 msgid "Default"
 msgstr "Standard"
 
-#: ../inc/common.output.formatting.functions.inc.php:537
+#: ../inc/common.output.formatting.functions.inc.php:548
 msgid "Responsive [Experimental]"
 msgstr "Responsive [Experimental]"
 
@@ -3591,6 +3591,3 @@ msgstr "Öffnungszeiten"
 #: ../wppizza.php:207
 msgid "Search"
 msgstr "Suche"
-
-#~ msgid "Ctrl+Click to select multiple"
-#~ msgstr "Strg+Klick um mehrere zu wählen"

@@ -304,6 +304,7 @@
 				'version' => $this->pluginVersion,
 				'js_in_footer' => false,
 				'mail_type' => 'mail',
+				'dequeue_scripts' => '',	
 				'search_include' => false,
 				'post_single_template' => array(),
 				'category_parent_page' => array(),

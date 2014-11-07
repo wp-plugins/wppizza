@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WPPizza v2.9.4.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-10-30 12:27-0000\n"
-"PO-Revision-Date: 2014-10-30 12:27-0000\n"
+"POT-Creation-Date: 2014-11-05 19:52-0000\n"
+"PO-Revision-Date: 2014-11-05 19:52-0000\n"
 "Last-Translator: ollybach <dev@1000db.com>\n"
 "Language-Team: \n"
 "Language: nl_NL\n"
@@ -280,7 +280,7 @@ msgstr "Menu Items (active)"
 
 # @ default
 #: ../classes/wppizza.actions.inc.php:1033
-#: ../classes/wppizza.actions.inc.php:2000
+#: ../classes/wppizza.actions.inc.php:1999
 msgid "Categories"
 msgstr "Categorieën"
 
@@ -360,152 +360,152 @@ msgid "Delete Orders"
 msgstr "Bestellingen verwijderen"
 
 # @ default
-#: ../classes/wppizza.actions.inc.php:1542
+#: ../classes/wppizza.actions.inc.php:1541
 msgid "Nothing here"
 msgstr "Niets hier"
 
 # @ wppizza-locale
-#: ../classes/wppizza.actions.inc.php:1926
+#: ../classes/wppizza.actions.inc.php:1925
 msgid "Menu Items"
 msgstr "Menu-items"
 
 # @ wppizza-locale
-#: ../classes/wppizza.actions.inc.php:1927
+#: ../classes/wppizza.actions.inc.php:1926
 msgid "Menu Item"
 msgstr "Menu-item"
 
 # @ wppizza-locale
-#: ../classes/wppizza.actions.inc.php:1928
+#: ../classes/wppizza.actions.inc.php:1927
 msgid "Add New"
 msgstr "Voeg nieuw toe"
 
 # @ wppizza-locale
-#: ../classes/wppizza.actions.inc.php:1929
+#: ../classes/wppizza.actions.inc.php:1928
 msgid "Add New Menu Item"
 msgstr "Voeg een nieuw menu-item toe"
 
 # @ wppizza-locale
-#: ../classes/wppizza.actions.inc.php:1930
+#: ../classes/wppizza.actions.inc.php:1929
 msgid "Edit"
 msgstr "Bewerk"
 
 # @ wppizza-locale
-#: ../classes/wppizza.actions.inc.php:1931
+#: ../classes/wppizza.actions.inc.php:1930
 msgid "Edit Menu Item"
 msgstr "Bewerk menu item"
 
 # @ wppizza-locale
-#: ../classes/wppizza.actions.inc.php:1932
+#: ../classes/wppizza.actions.inc.php:1931
 msgid "New Menu Item"
 msgstr "Nieuw menu-item"
 
 # @ wppizza-locale
-#: ../classes/wppizza.actions.inc.php:1933
+#: ../classes/wppizza.actions.inc.php:1932
 msgid "All Menu Items"
 msgstr "Alle menu-items"
 
 # @ wppizza-locale
-#: ../classes/wppizza.actions.inc.php:1934
+#: ../classes/wppizza.actions.inc.php:1933
 msgid "View"
 msgstr "Bekijk"
 
 # @ wppizza-locale
-#: ../classes/wppizza.actions.inc.php:1935
-msgid "View Menu Items"
-msgstr "Bekijk de menu-items"
+#: ../classes/wppizza.actions.inc.php:1934
+msgid "View Menu Item"
+msgstr "Bekijk de menu-item"
 
 # @ wppizza-locale
-#: ../classes/wppizza.actions.inc.php:1936
+#: ../classes/wppizza.actions.inc.php:1935
 msgid "Search Menu Items"
 msgstr "Zoek in de menu-items"
 
 # @ wppizza-locale
-#: ../classes/wppizza.actions.inc.php:1937
+#: ../classes/wppizza.actions.inc.php:1936
 msgid "No items found"
 msgstr "Geen items gevonden"
 
 # @ wppizza-locale
-#: ../classes/wppizza.actions.inc.php:1938
+#: ../classes/wppizza.actions.inc.php:1937
 msgid "No items found in the Trash"
 msgstr "Geen artikelen gevonden in de Prullenbak"
 
 # @ wppizza-locale
-#: ../classes/wppizza.actions.inc.php:1947
+#: ../classes/wppizza.actions.inc.php:1946
 #, php-format
 msgid "Holds %1$s  menu items data"
 msgstr "Bevat %1$s menu-item gegevens"
 
 # @ default
-#: ../classes/wppizza.actions.inc.php:1990
+#: ../classes/wppizza.actions.inc.php:1989
 msgctxt "taxonomy general name"
 msgid "Categories"
 msgstr "Categories"
 
 # @ default
-#: ../classes/wppizza.actions.inc.php:1991
+#: ../classes/wppizza.actions.inc.php:1990
 msgctxt "taxonomy singular name"
 msgid "Category"
 msgstr "Category"
 
 # @ default
-#: ../classes/wppizza.actions.inc.php:1992
+#: ../classes/wppizza.actions.inc.php:1991
 msgid "Search Categories"
 msgstr "Zoek in de Categorieën"
 
 # @ default
-#: ../classes/wppizza.actions.inc.php:1993
+#: ../classes/wppizza.actions.inc.php:1992
 msgid "All Categories"
 msgstr "Alle Categorieën"
 
 # @ default
-#: ../classes/wppizza.actions.inc.php:1994
+#: ../classes/wppizza.actions.inc.php:1993
 msgid "Parent Category"
 msgstr "Hoofd Categorie"
 
 # @ default
-#: ../classes/wppizza.actions.inc.php:1995
+#: ../classes/wppizza.actions.inc.php:1994
 msgid "Parent Category:"
 msgstr "Hoofd Categorie:"
 
 # @ default
-#: ../classes/wppizza.actions.inc.php:1996
+#: ../classes/wppizza.actions.inc.php:1995
 msgid "Edit Category"
 msgstr "Bewerk Categorie"
 
 # @ default
-#: ../classes/wppizza.actions.inc.php:1997
+#: ../classes/wppizza.actions.inc.php:1996
 msgid "Update Category"
 msgstr "Actualiseer de Categorie"
 
 # @ default
-#: ../classes/wppizza.actions.inc.php:1998
+#: ../classes/wppizza.actions.inc.php:1997
 msgid "Add New Category"
 msgstr "Nieuwe Categorie Toevoegen"
 
 # @ default
-#: ../classes/wppizza.actions.inc.php:1999
+#: ../classes/wppizza.actions.inc.php:1998
 msgid "New Category Name"
 msgstr "Nieuwe Categorie Naam"
 
-#: ../classes/wppizza.actions.inc.php:2017
+#: ../classes/wppizza.actions.inc.php:2016
 #, php-format
 msgid "%s"
 msgstr "%s"
 
 # @ wppizza-locale
-#: ../classes/wppizza.actions.inc.php:2153
+#: ../classes/wppizza.actions.inc.php:2152
 msgid "WPPizza Categories"
 msgstr "WPPizza Categorieën"
 
 # @ default
-#: ../classes/wppizza.actions.inc.php:3324
-#: ../classes/wppizza.actions.inc.php:3326
+#: ../classes/wppizza.actions.inc.php:3325
+#: ../classes/wppizza.actions.inc.php:3327
 msgid "Previous"
 msgstr "Vorige"
 
 # @ default
-#: ../classes/wppizza.actions.inc.php:3340
-#: ../classes/wppizza.actions.inc.php:3342
+#: ../classes/wppizza.actions.inc.php:3341
+#: ../classes/wppizza.actions.inc.php:3343
 msgid "Next"
 msgstr "Volgende"
 
@@ -4045,47 +4045,47 @@ msgid "OTHER"
 msgstr "OTHER"
 
 # @ wppizza-locale
-#: ../inc/common.output.formatting.functions.inc.php:522
+#: ../inc/common.output.formatting.functions.inc.php:533
 msgid "Mondays"
 msgstr "Maandagen"
 
 # @ wppizza-locale
-#: ../inc/common.output.formatting.functions.inc.php:523
+#: ../inc/common.output.formatting.functions.inc.php:534
 msgid "Tuesdays"
 msgstr "Dinsdagen"
 
 # @ wppizza-locale
-#: ../inc/common.output.formatting.functions.inc.php:524
+#: ../inc/common.output.formatting.functions.inc.php:535
 msgid "Wednesdays"
 msgstr "Woensdagen"
 
 # @ wppizza-locale
-#: ../inc/common.output.formatting.functions.inc.php:525
+#: ../inc/common.output.formatting.functions.inc.php:536
 msgid "Thursdays"
 msgstr "Donderdagen"
 
 # @ wppizza-locale
-#: ../inc/common.output.formatting.functions.inc.php:526
+#: ../inc/common.output.formatting.functions.inc.php:537
 msgid "Fridays"
 msgstr "Vrijdagen"
 
 # @ wppizza-locale
-#: ../inc/common.output.formatting.functions.inc.php:527
+#: ../inc/common.output.formatting.functions.inc.php:538
 msgid "Saturdays"
 msgstr "Zaterdagen"
 
 # @ wppizza-locale
-#: ../inc/common.output.formatting.functions.inc.php:528
+#: ../inc/common.output.formatting.functions.inc.php:539
 msgid "Sundays"
 msgstr "Zondagen"
 
 # @ wppizza-locale
-#: ../inc/common.output.formatting.functions.inc.php:536
+#: ../inc/common.output.formatting.functions.inc.php:547
 msgid "Default"
 msgstr "Standaard"
 
 # @ wppizza-locale
-#: ../inc/common.output.formatting.functions.inc.php:537
+#: ../inc/common.output.formatting.functions.inc.php:548
 msgid "Responsive [Experimental]"
 msgstr "Responsive [Experimenteel]"
 

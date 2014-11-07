@@ -53,6 +53,8 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 		if(!is_admin()){
 			/***enqueue frontend scripts and styles***/
 			add_action('wp_enqueue_scripts', array( $this, 'wppizza_register_scripts_and_styles'),$this->pluginOptions['layout']['css_priority']);
+			/*dequeue if set**/
+			add_action('wp_print_scripts', array( $this, 'wppizza_dequeue_scripts'),100);
 			/***************
 				[filters]
 			***************/
@@ -1931,7 +1933,7 @@ public function wppizza_require_common_input_validation_functions(){
 			'new_item'           => __( 'New Menu Item',$this->pluginLocale ),
 			'all_items'          => __( 'All Menu Items',$this->pluginLocale ),
 			'view'               => __( 'View', $this->pluginLocale ),
-			'view_item'          => __( 'View Menu Items',$this->pluginLocale ),
+			'view_item'          => __( 'View Menu Item',$this->pluginLocale ),
 			'search_items'       => __( 'Search Menu Items',$this->pluginLocale ),
 			'not_found'          => __( 'No items found',$this->pluginLocale ),
 			'not_found_in_trash' => __( 'No items found in the Trash',$this->pluginLocale ),
@@ -2518,7 +2520,18 @@ public function wppizza_require_common_input_validation_functions(){
 		wp_localize_script( $this->pluginSlug,$this->pluginSlug, $localized_array );
 
     }
-
+	function wppizza_dequeue_scripts(){
+		if(isset($this->pluginOptions['plugin_data']['dequeue_scripts']) && $this->pluginOptions['plugin_data']['dequeue_scripts']!=''){
+			/*dequeue main*/
+			if($this->pluginOptions['plugin_data']['dequeue_scripts']=='all'){
+				wp_dequeue_script($this->pluginSlug);
+			}
+			/*dequeue jquery validate too or only*/
+			if($this->pluginOptions['plugin_data']['dequeue_scripts']=='all' || $this->pluginOptions['plugin_data']['dequeue_scripts']=='validation'){
+				wp_dequeue_script($this->pluginSlug.'-validate');
+			}
+		}
+	}
 /*********************************************************
 *
 *		[add filter functions]
