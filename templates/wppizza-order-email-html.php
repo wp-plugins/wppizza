@@ -71,22 +71,31 @@ $htmlEmailStyle = apply_filters('wppizza_filter_html_email_style', $htmlEmailSty
 /***********************************************
 
 	[add some header]
-
+	[allow filtering of output]
 ************************************************/
+			/**tr**/
+			$htmlEmailHead='<tr><td colspan="2" style="'.$htmlEmailStyle['mailPadding']['30'].';text-align:center;'.$htmlEmailStyle['mailHeaderBackgroundImage'].';background-color:'.$htmlEmailStyle['mailHeaderBackgroundColor'].';"><h1 style="font-size:160%;color:'. $htmlEmailStyle['mailHeaderTextColour'].';">'.get_bloginfo().'</h1></td></tr>';
+			/*add filter**/
+			$htmlEmailHead = apply_filters('wppizza_filter_htmlemail_head', $htmlEmailHead, $htmlEmailStyle, $orderLabel, $nowdate, $gatewayLabel, $transactionId);
+			/*output**/
+			echo $htmlEmailHead;
 ?>
-							<tr><td colspan="2" style="<?php echo $htmlEmailStyle['mailPadding']['30'] ?>;text-align:center;<?php echo $htmlEmailStyle['mailHeaderBackgroundImage'] ?>;background-color:<?php echo $htmlEmailStyle['mailHeaderBackgroundColor'] ?>;"><h1 style="font-size:160%;color:<?php echo $htmlEmailStyle['mailHeaderTextColour'] ?>;"><?php echo get_bloginfo(); ?></h1></td></tr>
 <?php
 /***********************************************
 
 	[add label, date transactionid, gateway info]
-
+	[allow filtering of output]
 ************************************************/
+			/**trs**/
+			$htmlEmailHeadInfo['orderlabel']='<tr><td colspan="2" style="'.$htmlEmailStyle['mailPadding']['20x0x0x15'].'">'.$orderLabel['order_details'].'</td></tr>';
+			$htmlEmailHeadInfo['transactiondate']='<tr><td colspan="2" style="'.$htmlEmailStyle['mailPadding']['2x0x0x15'].'">'.$nowdate.'</td></tr>';
+			$htmlEmailHeadInfo['paymentdetails']='<tr><td colspan="2" style="'.$htmlEmailStyle['mailPadding']['2x0x0x15'].'">'.$orderLabel['order_paid_by'].' '.$gatewayLabel.' ('.$transactionId.')</td></tr>';
+			$htmlEmailHeadInfo['devider']='<tr><td colspan="2" style="'.$htmlEmailStyle['mailDivider'].'">&nbsp;</td></tr>';
+			/*add filter**/
+			$htmlEmailHeadInfo = apply_filters('wppizza_filter_htmlemail_head_info', $htmlEmailHeadInfo,  $htmlEmailStyle, $orderLabel, $nowdate, $gatewayLabel, $transactionId);
+			/*output**/
+			echo implode(PHP_EOL,$htmlEmailHeadInfo);
 ?>
-							<tr><td colspan="2" style="<?php echo $htmlEmailStyle['mailPadding']['20x0x0x15'] ?>"><?php echo $orderLabel['order_details']; ?></td></tr>
-							<tr><td colspan="2" style="<?php echo $htmlEmailStyle['mailPadding']['2x0x0x15'] ?>"><?php echo $nowdate; ?></td></tr>
-							<tr><td colspan="2" style="<?php echo $htmlEmailStyle['mailPadding']['2x0x0x15'] ?>"><?php echo $orderLabel['order_paid_by']; ?> <?php echo $gatewayLabel; ?> (<?php echo $transactionId; ?>)</td></tr>
-							<tr><td colspan="2" style="<?php echo $htmlEmailStyle['mailDivider'] ?>">&nbsp;</td></tr><?php /*add devider**/ ?>
-
 <?php
 /**********************************************************
 

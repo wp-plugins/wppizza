@@ -2151,17 +2151,27 @@ public function wppizza_require_common_input_validation_functions(){
 	function wppizza_filter_title_tag($title, $sep=false , $loc='right'){
 		if(get_post_type()==WPPIZZA_POST_TYPE){
 			$titleOrig=$title;
+
 			$strSearch=__('WPPizza Categories',$this->pluginLocale);
+			
 			if($sep && $loc=='right'){
 				$title=str_ireplace(''.$strSearch.' '.$sep.'','',$title);
 			}
 			if($sep && $loc!='right'){
-				$title=str_ireplace(''.$strSearch.' WPPizza Categories','',$title);
+				$title=str_ireplace(''.$sep.' '.$strSearch.'','',$title);
 			}
 			/*if we dont have a seperator or nothing has been done yet and its still the same, just try a normal str replace*/
 			if(!$sep || trim($sep)=='' || $title==$titleOrig){
 				$title=str_ireplace($strSearch,'',$title);
 			}
+			/**as last resort if it's still in the title somehow***/
+			$pos = stripos($title, $strSearch);
+			if ($pos !== false) {
+    			$title=str_ireplace($strSearch,'',$title);
+    			/*and - just to be sure - replace any leftover double seperators with single ones**/
+    			$title=str_replace($sep.$sep,$sep,$title);
+			} 			
+
 		/**might as well trim it*/
 		$title=trim($title);
 		}
