@@ -233,6 +233,9 @@
 			$emailFrom=wppizza_validate_email_array($input['order']['order_email_from']);/*validated as array but we only store the first value as string*/
 			$options['order']['order_email_from'] = !empty($emailFrom[0]) ? ''.$emailFrom[0].'' : '' ;
 			$options['order']['order_email_from_name'] = wppizza_validate_string($input['order']['order_email_from_name']);
+			
+			/**dmarc nag**/
+			$options['order']['dmarc_nag_off']= !empty($input['order']['dmarc_nag_off']) ? true : false;
 		}
 		/**validate order form***/
 		if(isset($_POST[''.$this->pluginSlug.'_order_form'])){

@@ -60,10 +60,10 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 			***************/
 			/*include template**/
 			add_filter('template_include', array( $this,'wppizza_include_template'), 1 );
-			
+
 			/******add js functions to run after cart refresh (if using shortcode type=totals**********************************/
-			add_filter('wppizza_filter_js_cart_refresh_functions', array( $this, 'wppizza_filter_totals_js_cart_refresh_functions'),10,1);			
-			
+			add_filter('wppizza_filter_js_cart_refresh_functions', array( $this, 'wppizza_filter_totals_js_cart_refresh_functions'),10,1);
+
 
 			/**set possibly missing vars if using templates **/
 			add_filter('wppizza_loop_top', array( $this,'wppizza_loop_include_vars'), 1 );
@@ -84,10 +84,10 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 			add_filter('wp_authenticate', array( $this, 'wppizza_authenticate'),1,2);/*authenticate and redirect**/
 			add_filter('login_redirect', array( $this, 'wppizza_login_redirect'),10,3);/**successful login redirect**/
 			add_action('wppizza_gateway_choice_before', array( $this, 'wppizza_create_user_option'));/**continue and register or as guest**/
-			
+
 			/**add additional text to initial order form display (if not empty)**/
-			add_action('wppizza_order_form_inside_top', array( $this, 'wppizza_do_additional_info_order_form'));/**add info**/			
-			
+			add_action('wppizza_order_form_inside_top', array( $this, 'wppizza_do_additional_info_order_form'));/**add info**/
+
 			/***reset loop query***/
 			add_action('wppizza_loop_template_end', array( $this, 'wppizza_reset_loop_query'));/**needed by some themes **/
 
@@ -138,6 +138,9 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
     		add_action('admin_init', array( $this, 'wppizza_admin_pages_init' ) );
     		add_action('admin_init', array( $this, 'wppizza_admin_metaboxes') );
 			add_action('admin_init', array( $this, 'wppizza_do_admin_notice'));/*if necessary,show admin info screens**/
+
+			add_action('admin_notices', array( $this, 'wppizza_dmarc_nag') );/*dmarc nag*/
+
 			/***enqueue backend scripts and styles***/
 			add_action('admin_enqueue_scripts', array( $this, 'wppizza_register_scripts_and_styles_admin'));
 			/*when deleting or creating categories*/
@@ -244,10 +247,10 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 	function wppizza_order_form_item_quantity_update_button($item){
 		print"<div class='wppizza-update-quantity'><input type='button' class='submit wppizza-update-order' value='".$this->pluginOptions['localization']['update_order']['lbl']."' /></div>";
 	}
-	
+
 	/************************************************************************
 		[output some additional info before order form details before submitting]
-	************************************************************************/	
+	************************************************************************/
 	function wppizza_do_additional_info_order_form(){
 		if($this->pluginOptions['localization']['order_ini_additional_info']['lbl']!=''){
 			print"".$this->pluginOptions['localization']['order_ini_additional_info']['lbl']."";
@@ -643,6 +646,31 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 	/************************************************************************************
 		[admin notices: show and dismiss]
 	************************************************************************************/
+    function wppizza_dmarc_nag() {
+			if(!$this->pluginOptions['order']['dmarc_nag_off']){
+				/*get domain*/
+				$urlobj=parse_url(get_site_url());
+				$domain=$urlobj['host'];
+				if (preg_match('/(?P<domain>[a-z0-9][a-z0-9\-]{1,63}\.[a-z\.]{2,6})$/i', $domain, $regs)) {
+        			$domain=$regs['domain'];
+      			}
+				/*check if in static from email*/
+				$staticFromEmail=$this->pluginOptions['order']['order_email_from'];
+				$pos = strpos($staticFromEmail, $domain);
+				if ($pos === false) {
+					/*dmarc nag**/
+					print'<div id="message" class="error"><b>
+						WPPIZZA - DMARC email policies (November 2014 / ongoing):<br /><br />
+						Due to recent policy changes by yahoo (others may follow suit) it is <span style="color:red">strongly advised to set a static "from email address"</span> in wppizza->order settings ->set static from email address, that corrosponds to your domain name.<br />
+						as your domain appears to be "'.$domain.'" you should <span style="color:red">set an email address like "abc@'.$domain.'"</span><br />
+						<span style="color:red">if you do NOT do this, some emails might NOT get delivered to you or your customers</span> as they would violate DMARC policies (search on google for "DMARC" if you would like to find out more)<br /><br />
+						this notice will remain until acted upon or you forcefully switch it off in wppizza->order settings -> next to the "static from address" settings.<br /><br />
+						Thank you
+					</b></div>';
+				}
+			}
+  	}
+
     function wppizza_do_admin_notice() {/*check if we need to show any notices i.e when set to 1 or on first install*/
 		if($this->pluginOptions['plugin_data']['nag_notice']!=0 || $this->pluginOptions==0){
 			add_action('admin_notices', array( $this, 'wppizza_install_notice') );
@@ -1497,7 +1525,7 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 			}else{
 			/*if template not in theme, fallback to template in plugin*/
 				$template_file=''.WPPIZZA_PATH.'templates/wppizza-loop'.$loStyle.'.php';
-			}			
+			}
 
 			/**loop through selected categories (might be one , many or all**/
 			foreach($querys as $query){
@@ -1509,7 +1537,7 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 				/*include the template**/
 				include($template_file);
 				do_action('wppizza_loop_template_end');
-				
+
 			}
 			return;//after loop
 		}
@@ -2153,7 +2181,7 @@ public function wppizza_require_common_input_validation_functions(){
 			$titleOrig=$title;
 
 			$strSearch=__('WPPizza Categories',$this->pluginLocale);
-			
+
 			if($sep && $loc=='right'){
 				$title=str_ireplace(''.$strSearch.' '.$sep.'','',$title);
 			}
@@ -2170,7 +2198,7 @@ public function wppizza_require_common_input_validation_functions(){
     			$title=str_ireplace($strSearch,'',$title);
     			/*and - just to be sure - replace any leftover double seperators with single ones**/
     			$title=str_replace($sep.$sep,$sep,$title);
-			} 			
+			}
 
 		/**might as well trim it*/
 		$title=trim($title);
@@ -2388,7 +2416,7 @@ public function wppizza_require_common_input_validation_functions(){
             		wp_register_script($this->pluginSlug, plugins_url( 'js/scripts.admin.js', $this->pluginPath ), array('jquery'), $this->pluginVersion ,true);
             		wp_register_script($this->pluginSlug.'-timepick', plugins_url( 'js/jquery.ui.timepicker.js', $this->pluginPath ), array('jquery'), $this->pluginVersion ,true);
             		wp_register_script($this->pluginSlug.'-chosen', plugins_url( 'js/chosen.jquery.min.js', $this->pluginPath ), array('jquery'), $this->pluginVersion ,true);
-            		
+
             		wp_enqueue_script($this->pluginSlug);
             		wp_enqueue_script($this->pluginSlug.'-timepick');
             		wp_enqueue_script($this->pluginSlug.'-chosen');
@@ -2485,7 +2513,7 @@ public function wppizza_require_common_input_validation_functions(){
 		$jsCartRefreshCompleteFunctions['functionsCartRefresh']=array();
 		$jsCartRefreshCompleteFunctions['functionsCartRefresh'] = apply_filters('wppizza_filter_js_cart_refresh_functions', $jsCartRefreshCompleteFunctions['functionsCartRefresh']);
 		$jsCartRefreshCompleteFunctions['functionsCartRefresh'] = array_keys(array_flip($jsCartRefreshCompleteFunctions['functionsCartRefresh']));/*flip to make unique, keys to just get the function name to sanitise things*/
-		
+
 		/**allow adding of veriables for extending plugins**/
 		$jsExtend['jsExtend']=array();
 		$jsExtend['jsExtend'] = apply_filters('wppizza_filter_js_extend', $jsExtend['jsExtend']);

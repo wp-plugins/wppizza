@@ -429,7 +429,8 @@
 				'order_email_attachments'=>array(),
 				'order_email_from'=>'',
 				'order_email_from_name'=>'',
-				'order_sms'=>''
+				'order_sms'=>'',
+				'dmarc_nag_off' => false					
 			),
 			'order_form'=>array(
 				0=>array('sort'=>0,'key'=>'cname','lbl'=>__('Name :', $this->pluginLocale),'value'=>array(),'type'=>'text','enabled'=>true,'required'=>false,'required_on_pickup'=>false,'prefill'=>true,'onregister'=>false,'placeholder'=>false),

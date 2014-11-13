@@ -60,7 +60,7 @@ $options = $this->pluginOptions;
 				}
 				echo "</select>";
 				echo" <span class='description'>".__('how to display single wppizza menu items.', $this->pluginLocale)."</span>";
-				echo" <span class='description' style='color:blue'>".__('please see the <a href="http://wordpress.org/plugins/wppizza/faq/">faq\'s -> single wppizza menu items display</a> for details as to how this works', $this->pluginLocale)."</span>";
+				echo" <span class='description' style='color:blue'>".__('please see the <a href="https://www.wp-pizza.com/topic/single-wppizza-menu-items-display/">faq\'s -> single wppizza menu items display</a> for details as to how this works', $this->pluginLocale)."</span>";
 			}
 
 			if($field=='category_parent_page'){
@@ -90,7 +90,7 @@ $options = $this->pluginOptions;
 			if($field=='single_item_permalink_rewrite'){
 				echo "<input name='".$this->pluginSlug."[plugin_data][".$field."]' size='20' type='text'  value='{$options['plugin_data'][$field]}' />";
 				echo " ".__('defaults to "wppizza" if left empty. Any value used here cannot not be used in any other custom post type', $this->pluginLocale)."";
-				echo "<br />".__('Note: by default, wppizza templates/shortcodes do not link to any single menu items. However, if you are including mneu items in search results for example or have edited a/the template(s) to include links to individual menu items you will also (probably) want to edit the single item template. see http://wordpress.org/plugins/wppizza/faq/ ->single wppizza menu items display', $this->pluginLocale)."";
+				echo "<br />".__('Note: by default, wppizza templates/shortcodes do not link to any single menu items. However, if you are including mneu items in search results for example or have edited a/the template(s) to include links to individual menu items you will also (probably) want to edit the single item template. see https://www.wp-pizza.com/topic/single-wppizza-menu-items-display', $this->pluginLocale)."";
 
 			}
 			if($field=='empty_category_and_items'){
@@ -720,7 +720,9 @@ $options = $this->pluginOptions;
 			}
 
 			if($field=='order_email_from'){
-				echo "<input id='".$field."' name='".$this->pluginSlug."[order][".$field."]' size='30' type='text' value='".$options['order'][$field]."' />";
+				echo "<input id='".$field."' name='".$this->pluginSlug."[order][".$field."]' size='30' type='text' value='".$options['order'][$field]."' /><br />";
+				echo" <input name='".$this->pluginSlug."[order][dmarc_nag_off]' type='checkbox'  ". checked($options['order']['dmarc_nag_off'],true,false)." value='1' /> ";
+				echo"".__('<b>if a DMARC notice is displayed at the top of the page (otherwise you can ignore this setting)</b>:<br />I know what I\'m doing, have read the DMARC nag notice about setting a static from address (if applicable) and/or have already set the appropriate email here. Stop bugging me.', $this->pluginLocale)."";
 			}
 			if($field=='order_email_from_name'){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[order][".$field."]' size='30' type='text' value='".$options['order'][$field]."' />";

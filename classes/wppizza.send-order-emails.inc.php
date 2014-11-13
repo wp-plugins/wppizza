@@ -499,6 +499,7 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 		function wppizza_order_send_email($orderid=false, $blogid=false){//,$options=false
 
 			$options=$this->pluginOptions;
+			$options = apply_filters('wppizza_filter_order_email_options', $options );
 
 			/***create/set email html and plaintext strings***/
 			$this->wppizza_order_email($orderid, $blogid);
