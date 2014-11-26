@@ -517,6 +517,12 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 				$orderFromEmail=$options['order']['order_email_from'];
 			}
 
+			/**if empty, use first half of email address**/
+			if(trim($orderFromName)==''){
+				$xplEmail=explode("@",$orderFromEmail);
+				$orderFromName=''.$xplEmail[0].'';
+			}
+
 			/**who to send the order to. put it in a var so we can reuse it**/
 			$this->orderShopEmail='';/**set default to admin email perhaps ? like so get_option('admin_email')**/
 			if(count($options['order']['order_email_to'])>0){

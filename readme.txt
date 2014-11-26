@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.3+, WP 3.3+ 
 Tested up to: 4.0
-Stable tag: 2.11.5.5
+Stable tag: 2.11.5.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -142,6 +142,11 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 
 == Changelog ==
+
+2.11.5.6  
+* bugfix: some gateway the_content filters directly output the string as opposed to returning it  
+* tweak: using first half of email address (before the @) as name in email headers when no name has been supplied (as opposed to using ---- )  
+26th November 2014  
 
 2.11.5.5  
 * added filter to email sending options (wppizza_filter_order_email_options)   

@@ -812,8 +812,9 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 	*	[order has been cancelled using GET vars-> display txt]
 	*
 	******************************************************************/
-	function wppizza_gateway_order_cancelled($orderhash, $blogid=false, $cancelTxt='', $delete=false){
+	function wppizza_gateway_order_cancelled($orderhash, $blogid=false, $cancelTxt='', $delete=false, $content=false){
 		global $wpdb;
+		$markup='';
 		//$wpdb->hide_errors();
 		$orderhash=wppizza_validate_alpha_only($orderhash);/**sanitize**/
 		/**select the right blog table */
@@ -831,12 +832,17 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 				$wpdb->query("UPDATE ".$wpdb->prefix . $this->pluginOrderTable." SET payment_status='CANCELLED' WHERE id=".$res->id." ");
 			}
 
-			print"<div class='wppizza-gateway-success'>".$cancelTxt."</div>";
+			$markup="<div class='wppizza-gateway-success'>".$cancelTxt."</div>";
 
 		}else{
-			print"<div class='wppizza-gateway-error'>error [".$this->gatewayIdent."-1101]: ".__('nothing to do !',$this->pluginLocale)."</div>";
+			$markup="<div class='wppizza-gateway-error'>error [".$this->gatewayIdent."-1101]: ".__('nothing to do !',$this->pluginLocale)."</div>";
 		}
-		return;
+		/*legacy for gateways that print as opposed to return output in filter*/
+		if(!$content){
+			echo $markup;return;
+		}else{
+			return $markup;
+		}
 	}
 
 	/******************************************************************
@@ -844,8 +850,9 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 	*	[order has failed using GET vars-> display txt]
 	*
 	******************************************************************/
-	function wppizza_gateway_payment_failed($orderhash, $blogid=false, $failTxt='', $delete=false){
+	function wppizza_gateway_payment_failed($orderhash, $blogid=false, $failTxt='', $delete=false, $content=false){
 		global $wpdb;
+		$markup='';
 		//$wpdb->hide_errors();
 		$orderhash=wppizza_validate_alpha_only($orderhash);/**sanitize**/
 		/**select the right blog table */
@@ -863,12 +870,17 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 				$wpdb->query("UPDATE ".$wpdb->prefix . $this->pluginOrderTable." SET payment_status='INVALID' WHERE id=".$res->id." ");
 			}
 
-			print"<div class='wppizza-gateway-error'>".$failTxt."</div>";
+			$markup="<div class='wppizza-gateway-error'>".$failTxt."</div>";
 
 		}else{
-			print"<div class='wppizza-gateway-error'>error [".$this->gatewayIdent."-1101]: ".__('nothing to do !',$this->pluginLocale)."</div>";
+			$markup="<div class='wppizza-gateway-error'>error [".$this->gatewayIdent."-1101]: ".__('nothing to do !',$this->pluginLocale)."</div>";
 		}
-		return;
+		/*legacy for gateways that print as opposed to return output in filter*/
+		if(!$content){
+			echo $markup;return;
+		}else{
+			return $markup;
+		}
 	}
 
 
@@ -900,29 +912,35 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 	*	[order has been completed -> display txt]
 	*
 	******************************************************************/
-	function wppizza_gateway_order_completed($orderhash, $blogid=false, $txtPending=false, $txtCancelled=false){
+	function wppizza_gateway_order_completed($orderhash, $blogid=false, $txtPending=false, $txtCancelled=false, $content=false){
 		$orderhash=wppizza_validate_alpha_only($orderhash);/**sanitize**/
 		$res = $this->wppizza_gateway_get_order_details($orderhash, false, $blogid);
-
+		$markup='';
 		if($res){
 			/**done**/
 			if($res->payment_status=='COMPLETED'){
-				print"<div class='wppizza-gateway-success'><h1>".$this->pluginOptions['localization']['thank_you']['lbl']."</h1>".nl2br($this->pluginOptions['localization']['thank_you_p']['lbl'])."</div>";
+				$markup.="<div class='wppizza-gateway-success'><h1>".$this->pluginOptions['localization']['thank_you']['lbl']."</h1>".nl2br($this->pluginOptions['localization']['thank_you_p']['lbl'])."</div>";
 				/**display order details (if enabled)**/
-				print"".$this->gateway_order_on_thankyou($res->id,$this->pluginOptions);
-				return;
+				$markup.="".$this->gateway_order_on_thankyou($res->id,$this->pluginOptions);
+
+				/*legacy for gateways that print as opposed to return output in filter*/
+				if(!$content){echo $markup;return;}else{return $markup;}				
 			}
 			/**waiting for ipn response**/
 			if($res->payment_status!='COMPLETED' && ($res->payment_status=='CAPTURED' || $res->payment_status=='AUTHORIZED') ){
-				print"<div class='wppizza-gateway-success'>".$txtPending."<p><b>ID:".$res->id."</b></p></div>";
-				print'<script>setInterval(function(){window.location.href=window.location.href;},5000);</script>';
-				return;
+				$markup.="<div class='wppizza-gateway-success'>".$txtPending."<p><b>ID:".$res->id."</b></p></div>";
+				$markup.='<script>setInterval(function(){window.location.href=window.location.href;},5000);</script>';
+
+				/*legacy for gateways that print as opposed to return output in filter*/
+				if(!$content){echo $markup;return;}else{return $markup;}
 			}
 			/**done**/
 			if($res->payment_status=='CANCELLED'){
 				/*maybe redirect to orderpage without GET vars or homepage ??*/
-				print"<div class='wppizza-gateway-success'>".$txtCancelled."</div>";
-				return;
+				$markup.="<div class='wppizza-gateway-success'>".$txtCancelled."</div>";
+
+				/*legacy for gateways that print as opposed to return output in filter*/
+				if(!$content){echo $markup;return;}else{return $markup;}
 			}
 			/**all others**/
 			//$errors="ORDER ID: ".$res->id."<br />";
@@ -933,13 +951,19 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 
 
 			/**actually lets make this a generic page without too much info**/
-			print"<div class='wppizza-gateway-error'>error [".$this->gatewayIdent."-1102]: ".__('Sorry, this order has already been processed or does not exist !',$this->pluginLocale)."</div>";
+			$markup.="<div class='wppizza-gateway-error'>error [".$this->gatewayIdent."-1102]: ".__('Sorry, this order has already been processed or does not exist !',$this->pluginLocale)."</div>";
 
-			return;
+			/*legacy for gateways that print as opposed to return output in filter*/
+			if(!$content){echo $markup;return;}else{return $markup;}
 		}else{
-			print"<div class='wppizza-gateway-error'>error [".$this->gatewayIdent."-1103]: ".__('Sorry, this order does not exist !',$this->pluginLocale)."</div>";
+			$markup.="<div class='wppizza-gateway-error'>error [".$this->gatewayIdent."-1103]: ".__('Sorry, this order does not exist !',$this->pluginLocale)."</div>";
+
+			/*legacy for gateways that print as opposed to return output in filter*/
+			if(!$content){echo $markup; return;}else{return $markup;}
 		}
-		return;
+		
+		
+		if(!$content){return;}else{return $content;}
 	}
 	/******************************************************************
 	*

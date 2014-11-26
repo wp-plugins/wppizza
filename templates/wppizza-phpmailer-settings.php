@@ -43,10 +43,20 @@ try {
 	
 	/**who the order is from. (if given). might be statically set**/
 	if($orderFromEmail!=''){
+		
 		$fromName=trim($orderFromName); 
-		if($fromName==''){$fromName='----';}
+		if($fromName==''){
+			/**if empty, use first half of email address**/
+			$xplEmail=explode("@",$orderFromEmail);
+			$fromName=''.$xplEmail[0].'';
+		}
+		
 		$replyToCCName=trim($this->orderClientName); 
-		if($replyToCCName==''){$replyToCCName='----';}	//if we want, we could set $fromName=get_bloginfo() for example if no name was given...		
+		if($replyToCCName==''){
+			/**if empty, use first half of email address**/
+			$xplEmail=explode("@",$this->orderClientEmail);
+			$replyToCCName=''.$xplEmail[0].'';
+		}	//if we want, we could set $fromName=get_bloginfo() for example if no name was given...		
 		
 		
 		$mail->SetFrom(''.$orderFromEmail.'',''.$fromName.'');/*by default, these are the customer submitted name/email. However these might also be statically set in order settings*/
