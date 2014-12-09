@@ -417,3 +417,6 @@ h2.wppizza-article-title{padding-bottom:0;margin:0}
 ************************/
 .wppizza-total{padding:0 3px}
 .wppizza-totals-itemcount{vertical-align:super;font-size:smaller;width:15px;height:15px;padding:0 0 5px 8px;display:inline-block;margin:0 5px;}
+.wppizza-totals-checkout{text-decoration:none;color:inherit !important}
+.wppizza-totals-checkout:hover{text-decoration:underline;color:inherit !important}
+.wppizza-totals-checkout:visited{color:inherit !important}

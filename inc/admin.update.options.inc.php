@@ -34,18 +34,6 @@
 	if(!isset($options['order']['delivery']['minimum_total']['deliverycharges_below_total'])){
 		$update_options['order']['delivery']['minimum_total']['deliverycharges_below_total']=$defaultOptions['order']['delivery']['minimum_total']['deliverycharges_below_total'];
 	}
-	if(!isset($options['order']['delivery_calculation_exclude_item'])){
-		$update_options['order']['delivery_calculation_exclude_item']=$defaultOptions['order']['delivery_calculation_exclude_item'];
-	}
-	if(!isset($options['order']['delivery_calculation_exclude_cat'])){
-		$update_options['order']['delivery_calculation_exclude_cat']=$defaultOptions['order']['delivery_calculation_exclude_cat'];
-	}
-	if(!isset($options['order']['discount_calculation_exclude_item'])){
-		$update_options['order']['discount_calculation_exclude_item']=$defaultOptions['order']['discount_calculation_exclude_item'];
-	}
-	if(!isset($options['order']['discount_calculation_exclude_cat'])){
-		$update_options['order']['discount_calculation_exclude_cat']=$defaultOptions['order']['discount_calculation_exclude_cat'];
-	}
 	/****************************************************************************
 	$update_options now holds the old options plus the added new defaults options
 	*****************************************************************************/
@@ -92,6 +80,20 @@
 	if(isset($options['order']['order_email_attachments'])){
 		$update_options['order']['order_email_attachments']=$options['order']['order_email_attachments'];
 	}
+	if(isset($options['order']['delivery_calculation_exclude_item'])){
+		$update_options['order']['delivery_calculation_exclude_item']=$options['order']['delivery_calculation_exclude_item'];
+	}
+	if(isset($options['order']['delivery_calculation_exclude_cat'])){
+		$update_options['order']['delivery_calculation_exclude_cat']=$options['order']['delivery_calculation_exclude_cat'];
+	}
+	if(isset($options['order']['discount_calculation_exclude_item'])){
+		$update_options['order']['discount_calculation_exclude_item']=$options['order']['discount_calculation_exclude_item'];
+	}
+	if(isset($options['order']['discount_calculation_exclude_cat'])){
+		$update_options['order']['discount_calculation_exclude_cat']=$options['order']['discount_calculation_exclude_cat'];
+	}	
+	
+	
 	if(isset($options['order_form'])){
 		$update_options['order_form']=$update_options['order_form'];
 		/*lets not loose select options in order form**/

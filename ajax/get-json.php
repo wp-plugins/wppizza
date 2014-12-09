@@ -29,10 +29,7 @@ if(isset($_POST['vars']['type']) && (($_POST['vars']['type']=='add' || $_POST['v
 	if(isset($_POST['vars']['catId']) && $_POST['vars']['catId']!=''){
 		$catIdSelected=(int)$_POST['vars']['catId'];
 	}
-	/**check if we want to exclude this item when calculating discounts**/
-	$exclItemFromDiscount=$options['order']['discount_calculation_exclude_item'];
-
-
+	
 	/**initialize price array***/
 	$itemprice=array();
 	$itempricefordelivery=array();/*if we have excluded item to count towards free delivery */
@@ -91,7 +88,8 @@ if(isset($_POST['vars']['type']) && (($_POST['vars']['type']=='add' || $_POST['v
 	/**remove from cart -> just unset**/
 	if($_POST['vars']['type']=='remove'){
 		/**explode and get last in array (the id)**/
-		$groupId=end(explode("-",$_POST['vars']['id']));
+		$chkX=explode("-",$_POST['vars']['id']);
+		$groupId=end($chkX);
 		end($_SESSION[$this->pluginSession]['items'][$groupId]);
 		$last=key($_SESSION[$this->pluginSession]['items'][$groupId]);
 		unset($_SESSION[$this->pluginSession]['items'][$groupId][$last]);
@@ -576,15 +574,15 @@ exit();
 if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='hasCachePlugin'){
 		/**********set header********************/
 		header('Content-type: application/json');
-	
+
 		ob_start();
 		$attributes=json_decode(stripslashes($_POST['vars']['attributes']),true);
 		$cart=$this->wppizza_include_shortcode_template('cart',$attributes);
 		$markup = ob_get_clean();
 		/*return html and cart separately*/
-		$res['markup']=$markup;		
+		$res['markup']=$markup;
 		$res['cart']=$cart;
-		
+
 	print"".json_encode($res)."";
 exit();
 }
@@ -599,10 +597,10 @@ if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='gettotals'){
 	/**********set header********************/
 	header('Content-type: application/json');
 	$res=wppizza_order_summary($_SESSION[$this->pluginSession],$options);
-	
+
 	$res['itemcount']=0;
 	foreach($res['items'] as $item){
-	$res['itemcount']+=$item['count'];	
+	$res['itemcount']+=$item['count'];
 	}
 	print"".json_encode($res)."";
 exit();

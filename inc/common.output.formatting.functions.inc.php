@@ -308,7 +308,24 @@
 				$summary['itemcount_right']='<span class="wppizza-totals-itemcount"></span>';
 			}
 		}
-		$str='<div class="wppizza-totals">'.$summary['itemcount_left'].''.$summary['currency_left'].'<span class="wppizza-total'.$itemsClass.'"></span>'.$summary['currency_right'].''.$summary['itemcount_right'].'</div>';
+		/**link the whole shebang to order page if att set**/
+		$summary['checkout_a_href']='';
+		$summary['checkout_a_close']='';
+		if(isset($atts['checkout']) && $options['order']['orderpage'] && $options['order']['orderpage']!=''){
+			/**wpml select of order page**/
+			if(function_exists('icl_object_id')) {
+				$options['order']['orderpage']=icl_object_id($options['order']['orderpage'],'page');
+				/*confirmation page -> amend order link**/
+				if($options['confirmation_form_amend_order_link']>0){
+					$options['confirmation_form_amend_order_link']=icl_object_id($options['confirmation_form_amend_order_link'],'page');
+				}
+			}
+			$summary['orderpagelink']=get_page_link($options['order']['orderpage']);
+			$summary['checkout_a_href'].='<a href="'.$summary['orderpagelink'].'"  class="wppizza-totals-checkout" title="'.$options['localization']['place_your_order']['lbl'].'">';
+			$summary['checkout_a_close'].='</a>';
+		}
+		
+		$str='<div class="wppizza-totals">'.$summary['checkout_a_href'].''.$summary['itemcount_left'].''.$summary['currency_left'].'<span class="wppizza-total'.$itemsClass.'"></span>'.$summary['currency_right'].''.$summary['itemcount_right'].''.$summary['checkout_a_close'].'</div>';
 		return $str;
 	}
 	/**format time output**/
@@ -719,7 +736,7 @@ function wppizza_order_summary($session,$options,$module=null,$ajax=null){
 				$discountApply=0;
 		}
 		/*loose php notice**/
-		$session['total_price_calc_discount']=!empty($session['total_price_calc_discount']) ? $session['total_price_calc_discount'] : $session['total_price_items'];
+		$session['total_price_calc_discount']=isset($session['total_price_calc_discount']) ? $session['total_price_calc_discount'] : $session['total_price_items'];
 
 		/** percentage discount**/
 		if($options['order']['discount_selected']=='percentage'){

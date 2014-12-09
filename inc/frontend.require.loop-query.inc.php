@@ -64,10 +64,11 @@ if(!is_single()){
 	however if we  have no idea here which one it should be , 
 	we just take the first one unless set by GET[c]
 ********************************************************/
-if(is_single()){
+if(is_single() && get_post_type()==$post_type){
 	$termDetails = wp_get_post_terms( $post->ID, WPPIZZA_TAXONOMY);
 	$termSlug='';/*ini as unknown*/
 	$categoryId=0;/*ini as unknown*/
+
 	if ($termDetails && ! is_wp_error($termDetails)){
 		if(isset($_GET['c'])){/*if we know which category this is apply, otherwsise use first available**/
 			$taxonomies = wp_list_pluck( $termDetails, 'term_id', 'slug');
@@ -79,7 +80,49 @@ if(is_single()){
 		}
 	}
 }
+/**************************************************************************
+	for people that cannot read or insist nevertheless on putting 
+	the shortcode on a post or other custom post type although 
+	- AS THE DOCUMENTAION SAYS - IT BELONGS ON PAGES ONLY 
+	
 
+	NOTE: as we cannot use the current post id (as it's not a
+	wppizza post) we'll do our best to get and set the appropriate vars
+	
+	
+	ADVISE: THE BELOW IS REALLY NOT SUPPORTED AS SUCH.
+	IT MIGHT OR MIGHT NOT WORK DEPENDING ON POST (TYPE) USED.
+	just saying.....
+**************************************************************************/
+if(is_single() && get_post_type()!=$post_type){
+	/*ignore all of the below if there's no query var to start off with*/
+	if(isset($query_var)){
+		
+		$terms = get_terms(WPPIZZA_TAXONOMY);/**get all wppizza categories*/
+		$taxonomies = wp_list_pluck( $terms, 'term_id', 'slug');/**array slug->id*/					
+		$termSlug='';/*ini as unknown*/
+		$categoryId=0;/*ini as unknown*/		
+		$termDetails=array();/*ini as unknown*/		
+		
+	
+		/**lets see if we can find one**/
+		if(isset($taxonomies[$query_var])){
+			$termSlug=$query_var;
+			$categoryId=$taxonomies[$query_var];
+			
+			$tDetails=array();
+			foreach($terms as $term){
+				if($term->term_id==$categoryId){
+					$tDetails=$term;
+					break;
+				}
+			}
+			/*get details from cat id**/
+			$termDetails[0] = $tDetails;
+			$termDetails[0]->filter = 'raw'; 
+		}
+	}
+}
 /*************************************************************	
 	build and run the query
 *************************************************************/

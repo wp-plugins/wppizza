@@ -5,8 +5,8 @@ Author URI: http://www.wp-pizza.com
 Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.3+, WP 3.3+ 
-Tested up to: 4.0
-Stable tag: 2.11.5.6
+Tested up to: 4.0.1
+Stable tag: 2.11.5.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -142,6 +142,13 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 
 == Changelog ==
+
+2.11.5.7  
+* bugfix: Discounts not always correctly identified when excluding selected menu items and/or categories to calculate discount  
+* added: ability to also use shortcodes in (custom) posts as opposed to just pages (although not recommended or indeed futher supported)  
+* added: checkout attribute to [wppizza type='totals'] shortcode (wrapping all into href link) to allow going to orderpage from there 
+8th December 2014  
+
 
 2.11.5.6  
 * bugfix: some gateway the_content filters directly output the string as opposed to returning it  

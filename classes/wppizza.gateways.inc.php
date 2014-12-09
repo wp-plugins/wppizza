@@ -615,7 +615,7 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 	*	[update db entry with order variables]
 	*
 	******************************************************************/
-	function wppizza_gateway_update_order_details($order, $blogid=false, $updateSession=true){
+	function wppizza_gateway_update_order_details($order, $blogid=false, $updateSession=true, $status=false){
 		global $wpdb;
 		//$wpdb->hide_errors();
 		$orderId=$order->id;
@@ -658,8 +658,17 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 			$_POST['wppizza_wpml_lang']=ICL_LANGUAGE_CODE;
 		}
 		$thisOrderPostVars=wppizza_filter_sanitize_post_vars($_POST);
-
-		$wpdb->query("UPDATE ".$wpdb->prefix . $this->pluginOrderTable." SET customer_ini='".$thisOrderPostVars."', initiator='".esc_sql($this->gatewayName)."' , order_ini='".esc_sql(serialize($order->order_details))."'   WHERE id='".$orderId."' ");
+		
+		
+		/***change status if required****/
+		if(!$status){
+			$setStatus='';	
+		}else{
+			$setStatus=", payment_status='".esc_sql($status)."' ";
+		}
+		
+		
+		$wpdb->query("UPDATE ".$wpdb->prefix . $this->pluginOrderTable." SET customer_ini='".$thisOrderPostVars."', initiator='".esc_sql($this->gatewayName)."' , order_ini='".esc_sql(serialize($order->order_details))."' ".$setStatus."  WHERE id='".$orderId."' ");
 
 		/**filter order items**/
 		$order->order_details['item'] = apply_filters('wppizza_filter_order_extend', $order->order_details['item']);
@@ -821,7 +830,7 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 		if($blogid && is_int($blogid) && $blogid>1){$wpdb->prefix=$wpdb->base_prefix . $blogid.'_';}
 
 		/***check if order exists**/
-		$res = $this->wppizza_gateway_get_order_details($orderhash, false, $blogid, array('INITIALIZED','CANCELLED'), $this->gatewayName);
+		$res = $this->wppizza_gateway_get_order_details($orderhash, false, $blogid, array('INITIALIZED','CANCELLED','PENDING'), $this->gatewayName);
 		if($res){
 			/**delete cancelled order**/
 			if($delete){
@@ -912,7 +921,7 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 	*	[order has been completed -> display txt]
 	*
 	******************************************************************/
-	function wppizza_gateway_order_completed($orderhash, $blogid=false, $txtPending=false, $txtCancelled=false, $content=false){
+	function wppizza_gateway_order_completed($orderhash, $blogid=false, $txtPending=false, $txtCancelled=false, $content=false ,$refresh=5000){
 		$orderhash=wppizza_validate_alpha_only($orderhash);/**sanitize**/
 		$res = $this->wppizza_gateway_get_order_details($orderhash, false, $blogid);
 		$markup='';
@@ -921,15 +930,20 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 			if($res->payment_status=='COMPLETED'){
 				$markup.="<div class='wppizza-gateway-success'><h1>".$this->pluginOptions['localization']['thank_you']['lbl']."</h1>".nl2br($this->pluginOptions['localization']['thank_you_p']['lbl'])."</div>";
 				/**display order details (if enabled)**/
-				$markup.="".$this->gateway_order_on_thankyou($res->id,$this->pluginOptions);
+				//$markup.="".$this->gateway_order_on_thankyou($res->id,$this->pluginOptions);
+
+				/**display order details (if enabled)**/
+				ob_start();
+				$this->gateway_order_on_thankyou($res->id,$this->pluginOptions);
+				$markup .= ob_get_clean();
 
 				/*legacy for gateways that print as opposed to return output in filter*/
 				if(!$content){echo $markup;return;}else{return $markup;}				
 			}
 			/**waiting for ipn response**/
-			if($res->payment_status!='COMPLETED' && ($res->payment_status=='CAPTURED' || $res->payment_status=='AUTHORIZED') ){
+			if(in_array($res->payment_status, array('CAPTURED','AUTHORIZED','PENDING'))){
 				$markup.="<div class='wppizza-gateway-success'>".$txtPending."<p><b>ID:".$res->id."</b></p></div>";
-				$markup.='<script>setInterval(function(){window.location.href=window.location.href;},5000);</script>';
+				$markup.='<script>setInterval(function(){window.location.href=window.location.href;},'.$refresh.');</script>';
 
 				/*legacy for gateways that print as opposed to return output in filter*/
 				if(!$content){echo $markup;return;}else{return $markup;}
