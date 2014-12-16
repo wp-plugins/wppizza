@@ -5,7 +5,7 @@ Description: Maintain your restaurant menu online and accept cash on delivery or
 Author: ollybach
 Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Author URI: http://www.wp-pizza.com
-Version: 2.11.5.7
+Version: 2.11.5.8
 License:
 
   Copyright 2012 ollybach (dev@wp-pizza.com)
@@ -94,7 +94,7 @@ class WPPizza extends WP_Widget {
  function __construct() {
 
 	/**init constants***/
-	$this->pluginVersion='2.11.5.7';//increment in line with stable tag in readme and version above
+	$this->pluginVersion='2.11.5.8';//increment in line with stable tag in readme and version above
  	$this->pluginName="".WPPIZZA_NAME."";
  	$this->pluginSlug="".WPPIZZA_SLUG."";//set also in uninstall when deleting options
 	$this->pluginSlugCategoryTaxonomy="".WPPIZZA_TAXONOMY."";//also on uninstall delete wppizza_children as well as widget
@@ -236,7 +236,7 @@ class WPPizza extends WP_Widget {
 	*
 	*	[set/save submitted user post data in session, exclude tips though ]
 	*	[moved from actions to be available throughout]
-	*	
+	*
 	******************************************************/
 	function wppizza_sessionise_userdata($postUserData,$orderFormOptions) {
 			if (!session_id()) {session_start();}
@@ -289,6 +289,12 @@ class WPPizza extends WP_Widget {
 	* 	only include once in admin to register strings (as it saves a ton of icl queries)
 	********************************************************************************/
 	function wppizza_wpml_localization(){
+		/*get the wpml'd order page*/
+		if($this->pluginOptions!=0) {
+			if(function_exists('icl_object_id')){
+				$this->pluginOptions['order']['orderpage']=icl_object_id($this->pluginOptions['order']['orderpage'],'page');
+			}
+		}
 		if(function_exists('icl_translate')){
 			if( is_admin() && ( !defined( 'DOING_AJAX' ) || !DOING_AJAX )){
 				require_once(WPPIZZA_PATH .'inc/wpml.inc.php');

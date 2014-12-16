@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.3+, WP 3.3+ 
 Tested up to: 4.0.1
-Stable tag: 2.11.5.7
+Stable tag: 2.11.5.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -142,6 +142,17 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 
 == Changelog ==
+
+2.11.5.8  
+* tweak: header classes in loop templates filterable  
+* tweak: article classes in loop templates filterable (and added -first and -last)  
+* tweak: removed header class page-header and page-title from header in loop when more than one category displayed (in case themes mess around with this)  
+* fix: loop responsive template. missing closing div in single item display.  
+* fix: WPML orderpage not identified when wpml string translation not installed 
+* fix: broke bestseller attribute when !all attribute was added in a previous version  
+* fix: broke single attribute when !all attribute was added in a previous version  
+* added: added WPPIZZA_ORDER_DETAILS class (for future use to simplify getting order details, not yet for production or indeed used anywhere)  
+16th December 2014  
 
 2.11.5.7  
 * bugfix: Discounts not always correctly identified when excluding selected menu items and/or categories to calculate discount  

@@ -2,14 +2,6 @@
 	/*no need to run this when no wpml or on wppizza first install*/
 	if($this->pluginOptions!=0) {
 
-		/*****wpml check for orderpage**********/
-		if ( is_admin() && ( !defined( 'DOING_AJAX' ) || !DOING_AJAX ) ){
-			/*maybe do something one day in admin **/
-		}else{
-			$this->pluginOptions['order']['orderpage']=icl_object_id($this->pluginOptions['order']['orderpage'],'page');
-		}
-
-
 		/**localization**/
 		if(isset($this->pluginOptions['localization']) && is_array($this->pluginOptions['localization'])){
 		foreach($this->pluginOptions['localization'] as $k=>$arr){

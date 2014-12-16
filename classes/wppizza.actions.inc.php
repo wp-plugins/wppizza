@@ -1317,9 +1317,8 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 			[include category loop template]
 		***************************************/
 		if($type=='category'){
-			static $countCategory=0;$countCategory++;
 			$options = $this->pluginOptions;
-
+			$querys=array();
 			/*********************************************************************
 				[as we have changed in v.2.8.7.4 to have the additives as array
 				so we can custom sort them but dont really want to screw up
@@ -1349,7 +1348,12 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 			*
 			********************************************************************/
 
-			/***top 10 (or whatever) -> bestsellers****/
+
+			/**********************************************************************************
+			*
+			*	[top 10 (or whatever) -> bestsellers ]
+			*
+			**********************************************************************************/
 			if(isset($atts['bestsellers'])){
 				global $wpdb;
 				/**wppizza posts to compare against, making sure posts still exists**/
@@ -1384,7 +1388,6 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 				/*chunk to required bits*/
 				$chunks=(int)$atts['bestsellers'];
 				$bestsellers=array_chunk($bestsellers, $chunks, true);
-
 
 				if(count($bestsellers)>0){
 					/**required bestsellers**/
@@ -1422,27 +1425,65 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 				/*get and set all terms in the taxonomy and convert to array of all slugs for tax query */
 				$terms = get_terms( $this->pluginSlugCategoryTaxonomy );
 				$query_var = wp_list_pluck( $terms, 'slug' );
-
 				/** filter arguments -> sort output according to populariry (i.e how many tims an item has been bought)**/
 				add_filter('wppizza_filter_loop', array( $this, 'wppizza_filter_shortcode_post_in_args'),10,1);
+
+				/**********************************************************
+					as bestsellers are not tied to a particular category
+					set some static variables so we can use it in the
+					loop templates
+				**********************************************************/
+				$querys['bestsellers'] = new stdClass;
+				$querys['bestsellers']->term_id = array_keys($query_var);
+				$querys['bestsellers']->name = 'bestsellers';//should be a slug. no spaces etc
+				$querys['bestsellers']->slug = $query_var;
+				$querys['bestsellers']->category_id = 0;//unknown / not applicable
 			}
 
-			/***single item ***/
+
+			/**********************************************************************************
+			*
+			*	[single item]
+			*
+			**********************************************************************************/
 			if(isset($atts['single'])){
-				$atts['include']=$atts['single'];
+				$atts['include']=(int)$atts['single'];
 				unset($atts['category']);/*unset all categories as query_vars below will hold an array of all the categories**/
 				$atts['noheader']=1;/**omit header**/
 				/*get and set all terms in the taxonomy and convert to array of all slugs for tax query */
-				$terms = get_terms( $this->pluginSlugCategoryTaxonomy );
-				$query_var = wp_list_pluck( $terms, 'slug' );
-
+				$termDetails = wp_get_post_terms( $atts['include'], WPPIZZA_TAXONOMY);
+				if ($termDetails && !is_wp_error($termDetails)){
+					$query_var = wp_list_pluck( $termDetails, 'slug', 'term_id');
+				}else{
+					/*cat find any, get all*/
+					$terms = get_terms( $this->pluginSlugCategoryTaxonomy );
+					$query_var = wp_list_pluck( $terms, 'slug' );
+				}
+				/*indexed array of term to be able to set some sort of category id*/
+				$termKeys=array_keys($query_var);
 				/** filter arguments -> sort output according to populariry (i.e how many tims an item has been bought)**/
 				add_filter('wppizza_filter_loop', array( $this, 'wppizza_filter_shortcode_post_in_args'),10,1);
+
+				/**********************************************************
+					as single items are not tied to a particular category
+					(they can be in several)
+					set some static variables so we can use it in the
+					loop templates
+				**********************************************************/
+				$querys['single'] = new stdClass;
+				$querys['single']->term_id = $termKeys;
+				$querys['single']->name = 'single';//should be a slug. no spaces etc
+				$querys['single']->slug = $query_var[$termKeys[0]];//get first slug
+				$querys['single']->category_id = $termKeys[0];//just use the first we have
+
 			}
 
-
-			$querys=array();
-			/*select first category if none selected->used when using shortcode without category, unless we are looking for bestsellers*/
+			/**********************************************************************************
+			*
+			*	[select first category if none selected->used when using shortcode without category,
+			*	unless we are looking for bestsellers]
+			*
+			**********************************************************************************/
 			if(!isset($atts['category']) && !isset($atts['bestsellers']) && !isset($atts['single']) ){
 				$termSort=$options['layout']['category_sort'];
 				asort($termSort);
@@ -1452,11 +1493,14 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 				$querys[]=get_term_by('id',$firstTermId,$this->pluginSlugCategoryTaxonomy);
 			}
 
-			/*category(ies) has/have been selected*/
+			/**********************************************************************************
+			*
+			*	[category(ies) has/have been selected]
+			*
+			**********************************************************************************/
 			if(isset($atts['category'])){
 				$catSlugsToArray=explode(',',$atts['category']);
 				if(in_array('!all',$catSlugsToArray)){
-
 					/**check if we are excluding some categories**/
 					$excludeCategory=array();
 					foreach($catSlugsToArray as $sKey=>$slug){
@@ -1527,17 +1571,19 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 				$template_file=''.WPPIZZA_PATH.'templates/wppizza-loop'.$loStyle.'.php';
 			}
 
-			/**loop through selected categories (might be one , many or all**/
+			/*cat count*/
+			$catCount=count($querys);
+			static $loopCount=0;//set static in case there's more than one shortcode on page
 			foreach($querys as $query){
-
 				/**q vars**/
 				if(isset($query) && $query){
-					$query_var=''.$query->slug.'';
+					$query_var=$query->slug;
 				}
 				/*include the template**/
 				include($template_file);
 				do_action('wppizza_loop_template_end');
 
+				$loopCount++;
 			}
 			return;//after loop
 		}
@@ -2432,6 +2478,7 @@ public function wppizza_require_common_input_validation_functions(){
     public function wppizza_register_scripts_and_styles($hook) {
     	global $wp_scripts;
 		$options = $this->pluginOptions;
+
     	/**************
     		css
     	**************/

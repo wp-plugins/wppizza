@@ -4,10 +4,10 @@
  *
  *	WPPizza - Category Loop Template
  *	IF YOU MUST EDIT THIS, READ THE COMMENTS
- *	
  *
- ****************************************************************************************/	
-	/*************************************************************	
+ *
+ ****************************************************************************************/
+	/*************************************************************
 		[TIDYUP in 2.11.2 using includes to get plugin options
 		, get/set vars and run query in loop and loop responsive
 	*************************************************************/
@@ -17,22 +17,22 @@
 	require(WPPIZZA_PATH.'inc/frontend.require.loop-query.inc.php');/*query arguments filterable via wppizza_filter_loop */
 ?>
 <?php
+	/*ADDED IN VERSION 2.8.5*/
+	do_action('wppizza_loop_outside_start', $the_query, $options,  $termSlug, $categoryId);
+?>
+<?php
 /********************************************
  *
  *	[OUTPUT HEADER]
  *	[edit or even delete if you want]
  *	[alternatively - and better - set "noheader" in shortcode, "Suppress Category Header" in widget
  *	or just suppress all headers above looped items  in wppizza settings->layout]
- * 
+ *
  ********************************************/
 ?>
-<?php
-	/*ADDED IN VERSION 2.8.5*/
-	do_action('wppizza_loop_outside_start', $the_query, $options,  $termSlug, $categoryId);
-?>
 <?php if(!is_single() && !isset($noheader) && $termDetails && $the_query->found_posts>0){ /*exclude header if set or is single or <=0 posts */?>
-	<header id="<?php echo $post_type ?>-header-<?php echo $termSlug ?>-<?php echo $categoryId ?>" class="page-header entry-header <?php echo $post_type ?>-header <?php echo $post_type ?>-header-<?php echo $termSlug ?>">
-		<h1 class="page-title entry-title <?php echo $post_type ?>-title"><?php echo $termDetails->name ?></h1>
+	<header id="<?php echo $post_type ?>-header-<?php echo $termSlug ?>-<?php echo $categoryId ?>" class="<?php echo $headerclasses ?>">
+		<h1 class="<?php echo $headerclassesh1 ?>"><?php echo $termDetails->name ?></h1>
 		<?php if ( $termDetails->description!='' ) :?>
 		<div class="entry-meta <?php echo $post_type ?>-header-meta"><?php echo $termDetails->description; ?></div>
 		<?php endif; ?>
@@ -48,19 +48,21 @@
 *
 *	[OUTPUT LOOP - edit if you want/must]
 *	WARNING: be careful not to change or delete any classes or id's (especially in the prices section), as the ajax functionality when adding items to cart depends on them
-*	Furthermore, the used CSS has - obviously - been setup with those in min.
-*	You should be able to add additional classes though. Make sure you test things.
+*	Furthermore, the used CSS has - obviously - been setup with those in mind.
+*	You should be able to add additional classes though (use the filters if you can). Make sure you test things.
 *
 *
  ********************************************/
 	/* Start the Loop */
+	$articlecount=0;//counter
 	while ( $the_query->have_posts() ) : $the_query->the_post();
+	$articlecount++;
 	/**changed / added in 2.5***/
 	/**changed to not run function multiple times unnecessarily -> replaced all other get_the_ID() further down**/
 	$postId=get_the_ID();
 	/***new in 2.5.6 ->prettyPhoto (store get_the_title() in var so we can use it multiple times without running function more than once **/
 	$postTitle=get_the_title();
-	/**get permalink*****/	
+	/**get permalink*****/
 	$permalink = get_permalink( $postId );
 	/**filter to add category id to permalink so we can identify which category it came from if we have "group by category" enabled;**/
 	$permalink = apply_filters('wppizza_filter_loop_permalink', $postId, $permalink, $termDetails, $categoryId);
@@ -68,7 +70,11 @@
 	$meta=get_post_meta($postId, $post_type, true );
 	/**added in 2.5 to enable messing around with output below if required***/
 	$meta = apply_filters('wppizza_filter_loop_meta', $meta, $postId);
-
+	/**article classes*****/
+	$articleclasses = array(''.$post_type.'-article','entry-content',''.$post_type.'-article-'.$termSlug.'-'.$categoryId);
+	if($articlecount==1){$articleclasses[]=''.$post_type.'-article-first';}/*add - first*/
+	if($articlecount==$the_query->found_posts && $the_query->found_posts>1){$articleclasses[]=''.$post_type.'-article-last';}/*add - last if more than one*/
+	$articleclasses=apply_filters('wppizza_filter_article_class',$articleclasses, $postId, $articlecount);/*enable filtering*/
 	/***********************************************************
 	*
 	*	if you want to display categories for example , uncomment
@@ -86,10 +92,10 @@
 //			$categoryNames = implode(" / ",$term_category);
 //		}
 //		/*now output $categoryNames somewhere***/
-	
-	
+
+
 	$numberOfSizes=count($options['sizes'][$meta['sizes']]);
-	/**if selected in admin, make click on title add to cart or 
+	/**if selected in admin, make click on title add to cart or
 	show alert when there are more than one size**/
 	$clickTriggerClass='';
 	$clickTriggerId='';
@@ -107,7 +113,7 @@
 	/*ADDED IN VERSION 2.8.5*/
 	do_action('wppizza_loop_inside_before_article', $postId,  $options, $termSlug, $categoryId);
 ?>
-	<article id="post-<?php echo $postId ?>" <?php post_class(array(''.$post_type.'-article','entry-content',''.$post_type.'-article-'.$termSlug.'-'.$categoryId)); ?>>
+	<article id="post-<?php echo $postId ?>" <?php post_class($articleclasses); ?>>
 <?php
 /*********************************************
 	[single items entry content]
@@ -151,7 +157,7 @@ if(is_single()){
 <?php
 	/*ADDED IN VERSION 2.8.5*/
 	do_action('wppizza_loop_inside_after_thumbnails', $postId,  $options, $termSlug, $categoryId);
-?>		
+?>
 <?php
 /*********************************************
 		[prices]
@@ -204,7 +210,7 @@ if(is_single()){
 <?php
 	/*ADDED IN VERSION 2.8.5*/
 	do_action('wppizza_loop_inside_after_title', $postId,  $options, $termSlug, $categoryId);
-?>			
+?>
 		<?php the_content();?>
 		</div>
 
@@ -234,10 +240,10 @@ if(is_single()){
 /*************************************************
 	[comments box - if single item view and enabled of course]
 **************************************************/
-if(is_single()){	
-	comments_template( '', true ); 
+if(is_single()){
+	comments_template( '', true );
 }
-?>	
+?>
 <?php
 	/*ADDED IN VERSION 2.8.5*/
 	do_action('wppizza_loop_inside_after_comments', $postId,  $options, $termSlug, $categoryId);
