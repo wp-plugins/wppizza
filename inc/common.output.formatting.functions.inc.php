@@ -283,7 +283,7 @@
 
 		return trim($str);
 	}
-	/**show totals**/
+	/**show totals by shortcode**/
 	function wppizza_frontendTotals($options,$atts){
 		$itemsClass='';
 		if(isset($atts['value']) && $atts['value']=='items'){
@@ -328,6 +328,7 @@
 		$str='<div class="wppizza-totals">'.$summary['checkout_a_href'].''.$summary['itemcount_left'].''.$summary['currency_left'].'<span class="wppizza-total'.$itemsClass.'"></span>'.$summary['currency_right'].''.$summary['itemcount_right'].''.$summary['checkout_a_close'].'</div>';
 		return $str;
 	}
+		
 	/**format time output**/
 	function wpizza_format_time($time,$timeFormat){
 		if(!isset($timeFormat) || !is_array($timeFormat)){

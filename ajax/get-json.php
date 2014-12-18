@@ -236,6 +236,10 @@ if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='order-pickup'){
 	}
 
 	$vars['location']=$location;
+	/*element name to go to on page refresh*/
+	if(trim($options['layout']['element_name_refresh_page'])!=''){
+		$vars['anchor']='#'.trim($options['layout']['element_name_refresh_page']);
+	}
 
 	/***do action of some sort***/
 	do_action('wppizza_pickup_toggle',$pickup);

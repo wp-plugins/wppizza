@@ -93,6 +93,7 @@ $options = $this->pluginOptions;
 				echo "<br />".__('Note: by default, wppizza templates/shortcodes do not link to any single menu items. However, if you are including mneu items in search results for example or have edited a/the template(s) to include links to individual menu items you will also (probably) want to edit the single item template. see https://www.wp-pizza.com/topic/single-wppizza-menu-items-display', $this->pluginLocale)."";
 
 			}
+						
 			if($field=='empty_category_and_items'){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[plugin_data][".$field."]' type='checkbox'  value='1' />";
 				echo" ".__('delete images too ?', $this->pluginLocale)."";
@@ -107,7 +108,13 @@ $options = $this->pluginOptions;
 				echo "<br />".__('By default, the stylesheet will be loaded AFTER the main theme stylesheet (which should have a priority of "10"). If you experience strange behaviour or layout issues (in conjunction with other plugins for example), you can try adjusting this priority here (the bigger the number, the later it gets loaded).', $this->pluginLocale)."";
 
 			}
+			if($field=='element_name_refresh_page'){
+				echo "<input name='".$this->pluginSlug."[layout][".$field."]' size='20' type='text'  value='{$options['layout'][$field]}' />";
+				echo " ".__('[blank to ignore]', $this->pluginLocale)."";
+				echo "<br />".__('set an element name the page should go to on refresh when <b>switching beetween pickup and delivery</b> (if enabled). perhaps useful in long/one-page layouts to go to a specific part of the page on refresh', $this->pluginLocale)."";
+				echo "<br /><span class='description'>".__('example: put an element on your page in the appropriate place like &#60;a name="somename" /&#62; and set the value here to "somename" ', $this->pluginLocale)."</span>";
 
+			}
 			if($field=='hide_decimals' ){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[layout][".$field."]' type='checkbox'  ". checked($options['layout'][$field],true,false)." value='1' />";
 			}

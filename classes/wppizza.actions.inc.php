@@ -1308,6 +1308,65 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 	}
 
     /*****************************************************
+    *
+    * add to cart button by shortcode
+    *
+    ******************************************************/
+	function wppizza_add_item_to_cart_button($atts , $options){
+		$str='';/*ini empty*/
+				
+		/*missing or empty attributes**/
+		if(!isset($atts['id']) ||  $atts['id']<=0 || $atts['id']=='' ){
+			return $str;
+		}
+		/**not the correct post type*/
+		$posttype=get_post_type( $atts['id'] );
+		if($posttype!=WPPIZZA_POST_TYPE){
+			return $str;
+		}
+		
+		/* get sizes for this menu item*/
+		$meta=get_post_meta($atts['id'],$this->pluginSlug, true);//, $this->pluginSlug, true
+
+		/*size id*/
+		$size=$meta['sizes'];
+
+		/*price/tier id*/
+		$selectedPrice=0;//default to first
+		/*check if size exists*/
+		if(isset($atts['size']) && isset($meta['prices'][$atts['size']])){
+			$selectedPrice=$atts['size'];
+		}
+		$dropdown='';
+		$hasdropdown=false;
+		if(!isset($atts['single']) || !$atts['single']){/*if not forced to single button*/
+			if(count($meta['prices'])>1){
+				$hasdropdown=true;
+				$dropdown.='<select id="wppizza-add-to-cart-size-'.$atts['id'].'" class="wppizza-add-to-cart-size">';
+					foreach($meta['prices'] as $selPrice=>$value){
+					$dropdown.='<option value="'.$atts['id'].'-'.$size.'-'.$selPrice.'" '.selected($selPrice,$selectedPrice,false).'>'.$options['sizes'][$size][$selPrice]['lbl'].'</option>';
+					}
+				$dropdown.='</select>';
+			}
+		}
+		
+		/****output****/
+		$str='<span class="wppizza-add-to-cart-btn-wrap">';
+		 if($hasdropdown){
+			/**dropdown if multiple*/
+			$str.=$dropdown;
+			/*size id and tier*/
+			$str.='<input type="button" id="'.$this->pluginSlug.'-add-to-cart-select-'.$atts['id'].'" class="'.$this->pluginSlug.'-add-to-cart-select '.$this->pluginSlug.'-add-to-cart-btn" value="'.$options['localization']['add_to_cart']['lbl'].'" />';
+		 	/*span that gets the trigger must be next element after button*/
+		 	$str.='<span id="'.$this->pluginSlug.'-'.$atts['id'].'-'.$size.'-'.$selectedPrice.'" class="'.$this->pluginSlug.'-add-to-cart '.$this->pluginSlug.'-add-to-cart-select-trigger"></span>';
+		 }else{
+			/*direct selection*/
+			$str.='<input type="button" id="'.$this->pluginSlug.'-'.$atts['id'].'-'.$size.'-'.$selectedPrice.'" class="'.$this->pluginSlug.'-add-to-cart '.$this->pluginSlug.'-add-to-cart-btn" value="'.$options['localization']['add_to_cart']['lbl'].'" />';
+		 }
+		$str.='</span>';
+		return $str;
+	}
+    /*****************************************************
     * include relevant template depending on shortcode
     * [see header of template for details]
     ******************************************************/
@@ -2555,7 +2614,6 @@ public function wppizza_require_common_input_validation_functions(){
 			$localized_options['pickupConfirm']=1;
 		}
 
-
 		/*add functions (names) to run when cart has been refreshed**/
 		$jsCartRefreshCompleteFunctions['functionsCartRefresh']=array();
 		$jsCartRefreshCompleteFunctions['functionsCartRefresh'] = apply_filters('wppizza_filter_js_cart_refresh_functions', $jsCartRefreshCompleteFunctions['functionsCartRefresh']);
@@ -2582,8 +2640,6 @@ public function wppizza_require_common_input_validation_functions(){
 		if(isset($localized_options)){
 			$localized_array['opt']=$localized_options;
 		}
-
-
 
 
 		/**sticky cart settings**/

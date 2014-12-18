@@ -437,7 +437,15 @@ jQuery(document).ready(function($){
 				}
 			}
 			jQuery.post(wppizza.ajaxurl , {action :'wppizza_json',vars:{'type':'order-pickup','value':selfValue,'data':$('#wppizza-send-order').serialize(),'locHref':location.href,'urlGetVars':location.search}}, function(res) {
-				window.location.href=res.location;/*make sure page gest reloaded without confirm*/
+				var anchor='';
+				if(typeof res.anchor!=='undefined'){
+					anchor=res.anchor;
+				}
+				window.location.href=res.location+anchor;/*make sure page gest reloaded without confirm*/
+				/*force reload if using anchor*/
+				if(typeof res.anchor!=='undefined'){
+					window.location.reload(true)
+				}
 			},'json').error(function(jqXHR, textStatus, errorThrown) {alert("error : " + errorThrown);console.log(jqXHR.responseText);});
 	}});
 
@@ -705,6 +713,31 @@ jQuery(document).ready(function($){
 		/*if no cache, just exec sticky cart function*/
 		wppizzaCartStickyLoad();
 	}
+	
+	/***********************************************
+	*
+	*	hijacking other cpts (or just a button with dropdown elsewhere)
+	*	adding an add to cart button linked to a specific menu item
+	*	selecting from dropdown
+	***********************************************/	
+	/*set id on trigger element when dropdown changes*/
+	$(document).on('change', '.wppizza-add-to-cart-size', function(e){
+       	var self=$(this);
+       	/**add class*/
+       	//self.addClass('wppizza-add-to-cart');
+		/*get id*/       	
+       	var id=$(this).attr('id');
+       	var postid=id.split('-').pop(-1);
+       	var selVal=$('#wppizza-add-to-cart-size-'+postid+'').val();		
+		/*set id on element to trigger*/
+		var elm=self.closest('span').find('.wppizza-add-to-cart').prop('id', 'wppizza-'+selVal+'');		
+	});
+	/**trigger click on element when button clicked*/
+	$(document).on(''+wppizzaClickEvent+'', '.wppizza-add-to-cart-select', function(e){	
+		var self=$(this);
+		var triggerElm=self.next();
+		triggerElm.trigger(''+wppizzaClickEvent+'');
+	});	
 	/***********************************************
 	*
 	*	[using totals shortcode,load via js]

@@ -355,7 +355,8 @@
 				'sticky_cart_background' =>'inherit',
 				'sticky_cart_limit_bottom_elm_id' =>'',
 				'jquery_fb_add_to_cart' =>false,
-				'jquery_fb_add_to_cart_ms' =>1000
+				'jquery_fb_add_to_cart_ms' =>1000,
+				'element_name_refresh_page' =>''
 			),
 			'opening_times_standard'=>array(
 				0=>array('open'=>'14:30','close'=>'01:00'),

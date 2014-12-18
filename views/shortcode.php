@@ -158,4 +158,17 @@ if($type=='search'){
 	$markup = ob_get_clean();
 return $markup;
 }
+/**********************************************
+	[add_item_to_cart_button]
+	required attributes:
+	type='add_to_cart_button' 	(required [str])
+	id='6' 						(required [int]) - id of wppizza menu item 
+	size='0'  					(optional [int]) - id (zero indexed) of wppizza menu size for that item
+	single='1'  				(optional [bool]) - if set will only show single button without dropdown    
+	example: 					[wppizza type='add_item_to_cart_button' id='6' size='0']
+	returns a button (with or without dropdown) to add a menu item to cart 
+**********************************************/
+if($type=='add_item_to_cart_button'){
+	$markup = $this->wppizza_add_item_to_cart_button($atts, $this->pluginOptions);
+}
 ?>
