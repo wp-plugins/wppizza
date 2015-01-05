@@ -254,3 +254,8 @@ nth-child(3n+0)
 #wppizza-settings .form-table th{vertical-align:top;padding:5px;margin:5px;font-size:95%;text-shadow:none}
 #wppizza-settings .form-table td{vertical-align:inherit;padding:5px;margin:5px;font-size:95%;text-shadow:none}
 #wppizza-settings .form-table input[type=text],#wppizza-settings .form-table select{padding:2px;margin:3px;font-size:100%;line-height:100%;height:auto}
+
+/**divs**/
+#wppizza-general .wppizza_option{padding:5px;}
+#wppizza-general .wppizza_option:nth-child(odd){background:#F9F9F9;}
+#wppizza-general .wppizza_option:nth-child(even){background:#FFFFFF;}

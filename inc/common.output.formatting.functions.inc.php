@@ -485,6 +485,12 @@ function wpizza_are_we_open($standard,$custom,$breaks){
 	return $currentlyOpen;
 
 }
+/**is shop currently open ->simpified to use elsewhere*/
+function wpizzaShopOpen(){
+	$options=get_option('wppizza');	
+	$shopopen=wpizza_are_we_open($options['opening_times_standard'],$options['opening_times_custom'],$options['times_closed_standard']);
+	return $shopopen;
+}
 
 /* takes 01:45, 3:45 format, no seconds as currently not needed**/
 function wpizza_get_opening_times($starttime,$endtime,$d,$m,$Y,$day='today'){

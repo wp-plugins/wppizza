@@ -914,8 +914,15 @@ $options = $this->pluginOptions;
 			}
 			if($field=='tools'){
 				if(!isset($_GET['tab']) || $_GET['tab']=='tools'){
-				echo"<div id='wppizza_".$field."'>";
-					echo"<div id='wppizza_".$field."_clear'>";
+				echo"<div id='wppizza-general'>";
+					
+					/*****************************
+					*
+					*	clear abandoned orders
+					*
+					****************************/
+				
+					echo"<div class='wppizza_option'>";
 						echo" <b>".__('Delete abandoned/cancelled orders from database older than', $this->pluginLocale)."</b> ";
 						echo"<input id='wppizza_order_days_delete' type='text' size='2' name='".$this->pluginSlug."[cron][days_delete]' value='".$options['cron']['days_delete']."' />";
 						echo" <b>".__('Days (minimum: 1)', $this->pluginLocale)."</b> ";
@@ -941,6 +948,17 @@ $options = $this->pluginOptions;
 						echo"<br />".__('As soon as customers go to the order page an order will be initialized and stored in the db to be checked against when going through with the purchase to make sure nothing has been tampered with. However, not every customer will actually go through with the purchase which leaves this initialised order orphaned in the db.Click the "ok" button to clean your db of these entries (it will NOT affect any completed or pending orders)', $this->pluginLocale)."";
 						echo"<br /><br /><span style='color:red'>".__('Note: This will delete these entries PERMANENTLY from the db and is not reversable.', $this->pluginLocale)."</span>";
 					echo"</div>";
+					
+					/*****************************
+					*
+					*	repair category orders
+					*
+					****************************/					
+					echo"<div class='wppizza_option'>";
+						echo"<input id='wppizza_category_repair' name='".$this->pluginSlug."[maintenance][category_repair]' type='checkbox' value='1' />";
+						echo" <b>".__('repair categories.', $this->pluginLocale)."</b> ";
+						echo"<br /><span'>".__('There exists an (as yet) unknown sequence of events related to saving/adding/editing/deleting wppizza categories that may result in the last category being repeated when using the category=!all shortcode attribute and/or not all categories showing up in the admin of the plugin.<br />If this should be the case, you can try repairing this by checking the box above and saving once. <b>If you use this function, please ensure your category order is still as required as you might have to re-sort - i.e drag and drop - some categories again</b>.<br />In case this does not solve the issue, please contact me, letting me know anything you did before this issue occured if possible.', $this->pluginLocale)."</span>";
+					echo"</div>";					
 				echo"</div>";
 				}
 

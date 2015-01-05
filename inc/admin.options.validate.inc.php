@@ -21,16 +21,10 @@
 			$this->wppizza_cron_setup_schedule($options['cron']);
 		}
 
-
 		if(isset($input['plugin_data']['empty_category_and_items']) && $input['plugin_data']['empty_category_and_items']==1){
 			$this->wppizza_empty_taxonomy(!empty($input['plugin_data']['delete_attachments']) ? true : false, !empty($input['plugin_data']['truncate_orders']) ? true : false);
 		}
 
-		/**maybe in the future**/
-//		if(isset($input['plugin_data']['install_sample_data'])){
-			//include(WPPIZZA_PATH .'inc/admin.sample.data.inc.php');
-			//$this->wppizza_empty_taxonomy(!empty($input['plugin_data']['delete_attachments']) ? true : false, !empty($input['plugin_data']['truncate_orders']) ? true : false);
-//		}
 
 		/**validate global settings***/
 		if(isset($_POST[''.$this->pluginSlug.'_global'])){
@@ -39,7 +33,7 @@
 			$options['plugin_data']['wp_multisite_session_per_site'] = !empty($input['plugin_data']['wp_multisite_session_per_site']) ? true : false;
 			$options['plugin_data']['using_cache_plugin'] = !empty($input['plugin_data']['using_cache_plugin']) ? true : false;
 			$options['plugin_data']['mail_type'] = wppizza_validate_alpha_only($input['plugin_data']['mail_type']);
-			$options['plugin_data']['dequeue_scripts'] = wppizza_validate_alpha_only($input['plugin_data']['dequeue_scripts']);			
+			$options['plugin_data']['dequeue_scripts'] = wppizza_validate_alpha_only($input['plugin_data']['dequeue_scripts']);
 			$options['plugin_data']['search_include'] = !empty($input['plugin_data']['search_include']) ? true : false;
 		}
 
@@ -233,7 +227,7 @@
 			$emailFrom=wppizza_validate_email_array($input['order']['order_email_from']);/*validated as array but we only store the first value as string*/
 			$options['order']['order_email_from'] = !empty($emailFrom[0]) ? ''.$emailFrom[0].'' : '' ;
 			$options['order']['order_email_from_name'] = wppizza_validate_string($input['order']['order_email_from_name']);
-			
+
 			/**dmarc nag**/
 			$options['order']['dmarc_nag_off']= !empty($input['order']['dmarc_nag_off']) ? true : false;
 		}
@@ -409,4 +403,30 @@
 				update_option($v['gatewayOptionsName'],$updateGatewayOptions);
 			}
 		}
+
+
+
+
+/************************************************************************************************************************
+*
+*
+*	[misc tools/maintenance functions]
+*
+*
+************************************************************************************************************************/
+if(isset($input['maintenance'])){
+	/*********************************************************
+		[repair categories sortorder]
+		fix possibly messed up category sorting
+		which might result in multiple display when using
+		category=!all attribute or not visible cats in admin
+	*********************************************************/
+	if(isset($input['maintenance']['category_repair'])){
+		$categorySort=$this->wppizza_maintenance_repair_category_sort();
+		/*overwrite old vars**/
+		$options['layout']['category_sort_hierarchy']=$categorySort;
+		$options['layout']['category_sort']=$categorySort;
+	}
+}
+
 ?>

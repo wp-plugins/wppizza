@@ -49,6 +49,7 @@
 	otherwise just get the one we have and get term descriptions, id's etc
 *****************************************************************/
 if(!is_single()){
+
 	if(isset($query_var)){
 		/*
 			bestsellers,single etc might have multiple cats
@@ -69,14 +70,16 @@ if(!is_single()){
 			$categoryId=$query->term_id;
 		}
 	}else{
-		/**using wppizza-single.php**/
 		$termSlug=get_query_var( WPPIZZA_TAXONOMY );
 		$termQuery=$termSlug;
 		$classIdent=$termSlug;
 		$catCount=1;//set as 1 category
 		$loopCount=0;//set static as no template loop
 		$termDetails = get_term_by( 'slug', $termSlug, WPPIZZA_TAXONOMY);
-		$categoryId=$termDetails->term_id;
+		$categoryId=0;/*ini in case someone uses shortcode with nonexistant category***/
+		if(is_object($termDetails)){
+			$categoryId=$termDetails->term_id;
+		}
 	}
 }
 /********************************************************

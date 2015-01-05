@@ -1568,7 +1568,7 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 							$excludeCategory[$thisCategory->term_id]=$thisCategory->term_id;
 						}
 					}
-					/**get all*/
+					/**get all sorted ones*/
 					$termSort=$options['layout']['category_sort'];
 					asort($termSort);
 					foreach($termSort as $termId=>$sorter){
@@ -1576,10 +1576,25 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 						$querys[]=get_term_by('id',$termId,$this->pluginSlugCategoryTaxonomy);
 						}
 					}
+					/*********
+						filter any empty ones if more cats in $options['layout']['category_sort'] for some reason than actual categories
+						
+						temp solution for !all shortcode:
+						in some (as yet unknown) cases/situations the sorted categories variable gets saved
+						including some old/non existing ones and therefore consists of 
+						more than actually existing ones 
+						this can result in the last category being displayed multiple times when using !all shortcode
+						
+						so - as to at least for now fix the symptoms - filter empty ones						
+					********/
+					$querys=array_filter($querys);
+					
 				}else{
 					foreach($catSlugsToArray as $sKey=>$slug){
-						/*get slug and taxonomy from slug*/
-						$querys[]=get_term_by('slug',$slug,$this->pluginSlugCategoryTaxonomy);
+						if(trim($slug)!=''){//in case of using two commas omitting slug 
+							/*get slug and taxonomy from slug*/
+							$querys[]=get_term_by('slug',$slug,$this->pluginSlugCategoryTaxonomy);
+						}
 					}
 				}
 			}
@@ -2175,8 +2190,54 @@ public function wppizza_require_common_input_validation_functions(){
 			$hierarchy=array_flip($hierarchy);
 		return $hierarchy;
 	}
-
-
+	
+	/*******************************************************
+		[repair sorted hierarchy of wppizza categories
+		in case we are missing or have too many wppizza cats in 
+		sorted category list]
+	******************************************************/	
+	function wppizza_maintenance_repair_category_sort(){
+		/*set var for simplification*/
+		$setSort=$this->pluginOptions['layout']['category_sort_hierarchy'];
+		
+		/**get all wppizza terms**/
+		$allTerms = get_terms(WPPIZZA_TAXONOMY);
+		/*reduce to term id->slug array**/
+		$allTermIds = wp_list_pluck( $allTerms, 'slug', 'term_id');	
+		/*TESTING ONLY*/
+		//$allTermIds[1000]='test';
+		
+		/**ini array to save as repaired sortorder**/
+		$fixCatHierachy=array();
+		
+		/**get all term id's we already have a sortorder for to keep existing**/
+			$termIntersect = array_intersect_key($allTermIds, $setSort);
+			$maxSort=array();
+			foreach($termIntersect as $tId=>$tSlug){
+				/*termsortorder as previously set*/
+				$sortId=$setSort[$tId];
+				/*key=termid val=termsortorder as previously**/
+				$fixCatHierachy[$tId]=$sortId;
+				/**get sort number for max sort below**/
+				$maxSort[]=$sortId;
+			}
+		/**get all id's we are missing in sortorders**/
+			$termDiff = array_diff_key($allTermIds, $setSort);
+			$max=max($maxSort);
+			foreach($termDiff  as $tId=>$tSlug){
+				/*advance by one**/
+				$max++;
+				$fixCatHierachy[$tId]=$max;
+			}
+			
+		/**just because we can, makes no difference really -> sort***/
+			asort($fixCatHierachy);	
+	
+	return $fixCatHierachy;
+	}
+	/*******************************************************
+		[set search box queries ]
+	******************************************************/
 	function wppizza_set_search_query( $query ) {
     	if (is_search() && $query->is_main_query()) {
 			/*******************************************************************

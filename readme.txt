@@ -5,8 +5,8 @@ Author URI: http://www.wp-pizza.com
 Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.3+, WP 3.3+ 
-Tested up to: 4.0.1
-Stable tag: 2.11.5.9
+Tested up to: 4.1
+Stable tag: 2.11.5.10
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -142,6 +142,14 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 
 == Changelog ==
+
+2.11.5.10
+* eliminated some php notices (when using an invalid shortcodes)  
+* added: simplified wpizzaShopOpen() function to use elsewhere if required  
+* added: tools->repair category order for invalid category sort orders if required   
+* fix: in certain circumstances category=!all shortcode resulted in repeat of menu items in last category  
+5th January 2015  
+
 
 2.11.5.9  
 * added: add_to_cart_button shortcode. allows output of a button elsewhere to add an item to cart  
