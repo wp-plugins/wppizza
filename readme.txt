@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.3+, WP 3.3+ 
 Tested up to: 4.1
-Stable tag: 2.11.5.10
+Stable tag: 2.11.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -142,6 +142,13 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 
 == Changelog ==
+
+
+2.11.6
+* added: print order template (admin order history) to replace current way orders are printed   
+* added: filter to totals shortcode output (wppizza_filter_shortcode_totals) to be able to selectively remove/add elements  
+* internal: added/updated separate class to deal with order values more efficiently (to be able to replace somewhat convoluted coding in other parts of the plugin in due course / bit by bit)  
+7th January 2015  
 
 2.11.5.10
 * eliminated some php notices (when using an invalid shortcodes)  

@@ -247,7 +247,6 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 					$wppizzaEmailOrderItems[$k]['label']=''.$v['quantity'].'x '.$v['name'].' '.$v['size'].' ['.$currency_left.''.$v['price'].''.$currency_right.']';
 					$wppizzaEmailOrderItems[$k]['value']=''.$currency_left.$v['pricetotal'].$currency_right.'';
 				}
-
 				/**********************************************************************************************
 				*
 				*

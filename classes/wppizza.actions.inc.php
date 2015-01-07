@@ -629,11 +629,14 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 				/**compare table options against default options and delete/add as required***/
 				require_once(WPPIZZA_PATH .'inc/admin.update.options.inc.php');
 
-				/**compare currently installed options vs this vesrion**/
+				/**compare currently installed options vs this version**/
 				if(	version_compare( $options['plugin_data']['version'], '2.0', '<' )){$update_options['plugin_data']['nag_notice']='2.1';}
 				if(	version_compare( $options['plugin_data']['version'], '2.8.7', '<' )){$update_options['plugin_data']['nag_notice']='2.8.7';}
 				/**check for child themes**/
 				if(	version_compare( $options['plugin_data']['version'], '2.8.9.7', '<' ) && get_stylesheet_directory()!=get_template_directory()){$update_options['plugin_data']['nag_notice']='2.8.9.7';}
+				/***** admin order print by template now******/
+				if(	version_compare( $options['plugin_data']['version'], '2.11.6', '<' )){$update_options['plugin_data']['nag_notice']='2.11.6';}
+				
 
 				/**update options**/
 				update_option($this->pluginSlug, $update_options );
@@ -736,9 +739,27 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 				$pluginUpdatedNotice.='<br/><br/>thank you<br/>';
 			}
 
+			if($this->pluginOptions['plugin_data']['nag_notice']=='2.11.6'){
+				$pluginUpdatedNotice.='<b>Update Notice '.WPPIZZA_NAME.' '.$this->pluginVersion.'+ </b><b style="color:red">Wppizza->Order History : Order Printing:</b>';
+				$pluginUpdatedNotice.='<br />';
+				$pluginUpdatedNotice.='<br /><b>Please note: the way the printing of orders is handled in wppizza->order history has been completely re-written and has - finally - had it\'s own template added instead of having to mess around with the plaintext email templates</b>';
+				$pluginUpdatedNotice.='<br /><b>For the next few weeks, while getting feedback on this, it will not yet be editable and the actions/filters within will most likely change. Therefore any feedback - good or bad - as to the way this is handled by your printer would be appreciated. (ideally with a photo of your printouts even if possible)</b>';
+				$pluginUpdatedNotice.='<br /><br /><b style="color:red">If you wish to revert to the previous way orders were printed (because you already used some filters/actions/edits to make this work for your particular scenario, you will find a checkbox in wppizza->settings which will allow you to do so</b>';
+				$pluginUpdatedNotice.='<br /><br /><b>You can safely ignore this notice if you have no need to print your orders from the order history screen</b>';
+				
+				$pluginUpdatedNotice.='<br /><br /><b>As ever - if there are any questions - please let me know</b>';
+				
+				$pluginUpdatedNotice.='<br/><br/>thank you<br/>';
+			}
+
+
+			
+			$pluginUpdatedNotice= $pluginUpdatedNotice;
 			$pluginUpdatedNotice.='<br/><a href="#" onclick="wppizza_dismiss_notice(); return false;" class="button-primary">dismiss</a>';
 			$pluginUpdatedNotice.='</div>';
-			$pluginUpdatedNotice=__($pluginUpdatedNotice, $this->pluginLocale);
+			
+			
+			/*output*/
 			print"".$pluginUpdatedNotice."";
     }
     function wppizza_dismiss_notice_js () {
@@ -1796,7 +1817,10 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 						}
 					}
 					/***if we are adding get vars to the url (if a tip has been added for instance the page will be refreshed with vars appended), force prefill to be enabled and set values accordingly. ADDED IN VERSION 2.8.6**/
-					/*$_GET will also include session data set in $_SESSION[$this->pluginSessionGlobal]['userdata'] as they will not be appended to the url anymore (it's just ugly). MODIFIED IN VERSION 2.8.8.3, but no changes made to this file */
+					/*
+						$_GET will also include session data set in $_SESSION[$this->pluginSessionGlobal]['userdata'] as they will not be appended to the url anymore (it's just ugly). 
+						MODIFIED IN VERSION 2.8.8.3, but no changes made to this file 
+					*/
 					$isSelfPickup=!empty($_SESSION[$this->pluginSession]['selfPickup']) ? 1:0;/**check if self pickup has been selected and make fields required as set in order form settings, ADDED in 2.8.9.10*/
 					foreach($formelements as $elmKey=>$elm){
 						if(isset($_GET[$elm['key']])){
@@ -1855,10 +1879,9 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 
 			/*******get the variables***/
 			$options = $this->pluginOptions;
-
 			$cart=wppizza_order_summary($_SESSION[$this->pluginSession],$options,$type);
-
 			$cart = apply_filters('wppizza_filter_order_summary', $cart);
+
 			/**check if tax was included in prices**/
 			$taxIncluded=!empty($options['order']['item_tax_included']) ? true:false;
 

@@ -1,5 +1,5 @@
 <?php
-error_reporting(0);
+//error_reporting(0);
 if(!defined('DOING_AJAX') || !DOING_AJAX){
 	header('HTTP/1.0 400 Bad Request', true, 400);
 	print"you cannot call this script directly";
@@ -284,8 +284,20 @@ $output='';
 								$actions['delete']="<a href='#' id='wppizza_order_".$orders->id."' class='wppizza_order_delete'>".__('delete', $this->pluginLocale)."</a>";
 								$actions['deletebr']="<br/>";
 							}
-							/*print order*/
-							$actions['print']="<a href='javascript:void(0);'  id='wppizza-print-order-".$orders->id."' class='wppizza-print-order button'>".__('print order', $this->pluginLocale)."</a>";
+							/********
+								print order - previous/deprecated version
+								
+								if and when we deprecate this
+								we can also remove some hidden input fields above
+								
+								not for a while yet though
+							********/
+							if($options['plugin_data']['use_old_admin_order_print']){
+								$actions['print']="<a href='javascript:void(0);'  id='wppizza-print-order-".$orders->id."' class='wppizza-print-order-prev button'>".__('print order', $this->pluginLocale)."</a>";
+							}else{
+								$actions['print']="<a href='javascript:void(0);'  id='wppizza-print-order-".$orders->id."' class='wppizza-print-order button'>".__('print order', $this->pluginLocale)."</a>";
+							}
+							
 							/*add edit notes*/
 								$actions['printbr']="<br/>";
 								if(trim($orders->notes)==''){
@@ -406,6 +418,58 @@ $output='';
 				$output.="<input name='".$_POST['vars']['inpname']."[prices][]' type='text' size='5' value='".$price."'>";
 		}}
 	}
+	/*************************************************************************************
+	*
+	*
+	*	[print order]
+	*
+	*
+	*************************************************************************************/
+	if($_POST['vars']['field']=='print-order' && $_POST['vars']['id']>=0){
+		
+		$orderId=(int)$_POST['vars']['id'];
+		/*should never happen really*/
+		if($orderId<=0){
+			print"ERROR [ADMIN 1001]: invalid order id";
+			exit();
+		}
+		/**********************************
+			get order details
+		**********************************/
+		require(WPPIZZA_PATH.'classes/wppizza.order.details.inc.php');
+		$orderDetails=new WPPIZZA_ORDER_DETAILS();
+		$orderDetails->setOrderId($orderId);		
+		$order=$orderDetails->getOrder();/**all order vars**/
+		
+		/********************************
+		simplify vars to us in template
+		********************************/
+		$orderDetails=$order['ordervars'];
+		$txt=$order['localization'];
+		$customerDetails=$order['customer'];
+		$cartitems=$order['items'];
+		$orderSummary=$order['summary'];
+		
+		
+		/**get template**/
+		$output='';
+		/*
+			do not yet allow usage of template in theme diractory until stable
+			when stable, uncomment relevant bits below
+		*/
+		//if(file_exists( $this->pluginTemplateDir . '/wppizza-order-print.php')){
+		//	ob_start();
+		//	require_once($this->pluginTemplateDir.'/wppizza-order-print.php');
+		//	$output = ob_get_clean();
+		//}else{
+			ob_start();
+			require_once(WPPIZZA_PATH.'templates/wppizza-order-print.php');
+			$output = ob_get_clean();
+		//}
+
+		print"".$output."";
+		exit();
+	}	
 	/************************************************************************************************
 	*
 	*	[in case one wants to do/add more things in functions.php]

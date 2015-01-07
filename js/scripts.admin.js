@@ -32,9 +32,27 @@ jQuery(document).ready(function($){
 		return newKey;
 	}
 	/******************************
-	* print order history
+	* print order history using template
 	*******************************/
-	$(document).on('click touchstart', '.wppizza-print-order', function(e){
+	$(document).on('click', '.wppizza-print-order', function(e){
+		e.preventDefault();
+		var orderId=$(this).attr('id').split("-").pop(-1);
+		jQuery.post(ajaxurl , {action :'wppizza_admin_json',vars:{'field':'print-order','id':orderId}}, function(output) {
+            //Print Page : as Android doesnt understnd this, let's open a window
+            var wppizzaPrintOrder = window.open("","WppizzaOrder","width=750,height=550");
+			wppizzaPrintOrder.document.write(output);
+            wppizzaPrintOrder.focus();
+			/*android doesnt understand .print() not my fault really*/
+			wppizzaPrintOrder.print();			
+			/*output to console*/
+			//console.log(output)			
+			
+		},'html').error(function(jqXHR, textStatus, errorThrown) {alert("error : " + errorThrown);});
+	});	
+	/******************************
+	* print order history - old/previous version 
+	*******************************/
+	$(document).on('click touchstart', '.wppizza-print-order-prev', function(e){
 			e.preventDefault();
 			var ordId=$(this).attr('id').split("-").pop(-1);
             //Get the value of textareas

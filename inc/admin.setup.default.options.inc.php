@@ -312,6 +312,7 @@
 				'empty_category_and_items' => false,
 				'wp_multisite_session_per_site' => true,
 				'using_cache_plugin' => false,
+				'use_old_admin_order_print' => false,
 				'nag_notice' => $this->pluginNagNotice
 			),
 			'cron'=>array(
@@ -507,8 +508,7 @@
 				'subtotals_after_additional_info'=>array(
 					'descr'=>__('Confirmation Form - [miscellaneous]: additional/optional info/text to display after (sub)totals', $this->pluginLocale),
 					'lbl'=>''
-				)
-
+				)					
 			),
 			'gateways'=>array(
 				'gateway_selected'=>array('COD'=>true),
@@ -746,7 +746,87 @@
 				'openinghours_closed'=>array(
 					'descr'=>__('Openinghours: text to display when shop is closed that day ', $this->pluginLocale),
 					'lbl'=>__('closed', $this->pluginLocale)
-				)
+				),
+				'header_order_print_header'=>array(
+					'descr'=>__('Print Order Admin - [Header]: optional - for example your shops name', $this->pluginLocale),
+					'lbl'=>''.get_bloginfo('name').''
+				),
+				'header_order_print_shop_address'=>array(
+					'descr'=>__('Print Order Admin - [Address]: replace with your shop\'s address [html allowed]', $this->pluginLocale),
+					'lbl'=>''.get_bloginfo('name').''
+				),
+				'header_order_print_customer_label'=>array(
+					'descr'=>__('Print Order Admin - [Label]: customer details', $this->pluginLocale),
+					'lbl'=>__('Customer Details / Delivery Address', $this->pluginLocale)
+				),
+				'header_order_print_overview_label'=>array(
+					'descr'=>__('Print Order Admin - [Label]: order overview', $this->pluginLocale),
+					'lbl'=>__('Order', $this->pluginLocale)
+				),					
+				'header_order_print_itemised_article'=>array(
+					'descr'=>__('Print Order Admin - [itemised header]: article ', $this->pluginLocale),
+					'lbl'=>__('Article', $this->pluginLocale)
+				),
+				'header_order_print_itemised_price'=>array(
+					'descr'=>__('Print Order Admin - [itemised header]: price', $this->pluginLocale),
+					'lbl'=>__('Price', $this->pluginLocale)
+				),
+				'header_order_print_itemised_quantity'=>array(
+					'descr'=>__('Print Order Admin - [itemised header]: quantity', $this->pluginLocale),
+					'lbl'=>__('Qty', $this->pluginLocale)
+				),
+				'common_value_order_delivery'=>array(
+					'descr'=>__('Common [Order Values] : delivery', $this->pluginLocale).' (currently only used when printing order in order history)',
+					'lbl'=>__('For Delivery', $this->pluginLocale)
+				),
+				'common_value_order_pickup'=>array(
+					'descr'=>__('Common [Order Values] : pickup', $this->pluginLocale).' (currently only used when printing order in order history)',
+					'lbl'=>__('For Pickup', $this->pluginLocale)
+				),		
+				'common_value_order_cash'=>array(
+					'descr'=>__('Common [Order Values] : cash', $this->pluginLocale).' (currently only used when printing order in order history)',
+					'lbl'=>__('Cash', $this->pluginLocale)
+				),
+				'common_value_order_credit_card'=>array(
+					'descr'=>__('Common [Order Values] : credit card', $this->pluginLocale).' (currently only used when printing order in order history)',
+					'lbl'=>__('Credit Card', $this->pluginLocale)
+				),								
+				'common_label_order_delivery_type'=>array(
+					'descr'=>__('Common [Order Labels] : delivery type', $this->pluginLocale).' (currently only used when printing order in order history)',
+					'lbl'=>__('Delivery Type :', $this->pluginLocale)
+				),				
+				'common_label_order_wp_user_id'=>array(
+					'descr'=>__('Common [Order Labels] : user id', $this->pluginLocale).' (currently unused)',
+					'lbl'=>__('User ID :', $this->pluginLocale)
+				),
+				'common_label_order_order_id'=>array(
+					'descr'=>__('Common [Order Labels] : order id', $this->pluginLocale).'  (currently only used when printing order in order history)',
+					'lbl'=>__('Order ID :', $this->pluginLocale)
+				),
+				'common_label_order_currency'=>array(
+					'descr'=>__('Common [Order Labels] : currency', $this->pluginLocale).'  (currently unused)',
+					'lbl'=>__('Currency :', $this->pluginLocale)
+				),					
+				'common_label_order_payment_type'=>array(
+					'descr'=>__('Common [Order Labels] : payment type', $this->pluginLocale).' (currently only used when printing order in order history)',
+					'lbl'=>__('Payment Type :', $this->pluginLocale)
+				),	
+				'common_label_order_payment_method'=>array(
+					'descr'=>__('Common [Order Labels] : payment method', $this->pluginLocale).' (currently only used when printing order in order history)',
+					'lbl'=>__('Payment Method :', $this->pluginLocale)
+				),	
+				'common_label_order_order_date'=>array(
+					'descr'=>__('Common [Order Labels] : order date', $this->pluginLocale).' (currently only used when printing order in order history)',
+					'lbl'=>__('Order Date :', $this->pluginLocale)
+				),
+				'common_label_order_transaction_id'=>array(
+					'descr'=>__('Common [Order Labels] : transaction id', $this->pluginLocale).' (currently only used when printing order in order history)',
+					'lbl'=>__('Transaction Id :', $this->pluginLocale)
+				),
+				'common_label_order_payment_outstanding'=>array(
+					'descr'=>__('Common [Order Labels] : payment due', $this->pluginLocale).' (currently only used when printing order in order history)',
+					'lbl'=>__('Payment Due :', $this->pluginLocale)
+				)	
 			)
 		);
 

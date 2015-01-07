@@ -35,6 +35,7 @@
 			$options['plugin_data']['mail_type'] = wppizza_validate_alpha_only($input['plugin_data']['mail_type']);
 			$options['plugin_data']['dequeue_scripts'] = wppizza_validate_alpha_only($input['plugin_data']['dequeue_scripts']);
 			$options['plugin_data']['search_include'] = !empty($input['plugin_data']['search_include']) ? true : false;
+			$options['plugin_data']['use_old_admin_order_print'] = !empty($input['plugin_data']['use_old_admin_order_print']) ? true : false;
 		}
 
 
@@ -309,7 +310,7 @@
 		/**validate localization ***/
 		if(isset($_POST[''.$this->pluginSlug.'_localization'])){
 			if(isset($input['localization'])){
-			$allowHtml=array('thank_you_p','order_ini_additional_info','jquery_fb_add_to_cart_info','register_option_create_account_info','register_option_create_account_error');/*array of items to allow html (such as tinymce textareas) */
+			$allowHtml=array('thank_you_p','order_ini_additional_info','jquery_fb_add_to_cart_info','register_option_create_account_info','register_option_create_account_error','header_order_print_shop_address');/*array of items to allow html (such as tinymce textareas) */
 			foreach($input['localization'] as $a=>$b){
 				/*add new value , but keep desciption (as its not editable on frontend)*/
 				if(in_array($a,$allowHtml)){$html=1;}else{$html=false;}

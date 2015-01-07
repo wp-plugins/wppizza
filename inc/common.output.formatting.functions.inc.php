@@ -325,8 +325,30 @@
 			$summary['checkout_a_close'].='</a>';
 		}
 		
-		$str='<div class="wppizza-totals">'.$summary['checkout_a_href'].''.$summary['itemcount_left'].''.$summary['currency_left'].'<span class="wppizza-total'.$itemsClass.'"></span>'.$summary['currency_right'].''.$summary['itemcount_right'].''.$summary['checkout_a_close'].'</div>';
-		return $str;
+		$output=array();
+		$output['wrapopen']='<div class="wppizza-totals">';
+		$output['ahrefopen']=$summary['checkout_a_href'];
+		if($summary['itemcount_left']!=''){
+			$output['count']=$summary['itemcount_left'];
+		}
+		if($summary['currency_left']!=''){
+			$output['currency']=$summary['currency_left'];
+		}
+		$output['totals']='<span class="wppizza-total'.$itemsClass.'"></span>';
+		if($summary['currency_right']!=''){
+			$output['currency']=$summary['currency_right'];
+		}
+		if($summary['itemcount_right']!=''){
+			$output['count']=$summary['itemcount_right'];
+		}
+		$output['ahrefclose']=$summary['checkout_a_close'];
+		$output['wrapclose']='</div>';
+
+		/*filter**/		
+		$output = apply_filters('wppizza_filter_shortcode_totals', $output);
+		$output = implode('',$output);
+		
+		return $output;
 	}
 		
 	/**format time output**/

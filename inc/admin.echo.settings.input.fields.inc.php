@@ -18,6 +18,7 @@ $options = $this->pluginOptions;
 			if($field=='js_in_footer'){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[plugin_data][".$field."]' type='checkbox'  ". checked($options['plugin_data'][$field],true,false)." value='1' />";
 			}
+			
 			if($field=='wp_multisite_session_per_site'){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[plugin_data][".$field."]' type='checkbox'  ". checked($options['plugin_data'][$field],true,false)." value='1' />";
 			}
@@ -26,6 +27,13 @@ $options = $this->pluginOptions;
 				echo" <span class='description'>".__('Will ALWAYS load the cart dynamically via ajax. Especially useful if your caching plugin does not support the exclusion of only parts of a page.', $this->pluginLocale)."</span>";
 				echo"<br /><span class='description'><b>".__('Note: you still want to exclude your entire *order page* - or at least the main content of that page - from being cached in your cache plugin (please see the documentation for your choosen cache plugin for how to do this). After you enable this, clear your cache.', $this->pluginLocale)."</b></span>";
 			}
+			if($field=='use_old_admin_order_print'){
+				echo "<input id='".$field."' name='".$this->pluginSlug."[plugin_data][".$field."]' type='checkbox'  ". checked($options['plugin_data'][$field],true,false)." value='1' />";
+				echo" <span class='description'>".__('revert to old printing style of orders in "wppizza -> order history" when clicking on "print order"', $this->pluginLocale)."</span>";
+				//echo'<span style="color:red">'.__('ADVANCE NOTICE: This will be deprecated at some point', $this->pluginLocale).'</span>';
+			}			
+			
+			
 			if($field=='mail_type'){
 				//echo "<input id='".$field."' name='".$this->pluginSlug."[".$field."]' type='checkbox'  ". checked($options['plugin_data'][$field],true,false)." value='1' />";
 				echo "<select name='".$this->pluginSlug."[plugin_data][".$field."]' />";
@@ -822,7 +830,7 @@ $options = $this->pluginOptions;
 				echo"<div id='wppizza_".$field."'>";
 					echo"<div id='wppizza_".$field."_options'>";
 					asort($localizeOptions);
-					$lngOddEvenArray=__('0,1,6,13,14,17,41,49', $this->pluginLocale);
+					$lngOddEvenArray=__('0,9,10,12,15,20,22,23,26,50,58,65', $this->pluginLocale);
 					$lngOddEvan=explode(",",$lngOddEvenArray);
 					$bgStyle=$lngOddEvan;
 					$i=0;

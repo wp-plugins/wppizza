@@ -1,4 +1,8 @@
 <?php
+// Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) exit;
+?>
+<?php
  /*
  *
  *	Template: WPPizza Gateway "Thank you" page Order Details
