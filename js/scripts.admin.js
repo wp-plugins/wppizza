@@ -34,7 +34,7 @@ jQuery(document).ready(function($){
 	/******************************
 	* print order history using template
 	*******************************/
-	$(document).on('click', '.wppizza-print-order', function(e){
+	$(document).on('click touchstart', '.wppizza-print-order', function(e){
 		e.preventDefault();
 		var orderId=$(this).attr('id').split("-").pop(-1);
 		jQuery.post(ajaxurl , {action :'wppizza_admin_json',vars:{'field':'print-order','id':orderId}}, function(output) {
@@ -50,7 +50,7 @@ jQuery(document).ready(function($){
 		},'html').error(function(jqXHR, textStatus, errorThrown) {alert("error : " + errorThrown);});
 	});	
 	/******************************
-	* print order history - old/previous version 
+	* print order history - OLD/PREVIOUS VERSION 
 	*******************************/
 	$(document).on('click touchstart', '.wppizza-print-order-prev', function(e){
 			e.preventDefault();

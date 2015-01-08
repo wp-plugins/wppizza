@@ -1,5 +1,5 @@
 <?php
-//error_reporting(0);
+error_reporting(0);
 if(!defined('DOING_AJAX') || !DOING_AJAX){
 	header('HTTP/1.0 400 Bad Request', true, 400);
 	print"you cannot call this script directly";
@@ -103,12 +103,12 @@ $output='';
 				$sorter++;
 			}
 		}
-		
-		
+
+
 		/***update full hierarchy too make sure we are now using the right updated order***/
-		$newOptions['layout']['category_sort_hierarchy']=$this->wppizza_complete_sorted_hierarchy($newOptions['layout']['category_sort']);		
-		
-		
+		$newOptions['layout']['category_sort_hierarchy']=$this->wppizza_complete_sorted_hierarchy($newOptions['layout']['category_sort']);
+
+
 		update_option( $this->pluginSlug, $newOptions );
 	die(1);
 	}
@@ -133,13 +133,13 @@ $output='';
 		$totalPriceOfShown=0;
 		global $wpdb;
 		if($_POST['vars']['limit']>0){$limit=' limit 0,'.$_POST['vars']['limit'].'';}else{$limit='';}
-		
+
 		if($_POST['vars']['orderstatus']!=''){$orderstatus=' AND order_status="'.$_POST['vars']['orderstatus'].'" ';}else{$orderstatus='';}
-		
+
 		$allOrders = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix . $this->pluginOrderTable." WHERE payment_status IN ('COD','COMPLETED','REFUNDED') ".$orderstatus." ORDER BY id DESC ".$limit." ");
-		
-		
-		
+
+
+
 		if(is_array($allOrders) && count($allOrders)>0){
 			/*admin only*/
 			if (current_user_can('wppizza_cap_delete_order')){
@@ -151,29 +151,29 @@ $output='';
 					[header row]
 				****************************************************************************/
 				$output.="<tr class='wppizza-orders-head'>";
-					
+
 					$header['column_order']="<td>";
 						$header['column_order'].="".__('Order', $this->pluginLocale)."";
 					$header['column_order'].="</td>";
-					
+
 					$header['column_customer']="<td>";
 						$header['column_customer'].="".__('Customer Details', $this->pluginLocale)."";
 					$header['column_customer'].="</td>";
-					
+
 					$header['column_details']="<td>";
 						$header['column_details'].="".__('Order Details', $this->pluginLocale)."";
 					$header['column_details'].="</td>";
-					
+
 					$header['column_empty']="<td>";
 						$header['column_empty'].="";
 					$header['column_empty'].="</td>";
-				
-				/**allow filtering**/	
-				$header= apply_filters('wppizza_filter_orderhistory_header', $header );	
+
+				/**allow filtering**/
+				$header= apply_filters('wppizza_filter_orderhistory_header', $header );
 				$output.=implode('',$header);
-					
-					
-					
+
+
+
 				$output.="</tr>";
 
 
@@ -185,15 +185,15 @@ $output='';
 					$orderDet=maybe_unserialize($orders->order_ini);
 					$totalPriceOfShown+=(float)$orderDet['total'];
 					/*******************************************/
-					
+
 					$output.="<tr class='wppizza-ord-status-".strtolower($orders->order_status)."'>";
-						
-						
+
+
 						/****************************************************************************
 							[first column, order info (id, transaction id etc)]
 						****************************************************************************/
 						$orderinfo=array();/*reset*/
-						
+
 						$orderinfo['tdopen']="<td style='white-space:nowrap'>";
 							$orderinfo['date']= date("d-M-Y H:i:s",strtotime($orders->order_date));
 							if($orders->initiator!=''){
@@ -208,7 +208,7 @@ $output='';
 								}
 								$orderinfo['hiddeninput_payment']="<input type='hidden' id='wppizza_order_initiator_".$orders->id."' value='".__('Payment By', $this->pluginLocale).": ". $gwIdent ."' />";
 								$orderinfo['hiddeninput_payment'].="<input type='hidden' id='wppizza_order_initiator_ident_".$orders->id."' value='". $gwIdent ."' />";
-								
+
 								$orderinfo['payment']="<br/>".__('Payment By', $this->pluginLocale).": ". $gwIdent ."";
 							}
 							if($orders->transaction_id!=''){
@@ -221,11 +221,11 @@ $output='';
 							$orderinfo['status'].="<select id='wppizza_order_status-".$orders->id."' name='wppizza_order_status-".$orders->id."' class='wppizza_order_status'>";
 								foreach($customOrderStatus as $s){
 									if(isset($customOrderStatusGetTxt[$s])){/*get translation if we have any*/
-										$lbl=$customOrderStatusGetTxt[$s];	
+										$lbl=$customOrderStatusGetTxt[$s];
 									}else{
 										$lbl=$s;
 									}
-									
+
 									$orderinfo['status'].="<option value='".$s."' ".selected($orders->order_status,$s,false).">".$lbl."</option>";
 								}
 							$orderinfo['status'].="</select>";
@@ -246,37 +246,37 @@ $output='';
 							}
 							$orderinfo['last_update'].="</span>";
 						$orderinfo['tdclose']="</td>";
-						
-						/**allow filtering**/	
-						$orderinfo= apply_filters('wppizza_filter_orderhistory_order_info', $orderinfo, $orders->id, $customerDet, $orderDet);	
-						$output.=implode('',$orderinfo);						
-						
-						
+
+						/**allow filtering**/
+						$orderinfo= apply_filters('wppizza_filter_orderhistory_order_info', $orderinfo, $orders->id, $customerDet, $orderDet);
+						$output.=implode('',$orderinfo);
+
+
 						/****************************************************************************
 							[second column -> customer details
-						****************************************************************************/						
+						****************************************************************************/
 						$customer_details=array();/*reset*/
 						$customer_details[]="<td>";
 							$customer_details[]="<textarea id='wppizza_order_customer_details_".$orders->id."' class='wppizza_order_customer_details'>". $orders->customer_details ."</textarea>";
 						$customer_details[]="</td>";
-						/**allow filtering**/	
-						$customer_details= apply_filters('wppizza_filter_orderhistory_customer_details', $customer_details, $orders->id, $customerDet, $orderDet);	
-						$output.=implode('',$customer_details);						
+						/**allow filtering**/
+						$customer_details= apply_filters('wppizza_filter_orderhistory_customer_details', $customer_details, $orders->id, $customerDet, $orderDet);
+						$output.=implode('',$customer_details);
 
 						/****************************************************************************
 							[third column -> order details
-						****************************************************************************/	
+						****************************************************************************/
 						$order_details=array();/*reset*/
 						$order_details[]="<td>";
 							$order_details[]="<textarea id='wppizza_order_details_".$orders->id."' class='wppizza_order_details' >". $orders->order_details ."</textarea>";
 						$order_details[]="</td>";
-						/**allow filtering**/	
-						$order_details= apply_filters('wppizza_filter_orderhistory_order_details', $order_details, $orders->id, $customerDet, $orderDet);	
-						$output.=implode('',$order_details);							
-						
+						/**allow filtering**/
+						$order_details= apply_filters('wppizza_filter_orderhistory_order_details', $order_details, $orders->id, $customerDet, $orderDet);
+						$output.=implode('',$order_details);
+
 						/****************************************************************************
 							[fourth column -> delete, print, add notes
-						****************************************************************************/						
+						****************************************************************************/
 						$actions=array();/*reset*/
 						$actions['tdopen']="<td>";
 							/*admin only*/
@@ -286,10 +286,10 @@ $output='';
 							}
 							/********
 								print order - previous/deprecated version
-								
-								if and when we deprecate this
+
+								if and/or when we deprecate this
 								we can also remove some hidden input fields above
-								
+
 								not for a while yet though
 							********/
 							if($options['plugin_data']['use_old_admin_order_print']){
@@ -297,7 +297,7 @@ $output='';
 							}else{
 								$actions['print']="<a href='javascript:void(0);'  id='wppizza-print-order-".$orders->id."' class='wppizza-print-order button'>".__('print order', $this->pluginLocale)."</a>";
 							}
-							
+
 							/*add edit notes*/
 								$actions['printbr']="<br/>";
 								if(trim($orders->notes)==''){
@@ -307,18 +307,18 @@ $output='';
 								}
 								$actions['notes']="<a href='javascript:void(0);'  id='wppizza-order-add-notes-".$orders->id."' class='wppizza-order-add-notes button' style='display:".$notesBtnSty."'>".__('add notes', $this->pluginLocale)."</a>";
 						$actions['tdclose']="</td>";
-						/**allow filtering**/	
-						$actions= apply_filters('wppizza_filter_orderhistory_actions', $actions, $orders->id, $customerDet, $orderDet );	
-						$output.=implode('',$actions);							
-					
-					
-					
+						/**allow filtering**/
+						$actions= apply_filters('wppizza_filter_orderhistory_actions', $actions, $orders->id, $customerDet, $orderDet );
+						$output.=implode('',$actions);
+
+
+
 					$output.="</tr>";
 
 
 					/****************************************************************************
 						[second row -> order notes
-					****************************************************************************/					
+					****************************************************************************/
 					$notes=array();/*reset*/
 					$notes['tropen']="<tr id='".$nbtrClass."-".$orders->id."' class='".$nbtrClass."'>";
 						$notes['tdopen']="<td colspan='4'>";
@@ -326,25 +326,25 @@ $output='';
 							$notes['textarea_notes_ok']="<a href='javascript:void(0);'  id='wppizza-order-do-notes-".$orders->id."' class='wppizza-order-do-notes button'>".__('ok', $this->pluginLocale)."</a>";
 						$notes['tdclose']="</td>";
 					$notes['trclose']="</tr>";
-					
-					/**allow filtering**/	
-					$notes= apply_filters('wppizza_filter_orderhistory_notes', $notes, $orders->id, $customerDet, $orderDet );	
-					$output.=implode('',$notes);						
-					
-					
+
+					/**allow filtering**/
+					$notes= apply_filters('wppizza_filter_orderhistory_notes', $notes, $orders->id, $customerDet, $orderDet );
+					$output.=implode('',$notes);
+
+
 				}
 			$output.="</table>";
 		}else{
 			$output.="<h1 style='text-align:center'>".__('no orders yet :(', $this->pluginLocale)."</h1>";
 		}
-		
+
 		$obj['orders']=$output;
-		
+
 		$obj['totals']=__('Total of shown orders', $this->pluginLocale).': '.$this->pluginOptions['order']['currency_symbol'].' '.wppizza_output_format_price($totalPriceOfShown).'';
 		$obj['totals'].='<br /><a href="javascript:void(0)" id="wppizza_history_totals_getall">'.__('show total of all orders', $this->pluginLocale).'</a>';
-		
+
 		print"".json_encode($obj)."";
-	exit();		
+	exit();
 	}
 	/*****************************************************
 		[order history get totals]
@@ -353,7 +353,7 @@ $output='';
 	if($_POST['vars']['field']=='get_orders_total'){
 		$totalPriceAll=0;
 		global $wpdb;
-		$allOrders = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix . $this->pluginOrderTable." WHERE payment_status IN ('COD','COMPLETED') ORDER BY id DESC ");	
+		$allOrders = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix . $this->pluginOrderTable." WHERE payment_status IN ('COD','COMPLETED') ORDER BY id DESC ");
 		if(is_array($allOrders) && count($allOrders)>0){
 			foreach ( $allOrders as $orders ){
 				/**add to total ordered amount of shown items**/
@@ -362,17 +362,17 @@ $output='';
 				/*******************************************/
 			}
 		}
-		
+
 		$obj['totals']=__('total all orders', $this->pluginLocale).': '.$this->pluginOptions['order']['currency_symbol'].' '.wppizza_output_format_price($totalPriceAll).'';
 		print"".json_encode($obj)."";
-	exit();		
+	exit();
 	}
 	/********************************************
 		[order history -> update order status]
 	********************************************/
 	if($_POST['vars']['field']=='orderstatuschange' && isset($_POST['vars']['id']) && $_POST['vars']['id']>=0){
 		global $wpdb;
-		
+
 		/****update if set to refunded***/
 		$order_status=$_POST['vars']['selVal'];
 		if($order_status=='REFUNDED'){
@@ -426,7 +426,7 @@ $output='';
 	*
 	*************************************************************************************/
 	if($_POST['vars']['field']=='print-order' && $_POST['vars']['id']>=0){
-		
+
 		$orderId=(int)$_POST['vars']['id'];
 		/*should never happen really*/
 		if($orderId<=0){
@@ -438,45 +438,41 @@ $output='';
 		**********************************/
 		require(WPPIZZA_PATH.'classes/wppizza.order.details.inc.php');
 		$orderDetails=new WPPIZZA_ORDER_DETAILS();
-		$orderDetails->setOrderId($orderId);		
+		$orderDetails->setOrderId($orderId);
 		$order=$orderDetails->getOrder();/**all order vars**/
-		
+
 		/********************************
 		simplify vars to us in template
 		********************************/
 		$orderDetails=$order['ordervars'];
 		$txt=$order['localization'];
-		$customerDetails=$order['customer'];
+		$customerDetails=$order['customer']['post'];//omit ['others'] here
 		$cartitems=$order['items'];
 		$orderSummary=$order['summary'];
-		
-		
+
+
 		/**get template**/
 		$output='';
-		/*
-			do not yet allow usage of template in theme diractory until stable
-			when stable, uncomment relevant bits below
-		*/
-		//if(file_exists( $this->pluginTemplateDir . '/wppizza-order-print.php')){
-		//	ob_start();
-		//	require_once($this->pluginTemplateDir.'/wppizza-order-print.php');
-		//	$output = ob_get_clean();
-		//}else{
+		if(file_exists( $this->pluginTemplateDir . '/wppizza-order-print.php')){
+			ob_start();
+			require_once($this->pluginTemplateDir.'/wppizza-order-print.php');
+			$output = ob_get_clean();
+		}else{
 			ob_start();
 			require_once(WPPIZZA_PATH.'templates/wppizza-order-print.php');
 			$output = ob_get_clean();
-		//}
+		}
 
 		print"".$output."";
 		exit();
-	}	
+	}
 	/************************************************************************************************
 	*
 	*	[in case one wants to do/add more things in functions.php]
 	*
 	************************************************************************************************/
 	do_action('wppizza_ajax_action_admin',$_POST);
-	
+
 print"".$output."";
 exit();
 ?>

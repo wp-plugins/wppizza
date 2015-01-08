@@ -636,7 +636,7 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 				if(	version_compare( $options['plugin_data']['version'], '2.8.9.7', '<' ) && get_stylesheet_directory()!=get_template_directory()){$update_options['plugin_data']['nag_notice']='2.8.9.7';}
 				/***** admin order print by template now******/
 				if(	version_compare( $options['plugin_data']['version'], '2.11.6', '<' )){$update_options['plugin_data']['nag_notice']='2.11.6';}
-				
+
 
 				/**update options**/
 				update_option($this->pluginSlug, $update_options );
@@ -647,7 +647,7 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 		}
 	}
 	/************************************************************************************
-		[admin notices: show and dismiss]
+		[DMARCE NAG - ALWAYS LEAVE THIS]
 	************************************************************************************/
     function wppizza_dmarc_nag() {
 			if(!$this->pluginOptions['order']['dmarc_nag_off']){
@@ -673,7 +673,9 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 				}
 			}
   	}
-
+	/************************************************************************************
+		[admin notices: show and dismiss]
+	************************************************************************************/
     function wppizza_do_admin_notice() {/*check if we need to show any notices i.e when set to 1 or on first install*/
 		if($this->pluginOptions['plugin_data']['nag_notice']!=0 || $this->pluginOptions==0){
 			add_action('admin_notices', array( $this, 'wppizza_install_notice') );
@@ -746,19 +748,19 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 				$pluginUpdatedNotice.='<br /><b>For the next few weeks, while getting feedback on this, it will not yet be editable and the actions/filters within will most likely change. Therefore any feedback - good or bad - as to the way this is handled by your printer would be appreciated. (ideally with a photo of your printouts even if possible)</b>';
 				$pluginUpdatedNotice.='<br /><br /><b style="color:red">If you wish to revert to the previous way orders were printed (because you already used some filters/actions/edits to make this work for your particular scenario, you will find a checkbox in wppizza->settings which will allow you to do so</b>';
 				$pluginUpdatedNotice.='<br /><br /><b>You can safely ignore this notice if you have no need to print your orders from the order history screen</b>';
-				
+
 				$pluginUpdatedNotice.='<br /><br /><b>As ever - if there are any questions - please let me know</b>';
-				
+
 				$pluginUpdatedNotice.='<br/><br/>thank you<br/>';
 			}
 
 
-			
+
 			$pluginUpdatedNotice= $pluginUpdatedNotice;
 			$pluginUpdatedNotice.='<br/><a href="#" onclick="wppizza_dismiss_notice(); return false;" class="button-primary">dismiss</a>';
 			$pluginUpdatedNotice.='</div>';
-			
-			
+
+
 			/*output*/
 			print"".$pluginUpdatedNotice."";
     }
@@ -1335,7 +1337,7 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
     ******************************************************/
 	function wppizza_add_item_to_cart_button($atts , $options){
 		$str='';/*ini empty*/
-				
+
 		/*missing or empty attributes**/
 		if(!isset($atts['id']) ||  $atts['id']<=0 || $atts['id']=='' ){
 			return $str;
@@ -1345,7 +1347,7 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 		if($posttype!=WPPIZZA_POST_TYPE){
 			return $str;
 		}
-		
+
 		/* get sizes for this menu item*/
 		$meta=get_post_meta($atts['id'],$this->pluginSlug, true);//, $this->pluginSlug, true
 
@@ -1370,7 +1372,7 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 				$dropdown.='</select>';
 			}
 		}
-		
+
 		/****output****/
 		$str='<span class="wppizza-add-to-cart-btn-wrap">';
 		 if($hasdropdown){
@@ -1599,20 +1601,20 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 					}
 					/*********
 						filter any empty ones if more cats in $options['layout']['category_sort'] for some reason than actual categories
-						
+
 						temp solution for !all shortcode:
 						in some (as yet unknown) cases/situations the sorted categories variable gets saved
-						including some old/non existing ones and therefore consists of 
-						more than actually existing ones 
+						including some old/non existing ones and therefore consists of
+						more than actually existing ones
 						this can result in the last category being displayed multiple times when using !all shortcode
-						
-						so - as to at least for now fix the symptoms - filter empty ones						
+
+						so - as to at least for now fix the symptoms - filter empty ones
 					********/
 					$querys=array_filter($querys);
-					
+
 				}else{
 					foreach($catSlugsToArray as $sKey=>$slug){
-						if(trim($slug)!=''){//in case of using two commas omitting slug 
+						if(trim($slug)!=''){//in case of using two commas omitting slug
 							/*get slug and taxonomy from slug*/
 							$querys[]=get_term_by('slug',$slug,$this->pluginSlugCategoryTaxonomy);
 						}
@@ -1818,8 +1820,8 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 					}
 					/***if we are adding get vars to the url (if a tip has been added for instance the page will be refreshed with vars appended), force prefill to be enabled and set values accordingly. ADDED IN VERSION 2.8.6**/
 					/*
-						$_GET will also include session data set in $_SESSION[$this->pluginSessionGlobal]['userdata'] as they will not be appended to the url anymore (it's just ugly). 
-						MODIFIED IN VERSION 2.8.8.3, but no changes made to this file 
+						$_GET will also include session data set in $_SESSION[$this->pluginSessionGlobal]['userdata'] as they will not be appended to the url anymore (it's just ugly).
+						MODIFIED IN VERSION 2.8.8.3, but no changes made to this file
 					*/
 					$isSelfPickup=!empty($_SESSION[$this->pluginSession]['selfPickup']) ? 1:0;/**check if self pickup has been selected and make fields required as set in order form settings, ADDED in 2.8.9.10*/
 					foreach($formelements as $elmKey=>$elm){
@@ -2213,26 +2215,26 @@ public function wppizza_require_common_input_validation_functions(){
 			$hierarchy=array_flip($hierarchy);
 		return $hierarchy;
 	}
-	
+
 	/*******************************************************
 		[repair sorted hierarchy of wppizza categories
-		in case we are missing or have too many wppizza cats in 
+		in case we are missing or have too many wppizza cats in
 		sorted category list]
-	******************************************************/	
+	******************************************************/
 	function wppizza_maintenance_repair_category_sort(){
 		/*set var for simplification*/
 		$setSort=$this->pluginOptions['layout']['category_sort_hierarchy'];
-		
+
 		/**get all wppizza terms**/
 		$allTerms = get_terms(WPPIZZA_TAXONOMY);
 		/*reduce to term id->slug array**/
-		$allTermIds = wp_list_pluck( $allTerms, 'slug', 'term_id');	
+		$allTermIds = wp_list_pluck( $allTerms, 'slug', 'term_id');
 		/*TESTING ONLY*/
 		//$allTermIds[1000]='test';
-		
+
 		/**ini array to save as repaired sortorder**/
 		$fixCatHierachy=array();
-		
+
 		/**get all term id's we already have a sortorder for to keep existing**/
 			$termIntersect = array_intersect_key($allTermIds, $setSort);
 			$maxSort=array();
@@ -2252,10 +2254,10 @@ public function wppizza_require_common_input_validation_functions(){
 				$max++;
 				$fixCatHierachy[$tId]=$max;
 			}
-			
+
 		/**just because we can, makes no difference really -> sort***/
-			asort($fixCatHierachy);	
-	
+			asort($fixCatHierachy);
+
 	return $fixCatHierachy;
 	}
 	/*******************************************************

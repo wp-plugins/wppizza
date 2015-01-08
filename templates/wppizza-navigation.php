@@ -1,4 +1,5 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/
 /*
 	Template for displaying WPPizza Category Navigation
 	unless you want to wrap the whole thing in a div or something

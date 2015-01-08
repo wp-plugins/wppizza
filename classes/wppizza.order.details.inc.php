@@ -158,7 +158,7 @@ if (!class_exists('WPPIZZA_ORDER_DETAILS')) {
 				******************************************/
 				$order['localization']=$this->getLocalization($pOptions);
 				/****************************************
-					other order vars (date/payment type etc)
+					other order vars (date/payment type/notes  etc)
 				*****************************************/
 				$order['ordervars']=$this->getOrderDetails($orderDetails,$oOrder,$pOptions,$currency);
 
@@ -187,7 +187,6 @@ if (!class_exists('WPPIZZA_ORDER_DETAILS')) {
 				$oItems[$itemKey]=$item;
 				/**for convenience, we concat vars into label and value and add them to array */
 				$oItems[$itemKey]['label']=''.$item['quantity'].'x '.$item['name'].' '.$item['size'].' ['.$currency['left'].''.$item['price'].''.$currency['right'].']';
-				$oItems[$itemKey]['value']=''.$currency['left'].$item['pricetotal'].$currency['right'].'';
 			}
 			/**filter new/current extend additional info keys - to be run by external plugin if required**/
 			$oItems = apply_filters('wppizza_filter_order_extend', $oItems);
@@ -197,7 +196,7 @@ if (!class_exists('WPPIZZA_ORDER_DETAILS')) {
 			****************************************************/
 			$items=array();
 			foreach($oItems as $itemKey=>$item){
-				/*single vars*/
+				/*single item vars*/
 				$items[$itemKey]['postId']			=$item['postId'];
 				$items[$itemKey]['name']			=$item['name'];
 				$items[$itemKey]['size']			=$item['size'];
@@ -218,9 +217,8 @@ if (!class_exists('WPPIZZA_ORDER_DETAILS')) {
 					$items[$itemKey]['addinfo']			=!empty($item['addinfo']) ? $item['addinfo']['txt'] : '' ;
 				}
 
-				/*concat vars*/
+				/*add above concat vars too*/
 				$items[$itemKey]['label']			=$item['label'];
-				$items[$itemKey]['value']			=$item['value'];
 
 				/**all  vars not used for now**/
 				//$items[$itemKey]['all']				=$item;
@@ -233,6 +231,7 @@ if (!class_exists('WPPIZZA_ORDER_DETAILS')) {
 			wppizza_filter_order_items_to_plaintext //if so add filter above in construct (see WPPIZZA_ACTIONS and wppizza.send-order-emails.inc.php)
 			wppizza_filter_order_items_html//if so add filter above in construct (see WPPIZZA_ACTIONS and wppizza.send-order-emails.inc.php)
 			*/
+
 			return $items;
 		}
 
@@ -271,8 +270,6 @@ if (!class_exists('WPPIZZA_ORDER_DETAILS')) {
 			unset($customer['other']['wppizza-gateway']);
 			unset($customer['other']['wppizza_hash']);
 
-
-
 			/**
 				filter if required - probably overkill as there is already a filter above
 				but perhaps needed in future for backwards compatibility :
@@ -285,14 +282,13 @@ if (!class_exists('WPPIZZA_ORDER_DETAILS')) {
 			****************************************************/
 			$customerDetails=array();
 			foreach($customer['post'] as $key=>$values){
-				$customerDetails[$key]['label']=$values['label'];
-				$customerDetails[$key]['value']=$values['value'];
-				$customerDetails[$key]['type']=$values['type'];
+				$customerDetails['post'][$key]['label']=$values['label'];
+				$customerDetails['post'][$key]['value']=$values['value'];
+				$customerDetails['post'][$key]['type']=$values['type'];
 			}
+			/*might have been added by other plugins*/
 			foreach($customer['other'] as $key=>$values){
-				$customerDetails[$key]['label']=$values['label'];
-				$customerDetails[$key]['value']=$values['value'];
-				$customerDetails[$key]['type']=$values['type'];
+				$customerDetails['other'][$key]['label']=$values;
 			}
 
 			return $customerDetails;

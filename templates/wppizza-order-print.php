@@ -7,23 +7,17 @@ if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/
 *	WPPizza - Print Order Template
 *	template used when printing order from admin order history screen
 *
-*	NOTE: THIS TEMPLATE IS NOT *YET* EDITABLE OTHER THAN USING FILTERS AND ACTIONS (AND EVEN THOSE MIGHT CHANGE YET)
-*	(Well, of course it's editable, but you will loose your changes in the next update/s of the plugin)
-*	
-*	WHY: as it's a new addition I would expect a few  things to change depending on user feedback 
+*	WARNING: ALTHOUGH YOU COULD MOVE THS TEMPLATE TO YOUR THEME DIRECTORY AND EDIT IT THERE TO NOT LOOSE YOUR CHANGES ON PLUGIN UPDATES
+*	YOU ARE STRONGLY ADVISED TO USE THE FILTERS PROVIDED INSTEAD, AS THIS FILE MAY CHANGE AT ANY TIME
 *
-*	To support as many printers as possible it is also deliberately using tables as opposed to divs (for now anyway)
+*
+*	for filter usage refer to the examples in each section.
+*	if you think there is something you cannot do with the filters, contact me at dev[at]wp-pizza.com. I'd happily add some more if needed.
+*
+*	Note: To support as many printers as possible it is also deliberately using tables as opposed to divs (for now anyway)
 *
 *
 **********************************************************************************************************************************************************************/
-/****************************************************************
-*
-*
-*	allow filtering of miscellaneous  variables and css styles
-*	through a filter rather than editing this template directly
-*
-*
-*****************************************************************/
 	/*************************
 		misellaneous variables
 		[not really in use yet]
@@ -34,8 +28,8 @@ if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/
 	/*#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#*
 		to add your own title ( might not make too much sense when printing though):
 		in your theme's functions.php:
-		add_filter('wppizza_filter_print_order_variables','myprefix_function_add_title');
-		myprefix_function_add_title($vars){
+		add_filter('wppizza_filter_print_order_variables','myprefix_add_title');
+		function myprefix_add_title($vars){
 			$vars['title']='my title';
 			return $vars;
 		}
@@ -44,10 +38,10 @@ if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/
 		css
 	****************/
 	/*globals*/
-	$style['global']='html,body,table,tbody,tr,td,th{margin:0;padding:0;font-size:12px;text-align:left}';
+	$style['global']='html,body,table,tbody,tr,td,th,span{margin:0;padding:0;font-size:12px;text-align:left;font-family:Verdana, Helvetica, Arial, sans-serif}';
 	$style['table']='table{width:100%;margin:0 0 10px 0;}';
 	$style['th']='th{padding:5px;}';
-	$style['td']='td{padding:0 5px;}';
+	$style['td']='td{padding:0 5px;vertical-align:top}';
 	/*header*/
 	$style['header']='#header{margin:0}';
 	$style['header_td']='#header #head td{font-size:200%;text-align:center;}';
@@ -71,6 +65,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/
 	$style['items_tds']='#items .item td{padding-top:5px}';
 	$style['items_td_1']='#items .item td:first-child{text-align:center}';
 	$style['items_td_2']='#items .item td:last-child{text-align:right}';
+	$style['items_size']='#items .size{}';
 	$style['items_divider_hr']='#items tbody > tr.divider > td > hr {border:none;border-top:1px dotted #AAAAAA;}';
 	/*summary*/
 	$style['summary']='#summary {border-top:1px solid;border-bottom:1px solid;}';
@@ -86,16 +81,16 @@ if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/
 		to add your own css:
 		in your theme's functions.php:
 
-		add_filter('wppizza_filter_print_order_css','myprefix_function_add_css');
-		myprefix_function_add_css($style){
+		add_filter('wppizza_filter_print_order_css','myprefix_add_css');
+		function myprefix_add_css($style){
 
 			// *** to add new ***  //
 			$style['custom']='// add some custom css declaration //';
 
-			// *** to remove exiting ['table']  for instance ***  //
+			// *** to remove exiting ['table'] style for instance ***  //
 			unset($style['table']);
 
-			// *** to change exiting  ['table']  for instance ***  //
+			// *** to change exiting  ['table'] style for instance ***  //
 			$style['table']='table{// use your own css declaration //}';
 
 			return $style;
@@ -140,8 +135,8 @@ if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/
 
 		/*body*/
 		$hTable['tableBodyOpen']='<tbody>';
-			$hTable['tableBodyHeader']='<tr id="head"><td>'.$txt['header_order_print_header'].'</td></tr>';
-			$hTable['tableBodyAddress']='<tr id="address"><td>'.$txt['header_order_print_shop_address'].'</td></tr>';
+			$hTable['header']='<tr id="head"><td>'.$txt['header_order_print_header'].'</td></tr>';
+			$hTable['address']='<tr id="address"><td>'.$txt['header_order_print_shop_address'].'</td></tr>';
 		$hTable['tableBodyClose']='</tbody>';
 
 	$hTable['tableClose']='</table>';
@@ -149,7 +144,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/
 		allow filtering and
 		implode for output
 	***************************/
-	$hTable = apply_filters('wppizza_filter_print_order_address_output', $hTable, $txt);
+	$hTable = apply_filters('wppizza_filter_print_order_header_output', $hTable, $txt);
 	$hTable = implode(PHP_EOL, array_filter($hTable));
 
 	/***********************
@@ -158,6 +153,24 @@ if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/
 	*
 	***********************/
 	$output['header']=$hTable;
+
+	/*#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#*
+		to add, amend or delete  different elements (examples) :
+		in your theme's functions.php:
+		add_filter('wppizza_filter_print_order_header_output','myprefix_amend_header_elements');
+		function myprefix_amend_header_elements($elements){
+
+			// to add something to footer
+			$elements['tableFooter']='<tfoot><tr><td colspan="2">something</td></tr></tfoot>';
+
+			// to remove address for example
+			unset($elements['address']);
+
+
+			return $elements;
+
+		}
+	*#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#*/
 
 ?>
 <?php
@@ -210,6 +223,37 @@ if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/
 	*
 	***********************/
 	$output['overview']=$oTable;
+
+	/*#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#*
+		to add, amend or delete  different elements (examples) :
+		in your theme's functions.php:
+		add_filter('wppizza_filter_print_order_overview_output','myprefix_amend_overview_elements');
+		function myprefix_amend_overview_elements($elements){
+
+			// to add something to footer
+			$elements['tableFooter']='<tfoot><tr><td colspan="2">something</td></tr></tfoot>';
+
+			// to remove table header for example
+			unset($elements['tableHeader']);
+
+			// to remove transaction id line
+			unset($elements['transaction_id']);
+
+
+			// to add something after transaction_id
+			$elements['transaction_id'].='<tr><td>something left</td><td>something right</td></tr>';
+
+			// to move transaction_id before payment_type (.ie after delivery)
+			$tid=$elements['transaction_id'];//store var
+			unset($elements['transaction_id']);//remove original
+			$elements['pickup_delivery'].=$tid;//append after delivery
+
+
+
+			return $elements;
+
+		}
+	*#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#*/
 ?>
 <?php
 /****************************************************************************
@@ -225,13 +269,29 @@ if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/
 	*
 	***********************/
 	$customer=array();
-	foreach($customerDetails as $key=>$array){
-		$customer[$key] ='<tr><td>'.$array['label'].'</td><td>'.$array['value'].'</td></tr>';
+	foreach($customerDetails as $key=>$item){
+		$customer[$key] ='<tr><td>'.$item['label'].'</td><td>'.$item['value'].'</td></tr>';
 	}
 	/**allow filtering**/
 	$customer = apply_filters('wppizza_filter_print_order_customer', $customer);
 	/*implode for output below*/
 	$customer = implode(PHP_EOL,$customer);
+
+	/*#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#*
+		to add, amend or delete  different customer data (examples) :
+		in your theme's functions.php:
+		add_filter('wppizza_filter_print_order_customer','myprefix_amend_customer_details');
+		function myprefix_amend_customer_details($details){
+
+			//	do a print_r($details); to get all keys - they will be something like [cname],[cemail],[caddress],[ctel] etc
+
+			// so to remove the line containing the email address (key being [cemail]) do:
+			unset($details['cemail']);
+
+			return $details;
+		}
+	*#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#*/
+
 
 	/***********************
 	*
@@ -265,7 +325,29 @@ if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/
 	*	[add to output]
 	*
 	***********************/
-	$output['customers']=$cTable;
+	$output['customer']=$cTable;
+
+
+	/*#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#*
+		to add, amend or delete  different elements (examples) :
+		in your theme's functions.php:
+		add_filter('wppizza_filter_print_order_customer_output','myprefix_amend_customer_elements');
+		function myprefix_amend_customer_elements($elements){
+
+			// to add something to footer
+			$elements['tableFooter']='<tfoot><tr><td colspan="2">something</td></tr></tfoot>';
+
+
+			// to add something after items
+			$elements['tableBodyItems'].='<tr><td>something </td><td>something </td><td>something </td></tr>';
+
+			// to remove table header for example
+			unset($elements['tableHeader']);
+
+			return $elements;
+
+		}
+	*#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#*/
 ?>
 <?php
 /****************************************************************************
@@ -281,28 +363,29 @@ if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/
 	*
 	***********************/
 	$items=array();
-	foreach($cartitems as $key=>$array){
+	foreach($cartitems as $key=>$item){
 
 		/**construct item <tr> by array to make it more easily filterable**/
 		$items[$key]['tropen'] ='<tr class="item">';
 
 			$items[$key]['td1open'] ='<td>';
-				$items[$key]['quantity'] =''.$array['quantity'].'';
+				$items[$key]['quantity'] =''.$item['quantity'].'';
 			$items[$key]['td1close'] ='</td>';
 
 			$items[$key]['td2open'] ='<td>';
-				$items[$key]['name'] =''.$array['name'].'';
-				$items[$key]['pricesingle'] =' '.$array['value'].'';
+				$items[$key]['name'] =''.$item['name'].'';
+				$items[$key]['size'] ='<span class="size"> '.$item['size'].'</span>';
+				$items[$key]['pricesingle'] =' ['.$item['value'].']';
 			$items[$key]['td2close'] ='</td>';
 
 			$items[$key]['td3open'] ='<td>';
-				$items[$key]['pricetotal'] =''.$array['valuetotal'].'';
+				$items[$key]['pricetotal'] =''.$item['valuetotal'].'';
 			$items[$key]['td3close'] ='</td>';
 
 		$items[$key]['trclose'] ='</tr>';
 
 		/**additional info other plugins might add**/
-		$items[$key]['addinfo'] ='<tr class="itemaddinfo"><td></td><td>'.$array['addinfo'].'</td><td></td></tr>';
+		$items[$key]['addinfo'] ='<tr class="itemaddinfo"><td></td><td>'.$item['addinfo'].'</td><td></td></tr>';
 
 		/**a divider tr /  hr ****/
 		$items[$key]['devider'] ='<tr class="divider"><td colspan="3"><hr /></td></tr>';
@@ -311,10 +394,23 @@ if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/
 		$items[$key] = apply_filters('wppizza_filter_print_order_single_item', $items[$key]);
 		$items[$key] = implode(PHP_EOL,$items[$key]);
 	}
-	/**allow filtering all items**/
-	$items = apply_filters('wppizza_filter_print_order_items', $items);
 	/*implode for output below*/
 	$items = implode(PHP_EOL,$items);
+
+	/*#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#*
+		to delete the single item price for example in each element:
+		in your theme's functions.php:
+		add_filter('wppizza_filter_print_order_single_item','myprefix_amend_item');
+		function myprefix_amend_item($item){
+
+			// to remove pricesingle after item name/size
+			unset($item['pricesingle']);
+
+			return $item;
+
+		}
+	*#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#*/
+
 
 	/***********************
 	*
@@ -359,6 +455,27 @@ if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/
 	*
 	***********************/
 	$output['items']=$iTable;
+
+	/*#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#*
+		to add, amend or delete  different elements (examples) :
+		in your theme's functions.php:
+		add_filter('wppizza_filter_print_order_items_output','myprefix_amend_items_elements');
+		function myprefix_amend_items_elements($elements){
+
+			// to add something to footer
+			$elements['tableFooter']='<tfoot><tr><td colspan="2">something</td></tr></tfoot>';
+
+
+			// to add something after items
+			$elements['tableBodyItems'].='<tr><td>something </td><td>something </td><td>something </td></tr>';
+
+			// to remove table header for example
+			unset($elements['tableHeader']);
+
+			return $elements;
+
+		}
+	*#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#*/
 ?>
 <?php
 /************************************************************************************************
@@ -374,8 +491,8 @@ if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/
 	*
 	***********************/
 	$summary=array();
-	foreach($orderSummary as $key=>$array){
-		$summary[$key] ='<tr><td>'.$array['label'].'</td><td>'.$array['value'].'</td></tr>';
+	foreach($orderSummary as $key=>$item){
+		$summary[$key] ='<tr><td>'.$item['label'].'</td><td>'.$item['value'].'</td></tr>';
 		/**allow filtering per line**/
 		$summary[$key] = apply_filters('wppizza_filter_print_order_summary_item', $summary[$key]);
 	}
@@ -408,7 +525,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/
 		allow filtering and
 		implode for output
 	***************************/
-	$sTable = apply_filters('wppizza_filter_print_order_customer_output', $sTable, $order);
+	$sTable = apply_filters('wppizza_filter_print_order_summary_output', $sTable, $order);
 	$sTable = implode(PHP_EOL,$sTable);
 
 	/***********************
@@ -417,6 +534,27 @@ if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/
 	*
 	***********************/
 	$output['summary']=$sTable;
+
+	/*#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#*
+		to add, amend or delete  different elements (examples) :
+		in your theme's functions.php:
+		add_filter('wppizza_filter_print_order_summary_output','myprefix_amend_summary_element');
+		function myprefix_amend_summary_element($elements){
+
+			// to add something to footer
+			$elements['tableFooter']='<tfoot><tr><td colspan="2">something</td></tr></tfoot>';
+
+
+			// to add something after summary
+			$elements['tableBodySummary'].='<tr><td>something left</td><td>something right</td></tr>';
+
+			// to remove table header for example
+			unset($elements['tableHeader']);
+
+			return $elements;
+
+		}
+	*#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#*/
 ?>
 <?php
 /****************************************************************************
@@ -430,6 +568,29 @@ if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/
 	$output=apply_filters('wppizza_filter_print_order_output', $output, $order);
 	$output=implode(PHP_EOL,$output);
 	echo $output;
+
+	/*#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#*
+		to reorder the different parts (or omit one or more):
+		in your theme's functions.php:
+		add_filter('wppizza_filter_print_order_output','myprefix_amend_output');
+		function myprefix_amend_output($parts){
+
+			// to reorder just arrange the order as required below. for example, to have customer details last
+			$newparts['header']=$parts['header'];
+			$newparts['overview']=$parts['overview'];
+			$newparts['items']=$parts['items'];
+			$newparts['summary']=$parts['summary'];
+			$newparts['customer']=$parts['customer'];
+
+			return $newparts;
+
+			//to - for example - omit the header entirely
+			unset($parts['header']);
+
+			return $parts;
+
+		}
+	*#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#*/
 ?>
 <?php
 /*****************************************************************
