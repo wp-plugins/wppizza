@@ -47,7 +47,10 @@ if (!class_exists('WPPIZZA_ORDER_DETAILS')) {
 			************************/
 			/**filter order items when returned from db as its all stored in a array**/
 			add_filter('wppizza_filter_order_details_db_return', array( $this, 'wppizza_filter_order_db_return'),10,1);
+			/**filter transaction id appending db id if so required**/
 			add_filter('wppizza_filter_order_details_transaction_id', array( $this, 'wppizza_filter_transaction_id'),10,2);
+			/**filter items to sort by category**/
+			add_filter('wppizza_filter_print_order_items', array( $this, 'wppizza_filter_items_by_category'),10,2);
 
 		}
 /**********************************************************************************************

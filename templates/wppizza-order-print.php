@@ -363,11 +363,13 @@ if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/
 	*
 	***********************/
 	$items=array();
-	foreach($cartitems as $key=>$item){
-
+	/*filter to allow sorting by category for example (or whatever else one can think of) **/
+	$cartitems = apply_filters('wppizza_filter_print_order_items', $cartitems, 'print-order');
+	
+	foreach($cartitems as $key=>$item){	
 		/**construct item <tr> by array to make it more easily filterable**/
 		$items[$key]['tropen'] ='<tr class="item">';
-
+		
 			$items[$key]['td1open'] ='<td>';
 				$items[$key]['quantity'] =''.$item['quantity'].'';
 			$items[$key]['td1close'] ='</td>';
@@ -407,7 +409,6 @@ if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/
 			unset($item['pricesingle']);
 
 			return $item;
-
 		}
 	*#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#*/
 
@@ -496,8 +497,8 @@ if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/
 		/**allow filtering per line**/
 		$summary[$key] = apply_filters('wppizza_filter_print_order_summary_item', $summary[$key]);
 	}
-	/**allow filtering all items**/
-	$summary = apply_filters('wppizza_filter_print_order_items', $summary);
+	/**allow filtering all summary items**/
+	$summary = apply_filters('wppizza_filter_print_order_summary', $summary);
 	/*implode for output below*/
 	$summary = implode(PHP_EOL,$summary);
 
