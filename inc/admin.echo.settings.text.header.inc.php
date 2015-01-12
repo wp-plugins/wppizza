@@ -21,6 +21,7 @@
 		if($v['id']=='sizes'){
 			echo '<h4>'.__('Define a selection of sizes that might be available per item.', $this->pluginLocale).'</h4>';
 			echo"<span class='description'>".__('As meals and beverages can come in different sizes, please add/edit the options you want to offer your customers. You will then be able to offer these options on a per item basis:', $this->pluginLocale)."</span>";
+			echo"<br /><span style='color:red'>".__('for your own sanity and easier managability now and in the future, I would also suggest to define separate, distinct options for different types of dishes *even if they have the same sizes/labels*. (use the "Admin Screen Label" for easier identification)', $this->pluginLocale)."</span>";
 		}	
 		if($v['id']=='additives'){
 			echo '<h4>'.__('Some meals and beverages may contain additives. Add any possible additives here and select them at any meal/beravage that contains these additives. This in turn will add a footnote to pages denoting which item contains what additives', $this->pluginLocale).'</h4>';

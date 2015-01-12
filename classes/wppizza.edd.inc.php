@@ -170,24 +170,31 @@ class WPPIZZA_EDD_SL{
 	*	[add edd settings fields]
 	*
 	***********************************************/
-	function echo_edd_settings($slug,$fieldName,$license,$status){
-		echo"<input name='".$fieldName."' type='text' placeholder='".__('Enter your license key')."' size='30' class='regular-text' value='".$license."' />";
-		echo' '.__('License Key', WPPIZZA_LOCALE).'<br />';
+	function echo_edd_settings($slug,$fieldName,$license,$status,$echo=true){
+		$output='';
+		$output.="<input name='".$fieldName."' type='text' placeholder='".__('Enter your license key')."' size='30' class='regular-text' value='".$license."' />";
+		$output.=' '.__('License Key', WPPIZZA_LOCALE).'<br />';
 
 		/**print activate or de-activate button**/
 		if( $status !== false && $status == 'valid' ) {
-			echo"<label class='button-secondary'><input name='".$slug."[license][action]' type='checkbox' value='deactivate' /> ".__('De-Activate License', WPPIZZA_LOCALE)."</label>";
+			$output.="<label class='button-secondary'><input name='".$slug."[license][action]' type='checkbox' value='deactivate' /> ".__('De-Activate License', WPPIZZA_LOCALE)."</label>";
 		}else{
-			echo"<label class='button-secondary'><input name='".$slug."[license][action]' type='checkbox' value='activate' /> ".__('Activate License', WPPIZZA_LOCALE)."</label>";
+			$output.="<label class='button-secondary'><input name='".$slug."[license][action]' type='checkbox' value='activate' /> ".__('Activate License', WPPIZZA_LOCALE)."</label>";
 		}
 		/**print status info**/
 		if( $status !== false && $status == 'valid' ) {
-			echo'<span style="color:green;"> '. __('License active', WPPIZZA_LOCALE).'</span>';
+			$output.='<span style="color:green;"> '. __('License active', WPPIZZA_LOCALE).'</span>';
 		}
 		if( $status !== false && $status !='' && $status != 'valid' ) {
-			echo'<span style="color:red;"> '. __('License in-active', WPPIZZA_LOCALE).' ['.$status.']</span>';
+			$output.='<span style="color:red;"> '. __('License in-active', WPPIZZA_LOCALE).' ['.$status.']</span>';
 		}
-		echo'<br/>'.__('Please note: entering and activating the license is optional, but if you choose not to do so, you will not be informed of any future bugfixes and/or updates.', WPPIZZA_LOCALE).'<br />';
+		$output.='<br/>'.__('Please note: entering and activating the license is optional, but if you choose not to do so, you will not be informed of any future bugfixes and/or updates.', WPPIZZA_LOCALE).'<br />';
+		
+		if($echo){
+			echo $output;	
+		}else{
+			return $output;
+		}
 	}
 	/***********************************************
 	*

@@ -38,7 +38,8 @@ if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/
 		css
 	****************/
 	/*globals*/
-	$style['global']='html,body,table,tbody,tr,td,th,span{margin:0;padding:0;font-size:12px;text-align:left;font-family:Verdana, Helvetica, Arial, sans-serif}';
+	$style['global']='html,body,table,tbody,tr,td,th,span{margin:0;padding:0;text-align:left;}';
+	$style['global_font']='html,body,table,tbody,tr,td,th,span{font-size:12px;font-family:Arial, Verdana, Helvetica, sans-serif}';
 	$style['table']='table{width:100%;margin:0 0 10px 0;}';
 	$style['th']='th{padding:5px;}';
 	$style['td']='td{padding:0 5px;vertical-align:top}';
@@ -62,7 +63,10 @@ if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/
 	/*items*/
 	$style['items_th']='#items th{border-top:1px solid;border-bottom:1px solid;white-space:nowrap;}';
 	$style['items_th_widths']='#items th:first-child,#items th:last-child{width:20px}';
-	$style['items_tds']='#items .item td{padding-top:5px}';
+	/*categories (if printed)*/
+	$style['item_category']='#items .item-category td{padding:5px 2px 2px 2px; border-bottom:1px dashed }';
+	$style['items_tds']='#items .item td{padding-top:5px;}';
+	$style['items_fontsize']='#items .item td{font-size:100%}';
 	$style['items_td_1']='#items .item td:first-child{text-align:center}';
 	$style['items_td_2']='#items .item td:last-child{text-align:right}';
 	$style['items_size']='#items .size{}';
@@ -78,20 +82,29 @@ if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/
 	$style = implode('', $style);
 
 	/*#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#*
-		to add your own css:
+		to add your own or change existing css:
 		in your theme's functions.php:
 
 		add_filter('wppizza_filter_print_order_css','myprefix_add_css');
 		function myprefix_add_css($style){
 
-			// *** to add new ***  //
-			$style['custom']='// add some custom css declaration //';
+			// *** to change overall font/fontsize (default being font-size:12px;font-family:Arial, Verdana, Helvetica, sans-serif)***  //
+			$style['global_font']='html,body,table,tbody,tr,td,th,span{font-size:10px;font-family: Verdana, Helvetica, sans-serif}';
+
+			// *** to change item font size (default being 100%)***  //
+			$style['items_fontsize']='#items .item td{font-size:120%}';	
 
 			// *** to remove exiting ['table'] style for instance ***  //
 			unset($style['table']);
-
+						
 			// *** to change exiting  ['table'] style for instance ***  //
 			$style['table']='table{// use your own css declaration //}';
+			
+			// *** to add new declaraion***  //
+			$style['custom']='// add some custom css declaration //';
+
+			// *** to remove ALL css *** //
+			$style=array();
 
 			return $style;
 		}
@@ -122,7 +135,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/
 ****************************************************************************/
 	/***********************
 	*
-	*	[create output]
+	*	[create output header]
 	*
 	***********************/
 	$hTable['tableOpen']='<table id="header">';
@@ -155,7 +168,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/
 	$output['header']=$hTable;
 
 	/*#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#*
-		to add, amend or delete  different elements (examples) :
+		to add, amend or delete header elements (examples) :
 		in your theme's functions.php:
 		add_filter('wppizza_filter_print_order_header_output','myprefix_amend_header_elements');
 		function myprefix_amend_header_elements($elements){
@@ -183,7 +196,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/
 ****************************************************************************/
 	/***********************
 	*
-	*	[create output]
+	*	[create output overview]
 	*
 	***********************/
 	$oTable['tableOpen']='<table id="overview">';
@@ -295,7 +308,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/
 
 	/***********************
 	*
-	*	[create output]
+	*	[create output customer]
 	*
 	***********************/
 	$cTable['tableOpen']='<table id="customer">';
@@ -367,6 +380,9 @@ if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/
 	$cartitems = apply_filters('wppizza_filter_print_order_items', $cartitems, 'print-order');
 	
 	foreach($cartitems as $key=>$item){	
+		/**returns the category as <tr class="item-category"><td colspan="3">'.----this category name -----.'</td></tr>'**/
+		$items[$key]['category'] = apply_filters('wppizza_filter_print_order_single_item_category', $item ,'tr');
+	
 		/**construct item <tr> by array to make it more easily filterable**/
 		$items[$key]['tropen'] ='<tr class="item">';
 		
@@ -395,6 +411,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/
 		/**allow filtering individual item**/
 		$items[$key] = apply_filters('wppizza_filter_print_order_single_item', $items[$key]);
 		$items[$key] = implode(PHP_EOL,$items[$key]);
+
 	}
 	/*implode for output below*/
 	$items = implode(PHP_EOL,$items);
@@ -407,7 +424,12 @@ if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/
 
 			// to remove pricesingle after item name/size
 			unset($item['pricesingle']);
-
+			
+			//to remove category name
+			//(only applicable if enabled in wppizza->layout Group, sort and display menu items by category)
+			
+			unset($item['category']);
+			
 			return $item;
 		}
 	*#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#*/
@@ -415,7 +437,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/
 
 	/***********************
 	*
-	*	[create output]
+	*	[create output items]
 	*
 	***********************/
 	$iTable['tableOpen']='<table id="items">';
@@ -504,7 +526,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/
 
 	/***********************
 	*
-	*	[create output]
+	*	[create output summary]
 	*
 	***********************/
 	$sTable['tableOpen']='<table id="summary">';

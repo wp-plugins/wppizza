@@ -51,7 +51,11 @@ if (!class_exists('WPPIZZA_ORDER_DETAILS')) {
 			add_filter('wppizza_filter_order_details_transaction_id', array( $this, 'wppizza_filter_transaction_id'),10,2);
 			/**filter items to sort by category**/
 			add_filter('wppizza_filter_print_order_items', array( $this, 'wppizza_filter_items_by_category'),10,2);
-
+			/**filter items to sort by category**/
+			add_action('wppizza_orderhistory_item', array( $this, 'wppizza_items_show_order_print_category'));
+			/**output category name above each item group  (if enabled) **/
+			add_filter('wppizza_filter_print_order_single_item_category', array( $this, 'wppizza_items_print_category'),10,2);
+			
 		}
 /**********************************************************************************************
 *

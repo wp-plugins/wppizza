@@ -38,19 +38,20 @@ jQuery(document).ready(function($){
 		e.preventDefault();
 		var orderId=$(this).attr('id').split("-").pop(-1);
 		jQuery.post(ajaxurl , {action :'wppizza_admin_json',vars:{'field':'print-order','id':orderId}}, function(output) {
+            var wpPizzaOrder=output;
             //Print Page : as Android doesnt understnd this, let's open a window
             var wppizzaPrintOrder = window.open("","WppizzaOrder","width=750,height=550");
-			wppizzaPrintOrder.document.write(output);
+			wppizzaPrintOrder.document.write(wpPizzaOrder);
             wppizzaPrintOrder.focus();
 			/*android doesnt understand .print() not my fault really*/
-			wppizzaPrintOrder.print();			
+			wppizzaPrintOrder.print();
 			/*output to console*/
-			//console.log(output)			
-			
+			//console.log(output)
+
 		},'html').error(function(jqXHR, textStatus, errorThrown) {alert("error : " + errorThrown);});
-	});	
+	});
 	/******************************
-	* print order history - OLD/PREVIOUS VERSION 
+	* print order history - OLD/PREVIOUS VERSION
 	*******************************/
 	$(document).on('click touchstart', '.wppizza-print-order-prev', function(e){
 			e.preventDefault();

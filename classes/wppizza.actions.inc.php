@@ -3077,6 +3077,19 @@ public function wppizza_require_common_input_validation_functions(){
 			echo'<li class="wppizza-item-category">'.$item['itemCatHierarchy'].'</li>';
 		}
 	}
+	function wppizza_items_print_category($item,$type='tr'){
+		/**only print if not empty and enabled**/
+		if(isset($item['itemCatHierarchy']) && $item['itemCatHierarchy']!=''){
+			if($type=='tr'){
+				$cat='<tr class="item-category"><td colspan="3">'.$item['itemCatHierarchy'].'</td></tr>';
+			}
+			if($type=='li'){
+				$cat='<li class="item-category">'.$item['itemCatHierarchy'].'</li>';
+			}
+			return $cat;
+		}
+	}
+
 
 /**
  * Retrieve category parents with separator for general taxonomies.

@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.3+, WP 3.3+ 
 Tested up to: 4.1
-Stable tag: 2.11.6.2
+Stable tag: 2.11.6.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -142,6 +142,12 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 
 == Changelog ==
+
+2.11.6.3  
+* tweak: order history print also now outputting categories (if enabled in layout)  
+* tweak: order history print now using Arial as default font  
+* minor tidyup in places   
+12th January 2015  
 
 2.11.6.2
 * tweak: order history printing template (also now applying category sort order if set in wppizza->layout : Group, sort and display menu items by category) 
