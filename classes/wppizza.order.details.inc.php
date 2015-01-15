@@ -100,7 +100,7 @@ if (!class_exists('WPPIZZA_ORDER_DETAILS')) {
 		function getOrder(){
 			global $wpdb;
 			/**select the right blog table if set **/
-			if($this->blogId && (int)$this->blogId>1){
+			if($this->blogId!='' && $this->blogId && (int)$this->blogId>1){
 				$wpdb->prefix=$wpdb->base_prefix . $this->blogId.'_';
 			}
 			$orderDetails = $wpdb->get_row("SELECT id, wp_user_id, order_date,  order_update, customer_ini, order_ini, transaction_id, initiator, payment_status, notes FROM " .$wpdb->prefix . "wppizza_orders WHERE id='".(int)$this->orderId."' ");
@@ -148,6 +148,10 @@ if (!class_exists('WPPIZZA_ORDER_DETAILS')) {
 			*
 			***************************************************************************/
 
+				/******************************************
+					site details (useful in multisite)
+				******************************************/
+				$order['site']=$this->getSiteDetails($this->blogId);
 				/******************************************
 					customer
 				******************************************/
@@ -522,6 +526,32 @@ if (!class_exists('WPPIZZA_ORDER_DETAILS')) {
 			$orderDetails['initiator']=array('label'=>'','value'=>$orderFields->initiator);
 
 			return $orderDetails;
+		}
+		/**********************************************************************************************
+		*
+		*	[site details  - private - return '' if not multisite to start off with]
+		*
+		*********************************************************************************************/
+		private function getSiteDetails($blogid){
+			$siteDetails=array();
+			
+			/*not multisite | no blogid*/
+			if(!is_multisite() || !$blogid){
+				return $siteDetails;	
+			}
+			/*multisite*/
+			if($blogid){// && $blogid>1
+				global $blogid;
+				$sDetails=get_blog_details($blogid);
+				$siteDetails['site_id']=$sDetails->site_id;
+				$siteDetails['blog_id']=$sDetails->blog_id;
+				$siteDetails['lang_id']=$sDetails->lang_id;
+				$siteDetails['siteurl']=$sDetails->siteurl;
+				$siteDetails['blogname']=$sDetails->blogname;
+				$siteDetails['parent_site']=$sDetails->blog_id==BLOG_ID_CURRENT_SITE ? true : false;
+			}
+		
+			return $siteDetails;
 		}
 		/**********************************************************************************************
 		*

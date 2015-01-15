@@ -223,6 +223,12 @@
 		a bit hackish mind you, but thank's any way to the website
 		that provided the original if i find it again, i insert the address here...
 	* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
+	function wpizzaOpeningtimes(){/*wrapper in case we have no options**/
+		$options=get_option('wppizza');	
+		$openingtimes=wppizza_frontendOpeningTimes($options);
+		return $openingtimes;
+	}
+
 	function wppizza_frontendOpeningTimes($options){
 		$weekDayStart=get_option('start_of_week',7);
 
@@ -268,7 +274,7 @@
 						$groupDays.=wpizza_format_weekday($consecDays[0],'D');
 				}
 			}
-			$str.='<span class="'.trim($groupClasses).'">';
+			$str.='<span class="wppizza-optm '.trim($groupClasses).'">';
 			$str.=$groupDays;
 			$open=explode("|",$k);
 			if($open[0]==$open[1]){

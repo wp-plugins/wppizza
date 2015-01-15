@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.3+, WP 3.3+ 
 Tested up to: 4.1
-Stable tag: 2.11.6.3
+Stable tag: 2.11.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -142,6 +142,18 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 
 == Changelog ==
+
+2.11.7  
+* tweak: split admin global settings into sections  
+* tweak: added general wppizza-optm class to opening times output spans  
+* tweak: more meaningful filenames on reports export 
+* added: wrapper function wpizzaOpeningtimes() if wppizza options are not available (in multisite blogloop for example)  
+* multisite: remove multisite settings for single installs  
+* multisite: allow reporting for all subsites (in parent site only)  
+* multisite: allow order history for all subsites (in parent site only)  
+* multisite: order history print adds sitename for easier identification (in parent site only)   
+15th January 2015  
+
 
 2.11.6.3  
 * tweak: order history print also now outputting categories (if enabled in layout)  

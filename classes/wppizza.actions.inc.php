@@ -1012,7 +1012,14 @@ function wppizza_require_report_functions(){
 *********************************************************/
 function wppizza_dashboard_widget(){
 	if (current_user_can('wppizza_cap_reports')){
-		wp_add_dashboard_widget('wppizza_dashboard_widget',WPPIZZA_NAME.' '.__('Overview',$this->pluginLocale),array($this,'wppizza_do_dashboard_widget'));
+		$dpwTitle=__('Overview',$this->pluginLocale);
+		if(!empty($this->pluginOptions['plugin_data']['wp_multisite_reports_all_sites'])){
+			$dpwTitle.=' '.__('[All Sites]',$this->pluginLocale);
+		}
+		/*filter if you want*/
+		$dpwTitle = apply_filters('wppizza_filter_dbw_title', $dpwTitle);
+
+		wp_add_dashboard_widget('wppizza_dashboard_widget',WPPIZZA_NAME.' '.$dpwTitle, array($this,'wppizza_do_dashboard_widget'));
 	}
 }
 function wppizza_do_dashboard_widget() {

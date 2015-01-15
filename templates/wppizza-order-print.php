@@ -50,6 +50,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/
 	/*overview*/
 	$style['overview_th']='#overview{margin:0}';
 	$style['overview_th']='#overview th{border-top:1px solid;border-bottom:1px solid;font-size:120%;text-align:center}';
+	$style['overview_blogname']='#blogname {font-size:80%;font-weight:normal}';	
 	$style['overview_td']='#overview tbody>tr>td{width:50%;white-space:nowrap;}';
 	$style['overview_td1']='#overview tbody>tr>td:first-child{text-align:right}';
 	$style['overview_td2']='#overview tbody>tr>td:last-child{text-align:left}';
@@ -157,7 +158,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/
 		allow filtering and
 		implode for output
 	***************************/
-	$hTable = apply_filters('wppizza_filter_print_order_header_output', $hTable, $txt);
+	$hTable = apply_filters('wppizza_filter_print_order_header_output', $hTable, $txt, $order);
 	$hTable = implode(PHP_EOL, array_filter($hTable));
 
 	/***********************
@@ -202,7 +203,30 @@ if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/
 	$oTable['tableOpen']='<table id="overview">';
 
 		/*header*/
-		$oTable['tableHeader']='<thead><tr><th colspan="2">'.$orderDetails['order_date']['value'].'</th></thead>';
+		$oTable['tableHeader']='<thead><tr><th colspan="2">';
+		$oTable['tableHeader'].=''.$orderDetails['order_date']['value'].'';
+		
+		/**************************
+			multisite only, 
+			allows us to ident site (parent only)
+		**************************/
+		if(is_multisite() && $siteDetails['parent_site'] && $options['plugin_data']['wp_multisite_order_history_all_sites'] ){
+			$multisiteHeader=array();
+			if(!empty($siteDetails['blogname']) && $siteDetails['blogname']!=''){
+				$multisiteHeader['blogname']='<br /><span id="blogname">'.$siteDetails['blogname'].'</span>';
+			}
+			/**************************
+				allow filtering and implode for output
+			***************************/
+			$multisiteHeader = apply_filters('wppizza_filter_print_order_overview_multisite_header', $multisiteHeader, $order);			
+			$oTable['tableHeader'].= implode(PHP_EOL,$multisiteHeader);
+		}
+		/**************************
+			multisite only end
+		**************************/		
+		
+		$oTable['tableHeader'].='</th></thead>';
+
 
 		/*footer*/
 		$oTable['tableFooter']='';

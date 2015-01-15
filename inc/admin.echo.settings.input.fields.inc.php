@@ -10,18 +10,34 @@ $options = $this->pluginOptions;
 	$args = array('taxonomy' => ''.WPPIZZA_TAXONOMY.'');
 	$cats=get_categories($args);
 
-
-
 			if($field=='version'){
 				echo "{$options['plugin_data'][$field]}";
 			}
 			if($field=='js_in_footer'){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[plugin_data][".$field."]' type='checkbox'  ". checked($options['plugin_data'][$field],true,false)." value='1' />";
+				echo" <span class='description'>".__('combines all jsVars in one tidy place, but requires wp_footer in theme', $this->pluginLocale)."</span>";
 			}
 			
 			if($field=='wp_multisite_session_per_site'){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[plugin_data][".$field."]' type='checkbox'  ". checked($options['plugin_data'][$field],true,false)." value='1' />";
+				echo" <span class='description'>".__('Set cart contents and order on a per site basis when using subdirectories. This has no effect/relevance when there\'s no multisite setup or using different domains per site on the network. Chances are that you want this on when you have a multisite/network install.', $this->pluginLocale)."</span>";
+				echo"<br /><span class='description' style='color:red'>".__('THERE ARE ONLY VERY FEW SECENARIOS WHERE YOU MIGHT WANT THIS OFF', $this->pluginLocale)."</span>";
 			}
+			
+			if($field=='wp_multisite_reports_all_sites'){
+				echo "<input id='".$field."' name='".$this->pluginSlug."[plugin_data][".$field."]' type='checkbox'  ". checked($options['plugin_data'][$field],true,false)." value='1' />";
+				echo" <span class='description'>".__('check to have reporting to use all orders of all child sites', $this->pluginLocale)."</span>";
+				echo"<br /><span><b>".__('only applicable in parent site\'s reporting. reporting in child sites will only ever show values based on that sites orders', $this->pluginLocale)."</b></span>";
+				echo"<br /><span class='description' style='color:red'>".__('NOTE: THIS MIGHT SLOW THINGS DOWN IN THE ADMIN REPORTING PAGE OF YOUR MAIN/PARENT SITE CONSIDERABLY', $this->pluginLocale)."</span>";
+			}
+			if($field=='wp_multisite_order_history_all_sites'){
+				echo "<input id='".$field."' name='".$this->pluginSlug."[plugin_data][".$field."]' type='checkbox'  ". checked($options['plugin_data'][$field],true,false)." value='1' />";
+				echo" <span class='description'>".__('check to have order history to use all orders of all child sites', $this->pluginLocale)."</span>";
+				echo"<br /><span><b>".__('only applicable in parent site\'s order history. order history in child sites will only ever show values based on that sites orders', $this->pluginLocale)."</b></span>";
+				echo"<br /><span class='description' style='color:red'>".__('NOTE: THIS MIGHT SLOW THINGS DOWN IN THE ADMIN ORDER HISTORY PAGE OF YOUR MAIN/PARENT SITE CONSIDERABLY', $this->pluginLocale)."</span>";
+			}						
+						
+						
 			if($field=='using_cache_plugin'){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[plugin_data][".$field."]' type='checkbox'  ". checked($options['plugin_data'][$field],true,false)." value='1' />";
 				echo" <span class='description'>".__('Will ALWAYS load the cart dynamically via ajax. Especially useful if your caching plugin does not support the exclusion of only parts of a page.', $this->pluginLocale)."</span>";
@@ -35,12 +51,13 @@ $options = $this->pluginOptions;
 			
 			
 			if($field=='mail_type'){
-				//echo "<input id='".$field."' name='".$this->pluginSlug."[".$field."]' type='checkbox'  ". checked($options['plugin_data'][$field],true,false)." value='1' />";
 				echo "<select name='".$this->pluginSlug."[plugin_data][".$field."]' />";
 					echo"<option value='mail' ".selected($options['plugin_data'][$field],"mail",false).">".__('default [uses mail]', $this->pluginLocale)."</option>";
 					echo"<option value='wp_mail' ".selected($options['plugin_data'][$field],"wp_mail",false).">".__('Wordpress Mail Function [uses wp_mail]', $this->pluginLocale)."</option>";
 					echo"<option value='phpmailer' ".selected($options['plugin_data'][$field],"phpmailer",false).">".__('HTML and Plaintext [uses PHPMailer]', $this->pluginLocale)."</option>";
 				echo "</select>";
+				echo" <span>".__('might be worth changing if you have trouble when sending/receiving orders with the default settings or prefer html emails', $this->pluginLocale)."</span>";
+				echo"<br /><span class='description'>".__('if using PHPMailer function you probably want to edit the html template. To do so, move "wppizza-order-html-email.php" from the wppizza template directory to your theme folder and edit as required', $this->pluginLocale)."</span>";
 			}
 			
 			if($field=='dequeue_scripts'){

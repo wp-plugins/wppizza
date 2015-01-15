@@ -147,7 +147,10 @@ Dequeue scripts:          <?php echo !empty( $this->pluginOptions['plugin_data']
 Style:                    <?php echo $this->pluginOptions['layout']['style'] . PHP_EOL ?>
 Style Enabled:            <?php echo !empty( $this->pluginOptions['layout']['include_css']) ? 'Yes'. PHP_EOL :'No' . PHP_EOL ?>
 Confirmation Form:        <?php echo !empty( $this->pluginOptions['order_form']['confirmation_form_enabled']) ? 'Yes' . PHP_EOL :'No' . PHP_EOL ?>
-Multisite Session:        <?php echo !empty( $this->pluginOptions['plugin_data']['wp_multisite_session_per_site']) ? 'Yes'. PHP_EOL :'No' . PHP_EOL ?>
+Multisite Session:        <?php echo !empty( $this->pluginOptions['plugin_data']['wp_multisite_session_per_site']) ? 'Yes (Default)'. PHP_EOL :'No' . PHP_EOL ?>
+Multisite Reports:        <?php echo !empty( $this->pluginOptions['plugin_data']['wp_multisite_reports_all_sites']) ? 'Yes'. PHP_EOL :'No (Default)' . PHP_EOL ?>
+Multisite History:        <?php echo !empty( $this->pluginOptions['plugin_data']['wp_multisite_order_history_all_sites']) ? 'Yes'. PHP_EOL :'No (Default)' . PHP_EOL ?>
+
 Single Item Tpl:          <?php echo !empty( $this->pluginOptions['plugin_data']['post_single_template']) ? $this->pluginOptions['plugin_data']['post_single_template']. PHP_EOL :'--' . PHP_EOL ?>
 Single Item Permalink:    <?php echo $this->pluginOptions['plugin_data']['single_item_permalink_rewrite'] . PHP_EOL ?>
 

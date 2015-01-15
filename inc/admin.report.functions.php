@@ -2,11 +2,11 @@
 	function wppizza_report_dataset($options,$locale,$orderTable){
 
 		if( version_compare( PHP_VERSION, '5.3', '<' )) {
-			print"<div style='text-align:center;margin:50px 0'>Sorry, reporting is only available with php >=5.3</div>";	
+			print"<div style='text-align:center;margin:50px 0'>Sorry, reporting is only available with php >=5.3</div>";
 			exit();
 		}
 
-		global $wpdb;
+		global $wpdb,$blog_id;
 
 			$wpTime=current_time('timestamp');
 			$reportCurrency=$options['order']['currency_symbol'];
@@ -208,13 +208,34 @@
 				}
 			}
 
-			/************************
-				[run query]
-			*************************/
-			$ordersQuery="SELECT id,order_date as oDate ,UNIX_TIMESTAMP(order_date) as order_date,order_ini FROM ".$wpdb->prefix . $orderTable." WHERE payment_status IN ('COD','COMPLETED') ";
-			$ordersQuery.= $oQuery;
-			$ordersQuery.='ORDER BY order_date ASC';
-			$ordersQueryRes = $wpdb->get_results($ordersQuery);
+
+			/************************************************************************
+				multisite install
+				all orders of all sites (blogs)
+				but only for master blog and if enabled (settings)
+			************************************************************************/
+			if ( is_multisite() && $blog_id==BLOG_ID_CURRENT_SITE && $options['plugin_data']['wp_multisite_reports_all_sites']) {
+				$ordersQueryRes=array();
+		 	   	$blogs = $wpdb->get_results("SELECT blog_id FROM {$wpdb->blogs}", ARRAY_A);
+		 	   		if ($blogs) {
+		        	foreach($blogs as $blog) {
+		        		switch_to_blog($blog['blog_id']);
+						/************************
+							[make and run query]
+						*************************/
+						$ordersQuery=wppizza_report_mkquery($wpdb->prefix,$orderTable,$oQuery);
+						$ordersQuery= $wpdb->get_results($ordersQuery);
+						/**merge array**/
+						$ordersQueryRes=array_merge($ordersQuery,$ordersQueryRes);
+						restore_current_blog();
+		        	}}
+			}else{
+				/************************
+					[make and run query]
+				*************************/
+				$ordersQuery=wppizza_report_mkquery($wpdb->prefix,$orderTable,$oQuery);
+				$ordersQueryRes = $wpdb->get_results($ordersQuery);
+			}
 
 			/**************************
 				ini dates
@@ -528,8 +549,34 @@
 	return $data;
 	}
 
+	function wppizza_report_mkquery($wpdbPrefix,$orderTable,$oQuery){
+		$ordersQuery="SELECT id,order_date as oDate ,UNIX_TIMESTAMP(order_date) as order_date, order_ini FROM ".$wpdbPrefix . $orderTable." WHERE payment_status IN ('COD','COMPLETED') ";
+		$ordersQuery.= $oQuery;
+		$ordersQuery.='ORDER BY order_date ASC';
+
+		return $ordersQuery;
+	}
+
 	function wppizza_report_export($dataset){
 		//print_r($dataset);
+		$wpTime=current_time('timestamp');
+		$filename[]=date('Y.m.d',$wpTime);
+		/*add range**/
+		if(isset($_GET['from']) && isset($_GET['to'])){
+			$filename[]='-[';
+			$filename[]=esc_sql(str_replace("-",".",$_GET['from']));
+			$filename[]='-';
+			$filename[]=esc_sql(str_replace("-",".",$_GET['to']));
+			$filename[]=']';
+		}else{
+			if(isset($_GET['name'])){
+				$filename[]='-'.esc_sql(str_replace(" ","_",$_GET['name']));
+			}
+		}
+		/*filter if you want*/
+		$filename = apply_filters('wppizza_filter_report_export_title', $filename);
+		$filename=implode("",$filename);
+
 		$delimiter=',';
 		$encoding='base64';
 		$mime='text/csv';
@@ -541,7 +588,7 @@
 			$result.=$date . $delimiter . $order['sales_value_total']  . $delimiter . $order['items_value_total'] . $delimiter . $order['sales_count_total'] . $delimiter . $order['items_count_total'];
 			$result.=PHP_EOL;
 		}
-		$filename = 'wppizza_report_'.$wpTime.''.$extension.'';
+		$filename = 'wppizza_report_'.$filename.''.$extension.'';
 		header("Content-Type: ".$mime."");
 		header('Content-Disposition: attachment; filename="'.$filename.'"');
 		header("Content-Length: " . strlen($result));

@@ -29,17 +29,28 @@
 		/**validate global settings***/
 		if(isset($_POST[''.$this->pluginSlug.'_global'])){
 			/**submitted options -> validate***/
-			$options['plugin_data']['js_in_footer'] = !empty($input['plugin_data']['js_in_footer']) ? true : false;
-			$options['plugin_data']['wp_multisite_session_per_site'] = !empty($input['plugin_data']['wp_multisite_session_per_site']) ? true : false;
+			$options['plugin_data']['js_in_footer'] = !empty($input['plugin_data']['js_in_footer']) ? true : false;			
 			$options['plugin_data']['using_cache_plugin'] = !empty($input['plugin_data']['using_cache_plugin']) ? true : false;
 			$options['plugin_data']['mail_type'] = wppizza_validate_alpha_only($input['plugin_data']['mail_type']);
 			$options['plugin_data']['dequeue_scripts'] = wppizza_validate_alpha_only($input['plugin_data']['dequeue_scripts']);
 			$options['plugin_data']['search_include'] = !empty($input['plugin_data']['search_include']) ? true : false;
 			$options['plugin_data']['use_old_admin_order_print'] = !empty($input['plugin_data']['use_old_admin_order_print']) ? true : false;
+			
+			/*multisite vars**/
+			$options['plugin_data']['wp_multisite_session_per_site'] = !empty($input['plugin_data']['wp_multisite_session_per_site']) ? true : false;
+			$options['plugin_data']['wp_multisite_reports_all_sites'] = !empty($input['plugin_data']['wp_multisite_reports_all_sites']) ? true : false;
+			$options['plugin_data']['wp_multisite_order_history_all_sites'] = !empty($input['plugin_data']['wp_multisite_order_history_all_sites']) ? true : false;
+			/*if not multisite use defaults*/
+			if(!is_multisite()){
+				$options['plugin_data']['wp_multisite_session_per_site'] =true;	
+				$options['plugin_data']['wp_multisite_reports_all_sites'] =false;
+				$options['plugin_data']['wp_multisite_order_history_all_sites'] =false;
+			}			
+			
 		}
 
 
-		/**what temaplate are we using for single results ?**/
+		/**what template are we using for single results ?**/
 		if(isset($input['plugin_data']['post_single_template'])){
 			$options['plugin_data']['post_single_template'] = !empty($input['plugin_data']['post_single_template']) ? (int)$input['plugin_data']['post_single_template'] : '';
 		}

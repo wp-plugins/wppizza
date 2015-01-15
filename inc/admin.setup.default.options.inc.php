@@ -311,6 +311,8 @@
 				'single_item_permalink_rewrite'=>'',
 				'empty_category_and_items' => false,
 				'wp_multisite_session_per_site' => true,
+				'wp_multisite_reports_all_sites' => false,
+				'wp_multisite_order_history_all_sites' => false,
 				'using_cache_plugin' => false,
 				'use_old_admin_order_print' => false,
 				'nag_notice' => $this->pluginNagNotice
