@@ -5,7 +5,7 @@ Description: Maintain your restaurant menu online and accept cash on delivery or
 Author: ollybach
 Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Author URI: https://www.wp-pizza.com
-Version: 2.11.7
+Version: 2.11.7.1
 License:
 
   Copyright 2012 ollybach (dev@wp-pizza.com)
@@ -94,7 +94,7 @@ class WPPizza extends WP_Widget {
  function __construct() {
 
 	/**init constants***/
-	$this->pluginVersion='2.11.7';//increment in line with stable tag in readme and version above
+	$this->pluginVersion='2.11.7.1';//increment in line with stable tag in readme and version above
  	$this->pluginName="".WPPIZZA_NAME."";
  	$this->pluginSlug="".WPPIZZA_SLUG."";//set also in uninstall when deleting options
 	$this->pluginSlugCategoryTaxonomy="".WPPIZZA_TAXONOMY."";//also on uninstall delete wppizza_children as well as widget
@@ -113,11 +113,23 @@ class WPPizza extends WP_Widget {
 
 	/********************************************************************************************
 		set session per blogid when multisite and enabled to avoid having same cart
-		contents between different network sites
+		contents between different network sites (unless we want this)
 	*********************************************************************************************/
-	if(is_multisite() && $this->pluginOptions['plugin_data']['wp_multisite_session_per_site']){
-		global $blog_id;
-		$this->pluginSession=$this->pluginSlug.''.$blog_id;
+	if(is_multisite() ){
+		$multisession=true;
+		/*get settings from parent blog for  this**/
+		switch_to_blog(BLOG_ID_CURRENT_SITE);
+			$wppOptions=get_option('wppizza');
+			if(!$wppOptions['plugin_data']['wp_multisite_session_per_site']){
+				$multisession=false;	
+			}
+		restore_current_blog();
+		global $blog_id;		
+		if($multisession){
+			$this->pluginSession=$this->pluginSlug.''.$blog_id;
+		}else{
+			$this->pluginSession=$this->pluginSlug;	
+		}
 	}else{
 		$this->pluginSession=$this->pluginSlug;
 	}
