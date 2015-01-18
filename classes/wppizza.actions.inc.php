@@ -3140,13 +3140,13 @@ function wppizza_cat_parents($options, $blogid, $id, $separator =' &raquo; ', $p
 	$name = '';
 
 	/**mutlisite ->switch (only order history might have the blogid set via multisite attribute in shortcode**/
-	if($blogid){switch_to_blog($blogid);}
+	if(is_multisite() && $blogid){switch_to_blog($blogid);}
 
 	/**get term**/
 	$parent = get_term( $id, $taxonomy);
 
 	/**mutlisite -> restore current **/
-	if($blogid){restore_current_blog();}
+	if(is_multisite() && $blogid){restore_current_blog();}
 
 
 	if ( is_wp_error( $parent ) ){

@@ -641,6 +641,7 @@ function wppizza_options_in_use(){
 *
 *********************************************************************************/
 function wppizza_order_summary($session,$options,$module=null,$ajax=null){
+	global $blog_id;
 	/**allow filtering of options and session**/
 	$session = apply_filters('wppizza_filter_order_summary_session', $session);
 	$options = apply_filters('wppizza_filter_order_summary_options', $options);
@@ -700,7 +701,9 @@ function wppizza_order_summary($session,$options,$module=null,$ajax=null){
 			if(!isset($v['additionalinfo'])){$v['additionalinfo']=array();}
 			if(!isset($v['extend'])){$v['extend']=array();}
 			if(!isset($v['extenddata'])){$v['extenddata']=array();}
-			$cartItems[''.$groupid.''][]=array('sortname'=>$v['sortname'],'size'=>$v['size'],'sizename'=>$v['sizename'],'printname'=>$v['printname'],'price'=>$v['price'],'additionalinfo'=>$v['additionalinfo'],'extend'=>$v['extend'],'extenddata'=>$v['extenddata'],'postId'=>$v['id']);
+			/*if not set , add current*/
+			if(!isset($v['blogid'])){$v['blogid']=$blog_id;}
+			$cartItems[''.$groupid.''][]=array('sortname'=>$v['sortname'],'size'=>$v['size'],'sizename'=>$v['sizename'],'printname'=>$v['printname'],'price'=>$v['price'],'additionalinfo'=>$v['additionalinfo'],'extend'=>$v['extend'],'extenddata'=>$v['extenddata'],'postId'=>$v['id'], 'blogid'=>$v['blogid']);
 			/**conditional just used to not break other extensions/plugins that have not been updated yet to add selected category id.*/
 			if(isset($v['catIdSelected'])){
 				$catIdSelected[''.$groupid.'']=$v['catIdSelected'];
@@ -723,13 +726,27 @@ function wppizza_order_summary($session,$options,$module=null,$ajax=null){
 			'extend'=>$cartItems[$k][0]['extend'],
 			'extenddata'=>$cartItems[$k][0]['extenddata'],
 			'postId'=>$cartItems[$k][0]['postId'],
-			'catIdSelected'=>$catIdSelected[$k]
+			'catIdSelected'=>$catIdSelected[$k],
+			'blogid'=>$cartItems[$k][0]['blogid']
 		);
 	}
 	asort($groupedItems);
 
 	/**output items sorted by name and size**/
 	foreach($groupedItems as $k=>$v){
+		
+		/*in a multisite setup we need to sitch to the right blog if necessary**/
+		if(is_multisite() && $v['blogid']!=$blog_id){
+			switch_to_blog($v['blogid']);
+		}
+		/*get categories**/
+		$catObj = get_the_terms($v['postId'], WPPIZZA_TAXONOMY);
+		/*restore blog if needed*/
+		if(is_multisite() && $v['blogid']!=$blog_id){
+			restore_current_blog();		
+		}
+		
+		
 		/*get categories**/
 		$catObj = get_the_terms($v['postId'], WPPIZZA_TAXONOMY);
 		$catArray=json_decode(json_encode($catObj), true);
@@ -751,7 +768,7 @@ function wppizza_order_summary($session,$options,$module=null,$ajax=null){
 			$firstCat=reset($catArray);
 			$v['catIdSelected']=$firstCat['term_id'];
 		}
-		$summary['items'][$k]=array('name'=>$v['printname'],'count'=>$v['count'],'size'=>$v['sizename'],'price'=>wppizza_output_format_price($v['price'],$optionsDecimals),'pricetotal'=>wppizza_output_format_price($v['total'],$optionsDecimals),'categories'=>$catArray,'taxrate'=>$taxRate,'additionalinfo'=>$v['additionalinfo'],'extend'=>$v['extend'],'extenddata'=>$v['extenddata'],'postId'=>$v['postId'],'catIdSelected'=>$v['catIdSelected']);
+		$summary['items'][$k]=array('name'=>$v['printname'],'count'=>$v['count'],'size'=>$v['sizename'],'price'=>wppizza_output_format_price($v['price'],$optionsDecimals),'pricetotal'=>wppizza_output_format_price($v['total'],$optionsDecimals),'categories'=>$catArray,'taxrate'=>$taxRate,'additionalinfo'=>$v['additionalinfo'],'extend'=>$v['extend'],'extenddata'=>$v['extenddata'],'postId'=>$v['postId'],'catIdSelected'=>$v['catIdSelected'],'blogid'=>$v['blogid']);
 	}
 
 	/****************************************************

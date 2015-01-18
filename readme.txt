@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.3+, WP 3.3+ 
 Tested up to: 4.1
-Stable tag: 2.11.7.1
+Stable tag: 2.11.7.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -142,6 +142,10 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 
 == Changelog ==
+
+2.11.7.2  
+* multisite|internal: store and use blogid per item in session too for use if/when appropriate   
+18th January 2015  
 
 2.11.7.1  
 * fixed (possible) session handling error introduced in v 2.11.7  

@@ -10,6 +10,7 @@ if(!defined('DOING_AJAX') || !DOING_AJAX){
 //sleep(5);//when testing jquery fadeins etc
 /******************************************/
 $options=$this->pluginOptions;
+global $blog_id;
 /***************************************************************
 *
 *
@@ -42,11 +43,13 @@ if(isset($_POST['vars']['type']) && (($_POST['vars']['type']=='add' || $_POST['v
 		$itemVars=explode("-",$_POST['vars']['id']);
 		//$meta=get_post_meta($itemVars[1], $this->pluginSlug, true );
 		$itemName=get_the_title($itemVars[1]);
-		$groupId=$itemVars[1].'.'.$itemVars[3];//group items by id and size . ensure there's a seperator between (as 8 and 31 would otherwise be the same as 83 and 1. furthermore , dont use "-" as the js splits by this
+		$groupId=$itemVars[1].'.'.$itemVars[3];//group items by id and size . ensure there's a seperator between (as 8 and 31 would otherwise be the same as 83 and 1. furthermore , dont use "-" as the js splits by this		
 		/**add category to group id (distinct cat id will only be passed if catdisplay enabled in layout)**/
 		if($catIdSelected!='' && $this->pluginOptions['layout']['items_group_sort_print_by_category']){/*if we dont need to or want to split by category, do not add another distinction to the group*/
 			$groupId.='.'.$catIdSelected;
 		}
+		//add blog id too as item with the same name could be in different subsites **/
+		$groupId.='.'.$blog_id;		
 
 		/*get item set meta values to get price for this size**/
 		$meta_values = get_post_meta($itemVars[1],$this->pluginSlug,true);
@@ -70,7 +73,7 @@ if(isset($_POST['vars']['type']) && (($_POST['vars']['type']=='add' || $_POST['v
 		}
 
 		/*add item to session array. adding lowercase name first to simplify sorting with asort**/
-		$_SESSION[$this->pluginSession]['items'][$groupId][]=array('sortname'=>strtolower($itemName),'size'=>$itemVars[3],'price'=>$itemSizePrice,'sizename'=>$itemSizeName,'printname'=>$itemName,'id'=>$itemVars[1],'allCatIds'=>$itemCats,'catIdSelected'=>$catIdSelected);
+		$_SESSION[$this->pluginSession]['items'][$groupId][]=array('sortname'=>strtolower($itemName),'size'=>$itemVars[3], 'price'=>$itemSizePrice, 'sizename'=>$itemSizeName, 'printname'=>$itemName, 'id'=>$itemVars[1], 'allCatIds'=>$itemCats, 'catIdSelected'=>$catIdSelected, 'blogid' => $blog_id);
 	}
 
 	/**increment when using textbox**/
