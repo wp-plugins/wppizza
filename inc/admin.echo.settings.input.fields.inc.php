@@ -46,9 +46,12 @@ $options = $this->pluginOptions;
 			if($field=='use_old_admin_order_print'){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[plugin_data][".$field."]' type='checkbox'  ". checked($options['plugin_data'][$field],true,false)." value='1' />";
 				echo" <span class='description'>".__('revert to old printing style of orders in "wppizza -> order history" when clicking on "print order"', $this->pluginLocale)."</span>";
-				//echo'<span style="color:red">'.__('ADVANCE NOTICE: This will be deprecated at some point', $this->pluginLocale).'</span>';
 			}			
 			
+			if($field=='always_load_all_scripts_and_styles'){
+				echo "<input id='".$field."' name='".$this->pluginSlug."[plugin_data][".$field."]' type='checkbox'  ". checked($options['plugin_data'][$field],true,false)." value='1' />";
+				echo" <span class='description'>".__('load *all* css and javascripts on all pages. Might be necessary for themes that hijack normal pagelinks', $this->pluginLocale)."</span>";
+			}
 			
 			if($field=='mail_type'){
 				echo "<select name='".$this->pluginSlug."[plugin_data][".$field."]' />";

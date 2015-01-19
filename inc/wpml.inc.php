@@ -15,6 +15,9 @@
 		/**additives**/
 		if(isset($this->pluginOptions['additives']) && is_array($this->pluginOptions['additives'])){
 		foreach($this->pluginOptions['additives'] as $k=>$str){
+			
+			if(is_array($str) && isset($str['name'])){$str=$str['name'];}/*legacy*/
+			
 			if ( is_admin() && ( !defined( 'DOING_AJAX' ) || !DOING_AJAX ) ){
 				icl_register_string(WPPIZZA_SLUG,'additives_'. $k.'', $str);//register in admin
 			}else{			

@@ -2658,7 +2658,7 @@ public function wppizza_require_common_input_validation_functions(){
 			}
 		}
 		/**include spinner css on orderpage if enabled**/
-		if($options['layout']['order_page_quantity_change'] && $options['order']['orderpage']==get_the_ID() && $options['layout']['order_page_quantity_change_style']!=''){
+		if($options['layout']['order_page_quantity_change'] && $options['layout']['order_page_quantity_change_style']!='' && ( $options['order']['orderpage']==get_the_ID() || $options['plugin_data']['always_load_all_scripts_and_styles'] ) ){
 			$ui = $wp_scripts->query('jquery-ui-spinner');
 			wp_enqueue_style('jquery-ui-'.$options['layout']['order_page_quantity_change_style'].'', "//ajax.googleapis.com/ajax/libs/jqueryui/".$ui->ver."/themes/".$options['layout']['order_page_quantity_change_style']."/jquery-ui.min.css", false, null);
 		}
@@ -2666,7 +2666,7 @@ public function wppizza_require_common_input_validation_functions(){
 			js
 		****************/
 		/**include spinner js on orderpage if enabled**/
-		if($options['layout']['order_page_quantity_change'] && $options['order']['orderpage']==get_the_ID()){
+		if($options['layout']['order_page_quantity_change'] && ( $options['order']['orderpage']==get_the_ID() || $options['plugin_data']['always_load_all_scripts_and_styles'] ) ){
 			wp_enqueue_script("jquery-ui-spinner");
 		}
 		/*only load easing if necessary**/
@@ -2726,7 +2726,7 @@ public function wppizza_require_common_input_validation_functions(){
 			$localized_array['cfrm']=1;
 		}
 		/**do we want to be able to still change quantities on order page**/
-		if($options['layout']['order_page_quantity_change'] && $options['order']['orderpage']==get_the_ID()){
+		if($options['layout']['order_page_quantity_change'] && ( $options['order']['orderpage']==get_the_ID() || $options['plugin_data']['always_load_all_scripts_and_styles'] ) ){
 			$localized_array['ofqc']=1;
 		}
 		/***various options**/
