@@ -18,6 +18,11 @@ $options = $this->pluginOptions;
 				echo" <span class='description'>".__('combines all jsVars in one tidy place, but requires wp_footer in theme', $this->pluginLocale)."</span>";
 			}
 			
+			if($field=='admin_order_history_max_results'){
+				echo "<input id='".$field."' name='".$this->pluginSlug."[plugin_data][".$field."]' size='2' type='text'  value='{$options['plugin_data']['admin_order_history_max_results']}' />";
+				echo" <span class='description'>".__('default number of results to show in admin order history', $this->pluginLocale)."</span>";
+			}			
+			
 			if($field=='wp_multisite_session_per_site'){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[plugin_data][".$field."]' type='checkbox'  ". checked($options['plugin_data'][$field],true,false)." value='1' />";
 				echo" <span class='description'>".__('Set cart contents and order on a per site basis when using subdirectories. This has no effect/relevance when there\'s no multisite setup or using different domains per site on the network. Chances are that you want this on when you have a multisite/network install.', $this->pluginLocale)."</span>";
@@ -927,7 +932,7 @@ $options = $this->pluginOptions;
 							echo"<option value='REFUNDED'>".__('refunded', $this->pluginLocale)."</option>";
 							echo"<option value='OTHER'>".__('other', $this->pluginLocale)."</option>";
 						echo "</select>";
-						echo " ".__('maximum results [0 to show all]', $this->pluginLocale)."<input id='".$field."_orders_limit' size='3' type='text' value='20' />";
+						echo " ".__('maximum results [0 to show all]', $this->pluginLocale)."<input id='".$field."_orders_limit' size='3' type='text' value='".$options['plugin_data']['admin_order_history_max_results']."' />";
 						echo "</span>";
 						echo "<span style='float:right;margin-right:50px;'>";
 						echo " ".__('poll for new orders every', $this->pluginLocale)."<input id='".$field."_orders_poll_interval' size='2' type='text' value='30' />".__('seconds', $this->pluginLocale)." ";
@@ -995,7 +1000,8 @@ $options = $this->pluginOptions;
 					echo"<br /><h2>".__('System Info', $this->pluginLocale)."</h2> ";
 					echo $this->wppizza_system_info_include();
 					echo"<br /><h2>".__('All wppizza options', $this->pluginLocale)."</h2> ";
-					echo"<textarea  readonly='readonly' onclick='this.focus();this.select();' style='width:100%;height:150px'>### ALL WPPIZZA VARIABLES ###".PHP_EOL.print_r($this->pluginOptions,true)."</textarea>";
+					$wppizzaOptions=get_option(WPPIZZA_SLUG);
+					echo"<textarea  readonly='readonly' onclick='this.focus();this.select();' style='width:100%;height:150px'>### ALL WPPIZZA VARIABLES ###".PHP_EOL.print_r($wppizzaOptions,true)."</textarea>";
 				echo"</div>";
 				}
 			}

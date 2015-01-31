@@ -156,8 +156,11 @@ $output='';
 	if($_POST['vars']['field']=='get_orders'){
 		/*get some global wp vars**/
 		global $wpdb,$blog_id;
-		/*ini output string*/
-		$output='';
+		/*ini markup string*/
+		$markup='';
+		/**ini output array*/
+		$output=array();
+			
 		/*ini total price*/
 		$totalPriceOfShown=0;
 		/*get selected limit*/ 
@@ -236,6 +239,7 @@ $output='';
 		********************/
 		if(is_array($allOrders) && count($allOrders)>0){
 			
+			
 			/*get any -perhaps filtered - customised order status */
 			$customOrderStatus=wppizza_custom_order_status();
 			$customOrderStatusGetTxt=wppizza_order_status_default();
@@ -243,10 +247,10 @@ $output='';
 			
 			/*admin only notice if able to delete order*/
 			if (current_user_can('wppizza_cap_delete_order')){
-				$output.="<div>".__('Note: deleting an order will <b>ONLY</b> delete it from the database table. It will <b>NOT</b> issue any refunds, cancel the order, send emails etc.', $this->pluginLocale)."</div>";
+				$output['notice_delete']="<div>".__('Note: deleting an order will <b>ONLY</b> delete it from the database table. It will <b>NOT</b> issue any refunds, cancel the order, send emails etc.', $this->pluginLocale)."</div>";
 			}
 			/*notice regarding status change*/
-			$output.="<div style='color:red'>".__('"Status" is solely for your internal reference. Updating/changing the value will have no other effects but might help you to identify which orders have not been processed.', $this->pluginLocale)."</div>";
+			$output['notice_info']="<div style='color:red'>".__('"Status" is solely for your internal reference. Updating/changing the value will have no other effects but might help you to identify which orders have not been processed.', $this->pluginLocale)."</div>";
 			
 			
 			
@@ -255,11 +259,11 @@ $output='';
 			*	[TABLE OPEN]
 			*
 			********************************************************************************************/			
-			$output.="<table>";
+			$output['table_open']="<table>";
 				/****************************************************************************
 					[header row]
 				****************************************************************************/
-				$output.="<tr class='wppizza-orders-head'>";
+				$output['header']="<tr class='wppizza-orders-head'>";
 
 					$header['column_order']="<td>";
 						$header['column_order'].="".__('Order', $this->pluginLocale)."";
@@ -279,18 +283,23 @@ $output='';
 
 					/**allow header filtering**/
 					$header= apply_filters('wppizza_filter_orderhistory_header', $header );
-					$output.=implode('',$header);
+					$output['header'].=implode('',$header);
 
-				$output.="</tr>";
+				$output['header'].="</tr>";
 				
 				/********************
 					loop 
 				********************/				
 				foreach ( $allOrders as $oKey=>$orders ){
+					/**ini array*/
+					$thisOrder=array();
 					/*unserialized customer data*/
 					$customerDet=maybe_unserialize($orders->customer_ini);
 					/*unserialized order data*/
 					$orderDet=maybe_unserialize($orders->order_ini);
+					/*order status*/
+					$orderStatus=strtolower($orders->order_status);
+					
 					/**add to total ordered amount of shown items**/
 					$totalPriceOfShown+=(float)$orderDet['total'];
 					/**
@@ -300,8 +309,8 @@ $output='';
 					$uoKey='';
 					$blogid='';
 					if(isset($orders->blogId)){
-					$blogid=$orders->blogId;
-					$uoKey.=''.$orders->blogId.'_';	
+						$blogid=$orders->blogId;
+						$uoKey.=''.$orders->blogId.'_';	
 					}
 					$uoKey.=$orders->id;
 					
@@ -312,7 +321,7 @@ $output='';
 					*	
 					****************************************************************************/
 
-					$output.="<tr class='wppizza-ord-status-".strtolower($orders->order_status)."'>";
+					$thisOrder['main_tr_open']="<tr  id='wppizza-order-tr-".$uoKey."' class='wppizza-order-tr wppizza-ord-status-".$orderStatus."'>";
 
 
 						/***************************************************************
@@ -327,7 +336,7 @@ $output='';
 							/************************
 							*
 							*	add some hidden inputs to be able to correctly 
-							*	identify id's etc
+							*	identify id's etc via js if required
 							*
 							************************/
 								/**order id**/
@@ -423,8 +432,8 @@ $output='';
 						$orderinfo['tdclose']="</td>";
 
 						/**allow filtering**/
-						$orderinfo= apply_filters('wppizza_filter_orderhistory_order_info', $orderinfo, $orders->id, $customerDet, $orderDet, $blogid);
-						$output.=implode('',$orderinfo);
+						$orderinfo= apply_filters('wppizza_filter_orderhistory_order_info', $orderinfo, $orders->id, $customerDet, $orderDet, $blogid, $orderStatus);
+						$thisOrder['orderinfo']=implode('',$orderinfo);
 
 
 						/***************************************************************
@@ -436,8 +445,8 @@ $output='';
 							$customer_details[]="<textarea id='wppizza_order_customer_details_".$uoKey."' class='wppizza_order_customer_details'>". $orders->customer_details ."</textarea>";
 						$customer_details[]="</td>";
 						/**allow filtering**/
-						$customer_details= apply_filters('wppizza_filter_orderhistory_customer_details', $customer_details, $orders->id, $customerDet, $orderDet, $blogid);
-						$output.=implode('',$customer_details);
+						$customer_details= apply_filters('wppizza_filter_orderhistory_customer_details', $customer_details, $orders->id, $customerDet, $orderDet, $blogid, $orderStatus);
+						$thisOrder['customer_details']=implode('',$customer_details);
 
 						/***************************************************************
 							first row, third column, 
@@ -448,8 +457,8 @@ $output='';
 							$order_details[]="<textarea id='wppizza_order_details_".$uoKey."' class='wppizza_order_details' >". $orders->order_details ."</textarea>";
 						$order_details[]="</td>";
 						/**allow filtering**/
-						$order_details= apply_filters('wppizza_filter_orderhistory_order_details', $order_details, $orders->id, $customerDet, $orderDet, $blogid);
-						$output.=implode('',$order_details);
+						$order_details= apply_filters('wppizza_filter_orderhistory_order_details', $order_details, $orders->id, $customerDet, $orderDet, $blogid, $orderStatus);
+						$thisOrder['order_details']=implode('',$order_details);
 
 
 						/***************************************************************
@@ -496,15 +505,17 @@ $output='';
 						
 						$actions['tdclose']="</td>";
 						/**allow filtering**/
-						$actions= apply_filters('wppizza_filter_orderhistory_actions', $actions, $orders->id, $customerDet, $orderDet, $blogid );
-						$output.=implode('',$actions);
+						$actions= apply_filters('wppizza_filter_orderhistory_actions', $actions, $orders->id, $customerDet, $orderDet, $blogid, $orderStatus );
+						$thisOrder['actions']=implode('',$actions);
 
-					$output.="</tr>";
+					$thisOrder['main_tr_close']="</tr>";
 
 
 					/****************************************************************************
 					*
+					*
 					*	[do second row -> order notes]
+					*
 					*	
 					****************************************************************************/
 					$notes=array();/*reset*/
@@ -519,10 +530,21 @@ $output='';
 					$notes['trclose']="</tr>";
 
 					/**allow filtering of notes **/
-					$notes= apply_filters('wppizza_filter_orderhistory_notes', $notes, $orders->id, $customerDet, $orderDet );
+					$notes= apply_filters('wppizza_filter_orderhistory_notes', $notes, $orders->id, $customerDet, $orderDet, $blogid, $orderStatus  );
 					/**add notes tr to output**/
-					$output.=implode('',$notes);
+					$thisOrder['notes']=implode('',$notes);
 
+
+
+
+
+					/**********************************************
+						allow filter of output parts
+						in loop
+					**********************************************/
+					$thisOrder= apply_filters('wppizza_filter_orderhistory_loop_parts', $thisOrder , $orders->id, $customerDet, $orderDet, $blogid, $orderStatus  );
+					$output['order_'.$uoKey]=implode('',$thisOrder);
+				
 				}
 				/***********************************************************************************
 				*
@@ -530,7 +552,18 @@ $output='';
 				*
 				***********************************************************************************/				
 				
-			$output.="</table>";
+			$output['table_close']="</table>";
+			
+			
+			
+			/******************************************
+				allow filter of output all output parts
+			********************************************/
+			$output= apply_filters('wppizza_filter_orderhistory_table', $output);
+			$output=implode('',$output);
+			/**add to markup*/
+			$markup.=$output;
+			
 			/********************************************************************************************
 			*
 			*	[TABLE CLOSE]
@@ -539,7 +572,7 @@ $output='';
 		}
 		/**we have no orders to display*/
 		else{
-			$output.="<h1 style='text-align:center'>".__('no orders yet :(', $this->pluginLocale)."</h1>";
+			$markup.="<h1 style='text-align:center'>".__('no orders yet :(', $this->pluginLocale)."</h1>";
 		}
 
 		/*************************************************************************************************
@@ -548,7 +581,7 @@ $output='';
 		*
 		*************************************************************************************************/
 		/*orders html*/
-		$obj['orders']=$output;
+		$obj['orders']=$markup;
 		/*total value of DISPLAYED orders*/
 		$obj['totals']=__('Total of shown orders', $this->pluginLocale).': '.$this->pluginOptions['order']['currency_symbol'].' '.wppizza_output_format_price($totalPriceOfShown).'';
 		$obj['totals'].='<br /><a href="javascript:void(0)" id="wppizza_history_totals_getall">'.__('show total of all orders', $this->pluginLocale).'</a>';

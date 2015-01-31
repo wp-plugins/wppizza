@@ -316,6 +316,7 @@
 				'using_cache_plugin' => false,
 				'use_old_admin_order_print' => false,
 				'always_load_all_scripts_and_styles' => false,
+				'admin_order_history_max_results' => 20,
 				'nag_notice' => $this->pluginNagNotice
 			),
 			'cron'=>array(

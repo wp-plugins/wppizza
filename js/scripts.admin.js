@@ -455,6 +455,14 @@ jQuery(document).ready(function($){
 		},'json').error(function(jqXHR, textStatus, errorThrown) {alert("error : " + errorThrown);});
 	});
 	/******************************
+	*	[show orders on load too ]
+	******************************/	
+	var triggerTarget=$('#history_get_orders');
+	triggerTarget.trigger('click');
+	
+	
+	
+	/******************************
 	*	[get total of all orders]
 	******************************/
 	$(document).on('click', '#wppizza_history_totals_getall', function(e){

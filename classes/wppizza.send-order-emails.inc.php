@@ -128,7 +128,10 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 				/**set appropriate language. as this can be a language agnostic ipn request, set it specifically depending on what was stored in the db**/
 				if(function_exists('icl_translate') && isset($cDetails['wppizza_wpml_lang']) && $cDetails['wppizza_wpml_lang']!=''){
 						global $sitepress;
-						$sitepress->switch_lang($cDetails['wppizza_wpml_lang']);
+						/*polylang for instance does not recognise switch_lang*/
+						if(method_exists($sitepress, 'switch_lang')){
+							$sitepress->switch_lang($cDetails['wppizza_wpml_lang']);
+						}
 						require(WPPIZZA_PATH .'inc/wpml.inc.php');
 						require(WPPIZZA_PATH .'inc/wpml.gateways.inc.php');
 				}

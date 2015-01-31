@@ -8,7 +8,8 @@
 		add_settings_field('search_include', '<b>'.__('Include wppizza menu items in regular search results:', $this->pluginLocale).'', array( $this, 'wppizza_admin_settings_input'), 'global', 'global', 'search_include' );
 		add_settings_field('using_cache_plugin', '<b>'.__('I am using a caching plugin:', $this->pluginLocale).'', array( $this, 'wppizza_admin_settings_input'), 'global', 'global', 'using_cache_plugin' );
 		add_settings_field('js_in_footer', '<b>'.__('Javascript in Footer:', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'global', 'global', 'js_in_footer' );		
-				
+		
+		
 		/**permalinks settings**/
 		add_settings_section('permalinks','',  array( $this, 'wppizza_admin_page_text_header'), 'permalinks');
 		add_settings_field('category_parent_page', ''.__('<b>Permalinks - Categories/Pages:<br/>(only used and relevant when using widget or shortcode to display wppizza category navigation !!!)<br/><span style="color:red">when changing this setting, you MUST re-save your permalink settings</span></b><br/>(page cannot be used as static post page (wp settings) or have any children', $this->pluginLocale).'', array( $this, 'wppizza_admin_settings_input'), 'permalinks', 'permalinks', 'category_parent_page' );
@@ -22,6 +23,7 @@
 
 		/**miscellaneous settings**/
 		add_settings_section('global_miscellaneous','',  array( $this, 'wppizza_admin_page_text_header'), 'global_miscellaneous');
+		add_settings_field('admin_order_history_max_results', '<b>'.__('Results order history:', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'global_miscellaneous', 'global_miscellaneous', 'admin_order_history_max_results' );		
 		add_settings_field('use_old_admin_order_print', '<b>'.__('old style order printing', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'global_miscellaneous', 'global_miscellaneous', 'use_old_admin_order_print' );		
 		add_settings_field('always_load_all_scripts_and_styles', '<b>'.__('load css and js on all pages', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'global_miscellaneous', 'global_miscellaneous', 'always_load_all_scripts_and_styles' );		
 		add_settings_field('dequeue_scripts', '<b>'.__('dequeue wppizza scripts:', $this->pluginLocale).'</b><br /><span style="color:red">'.__('NOTE: if you dequeue any script other plugins rely on you WILL break things', $this->pluginLocale).'</span>', array( $this, 'wppizza_admin_settings_input'), 'global_miscellaneous', 'global_miscellaneous', 'dequeue_scripts' );				

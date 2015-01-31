@@ -30,6 +30,7 @@
 		if(isset($_POST[''.$this->pluginSlug.'_global'])){
 			/**submitted options -> validate***/
 			$options['plugin_data']['js_in_footer'] = !empty($input['plugin_data']['js_in_footer']) ? true : false;			
+			$options['plugin_data']['admin_order_history_max_results'] = wppizza_validate_int_only($input['plugin_data']['admin_order_history_max_results']);
 			$options['plugin_data']['using_cache_plugin'] = !empty($input['plugin_data']['using_cache_plugin']) ? true : false;
 			$options['plugin_data']['mail_type'] = wppizza_validate_alpha_only($input['plugin_data']['mail_type']);
 			$options['plugin_data']['dequeue_scripts'] = wppizza_validate_alpha_only($input['plugin_data']['dequeue_scripts']);
