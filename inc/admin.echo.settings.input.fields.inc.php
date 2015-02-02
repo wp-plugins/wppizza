@@ -53,6 +53,11 @@ $options = $this->pluginOptions;
 				echo" <span class='description'>".__('revert to old printing style of orders in "wppizza -> order history" when clicking on "print order"', $this->pluginLocale)."</span>";
 			}			
 			
+			if($field=='experimental_js'){
+				echo "<input id='".$field."' name='".$this->pluginSlug."[plugin_data][".$field."]' type='checkbox'  ". checked($options['plugin_data'][$field],true,false)." value='1' />";
+				echo" <span class='description'>".__('<b>this should be off unless otherwise requested</b> (things tested here will eventually make it into the core js)', $this->pluginLocale)."</span>";
+			}				
+
 			if($field=='always_load_all_scripts_and_styles'){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[plugin_data][".$field."]' type='checkbox'  ". checked($options['plugin_data'][$field],true,false)." value='1' />";
 				echo" <span class='description'>".__('load *all* css and javascripts on all pages. Might be necessary for themes that hijack normal pagelinks', $this->pluginLocale)."</span>";

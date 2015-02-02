@@ -308,6 +308,30 @@ if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/
 	$customer=array();
 	foreach($customerDetails as $key=>$item){
 		$customer[$key] ='<tr><td>'.$item['label'].'</td><td>'.$item['value'].'</td></tr>';
+		/**allow filtering**/
+		$customer[$key] = apply_filters('wppizza_filter_print_order_customer_detail', $customer[$key], $key, $item);
+		
+		/*#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#*
+			[remove, or alter labels for example]
+			add_filter('wppizza_filter_print_order_customer_detail','myprefix_amend_customer_data',10,3);
+			function myprefix_amend_customer_data($detail,$key,$item){
+			
+				
+				//* to remove all labels in fron of all customer details**
+				$detail='<tr><td colspam="2" >'.$item['value'].'</td></tr>';
+			
+				//* to remove only the label for email in fron of all customer details**
+				if($key=='cemail'){
+					$detail='<tr><td colspam="2" >'.$item['value'].'</td></tr>';
+				}
+				//* to alter the label in front of emails details**
+				if($key=='cemail'){
+					$detail='<tr><td>- my new label--</td><td>'.$item['value'].'</td></tr>';
+				}
+			
+				return $detail;
+			}			
+		*#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#*/
 	}
 	/**allow filtering**/
 	$customer = apply_filters('wppizza_filter_print_order_customer', $customer);

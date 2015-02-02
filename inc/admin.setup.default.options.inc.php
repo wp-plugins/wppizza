@@ -315,6 +315,7 @@
 				'wp_multisite_order_history_all_sites' => false,
 				'using_cache_plugin' => false,
 				'use_old_admin_order_print' => false,
+				'experimental_js' => false,
 				'always_load_all_scripts_and_styles' => false,
 				'admin_order_history_max_results' => 20,
 				'nag_notice' => $this->pluginNagNotice

@@ -36,6 +36,7 @@
 			$options['plugin_data']['dequeue_scripts'] = wppizza_validate_alpha_only($input['plugin_data']['dequeue_scripts']);
 			$options['plugin_data']['search_include'] = !empty($input['plugin_data']['search_include']) ? true : false;
 			$options['plugin_data']['use_old_admin_order_print'] = !empty($input['plugin_data']['use_old_admin_order_print']) ? true : false;
+			$options['plugin_data']['experimental_js'] = !empty($input['plugin_data']['experimental_js']) ? true : false;
 			$options['plugin_data']['always_load_all_scripts_and_styles'] = !empty($input['plugin_data']['always_load_all_scripts_and_styles']) ? true : false;
 			
 			/*multisite vars**/

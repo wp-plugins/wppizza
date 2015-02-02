@@ -51,6 +51,10 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 			[runs only for frontend]
 		*************************************************************************/
 		if(!is_admin()){
+			
+			/***EXPERIMENTAL frontend scripts - load straight after jquery ***/
+			add_action('wp_enqueue_scripts', array( $this, 'wppizza_load_experimental_scripts_and_styles'),9);			
+						
 			/***enqueue frontend scripts and styles***/
 			add_action('wp_enqueue_scripts', array( $this, 'wppizza_register_scripts_and_styles'),$this->pluginOptions['layout']['css_priority']);
 			/*dequeue if set**/
@@ -2625,8 +2629,22 @@ public function wppizza_require_common_input_validation_functions(){
         }
     }
     /**************
+     
      	[Frontend]
+     	
 	***************/
+    
+    /*some experimental things that might or might not make it into the core, depending on the outcome*/
+    public function wppizza_load_experimental_scripts_and_styles() {
+    	/**EXPERIMENTAL JS**/
+    	if($this->pluginOptions['plugin_data']['experimental_js']){
+    		wp_register_script($this->pluginSlug.'-exp', plugins_url( 'js/scripts.exp.min.js', $this->pluginPath ), array('jquery'), $this->pluginVersion ,$options['plugin_data']['js_in_footer']);
+    		wp_enqueue_script($this->pluginSlug.'-exp');	
+    	}    	
+    }
+    
+    
+    
     public function wppizza_register_scripts_and_styles($hook) {
     	global $wp_scripts;
 		$options = $this->pluginOptions;
@@ -2665,6 +2683,8 @@ public function wppizza_require_common_input_validation_functions(){
 		/****************
 			js
 		****************/
+				
+		
 		/**include spinner js on orderpage if enabled**/
 		if($options['layout']['order_page_quantity_change'] && ( $options['order']['orderpage']==get_the_ID() || $options['plugin_data']['always_load_all_scripts_and_styles'] ) ){
 			wp_enqueue_script("jquery-ui-spinner");
@@ -2673,9 +2693,14 @@ public function wppizza_require_common_input_validation_functions(){
 		if(!in_array($options['layout']['sticky_cart_animation_style'],array('','swing','linear')) && $options['layout']['sticky_cart_animation']>0){
 			wp_enqueue_script("jquery-effects-core");
 		}
+
+
+		/*main js**/
     	wp_register_script($this->pluginSlug, plugins_url( 'js/scripts.min.js', $this->pluginPath ), array('jquery'), $this->pluginVersion ,$options['plugin_data']['js_in_footer']);
     	wp_enqueue_script($this->pluginSlug);
 
+
+		/*validation*/
     	wp_register_script($this->pluginSlug.'-validate', plugins_url( 'js/jquery.validate.min.js', $this->pluginPath ), array($this->pluginSlug), $this->pluginVersion ,$options['plugin_data']['js_in_footer']);
     	wp_enqueue_script($this->pluginSlug.'-validate');
 
