@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.3+, WP 3.3+ 
 Tested up to: 4.1
-Stable tag: 2.11.7.4
+Stable tag: 2.11.7.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -144,13 +144,20 @@ if you do wish to use any icon from this set commercially, please follow <a href
 == Changelog ==
 
 
+2.11.7.5 
+MINOR UPDATES
+* tweak: show some more system info variables (admin tools) 
+* added: a couple of action hooks at end of email templates (as per user request)  
+2nd February 2015  
+
+
 2.11.7.4  
 * WPML: admin order settings : make sure original order page settings id gets used when translation does not exist (mainly for compatibility reasons with other non WPML plugins)   
 * WPML: some more method existance checking (namely "switch_lang") to perhaps get around some compatibility issues between WPML and other translation plugins (although non WPML are typically not really supported by the plugin, but worth the effort in a couple of places perhaps)
 * internal: wppizza->tools : make sure wppizza vars shown are coming directly from db before having had the chance of being filtered somewhere   
 * tweak: show admin order history on load without having to click button  
 * tweak: option to set admin max order history results to other than 20   
-* added: more filters added to admin order history as well as passing order status to filters  
+* added: more filters added to admin order history as well as passing order status to filters 
 31st January 2015  
 
 

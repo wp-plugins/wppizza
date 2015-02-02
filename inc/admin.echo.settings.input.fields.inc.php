@@ -855,7 +855,7 @@ $options = $this->pluginOptions;
 				echo"<div id='wppizza_".$field."'>";
 					echo"<div id='wppizza_".$field."_options'>";
 					asort($localizeOptions);
-					$lngOddEvenArray=__('0,9,10,12,15,20,22,23,26,50,58,65', $this->pluginLocale);
+					$lngOddEvenArray=__('0,9,13,14,16,19,24,26,27,30,54,62,69', $this->pluginLocale);
 					$lngOddEvan=explode(",",$lngOddEvenArray);
 					$bgStyle=$lngOddEvan;
 					$i=0;
@@ -999,9 +999,17 @@ $options = $this->pluginOptions;
 				echo"<div id='wppizza_".$field."_system_info'>";
 					echo"<br /><h2>".__('System Info', $this->pluginLocale)."</h2> ";
 					echo $this->wppizza_system_info_include();
-					echo"<br /><h2>".__('All wppizza options', $this->pluginLocale)."</h2> ";
+					echo"<br /><h2>".__('WPPizza options set', $this->pluginLocale)."</h2> ";
 					$wppizzaOptions=get_option(WPPIZZA_SLUG);
 					echo"<textarea  readonly='readonly' onclick='this.focus();this.select();' style='width:100%;height:150px'>### ALL WPPIZZA VARIABLES ###".PHP_EOL.print_r($wppizzaOptions,true)."</textarea>";
+
+
+					/*in case some other plugin wants to display things here too*/
+					do_action('wppizza_admin_tools_system_info');	
+
+					echo"<br />";
+					echo "<h2><a href='javascript:void(0)' id='wppizza_show_php_vars' class='button'>".__('show php configuration', $this->pluginLocale)."</a></h2>";
+					echo"<div id='wppizza_php_info'></div>";
 				echo"</div>";
 				}
 			}

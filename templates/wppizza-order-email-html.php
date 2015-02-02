@@ -212,6 +212,14 @@ $htmlEmailStyle = apply_filters('wppizza_filter_html_email_style', $htmlEmailSty
 <?php
 /**********************************************************
 
+	[action hook to add things if required]
+
+***********************************************************/
+	do_action('wppizza_emailhtml_end', $order_summary, $order_items, $htmlEmailStyle, $orderLabel);
+?>
+<?php
+/**********************************************************
+
 	[some thank you text or whatever]
 
 ***********************************************************/
@@ -230,6 +238,7 @@ if(trim($orderLabel['order_email_footer'])!=''){
 
 ***********************************************************/
 ?>
+
 						</table>
 					</center>
 				</td>
