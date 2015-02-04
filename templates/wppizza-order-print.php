@@ -317,12 +317,12 @@ if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/
 			function myprefix_amend_customer_data($detail,$key,$item){
 			
 				
-				//* to remove all labels in fron of all customer details**
-				$detail='<tr><td colspam="2" >'.$item['value'].'</td></tr>';
+				//* to remove all labels in front of all customer details**
+				$detail='<tr><td colspan="2" >'.$item['value'].'</td></tr>';
 			
-				//* to remove only the label for email in fron of all customer details**
+				//* to remove only the label for email in front of all customer details**
 				if($key=='cemail'){
-					$detail='<tr><td colspam="2" >'.$item['value'].'</td></tr>';
+					$detail='<tr><td colspan="2" >'.$item['value'].'</td></tr>';
 				}
 				//* to alter the label in front of emails details**
 				if($key=='cemail'){

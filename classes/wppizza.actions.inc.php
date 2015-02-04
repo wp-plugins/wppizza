@@ -2636,9 +2636,9 @@ public function wppizza_require_common_input_validation_functions(){
     
     /*some experimental things that might or might not make it into the core, depending on the outcome*/
     public function wppizza_load_experimental_scripts_and_styles() {
-    	/**EXPERIMENTAL JS**/
-    	if($this->pluginOptions['plugin_data']['experimental_js']){
-    		wp_register_script($this->pluginSlug.'-exp', plugins_url( 'js/scripts.exp.min.js', $this->pluginPath ), array('jquery'), $this->pluginVersion ,$options['plugin_data']['js_in_footer']);
+    	/**EXPERIMENTAL JS - currently empty/unused**/
+    	if(isset($this->pluginOptions['plugin_data']['experimental_js']) && $this->pluginOptions['plugin_data']['experimental_js']){
+    		wp_register_script($this->pluginSlug.'-exp', plugins_url( 'js/scripts.exp.min.js', $this->pluginPath ), array('jquery'), $this->pluginVersion ,$this->pluginOptions['plugin_data']['js_in_footer']);
     		wp_enqueue_script($this->pluginSlug.'-exp');	
     	}    	
     }

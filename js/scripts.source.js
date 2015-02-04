@@ -8,31 +8,35 @@ jQuery(document).ready(function($){
 	*	and use touchstart if click is not supported
 	*	avoids double trigger as using 'click touchstart'
 	*	appears to trigger twice in Android devices
+	*
+	*	[DEPRECATED in favour of adding cursor:pointer to css 
+	*	for relevant elements]
+	*
 	*******************************************************/
+//
+//	var wppizzaCheckEventSupport = function(eventName){
 
-	var wppizzaCheckEventSupport = function(eventName){
+//    	/*iSomething understands click, but doesnt want to do things with it so lets force touchstsrt*/
+//    	if((navigator.userAgent.match(/iPhone/i)) || (navigator.userAgent.match(/iPad/i)) || (navigator.userAgent.match(/iPod/i))) {
+//   			var bindEvent='touchstart';/*default to touchstart for iCrap*/
+//   			return bindEvent;
+//		}
 
-    	/*iSomething understands click, but doesnt want to do things with it so lets force touchstsrt*/
-    	if((navigator.userAgent.match(/iPhone/i)) || (navigator.userAgent.match(/iPad/i)) || (navigator.userAgent.match(/iPod/i))) {
-   			var bindEvent='touchstart';/*default to touchstart for iCrap*/
-   			return bindEvent;
-		}
-
-    	var el = document.createElement('div');
-    	eventName = 'on' + eventName;
-    	var isSupported = (eventName in el);
-    	if (!isSupported) {
-      		el.setAttribute(eventName, 'return;');
-      		isSupported = typeof el[eventName] == 'function';
-    	}
-    	el = null;
-    	var bindEvent='click';/*default touchstart*/
-    	if(!isSupported){
-    		bindEvent='touchstart';	/*if browser does not support touchstart, use click*/
-    	}
-    	return bindEvent;
-  	}
-  	wppizzaClickEvent=wppizzaCheckEventSupport("click");
+//    	var el = document.createElement('div');
+//    	eventName = 'on' + eventName;
+//    	var isSupported = (eventName in el);
+//    	if (!isSupported) {
+//      		el.setAttribute(eventName, 'return;');
+//      		isSupported = typeof el[eventName] == 'function';
+//    	}
+//    	el = null;
+//    	var bindEvent='click';/*default touchstart*/
+//    	if(!isSupported){
+//    		bindEvent='touchstart';	/*if browser does not support touchstart, use click*/
+//    	}
+//    	return bindEvent;
+//  	}
+//  	wppizzaClickEvent=wppizzaCheckEventSupport("click");
 
 
 	/****************************************************************************************************************************************************************************************************

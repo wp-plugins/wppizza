@@ -421,3 +421,10 @@ h2.wppizza-article-title{padding-bottom:0;margin:0}
 .wppizza-totals-checkout{text-decoration:none;color:inherit !important}
 .wppizza-totals-checkout:hover{text-decoration:underline;color:inherit !important}
 .wppizza-totals-checkout:visited{color:inherit !important}
+/************************
+*	[iOS (iPhone,iPad)]
+*	add distinct cursor:pointer to relevant elements 
+*	to enable onclick events instead of using touchstart 
+************************/
+.wppizza-article-price,.wppizza-remove-from-cart,.wppizza-cart-increment,.wppizza-trigger-choose,.wppizza-cart-refresh,#wppizza-force-refresh,.wppizza-add-to-cart-select
+{cursor:pointer}

@@ -19,6 +19,9 @@
 
 	/*distinctly set plugin version*/
 	$update_options['plugin_data']['version']=$this->pluginVersion;
+	/*distinctly disable experimental on update*/
+	$update_options['plugin_data']['experimental_js']=false;
+
 
 	if(!isset($options['plugin_data']['using_cache_plugin'])){
 		$update_options['plugin_data']['using_cache_plugin']=$defaultOptions['plugin_data']['using_cache_plugin'];
