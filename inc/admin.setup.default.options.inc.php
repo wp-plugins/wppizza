@@ -304,12 +304,11 @@
 				'version' => $this->pluginVersion,
 				'js_in_footer' => false,
 				'mail_type' => 'mail',
-				'dequeue_scripts' => '',	
+				'dequeue_scripts' => '',
 				'search_include' => false,
 				'post_single_template' => array(),
 				'category_parent_page' => array(),
 				'single_item_permalink_rewrite'=>'',
-				'empty_category_and_items' => false,
 				'wp_multisite_session_per_site' => true,
 				'wp_multisite_reports_all_sites' => false,
 				'wp_multisite_order_history_all_sites' => false,
@@ -437,7 +436,7 @@
 				'order_email_from'=>'',
 				'order_email_from_name'=>'',
 				'order_sms'=>'',
-				'dmarc_nag_off' => false					
+				'dmarc_nag_off' => false
 			),
 			'order_form'=>array(
 				0=>array('sort'=>0,'key'=>'cname','lbl'=>__('Name :', $this->pluginLocale),'value'=>array(),'type'=>'text','enabled'=>true,'required'=>false,'required_on_pickup'=>false,'prefill'=>true,'onregister'=>false,'placeholder'=>false),
@@ -513,7 +512,7 @@
 				'subtotals_after_additional_info'=>array(
 					'descr'=>__('Confirmation Form - [miscellaneous]: additional/optional info/text to display after (sub)totals', $this->pluginLocale),
 					'lbl'=>''
-				)					
+				)
 			),
 			'gateways'=>array(
 				'gateway_selected'=>array('COD'=>true),
@@ -767,7 +766,7 @@
 				'header_order_print_overview_label'=>array(
 					'descr'=>__('Print Order Admin - [Label]: order overview', $this->pluginLocale),
 					'lbl'=>__('Order', $this->pluginLocale)
-				),					
+				),
 				'header_order_print_itemised_article'=>array(
 					'descr'=>__('Print Order Admin - [itemised header]: article ', $this->pluginLocale),
 					'lbl'=>__('Article', $this->pluginLocale)
@@ -787,7 +786,7 @@
 				'common_value_order_pickup'=>array(
 					'descr'=>__('Common [Order Values] : pickup', $this->pluginLocale).' (currently only used when printing order in order history)',
 					'lbl'=>__('For Pickup', $this->pluginLocale)
-				),		
+				),
 				'common_value_order_cash'=>array(
 					'descr'=>__('Common [Order Values] : cash', $this->pluginLocale).' (currently only used when printing order in order history)',
 					'lbl'=>__('Cash', $this->pluginLocale)
@@ -795,11 +794,11 @@
 				'common_value_order_credit_card'=>array(
 					'descr'=>__('Common [Order Values] : credit card', $this->pluginLocale).' (currently only used when printing order in order history)',
 					'lbl'=>__('Credit Card', $this->pluginLocale)
-				),								
+				),
 				'common_label_order_delivery_type'=>array(
 					'descr'=>__('Common [Order Labels] : delivery type', $this->pluginLocale).' (currently only used when printing order in order history)',
 					'lbl'=>__('Delivery Type :', $this->pluginLocale)
-				),				
+				),
 				'common_label_order_wp_user_id'=>array(
 					'descr'=>__('Common [Order Labels] : user id', $this->pluginLocale).' (currently unused)',
 					'lbl'=>__('User ID :', $this->pluginLocale)
@@ -811,15 +810,15 @@
 				'common_label_order_currency'=>array(
 					'descr'=>__('Common [Order Labels] : currency', $this->pluginLocale).'  (currently unused)',
 					'lbl'=>__('Currency :', $this->pluginLocale)
-				),					
+				),
 				'common_label_order_payment_type'=>array(
 					'descr'=>__('Common [Order Labels] : payment type', $this->pluginLocale).' (currently only used when printing order in order history)',
 					'lbl'=>__('Payment Type :', $this->pluginLocale)
-				),	
+				),
 				'common_label_order_payment_method'=>array(
 					'descr'=>__('Common [Order Labels] : payment method', $this->pluginLocale).' (currently only used when printing order in order history)',
 					'lbl'=>__('Payment Method :', $this->pluginLocale)
-				),	
+				),
 				'common_label_order_order_date'=>array(
 					'descr'=>__('Common [Order Labels] : order date', $this->pluginLocale).' (currently only used when printing order in order history)',
 					'lbl'=>__('Order Date :', $this->pluginLocale)
@@ -831,7 +830,7 @@
 				'common_label_order_payment_outstanding'=>array(
 					'descr'=>__('Common [Order Labels] : payment due', $this->pluginLocale).' (currently only used when printing order in order history)',
 					'lbl'=>__('Payment Due :', $this->pluginLocale)
-				)	
+				)
 			)
 		);
 

@@ -283,6 +283,16 @@ jQuery(document).ready(function($){
 			e.preventDefault();
 			e.stopPropagation();
 
+		/**if on orderpage, cover whole page**/
+		if(typeof wppizza.isCheckout!=='undefined'){
+       		$('html').css({'position':'relative'});/*stretch html to make loading cover whole page*/
+     		$('body').prepend('<div id="wppizza-loading" style="opacity:0.8"></div>');
+			$('.wppizza-ordernow').attr("disabled", "true");//disable send order button
+		}else{
+			$('.wppizza-order').prepend('<div id="wppizza-loading"></div>');
+		}
+
+
 		var self=$(this);
 		var selfId=self.attr('id');
 		var cartButton=$('.wppizza-cart-button input,.wppizza-cart-button>a,.wppizza-empty-cart-button');
@@ -332,9 +342,13 @@ jQuery(document).ready(function($){
 				});
 			}
 
-
-			$('.wppizza-order').prepend('<div id="wppizza-loading"></div>');
 			jQuery.post(wppizza.ajaxurl , {action :'wppizza_json',vars:{'type':type,'id':selfId,'itemCount':itemCount,'catId':catId}}, function(response) {
+				/**if on orderpage, just reload**/
+				if(typeof wppizza.isCheckout!=='undefined'){
+					window.location.href=window.location.href;/*make sure page gest reloaded without confirm*/
+					return;
+				}
+
 				/*show items in cart*/
 				$('.wppizza-order').html(response.itemsajax);
 				/*button*/

@@ -8,10 +8,10 @@ $terms = get_terms(''.$this->pluginSlugCategoryTaxonomy.'', array('hide_empty' =
 	*
 	*************************************************************************************************/
 	$postids=array();
-	$args = array('post_type'=> $this->pluginSlug,'posts_per_page'=>-1);  
+	$args = array('post_type'=> $this->pluginSlug,'posts_per_page'=>-1);
 	$the_query = new WP_Query( $args );
 	if($the_query->have_posts()) {
-		$posts=$the_query->posts;	
+		$posts=$the_query->posts;
 	}
 	if(isset($posts) && is_array($posts)){
 	foreach($posts as $k=>$v){
@@ -45,7 +45,7 @@ $terms = get_terms(''.$this->pluginSlugCategoryTaxonomy.'', array('hide_empty' =
 	foreach($postids as $k=>$v){
 		wp_delete_post( $v, true );
 	}}
-	
+
 	/*************************************************************************************************
 	*
 	*	[now lets delete all terms]
@@ -53,20 +53,6 @@ $terms = get_terms(''.$this->pluginSlugCategoryTaxonomy.'', array('hide_empty' =
 	*************************************************************************************************/
 	foreach( $terms as $term ){
 		wp_delete_term( $term->term_id, $this->pluginSlugCategoryTaxonomy );
-	}
-	
-	/*************************************************************************************************
-	*
-	*	[if set , truncate order table]
-	*
-	*************************************************************************************************/
-	if($truncateOrders){
-		global $wpdb;
-		/*no backticks or apostrophies please**/
-		/** see http://codex.wordpress.org/Creating_Tables_with_Plugins **/		
-		$sql="TRUNCATE ".$wpdb->prefix . $this->pluginOrderTable."";
-		$e = $wpdb->query($sql); 
-		//die(var_dump($e));
 	}
   }
 ?>

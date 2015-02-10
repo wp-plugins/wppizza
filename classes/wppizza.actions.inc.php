@@ -1850,7 +1850,9 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 							$formelements[$elmKey]['required']=true;
 						}
 					}
-
+					
+					/**add invisible div to order page be be able to still add things to cart and reload (for upsells etc)**/
+					add_action('wppizza_order_form_inside_top', array( $this, 'wppizza_invisible_cart'));
 
 
 					/*check if the file exists in the theme, otherwise serve the file from the plugin directory if possible*/
@@ -2047,7 +2049,15 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 			return;
 		}
 }
-
+	/*******************************************************
+     *
+     *	add hidden input/div  - when open - to orderpage
+     *	to be be able to still add things to cart and reload (for upsells etc)
+     *	even if no cart on page
+     ******************************************************/
+	function wppizza_invisible_cart(){
+		echo'<span class="wppizza-open wppizza-cart" style="display:none"></span>';
+	}
 	/*******************************************************
      *
      *	[add a js function when using shortcode to display totals]
@@ -2646,7 +2656,7 @@ public function wppizza_require_common_input_validation_functions(){
     
     
     public function wppizza_register_scripts_and_styles($hook) {
-    	global $wp_scripts;
+    	global $wp_scripts,$post;
 		$options = $this->pluginOptions;
 
     	/**************
@@ -2731,7 +2741,7 @@ public function wppizza_require_common_input_validation_functions(){
 		if($options['order']['order_pickup'] && $options['order']['order_pickup_alert_confirm'] ){
 			$localized_options['pickupConfirm']=1;
 		}
-
+				
 		/*add functions (names) to run when cart has been refreshed**/
 		$jsCartRefreshCompleteFunctions['functionsCartRefresh']=array();
 		$jsCartRefreshCompleteFunctions['functionsCartRefresh'] = apply_filters('wppizza_filter_js_cart_refresh_functions', $jsCartRefreshCompleteFunctions['functionsCartRefresh']);
@@ -2746,6 +2756,16 @@ public function wppizza_require_common_input_validation_functions(){
 		if($options['plugin_data']['using_cache_plugin']){
 			$localized_array['usingCache']=1;
 		}
+		/**set flag to indicate we are on checkout page**/
+			/**wpml select of order page**/
+			if(function_exists('icl_object_id')) {
+				$options['order']['orderpage']=icl_object_id($options['order']['orderpage'],'page');
+			}			
+			/**set flag that we are on order page to not do any redirection for example**/
+			if($post->ID==$options['order']['orderpage']){
+				$localized_array['isCheckout']=1;
+			}
+		
 		/**are we using a confirmation form too ?**/
 		if($options['confirmation_form_enabled']){
 			$localized_array['cfrm']=1;
@@ -2754,10 +2774,14 @@ public function wppizza_require_common_input_validation_functions(){
 		if($options['layout']['order_page_quantity_change'] && ( $options['order']['orderpage']==get_the_ID() || $options['plugin_data']['always_load_all_scripts_and_styles'] ) ){
 			$localized_array['ofqc']=1;
 		}
+
 		/***various options**/
 		if(isset($localized_options)){
 			$localized_array['opt']=$localized_options;
 		}
+
+
+
 
 
 		/**sticky cart settings**/
@@ -2851,10 +2875,16 @@ public function wppizza_require_common_input_validation_functions(){
 *		[empty custom posts]
 *
 *********************************************************/
-	public function wppizza_empty_taxonomy($deleteAttachments=false,$truncateOrders=false){
+	public function wppizza_empty_taxonomy($deleteAttachments=false){
 		require_once(WPPIZZA_PATH .'inc/admin.empty.taxonomy.data.php');
 	}
-
+	public function wppizza_truncate_order_table(){
+		global $wpdb;
+		/*no backticks or apostrophies please**/
+		/** see http://codex.wordpress.org/Creating_Tables_with_Plugins **/		
+		$sql="TRUNCATE ".$wpdb->prefix . $this->pluginOrderTable."";
+		$e = $wpdb->query($sql); 		
+	}
 /*********************************************************************************
 *
 *	[changes wppizza custom sort order query to display category navigation in the right order]

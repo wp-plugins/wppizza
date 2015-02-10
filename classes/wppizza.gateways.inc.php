@@ -45,7 +45,6 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 		}
 	}	
 	function wppizza_instanciate_gateways_frontend() {
-
 		/**display surcharges pre order**/
 		$this->showSurchageBeforOrder=false;
 

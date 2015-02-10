@@ -5,7 +5,7 @@ Description: Maintain your restaurant menu online and accept cash on delivery or
 Author: ollybach
 Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Author URI: https://www.wp-pizza.com
-Version: 2.11.7.7
+Version: 2.11.7.8
 License:
 
   Copyright 2012 ollybach (dev@wp-pizza.com)
@@ -94,7 +94,7 @@ class WPPizza extends WP_Widget {
  function __construct() {
 
 	/**init constants***/
-	$this->pluginVersion='2.11.7.7';//increment in line with stable tag in readme and version above
+	$this->pluginVersion='2.11.7.8';//increment in line with stable tag in readme and version above
  	$this->pluginName="".WPPIZZA_NAME."";
  	$this->pluginSlug="".WPPIZZA_SLUG."";//set also in uninstall when deleting options
 	$this->pluginSlugCategoryTaxonomy="".WPPIZZA_TAXONOMY."";//also on uninstall delete wppizza_children as well as widget
@@ -284,11 +284,18 @@ class WPPizza extends WP_Widget {
 
 			/*also keep selected gateway in session*/
 			if(isset($_SESSION[$this->pluginSessionGlobal]['userdata']['gateway'])){
+				/**store previously selected in case we need to fall back to it**/
+				//$prevGwFallback=$_SESSION[$this->pluginSessionGlobal]['userdata']['gateway'];
+				/*unset session*/
 				unset($_SESSION[$this->pluginSessionGlobal]['userdata']['gateway']);
 			}
 			$selectedGateway=!empty($params['wppizza-gateway']) ? strtoupper(wppizza_validate_string($params['wppizza-gateway'])) : '';
-			$_SESSION[$this->pluginSessionGlobal]['userdata']['gateway']=$selectedGateway;
-
+			
+			/*reset session if not empty*/
+			if($selectedGateway!=''){
+				$_SESSION[$this->pluginSessionGlobal]['userdata']['gateway']=$selectedGateway;
+			}
+		
 			/**allow filtering of session data**/
 			$_SESSION[$this->pluginSessionGlobal]['userdata'] = apply_filters('wppizza_filter_sessionise_userdata', $_SESSION[$this->pluginSessionGlobal]['userdata'],$params);
 

@@ -5,7 +5,6 @@
 		/**lets not forget static, uneditable options **/
 		$options['plugin_data']['version'] = $this->pluginVersion;
 		$options['plugin_data']['nag_notice'] = isset($input['plugin_data']['nag_notice']) ? $input['plugin_data']['nag_notice'] : $options['plugin_data']['nag_notice'];
-		$options['plugin_data']['empty_category_and_items'] = false;/*we dont really want to save these settings, just execute when true*/
 		$options['plugin_data']['db_order_status_options'] = !empty($input['plugin_data']['db_order_status_options']) ? $input['plugin_data']['db_order_status_options'] : wppizza_order_status_default('keys');
 
 		/**schedule cron**/
@@ -21,15 +20,10 @@
 			$this->wppizza_cron_setup_schedule($options['cron']);
 		}
 
-		if(isset($input['plugin_data']['empty_category_and_items']) && $input['plugin_data']['empty_category_and_items']==1){
-			$this->wppizza_empty_taxonomy(!empty($input['plugin_data']['delete_attachments']) ? true : false, !empty($input['plugin_data']['truncate_orders']) ? true : false);
-		}
-
-
 		/**validate global settings***/
 		if(isset($_POST[''.$this->pluginSlug.'_global'])){
 			/**submitted options -> validate***/
-			$options['plugin_data']['js_in_footer'] = !empty($input['plugin_data']['js_in_footer']) ? true : false;			
+			$options['plugin_data']['js_in_footer'] = !empty($input['plugin_data']['js_in_footer']) ? true : false;
 			$options['plugin_data']['admin_order_history_max_results'] = wppizza_validate_int_only($input['plugin_data']['admin_order_history_max_results']);
 			$options['plugin_data']['using_cache_plugin'] = !empty($input['plugin_data']['using_cache_plugin']) ? true : false;
 			$options['plugin_data']['mail_type'] = wppizza_validate_alpha_only($input['plugin_data']['mail_type']);
@@ -38,18 +32,18 @@
 			$options['plugin_data']['use_old_admin_order_print'] = !empty($input['plugin_data']['use_old_admin_order_print']) ? true : false;
 			$options['plugin_data']['experimental_js'] = !empty($input['plugin_data']['experimental_js']) ? true : false;
 			$options['plugin_data']['always_load_all_scripts_and_styles'] = !empty($input['plugin_data']['always_load_all_scripts_and_styles']) ? true : false;
-			
+
 			/*multisite vars**/
 			$options['plugin_data']['wp_multisite_session_per_site'] = !empty($input['plugin_data']['wp_multisite_session_per_site']) ? true : false;
 			$options['plugin_data']['wp_multisite_reports_all_sites'] = !empty($input['plugin_data']['wp_multisite_reports_all_sites']) ? true : false;
 			$options['plugin_data']['wp_multisite_order_history_all_sites'] = !empty($input['plugin_data']['wp_multisite_order_history_all_sites']) ? true : false;
 			/*if not multisite use defaults*/
 			if(!is_multisite()){
-				$options['plugin_data']['wp_multisite_session_per_site'] =true;	
+				$options['plugin_data']['wp_multisite_session_per_site'] =true;
 				$options['plugin_data']['wp_multisite_reports_all_sites'] =false;
 				$options['plugin_data']['wp_multisite_order_history_all_sites'] =false;
-			}			
-			
+			}
+
 		}
 
 
@@ -442,6 +436,15 @@ if(isset($input['maintenance'])){
 		$options['layout']['category_sort_hierarchy']=$categorySort;
 		$options['layout']['category_sort']=$categorySort;
 	}
+	/**delete wppizza posts, categories and - possibly - images/attachments **/
+	if(isset($input['maintenance']['empty_category_and_items']) && $input['maintenance']['empty_category_and_items']==1){
+		$this->wppizza_empty_taxonomy(!empty($input['maintenance']['delete_attachments']) ? true : false);
+	}
+	/**truncate orders**/
+	if(isset($input['maintenance']['truncate_orders'])){
+		$this->wppizza_truncate_order_table();
+	}
+
 }
 
 ?>

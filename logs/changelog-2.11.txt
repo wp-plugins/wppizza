@@ -1,3 +1,98 @@
+2.11.6.3  
+* tweak: order history print also now outputting categories (if enabled in layout)  
+* tweak: order history print now using Arial as default font  
+* minor tidyup in places   
+12th January 2015  
+
+2.11.6.2
+* tweak: order history printing template (also now applying category sort order if set in wppizza->layout : Group, sort and display menu items by category) 
+8th January 2015  
+
+2.11.6.1
+* tweak: order history printing template (slight css changes and more heavily commented)  
+8th January 2015  
+
+2.11.6
+* added: print order template (admin order history) to replace current way orders are printed   
+* added: filter to totals shortcode output (wppizza_filter_shortcode_totals) to be able to selectively remove/add elements  
+* internal: added/updated separate class to deal with order values more efficiently (to be able to replace somewhat convoluted coding in other parts of the plugin in due course / bit by bit)  
+7th January 2015  
+
+2.11.5.10
+* eliminated some php notices (when using an invalid shortcodes)  
+* added: simplified wpizzaShopOpen() function to use elsewhere if required  
+* added: tools->repair category order for invalid category sort orders if required   
+* fix: in certain circumstances category=!all shortcode resulted in repeat of menu items in last category  
+5th January 2015  
+
+
+2.11.5.9  
+* added: add_to_cart_button shortcode. allows output of a button elsewhere to add an item to cart  
+* added: optional element name to go to on forced page refresh when switching from pickup to delivery (and vice versa)    
+19th December 2014  
+
+2.11.5.8  
+* tweak: header classes in loop templates filterable  
+* tweak: article classes in loop templates filterable (and added -first and -last)  
+* tweak: removed header class page-header and page-title from header in loop when more than one category displayed (in case themes mess around with this)  
+* fix: loop responsive template. missing closing div in single item display.  
+* fix: WPML orderpage not identified when wpml string translation not installed 
+* fix: broke bestseller attribute when !all attribute was added in a previous version  
+* fix: broke single attribute when !all attribute was added in a previous version  
+* added: added WPPIZZA_ORDER_DETAILS class (for future use to simplify getting order details, not yet for production or indeed used anywhere)  
+16th December 2014  
+
+2.11.5.7  
+* bugfix: Discounts not always correctly identified when excluding selected menu items and/or categories to calculate discount  
+* added: ability to also use shortcodes in (custom) posts as opposed to just pages (although not recommended or indeed futher supported)  
+* added: checkout attribute to [wppizza type='totals'] shortcode (wrapping all into href link) to allow going to orderpage from there 
+8th December 2014  
+
+
+2.11.5.6  
+* bugfix: some gateway the_content filters directly output the string as opposed to returning it  
+* tweak: using first half of email address (before the @) as name in email headers when no name has been supplied (as opposed to using ---- )  
+26th November 2014  
+
+2.11.5.5  
+* added filter to email sending options (wppizza_filter_order_email_options)   
+* added DMARC notice in admin page  
+13th November 2014  
+
+2.11.5.4  
+* added some more filters to html email template   
+11th November 2014  
+
+2.11.5.3  
+* better filtering of title tag to get rid of "WPPizza Categories" string   
+6th November 2014  
+
+2.11.5.2  
+* updated spanish language  
+* added option to dequeue scripts (wppizza->settings)  
+* Some maintenance 
+6th November 2014  
+
+2.11.5.1  
+* added attribute (itemcount=[left|right]) to wppizza type=totals shortcode  
+* fix: loop template was loaded 2x when using shortcode attribute !all AND having a customised version in theme directory  
+* fix: some php notices eliminated  
+* improved mobile devices usability somewhat when allowing quantities to be changed via input field  
+* internal: now also passing cart variables to js cart refresh function  
+31st October 2014  
+
+2.11.5  
+* fix: wrong submit button label in confirmation page  
+* admin: added exclude categories/items when calculating discounts  
+* admin: added exclude categories when calculating delivery charges  
+* admin: minor admin text changes  
+* admin: added chosen.js library for multiselects  
+* added filter for delivery charges     
+* added missing translations for order history status (admin)  
+* stopped accidental submitting order when changing quantities and hitting enter key. this will now trigger update of quantities instead.  
+* readme.txt tidyup  
+29th October 2014  
+
 2.11.4    
 * updated language files  
 * replaced erroneously hardcoded WPPizza with WPPIZZA_NAME constant in a couple of places  

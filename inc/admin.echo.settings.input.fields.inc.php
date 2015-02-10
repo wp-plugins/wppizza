@@ -17,18 +17,18 @@ $options = $this->pluginOptions;
 				echo "<input id='".$field."' name='".$this->pluginSlug."[plugin_data][".$field."]' type='checkbox'  ". checked($options['plugin_data'][$field],true,false)." value='1' />";
 				echo" <span class='description'>".__('combines all jsVars in one tidy place, but requires wp_footer in theme', $this->pluginLocale)."</span>";
 			}
-			
+
 			if($field=='admin_order_history_max_results'){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[plugin_data][".$field."]' size='2' type='text'  value='{$options['plugin_data']['admin_order_history_max_results']}' />";
 				echo" <span class='description'>".__('default number of results to show in admin order history', $this->pluginLocale)."</span>";
-			}			
-			
+			}
+
 			if($field=='wp_multisite_session_per_site'){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[plugin_data][".$field."]' type='checkbox'  ". checked($options['plugin_data'][$field],true,false)." value='1' />";
 				echo" <span class='description'>".__('Set cart contents and order on a per site basis when using subdirectories. This has no effect/relevance when there\'s no multisite setup or using different domains per site on the network. Chances are that you want this on when you have a multisite/network install.', $this->pluginLocale)."</span>";
 				echo"<br /><span class='description' style='color:red'>".__('THERE ARE ONLY VERY FEW SECENARIOS WHERE YOU MIGHT WANT THIS OFF', $this->pluginLocale)."</span>";
 			}
-			
+
 			if($field=='wp_multisite_reports_all_sites'){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[plugin_data][".$field."]' type='checkbox'  ". checked($options['plugin_data'][$field],true,false)." value='1' />";
 				echo" <span class='description'>".__('check to have reporting to use all orders of all child sites', $this->pluginLocale)."</span>";
@@ -40,9 +40,9 @@ $options = $this->pluginOptions;
 				echo" <span class='description'>".__('check to have order history to use all orders of all child sites', $this->pluginLocale)."</span>";
 				echo"<br /><span><b>".__('only applicable in parent site\'s order history. order history in child sites will only ever show values based on that sites orders', $this->pluginLocale)."</b></span>";
 				echo"<br /><span class='description' style='color:red'>".__('NOTE: THIS MIGHT SLOW THINGS DOWN IN THE ADMIN ORDER HISTORY PAGE OF YOUR MAIN/PARENT SITE CONSIDERABLY', $this->pluginLocale)."</span>";
-			}						
-						
-						
+			}
+
+
 			if($field=='using_cache_plugin'){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[plugin_data][".$field."]' type='checkbox'  ". checked($options['plugin_data'][$field],true,false)." value='1' />";
 				echo" <span class='description'>".__('Will ALWAYS load the cart dynamically via ajax. Especially useful if your caching plugin does not support the exclusion of only parts of a page.', $this->pluginLocale)."</span>";
@@ -51,18 +51,18 @@ $options = $this->pluginOptions;
 			if($field=='use_old_admin_order_print'){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[plugin_data][".$field."]' type='checkbox'  ". checked($options['plugin_data'][$field],true,false)." value='1' />";
 				echo" <span class='description'>".__('revert to old printing style of orders in "wppizza -> order history" when clicking on "print order"', $this->pluginLocale)."</span>";
-			}			
-			
+			}
+
 			if($field=='experimental_js'){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[plugin_data][".$field."]' type='checkbox'  ". checked($options['plugin_data'][$field],true,false)." value='1' />";
 				echo" <span class='description'>".__('<b>this should be off unless otherwise requested</b> (things tested here will eventually make it into the core js)', $this->pluginLocale)."</span>";
-			}				
+			}
 
 			if($field=='always_load_all_scripts_and_styles'){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[plugin_data][".$field."]' type='checkbox'  ". checked($options['plugin_data'][$field],true,false)." value='1' />";
 				echo" <span class='description'>".__('load *all* css and javascripts on all pages. Might be necessary for themes that hijack normal pagelinks', $this->pluginLocale)."</span>";
 			}
-			
+
 			if($field=='mail_type'){
 				echo "<select name='".$this->pluginSlug."[plugin_data][".$field."]' />";
 					echo"<option value='mail' ".selected($options['plugin_data'][$field],"mail",false).">".__('default [uses mail]', $this->pluginLocale)."</option>";
@@ -72,7 +72,7 @@ $options = $this->pluginOptions;
 				echo" <span>".__('might be worth changing if you have trouble when sending/receiving orders with the default settings or prefer html emails', $this->pluginLocale)."</span>";
 				echo"<br /><span class='description'>".__('if using PHPMailer function you probably want to edit the html template. To do so, move "wppizza-order-html-email.php" from the wppizza template directory to your theme folder and edit as required', $this->pluginLocale)."</span>";
 			}
-			
+
 			if($field=='dequeue_scripts'){
 				echo "<select name='".$this->pluginSlug."[plugin_data][".$field."]' />";
 					echo"<option value='' ".selected($options['plugin_data'][$field],"",false).">".__('leave as is', $this->pluginLocale)."</option>";
@@ -80,7 +80,7 @@ $options = $this->pluginOptions;
 					echo"<option value='validation' ".selected($options['plugin_data'][$field],"validation",false).">".__('dequeue jquery validation only', $this->pluginLocale)."</option>";
 				echo "</select>";
 				echo"<br /><span class='description'><b>".__('If you are *certain* you do not require the main wppizza javascript and jquery validation and nothing else depends on them, or another plugin is already including jquery validation elsewhere, use the settings above as required. if you do not now, just leave it as is', $this->pluginLocale)."</b></span>";
-			}			
+			}
 
 			if($field=='search_include' ){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[plugin_data][".$field."]' type='checkbox'  ". checked($options['plugin_data'][$field],true,false)." value='1' />";
@@ -131,14 +131,7 @@ $options = $this->pluginOptions;
 				echo "<br />".__('Note: by default, wppizza templates/shortcodes do not link to any single menu items. However, if you are including mneu items in search results for example or have edited a/the template(s) to include links to individual menu items you will also (probably) want to edit the single item template. see https://www.wp-pizza.com/topic/single-wppizza-menu-items-display', $this->pluginLocale)."";
 
 			}
-						
-			if($field=='empty_category_and_items'){
-				echo "<input id='".$field."' name='".$this->pluginSlug."[plugin_data][".$field."]' type='checkbox'  value='1' />";
-				echo" ".__('delete images too ?', $this->pluginLocale)."";
-				echo" <input id='".$field."_delete_attachments' name='".$this->pluginSlug."[plugin_data][delete_attachments]' type='checkbox'  value='1' />";
-				echo" ".__('empty order table ?', $this->pluginLocale)."";
-				echo" <input id='".$field."_truncate_orders' name='".$this->pluginSlug."[plugin_data][truncate_orders]' type='checkbox'  value='1' />";
-			}
+
 			if($field=='include_css' ){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[layout][".$field."]' type='checkbox'  ". checked($options['layout'][$field],true,false)." value='1' />";
 				echo "<input name='".$this->pluginSlug."[layout][css_priority]' size='2' type='text'  value='{$options['layout']['css_priority']}' />";
@@ -953,13 +946,13 @@ $options = $this->pluginOptions;
 			if($field=='tools'){
 				if(!isset($_GET['tab']) || $_GET['tab']=='tools'){
 				echo"<div id='wppizza-general'>";
-					
+
 					/*****************************
 					*
 					*	clear abandoned orders
 					*
 					****************************/
-				
+
 					echo"<div class='wppizza_option'>";
 						echo" <b>".__('Delete abandoned/cancelled orders from database older than', $this->pluginLocale)."</b> ";
 						echo"<input id='wppizza_order_days_delete' type='text' size='2' name='".$this->pluginSlug."[cron][days_delete]' value='".$options['cron']['days_delete']."' />";
@@ -986,17 +979,42 @@ $options = $this->pluginOptions;
 						echo"<br />".__('As soon as customers go to the order page an order will be initialized and stored in the db to be checked against when going through with the purchase to make sure nothing has been tampered with. However, not every customer will actually go through with the purchase which leaves this initialised order orphaned in the db.Click the "ok" button to clean your db of these entries (it will NOT affect any completed or pending orders)', $this->pluginLocale)."";
 						echo"<br /><br /><span style='color:red'>".__('Note: This will delete these entries PERMANENTLY from the db and is not reversable.', $this->pluginLocale)."</span>";
 					echo"</div>";
-					
+
 					/*****************************
 					*
 					*	repair category orders
 					*
-					****************************/					
+					****************************/
 					echo"<div class='wppizza_option'>";
 						echo"<input id='wppizza_category_repair' name='".$this->pluginSlug."[maintenance][category_repair]' type='checkbox' value='1' />";
 						echo" <b>".__('repair categories.', $this->pluginLocale)."</b> ";
 						echo"<br /><span'>".__('There exists an (as yet) unknown sequence of events related to saving/adding/editing/deleting wppizza categories that may result in the last category being repeated when using the category=!all shortcode attribute and/or not all categories showing up in the admin of the plugin.<br />If this should be the case, you can try repairing this by checking the box above and saving once. <b>If you use this function, please ensure your category order is still as required as you might have to re-sort - i.e drag and drop - some categories again</b>.<br />In case this does not solve the issue, please contact me, letting me know anything you did before this issue occured if possible.', $this->pluginLocale)."</span>";
-					echo"</div>";					
+					echo"</div>";
+
+
+					/*****************************
+					*
+					*	truncate order table
+					*
+					****************************/
+					echo"<div class='wppizza_option'>";
+						echo"<input id='wppizza_truncate_orders' name='".$this->pluginSlug."[maintenance][truncate_orders]' type='checkbox'  value='1' />";
+						echo" <b>".__('Empty order table ?', $this->pluginLocale)."</b><br />";
+						echo"<span style='color:red'>".__('completely and irreversibly EMPTIES the order table deleting ALL orders.', $this->pluginLocale)."</span>";
+					echo"</div>";
+
+					/*****************************
+					*
+					*	empty categories and items
+					*
+					****************************/
+					echo"<div class='wppizza_option'>";
+						echo "<input id='empty_category_and_items' name='".$this->pluginSlug."[maintenance][empty_category_and_items]' type='checkbox'  value='1' />";
+						echo '<b>'.__('Delete ALL WPPizza Categories and Items<br/><span style="color:red">use with care<br/>if you select "delete images too", all featured images used for any wppizza menu items will be deleted too.<br/>if you use these images elsewhere, you should not select this !</span>', $this->pluginLocale).'</b>';
+						echo"<br /><input id='empty_category_and_items_delete_attachments' name='".$this->pluginSlug."[maintenance][delete_attachments]' type='checkbox'  value='1' />";
+						echo" ".__('delete images too', $this->pluginLocale)."";
+					echo"</div>";
+
 				echo"</div>";
 				}
 
@@ -1010,7 +1028,7 @@ $options = $this->pluginOptions;
 
 
 					/*in case some other plugin wants to display things here too*/
-					do_action('wppizza_admin_tools_system_info');	
+					do_action('wppizza_admin_tools_system_info');
 
 					echo"<br />";
 					echo "<h2><a href='javascript:void(0)' id='wppizza_show_php_vars' class='button'>".__('show php configuration', $this->pluginLocale)."</a></h2>";

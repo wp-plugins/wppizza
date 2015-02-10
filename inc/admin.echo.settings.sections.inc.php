@@ -7,14 +7,14 @@
 		add_settings_field('mail_type', '<b>'.__('Select Type of Mail Delivery:', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'global', 'global', 'mail_type' );
 		add_settings_field('search_include', '<b>'.__('Include wppizza menu items in regular search results:', $this->pluginLocale).'', array( $this, 'wppizza_admin_settings_input'), 'global', 'global', 'search_include' );
 		add_settings_field('using_cache_plugin', '<b>'.__('I am using a caching plugin:', $this->pluginLocale).'', array( $this, 'wppizza_admin_settings_input'), 'global', 'global', 'using_cache_plugin' );
-		add_settings_field('js_in_footer', '<b>'.__('Javascript in Footer:', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'global', 'global', 'js_in_footer' );		
-		
-		
+		add_settings_field('js_in_footer', '<b>'.__('Javascript in Footer:', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'global', 'global', 'js_in_footer' );
+
+
 		/**permalinks settings**/
 		add_settings_section('permalinks','',  array( $this, 'wppizza_admin_page_text_header'), 'permalinks');
 		add_settings_field('category_parent_page', ''.__('<b>Permalinks - Categories/Pages:<br/>(only used and relevant when using widget or shortcode to display wppizza category navigation !!!)<br/><span style="color:red">when changing this setting, you MUST re-save your permalink settings</span></b><br/>(page cannot be used as static post page (wp settings) or have any children', $this->pluginLocale).'', array( $this, 'wppizza_admin_settings_input'), 'permalinks', 'permalinks', 'category_parent_page' );
 		add_settings_field('single_item_permalink_rewrite', ''.__('<b>Permalinks - Single Menu Items:<br/>(only used and relevant when actually linking to a single item from anywhere)<br/><span style="color:red">when changing this setting, you MUST re-save your permalink settings</span></b>', $this->pluginLocale).'', array( $this, 'wppizza_admin_settings_input'), 'permalinks', 'permalinks', 'single_item_permalink_rewrite' );
-		
+
 		/**multisite settings**/
 		add_settings_section('multisite','',  array( $this, 'wppizza_admin_page_text_header'), 'multisite');
 		add_settings_field('wp_multisite_session_per_site', '<b>'.__('Cart per site:', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'multisite', 'multisite', 'wp_multisite_session_per_site' );
@@ -23,15 +23,14 @@
 
 		/**miscellaneous settings**/
 		add_settings_section('global_miscellaneous','',  array( $this, 'wppizza_admin_page_text_header'), 'global_miscellaneous');
-		add_settings_field('admin_order_history_max_results', '<b>'.__('Results order history:', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'global_miscellaneous', 'global_miscellaneous', 'admin_order_history_max_results' );		
-		add_settings_field('use_old_admin_order_print', '<b>'.__('old style order printing', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'global_miscellaneous', 'global_miscellaneous', 'use_old_admin_order_print' );		
-		add_settings_field('always_load_all_scripts_and_styles', '<b>'.__('load css and js on all pages', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'global_miscellaneous', 'global_miscellaneous', 'always_load_all_scripts_and_styles' );		
-		add_settings_field('dequeue_scripts', '<b>'.__('dequeue wppizza scripts:', $this->pluginLocale).'</b><br /><span style="color:red">'.__('NOTE: if you dequeue any script other plugins rely on you WILL break things', $this->pluginLocale).'</span>', array( $this, 'wppizza_admin_settings_input'), 'global_miscellaneous', 'global_miscellaneous', 'dequeue_scripts' );				
-		add_settings_field('empty_category_and_items', '<b>'.__('Empty/Delete ALL WPPizza Categories and Items:<br/><span style="color:red">use with care<br/>if you select "delete images too", all featured images used for any wppizza menu items will be deleted too.<br/>if you use these images elsewhere, you should not select this !</span>', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'global_miscellaneous', 'global_miscellaneous', 'empty_category_and_items' );
-		add_settings_field('experimental_js', '<b>'.__('experimental JavaScript', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'global_miscellaneous', 'global_miscellaneous', 'experimental_js' );		
-		
-		
-		
+		add_settings_field('admin_order_history_max_results', '<b>'.__('Results order history:', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'global_miscellaneous', 'global_miscellaneous', 'admin_order_history_max_results' );
+		add_settings_field('use_old_admin_order_print', '<b>'.__('old style order printing', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'global_miscellaneous', 'global_miscellaneous', 'use_old_admin_order_print' );
+		add_settings_field('always_load_all_scripts_and_styles', '<b>'.__('load css and js on all pages', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'global_miscellaneous', 'global_miscellaneous', 'always_load_all_scripts_and_styles' );
+		add_settings_field('dequeue_scripts', '<b>'.__('dequeue wppizza scripts:', $this->pluginLocale).'</b><br /><span style="color:red">'.__('NOTE: if you dequeue any script other plugins rely on you WILL break things', $this->pluginLocale).'</span>', array( $this, 'wppizza_admin_settings_input'), 'global_miscellaneous', 'global_miscellaneous', 'dequeue_scripts' );
+		add_settings_field('experimental_js', '<b>'.__('experimental JavaScript', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'global_miscellaneous', 'global_miscellaneous', 'experimental_js' );
+
+
+
 		/**gateways settings**/
 		add_settings_section('gateways','',  array( $this, 'wppizza_admin_page_text_header'), 'gateways');
 		add_settings_field('gateways', '<b>'.__('Set Gateway Options:', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'gateways', 'gateways', 'gateways' );
@@ -63,8 +62,6 @@
 		add_settings_field('empty_cart_button', '<b>'.__('Enable "empty cart" button', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'layout', 'layout', 'empty_cart_button' );
 		add_settings_field('sticky_cart_settings', '<b>'.__('"sticky/scolling" cart settings [if used]', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'layout', 'layout', 'sticky_cart_settings' );
 		add_settings_field('element_name_refresh_page', '<b>'.__('page refresh element', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'layout', 'layout', 'element_name_refresh_page' );
-		
-		
 		add_settings_field('disable_online_order', '<b>'.__('Completely disable online orders:', $this->pluginLocale).'</b><br/><span style="color:red">'.__('this will still display prices (unless set to be hidden above), but will disable shoppingcart and orderpage', $this->pluginLocale).'</span><br/>'.__('Useful if you want to display your menu and prices but without offering online orders.', $this->pluginLocale).'', array( $this, 'wppizza_admin_settings_input'), 'layout', 'layout', 'disable_online_order' );
 
 
@@ -86,7 +83,7 @@
 		add_settings_field('discounts', '<b>'.__('Discounts:', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'order', 'order', 'discounts' );
 		add_settings_field('append_internal_id_to_transaction_id', '<b>'.__('Append internal ID to transaction ID:', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'order', 'order', 'append_internal_id_to_transaction_id' );
 
-	
+
 		add_settings_field('order_email_to', '<b>'.__('Which email address should any orders be sent to [separated by comma if multiple]:', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'order', 'order', 'order_email_to' );
 		add_settings_field('order_email_bcc', '<b>'.__('If you would like to BCC order emails add these here [separated by comma if multiple]:', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'order', 'order', 'order_email_bcc' );
 		add_settings_field('order_email_from', '<b>'.__('If you want to set a static "From" email address set it here, otherwise leave blank . All emails will appear to have been sent from this address. (Some fax gateways for example require a distinct FROM email address). However, the customers email address will still be stored in the db/order history if entered', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'order', 'order', 'order_email_from' );
@@ -125,5 +122,4 @@
 		/**tools**/
 		add_settings_section('tools', __('Miscellaneous Tools', $this->pluginLocale),  array( $this, 'wppizza_admin_page_text_header'), 'tools');
 		add_settings_field('tools', '', array( $this, 'wppizza_admin_settings_input'), 'tools', 'tools', 'tools' );
-
 ?>
