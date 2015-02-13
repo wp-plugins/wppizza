@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.3+, WP 3.3+ 
 Tested up to: 4.1
-Stable tag: 2.11.7.8
+Stable tag: 2.11.7.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -142,6 +142,12 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 
 == Changelog ==
+
+2.11.7.9 
+* internal: added more methods to WPPIZZA_ORDER_DETAILS to get variables/keys without needing an orderid  
+* multisite: "cart per site" (wppizza->settings) was only displayed for parent site when it should have been available for all sites  
+13th February 2015  
+
 
 2.11.7.8 
 * fix : eliminated PHP Notice:  Undefined index: gateway-selected  

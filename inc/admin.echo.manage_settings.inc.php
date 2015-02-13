@@ -11,9 +11,8 @@
 			echo"<h3>".__('Permalinks', $this->pluginLocale)."</h3>";
 			do_settings_sections('permalinks');
 			
-			/**only make this available in multisite installs and only on master site**/
-			global $blog_id;
-			if ( is_multisite() && $blog_id==BLOG_ID_CURRENT_SITE){
+			/**only make this available in multisite installs**/
+			if ( is_multisite()){
 				echo"<h3>".__('Multisite', $this->pluginLocale)."</h3>";
 				do_settings_sections('multisite');
 			}

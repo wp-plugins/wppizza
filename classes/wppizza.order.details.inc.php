@@ -92,10 +92,12 @@ if (!class_exists('WPPIZZA_ORDER_DETAILS')) {
 		function setSession($session){
 			$this->session=$session;
 		}
+		
 		/**********************************
 		*
 		*	get all order details as array
 		*
+		*	@return array		
 		**********************************/
 		function getOrder(){
 			global $wpdb;
@@ -112,20 +114,8 @@ if (!class_exists('WPPIZZA_ORDER_DETAILS')) {
 			/**unserialize customer data**/
 			$oCustomer=maybe_unserialize($orderDetails->customer_ini);
 
-			/****************************************************************
-				include wpml to use translated localization variables.
-				will not affect items (they will always be the translated one's
-				or - more accurately - be the ones that were put in the cart
-				don't use require once
-			****************************************************************/
-			if($this->translate && function_exists('icl_translate') && isset($cDetails['wppizza_wpml_lang']) && $cDetails['wppizza_wpml_lang']!=''){
-//					global $sitepress;
-//					$sitepress->switch_lang($oCustomer['wppizza_wpml_lang']);
-//					require(WPPIZZA_PATH .'inc/wpml.inc.php');
-//					require(WPPIZZA_PATH .'inc/wpml.gateways.inc.php');
-			}
-			/***get (possibly wpml'ed) options**/
-			$pOptions=$this->pluginOptions;
+			/**main wppizza options**/
+			$pOptions=$this->getPluginOptions();
 
 			/*****************************
 				get currency and position
@@ -178,7 +168,279 @@ if (!class_exists('WPPIZZA_ORDER_DETAILS')) {
 			//$order = apply_filters('wppizza_order_details_filter_order', $order, $pOptions);
 			return $order;
 		}
+		/************************************************
+		*
+		*	only get available keys, variables
+		*	in case we need them without an 
+		*	actual order (for sessions etc) 
+		*
+		*	@return array
+		************************************************/
+		function getOrderVariables(){
+			/**get main wppizza options**/
+			$pOptions=$this->getPluginOptions();
+			
+			/*initialize array**/
+			$vars=array();
+				
+			/*******************************************
+				customer
+			******************************************/
+			$vars['customer']=$this->getCustomerVariables(false,$pOptions);
+			/*******************************************
+				items
+			******************************************/
+			$vars['items']=$this->getItemVariables();			
+			
+			
+			return $vars;
+		}
+/**********************************************************************************************
+*
+*	===================NOT YET TO BE USED AS THEY WILL PROBABLY CHANGE====================
+*
+*
+*
+*	[helpers to only get variables/keys]
+*
+*
+*********************************************************************************************/
+		/**********************************************************************************************
+		*
+		*	[non-customer / non-order related db fields ]
+		* 	@$include - array of keys  to return. defaults to something sensible
+		*	
+		*	@return array();
+		*********************************************************************************************/
+		function getDbFields($include=array()){
 
+			$keys=array();
+			$keys['id']=array('key'=>'id', 'lbl'=>__('id',$this->pluginLocale));
+			$keys['wp_user_id']=array('key'=>'wp_user_id', 'lbl'=>__('wp user id',$this->pluginLocale));
+			$keys['order_date']=array('key'=>'order_date', 'lbl'=>__('order date',$this->pluginLocale));
+			$keys['order_update']=array('key'=>'order_update', 'lbl'=>__('order update',$this->pluginLocale));
+			$keys['order_status']=array('key'=>'order_status', 'lbl'=>__('order status',$this->pluginLocale));
+			$keys['payment_status']=array('key'=>'payment_status', 'lbl'=>__('payment status',$this->pluginLocale));
+			$keys['transaction_id']=array('key'=>'transaction_id', 'lbl'=>__('transaction id',$this->pluginLocale));
+			$keys['transaction_details']=array('key'=>'transaction_details', 'lbl'=>__('transaction details',$this->pluginLocale));
+			$keys['transaction_errors']=array('key'=>'transaction_errors', 'lbl'=>__('transaction errors',$this->pluginLocale));
+			$keys['initiator']=array('key'=>'initiator', 'lbl'=>__('initiator',$this->pluginLocale));
+			$keys['notes']=array('key'=>'notes', 'lbl'=>__('notes',$this->pluginLocale));
+			
+			
+			/* == the below are probably never required , but lets leave them here in case==*/
+			$columns['hash']=array('key'=>'hash', 'lbl'=>__('hash',$this->pluginLocale));
+			$columns['order_details']=array('key'=>'order_details', 'lbl'=>__('order_details output',$this->pluginLocale));
+			$columns['customer_details']=array('key'=>'customer_details', 'lbl'=>__('customer_details output',$this->pluginLocale));
+			$columns['order_ini']=array('key'=>'order_ini', 'lbl'=>__('order_ini array',$this->pluginLocale));
+			$columns['customer_ini']=array('key'=>'customer_ini', 'lbl'=>__('customer_ini array',$this->pluginLocale));
+			$columns['mail_construct']=array('key'=>'mail_construct', 'lbl'=>__('mail_construct',$this->pluginLocale));
+			$columns['mail_sent']=array('key'=>'mail_sent', 'lbl'=>__('mail_sent',$this->pluginLocale));
+			$columns['mail_error']=array('key'=>'mail_error', 'lbl'=>__('mail_error',$this->pluginLocale));	
+			
+
+			$columns=array();
+			foreach($include as $xKey){
+				$columns[$xKey]=$keys[$xKey];	
+			}
+
+			return $columns;
+		}
+		/**********************************************************************************************
+		*
+		*	[customer variables keys only]
+		*	sorted and disabled removed
+		*	@$all - return all vars, enabled or not
+		*	@$pOptions - main wppizza plugin options
+		*	@$exclude - exclude specific vars/keys
+		*
+		*	@return array()
+		*********************************************************************************************/
+		function getCustomerVariables($all=false, $pOptions=false, $exclude=array()){
+			
+			if(!$pOptions){
+				$pOptions=$this->getPluginOptions();
+			}
+			
+			$setFields=array();
+			asort($pOptions['order_form']);
+			foreach($pOptions['order_form'] as $k=>$v){
+				if($all || (!$all && $v['enabled'])){
+					$setFields[$v['key']]=$v;
+				}
+			}
+			/*apply any filters used*/
+			$setFields = apply_filters('wppizza_filter_order_form_fields', $setFields);
+			
+			/*any others to exclude ?*/
+			foreach($exclude as $xKey){
+				unset($setFields[$xKey]);	
+			}			
+						
+			return $setFields;
+		}		
+		/**********************************************************************************************	
+		*
+		*	[order items keys only]
+		* 	@$exclude - array of keys not to return
+		*	
+		*	@return array();
+		*********************************************************************************************/
+		function getItemVariables($exclude=array()){
+				$keys=array();
+				$keys['postId']=array('key'=>'postId', 'lbl'=>__('menu item id',$this->pluginLocale));
+				$keys['name']=array('key'=>'name', 'lbl'=>__('name',$this->pluginLocale));
+				$keys['size']=array('key'=>'size', 'lbl'=>__('size (id)',$this->pluginLocale));
+				$keys['quantity']=array('key'=>'quantity', 'lbl'=>__('quantity',$this->pluginLocale));
+				$keys['price']=array('key'=>'price', 'lbl'=>__('single item price',$this->pluginLocale));
+				$keys['pricetotal']=array('key'=>'pricetotal', 'lbl'=>__('subtotal item',$this->pluginLocale));
+				$keys['value']=array('key'=>'value', 'lbl'=>__('price without currency',$this->pluginLocale));
+				$keys['valuetotal']=array('key'=>'valuetotal', 'lbl'=>__('menu item id',$this->pluginLocale));
+				$keys['categories']=array('key'=>'categories', 'lbl'=>__('categories',$this->pluginLocale));
+				$keys['catIdSelected']=array('key'=>'catIdSelected', 'lbl'=>__('selected category',$this->pluginLocale));
+				$keys['currency']=array('key'=>'currency', 'lbl'=>__('currency',$this->pluginLocale));
+				$keys['addinfo']=array('key'=>'addinfo', 'lbl'=>__('additional info',$this->pluginLocale));
+				$keys['label']=array('key'=>'label', 'lbl'=>__('concat label',$this->pluginLocale));
+				
+				foreach($exclude as $xKey){
+					unset($keys[$xKey]);	
+				}
+			
+			return $keys;
+		}
+		/**********************************************************************************************
+		*	
+		*	[order summary keys only]
+		* 	@$exclude - array of keys not to return
+		*	
+		*	@return array();
+		*********************************************************************************************/
+		function getSummaryVariables($pOptions=false,$exclude=array()){
+			
+			if(!$pOptions){
+				$pOptions=$this->getPluginOptions();
+			}
+
+			/**********************************************************
+			*	[initialize array
+			**********************************************************/
+			$keys=array();
+			/**********************************************************
+			*	[cart items
+			**********************************************************/
+				$keys['cartitems']=array('key'=>'cartitems', 'lbl'=>($pOptions['localization']['order_items']['lbl']));
+			/**********************************************************
+			*	[discount]
+			**********************************************************/
+				$keys['discount']=array('key'=>'discount', 'lbl'=>($pOptions['localization']['discount']['lbl']));
+			/**********************************************************
+			*	[item tax - tax applied to items only]
+			**********************************************************/
+//			if($oDetails['item_tax']>0 && !($pOptions['order']['shipping_tax'])){
+//				$keys['item_tax']=array('key'=>'item_tax', 'lbl'=>($pOptions['localization']['item_tax_total']['lbl']));
+//			}
+			/**********************************************************
+			*	[delivery charges - no self pickup enabled or selected]
+			**********************************************************/
+//			if($pOptions['order']['delivery_selected']!='no_delivery'){/*delivery disabled*/
+//			if(!isset($oDetails['selfPickup']) || $oDetails['selfPickup']==0){
+//				if($oDetails['delivery_charges']!=''){
+//					$keys['delivery']=array('key'=>'delivery', 'lbl'=>($pOptions['localization']['delivery_charges']['lbl']));
+//				}else{
+//					$keys['delivery']=array('key'=>'delivery', 'lbl'=>($pOptions['localization']['free_delivery']['lbl']));
+//				}
+//			}
+//			}
+			/**********************************************************
+			*	[item tax - tax applied to items only]
+			**********************************************************/
+//			if($oDetails['item_tax']>0 && $pOptions['order']['shipping_tax']){
+//				$keys['item_tax']=array('key'=>'item_tax', 'lbl'=>($pOptions['localization']['item_tax_total']['lbl']));
+//			}
+
+			/**********************************************************
+			*	[taxes included]
+			**********************************************************/
+//			if($oDetails['taxes_included']>0 && $pOptions['order']['taxes_included']){
+//				$keys['taxes_included']=array('key'=>'taxes_included', 'lbl'=>sprintf(''.$pOptions['localization']['taxes_included']['lbl'].'',$pOptions['order']['item_tax']));
+//			}
+
+			/**********************************************************
+			*	[handling charges - (most likely to be used for vv payment)]
+			**********************************************************/
+//			if(isset($oDetails['handling_charge']) && $oDetails['handling_charge']>0){
+//				$keys['handling_charge']=array('key'=>'handling_charge', 'lbl'=>($pOptions['localization']['order_page_handling']['lbl']));
+//			}
+			/**********************************************************
+			*	[tips )]
+			**********************************************************/
+//			if(isset($oDetails['tips']) && $oDetails['tips']>0){
+//				$keys['tips']=array('key'=>'tips', 'lbl'=>($pOptions['localization']['tips']['lbl']));
+//			}
+			/**********************************************************
+				[order total]
+			**********************************************************/
+				$keys['total']=array('key'=>'total', 'lbl'=>($pOptions['localization']['order_total']['lbl']));
+			/****************************************************
+				[self pickup (enabled and selected) / no delivery offered ]
+			****************************************************/
+//			if(isset($oDetails['selfPickup']) && $oDetails['selfPickup']>=1){
+//				if($oDetails['selfPickup']==1){
+//					$keys['self_pickup']=array('key'=>'self_pickup', 'lbl'=>($pOptions['localization']['order_page_self_pickup']['lbl']));
+//				}
+//				if($oDetails['selfPickup']==2){
+//					$keys['self_pickup']=array('key'=>'self_pickup', 'lbl'=>($pOptions['localization']['order_page_no_delivery']['lbl']),'price'=>'','currency'=>'' );
+//				}
+//			}
+
+			/****************************************************
+				[allow filtering of summary]
+				currently disabled but perhaps needed in future for backwards compatibility :
+				$summary = apply_filters('wppizza_filter_order_summary_parameters_emails', $summary, $oDetails);
+			****************************************************/
+
+			/****************************************************
+				[simplify array taking account of currency left/right etc]
+			****************************************************/
+//			$summaryDetails=array();
+//			foreach($summary as $key=>$values){
+//				$summaryDetails[$key]['label']=$values['label'];
+//				$summaryDetails[$key]['value']=!empty($values['currency']) ? $currency['left'].$values['price'].$currency['right'] : $values['price'];
+//			}
+			
+	
+				foreach($exclude as $xKey){
+					unset($keys[$xKey]);	
+				}
+			
+			return $keys;
+		}
+		
+		/**********************************************************************************************
+		*
+		*	[site variables keys only]
+		* 	@$exclude - array of keys not to return
+		*	
+		*	@return array();
+		*********************************************************************************************/
+		function getSiteVariables($exclude=array('site_id','lang_id')){
+			$keys=array();
+			if(is_multisite()){
+				$keys['parent_site']=array('key'=>'parent_site', 'lbl'=>__('parent_ site',$this->pluginLocale));
+				$keys['site_id']=array('key'=>'blog_id', 'lbl'=>__('blog id',$this->pluginLocale));
+				$keys['blog_id']=array('key'=>'blog_id', 'lbl'=>__('blog id',$this->pluginLocale));
+			}
+			$keys['blogname']=array('key'=>'blogname', 'lbl'=>__('blogname',$this->pluginLocale));
+			$keys['siteurl']=array('key'=>'siteurl', 'lbl'=>__('siteurl',$this->pluginLocale));
+			$keys['lang_id']=array('key'=>'lang_id', 'lbl'=>__('lang id',$this->pluginLocale));
+			
+			
+			foreach($exclude as $xKey){
+				unset($keys[$xKey]);	
+			}
+			
+		return $keys;
+		}
 /**********************************************************************************************
 *
 *
@@ -186,6 +448,27 @@ if (!class_exists('WPPIZZA_ORDER_DETAILS')) {
 *
 *
 *********************************************************************************************/
+		/**********************************************************************************************
+		*
+		*	[get parent plugin options - private]
+		*
+		*********************************************************************************************/
+		private function getPluginOptions(){
+			/****************************************************************
+				include wpml to use translated localization variables.
+				will not affect items (they will always be the translated one's
+				or - more accurately - be the ones that were put in the cart
+				don't use require once
+			****************************************************************/
+		//			if($this->translate && function_exists('icl_translate') && isset($cDetails['wppizza_wpml_lang']) && $cDetails['wppizza_wpml_lang']!=''){
+		//					global $sitepress;
+		//					$sitepress->switch_lang($oCustomer['wppizza_wpml_lang']);
+		//					require(WPPIZZA_PATH .'inc/wpml.inc.php');
+		//					require(WPPIZZA_PATH .'inc/wpml.gateways.inc.php');
+		//			}
+			/***get (possibly wpml'ed) options**/
+			return $this->pluginOptions;			
+		}
 		/**********************************************************************************************
 		*
 		*	[order items - private]
@@ -246,7 +529,6 @@ if (!class_exists('WPPIZZA_ORDER_DETAILS')) {
 			return $items;
 		}
 
-
 		/**********************************************************************************************
 		*
 		*	[customer details - private]
@@ -255,12 +537,7 @@ if (!class_exists('WPPIZZA_ORDER_DETAILS')) {
 		private function getCustomerDetails($oCustomer,$pOptions){
 
 			/*get enabled plugin order form fields*/
-			$setFields=array();
-			foreach($pOptions['order_form'] as $k=>$v){
-				$setFields[$v['key']]=$v;
-			}
-			/*apply any filters used*/
-			$setFields = apply_filters('wppizza_filter_order_form_fields', $setFields);
+			$setFields=$this->getCustomerVariables($pOptions,true);
 
 
 			$customer=array();
@@ -304,8 +581,6 @@ if (!class_exists('WPPIZZA_ORDER_DETAILS')) {
 
 			return $customerDetails;
 		}
-
-
 
 		/**********************************************************************************************
 		*
