@@ -537,7 +537,7 @@ if (!class_exists('WPPIZZA_ORDER_DETAILS')) {
 		private function getCustomerDetails($oCustomer,$pOptions){
 
 			/*get enabled plugin order form fields*/
-			$setFields=$this->getCustomerVariables($pOptions,true);
+			$setFields=$this->getCustomerVariables(true, $pOptions);
 
 
 			$customer=array();
