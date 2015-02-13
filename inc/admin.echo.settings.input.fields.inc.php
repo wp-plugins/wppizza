@@ -33,14 +33,14 @@ $options = $this->pluginOptions;
 			}
 			
 			/**only displayed in multisite installs and on parent site**/
-			if($field=='wp_multisite_reports_all_sites' && $blog_id==BLOG_ID_CURRENT_SITE){
+			if($field=='wp_multisite_reports_all_sites'){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[plugin_data][".$field."]' type='checkbox'  ". checked($options['plugin_data'][$field],true,false)." value='1' />";
 				echo" <span class='description'>".__('check to have reporting to use all orders of all child sites', $this->pluginLocale)."</span>";
 				echo"<br /><span><b>".__('only applicable in parent site\'s reporting. reporting in child sites will only ever show values based on that sites orders', $this->pluginLocale)."</b></span>";
 				echo"<br /><span class='description' style='color:red'>".__('NOTE: THIS MIGHT SLOW THINGS DOWN IN THE ADMIN REPORTING PAGE OF YOUR MAIN/PARENT SITE CONSIDERABLY', $this->pluginLocale)."</span>";
 			}
 			/**only displayed in multisite installs and on parent site**/
-			if($field=='wp_multisite_order_history_all_sites' && $blog_id==BLOG_ID_CURRENT_SITE){
+			if($field=='wp_multisite_order_history_all_sites'){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[plugin_data][".$field."]' type='checkbox'  ". checked($options['plugin_data'][$field],true,false)." value='1' />";
 				echo" <span class='description'>".__('check to have order history to use all orders of all child sites', $this->pluginLocale)."</span>";
 				echo"<br /><span><b>".__('only applicable in parent site\'s order history. order history in child sites will only ever show values based on that sites orders', $this->pluginLocale)."</b></span>";

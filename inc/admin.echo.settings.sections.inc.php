@@ -18,9 +18,12 @@
 		/**multisite settings**/
 		add_settings_section('multisite','',  array( $this, 'wppizza_admin_page_text_header'), 'multisite');
 		add_settings_field('wp_multisite_session_per_site', '<b>'.__('Cart per site:', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'multisite', 'multisite', 'wp_multisite_session_per_site' );
-		add_settings_field('wp_multisite_reports_all_sites', '<b>'.__('Reports all subsites (WPPizza->Reports):', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'multisite', 'multisite', 'wp_multisite_reports_all_sites' );
-		add_settings_field('wp_multisite_order_history_all_sites', '<b>'.__('History all subsites (WPPizza->Order History):', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'multisite', 'multisite', 'wp_multisite_order_history_all_sites' );
-
+		/*parentonly*/
+		global $blog_id;
+		if(is_multisite() && $blog_id==BLOG_ID_CURRENT_SITE){
+			add_settings_field('wp_multisite_reports_all_sites', '<b>'.__('Reports all subsites (WPPizza->Reports):', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'multisite', 'multisite', 'wp_multisite_reports_all_sites' );
+			add_settings_field('wp_multisite_order_history_all_sites', '<b>'.__('History all subsites (WPPizza->Order History):', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'multisite', 'multisite', 'wp_multisite_order_history_all_sites' );
+		}
 		/**miscellaneous settings**/
 		add_settings_section('global_miscellaneous','',  array( $this, 'wppizza_admin_page_text_header'), 'global_miscellaneous');
 		add_settings_field('admin_order_history_max_results', '<b>'.__('Results order history:', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'global_miscellaneous', 'global_miscellaneous', 'admin_order_history_max_results' );
