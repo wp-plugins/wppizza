@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.3+, WP 3.3+ 
 Tested up to: 4.1
-Stable tag: 2.11.7.11
+Stable tag: 2.11.7.12
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -142,6 +142,12 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 
 == Changelog ==
+
+2.11.7.12
+* added: optionally set order history polling to be active on page load (and allow timer to be other than 30 secs as default). [wppizza->settings : miscellaneous]
+* tweak: some cart css tweaks for more theme compatibility  
+* added [internal]: additional methods in WPPIZZA_ORDER_DETAILS class (wppizza.order.details.inc.php)  
+19th February 2015  
 
 2.11.7.11
 * fix: admin order history - accidentally inverted 2 variables in  wppizza.order.details.inc.php  

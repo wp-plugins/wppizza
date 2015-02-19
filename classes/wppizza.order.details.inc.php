@@ -55,7 +55,7 @@ if (!class_exists('WPPIZZA_ORDER_DETAILS')) {
 			add_action('wppizza_orderhistory_item', array( $this, 'wppizza_items_show_order_print_category'));
 			/**output category name above each item group  (if enabled) **/
 			add_filter('wppizza_filter_print_order_single_item_category', array( $this, 'wppizza_items_print_category'),10,2);
-			
+
 		}
 /**********************************************************************************************
 *
@@ -92,12 +92,12 @@ if (!class_exists('WPPIZZA_ORDER_DETAILS')) {
 		function setSession($session){
 			$this->session=$session;
 		}
-		
+
 		/**********************************
 		*
 		*	get all order details as array
 		*
-		*	@return array		
+		*	@return array
 		**********************************/
 		function getOrder(){
 			global $wpdb;
@@ -105,7 +105,7 @@ if (!class_exists('WPPIZZA_ORDER_DETAILS')) {
 			if($this->blogId!='' && $this->blogId && (int)$this->blogId>1){
 				$wpdb->prefix=$wpdb->base_prefix . $this->blogId.'_';
 			}
-			$orderDetails = $wpdb->get_row("SELECT id, wp_user_id, order_date,  order_update, customer_ini, order_ini, transaction_id, initiator, payment_status, notes FROM " .$wpdb->prefix . "wppizza_orders WHERE id='".(int)$this->orderId."' ");
+			$orderDetails = $wpdb->get_row("SELECT id, wp_user_id, order_date,  order_update, order_status, customer_ini, order_ini, transaction_id, initiator, payment_status, notes FROM " .$wpdb->prefix . "wppizza_orders WHERE id='".(int)$this->orderId."' ");
 			if(!is_object($orderDetails)){$orderDetails=false; return $orderDetails;}
 
 			/**unserialize and filter order data**/
@@ -171,18 +171,18 @@ if (!class_exists('WPPIZZA_ORDER_DETAILS')) {
 		/************************************************
 		*
 		*	only get available keys, variables
-		*	in case we need them without an 
-		*	actual order (for sessions etc) 
+		*	in case we need them without an
+		*	actual order (for sessions etc)
 		*
 		*	@return array
 		************************************************/
 		function getOrderVariables(){
 			/**get main wppizza options**/
 			$pOptions=$this->getPluginOptions();
-			
+
 			/*initialize array**/
 			$vars=array();
-				
+
 			/*******************************************
 				customer
 			******************************************/
@@ -190,9 +190,9 @@ if (!class_exists('WPPIZZA_ORDER_DETAILS')) {
 			/*******************************************
 				items
 			******************************************/
-			$vars['items']=$this->getItemVariables();			
-			
-			
+			$vars['items']=$this->getItemVariables();
+
+
 			return $vars;
 		}
 /**********************************************************************************************
@@ -207,44 +207,108 @@ if (!class_exists('WPPIZZA_ORDER_DETAILS')) {
 *********************************************************************************************/
 		/**********************************************************************************************
 		*
-		*	[non-customer / non-order related db fields ]
+		*	CORRESPONDING TO KEYS AS SET IN getOrderDetails();
+		*
+		*	[other miscellaneous keys/variables ]
+		*
 		* 	@$include - array of keys  to return. defaults to something sensible
-		*	
+		* 	@$exclude - array of keys  to exclude. (priority over include)
+		*
 		*	@return array();
 		*********************************************************************************************/
-		function getDbFields($include=array()){
-
-			$keys=array();
-			$keys['id']=array('key'=>'id', 'lbl'=>__('id',$this->pluginLocale));
-			$keys['wp_user_id']=array('key'=>'wp_user_id', 'lbl'=>__('wp user id',$this->pluginLocale));
-			$keys['order_date']=array('key'=>'order_date', 'lbl'=>__('order date',$this->pluginLocale));
-			$keys['order_update']=array('key'=>'order_update', 'lbl'=>__('order update',$this->pluginLocale));
-			$keys['order_status']=array('key'=>'order_status', 'lbl'=>__('order status',$this->pluginLocale));
-			$keys['payment_status']=array('key'=>'payment_status', 'lbl'=>__('payment status',$this->pluginLocale));
-			$keys['transaction_id']=array('key'=>'transaction_id', 'lbl'=>__('transaction id',$this->pluginLocale));
-			$keys['transaction_details']=array('key'=>'transaction_details', 'lbl'=>__('transaction details',$this->pluginLocale));
-			$keys['transaction_errors']=array('key'=>'transaction_errors', 'lbl'=>__('transaction errors',$this->pluginLocale));
-			$keys['initiator']=array('key'=>'initiator', 'lbl'=>__('initiator',$this->pluginLocale));
-			$keys['notes']=array('key'=>'notes', 'lbl'=>__('notes',$this->pluginLocale));
-			
-			
-			/* == the below are probably never required , but lets leave them here in case==*/
-			$columns['hash']=array('key'=>'hash', 'lbl'=>__('hash',$this->pluginLocale));
-			$columns['order_details']=array('key'=>'order_details', 'lbl'=>__('order_details output',$this->pluginLocale));
-			$columns['customer_details']=array('key'=>'customer_details', 'lbl'=>__('customer_details output',$this->pluginLocale));
-			$columns['order_ini']=array('key'=>'order_ini', 'lbl'=>__('order_ini array',$this->pluginLocale));
-			$columns['customer_ini']=array('key'=>'customer_ini', 'lbl'=>__('customer_ini array',$this->pluginLocale));
-			$columns['mail_construct']=array('key'=>'mail_construct', 'lbl'=>__('mail_construct',$this->pluginLocale));
-			$columns['mail_sent']=array('key'=>'mail_sent', 'lbl'=>__('mail_sent',$this->pluginLocale));
-			$columns['mail_error']=array('key'=>'mail_error', 'lbl'=>__('mail_error',$this->pluginLocale));	
-			
-
-			$columns=array();
-			foreach($include as $xKey){
-				$columns[$xKey]=$keys[$xKey];	
+		function getDbFields($include=false,$exclude=false){
+			/*do some useful defaults**/
+			if(!$include || !is_array($include)){
+				$include=array('order_id','order_date','transaction_id','payment_type','payment_method','payment_due','pickup_delivery','total');
+				/*
+					other available: 'wp_user_id', 'order_update','payment_status','initiator','notes','total'
+				*/
 			}
 
+			/**get main wppizza options**/
+			$pOptions=$this->getPluginOptions();
+
+			/***********************
+				return array
+			***********************/
+			$orderDetails=array();/*ini*/
+
+			/*wp user id - currently unused*/
+			$orderDetails['wp_user_id']=array('key'=>'wp_user_id', 'label'=>$pOptions['localization']['common_label_order_wp_user_id']['lbl']);
+
+			/**order id*/
+			//$orderDetails['id']=array('key'=>'id', 'label'=>$pOptions['localization']['common_label_order_order_id']['lbl']);
+			$orderDetails['order_id']=array('key'=>'order_id', 'label'=>$pOptions['localization']['common_label_order_order_id']['lbl']);
+
+			/**transaction_id*/
+			$orderDetails['transaction_id']=array('key'=>'transaction_id', 'label'=>$pOptions['localization']['common_label_order_transaction_id']['lbl']);
+
+			/**order_date*/
+			$orderDetails['order_date']=array('key'=>'order_date', 'label'=>$pOptions['localization']['common_label_order_order_date']['lbl'] );
+
+			/**payment_type*/
+			$orderDetails['payment_type']=array('key'=>'payment_type', 'label'=>$pOptions['localization']['common_label_order_payment_type']['lbl']);
+
+			/**payment_status*/
+			$orderDetails['payment_method']=array('key'=>'payment_method', 'label'=>$pOptions['localization']['common_label_order_payment_method']['lbl']);
+
+			/**payment_due*/
+			$orderDetails['payment_due']=array('key'=>'payment_due', 'label'=>$pOptions['localization']['common_label_order_payment_outstanding']['lbl']);
+
+			/**currency - in use but without label*/
+			$orderDetails['currency']=array('key'=>'currency', 'label'=>$pOptions['localization']['common_label_order_currency']['lbl']);
+			$orderDetails['currencyiso']=array('key'=>'currencyiso', 'label'=>$pOptions['localization']['common_label_order_currency']['lbl']);
+
+			/**pickup/delivery**/
+			$orderDetails['pickup_delivery']=array('key'=>'pickup_delivery', 'label'=>$pOptions['localization']['common_label_order_delivery_type']['lbl']);
+
+			/*total add here too, might be useful*/
+			$orderDetails['total']=array('key'=>'total', 'label'=>$pOptions['localization']['order_total']['lbl']);
+
+
+			/*
+				currently unused variables without labels defined yet in localization
+				might come in useful somewhere one day
+			*/
+			//order_update
+			$orderDetails['order_update']=array('key'=>'order_update', 'label'=>__('Last Status Update', $this->pluginLocale));
+			//payment_status
+			$orderDetails['payment_status']=array('key'=>'payment_status', 'label'=>__('Payment Status', $this->pluginLocale));
+			//initiator
+			$orderDetails['initiator']=array('key'=>'initiator', 'label'=>__('Initiator', $this->pluginLocale));
+			//notes
+			$orderDetails['notes']=array('key'=>'notes', 'label'=>__('Notes', $this->pluginLocale));
+
+			/*
+				all others unused (not even returnd from db)
+				if we want to use these, make sure to set $wpdb->get_row("SELECT xx
+				as appropriate in getOrder() too
+				for the time being , i think these are wholly unnecessary to return anywhere
+
+				$orderDetails['hash']=array('key'=>'hash', 'label'=>__('Hash', $this->pluginLocale));
+				$orderDetails['transaction_details']=array('key'=>'transaction_details', 'label'=>__('Transaction Details', $this->pluginLocale));
+				$orderDetails['transaction_errors']=array('key'=>'transaction_errors', 'label'=>__('Transaction Errors', $this->pluginLocale));
+				$orderDetails['mail_construct']=array('key'=>'mail_construct', 'label'=>__('Mail Construct', $this->pluginLocale));
+				$orderDetails['mail_sent']=array('key'=>'mail_sent', 'label'=>__('Mail Sent ?', $this->pluginLocale));
+				$orderDetails['mail_error']=array('key'=>'mail_error', 'label'=>__('Mail Error', $this->pluginLocale));
+			*/
+
+
+			/**only INCLUDE set vars**/
+			$columns=array();
+			foreach($include as $xKey){
+				$columns[$xKey]=$orderDetails[$xKey];
+			}
+
+			/*any to exclude */
+			if($exclude && is_array($exclude)){
+			foreach($exclude as $xKey){
+				unset($columns[$xKey]);
+			}}
+
+
 			return $columns;
+
 		}
 		/**********************************************************************************************
 		*
@@ -254,14 +318,16 @@ if (!class_exists('WPPIZZA_ORDER_DETAILS')) {
 		*	@$pOptions - main wppizza plugin options
 		*	@$exclude - exclude specific vars/keys
 		*
+		*	note: ctips is a special case and should be excluded by default, but not excluded in getSummaryVariables
+		*
 		*	@return array()
 		*********************************************************************************************/
-		function getCustomerVariables($all=false, $pOptions=false, $exclude=array()){
-			
+		function getCustomerVariables($all=false, $pOptions=false, $exclude=array('ctips')){
+
 			if(!$pOptions){
 				$pOptions=$this->getPluginOptions();
 			}
-			
+
 			$setFields=array();
 			asort($pOptions['order_form']);
 			foreach($pOptions['order_form'] as $k=>$v){
@@ -271,55 +337,64 @@ if (!class_exists('WPPIZZA_ORDER_DETAILS')) {
 			}
 			/*apply any filters used*/
 			$setFields = apply_filters('wppizza_filter_order_form_fields', $setFields);
-			
+
 			/*any others to exclude ?*/
+			if($exclude && is_array($exclude)){
 			foreach($exclude as $xKey){
-				unset($setFields[$xKey]);	
-			}			
-						
+				unset($setFields[$xKey]);
+			}}
+
 			return $setFields;
-		}		
-		/**********************************************************************************************	
+		}
+		/**********************************************************************************************
 		*
 		*	[order items keys only]
-		* 	@$exclude - array of keys not to return
-		*	
+		* 	@$exclude - array of keys not to return (settings some sensble defaults)
+		*
 		*	@return array();
 		*********************************************************************************************/
-		function getItemVariables($exclude=array()){
-				$keys=array();
-				$keys['postId']=array('key'=>'postId', 'lbl'=>__('menu item id',$this->pluginLocale));
-				$keys['name']=array('key'=>'name', 'lbl'=>__('name',$this->pluginLocale));
-				$keys['size']=array('key'=>'size', 'lbl'=>__('size (id)',$this->pluginLocale));
-				$keys['quantity']=array('key'=>'quantity', 'lbl'=>__('quantity',$this->pluginLocale));
-				$keys['price']=array('key'=>'price', 'lbl'=>__('single item price',$this->pluginLocale));
-				$keys['pricetotal']=array('key'=>'pricetotal', 'lbl'=>__('subtotal item',$this->pluginLocale));
-				$keys['value']=array('key'=>'value', 'lbl'=>__('price without currency',$this->pluginLocale));
-				$keys['valuetotal']=array('key'=>'valuetotal', 'lbl'=>__('menu item id',$this->pluginLocale));
-				$keys['categories']=array('key'=>'categories', 'lbl'=>__('categories',$this->pluginLocale));
-				$keys['catIdSelected']=array('key'=>'catIdSelected', 'lbl'=>__('selected category',$this->pluginLocale));
-				$keys['currency']=array('key'=>'currency', 'lbl'=>__('currency',$this->pluginLocale));
-				$keys['addinfo']=array('key'=>'addinfo', 'lbl'=>__('additional info',$this->pluginLocale));
-				$keys['label']=array('key'=>'label', 'lbl'=>__('concat label',$this->pluginLocale));
-				
-				foreach($exclude as $xKey){
-					unset($keys[$xKey]);	
+		function getItemVariables($exclude=false){
+
+				/*do some useful defaults**/
+				if(!$exclude || !is_array($exclude)){
+					$exclude=array('postId', 'label', 'catIdSelected', 'currency', 'categories', 'value', 'valuetotal');
 				}
-			
+
+				$keys=array();
+				$keys['postId']=array('key'=>'postId', 'label'=>__('menu item id',$this->pluginLocale));
+				$keys['name']=array('key'=>'name', 'label'=>__('name',$this->pluginLocale));
+				$keys['size']=array('key'=>'size', 'label'=>__('size ',$this->pluginLocale));
+				$keys['quantity']=array('key'=>'quantity', 'label'=>__('quantity',$this->pluginLocale));
+				$keys['price']=array('key'=>'price', 'label'=>__('single item price',$this->pluginLocale));
+				$keys['pricetotal']=array('key'=>'pricetotal', 'label'=>__('subtotal item',$this->pluginLocale));
+				$keys['value']=array('key'=>'value', 'label'=>__('single item price [no currency]',$this->pluginLocale));
+				$keys['valuetotal']=array('key'=>'valuetotal', 'label'=>__('subtotal [no currency]',$this->pluginLocale));
+				$keys['categories']=array('key'=>'categories', 'label'=>__('categories',$this->pluginLocale));
+				$keys['catIdSelected']=array('key'=>'catIdSelected', 'label'=>__('selected category',$this->pluginLocale));
+				$keys['currency']=array('key'=>'currency', 'label'=>__('currency',$this->pluginLocale));
+				$keys['addinfo']=array('key'=>'addinfo', 'label'=>__('additional info',$this->pluginLocale));
+				$keys['label']=array('key'=>'label', 'label'=>__('premade label [for convenience]',$this->pluginLocale));
+
+				foreach($exclude as $xKey){
+					unset($keys[$xKey]);
+				}
+
 			return $keys;
 		}
 		/**********************************************************************************************
-		*	
+		*
 		*	[order summary keys only]
 		* 	@$exclude - array of keys not to return
-		*	
+		*
 		*	@return array();
 		*********************************************************************************************/
 		function getSummaryVariables($pOptions=false,$exclude=array()){
-			
+
 			if(!$pOptions){
 				$pOptions=$this->getPluginOptions();
 			}
+			/*which form fields are actually enabled ? (including tips here)*/
+			$fieldsEnabled=$this->getCustomerVariables(false, $pOptions, false);
 
 			/**********************************************************
 			*	[initialize array
@@ -328,117 +403,79 @@ if (!class_exists('WPPIZZA_ORDER_DETAILS')) {
 			/**********************************************************
 			*	[cart items
 			**********************************************************/
-				$keys['cartitems']=array('key'=>'cartitems', 'lbl'=>($pOptions['localization']['order_items']['lbl']));
+				$keys['cartitems']=array('key'=>'cartitems', 'label'=>($pOptions['localization']['order_items']['lbl']));
 			/**********************************************************
 			*	[discount]
 			**********************************************************/
-				$keys['discount']=array('key'=>'discount', 'lbl'=>($pOptions['localization']['discount']['lbl']));
+				$keys['discount']=array('key'=>'discount', 'label'=>($pOptions['localization']['discount']['lbl']));
 			/**********************************************************
-			*	[item tax - tax applied to items only]
+			*	[tax ]
 			**********************************************************/
-//			if($oDetails['item_tax']>0 && !($pOptions['order']['shipping_tax'])){
-//				$keys['item_tax']=array('key'=>'item_tax', 'lbl'=>($pOptions['localization']['item_tax_total']['lbl']));
-//			}
+				$keys['item_tax']=array('key'=>'item_tax', 'label'=>($pOptions['localization']['item_tax_total']['lbl']));
 			/**********************************************************
-			*	[delivery charges - no self pickup enabled or selected]
+			*	[delivery charges]
 			**********************************************************/
-//			if($pOptions['order']['delivery_selected']!='no_delivery'){/*delivery disabled*/
-//			if(!isset($oDetails['selfPickup']) || $oDetails['selfPickup']==0){
-//				if($oDetails['delivery_charges']!=''){
-//					$keys['delivery']=array('key'=>'delivery', 'lbl'=>($pOptions['localization']['delivery_charges']['lbl']));
-//				}else{
-//					$keys['delivery']=array('key'=>'delivery', 'lbl'=>($pOptions['localization']['free_delivery']['lbl']));
-//				}
-//			}
-//			}
-			/**********************************************************
-			*	[item tax - tax applied to items only]
-			**********************************************************/
-//			if($oDetails['item_tax']>0 && $pOptions['order']['shipping_tax']){
-//				$keys['item_tax']=array('key'=>'item_tax', 'lbl'=>($pOptions['localization']['item_tax_total']['lbl']));
-//			}
-
+			if($pOptions['order']['delivery_selected']!='no_delivery'){/*delivery disabled*/
+					$keys['delivery']=array('key'=>'delivery', 'label'=>($pOptions['localization']['delivery_charges']['lbl']));
+			}
 			/**********************************************************
 			*	[taxes included]
 			**********************************************************/
-//			if($oDetails['taxes_included']>0 && $pOptions['order']['taxes_included']){
-//				$keys['taxes_included']=array('key'=>'taxes_included', 'lbl'=>sprintf(''.$pOptions['localization']['taxes_included']['lbl'].'',$pOptions['order']['item_tax']));
-//			}
+			if($pOptions['order']['taxes_included']){
+				$keys['taxes_included']=array('key'=>'taxes_included', 'label'=>sprintf(''.$pOptions['localization']['taxes_included']['lbl'].'',$pOptions['order']['item_tax']));
+			}
 
 			/**********************************************************
-			*	[handling charges - (most likely to be used for vv payment)]
+			*	[handling charges - (most likely to be used for cc payment)]
 			**********************************************************/
-//			if(isset($oDetails['handling_charge']) && $oDetails['handling_charge']>0){
-//				$keys['handling_charge']=array('key'=>'handling_charge', 'lbl'=>($pOptions['localization']['order_page_handling']['lbl']));
-//			}
+				$keys['handling_charge']=array('key'=>'handling_charge', 'label'=>$pOptions['localization']['order_page_handling']['lbl']);
+
 			/**********************************************************
 			*	[tips )]
 			**********************************************************/
-//			if(isset($oDetails['tips']) && $oDetails['tips']>0){
-//				$keys['tips']=array('key'=>'tips', 'lbl'=>($pOptions['localization']['tips']['lbl']));
-//			}
+			if(isset($fieldsEnabled['ctips'])){
+				$keys['tips']=array('key'=>'tips', 'label'=>($pOptions['localization']['tips']['lbl']));
+			}
 			/**********************************************************
 				[order total]
 			**********************************************************/
-				$keys['total']=array('key'=>'total', 'lbl'=>($pOptions['localization']['order_total']['lbl']));
+				$keys['total']=array('key'=>'total', 'label'=>($pOptions['localization']['order_total']['lbl']));
 			/****************************************************
 				[self pickup (enabled and selected) / no delivery offered ]
 			****************************************************/
-//			if(isset($oDetails['selfPickup']) && $oDetails['selfPickup']>=1){
-//				if($oDetails['selfPickup']==1){
-//					$keys['self_pickup']=array('key'=>'self_pickup', 'lbl'=>($pOptions['localization']['order_page_self_pickup']['lbl']));
-//				}
-//				if($oDetails['selfPickup']==2){
-//					$keys['self_pickup']=array('key'=>'self_pickup', 'lbl'=>($pOptions['localization']['order_page_no_delivery']['lbl']),'price'=>'','currency'=>'' );
-//				}
-//			}
+				$keys['self_pickup']=array('key'=>'self_pickup', 'label'=>__('self pickup note',$this->pluginLocale) );
 
-			/****************************************************
-				[allow filtering of summary]
-				currently disabled but perhaps needed in future for backwards compatibility :
-				$summary = apply_filters('wppizza_filter_order_summary_parameters_emails', $summary, $oDetails);
-			****************************************************/
 
-			/****************************************************
-				[simplify array taking account of currency left/right etc]
-			****************************************************/
-//			$summaryDetails=array();
-//			foreach($summary as $key=>$values){
-//				$summaryDetails[$key]['label']=$values['label'];
-//				$summaryDetails[$key]['value']=!empty($values['currency']) ? $currency['left'].$values['price'].$currency['right'] : $values['price'];
-//			}
-			
-	
 				foreach($exclude as $xKey){
-					unset($keys[$xKey]);	
+					unset($keys[$xKey]);
 				}
-			
+
 			return $keys;
 		}
-		
+
 		/**********************************************************************************************
 		*
 		*	[site variables keys only]
-		* 	@$exclude - array of keys not to return
-		*	
+		* 	@$exclude - array of keys not to return (with somewhat sensible defaults)
+		*
 		*	@return array();
 		*********************************************************************************************/
 		function getSiteVariables($exclude=array('site_id','lang_id')){
 			$keys=array();
 			if(is_multisite()){
-				$keys['parent_site']=array('key'=>'parent_site', 'lbl'=>__('parent_ site',$this->pluginLocale));
-				$keys['site_id']=array('key'=>'blog_id', 'lbl'=>__('blog id',$this->pluginLocale));
-				$keys['blog_id']=array('key'=>'blog_id', 'lbl'=>__('blog id',$this->pluginLocale));
+				$keys['parent_site']=array('key'=>'parent_site', 'label'=>__('parent_ site',$this->pluginLocale));
+				$keys['site_id']=array('key'=>'blog_id', 'label'=>__('blog id',$this->pluginLocale));
+				$keys['blog_id']=array('key'=>'blog_id', 'label'=>__('blog id',$this->pluginLocale));
 			}
-			$keys['blogname']=array('key'=>'blogname', 'lbl'=>__('blogname',$this->pluginLocale));
-			$keys['siteurl']=array('key'=>'siteurl', 'lbl'=>__('siteurl',$this->pluginLocale));
-			$keys['lang_id']=array('key'=>'lang_id', 'lbl'=>__('lang id',$this->pluginLocale));
-			
-			
+			$keys['blogname']=array('key'=>'blogname', 'label'=>__('blogname',$this->pluginLocale));
+			$keys['siteurl']=array('key'=>'siteurl', 'label'=>__('siteurl',$this->pluginLocale));
+			$keys['lang_id']=array('key'=>'lang_id', 'label'=>__('lang id',$this->pluginLocale));
+
+
 			foreach($exclude as $xKey){
-				unset($keys[$xKey]);	
+				unset($keys[$xKey]);
 			}
-			
+
 		return $keys;
 		}
 /**********************************************************************************************
@@ -467,7 +504,7 @@ if (!class_exists('WPPIZZA_ORDER_DETAILS')) {
 		//					require(WPPIZZA_PATH .'inc/wpml.gateways.inc.php');
 		//			}
 			/***get (possibly wpml'ed) options**/
-			return $this->pluginOptions;			
+			return $this->pluginOptions;
 		}
 		/**********************************************************************************************
 		*
@@ -494,7 +531,7 @@ if (!class_exists('WPPIZZA_ORDER_DETAILS')) {
 				$items[$itemKey]['postId']			=$item['postId'];
 				$items[$itemKey]['name']			=$item['name'];
 				$items[$itemKey]['size']			=$item['size'];
-				$items[$itemKey]['quantity']		=$item['quantity'];
+				$items[$itemKey]['quantity']		=$item['quantity'].'x';
 				$items[$itemKey]['price']			=$currency['left'].$item['price'].$currency['right'];
 				$items[$itemKey]['pricetotal']		=$currency['left'].$item['pricetotal'].$currency['right'];
 				$items[$itemKey]['value']			=$item['price'];
@@ -685,7 +722,14 @@ if (!class_exists('WPPIZZA_ORDER_DETAILS')) {
 		*	[miscellaneous single order details - private]
 		*
 		*********************************************************************************************/
-		private function getOrderDetails($orderFields, $oDetails, $pOptions, $currency){
+		private function getOrderDetails($orderFields, $oDetails, $pOptions, $currency, $nolabel=false){
+
+			/**********************************
+				exclude some labels in front of output
+			**********************************/
+			if(!$nolabel || !is_array($nolabel)){
+				$nolabel['order_date']=true;//i think we should omit label for order date as it's obvious
+			}
 
 			/***********************
 				format some variables
@@ -752,36 +796,37 @@ if (!class_exists('WPPIZZA_ORDER_DETAILS')) {
 			$orderDetails=array();/*ini*/
 
 			/*wp user id - currently unused*/
-			$orderDetails['wp_user_id']=array('label'=>$pOptions['localization']['common_label_order_wp_user_id']['lbl'],'value'=>$orderFields->wp_user_id);
+			$orderDetails['wp_user_id']=array('label'=>!empty($nolabel['wp_user_id']) ? '' : $pOptions['localization']['common_label_order_wp_user_id']['lbl'],'value'=>$orderFields->wp_user_id);
 
 			/**order id*/
-			$orderDetails['order_id']=array('label'=>$pOptions['localization']['common_label_order_order_id']['lbl'],'value'=>$orderFields->id);
+			$orderDetails['id']=array('label'=>!empty($nolabel['id']) ? '' : $pOptions['localization']['common_label_order_order_id']['lbl'],'value'=>$orderFields->id);
+			$orderDetails['order_id']=array('label'=>!empty($nolabel['order_id']) ? '' : $pOptions['localization']['common_label_order_order_id']['lbl'],'value'=>$orderFields->id);
 
 			/**transaction_id*/
 			$orderFields->transaction_id = apply_filters('wppizza_filter_order_details_transaction_id', $orderFields->transaction_id, $orderFields->id );
-			$orderDetails['transaction_id']=array('label'=>$pOptions['localization']['common_label_order_transaction_id']['lbl'],'value'=>$orderFields->transaction_id);
+			$orderDetails['transaction_id']=array('label'=>!empty($nolabel['transaction_id']) ? '' : $pOptions['localization']['common_label_order_transaction_id']['lbl'],'value'=>$orderFields->transaction_id);
 
 			/**order_date*/
-			$orderDetails['order_date']=array('label'=>$pOptions['localization']['common_label_order_order_date']['lbl'],'value'=>$order_date);
+			$orderDetails['order_date']=array('label'=>!empty($nolabel['order_date']) ? '' : $pOptions['localization']['common_label_order_order_date']['lbl'],'value'=>$order_date);
 
 			/**payment_type*/
-			$orderDetails['payment_type']=array('label'=>$pOptions['localization']['common_label_order_payment_type']['lbl'],'value'=>$payment_type);
+			$orderDetails['payment_type']=array('label'=>!empty($nolabel['payment_type']) ? '' : $pOptions['localization']['common_label_order_payment_type']['lbl'],'value'=>$payment_type);
 
 			/**payment_status*/
-			$orderDetails['payment_method']=array('label'=>$pOptions['localization']['common_label_order_payment_method']['lbl'],'value'=>$payment_method);
+			$orderDetails['payment_method']=array('label'=>!empty($nolabel['payment_method']) ? '' : $pOptions['localization']['common_label_order_payment_method']['lbl'],'value'=>$payment_method);
 
 			/**payment_due*/
-			$orderDetails['payment_due']=array('label'=>$pOptions['localization']['common_label_order_payment_outstanding']['lbl'],'value'=>$payment_due);
+			$orderDetails['payment_due']=array('label'=>!empty($nolabel['payment_due']) ? '' : $pOptions['localization']['common_label_order_payment_outstanding']['lbl'],'value'=>$payment_due);
 
 			/**currency - in use but without label*/
-			$orderDetails['currency']=array('label'=>$pOptions['localization']['common_label_order_currency']['lbl'],'value'=>$currency['currency']);
-			$orderDetails['currencyiso']=array('label'=>$pOptions['localization']['common_label_order_currency']['lbl'],'value'=>$currency['currencyiso']);
+			$orderDetails['currency']=array('label'=>!empty($nolabel['currency']) ? '' : $pOptions['localization']['common_label_order_currency']['lbl'],'value'=>$currency['currency']);
+			$orderDetails['currencyiso']=array('label'=>!empty($nolabel['currencyiso']) ? '' : $pOptions['localization']['common_label_order_currency']['lbl'],'value'=>$currency['currencyiso']);
 
 			/**pickup/delivery**/
-			$orderDetails['pickup_delivery']=array('label'=>$pOptions['localization']['common_label_order_delivery_type']['lbl'],'value'=>$pickup_delivery);
+			$orderDetails['pickup_delivery']=array('label'=>!empty($nolabel['pickup_delivery']) ? '' : $pOptions['localization']['common_label_order_delivery_type']['lbl'],'value'=>$pickup_delivery);
 
 			/*total add here too, might be useful*/
-			$orderDetails['total']=array('label'=>$pOptions['localization']['order_total']['lbl'],'value'=>$currency['left'].wppizza_output_format_price($oDetails['total'],$pOptions['layout']['hide_decimals']).$currency['right']);
+			$orderDetails['total']=array('label'=>!empty($nolabel['total']) ? '' : $pOptions['localization']['order_total']['lbl'],'value'=>$currency['left'].wppizza_output_format_price($oDetails['total'],$pOptions['layout']['hide_decimals']).$currency['right']);
 
 
 			/*
@@ -809,23 +854,32 @@ if (!class_exists('WPPIZZA_ORDER_DETAILS')) {
 		*********************************************************************************************/
 		private function getSiteDetails($blogid){
 			$siteDetails=array();
-			
-			/*not multisite | no blogid*/
-			if(!is_multisite() || !$blogid){
-				return $siteDetails;	
+
+			/* no blogid*/
+			if(!$blogid){
+				return $siteDetails;
 			}
 			/*multisite*/
 			if($blogid){// && $blogid>1
-				global $blogid;
-				$sDetails=get_blog_details($blogid);
-				$siteDetails['site_id']=$sDetails->site_id;
-				$siteDetails['blog_id']=$sDetails->blog_id;
-				$siteDetails['lang_id']=$sDetails->lang_id;
-				$siteDetails['siteurl']=$sDetails->siteurl;
-				$siteDetails['blogname']=$sDetails->blogname;
-				$siteDetails['parent_site']=$sDetails->blog_id==BLOG_ID_CURRENT_SITE ? true : false;
+				if(is_multisite()){
+					$sDetails=get_blog_details($blogid);
+					$siteDetails['site_id']=$sDetails->site_id;
+					$siteDetails['blog_id']=$sDetails->blog_id;
+					$siteDetails['lang_id']=$sDetails->lang_id;
+					$siteDetails['siteurl']=$sDetails->siteurl;
+					$siteDetails['blogname']=$sDetails->blogname;
+					$siteDetails['parent_site']=$sDetails->blog_id==BLOG_ID_CURRENT_SITE ? true : false;
+				}
+				if(!is_multisite()){
+					$siteDetails['site_id']=1;
+					$siteDetails['blog_id']=1;
+					$siteDetails['lang_id']=get_bloginfo('language');
+					$siteDetails['siteurl']=get_bloginfo('url');
+					$siteDetails['blogname']=get_bloginfo('name');
+					$siteDetails['parent_site']=false;
+				}
 			}
-		
+
 			return $siteDetails;
 		}
 		/**********************************************************************************************

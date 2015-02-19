@@ -27,10 +27,11 @@
 		/**miscellaneous settings**/
 		add_settings_section('global_miscellaneous','',  array( $this, 'wppizza_admin_page_text_header'), 'global_miscellaneous');
 		add_settings_field('admin_order_history_max_results', '<b>'.__('Results order history:', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'global_miscellaneous', 'global_miscellaneous', 'admin_order_history_max_results' );
-		add_settings_field('use_old_admin_order_print', '<b>'.__('old style order printing', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'global_miscellaneous', 'global_miscellaneous', 'use_old_admin_order_print' );
-		add_settings_field('always_load_all_scripts_and_styles', '<b>'.__('load css and js on all pages', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'global_miscellaneous', 'global_miscellaneous', 'always_load_all_scripts_and_styles' );
-		add_settings_field('dequeue_scripts', '<b>'.__('dequeue wppizza scripts:', $this->pluginLocale).'</b><br /><span style="color:red">'.__('NOTE: if you dequeue any script other plugins rely on you WILL break things', $this->pluginLocale).'</span>', array( $this, 'wppizza_admin_settings_input'), 'global_miscellaneous', 'global_miscellaneous', 'dequeue_scripts' );
-		add_settings_field('experimental_js', '<b>'.__('experimental JavaScript', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'global_miscellaneous', 'global_miscellaneous', 'experimental_js' );
+		add_settings_field('admin_order_history_polling_auto', '<b>'.__('Order history - polling:', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'global_miscellaneous', 'global_miscellaneous', 'admin_order_history_polling_auto' );
+		add_settings_field('use_old_admin_order_print', '<b>'.__('Old style order printing', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'global_miscellaneous', 'global_miscellaneous', 'use_old_admin_order_print' );
+		add_settings_field('always_load_all_scripts_and_styles', '<b>'.__('Load css and js on all pages', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'global_miscellaneous', 'global_miscellaneous', 'always_load_all_scripts_and_styles' );
+		add_settings_field('dequeue_scripts', '<b>'.__('Dequeue wppizza scripts:', $this->pluginLocale).'</b><br /><span style="color:red">'.__('NOTE: if you dequeue any script other plugins rely on you WILL break things', $this->pluginLocale).'</span>', array( $this, 'wppizza_admin_settings_input'), 'global_miscellaneous', 'global_miscellaneous', 'dequeue_scripts' );
+		add_settings_field('experimental_js', '<b>'.__('Experimental JavaScript', $this->pluginLocale).'</b>', array( $this, 'wppizza_admin_settings_input'), 'global_miscellaneous', 'global_miscellaneous', 'experimental_js' );
 
 
 

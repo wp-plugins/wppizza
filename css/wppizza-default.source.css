@@ -36,7 +36,7 @@
 .wppizza-discounts>div{display:inline;margin:0 3px;}
 
 /**buy now and empty cart buttons below cart*/
-.wppizza-cart-button{font-weight:600;;padding:0;text-align:center;margin:2px}
+.wppizza-cart-button{font-weight:600;;padding:0;text-align:center;margin:2px;padding:0 !important}
 .wppizza-cart-button input{margin:0 1px;width:auto;height:auto !important; padding:4px 6px !important;line-height:100%;float:none}
 
 
@@ -47,8 +47,8 @@
 
 
 /**items in cart -> if the button below is quite big and makes the whole info spill into the cart contents, increase "bottom" size of .wppizza-order and adjust ".wppizza-cart" height **/
-/*NEW IN VERSION 2.0: changed bottom:100px to 108px to allow space for tax*/
-.wppizza-order{position:absolute;bottom:108px;top:0px;left:0;right:0;margin:0;border-bottom:1px dotted #999999;overflow:auto;}/*change bottom to allow more/less space for button*/
+/*NEW IN VERSION 2.0: changed bottom:100px to 115px to allow space for tax*/
+.wppizza-order{position:absolute;bottom:115px;top:0px;left:0;right:0;margin:0;border-bottom:1px dotted #999999;overflow:auto;padding:0!important}/*change bottom to allow more/less space for button*/
 .wppizza-order>p{text-align:center;}
 .wppizza-order>ul.wppizza-cart-contents{margin: 0 !important;padding: 0 !important;list-style: none;width:auto;}
 .wppizza-order>ul.wppizza-cart-contents>.wppizza-cart-item {text-align:left;background: none !important; margin:0 auto !important; padding:2px 0 !important;clear:both;border-bottom:1px dotted #DEDEDE;overflow:auto;font-size:90%;width:99%;line-height:110%}
@@ -145,7 +145,7 @@
 .wppizza-price-details .wppizza-total{font-weight:600}
 
 /**info minimum order (not)reached and price summary below cart contents*/
-.wppizza-cart-info{position:absolute;bottom:0;left:5px;right:5px;margin:0;padding:0;line-height:120%;font-size:90%}
+.wppizza-cart-info{position:absolute;bottom:0;left:5px;right:5px;margin:0;padding:0 !important;line-height:120%;font-size:90%}
 .wppizza-cart-info>.wppizza-cart-nocheckout{color:red;text-align:center;line-height:30px}
 .wppizza-cart-info>span{display:block;text-align:left}
 .wppizza-cart-info .wppizza-cart-info-price{float:right;font-size:100%;white-space:nowrap}

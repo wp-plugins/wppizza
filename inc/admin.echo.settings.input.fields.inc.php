@@ -24,6 +24,13 @@ $options = $this->pluginOptions;
 				echo "<input id='".$field."' name='".$this->pluginSlug."[plugin_data][".$field."]' size='2' type='text'  value='{$options['plugin_data']['admin_order_history_max_results']}' />";
 				echo" <span class='description'>".__('default number of results to show in admin order history', $this->pluginLocale)."</span>";
 			}
+
+			if($field=='admin_order_history_polling_auto'){
+				echo "<input id='".$field."' name='".$this->pluginSlug."[plugin_data][".$field."]' type='checkbox'  ". checked($options['plugin_data'][$field],true,false)." value='1' />";
+				echo" <span class='description'>".__('automatically activate order polling on page load', $this->pluginLocale)."</span><br />";
+				echo "<input id='admin_order_history_polling_time' name='".$this->pluginSlug."[plugin_data][admin_order_history_polling_time]' size='2' type='text'  value='{$options['plugin_data']['admin_order_history_polling_time']}' />";
+				echo" <span class='description'>".__('default polling time [in seconds]', $this->pluginLocale)."</span>";
+			}
 			
 			/**only displayed in multisite installs**/
 			if($field=='wp_multisite_session_per_site'){
@@ -938,8 +945,8 @@ $options = $this->pluginOptions;
 						echo " ".__('maximum results [0 to show all]', $this->pluginLocale)."<input id='".$field."_orders_limit' size='3' type='text' value='".$options['plugin_data']['admin_order_history_max_results']."' />";
 						echo "</span>";
 						echo "<span style='float:right;margin-right:50px;'>";
-						echo " ".__('poll for new orders every', $this->pluginLocale)."<input id='".$field."_orders_poll_interval' size='2' type='text' value='30' />".__('seconds', $this->pluginLocale)." ";
-						echo "<label class='button' style='margin-top:6px'><input id='".$field."_orders_poll_enabled' type='checkbox' value='1' />".__('on/off', $this->pluginLocale)."</span>";
+						echo " ".__('poll for new orders every', $this->pluginLocale)."<input id='".$field."_orders_poll_interval' size='2' type='text' value='".$options['plugin_data']['admin_order_history_polling_time']."' />".__('seconds', $this->pluginLocale)." ";
+						echo "<label class='button' style='margin-top:6px'><input id='".$field."_orders_poll_enabled' type='checkbox' ". checked($options['plugin_data']['admin_order_history_polling_auto'],true,false)." value='1' />".__('on/off', $this->pluginLocale)."</span>";
 								echo "<span id='wppizza-orders-polling'></span>";/*shows loading icon*/
 						echo "</label>";
 					echo"</div>";

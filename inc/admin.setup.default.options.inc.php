@@ -317,6 +317,8 @@
 				'experimental_js' => false,
 				'always_load_all_scripts_and_styles' => false,
 				'admin_order_history_max_results' => 20,
+				'admin_order_history_polling_auto' => false,
+				'admin_order_history_polling_time' => 30,
 				'nag_notice' => $this->pluginNagNotice
 			),
 			'cron'=>array(
