@@ -3279,6 +3279,7 @@ function wppizza_cat_parents($options, $blogid, $id, $separator =' &raquo; ', $p
 			/*override/entitydecode individual keys as required**/
 			foreach($orderItems as $k=>$v){
 				$oItems[$k]['name']=wppizza_email_decode_entities($v['name'],$this->blogCharset);
+				$oItems[$k]['size']=wppizza_email_decode_entities($v['size'],$this->blogCharset);
 				$oItems[$k]['label']=wppizza_email_decode_entities($v['label'],$this->blogCharset);
 				$oItems[$k]['value']=wppizza_email_decode_entities($v['value'],$this->blogCharset);
 				if(isset($v['categories']) && is_array($v['categories'])){
@@ -3294,9 +3295,7 @@ function wppizza_cat_parents($options, $blogid, $id, $separator =' &raquo; ', $p
 				unset($oItems[$k]['extend']);
 				unset($oItems[$k]['additionalInfo']);
 				unset($oItems[$k]['addinfo']);
-
-
-			}
+			}			
 			return $oItems;
 		}
 	}

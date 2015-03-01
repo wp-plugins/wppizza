@@ -764,7 +764,7 @@ if (!class_exists('WPPIZZA_ORDER_DETAILS')) {
 				$payment_type=!empty($gateways->pluginGateways[$gwIni]->gatewayOptions['gateway_label']) ? $gateways->pluginGateways[$gwIni]->gatewayOptions['gateway_label'] : $orderFields->initiator;
 
 				/*in case a customised non CC gateway was added, set back to Cash*/
-				if($gateways->pluginGateways[$gwIni]->gatewayTypeSubmit=='ajax'){
+				if(!empty($gateways->pluginGateways[$gwIni]->gatewayTypeSubmit) && $gateways->pluginGateways[$gwIni]->gatewayTypeSubmit=='ajax'){
 					$gw_payment_method='CASH';
 				}
 			}

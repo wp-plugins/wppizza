@@ -147,8 +147,6 @@
 		$items['JPY']='¥';
 		$items['JEP']='£';
 		$items['KZT']='&#1083;';
-		$items['KPW']='&#8361;';
-		$items['KRW']='&#8361;';
 		$items['KGS']='&#1083;';
 		$items['LAK']='&#8365;';
 		$items['LVL']='Ls';
@@ -206,6 +204,36 @@
 		$items['YER']='&#65020;';
 		$items['ZWD']='Z$';
 		$items['TRY']='&#8378;';
+		$items['TND']='&#1583;&#46;&#1578;';
+		$items['TND-ALT']='DT';
+		$items['AED']='&#1583;&#46;&#1573;';
+		$items['AOA']='Kz';
+		$items['BDT']='Tk';
+		$items['BHD']='BD';
+		$items['CVE']='$';
+		$items['DZD']='&#1583;&#1580;';
+		$items['DZD-ALT']='DA';
+		$items['ERN']='Nfk';
+		$items['ERN-ALT']='&#4755;&#4693;&#4939;';
+		$items['ETB']='Br';
+		$items['GNF']='FG';
+		$items['KWD']='&#1603;';
+		$items['LYD']='LD';
+		$items['MAD']='&#1583;&#46;&#1605;&#46;';
+		$items['MDL']='leu';
+		$items['MGA']='Ar';
+		$items['MMK']='K';
+		$items['MOP']='MOP$';
+		$items['MRO']='UM';
+		$items['MVR']='Rf';
+		$items['MVR-ALT']='&#1923;';
+		$items['MWK']='MK';
+		$items['PGK']='K';
+		$items['SDG']='&#1580;&#46;&#1587;&#46;';
+		$items['SLL']='Le';
+		$items['STD']='Db';
+
+		$items=apply_filters('wppizza_filter_currencies',$items);
 
 
 		if(!$returnValue){
