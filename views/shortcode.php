@@ -53,6 +53,8 @@ return $markup;
 		type='cart' 			(required [str])
  		openingtimes='1' 		(optional[bool]: anything. if its defined it gets displayed)
  		orderinfo=1				(optional[bool]: anything. if its defined it gets displayed)
+ 		stickycart=1			(optional[bool]: anything. if its defined it scrolls)
+ 		minicart=1				(optional[bool]: anything. if its defined it gets displayed)
  		width='200px' 			(optional[str]: value in px or % ) (although under 150px is probably bad)
  		height='200' 			(optional[str]: value in px )
 	example: 		[wppizza type='cart']
@@ -80,6 +82,13 @@ if($type=='cart'){
 			$markup = ob_get_clean();
 		}
 		$markup=apply_filters('wppizza_after_cart_markup',$markup);
+		
+		/**show mini cart if main cart out of view**/
+		if(isset($atts['minicart'])){
+			/**add minicart to show if main cart is out of view**/
+			add_action('wp_footer', array( $this, 'wppizza_mini_cart_if_cart_invisible'));
+		}		
+		
 	return $markup;
 	}
 }
@@ -137,6 +146,7 @@ if($type=='openingtimes'){
 	type='totals' (required [str])
 	value='items' (optional[str]) - if used , only displays value of items as ooposed to totals including delivery etc 
 	itemcount='left|right'  (optional [str]) - if used , count of item will be displayed left or right of the total 
+	checkout='bool | button' (optional. mixed) - set to 'button' will display a button to go to order page, anything else will wrap the whole thing into a link instead
 	example: 		[wppizza type='totals']
 	returns div that with current cart totals (loaded via js)
 **********************************************/

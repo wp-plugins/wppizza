@@ -100,14 +100,18 @@ $htmlEmailStyle = apply_filters('wppizza_filter_html_email_style', $htmlEmailSty
 <?php
 /**********************************************************
 
-	[customer details loop of all submittecd fields]
-
+	[customer details loop of all submitted fields]
+	
 ***********************************************************/
 ?>
+					<tr><td colspan="2">
+						<table width="100%" cellpadding="0" cellspacing="0" >
 <?php 	foreach($customer_details_array as $k=>$v){ ?>
-							<tr><td style="<?php echo $htmlEmailStyle['mailPadding']['2x15'] ?>;vertical-align:top"><?php echo $v['label']; ?></td><td><?php echo $v['value']; ?><td></tr>
+							<tr><td style="<?php echo $htmlEmailStyle['mailPadding']['2x15'] ?>;vertical-align:top;white-space:nowrap"><?php echo $v['label']; ?></td><td><?php echo $v['value']; ?><td></tr>
 <?php } ?>
-							<tr><td colspan="2" style="<?php echo $htmlEmailStyle['mailDivider'] ?>">&nbsp;</td></tr><?php /*add devider**/ ?>
+						</table>
+					</td></tr>
+					<tr><td colspan="2" style="<?php echo $htmlEmailStyle['mailDivider'] ?>">&nbsp;</td></tr><?php /*add devider**/ ?>
 
 <?php
 /**********************************************************

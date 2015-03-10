@@ -9,7 +9,7 @@ jQuery(document).ready(function($){
 	*	avoids double trigger as using 'click touchstart'
 	*	appears to trigger twice in Android devices
 	*
-	*	[DEPRECATED in favour of adding cursor:pointer to css 
+	*	[DEPRECATED in favour of adding cursor:pointer to css
 	*	for relevant elements]
 	*
 	*******************************************************/
@@ -235,7 +235,7 @@ jQuery(document).ready(function($){
 				return false;
 			}
 		});
-				
+
        /**do the update**/
        $(document).on(''+wppizzaClickEvent+'', '.wppizza-update-order', function(e){
        	/*get the elemenst and create a key value array to send to ajax**/
@@ -581,6 +581,30 @@ jQuery(document).ready(function($){
 	      			number: true
 	    		}
 	  		},
+	  		invalidHandler: function(form, validator) {
+
+		        if (!validator.numberOfInvalids()){
+		            return;
+		        }
+		        /**check if element is in view*/
+  				var errorElem = $(validator.errorList[0].element);
+    			var currentWindow = $(window);
+
+    			var docViewTop = currentWindow.scrollTop();
+    			var docViewBottom = docViewTop + currentWindow.height();
+
+			    var elemTop = errorElem.offset().top;
+    			var elemBottom = elemTop + errorElem.height();
+
+		        var inView= ((elemBottom <= docViewBottom) && (elemTop >= docViewTop));
+
+		        /**scroll into view if needed*/
+		        if(!inView){
+		        	$('html, body').animate({
+			            scrollTop: errorElem.offset().top-20
+		        	}, 300);
+		        }
+  			},
 			submitHandler: function(form) {
 				$('.wppizza-ordernow').attr('disabled', 'true');//stop double clicks
 				var hasClassAjax=false;
@@ -677,6 +701,7 @@ jQuery(document).ready(function($){
 				self.prepend('<div id="wppizza-loading"></div>');
 				$('#wppizza-user-login').empty().remove();
 				jQuery.post(wppizza.ajaxurl , {action :'wppizza_json',vars:{'type':'sendorder','data':self.serialize()}}, function(response) {
+					$('html, body').animate({scrollTop : 0},300);/*scroll to top*/
 					$('#wppizza-send-order #wppizza-loading').remove();
 					self.html('<div id="wppizza-order-received">'+response+'</div>');
 				},'html').error(function(jqXHR, textStatus, errorThrown) {$('#wppizza-send-order #wppizza-loading').remove();alert("error : " + errorThrown);console.log(jqXHR.responseText);});
@@ -731,31 +756,31 @@ jQuery(document).ready(function($){
 		/*if no cache, just exec sticky cart function*/
 		wppizzaCartStickyLoad();
 	}
-	
+
 	/***********************************************
 	*
 	*	hijacking other cpts (or just a button with dropdown elsewhere)
 	*	adding an add to cart button linked to a specific menu item
 	*	selecting from dropdown
-	***********************************************/	
+	***********************************************/
 	/*set id on trigger element when dropdown changes*/
 	$(document).on('change', '.wppizza-add-to-cart-size', function(e){
        	var self=$(this);
        	/**add class*/
        	//self.addClass('wppizza-add-to-cart');
-		/*get id*/       	
+		/*get id*/
        	var id=$(this).attr('id');
        	var postid=id.split('-').pop(-1);
-       	var selVal=$('#wppizza-add-to-cart-size-'+postid+'').val();		
+       	var selVal=$('#wppizza-add-to-cart-size-'+postid+'').val();
 		/*set id on element to trigger*/
-		var elm=self.closest('span').find('.wppizza-add-to-cart').prop('id', 'wppizza-'+selVal+'');		
+		var elm=self.closest('span').find('.wppizza-add-to-cart').prop('id', 'wppizza-'+selVal+'');
 	});
 	/**trigger click on element when button clicked*/
-	$(document).on(''+wppizzaClickEvent+'', '.wppizza-add-to-cart-select', function(e){	
+	$(document).on(''+wppizzaClickEvent+'', '.wppizza-add-to-cart-select', function(e){
 		var self=$(this);
 		var triggerElm=self.next();
 		triggerElm.trigger(''+wppizzaClickEvent+'');
-	});	
+	});
 	/***********************************************
 	*
 	*	[using totals shortcode,load via js]
@@ -767,6 +792,7 @@ jQuery(document).ready(function($){
 				var curr=$(".wppizza-totals-currency");
 				var total=$(".wppizza-total");
 				var itemcount=$(".wppizza-totals-itemcount");
+				var button=$(".wppizza-totals-checkout-button");
 
 				/**no items in cart**/
 				if(res.items.length<=0){
@@ -787,9 +813,80 @@ jQuery(document).ready(function($){
 						itemcount.html(res.itemcount);
 					}
 				}
+				/*print button (will be emoty if no item in cart**/
+				button.html(res.button);
+
 			},'json').error(function(jqXHR, textStatus, errorThrown) {$('#wppizza-send-order #wppizza-loading').remove();alert("error : " + errorThrown);console.log(jqXHR.responseText);});
 		}
 	}
 	wppizzaShortcodeTotals();
 
+	/***********************************************
+	*
+	*	[show minicart if main cart is not in view]
+	*	(provided it's enabled of course)
+	***********************************************/
+	wppizzaMiniCart = function(){
+		var miniCartElm=$("#wppizza-mini-cart");
+		var wppizzaCartCached=$(".wppizza-cart-nocache");
+
+		if (miniCartElm.length > 0){
+
+			/**get bottom of main cart element**/
+
+		        /**check if element is in view*/
+		        if(wppizzaCartCached.length>0){
+		        	/**using cart with cache**/
+		        	var mainCartElm = wppizzaCartCached;
+		        }else{
+  					var mainCartElm = $('.wppizza-cart');
+		        }
+		        
+    			var currentWindow = $(window);
+
+    			var docViewTop = currentWindow.scrollTop();
+    			var docViewBottom = docViewTop + currentWindow.height();
+
+			    var elemTop = mainCartElm.offset().top;
+    			var elemBottom = elemTop + mainCartElm.height();
+
+		        var inView= ((elemBottom <= docViewBottom) && (elemTop >= docViewTop));
+				var miniCartVisible=false;
+				/*fade in minicart if needed**/
+				if(!inView){
+					miniCartElm.fadeIn();
+					miniCartVisible=true;
+				}
+				var showMiniCart;
+				$(window).scroll(function () {
+
+					clearTimeout(showMiniCart);
+					showMiniCart=setTimeout(function(){
+
+						var docViewTopNow = $(window).scrollTop();
+						var docViewBottomNow = docViewTopNow + currentWindow.height();
+
+						/**
+							check if we need to show or hide minicart
+							depending om scroll position and set flag
+							accordingly
+						**/
+						if((elemTop>=docViewBottomNow || elemBottom<=docViewTopNow)){
+							if(!miniCartVisible){
+								miniCartElm.fadeIn(250);
+								miniCartVisible=true;
+							}
+						}else{
+							if(miniCartVisible){
+								miniCartElm.fadeOut(250);
+								miniCartVisible=false;
+							}
+						}
+					},300);
+				});
+		}
+	}
+	setTimeout(function(){
+		wppizzaMiniCart();
+	},500);
 });

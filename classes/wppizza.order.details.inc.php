@@ -32,6 +32,7 @@ if (!class_exists('WPPIZZA_ORDER_DETAILS')) {
 	public $rtl=false;
 	public $translate=false;
 	public $session=false;
+	public $type='order_history_print';
 
 /**********************************************************************************************
 *
@@ -55,6 +56,10 @@ if (!class_exists('WPPIZZA_ORDER_DETAILS')) {
 			add_action('wppizza_orderhistory_item', array( $this, 'wppizza_items_show_order_print_category'));
 			/**output category name above each item group  (if enabled) **/
 			add_filter('wppizza_filter_print_order_single_item_category', array( $this, 'wppizza_items_print_category'),10,2);
+			/**filter localization depending some options set **/
+			add_filter('wppizza_filter_order_details_localization', array( $this, 'wppizza_filter_order_details_localization'),10,4);
+			/**filter multisite - to get differences between current site and site where order was made**/
+			add_filter('wppizza_filter_order_details_multisite', array( $this, 'wppizza_filter_order_details_multisite'),10,4);
 
 		}
 /**********************************************************************************************
@@ -92,7 +97,10 @@ if (!class_exists('WPPIZZA_ORDER_DETAILS')) {
 		function setSession($session){
 			$this->session=$session;
 		}
-
+		/* to identify type. defaults to 'order_history_print', but can be used - in future - to use different filters etc for html email, plaintext emails, frontend order history, thank you pages etc etc */
+		function setType($type){
+			$this->type=$type;
+		}
 		/**********************************
 		*
 		*	get all order details as array
@@ -143,6 +151,20 @@ if (!class_exists('WPPIZZA_ORDER_DETAILS')) {
 				******************************************/
 				$order['site']=$this->getSiteDetails($this->blogId);
 				/******************************************
+					parent site details (useful in multisite)
+					might return the same as site if order
+					was made at parent
+				******************************************/
+				$order['parent_site']=$this->getSiteDetails($this->blogId, $order['site']);
+				/******************************************
+					return any differences there might be between
+					current site and site the order was made on (if any)
+					returns empty array if current site == parent site
+					or we are not in a multisite setup
+				******************************************/
+				$order['multisite']=$this->blogsCompare($this->blogId, $order['site']);
+				$order['multisite'] = apply_filters('wppizza_filter_order_details_multisite', $order['multisite'], $this->blogId, $pOptions, $this->type);
+				/******************************************
 					customer
 				******************************************/
 				$order['customer']=$this->getCustomerDetails($oCustomer,$pOptions);
@@ -157,7 +179,9 @@ if (!class_exists('WPPIZZA_ORDER_DETAILS')) {
 				/******************************************
 					localization
 				******************************************/
-				$order['localization']=$this->getLocalization($pOptions);
+				$order['localization'] = $this->getLocalization($pOptions);
+				/*[multisite setup, parent site only], when displaying orders from ALL sites in parent site, use header/address from site order was made at (if enabled in wppizza->settings))**/
+				$order['localization'] = apply_filters('wppizza_filter_order_details_localization', $order['localization'], $pOptions, $this->blogId, $this->type);
 				/****************************************
 					other order vars (date/payment type/notes  etc)
 				*****************************************/
@@ -478,13 +502,13 @@ if (!class_exists('WPPIZZA_ORDER_DETAILS')) {
 
 		return $keys;
 		}
-/**********************************************************************************************
+/**********************************************************************************************************************************************************
 *
 *
 *	[private methods]
 *
 *
-*********************************************************************************************/
+**********************************************************************************************************************************************************/
 		/**********************************************************************************************
 		*
 		*	[get parent plugin options - private]
@@ -852,17 +876,28 @@ if (!class_exists('WPPIZZA_ORDER_DETAILS')) {
 		*	[site details  - private - return '' if not multisite to start off with]
 		*
 		*********************************************************************************************/
-		private function getSiteDetails($blogid){
+		private function getSiteDetails($blogid, $siteOfOrder=false){
 			$siteDetails=array();
 
 			/* no blogid*/
-			if(!$blogid){
+			if(!$blogid || $blogid==''){
 				return $siteDetails;
 			}
 			/*multisite*/
 			if($blogid){// && $blogid>1
 				if(is_multisite()){
-					$sDetails=get_blog_details($blogid);
+					/**get parents details if different**/
+					if($siteOfOrder && is_array($siteOfOrder)){
+						/**same as site, just return site details we already have**/
+						if($blogid==BLOG_ID_CURRENT_SITE){
+							$sDetails=$siteOfOrder;
+							return $sDetails;
+						}else{
+							$sDetails=get_blog_details(BLOG_ID_CURRENT_SITE);
+						}
+					}else{
+						$sDetails=get_blog_details($blogid);
+					}
 					$siteDetails['site_id']=$sDetails->site_id;
 					$siteDetails['blog_id']=$sDetails->blog_id;
 					$siteDetails['lang_id']=$sDetails->lang_id;
@@ -882,6 +917,34 @@ if (!class_exists('WPPIZZA_ORDER_DETAILS')) {
 
 			return $siteDetails;
 		}
+
+		/**********************************************************************************************
+		*
+		*	[get differences - if any - between site where oder was made and current (parent) site]
+		*
+		*********************************************************************************************/
+		private function blogsCompare($blogid, $site){
+			$differences=array();
+
+			if(is_multisite()){
+				/**same blog, return empty array**/
+				if(!$blogid || $blogid=='' || $blogid==BLOG_ID_CURRENT_SITE){
+					return $differences;
+				}
+				/**blogid is not parent and not empty, return child site details **/
+				else{
+					$differences=$site;
+					/**switch to child blog add localization vars**/
+					switch_to_blog($blogid);
+					/**switch and get options from blog we switched to **/
+					$blogOptions=get_option(WPPIZZA_SLUG);
+					$differences['localization']=$this->getLocalization($blogOptions);
+					/**restore**/
+					restore_current_blog();
+				}
+			}
+			return $differences;
+		}
 		/**********************************************************************************************
 		*
 		*	[localization variables - private]
@@ -900,6 +963,137 @@ if (!class_exists('WPPIZZA_ORDER_DETAILS')) {
 				}
 			}
 			return $txt;
+		}
+
+
+/**********************************************************************************************************************************************************
+*
+*
+*	[filters]
+*	i think there is a better place for those, but for the time being leave them here
+*
+**********************************************************************************************************************************************************/
+		/**********************************************************************************************
+		*
+		*
+		*	[localization variables - filter depending on options - only in multisite setups]
+		*
+		*	this will no doubt grow / change over time allowing for more options
+		*
+		*
+		*********************************************************************************************/
+		function wppizza_filter_order_details_localization($localization, $pOptions, $blogId, $type){
+
+			/*************************
+
+				multisite only
+
+			**************************/
+			if(is_multisite()){
+				/**
+					check if we need to switch blog,
+				**/
+				$switchBlog=false;
+				if($blogId!=BLOG_ID_CURRENT_SITE){
+					$switchBlog=true;
+				}
+				/*
+					if we actually need to switch blogs
+					otherwise don't change do anything
+				*/
+				if($switchBlog){
+
+					/** now switch blog **/
+					switch_to_blog($blogId);
+
+					/*******************************************************************************
+					*
+					*
+					*	filter -> order history print
+					*
+					*
+					*******************************************************************************/
+					if($type=='order_history_print'){
+
+						/************
+							parent site only, set to display ALL orders from ALL sites
+							will be false for child sites.
+							alter name and address in header
+						************/
+						if($pOptions['plugin_data']['wp_multisite_order_history_all_sites'] && !empty($pOptions['plugin_data']['wp_multisite_order_history_print']['header_from_child'])){
+
+							/**switch and get options from blog we switched to **/
+							$switchedBlogWppizzaOptions=get_option(WPPIZZA_SLUG);
+
+							/**set name and address**/
+							$localization['header_order_print_header']=$switchedBlogWppizzaOptions['localization']['header_order_print_header']['lbl'];
+							$localization['header_order_print_shop_address']=$switchedBlogWppizzaOptions['localization']['header_order_print_shop_address']['lbl'];
+						}
+					}
+
+
+					/**restore current blog **/
+					restore_current_blog();
+				}
+			}
+
+
+			return $localization;
+		}
+		/**********************************************************************************************
+		*
+		*
+		*	[multisite]
+		*	get the info of the site where the order was ORIGINALLY made
+		*	for example: on multisite parent sites we can print orders from all child sites which
+		*	by default would print the header/info of the parent site
+		*	if we also want to display the info of the site where the order was originally made we can use the returned vars below
+		*
+		*	returns empty array if not on parent site, not in multisite setups or site of order == parent site
+		*********************************************************************************************/
+		function wppizza_filter_order_details_multisite($multiSiteInfo, $blogId, $pOptions, $type){
+
+			/*not multisite or no info available**/
+			if(!is_multisite()  || empty($blogId) || count($multiSiteInfo)<=0){
+				return array();
+			}
+
+
+			/*******************************************************************************
+			*
+			*	filter -> order history print
+			*	print small blogname under timestamp if current site differs from site where
+			*	order was made. UNSETS ALL OTHER VARS
+			*
+			*******************************************************************************/
+			if($type=='order_history_print'){
+			 	/**************
+			 		order was made on child site => $blogId will not be empty
+			 		AND
+			 		we are on parent site with orders from all sites showing
+			 		AND
+			 		we are NOT using headers from sites where order was made
+			 		AND
+			 		we want to display small original site name under order date
+			 	*************/
+			 	if(	!empty($blogId) &&
+			 		!empty($pOptions['plugin_data']['wp_multisite_order_history_all_sites']) &&
+			 		empty($pOptions['plugin_data']['wp_multisite_order_history_print']['header_from_child']) &&
+			 		!empty($pOptions['plugin_data']['wp_multisite_order_history_print']['multisite_info'])
+			 	){
+
+					/**only return site name**/
+					$showInfo=array();
+					$showInfo['header_order_print_header']=$multiSiteInfo['localization']['header_order_print_header'];
+					/*if someone wants to override it*/
+					$showInfo = apply_filters('wppizza_filter_order_details_multisite_print_order', $showInfo, $multiSiteInfo, $blogId, $pOptions);
+
+				return $showInfo;
+			 	}
+			}
+
+
+			return array();
 		}
 	}
 }

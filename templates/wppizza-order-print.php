@@ -34,9 +34,9 @@ if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/
 			return $vars;
 		}
 	*#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#*/
-	/****************
+	/**********************************************************
 		css
-	****************/
+	**********************************************************/
 	/*globals*/
 	$style['global']='html,body,table,tbody,tr,td,th,span{margin:0;padding:0;text-align:left;}';
 	$style['global_font']='html,body,table,tbody,tr,td,th,span{font-size:12px;font-family:Arial, Verdana, Helvetica, sans-serif}';
@@ -47,6 +47,9 @@ if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/
 	$style['header']='#header{margin:0}';
 	$style['header_td']='#header #head td{font-size:200%;text-align:center;}';
 	$style['address']='#header #address td{white-space:nowrap;font-size:130%;text-align:center;padding-bottom:5px;}';
+	/*multisite*/
+	$style['multisite']='#multisite{margin:0}';
+	$style['multisite_td']='#multisite tbody>tr>td{text-align:center}';	
 	/*overview*/
 	$style['overview_th']='#overview{margin:0}';
 	$style['overview_th']='#overview th{border-top:1px solid;border-bottom:1px solid;font-size:120%;text-align:center}';
@@ -112,13 +115,13 @@ if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/
 	*#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#*/
 ?>
 <?php
-/*****************************************************************
+/***********************************************************************************************************
 *
 *
 *	[start output ->  doctype/html/title/styles/body etc]
 *
 *
-******************************************************************/
+************************************************************************************************************/
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
@@ -129,11 +132,15 @@ if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/
 	</head>
 <body>
 <?php
-/****************************************************************************
+/**********************************************************************************************************************
+*
+*
 *
 *	[header: restaurant name and address for example]
 *
-****************************************************************************/
+*
+*
+**********************************************************************************************************************/
 	/***********************
 	*
 	*	[create output header]
@@ -188,18 +195,70 @@ if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/
 
 ?>
 <?php
-/****************************************************************************
+/**********************************************************************************************************************
+*
+*
+*
+*	[multisite only]
+*	if enabled, print name of site WHERE ORDER WAS MADE if different from site displayed in header above
+*
+*
+*
+**********************************************************************************************************************/
+	if(is_multisite() && is_array($multiSite) && count($multiSite)>0){
+		/***********************
+		*
+		*	[create output multisite info]
+		*
+		***********************/
+		$mTable['tableOpen']='<table id="multisite">';
+
+		/*header*/
+		$mTable['tableHeader']='';
+
+		/*footer*/
+		$mTable['tableFooter']='';
+
+		/*body*/
+		$mTable['tableBodyOpen']='<tbody>';
+			/*currently return site name [header_order_print_header](as set in localization of site) if different from the one printed above*/
+			/*override with add_filter('wppizza_filter_order_details_multisite_print_order','my_function',10,4); as required**/
+			foreach($multiSite as $key=>$item){
+				$mTable[$key]='<tr id="'.$key.'"><td>'.$item.'</td></tr>';
+			}
+		$mTable['tableBodyClose']='</tbody>';
+		
+		$mTable['tableClose']='</table>';
+
+		/**************************
+			allow filtering and
+			implode for output
+		***************************/
+		$mTable = apply_filters('wppizza_filter_print_order_multisite_output', $mTable, $order);
+		$mTable = implode(PHP_EOL,$mTable);
+		/***********************
+		*
+		*	[add to output]
+		*
+		***********************/
+		$output['multisite']=$mTable;
+	}
+?>
+<?php
+/**********************************************************************************************************************
+*
 *
 *
 *	[overview of order details: date, transactionId , gateway used etc etc ]
 *
 *
-****************************************************************************/
-	/***********************
+*
+**********************************************************************************************************************/
+	/*********************************
 	*
 	*	[create output overview]
 	*
-	***********************/
+	*********************************/
 	$oTable['tableOpen']='<table id="overview">';
 
 		/*header*/
@@ -207,20 +266,40 @@ if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/
 		$oTable['tableHeader'].=''.$orderDetails['order_date']['value'].'';
 		
 		/**************************
-			multisite only, 
-			allows us to ident site (parent only)
+			multisite only
+			allows us to ident site if different from current
+			(if parent sites show history from all subsites)
 		**************************/
-		if(is_multisite() && $siteDetails['parent_site'] && $options['plugin_data']['wp_multisite_order_history_all_sites'] ){
-			$multisiteHeader=array();
-			if(!empty($siteDetails['blogname']) && $siteDetails['blogname']!=''){
-				$multisiteHeader['blogname']='<br /><span id="blogname">'.$siteDetails['blogname'].'</span>';
-			}
-			/**************************
-				allow filtering and implode for output
-			***************************/
-			$multisiteHeader = apply_filters('wppizza_filter_print_order_overview_multisite_header', $multisiteHeader, $order);			
-			$oTable['tableHeader'].= implode(PHP_EOL,$multisiteHeader);
-		}
+//		if(is_multisite()){
+//			
+//			$multisiteHeader=array();
+//			/**
+//				get all (if any) differences between current and parent site
+//				currently filtered to only show blogname
+//			**/
+//			if(is_array($multiSite)){
+//			foreach($multiSite as $key=>$item){
+//				$multisiteHeader[$key]='<br /><span id="'.$key.'">'.$item.'</span>';
+//			}}
+//			/**************************
+//				allow filtering and implode for output
+//			***************************/
+//			$multisiteHeader = apply_filters('wppizza_filter_print_order_overview_multisite_header', $multisiteHeader, $order);		
+//			$oTable['tableHeader'].= implode(PHP_EOL,$multisiteHeader);
+//			
+//			
+//		
+//		if(is_multisite() && !$siteDetails['parent_site'] && $options['plugin_data']['wp_multisite_order_history_all_sites'] ){
+//			$multisiteHeader=array();
+//			if(!empty($siteDetails['blogname']) && $siteDetails['blogname']!=''){
+//				$multisiteHeader['blogname']='<br /><span id="blogname">'.$siteDetails['blogname'].'</span>';
+//			}
+//			/**************************
+//				allow filtering and implode for output
+//			***************************/
+//			$multisiteHeader = apply_filters('wppizza_filter_print_order_overview_multisite_header', $multisiteHeader, $order);			
+//			$oTable['tableHeader'].= implode(PHP_EOL,$multisiteHeader);
+//		}
 		/**************************
 			multisite only end
 		**************************/		
@@ -293,13 +372,15 @@ if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/
 	*#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#*/
 ?>
 <?php
-/****************************************************************************
+/**********************************************************************************************************************
+*
 *
 *
 *	[customer details: whatever fields where enabled on order page]
 *
 *
-****************************************************************************/
+*
+**********************************************************************************************************************/
 	/***********************
 	*
 	*	[customer details]
@@ -411,13 +492,15 @@ if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/
 	*#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#*/
 ?>
 <?php
-/****************************************************************************
+/**********************************************************************************************************************
+*
 *
 *
 *	[order/item details]
 *
 *
-****************************************************************************/
+*
+**********************************************************************************************************************/
 	/***********************
 	*
 	*	[items]
@@ -549,13 +632,15 @@ if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/
 	*#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#*/
 ?>
 <?php
-/************************************************************************************************
+/*********************************************************************************************************************
+*
 *
 *
 *	[order summary: price/tax/discount/delivery options etc]
 *
 *
-************************************************************************************************/
+*
+*********************************************************************************************************************/
 	/***********************
 	*
 	*	[details]
@@ -628,14 +713,16 @@ if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/
 	*#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#*/
 ?>
 <?php
-/****************************************************************************
+/**********************************************************************************************************************
+*
 *
 *
 *	[allow filter (to change order of blocks for example)
 *	, then implode and actually output]
 *
 *
-****************************************************************************/
+*
+**********************************************************************************************************************/
 	$output=apply_filters('wppizza_filter_print_order_output', $output, $order);
 	$output=implode(PHP_EOL,$output);
 	echo $output;
@@ -664,10 +751,10 @@ if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/
 	*#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#**#*#*#*/
 ?>
 <?php
-/*****************************************************************
+/*********************************************************************************************************************
 *
 *	[end  -> close body/html]
 *
-******************************************************************/
+**********************************************************************************************************************/
 ?>
 </body></html>

@@ -1772,7 +1772,7 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 				$stickycart='wppizza-cart-sticky';
 			}
 
-			/**dsiaply order info like discounts and delivery costs**/
+			/**display order info like discounts and delivery costs**/
 			if(isset($atts['orderinfo'])){
 				$orderinfo=true;
 			}
@@ -2049,6 +2049,28 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 			return;
 		}
 }
+
+
+	/*******************************************************
+     *
+     *	add minicart on pages that have the cart to show 
+     *	if main cart is out of view (mobile/scrolling)
+     *
+     ******************************************************/
+	function wppizza_mini_cart_if_cart_invisible(){
+		static $c=0;$c++;
+		/*really only once**/
+		if($c==1){
+		$atts['checkout']='button';
+		
+		$atts = apply_filters('wppizza_filter_minicart_atts', $atts);
+
+		$options = $this->pluginOptions;
+		$markup = wppizza_frontendTotals($options,$atts);		
+
+		echo'<div id="wppizza-mini-cart">'.$markup.'</div>';
+		}
+	}
 	/*******************************************************
      *
      *	add hidden input/div  - when open - to orderpage

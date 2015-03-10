@@ -5,8 +5,8 @@ Author URI: http://www.wp-pizza.com
 Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax
 Requires at least: PHP 5.3+, WP 3.3+ 
-Tested up to: 4.1
-Stable tag: 2.11.7.13
+Tested up to: 4.1.1
+Stable tag: 2.11.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -142,6 +142,17 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 
 == Changelog ==
+
+2.11.8  
+* multisite (parent site only - order history print): allow header of "print order" to use child sites blogname instead of parent site's name [wppizza->settings]. only applicable if displaying all orders of all sites in order history.
+* multisite (parent site only - order history print): allow display of site name *where order was made* .only applicable if displaying all orders of all sites in order history and header is set to show info of parent site.
+* added: automatically scroll to missing required input fields (if not already in view) on order and confirmation pages  
+* added: automatically scroll to top on thank you page if required  
+* added: option to dynamically add a minicart to top of page if main cart is not in view (enable in widget or per shortcode attribute minicart=1)  
+* tweak: minor css adjustments in cart  
+* tweak: wrapped customr details in html emails into their own table tag to not affect td widths in other elements    
+10th March 2015  
+
 
 2.11.7.13  
 * added: more currencies / alternative currency displays  

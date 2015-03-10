@@ -39,6 +39,16 @@
 			$options['plugin_data']['wp_multisite_session_per_site'] = !empty($input['plugin_data']['wp_multisite_session_per_site']) ? true : false;
 			$options['plugin_data']['wp_multisite_reports_all_sites'] = !empty($input['plugin_data']['wp_multisite_reports_all_sites']) ? true : false;
 			$options['plugin_data']['wp_multisite_order_history_all_sites'] = !empty($input['plugin_data']['wp_multisite_order_history_all_sites']) ? true : false;
+			
+			/**save as array so - in future - we can enable / disable parts with checkboxes etc without having to use filters or editing templates*/
+			$options['plugin_data']['wp_multisite_order_history_print'] =array();//default
+			if(is_multisite()){
+				$options['plugin_data']['wp_multisite_order_history_print']['header_from_child']  = !empty($input['plugin_data']['wp_multisite_order_history_print']['header_from_child']) ? true : false;
+				$options['plugin_data']['wp_multisite_order_history_print']['multisite_info']  = !empty($input['plugin_data']['wp_multisite_order_history_print']['multisite_info']) ? true : false;
+			}
+			
+			
+			
 			/*if not multisite use defaults*/
 			if(!is_multisite()){
 				$options['plugin_data']['wp_multisite_session_per_site'] =true;

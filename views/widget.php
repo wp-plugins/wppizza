@@ -21,6 +21,9 @@
 		if(isset( $instance['stickycart']) && $instance['stickycart']!=''){
 			$wdgArgs[]='stickycart="1"';
 		}
+		if(isset( $instance['minicart']) && $instance['minicart']!=''){
+			$wdgArgs[]='minicart="1"';
+		}		
 		if(isset( $instance['orderinfo']) && $instance['orderinfo']!=''){
 			$wdgArgs[]='orderinfo="1"';
 		}

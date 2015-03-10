@@ -52,6 +52,17 @@ $options = $this->pluginOptions;
 				echo" <span class='description'>".__('check to have order history to use all orders of all child sites', $this->pluginLocale)."</span>";
 				echo"<br /><span><b>".__('only applicable in parent site\'s order history. order history in child sites will only ever show values based on that sites orders', $this->pluginLocale)."</b></span>";
 				echo"<br /><span class='description' style='color:red'>".__('NOTE: THIS MIGHT SLOW THINGS DOWN IN THE ADMIN ORDER HISTORY PAGE OF YOUR MAIN/PARENT SITE CONSIDERABLY', $this->pluginLocale)."</span>";
+				
+				echo"<br />";
+				echo"<br /><strong>".__('Order history print options', $this->pluginLocale)."</strong>";
+				echo"<br />";
+				echo "<input id='wp_multisite_order_history_print_header_from_child' name='".$this->pluginSlug."[plugin_data][wp_multisite_order_history_print][header_from_child]' type='checkbox'  ". checked(!empty($options['plugin_data']['wp_multisite_order_history_print']['header_from_child']),true,false)." value='1' />";
+				echo" <span class='description'>".__('use header name/address of site <b>where the order was made</b> (set in localization : Print Order Admin - [Header] | Print Order Admin - [Address] <b>of that site</b>)', $this->pluginLocale)."</span>";
+				
+				echo"<br />";
+				echo "<input id='wp_multisite_order_history_print_multisite_info' name='".$this->pluginSlug."[plugin_data][wp_multisite_order_history_print][multisite_info]' type='checkbox'  ". checked(!empty($options['plugin_data']['wp_multisite_order_history_print']['multisite_info']),true,false)." value='1' />";
+				echo" <span class='description'>".__('add small display of order site\'s name if different from name in header [e.g if header displays parent name/address, but order was made at child site]', $this->pluginLocale)."</span>";
+				
 			}
 
 

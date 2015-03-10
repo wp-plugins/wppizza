@@ -133,7 +133,7 @@
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff',endColorstr='#ffe6e6e6',GradientType=0);
     filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
 }
-.wppizza-cart-item>.wppizza-cart-incr{padding:2px;margin:0;font-size:90%;width:20px !important;}
+.wppizza-cart-item>.wppizza-cart-incr{padding:2px;margin:0;font-size:90%;width:25px !important;height:22px;line-height:22px;}
 
 /**-----END NEW IN VERSION 2.5----***/
 
@@ -421,6 +421,16 @@ h2.wppizza-article-title{padding-bottom:0;margin:0}
 .wppizza-totals-checkout{text-decoration:none;color:inherit !important}
 .wppizza-totals-checkout:hover{text-decoration:underline;color:inherit !important}
 .wppizza-totals-checkout:visited{color:inherit !important}
+/************************
+*
+*	[absolute top minicart ]
+*
+************************/
+#wppizza-mini-cart{display:none;position:fixed;	z-index:1000;	top:0;	left:0;	right:0;background-color:#FFFFFF;margin:0;padding:5px 0;text-align:center;border-bottom:1px solid #cecece;opacity:0.9;color:#333333}
+#wppizza-mini-cart>div.wppizza-totals{margin:0 auto;display:inline;font-size:90%}
+#wppizza-mini-cart>div.wppizza-totals:before{content: url('img/cart-black-12-12.png');margin:0 3px 0 0;padding:0}
+#wppizza-mini-cart span.wppizza-totals-checkout-button{margin-left:5px}
+#wppizza-mini-cart span.wppizza-totals-checkout-button input{padding:3px;margin 0 3px}
 /************************
 *	[iOS (iPhone,iPad)]
 *	add distinct cursor:pointer to relevant elements 

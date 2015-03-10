@@ -345,7 +345,7 @@
 		/**link the whole shebang to order page if att set**/
 		$summary['checkout_a_href']='';
 		$summary['checkout_a_close']='';
-		if(isset($atts['checkout']) && $options['order']['orderpage'] && $options['order']['orderpage']!=''){
+		if(isset($atts['checkout']) && $atts['checkout']!='button'  && $options['order']['orderpage'] && $options['order']['orderpage']!=''){
 			/**wpml select of order page**/
 			if(function_exists('icl_object_id')) {
 				$options['order']['orderpage']=icl_object_id($options['order']['orderpage'],'page');
@@ -358,6 +358,13 @@
 			$summary['checkout_a_href'].='<a href="'.$summary['orderpagelink'].'"  class="wppizza-totals-checkout" title="'.$options['localization']['place_your_order']['lbl'].'">';
 			$summary['checkout_a_close'].='</a>';
 		}
+
+		/**set dedicated button instead of just a link**/		
+		$summary['checkoutbutton']='';
+		if(isset($atts['checkout']) && $atts['checkout']=='button'  && $options['order']['orderpage'] && $options['order']['orderpage']!=''){
+			/*create button*/
+			$summary['checkoutbutton']='<span class="wppizza-totals-checkout-button"></span>';					
+		}		
 		
 		$output=array();
 		$output['wrapopen']='<div class="wppizza-totals">';
@@ -376,6 +383,10 @@
 			$output['count']=$summary['itemcount_right'];
 		}
 		$output['ahrefclose']=$summary['checkout_a_close'];
+		
+		$output['checkoutbutton']=$summary['checkoutbutton'];
+		
+		
 		$output['wrapclose']='</div>';
 
 		/*filter**/		
@@ -790,7 +801,7 @@ function wppizza_order_summary($session,$options,$module=null,$ajax=null){
 			the item is categorised in.
 			90% of the time there will only be one anyway, so this would be correct.
 			worst case scenario, an enexpected (although not wrong) category will be displayed
-			{all of this is only relevant anyway if "show category for emails etc" is enabled in layout
+			all of this is only relevant anyway if "show category for emails etc" is enabled in layout
 		*******************************************************************************************/
 		if($v['catIdSelected']==''){
 			$firstCat=reset($catArray);

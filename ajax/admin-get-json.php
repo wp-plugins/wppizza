@@ -1,5 +1,5 @@
 <?php
-error_reporting(0);
+//error_reporting(0);
 if(!defined('DOING_AJAX') || !DOING_AJAX){
 	header('HTTP/1.0 400 Bad Request', true, 400);
 	print"you cannot call this script directly";
@@ -770,6 +770,7 @@ $output='';
 		simplify vars to us in template
 		********************************/
 		$siteDetails=$order['site'];
+		$multiSite=$order['multisite'];
 		$orderDetails=$order['ordervars'];
 		$txt=$order['localization'];
 		$customerDetails=$order['customer']['post'];//omit ['others'] here
