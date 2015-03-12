@@ -685,6 +685,7 @@ function wppizza_order_summary($session,$options,$module=null,$ajax=null){
 	$session = apply_filters('wppizza_filter_order_summary_session', $session);
 	$options = apply_filters('wppizza_filter_order_summary_options', $options);
 
+
 	/***************************************************
 		[in i some vars if undefined]
 	***************************************************/
@@ -887,8 +888,6 @@ function wppizza_order_summary($session,$options,$module=null,$ajax=null){
 
 
 
-
-
 			/**********************************
 				[delivery]
 			**********************************/
@@ -1072,9 +1071,14 @@ function wppizza_order_summary($session,$options,$module=null,$ajax=null){
 					***********************************************************/
 					$calcTaxSum=0;
 					$calcItemsSum=0;
-					foreach($summary['items'] as $item){
-						$calcTaxSum+=$item['pricetotal']/100*$item['taxrate'];
-						$calcItemsSum+=$item['pricetotal'];
+					foreach($groupedItems as $giKey=>$item){
+						/*
+							taxrate from summary as it does not exist in grouped items yet
+						*/
+						$itemTaxRate=$summary['items'][$giKey]['taxrate'];						
+
+						$calcTaxSum+=$item['total']/100*$itemTaxRate;
+						$calcItemsSum+=$item['total'];
 					}
 					/***if cart is empty, use defaults to avoid division by zero notice***/
 					if($calcItemsSum<=0){
@@ -1123,13 +1127,22 @@ function wppizza_order_summary($session,$options,$module=null,$ajax=null){
 					*	as we may have different taxrates on different items
 					*	and need to make sure that dicounts - as they are before tax -
 					*	are applied correctly, we must calculate the resulting taxrate
+					*	
+					*	as $summary['items'] might already by formatted to have prices 
+					*	with commas, use the prices from grouped items
 					***********************************************************/
 					$calcTaxSum=0;
 					$calcItemsSumBeforeTax=0;
-					foreach($summary['items'] as $item){
-						$calcTaxItem=$item['pricetotal']/(100+$item['taxrate'])*$item['taxrate'];/*tax on this item**/
+					foreach($groupedItems as $giKey=>$item){
+
+						/*
+							taxrate from summary as it does not exist in grouped items yet
+						*/
+						$itemTaxRate=$summary['items'][$giKey]['taxrate'];
+
+						$calcTaxItem=$item['total']/(100+$itemTaxRate)*$itemTaxRate;/*tax on this item**/
 						$calcTaxSum+=$calcTaxItem;
-						$calcItemsSumBeforeTax+=$item['pricetotal']-$calcTaxItem;
+						$calcItemsSumBeforeTax+=$item['total']-$calcTaxItem;
 					}
 					/***if cart is empty, use defaults to avoid division by zero notice***/
 					if($calcItemsSumBeforeTax<=0){
