@@ -136,12 +136,14 @@
 			$options['layout']['jquery_fb_add_to_cart'] = !empty($input['layout']['jquery_fb_add_to_cart']) ? true : false;
 			$options['layout']['jquery_fb_add_to_cart_ms']=absint($input['layout']['jquery_fb_add_to_cart_ms']);
 			$options['layout']['element_name_refresh_page']=wppizza_validate_string($input['layout']['element_name_refresh_page']);
+			$options['layout']['minicart_max_width_active']=wppizza_validate_int_only($input['layout']['minicart_max_width_active']);
 
 			$options['opening_times_format']['hour']=wppizza_validate_string($input['opening_times_format']['hour']);
 			$options['opening_times_format']['separator']=wppizza_validate_string($input['opening_times_format']['separator']);
 			$options['opening_times_format']['minute']=wppizza_validate_string($input['opening_times_format']['minute']);
 			$options['opening_times_format']['ampm']=wppizza_validate_string($input['opening_times_format']['ampm']);
-
+			
+			
 		}
 		/**validate opening_times settings***/
 		if(isset($_POST[''.$this->pluginSlug.'_opening_times'])){

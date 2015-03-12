@@ -358,6 +358,7 @@
 				'items_category_hierarchy_cart' => 'parent',
 				'items_category_separator' => ' &raquo; ',
 				'sticky_cart_animation' =>450,
+				'minicart_max_width_active'=>0,
 				'sticky_cart_animation_style' =>'',
 				'sticky_cart_margin_top' =>20,
 				'sticky_cart_background' =>'inherit',

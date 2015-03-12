@@ -832,61 +832,78 @@ jQuery(document).ready(function($){
 
 		if (miniCartElm.length > 0){
 
-			/**get bottom of main cart element**/
-
-		        /**check if element is in view*/
-		        if(wppizzaCartCached.length>0){
-		        	/**using cart with cache**/
-		        	var mainCartElm = wppizzaCartCached;
-		        }else{
-  					var mainCartElm = $('.wppizza-cart');
-		        }
-		        
-    			var currentWindow = $(window);
-
-    			var docViewTop = currentWindow.scrollTop();
-    			var docViewBottom = docViewTop + currentWindow.height();
-
-			    var elemTop = mainCartElm.offset().top;
-    			var elemBottom = elemTop + mainCartElm.height();
-
-		        var inView= ((elemBottom <= docViewBottom) && (elemTop >= docViewTop));
-				var miniCartVisible=false;
-				/*fade in minicart if needed**/
-				if(!inView){
-					miniCartElm.fadeIn();
-					miniCartVisible=true;
-				}
-				var showMiniCart;
-				$(window).scroll(function () {
-
+			/**current window**/
+			var currentWindow = $(window);
+			/**get the element in use*/
+			if(wppizzaCartCached.length>0){
+				/**using cart with cache**/
+				var mainCartElm = wppizzaCartCached;
+			}else{
+				var mainCartElm = $('.wppizza-cart');
+			}
+			var miniCartIni=true;
+			
+			/**on initial load**/		        
+		    setTimeout(function(){
+		    	wppizzaMiniCartDo(currentWindow, miniCartElm, mainCartElm);
+		    	miniCartIni=false;
+		    },500);
+		    
+		    /**on scroll**/
+		    var showMiniCart;
+			$(window).scroll(function () {
+				/**only on subsequent scrolls not when page is already scrolled on load*/
+				if(!miniCartIni){
 					clearTimeout(showMiniCart);
 					showMiniCart=setTimeout(function(){
-
-						var docViewTopNow = $(window).scrollTop();
-						var docViewBottomNow = docViewTopNow + currentWindow.height();
-
-						/**
-							check if we need to show or hide minicart
-							depending om scroll position and set flag
-							accordingly
-						**/
-						if((elemTop>=docViewBottomNow || elemBottom<=docViewTopNow)){
-							if(!miniCartVisible){
-								miniCartElm.fadeIn(250);
-								miniCartVisible=true;
-							}
-						}else{
-							if(miniCartVisible){
-								miniCartElm.fadeOut(250);
-								miniCartVisible=false;
-							}
-						}
+						wppizzaMiniCartDo(currentWindow, miniCartElm, mainCartElm);
 					},300);
-				});
+				}
+			});
+		    /**on resize**/    
+		    $(window).resize(function() {
+				/**only on subsequent scrolls not when page is already scrolled on load*/
+				if(!miniCartIni){
+					clearTimeout(showMiniCart);
+					showMiniCart=setTimeout(function(){
+						wppizzaMiniCartDo(currentWindow, miniCartElm, mainCartElm);
+					},300);
+				}
+			});
 		}
 	}
-	setTimeout(function(){
-		wppizzaMiniCart();
-	},500);
+	wppizzaMiniCart();
+	
+	var wppizzaMiniCartDo = function(currentWindow, miniCartElm, mainCartElm){	
+		/*get width**/
+    	var docViewWidth = currentWindow.width();
+    	/*max width**/
+    	if(typeof wppizza.crt.mCartMaxWidth !=='undefined'){
+    		var docWidthLimit=wppizza.crt.mCartMaxWidth;
+    	}
+    	
+		/**skip if wider than max width set or on oderpage**/
+		if((typeof docWidthLimit !=='undefined' && docViewWidth>docWidthLimit) || typeof wppizza.isCheckout!=='undefined'){
+			/*in case its still visible*/
+			if(miniCartElm.is(':visible')){
+				miniCartElm.fadeOut(250);	
+			}
+			return;
+		}
+    	
+    	var docViewTop = currentWindow.scrollTop();
+    	var docViewBottom = docViewTop + currentWindow.height();
+		var elemTop = mainCartElm.offset().top;
+		var elemBottom = elemTop + mainCartElm.height();
+		var notInView= (elemBottom<=docViewTop || elemTop>=docViewBottom);
+		/*fade in minicart if needed**/
+		if(notInView && miniCartElm.not(':visible')){
+			miniCartElm.fadeIn();
+		}
+		
+		if(!notInView && miniCartElm.is(':visible')){
+			miniCartElm.fadeOut(250);		
+		}
+	};
+
 });

@@ -386,6 +386,11 @@ $options = $this->pluginOptions;
 				echo " <input id='' name='".$this->pluginSlug."[layout][sticky_cart_limit_bottom_elm_id]' size='5' type='text'  value='{$options['layout']['sticky_cart_limit_bottom_elm_id']}' />";
 				echo" <span class='description'>".__('If you want to have a sticky cart NOT scroll further down that the TOP of a particular element that is further down on the page (might be useful in som layouts/themes), set that elements ID here [leave blank to ignore]', $this->pluginLocale)."</span>";
 			}
+			if($field=='minicart_max_width_active'){
+				echo "<input name='".$this->pluginSlug."[layout][".$field."]' size='2' type='text'  value='{$options['layout'][$field]}' />";
+				echo" <span class='description'>".__('max browser width - in px - up to which the min/small cart will be shown. useful to set for themes that, under a certain browser window width, change to a responsive design that moves elements to different places. [0 to ignore]', $this->pluginLocale)."</span>";			
+			}
+			
 			if($field=='opening_times_standard'){
 				echo"<div id='wppizza_".$field."'>";
 				foreach(wppizza_days() as $k=>$v){

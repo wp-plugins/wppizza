@@ -143,6 +143,11 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 == Changelog ==
 
+2.11.8.1  
+* tweak: option to enable minicart/small cart only for a set maximum bowser size 
+* fix: minicart/small cart display did not always behave accurately on page load  
+11th March 2015  
+
 2.11.8  
 * multisite (parent site only - order history print): allow header of "print order" to use child sites blogname instead of parent site's name [wppizza->settings]. only applicable if displaying all orders of all sites in order history.
 * multisite (parent site only - order history print): allow display of site name *where order was made* .only applicable if displaying all orders of all sites in order history and header is set to show info of parent site.

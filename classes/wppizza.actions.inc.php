@@ -2802,12 +2802,9 @@ public function wppizza_require_common_input_validation_functions(){
 			$localized_array['opt']=$localized_options;
 		}
 
-
-
-
-
 		/**sticky cart settings**/
 			$localized_array['crt']=array();
+
 			$localized_array['crt']['anim']=$options['layout']['sticky_cart_animation'];
 			$localized_array['crt']['fx']=$options['layout']['sticky_cart_animation_style'];
 			$localized_array['crt']['mt']=$options['layout']['sticky_cart_margin_top'];
@@ -2815,7 +2812,10 @@ public function wppizza_require_common_input_validation_functions(){
 			if($options['layout']['sticky_cart_limit_bottom_elm_id']!=''){
 			$localized_array['crt']['lmtb']=$options['layout']['sticky_cart_limit_bottom_elm_id'];
 			}
-
+			/**minicart max width**/
+			if($options['layout']['minicart_max_width_active']>0){
+				$localized_array['crt']['mCartMaxWidth']=$options['layout']['minicart_max_width_active'];
+			}
 			if($options['layout']['jquery_fb_add_to_cart']!=''){
 				$localized_array['itm']['fbatc']=$options['localization']['jquery_fb_add_to_cart_info']['lbl'];
 				$localized_array['itm']['fbatcms']=$options['layout']['jquery_fb_add_to_cart_ms'];

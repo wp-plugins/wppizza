@@ -125,7 +125,7 @@
 				<br />
 				<input class="checkbox" type="checkbox" id="<?php echo $this->get_field_id('minicart'); ?>" name="<?php echo $this->get_field_name('minicart'); ?>" <?php checked($minicart,true,true) ?> value="1" />
 		    	<label for="<?php echo $this->get_field_id( 'minicart' ); ?>"><?php _e("Add small cart to top of screen if main cart not in view", $this->pluginLocale); ?></label><br/>
-		    	<small style="margin-left:10px"><?php _e("you probably do NOT want to use this with the above scrolling option", $this->pluginLocale); ?></small>
+		    	<small style="margin-left:10px"><?php _e("See also WPPizza->Layout->small cart for additional options", $this->pluginLocale); ?></small>
 			</p>
 
 			<p class="<?php echo $this->pluginSlug; ?>-selected-search" <?php if($type=='search'){echo "style='display:block'";}else{echo "style='display:none'";} ?>>
