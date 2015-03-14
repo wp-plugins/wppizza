@@ -28,7 +28,7 @@ $htmlEmailStyle['vLinkColor']='#21759B';
 $htmlEmailStyle['categories']='padding:5px 0 0 5px;margin:0;text-decoration:underline';/**used when showing categories too*/
 $htmlEmailStyle['mailBackgroundColor']='#F4F3F4';
 $htmlEmailStyle['mailHeaderBackgroundColor']='#21759B';
-$htmlEmailStyle['mailHeaderBackgroundImage']="";//something like: background:url('http://www.domain.com/logo.png') 10px 10px no-repeat;
+$htmlEmailStyle['mailHeaderBackgroundImage']="";//something like: background:url('http://www.domain.com/logo.png') 10px 10px no-repeat; //do not omit the colon
 $htmlEmailStyle['mailHeaderTextColour']='#FFFFFF';
 $htmlEmailStyle['mailBorder']='border: 1px dotted #CECECE';
 $htmlEmailStyle['mailDivider']='padding:0;border-top:1px dotted #CECECE;';
@@ -58,11 +58,12 @@ $htmlEmailStyle = apply_filters('wppizza_filter_html_email_style', $htmlEmailSty
 ************************************************/
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
-		<meta http-equiv="Content-Type" content="text/html;<?php echo get_option('blog_charset'); ?>" />
+		<title></title>
+		<meta http-equiv="Content-Type" content="text/html;charset=<?php echo get_option('blog_charset'); ?>" />
 	</head>
-	<body style="margin: 0px; background-color:<?php echo $htmlEmailStyle['pageBackgroundColor'] ?>;" text="<?php echo $htmlEmailStyle['textColour'] ?>" bgcolor="<?php echo $htmlEmailStyle['pageBackgroundColor'] ?>" link="<?php echo $htmlEmailStyle['linkColor'] ?>" alink="<?php echo $htmlEmailStyle['aLinkColor'] ?>" vlink="<?php echo $htmlEmailStyle['vLinkColor'] ?>" marginheight="0" topmargin="0" marginwidth="0" leftmargin="0">
+	<body style="margin: 0px; background-color:<?php echo $htmlEmailStyle['pageBackgroundColor'] ?>;" text="<?php echo $htmlEmailStyle['textColour'] ?>" bgcolor="<?php echo $htmlEmailStyle['pageBackgroundColor'] ?>" link="<?php echo $htmlEmailStyle['linkColor'] ?>" alink="<?php echo $htmlEmailStyle['aLinkColor'] ?>" vlink="<?php echo $htmlEmailStyle['vLinkColor'] ?>">
 		<table cellpadding="0" cellspacing="0" width="100%" bgcolor="<?php echo $htmlEmailStyle['pageBackgroundColor'] ?>" border="0" style="margin:10px 0">
 			<tr>
 				<td>
@@ -107,7 +108,7 @@ $htmlEmailStyle = apply_filters('wppizza_filter_html_email_style', $htmlEmailSty
 					<tr><td colspan="2">
 						<table width="100%" cellpadding="0" cellspacing="0" >
 <?php 	foreach($customer_details_array as $k=>$v){ ?>
-							<tr><td style="<?php echo $htmlEmailStyle['mailPadding']['2x15'] ?>;vertical-align:top;white-space:nowrap"><?php echo $v['label']; ?></td><td><?php echo $v['value']; ?><td></tr>
+							<tr><td style="<?php echo $htmlEmailStyle['mailPadding']['2x15'] ?>;vertical-align:top;white-space:nowrap"><?php echo $v['label']; ?></td><td><?php echo $v['value']; ?></td></tr>
 <?php } ?>
 						</table>
 					</td></tr>
