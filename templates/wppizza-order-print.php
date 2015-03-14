@@ -124,11 +124,11 @@ if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/
 ************************************************************************************************************/
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<title><?php echo $vars['title'] ?></title>
-		<meta http-equiv="Content-Type" content="text/html;<?php echo get_option('blog_charset'); ?>" />
-		<style><?php echo $style ?></style>
+		<meta http-equiv="Content-Type" content="text/html;charset=<?php echo get_option('blog_charset'); ?>" />
+		<style type="text/css"><?php echo $style ?></style>
 	</head>
 <body>
 <?php
@@ -264,47 +264,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/
 		/*header*/
 		$oTable['tableHeader']='<thead><tr><th colspan="2">';
 		$oTable['tableHeader'].=''.$orderDetails['order_date']['value'].'';
-		
-		/**************************
-			multisite only
-			allows us to ident site if different from current
-			(if parent sites show history from all subsites)
-		**************************/
-//		if(is_multisite()){
-//			
-//			$multisiteHeader=array();
-//			/**
-//				get all (if any) differences between current and parent site
-//				currently filtered to only show blogname
-//			**/
-//			if(is_array($multiSite)){
-//			foreach($multiSite as $key=>$item){
-//				$multisiteHeader[$key]='<br /><span id="'.$key.'">'.$item.'</span>';
-//			}}
-//			/**************************
-//				allow filtering and implode for output
-//			***************************/
-//			$multisiteHeader = apply_filters('wppizza_filter_print_order_overview_multisite_header', $multisiteHeader, $order);		
-//			$oTable['tableHeader'].= implode(PHP_EOL,$multisiteHeader);
-//			
-//			
-//		
-//		if(is_multisite() && !$siteDetails['parent_site'] && $options['plugin_data']['wp_multisite_order_history_all_sites'] ){
-//			$multisiteHeader=array();
-//			if(!empty($siteDetails['blogname']) && $siteDetails['blogname']!=''){
-//				$multisiteHeader['blogname']='<br /><span id="blogname">'.$siteDetails['blogname'].'</span>';
-//			}
-//			/**************************
-//				allow filtering and implode for output
-//			***************************/
-//			$multisiteHeader = apply_filters('wppizza_filter_print_order_overview_multisite_header', $multisiteHeader, $order);			
-//			$oTable['tableHeader'].= implode(PHP_EOL,$multisiteHeader);
-//		}
-		/**************************
-			multisite only end
-		**************************/		
-		
-		$oTable['tableHeader'].='</th></thead>';
+		$oTable['tableHeader'].='</th></tr></thead>';
 
 
 		/*footer*/
@@ -443,7 +403,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/
 	$cTable['tableOpen']='<table id="customer">';
 
 		/*header*/
-		$cTable['tableHeader']='<thead><tr><th colspan="2">'.$txt['header_order_print_customer_label'].'</th></thead>';
+		$cTable['tableHeader']='<thead><tr><th colspan="2">'.$txt['header_order_print_customer_label'].'</th></tr></thead>';
 
 		/*footer*/
 		$cTable['tableFooter']='';
@@ -665,7 +625,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/
 	$sTable['tableOpen']='<table id="summary">';
 
 		/*header*/
-		$sTable['tableHeader']='<thead><tr><th colspan="2"></th></thead>';
+		$sTable['tableHeader']='<thead><tr><th colspan="2"></th></tr></thead>';
 
 		/*footer*/
 		$sTable['tableFooter']='';
