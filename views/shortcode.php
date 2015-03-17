@@ -86,7 +86,7 @@ if($type=='cart'){
 		/**show mini cart if main cart out of view**/
 		if(isset($atts['minicart'])){
 			/**add minicart to show if main cart is out of view**/
-			add_action('wp_footer', array( $this, 'wppizza_mini_cart_if_cart_invisible'));
+			add_action('wp_footer', array( $this, 'wppizza_mini_cart_if_cart_invisible'),99);
 		}		
 		
 	return $markup;

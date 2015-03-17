@@ -359,6 +359,11 @@
 				'items_category_separator' => ' &raquo; ',
 				'sticky_cart_animation' =>450,
 				'minicart_max_width_active'=>0,
+				'minicart_elm_padding_top'=>0,
+				'minicart_elm_padding_selector'=>'',
+				'minicart_add_to_element'=>'',
+				'minicart_always_shown'=>false,
+				'minicart_viewcart'=>false,
 				'sticky_cart_animation_style' =>'',
 				'sticky_cart_margin_top' =>20,
 				'sticky_cart_background' =>'inherit',
@@ -562,6 +567,10 @@
 				'empty_cart'=>array(
 					'descr'=>__('Shoppingcart: empty cart button text', $this->pluginLocale),
 					'lbl'=>__('empty cart', $this->pluginLocale)
+				),
+				'view_cart'=>array(
+					'descr'=>__('Shoppingcart: view cart button text', $this->pluginLocale),
+					'lbl'=>__('view cart', $this->pluginLocale)
 				),
 				'cart_is_empty'=>array(
 					'descr'=>__('Shoppingcart: text to display when cart is empty', $this->pluginLocale),

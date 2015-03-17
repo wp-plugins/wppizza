@@ -137,7 +137,11 @@
 			$options['layout']['jquery_fb_add_to_cart_ms']=absint($input['layout']['jquery_fb_add_to_cart_ms']);
 			$options['layout']['element_name_refresh_page']=wppizza_validate_string($input['layout']['element_name_refresh_page']);
 			$options['layout']['minicart_max_width_active']=wppizza_validate_int_only($input['layout']['minicart_max_width_active']);
-
+			$options['layout']['minicart_elm_padding_top']=wppizza_validate_int_only($input['layout']['minicart_elm_padding_top']);
+			$options['layout']['minicart_add_to_element']=preg_replace("/[^a-zA-Z0-9#>\-_\., ]/","",$input['layout']['minicart_add_to_element']);
+			$options['layout']['minicart_elm_padding_selector']=preg_replace("/[^a-zA-Z0-9#>\-_\., ]/","",$input['layout']['minicart_elm_padding_selector']);			
+			$options['layout']['minicart_always_shown'] = !empty($input['layout']['minicart_always_shown']) ? true : false;
+			$options['layout']['minicart_viewcart'] = !empty($input['layout']['minicart_viewcart']) ? true : false;			
 			$options['opening_times_format']['hour']=wppizza_validate_string($input['opening_times_format']['hour']);
 			$options['opening_times_format']['separator']=wppizza_validate_string($input['opening_times_format']['separator']);
 			$options['opening_times_format']['minute']=wppizza_validate_string($input['opening_times_format']['minute']);

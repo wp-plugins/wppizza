@@ -2061,14 +2061,23 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 		static $c=0;$c++;
 		/*really only once**/
 		if($c==1){
-		$atts['checkout']='button';
 		
-		$atts = apply_filters('wppizza_filter_minicart_atts', $atts);
-
 		$options = $this->pluginOptions;
-		$markup = wppizza_frontendTotals($options,$atts);		
-
-		echo'<div id="wppizza-mini-cart">'.$markup.'</div>';
+		/*checkout as button*/
+		$atts['checkout']='button';
+		/*add view cart button*/
+		if(!empty($options['layout']['minicart_viewcart'])){
+			$atts['viewcart']='1';
+		}
+		$atts = apply_filters('wppizza_filter_minicart_atts', $atts);
+		$markup = wppizza_frontendTotals($options,$atts);	
+		
+		/**if we have set some class or if**/
+		$class=empty($options['layout']['minicart_add_to_element']) ? 'fixed' : 'relative';
+		/**always visible**/
+		$visibility=empty($options['layout']['minicart_always_shown']) ? '' : 'wppizza-mini-cart-static';
+		
+		echo'<div id="wppizza-mini-cart" class="wppizza-mini-cart-'.$class.' '.$visibility.'">'.$markup.'</div>';
 		}
 	}
 	/*******************************************************
@@ -2816,6 +2825,25 @@ public function wppizza_require_common_input_validation_functions(){
 			if($options['layout']['minicart_max_width_active']>0){
 				$localized_array['crt']['mCartMaxWidth']=$options['layout']['minicart_max_width_active'];
 			}
+			/**minicart body padding top**/
+			if($options['layout']['minicart_elm_padding_top']>0){
+				$localized_array['crt']['mCartPadTop']=$options['layout']['minicart_elm_padding_top'];
+				/**minicart padding to distinct element**/
+				if($options['layout']['minicart_elm_padding_selector']!=''){
+					$localized_array['crt']['mCartPadElm']=$options['layout']['minicart_elm_padding_selector'];
+				}
+			}			
+			
+						
+			/**minicart add to element**/
+			if($options['layout']['minicart_add_to_element']!=''){
+				$localized_array['crt']['mCartElm']=$options['layout']['minicart_add_to_element'];
+			}			
+			/**minicart always displayed**/
+			if(!empty($options['layout']['minicart_always_shown'])){
+				$localized_array['crt']['mCartStatic']=1;
+			}			
+						
 			if($options['layout']['jquery_fb_add_to_cart']!=''){
 				$localized_array['itm']['fbatc']=$options['localization']['jquery_fb_add_to_cart_info']['lbl'];
 				$localized_array['itm']['fbatcms']=$options['layout']['jquery_fb_add_to_cart_ms'];

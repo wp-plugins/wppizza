@@ -609,6 +609,7 @@ if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='gettotals'){
 	foreach($res['items'] as $item){
 	$res['itemcount']+=$item['count'];
 	}
+	$res['viewcart']='<input class="btn btn-primary" type="button" value="'.$options['localization']['view_cart']['lbl'].'">';
 	print"".json_encode($res)."";
 exit();
 }

@@ -437,14 +437,17 @@ fieldset.wppizza-ff>input, fieldset.wppizza-ff>select, fieldset.wppizza-ff>texta
 
 /************************
 *
-*	[absolute top minicart ]
+*	[minicart ]
 *
 ************************/
-#wppizza-mini-cart{display:none;position:fixed;	z-index:1000;top:0;left:0;right:0;background-color:#FFFFFF;margin:0;padding:7px 0;text-align:center;border-bottom:1px solid #cecece;opacity:0.9;color:#333333}
+#wppizza-mini-cart{display:none;margin:0;padding:7px 0;text-align:center;}
+#wppizza-mini-cart.wppizza-mini-cart-fixed{position:fixed;top:0;left:0;right:0;z-index:1000;border-bottom:1px solid #cecece;opacity:0.9;color:#333333;background-color:#FFFFFF;}
+#wppizza-mini-cart.wppizza-mini-cart-relative{}
+#wppizza-mini-cart.wppizza-mini-cart-static{display:block}
 #wppizza-mini-cart>div.wppizza-totals{margin:0 auto;display:inline;font-size:90%}
 #wppizza-mini-cart>div.wppizza-totals:before{content: url('img/cart-black-12-12.png');margin:0 3px 0 0;padding:0}
-#wppizza-mini-cart span.wppizza-totals-checkout-button{margin-left:5px}
-#wppizza-mini-cart span.wppizza-totals-checkout-button input{padding:3px;margin 0 3px}
+#wppizza-mini-cart span.wppizza-totals-checkout-button,#wppizza-mini-cart span.wppizza-totals-viewcart{margin-left:5px;cursor:pointer}
+#wppizza-mini-cart span.wppizza-totals-checkout-button input,#wppizza-mini-cart span.wppizza-totals-viewcart input{padding:3px;margin 0 3px}
 
 /************************
 *	[iOS (iPhone,iPad)]

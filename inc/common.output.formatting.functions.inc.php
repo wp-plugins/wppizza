@@ -365,6 +365,12 @@
 			/*create button*/
 			$summary['checkoutbutton']='<span class="wppizza-totals-checkout-button"></span>';					
 		}		
+		/**allow for view cart button to scroll to **/		
+		$summary['viewcart']='';
+		if(isset($atts['viewcart'])){
+			/*create button*/
+			$summary['viewcart']='<span class="wppizza-totals-viewcart"></span>';					
+		}		
 		
 		$output=array();
 		$output['wrapopen']='<div class="wppizza-totals">';
@@ -383,6 +389,8 @@
 			$output['count']=$summary['itemcount_right'];
 		}
 		$output['ahrefclose']=$summary['checkout_a_close'];
+		
+		$output['viewcart']=$summary['viewcart'];
 		
 		$output['checkoutbutton']=$summary['checkoutbutton'];
 		

@@ -65,7 +65,6 @@ $options = $this->pluginOptions;
 				
 			}
 
-
 			if($field=='using_cache_plugin'){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[plugin_data][".$field."]' type='checkbox'  ". checked($options['plugin_data'][$field],true,false)." value='1' />";
 				echo" <span class='description'>".__('Will ALWAYS load the cart dynamically via ajax. Especially useful if your caching plugin does not support the exclusion of only parts of a page.', $this->pluginLocale)."</span>";
@@ -387,8 +386,28 @@ $options = $this->pluginOptions;
 				echo" <span class='description'>".__('If you want to have a sticky cart NOT scroll further down that the TOP of a particular element that is further down on the page (might be useful in som layouts/themes), set that elements ID here [leave blank to ignore]', $this->pluginLocale)."</span>";
 			}
 			if($field=='minicart_max_width_active'){
+				echo "<input name='".$this->pluginSlug."[layout][minicart_viewcart]' type='checkbox'  ". checked($options['layout']['minicart_viewcart'],true,false)." value='1' />";
+				echo" <span>".__('display "view cart" button', $this->pluginLocale)."</span>";
+				echo"<br />";
+				echo "<input name='".$this->pluginSlug."[layout][minicart_always_shown]' type='checkbox'  ". checked($options['layout']['minicart_always_shown'],true,false)." value='1' />";
+				echo" <span>".__('always show minicart, even if main cart is in view', $this->pluginLocale)."</span>";
+				echo"<br />";
 				echo "<input name='".$this->pluginSlug."[layout][".$field."]' size='2' type='text'  value='{$options['layout'][$field]}' />";
-				echo" <span class='description'>".__('max browser width - in px - up to which the min/small cart will be shown. useful to set for themes that, under a certain browser window width, change to a responsive design that moves elements to different places. [0 to ignore]', $this->pluginLocale)."</span>";			
+				echo" <span>".__('max browser width up to which the minicart will be shown. useful for themes that, under a certain browser window width, change to a responsive design that moves elements to different places. [in px, 0 to ignore]', $this->pluginLocale)."</span>";			
+				echo"<br />";
+				echo "<input name='".$this->pluginSlug."[layout][minicart_elm_padding_top]' size='2' type='text'  value='{$options['layout']['minicart_elm_padding_top']}' />";
+				echo" <span>".__('add additional top padding to body element if small cart is displayed. [in px, 0 to ignore]', $this->pluginLocale)."</span>";
+				
+				echo"<hr />";
+				echo"<hr />";
+				echo "<input name='".$this->pluginSlug."[layout][minicart_add_to_element]' size='20' type='text'  value='{$options['layout']['minicart_add_to_element']}' />";
+				echo" <span>".__('by default, the minicart will be added just before closing body tag with a css of position:fixed;top:0. if you want it appended elsewhere, set the relevant element here ', $this->pluginLocale)."</span>";
+				echo"<br /><span class='description'>".__('use jQuery selectors, such as #my-elm-id or .my_elm_class etc. You might have to use additional css declarations for your theme.', $this->pluginLocale)."</span>";
+				echo"<br />";
+				echo "<input name='".$this->pluginSlug."[layout][minicart_elm_padding_selector]' size='20' type='text'  value='{$options['layout']['minicart_elm_padding_selector']}' />";
+				echo" <span>".__('add above set padding to another element *instead* of the body tag (use jQuery selectors, such as #my-elm-id or .my_elm_class etc)', $this->pluginLocale)."</span>";				
+
+
 			}
 			
 			if($field=='opening_times_standard'){
