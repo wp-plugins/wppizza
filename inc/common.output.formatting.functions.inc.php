@@ -29,6 +29,10 @@
 				$str=number_format_i18n($str,2);
 			}
 		}
+		
+		/**allow filtering**/
+		$str=apply_filters('wppizza_filter_output_format_price', $str);
+		
 		return $str;
 	}
 	function wppizza_wordwrap_indent($str){
@@ -1408,7 +1412,7 @@ function wppizza_array_multisort($array, $cols){
 	echo $txt['some_key'];
 	a lot cleaner
 @ arr: two dimensional array
-@ key: which key to use as single dimention key value
+@ key: which key to use as single dimension key value
 ****************************************************************************/
 function wppizza_return_single_dimension_array($arr, $key='lbl'){
 	$array=array();

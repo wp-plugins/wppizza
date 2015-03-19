@@ -75,7 +75,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/
 	$articleclasses = array(''.$post_type.'-article','entry-content',''.$post_type.'-article-'.$termSlug.'-'.$categoryId);
 	if($articlecount==1){$articleclasses[]=''.$post_type.'-article-first';}/*add - first*/
 	if($articlecount==$the_query->found_posts && $the_query->found_posts>1){$articleclasses[]=''.$post_type.'-article-last';}/*add - last if more than one*/
-	$articleclasses=apply_filters('wppizza_filter_article_class',$articleclasses, $postId, $articlecount);/*enable filtering*/
+	$articleclasses=apply_filters('wppizza_filter_article_class', $articleclasses, $postId, $articlecount, $meta);/*enable filtering*/
 	/***********************************************************
 	*
 	*	if you want to display categories for example , uncomment

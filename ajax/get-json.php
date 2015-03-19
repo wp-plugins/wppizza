@@ -218,8 +218,7 @@ if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='order-pickup'){
 		provided we are actually on the order
 		page, otherwise there's nothing to do
 	*****************************************/
-	if(count($_POST['vars']['data'])>0){
-
+	if($_POST['vars']['data']!=''){
 		/***************************************************************
 			[get and parse all user post variables and save in session
 		***************************************************************/
@@ -232,7 +231,6 @@ if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='order-pickup'){
 		if($_POST['vars']['urlGetVars']!=''){
 			parse_str(substr($_POST['vars']['urlGetVars'],1), $getParameters);/*loose the '?'  */
 		}
-
 		/*********build the location url making sure permalinks are taken care of too**/
 		$location=$this->wppizza_set_redirect_url($_POST['vars']['locHref'],$getParameters);
 
