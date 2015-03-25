@@ -252,6 +252,8 @@ jQuery(document).ready(function($){
      	/**now send ajax to update**/
 		jQuery.post(wppizza.ajaxurl , {action :'wppizza_json',vars:{'type':'wppizza-update-order','data':updtElms}}, function(response) {
 			window.location.href=window.location.href;/*make sure page gest reloaded without confirm*/
+			window.location.reload(true);
+			return;			
 		},'json').error(function(jqXHR, textStatus, errorThrown) {	$('body>#wppizza-loading').remove(); alert("error : " + errorThrown);console.log(jqXHR.responseText);});
        });
   	}
@@ -346,6 +348,7 @@ jQuery(document).ready(function($){
 				/**if on orderpage, just reload**/
 				if(typeof wppizza.isCheckout!=='undefined'){
 					window.location.href=window.location.href;/*make sure page gest reloaded without confirm*/
+					window.location.reload(true);
 					return;
 				}
 
@@ -460,10 +463,8 @@ jQuery(document).ready(function($){
 					anchor=res.anchor;
 				}
 				window.location.href=res.location+anchor;/*make sure page gest reloaded without confirm*/
-				/*force reload if using anchor*/
-				if(typeof res.anchor!=='undefined'){
-					window.location.reload(true)
-				}
+				window.location.reload(true)
+				return;
 			},'json').error(function(jqXHR, textStatus, errorThrown) {alert("error : " + errorThrown);console.log(jqXHR.responseText);});
 	}});
 
@@ -487,6 +488,8 @@ jQuery(document).ready(function($){
 			}
 			jQuery.post(wppizza.ajaxurl , {action :'wppizza_json',vars:{'type':'wppizza-select-gateway','data':$('#wppizza-send-order').serialize(),'selgw':selectedGateway}}, function(res) {
 				window.location.href=window.location.href;/*make sure page gest reloaded without confirm*/
+				window.location.reload(true);
+				return;				
 			},'json').error(function(jqXHR, textStatus, errorThrown) {	$('#wppizza-send-order #wppizza-loading').remove(); alert("error : " + errorThrown);console.log(jqXHR.responseText);});
 		});
 	}
@@ -564,6 +567,8 @@ jQuery(document).ready(function($){
 	  			$("#wppizza-send-order").prepend('<div id="wppizza-loading" style="opacity:0.8"></div>');
 				jQuery.post(wppizza.ajaxurl , {action :'wppizza_json',vars:{'type':'add_tips','data':$('#wppizza-send-order').serialize(),'locHref':location.href,'urlGetVars':location.search}}, function(res) {
 				window.location.href=res.location;/*make sure page gest reloaded without confirm*/
+				window.location.reload(true);
+				return;				
 				},'json');
 	  		}
 		}
@@ -688,6 +693,7 @@ jQuery(document).ready(function($){
 			if(typeof response.isclosed!=='undefined'){
 				alert(response.isclosed);
 				window.location.href=window.location.href;/*make sure page gest reloaded without confirm*/
+				window.location.reload(true);
 				return;
 			}
 
@@ -736,6 +742,8 @@ jQuery(document).ready(function($){
 		if (typeof attr !== 'undefined' && attr !== false){}else{
         	var url=jQuery(this).attr("href");
 	        window.location.href = url;
+			window.location.reload(true);
+			return;	        
 		}
 	});
 	/***********************************************

@@ -134,7 +134,7 @@
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff',endColorstr='#ffe6e6e6',GradientType=0);
     filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
 }
-.wppizza-cart-item>.wppizza-cart-incr{padding:2px;margin:0;font-size:90%;width:25px !important;height:22px;line-height:22px;}
+.wppizza-cart-item>.wppizza-cart-incr{padding:0 2px;margin:0;font-size:90%;width:25px !important;height:21px;line-height:21px;}
 
 /**-----END NEW IN VERSION 2.5----***/
 

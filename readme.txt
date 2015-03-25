@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, pizzaria, pizzeria, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax, wpml
 Requires at least: PHP 5.3+, WP 3.3+ 
 Tested up to: 4.1.1
-Stable tag: 2.11.8.6
+Stable tag: 2.11.8.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -142,6 +142,12 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 
 == Changelog ==
+
+2.11.8.7  
+* tweak : added distinct window.location.relaod(true) to scripts where appropriate  
+* tweak : very minor cart css adjustments  
+* tweak : added filter after cart icons  
+25th March 2015  
 
 2.11.8.6  
 * tweak : customer session data got unnecessarily re-saved every time when switching from delivery to self-pickup even if not on order page   
