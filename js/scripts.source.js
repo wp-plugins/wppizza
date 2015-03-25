@@ -567,7 +567,6 @@ jQuery(document).ready(function($){
 	  			$("#wppizza-send-order").prepend('<div id="wppizza-loading" style="opacity:0.8"></div>');
 				jQuery.post(wppizza.ajaxurl , {action :'wppizza_json',vars:{'type':'add_tips','data':$('#wppizza-send-order').serialize(),'locHref':location.href,'urlGetVars':location.search}}, function(res) {
 				window.location.href=res.location;/*make sure page gest reloaded without confirm*/
-				window.location.reload(true);
 				return;				
 				},'json');
 	  		}
@@ -742,7 +741,6 @@ jQuery(document).ready(function($){
 		if (typeof attr !== 'undefined' && attr !== false){}else{
         	var url=jQuery(this).attr("href");
 	        window.location.href = url;
-			window.location.reload(true);
 			return;	        
 		}
 	});
