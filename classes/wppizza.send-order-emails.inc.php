@@ -555,7 +555,7 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 				$header .= 'Content-type: text/plain; charset='.$this->blogCharset.'' . PHP_EOL;
 
 				/************send mail**************/
-				if( @mail( $this->orderShopEmail, $this->subjectPrefix.$this->subject.$this->subjectSuffix, $this->orderMessage['plaintext'], $header)) {
+				if( mail($this->orderShopEmail, $this->subjectPrefix.$this->subject.$this->subjectSuffix, $this->orderMessage['plaintext'], $header)) {
 					$sendMail['status']=true;
 				}else{
 					$sendMail['status']=false;
@@ -593,7 +593,7 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 				}
 
 				/************send mail**************/
-				if(@wp_mail($this->orderShopEmail, $this->subjectPrefix.$this->subject.$this->subjectSuffix, $this->orderMessage['plaintext'], $wpMailHeaders, $wpMailAttachments)) {
+				if(wp_mail($this->orderShopEmail, $this->subjectPrefix.$this->subject.$this->subjectSuffix, $this->orderMessage['plaintext'], $wpMailHeaders, $wpMailAttachments)) {
 					$sendMail['status']=true;
 				}else{
 					$sendMail['status']=false;

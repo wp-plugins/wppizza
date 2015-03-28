@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, pizzaria, pizzeria, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax, wpml
 Requires at least: PHP 5.3+, WP 3.3+ 
 Tested up to: 4.1.1
-Stable tag: 2.11.8.8
+Stable tag: 2.11.8.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -142,6 +142,12 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 
 == Changelog ==
+
+2.11.8.9  
+* fix : erroneously used "minimum order for delivery" (as opposed to "minimum order for self-pickup") value when set to "No delivery offered / pickup only"    
+* tweak: capture/display (hopefully) more meaningful mail errors when using mail() or wp_mail()  
+28th March 2015  
+
 
 2.11.8.8  
 * fix : fixed bug introduced in 2.11.7.8 that stopped button to redirect to order page   

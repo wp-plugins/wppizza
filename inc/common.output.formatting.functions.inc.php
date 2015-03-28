@@ -1029,8 +1029,8 @@ function wppizza_order_summary($session,$options,$module=null,$ajax=null){
 			/*******************************************
 			*	set min order values (delivery/pickup)
 			******************************************/
-			/**minimum order value set but not reached -> on delivery***/
-			if(!isset($session['selfPickup'])){
+			/**minimum order value set but not reached -> on delivery - as long as its not set to $options['order']['delivery_selected']==no_delivery***/
+			if(!isset($session['selfPickup']) && $options['order']['delivery_selected']!='no_delivery'){
 				if($options['order']['order_min_for_delivery']>0 && $options['order']['order_min_for_delivery']>$session['total_price_calc_delivery'] ){
 					/*disable place order button**/
 					$placeOrderDisabled=true;
@@ -1041,8 +1041,8 @@ function wppizza_order_summary($session,$options,$module=null,$ajax=null){
 				}
 			}
 
-			/**minimum order value set but not reached -> on pickup***/
-			if(isset($session['selfPickup'])){
+			/**minimum order value set but not reached -> on pickup or if set to pickup only***/
+			if(isset($session['selfPickup']) || $options['order']['delivery_selected']=='no_delivery'){
 				/**minimum order value set but not reached -> self pickup***/
 				if($options['order']['order_min_for_pickup']>0 && $options['order']['order_min_for_pickup']>0 && $options['order']['order_min_for_pickup']>$session['total_price_calc_delivery'] ){
 					/*disable place order button**/

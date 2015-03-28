@@ -595,13 +595,17 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 		if($orderId && $orderhash){$wQuery=" hash='".$orderhash."' AND id='".$orderId."' ";}
 
 
-		$getOrderDetails = $wpdb->get_row("SELECT wp_user_id, id, hash, order_ini as order_details, customer_ini as customer_details, payment_status FROM " . $wpdb->prefix . $this->pluginOrderTable . " WHERE ".$wQuery." ".$psQuery." ".$iniQuery." LIMIT 0,1 ");
+		$getOrderDetails = $wpdb->get_row("SELECT wp_user_id, id, hash, order_ini as order_details, customer_ini as customer_details, payment_status, transaction_id, transaction_errors FROM " . $wpdb->prefix . $this->pluginOrderTable . " WHERE ".$wQuery." ".$psQuery." ".$iniQuery." LIMIT 0,1 ");
 		if(is_object($getOrderDetails)){
 			/**unserialize order**/
 			$getOrderDetails->order_details=maybe_unserialize($getOrderDetails->order_details);
 			/**unserialize customer**/
 			$getOrderDetails->customer_details=maybe_unserialize($getOrderDetails->customer_details);
+			/**unserialize any errors**/
+			$getOrderDetails->transaction_errors=maybe_unserialize($getOrderDetails->transaction_errors);
+			
 			/**return details**/
+			
 			return	$getOrderDetails;
 		}else{
 			return false;
@@ -920,7 +924,7 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 	*	[order has been completed -> display txt]
 	*
 	******************************************************************/
-	function wppizza_gateway_order_completed($orderhash, $blogid=false, $txtPending=false, $txtCancelled=false, $content=false ,$refresh=5000){
+	function wppizza_gateway_order_completed($orderhash, $blogid=false, $txtPending=false, $txtCancelled=false, $content=false ,$refresh=5000, $transaction_errors=false){
 		$orderhash=wppizza_validate_alpha_only($orderhash);/**sanitize**/
 		$res = $this->wppizza_gateway_get_order_details($orderhash, false, $blogid);
 		$markup='';
@@ -947,7 +951,7 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 				/*legacy for gateways that print as opposed to return output in filter*/
 				if(!$content){echo $markup;return;}else{return $markup;}
 			}
-			/**done**/
+			/**cancelled**/
 			if($res->payment_status=='CANCELLED'){
 				/*maybe redirect to orderpage without GET vars or homepage ??*/
 				$markup.="<div class='wppizza-gateway-success'>".$txtCancelled."</div>";
@@ -955,6 +959,28 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 				/*legacy for gateways that print as opposed to return output in filter*/
 				if(!$content){echo $markup;return;}else{return $markup;}
 			}
+			
+			/**failed and set to display specific errors - perhaps one day something like that**/
+//			if($res->payment_status=='FAILED' && $transaction_errors){
+//				$errors='<br />';
+//				$errors.="ORDER ID: ".$res->id."<br />";
+//				$errors.="TRANSACTION ID: ".$res->transaction_id."<br />";
+//				$errors.="TRANSACTION STATUS: ".$res->payment_status."<br />";
+//				/*as array*/
+//				if(is_array($transaction_errors) && count($transaction_errors>0)){
+//				foreach($transaction_errors as $error){
+//					$errors.='<br />'.$error;
+//				}}else{
+//					
+//					$errors.=''.$transaction_errors;	
+//				}
+//				$markup.="<div class='wppizza-gateway-failed'>payment failed [".$this->gatewayIdent."-1200]: ".$errors."</div>";
+//
+//				/*legacy for gateways that print as opposed to return output in filter*/
+//				if(!$content){echo $markup;return;}else{return $markup;}
+//			}				
+			
+			
 			/**all others**/
 			//$errors="ORDER ID: ".$res->id."<br />";
 			//$errors.="TRANSACTION ID: ".$res->transaction_id."<br />";
