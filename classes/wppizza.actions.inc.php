@@ -1384,8 +1384,11 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 			}
 		}
 
+		/****label - filterable****/
+		$options['localization']['add_to_cart']['lbl'] = apply_filters('wppizza_filter_add_item_to_cart_button_label', $options['localization']['add_to_cart']['lbl'],$atts);
+		
 		/****output****/
-		$str='<span class="wppizza-add-to-cart-btn-wrap">';
+		$str='<span id="wppizza-add-to-cart-btn-'.$atts['id'].'" class="wppizza-add-to-cart-btn-wrap">';
 		 if($hasdropdown){
 			/**dropdown if multiple*/
 			$str.=$dropdown;
@@ -3130,7 +3133,7 @@ public function wppizza_require_common_input_validation_functions(){
 		/**get categories and group/sort**/
 		foreach($items as $k=>$v){
 			/**associate category id with set sortorder*/
-			$itemCat=$setCatOrder[$v['catIdSelected']];
+			$itemCat=!empty($setCatOrder[$v['catIdSelected']]) ? $setCatOrder[$v['catIdSelected']] : '';
 			/**prepend first key of sortorder , append category hierarchy**/
 			$itemsCategorySort[$k]=array('catsort'=>$itemCat)+$v;//+array('itemCatHierarchy'=>$setCatHierarchy);
 		}

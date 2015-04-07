@@ -156,7 +156,18 @@
 							);
 
 
-
+						/**********************************************
+						*
+						*	[constant defined to not install any defaults]
+						*	
+						**********************************************/
+						if(defined('WPPIZZA_NO_DEFAULT_ITEMS') || defined('WPPIZZA_NO_DEFAULTS') ){
+							$defaultCategories=array();
+							
+						}
+						if(defined('WPPIZZA_NO_DEFAULT_PAGES') || defined('WPPIZZA_NO_DEFAULTS') ){
+							$defaultMainPages=array();
+						}
 
 						/**********************************************
 						*

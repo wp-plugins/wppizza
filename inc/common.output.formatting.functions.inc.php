@@ -813,12 +813,17 @@ function wppizza_order_summary($session,$options,$module=null,$ajax=null){
 			if other extensions have yet to add selcatid, just add the first one
 			the item is categorised in.
 			90% of the time there will only be one anyway, so this would be correct.
-			worst case scenario, an enexpected (although not wrong) category will be displayed
+			worst case scenario, an unexpected (although not wrong) category will be displayed
 			all of this is only relevant anyway if "show category for emails etc" is enabled in layout
 		*******************************************************************************************/
 		if($v['catIdSelected']==''){
-			$firstCat=reset($catArray);
-			$v['catIdSelected']=$firstCat['term_id'];
+			/*make sure a category was also actually assigned*/
+			if(is_array($catArray)){
+				$firstCat=reset($catArray);
+				$v['catIdSelected']=$firstCat['term_id'];
+			}else{
+				$v['catIdSelected']='';	
+			}
 		}
 		$summary['items'][$k]=array('name'=>$v['printname'],'count'=>$v['count'],'size'=>$v['sizename'],'price'=>wppizza_output_format_price($v['price'],$optionsDecimals),'pricetotal'=>wppizza_output_format_price($v['total'],$optionsDecimals),'categories'=>$catArray,'taxrate'=>$taxRate,'additionalinfo'=>$v['additionalinfo'],'extend'=>$v['extend'],'extenddata'=>$v['extenddata'],'postId'=>$v['postId'],'catIdSelected'=>$v['catIdSelected'],'blogid'=>$v['blogid']);
 	}

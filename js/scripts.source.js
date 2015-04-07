@@ -1,4 +1,4 @@
-var wppizzaClickEvent='click';
+var wppizzaClickEvent='click';/*leave for legacy reasons*/
 var wppizzaShortcodeTotals = function(){};
 
 jQuery(document).ready(function($){
@@ -231,13 +231,13 @@ jQuery(document).ready(function($){
 			spinnerElm.keydown(function(event) {
 				if(event.which == 13 || event.which == 35){
 					event.preventDefault();
-					$('.wppizza-update-order').trigger(''+wppizzaClickEvent+'');
+					$('.wppizza-update-order').trigger('click');
 				return false;
 			}
 		});
 
        /**do the update**/
-       $(document).on(''+wppizzaClickEvent+'', '.wppizza-update-order', function(e){
+       $(document).on('click', '.wppizza-update-order', function(e){
        	/*get the elemenst and create a key value array to send to ajax**/
        	var wppizzaCartCurrElms=$(".wppizza-item-quantity");
        	var updtElms={};
@@ -252,7 +252,6 @@ jQuery(document).ready(function($){
      	/**now send ajax to update**/
 		jQuery.post(wppizza.ajaxurl , {action :'wppizza_json',vars:{'type':'wppizza-update-order','data':updtElms}}, function(response) {
 			window.location.href=window.location.href;/*make sure page gest reloaded without confirm*/
-			window.location.reload(true);
 			return;			
 		},'json').error(function(jqXHR, textStatus, errorThrown) {	$('body>#wppizza-loading').remove(); alert("error : " + errorThrown);console.log(jqXHR.responseText);});
        });
@@ -265,7 +264,7 @@ jQuery(document).ready(function($){
 		this.value = this.value.replace(/[^0-9]/g,'');
 		/**when using textbox in cart to incr/decr allow enter/end (iphone) as well as clicking on button */
 		if(e.keyCode == 13 || e.keyCode == 35){
-			$(this).closest('li').find('.wppizza-cart-increment').trigger(''+wppizzaClickEvent+'');
+			$(this).closest('li').find('.wppizza-cart-increment').trigger('click');
 		}
 	});
 
@@ -280,7 +279,7 @@ jQuery(document).ready(function($){
 		}
 	});
 
-	$(document).on(''+wppizzaClickEvent+'', '.wppizza-add-to-cart,.wppizza-remove-from-cart,.wppizza-cart-refresh,#wppizza-force-refresh,.wppizza-cart-increment,.wppizza-empty-cart-button', function(e){
+	$(document).on('click', '.wppizza-add-to-cart,.wppizza-remove-from-cart,.wppizza-cart-refresh,#wppizza-force-refresh,.wppizza-cart-increment,.wppizza-empty-cart-button', function(e){
 		if ($(".wppizza-open").length > 0){//first check if shopping cart exists on page and that we are open
 			e.preventDefault();
 			e.stopPropagation();
@@ -299,13 +298,11 @@ jQuery(document).ready(function($){
 		var selfId=self.attr('id');
 		var cartButton=$('.wppizza-cart-button input,.wppizza-cart-button>a,.wppizza-empty-cart-button');
 		cartButton.attr("disabled", "true");/*disable place order button to stop trying to order whilst stuff is being added to the cart*/
-		/**feedback on item add enabled?*/
+		/**feedback on item add enabled ? - always skip if triggered from add_to_cart_button shortcode*/
 		var fbatc=false;
-		if(typeof wppizza.itm!=='undefined' && typeof wppizza.itm.fbatc!=='undefined'){
+		if(typeof wppizza.itm!=='undefined' && typeof wppizza.itm.fbatc!=='undefined' && !self.hasClass('wppizza-add-to-cart-btn')){
 		 fbatc=true;
 		}
-
-
 
 		var itemCount=1;
 		/**get cat id**/
@@ -420,7 +417,7 @@ jQuery(document).ready(function($){
 	*	but we are currently closed, display alert]
 	*
 	***********************************************/
-	$(document).on(''+wppizzaClickEvent+'', '.wppizza-add-to-cart', function(e){
+	$(document).on('click', '.wppizza-add-to-cart', function(e){
 		if ($(".wppizza-open").length == 0 &&  $(".wppizza-cart").length > 0){
 			alert(wppizza.msg.closed);
 	}});
@@ -431,7 +428,7 @@ jQuery(document).ready(function($){
 	*	only relevant if there's a shoppingcart or orderpage on page]
 	*	[as it's an input element always use click instead of touchstart, cause iStuff is stupid]
 	***********************************************/
-	$(document).on('click', '#wppizza-order-pickup-sel,#wppizza-order-pickup-js', function(e){
+	$(document).on('click', '#wppizza-order-pickup-sel, #wppizza-order-pickup-js', function(e){
 		if (($(".wppizza-open").length > 0 &&  $(".wppizza-cart").length > 0) || $("#wppizza-send-order").length>0){
 			var self=$(this);
 			self.attr("disabled", true);/*disable checkbox to give ajax time to do things*/
@@ -488,7 +485,7 @@ jQuery(document).ready(function($){
 			}
 			jQuery.post(wppizza.ajaxurl , {action :'wppizza_json',vars:{'type':'wppizza-select-gateway','data':$('#wppizza-send-order').serialize(),'selgw':selectedGateway}}, function(res) {
 				window.location.href=window.location.href;/*make sure page gest reloaded without confirm*/
-				window.location.reload(true);
+				//window.location.reload(true);
 				return;				
 			},'json').error(function(jqXHR, textStatus, errorThrown) {	$('#wppizza-send-order #wppizza-loading').remove(); alert("error : " + errorThrown);console.log(jqXHR.responseText);});
 		});
@@ -500,12 +497,12 @@ jQuery(document).ready(function($){
 	*	[provided  there's a cart on page and we are open]
 	***********************************************/
 	/*more than one size->choose alert*/
-	$(document).on(''+wppizzaClickEvent+'', '.wppizza-trigger-choose', function(e){
+	$(document).on('click', '.wppizza-trigger-choose', function(e){
 		if ($(".wppizza-open").length > 0 &&  $(".wppizza-cart").length > 0){
 			alert(wppizza.msg.choosesize);
 	}});
 	/*only one size, trigger click*/
-	$(document).on(''+wppizzaClickEvent+'', '.wppizza-trigger-click', function(e){
+	$(document).on('click', '.wppizza-trigger-click', function(e){
 		if ($(".wppizza-open").length > 0 &&  $(".wppizza-cart").length > 0){
 			/*just loose wppizza-article- from id*/
 			 var ArticleId=this.id.split("-");
@@ -514,7 +511,7 @@ jQuery(document).ready(function($){
 			/**make target id*/
 			target=$('#wppizza-'+ArticleId+'');
 			/*trigger*/
-			target.trigger(''+wppizzaClickEvent+'');
+			target.trigger('click');
 	}});
 
 	/***********************************************
@@ -522,7 +519,7 @@ jQuery(document).ready(function($){
 	*	[order form: login or continue as guest]
 	*
 	***********************************************/
-	$(document).on(''+wppizzaClickEvent+'', '#wppizza-login,#wppizza-login-cancel', function(e){
+	$(document).on('click', '#wppizza-login,#wppizza-login-cancel', function(e){
 		$("#wppizza-user-login-action").toggle(300);
 		$("#wppizza-user-login-option>span>a").toggle();
 	});
@@ -547,7 +544,7 @@ jQuery(document).ready(function($){
 	*	gateway could be either by dropdown,
 	*	radio, or if only one, hidden elm
 	*******************************************************************/
-	$(document).on(''+wppizzaClickEvent+'', '.wppizza-ordernow', function(e){
+	$(document).on('click', '.wppizza-ordernow', function(e){
 		$('#wppizza-send-order').validate().settings.ignore = "";
 	});
 	/*******************************
@@ -698,7 +695,14 @@ jQuery(document).ready(function($){
 
 			/**customised submit/payment via js window/overlay for example - will have to provide its own script**/
 			if(hasClassCustom){
+				/**custom js of gateway*/
 				window['wppizza' + currVal + 'payment']();
+
+				/***also save set customr data input fields in session data**/
+				jQuery.post(wppizza.ajaxurl , {action :'wppizza_json',vars:{'type':'wppizza-set-userdata','data':$('#wppizza-send-order').serialize()}}, function(res) {
+					//console.log('res');
+				},'json').error(function(jqXHR, textStatus, errorThrown) {	$('#wppizza-send-order #wppizza-loading').remove(); alert("error : " + errorThrown);console.log(jqXHR.responseText);});				
+
 				return;
 			}
 			/**cod->transmit form via ajax if cod or forced by gw settings (i.e $this->gatewayTypeSubmit = 'ajax')*/
@@ -735,7 +739,7 @@ jQuery(document).ready(function($){
 	/******************************
 	* Let's make IE7 IE8 happy and stop submitting while other stuff is going on such as adding items etc
 	*******************************/
-	$(document).on(''+wppizzaClickEvent+'', '.wppizza-cart-button>a', function(e){
+	$(document).on('click', '.wppizza-cart-button>a', function(e){
 		e.preventDefault(); e.stopPropagation();
 		var attr = $(this).attr('disabled');
 		if (typeof attr !== 'undefined' && attr !== false){}else{
@@ -782,10 +786,10 @@ jQuery(document).ready(function($){
 		var elm=self.closest('span').find('.wppizza-add-to-cart').prop('id', 'wppizza-'+selVal+'');
 	});
 	/**trigger click on element when button clicked*/
-	$(document).on(''+wppizzaClickEvent+'', '.wppizza-add-to-cart-select', function(e){
+	$(document).on('click', '.wppizza-add-to-cart-select', function(e){
 		var self=$(this);
 		var triggerElm=self.next();
-		triggerElm.trigger(''+wppizzaClickEvent+'');
+		triggerElm.trigger('click');
 	});
 	/***********************************************
 	*

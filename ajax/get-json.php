@@ -448,6 +448,22 @@ if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='wppizza-select-gate
 	print"".json_encode($_SESSION[$this->pluginSessionGlobal]['userdata'])."";/*not being output anywhere though*/
 	exit();
 }
+
+/****************************************************************************************************************************************
+*
+*
+*	general function that can be used async to sessionize user data entered on order page (kind of the same as above...)
+*	
+*
+****************************************************************************************************************************************/
+if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='wppizza-set-userdata'){
+	if(count($_POST['vars']['data'])>0){
+		$this->wppizza_sessionise_userdata($_POST['vars']['data'],$options['order_form']);
+	}
+	print"".json_encode($_SESSION[$this->pluginSessionGlobal]['userdata'])."";/*not being output anywhere though*/
+	exit();
+}
+
 /****************************************************************************************************************************************
 *
 *

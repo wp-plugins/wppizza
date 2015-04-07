@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, pizzaria, pizzeria, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax, wpml
 Requires at least: PHP 5.3+, WP 3.3+ 
 Tested up to: 4.1.1
-Stable tag: 2.11.8.9
+Stable tag: 2.11.8.10
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -50,48 +50,8 @@ Alternatively you can download and install WPPizza using the built in WordPress 
 
 **Things to do on first install**
 
-although some defaults will be installed and set when first installing this plugin, **you will have to configure some things** to make it play nicely in your theme  
-Note: you might want to start with  Option 1 first, as you can always use Option 2 later
-
-- **Option 1** - using normal pages: easier to setup initially, but more labour intensive to maintain in the long run
-
-	To get you started quickly and to help you decide if you like this plugin, the following defaults are being created on first install:
-	- some default categories
-	- some default menu items per category
-	- pages that display the items in any given category (including the required shortcode)  
-	- an order page to send any orders to you via email (including the required shortcode)  
-	- a default list of additives that a menu item might have 
-	- a selection of available meal sizes
-	- as well as default opening times, order settings etc.
-	- display the shoppingcart somewhere on those pages (typically in a sidebar) using the wppizza widget (using type:cart) or the following shortcode: [wppizza type='cart']  
-		
-	>**to be able to add items to your shopping cart make sure that ALL pages that display your menu items have the shopping cart displayed somewhere**  
-	>
-	>**However, you will most likely NOT want to display the shopping cart on the final order page.**   
-	>
-	>If your theme does not allow to adjust this - via templates for example -  use one of the many WP plugins available that lets you choose which widget to display on which page  
-	
-	- if the cart displays "currently closed" adjust your opening times in wppizza->settings->openingtimes (and make sure your timezone settings are correct)
-	- make sure the navigation to those pages gets displayed somewhere (this will normally already be the case - usually by some pagelist or menu ).
-
-	that should be it.......
-
-	NOTE: **some themes (custom community for example) require that you distinctly save the automatically inserted pages again (i.e "order page", etc) to generate the right markup and display correctly. So if the layout is messed up on initial install, try to just save those pages once and see if that fixes things.**
-
-- **Option 2** - using templates:
-	
-	- copy your themes 'page.php' file as 'wppizza-wrapper.php' into your theme directory(if your theme does not have a page.php file, look for archive.php or even index.php)
-	- open /wppizza/templates/wppizza-wrapper.php and copy everything between 	[copy from here .....] to [...........copy to here]
-	- place this snippet in the 'wppizza-wrapper.php' file we created above in your theme directory, REPLACING the original loop (including the while ( have_posts() ) : the_post(); or similar part) 
-	- display the navigation by either using the widget (type:navigation) or a shortcode [wppizza type='navigation']
-	- **ensure you still have an order page that includes the following shortcode [wppizza type='orderpage'] and wppizza->settings->order settings: 'order page' is set to use this page (you might have to re-save your permalink settings)**  
-	- **ensure - as outlined in Option 1 - that you are displaying your shopping cart**  
-	- if you wish , you can now delete all wppizza default pages EXCEPT THE ORDER PAGE. However,if using permalinks, you might want to keep the parent page (default: Our Menu) and set the permalinks in wppizza->settings to this page. If you do, make sure to update permalinks structure once.
-
-	Now you do not have to maintain any wppizza category pages, or navigation when adding new categories or menu items to wppizza as it's all taken care of automagically.
-
-**PS**: you might have to adjust the css to work within your theme.  
-see <a href='http://wordpress.org/extend/plugins/wppizza/faq/'>FAQ: "Can I edit the css ?"</a> for details  
+for consistency this document has now moved to the following location - I strongly encourage you to read this : 
+<a href='https://www.wp-pizza.com/topic/things-to-do-on-first-install/'>https://www.wp-pizza.com/topic/things-to-do-on-first-install/</a>
 
 
 **Uninstall**
@@ -143,11 +103,21 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 == Changelog ==
 
+2.11.8.10  
+added: option to not install default menu items, categories and/or pages  by defining WPPIZZA_NO_DEFAULTS (no menu items, categories, pages), WPPIZZA_NO_DEFAULT_ITEMS (no menu items, categories) and/or WPPIZZA_NO_DEFAULT_PAGES (no pages) constants in wp-config.php  
+added: more filter hooks in cart in various places  
+fix: unclosed div element in wppizza-order.php  
+fix: removed some more possible php notices under certain circumstances  
+tweak: some minor css tweaks in cart  
+tweak: some minor js tweaks (plus adding id to wrapper span) when using add_item_to_cart_button shortcode  
+tweak: added spans/classes around item name in cart and on order page    
+tweak: gateways using overlays instead of redirects will now also save user session data entered in order page  
+7th April 2015  
+
 2.11.8.9  
 * fix : erroneously used "minimum order for delivery" (as opposed to "minimum order for self-pickup") value when set to "No delivery offered / pickup only"    
 * tweak: capture/display (hopefully) more meaningful mail errors when using mail() or wp_mail()  
 28th March 2015  
-
 
 2.11.8.8  
 * fix : fixed bug introduced in 2.11.7.8 that stopped button to redirect to order page   
@@ -161,20 +131,19 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 2.11.8.6  
 * tweak : customer session data got unnecessarily re-saved every time when switching from delivery to self-pickup even if not on order page   
-* added: make formatted price output filterable (wppizza_filter_output_format_price)
+* added: make formatted price output filterable (wppizza_filter_output_format_price)  
 19th March 2015  
-
 
 2.11.8.5  
 * added : further options for minicart (paddings, viewcart button etc)  
 17th March 2015  
 
 2.11.8.4  
-* fix: [admin print order] -> added missing "doctype=" to meta tag, plus a couple of minor tweaks to now also pass w3c validation.
+* fix: [admin print order] -> added missing "doctype=" to meta tag, plus a couple of minor tweaks to now also pass w3c validation.  
 14th March 2015  
 
 2.11.8.3  
-* fix: [html email template] -> added missing "doctype=" to meta tag, plus a couple of minor tweaks to now also pass w3c validation.
+* fix: [html email template] -> added missing "doctype=" to meta tag, plus a couple of minor tweaks to now also pass w3c validation.  
 14th March 2015  
 
 2.11.8.2  
@@ -182,13 +151,13 @@ if you do wish to use any icon from this set commercially, please follow <a href
 12th March 2015  
 
 2.11.8.1  
-* tweak: option to enable minicart/small cart only for a set maximum bowser size 
+* tweak: option to enable minicart/small cart only for a set maximum bowser size  
 * fix: minicart/small cart display did not always behave accurately on page load  
 11th March 2015  
 
 2.11.8  
-* multisite (parent site only - order history print): allow header of "print order" to use child sites blogname instead of parent site's name [wppizza->settings]. only applicable if displaying all orders of all sites in order history.
-* multisite (parent site only - order history print): allow display of site name *where order was made* .only applicable if displaying all orders of all sites in order history and header is set to show info of parent site.
+* multisite (parent site only - order history print): allow header of "print order" to use child sites blogname instead of parent site's name [wppizza->settings]. only applicable if displaying all orders of all sites in order history.  
+* multisite (parent site only - order history print): allow display of site name *where order was made* .only applicable if displaying all orders of all sites in order history and header is set to show info of parent site.  
 * added: automatically scroll to missing required input fields (if not already in view) on order and confirmation pages  
 * added: automatically scroll to top on thank you page if required  
 * added: option to dynamically add a minicart to top of page if main cart is not in view (enable in widget or per shortcode attribute minicart=1)  
@@ -209,7 +178,7 @@ if you do wish to use any icon from this set commercially, please follow <a href
 * added [internal]: additional methods in WPPIZZA_ORDER_DETAILS class (wppizza.order.details.inc.php)  
 19th February 2015  
 
-2.11.7.11
+2.11.7.11  
 * fix: admin order history - accidentally inverted 2 variables in  wppizza.order.details.inc.php  
 13th February 2015  
 
@@ -225,36 +194,36 @@ if you do wish to use any icon from this set commercially, please follow <a href
 13th February 2015  
 
 
-2.11.7.8 
+2.11.7.8  
 * fix : eliminated PHP Notice:  Undefined index: gateway-selected  
 * tweak: moved "empty order table" and "delete wppizza posts and categories" to wppizza->tools allowing it to be used independently of each other  
 * added: allow menu items - added to order page via shortcodes for example (eg upsells) - to be added to order, reloading page if necessary  
 10th February 2015  
   
 2.11.7.7 
-* fix: stopped iOS (iPhone, iPad etc) from clicking/adding things when scrolling 
-4th February 2015 
+* fix: stopped iOS (iPhone, iPad etc) from clicking/adding things when scrolling  
+4th February 2015  
   
 2.11.7.6 
-MINOR UPDATES
+MINOR UPDATES  
 * tweak: added experimantal js (for development purposes only) - off by default  
 * added: a couple of filters for admin print order template (as per user request)  
 2nd February 2015  
 
-2.11.7.5 
-MINOR UPDATES
-* tweak: show some more system info variables (admin tools) 
+2.11.7.5  
+MINOR UPDATES  
+* tweak: show some more system info variables (admin tools)  
 * added: a couple of action hooks at end of email templates (as per user request)  
 2nd February 2015  
 
 
 2.11.7.4  
 * WPML: admin order settings : make sure original order page settings id gets used when translation does not exist (mainly for compatibility reasons with other non WPML plugins)   
-* WPML: some more method existance checking (namely "switch_lang") to perhaps get around some compatibility issues between WPML and other translation plugins (although non WPML are typically not really supported by the plugin, but worth the effort in a couple of places perhaps)
+* WPML: some more method existance checking (namely "switch_lang") to perhaps get around some compatibility issues between WPML and other translation plugins (although non WPML are typically not really supported by the plugin, but worth the effort in a couple of places perhaps)  
 * internal: wppizza->tools : make sure wppizza vars shown are coming directly from db before having had the chance of being filtered somewhere   
 * tweak: show admin order history on load without having to click button  
 * tweak: option to set admin max order history results to other than 20   
-* added: more filters added to admin order history as well as passing order status to filters 
+* added: more filters added to admin order history as well as passing order status to filters  
 31st January 2015  
 
 

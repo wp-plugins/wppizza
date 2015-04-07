@@ -21,6 +21,9 @@ if(isset($cart['innercartinfo'])){
 		$cartContents = apply_filters('wppizza_cart_item', $item, $cartContents);	
 		
 		$cartContents.='<li id="wppizza-cart-item-'.$k.'" class="wppizza-cart-item">';
+		/**filter if required**/
+		$cartContents = apply_filters('wppizza_cart_item_start', $cartContents, $item);
+
 		/********CHANGES IN 2.5, *****alloow increase/decrease changed 2.5*************/
 		if(isset($cart['increase_decrease'])){
 			$cartContents.="<input type='text' size=3 class='wppizza-cart-incr' name='wppizza-cart-incr' value='".$item['count']."'>";
@@ -33,9 +36,9 @@ if(isset($cart['innercartinfo'])){
 		
 		/********CHANGES IN 2.9: we do not need to display this really if we are already using text boxes.**/
 		if(isset($cart['increase_decrease'])){
-			$cartContents.=''.$item['name'].' ';
+			$cartContents.='<span class="wppizza-cart-item-name">'.$item['name'].'</span>';
 		}else{
-			$cartContents.=''.$item['count'].'x '.$item['name'].' ';	
+			$cartContents.='<span class="wppizza-cart-item-name">'.$item['count'].'x '.$item['name'].'</span>';	
 		}
 		
 		
@@ -49,16 +52,34 @@ if(isset($cart['innercartinfo'])){
 			changed	wppizza_output_format_price($item['pricetotal'],$options['layout']['hide_decimals']);
 			to just $item['pricetotal']
 		***********************************/
-
+		/**filter if required**/
+		$cartContents = apply_filters('wppizza_cart_item_before_item_price', $cartContents, $item);	
 
 		$cartContents.='<span class="wppizza-cart-item-price">'.$cart['currency_left'].''.$item['pricetotal'].''.$cart['currency_right'].'</span>';
+		/**filter if required**/
+		$cartContents = apply_filters('wppizza_cart_item_after_item_price', $cartContents, $item);	
+
 		if(is_array($item['additionalinfo']) && count($item['additionalinfo'])>0){
-			$cartContents.='<div class="wppizza-item-additional-info"><div class="wppizza-item-additional-info-icon"></div><div class="wppizza-item-additional-info-pad">';
-			foreach($item['additionalinfo'] as $addItem){
-				$cartContents.='<span>'.$addItem.'</span>';
-			}
-			$cartContents.='</div></div>';
+			
+			$cartContents.='<div class="wppizza-item-additional-info">';
+			/**filter if required**/
+			$cartContents = apply_filters('wppizza_cart_item_inside_additional_info_top', $cartContents, $item);
+			
+				$cartContents.='<div class="wppizza-item-additional-info-icon"></div>';
+			
+				$cartContents.='<div class="wppizza-item-additional-info-pad">';
+				foreach($item['additionalinfo'] as $addItem){
+					$cartContents.='<span class="wppizza-item-additional-info-content">'.$addItem.'</span>';
+				}
+				$cartContents.='</div>';
+				
+			/**filter if required**/
+			$cartContents = apply_filters('wppizza_cart_item_inside_additional_info_bottom', $cartContents, $item);			
+			$cartContents.='</div>';
 		}
+		
+		/**filter if required**/
+		$cartContents = apply_filters('wppizza_cart_item_end', $cartContents, $item);			
 		$cartContents.='</li>';
 	}
 	$cartContents.='</ul>';

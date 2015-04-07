@@ -40,13 +40,13 @@ if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/
 					/***allow action per item - probably to use in conjunction with filter above****/
 					do_action('wppizza_order_form_item', $item, $itemKey);
 			?>
-				<li><?php 
+				<li id="wppizza-cart-item-<?php echo $itemKey ?>"><?php 
 						/**added 2.10.2*/
 						/**construct the markup display of this item**/
 						$itemMarkup=array();
 						$itemMarkup['quantity']		=''.$item['count'].'x ';
-						$itemMarkup['name']			=''.$item['name'].' ';
-						$itemMarkup['size']			=''.$item['size'].' ';
+						$itemMarkup['name']			='<span class="wppizza-item-name">'.$item['name'].' </span>';
+						$itemMarkup['size']			='<span class="wppizza-item-size">'.$item['size'].' </span>';
 						$itemMarkup['price']		='<span class="wppizza-price-single">['.$cart['currency_left'].''.$item['price'].''.$cart['currency_right'].']</span> ';
 						$itemMarkup['price_total']	='<span class="wppizza-price">'.$cart['currency_left'].''.$item['pricetotal'].''.$cart['currency_right'].'</span>';
 						
@@ -55,7 +55,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/
 							foreach($item['additionalinfo'] as $additionalInfo){
 								$itemMarkup['additionalinfo'].='<span>'.$additionalInfo.'</span>';	
 							}
-							$itemMarkup['additionalinfo'].='<div>';
+							$itemMarkup['additionalinfo'].='</div>';
 						}
 					?>
 					<?php
