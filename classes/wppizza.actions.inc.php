@@ -3364,7 +3364,7 @@ function wppizza_cat_parents($options, $blogid, $id, $separator =' &raquo; ', $p
 			unset($oItems[$k]['extend']);
 			unset($oItems[$k]['additionalInfo']);
 			/**return additional info html with set returnKey (whatever is used in template*/
-			$oItems[$k][''.$returnKey.'']=''.$v['addinfo']['html'].'';
+			$oItems[$k][''.$returnKey.'']=!empty($v['addinfo']['html']) ? ''.$v['addinfo']['html'].'' : '' ;
 			/**now unset addinfo var as we dont need it anymore**/
 			unset($oItems[$k]['addinfo']);
 		}}

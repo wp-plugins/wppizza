@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, pizzaria, pizzeria, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax, wpml
 Requires at least: PHP 5.3+, WP 3.3+ 
 Tested up to: 4.1.1
-Stable tag: 2.11.8.10
+Stable tag: 2.11.8.11
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -50,8 +50,9 @@ Alternatively you can download and install WPPizza using the built in WordPress 
 
 **Things to do on first install**
 
-for consistency this document has now moved to the following location - I strongly encourage you to read this : 
-<a href='https://www.wp-pizza.com/topic/things-to-do-on-first-install/'>https://www.wp-pizza.com/topic/things-to-do-on-first-install/</a>
+for consistency this document has now moved to the following location :   
+<a href='https://www.wp-pizza.com/topic/things-to-do-on-first-install/'>https://www.wp-pizza.com/topic/things-to-do-on-first-install/</a>  
+** I strongly encourage you to read it **  
 
 
 **Uninstall**
@@ -102,6 +103,11 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 
 == Changelog ==
+
+2.11.8.11  
+fix: removed some more possible php notices under certain circumstances  
+fix: admin print order history -> summary prices error when hiding decimals (hide decimals function erroneously applied 2x)  
+12th April 2015  
 
 2.11.8.10  
 added: option to not install default menu items, categories and/or pages  by defining WPPIZZA_NO_DEFAULTS (no menu items, categories, pages), WPPIZZA_NO_DEFAULT_ITEMS (no menu items, categories) and/or WPPIZZA_NO_DEFAULT_PAGES (no pages) constants in wp-config.php  

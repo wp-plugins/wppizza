@@ -658,18 +658,18 @@ if (!class_exists('WPPIZZA_ORDER_DETAILS')) {
 			/**********************************************************
 			*	[cart items
 			**********************************************************/
-				$summary['cartitems']=array('label'=>($pOptions['localization']['order_items']['lbl']),'price'=>wppizza_output_format_price($oDetails['total_price_items'],$pOptions['layout']['hide_decimals']),'currency'=>$oDetails['currency'] );
+				$summary['cartitems']=array('label'=>($pOptions['localization']['order_items']['lbl']),'price'=>$oDetails['total_price_items'],'currency'=>$oDetails['currency'] );
 			/**********************************************************
 			*	[discount]
 			**********************************************************/
 			if($oDetails['discount']>0){
-				$summary['discount']=array('label'=>($pOptions['localization']['discount']['lbl']),'price'=>wppizza_output_format_price($oDetails['discount'],$pOptions['layout']['hide_decimals']),'currency'=>$oDetails['currency'] );
+				$summary['discount']=array('label'=>($pOptions['localization']['discount']['lbl']),'price'=>$oDetails['discount'],'currency'=>$oDetails['currency'] );
 			}
 			/**********************************************************
 			*	[item tax - tax applied to items only]
 			**********************************************************/
 			if($oDetails['item_tax']>0 && !($pOptions['order']['shipping_tax'])){
-				$summary['item_tax']=array('label'=>($pOptions['localization']['item_tax_total']['lbl']),'price'=>wppizza_output_format_price($oDetails['item_tax'],$pOptions['layout']['hide_decimals']),'currency'=>$oDetails['currency'] );
+				$summary['item_tax']=array('label'=>($pOptions['localization']['item_tax_total']['lbl']),'price'=>$oDetails['item_tax'],'currency'=>$oDetails['currency'] );
 			}
 			/**********************************************************
 			*	[delivery charges - no self pickup enabled or selected]
@@ -677,7 +677,7 @@ if (!class_exists('WPPIZZA_ORDER_DETAILS')) {
 			if($pOptions['order']['delivery_selected']!='no_delivery'){/*delivery disabled*/
 			if(!isset($oDetails['selfPickup']) || $oDetails['selfPickup']==0){
 				if($oDetails['delivery_charges']!=''){
-					$summary['delivery']=array('label'=>($pOptions['localization']['delivery_charges']['lbl']),'price'=>wppizza_output_format_price($oDetails['delivery_charges'],$pOptions['layout']['hide_decimals']),'currency'=>$oDetails['currency'] );
+					$summary['delivery']=array('label'=>($pOptions['localization']['delivery_charges']['lbl']),'price'=>$oDetails['delivery_charges'],'currency'=>$oDetails['currency'] );
 				}else{
 					$summary['delivery']=array('label'=>($pOptions['localization']['free_delivery']['lbl']),'price'=>'','currency'=>'' );
 				}
@@ -687,32 +687,32 @@ if (!class_exists('WPPIZZA_ORDER_DETAILS')) {
 			*	[item tax - tax applied to items only]
 			**********************************************************/
 			if($oDetails['item_tax']>0 && $pOptions['order']['shipping_tax']){
-				$summary['item_tax']=array('label'=>($pOptions['localization']['item_tax_total']['lbl']),'price'=>wppizza_output_format_price($oDetails['item_tax'],$pOptions['layout']['hide_decimals']),'currency'=>$oDetails['currency'] );
+				$summary['item_tax']=array('label'=>($pOptions['localization']['item_tax_total']['lbl']),'price'=>$oDetails['item_tax'],'currency'=>$oDetails['currency'] );
 			}
 
 			/**********************************************************
 			*	[taxes included]
 			**********************************************************/
 			if($oDetails['taxes_included']>0 && $pOptions['order']['taxes_included']){
-				$summary['taxes_included']=array('label'=>sprintf(''.$pOptions['localization']['taxes_included']['lbl'].'',$pOptions['order']['item_tax']),'price'=>wppizza_output_format_price($oDetails['taxes_included'],$pOptions['layout']['hide_decimals']),'currency'=>$oDetails['currency'] );
+				$summary['taxes_included']=array('label'=>sprintf(''.$pOptions['localization']['taxes_included']['lbl'].'',$pOptions['order']['item_tax']),'price'=>$oDetails['taxes_included'],'currency'=>$oDetails['currency'] );
 			}
 
 			/**********************************************************
 			*	[handling charges - (most likely to be used for vv payment)]
 			**********************************************************/
 			if(isset($oDetails['handling_charge']) && $oDetails['handling_charge']>0){
-				$summary['handling_charge']=array('label'=>($pOptions['localization']['order_page_handling']['lbl']),'price'=>wppizza_output_format_price($oDetails['handling_charge'],$pOptions['layout']['hide_decimals']),'currency'=>$oDetails['currency'] );
+				$summary['handling_charge']=array('label'=>($pOptions['localization']['order_page_handling']['lbl']),'price'=>$oDetails['handling_charge'],'currency'=>$oDetails['currency'] );
 			}
 			/**********************************************************
 			*	[tips )]
 			**********************************************************/
 			if(isset($oDetails['tips']) && $oDetails['tips']>0){
-				$summary['tips']=array('label'=>($pOptions['localization']['tips']['lbl']),'price'=>wppizza_output_format_price($oDetails['tips'],$pOptions['layout']['hide_decimals']),'currency'=>$oDetails['currency'] );
+				$summary['tips']=array('label'=>($pOptions['localization']['tips']['lbl']),'price'=>$oDetails['tips'],'currency'=>$oDetails['currency'] );
 			}
 			/**********************************************************
 				[order total]
 			**********************************************************/
-				$summary['total']=array('label'=>($pOptions['localization']['order_total']['lbl']),'price'=>wppizza_output_format_price($oDetails['total'],$pOptions['layout']['hide_decimals']),'currency'=>$oDetails['currency'] );
+				$summary['total']=array('label'=>($pOptions['localization']['order_total']['lbl']),'price'=>$oDetails['total'],'currency'=>$oDetails['currency'] );
 			/****************************************************
 				[self pickup (enabled and selected) / no delivery offered ]
 			****************************************************/
