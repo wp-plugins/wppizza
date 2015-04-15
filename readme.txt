@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, pizzaria, pizzeria, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax, wpml
 Requires at least: PHP 5.3+, WP 3.3+ 
 Tested up to: 4.1.1
-Stable tag: 2.11.8.11
+Stable tag: 2.11.8.12
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -104,20 +104,26 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 == Changelog ==
 
+2.11.8.12  
+* internal: also return transaction_details when using wppizza_gateway_get_order_details function  
+* tweak: set css max-width on ctips input field  
+* tweak: do not submit form when hitting enter in tips field, but apply tip instead    
+15th April 2015  
+
 2.11.8.11  
-fix: removed some more possible php notices under certain circumstances  
-fix: admin print order history -> summary prices error when hiding decimals (hide decimals function erroneously applied 2x)  
+* fix: removed some more possible php notices under certain circumstances  
+* fix: admin print order history -> summary prices error when hiding decimals (hide decimals function erroneously applied 2x)  
 12th April 2015  
 
 2.11.8.10  
-added: option to not install default menu items, categories and/or pages  by defining WPPIZZA_NO_DEFAULTS (no menu items, categories, pages), WPPIZZA_NO_DEFAULT_ITEMS (no menu items, categories) and/or WPPIZZA_NO_DEFAULT_PAGES (no pages) constants in wp-config.php  
-added: more filter hooks in cart in various places  
-fix: unclosed div element in wppizza-order.php  
-fix: removed some more possible php notices under certain circumstances  
-tweak: some minor css tweaks in cart  
-tweak: some minor js tweaks (plus adding id to wrapper span) when using add_item_to_cart_button shortcode  
-tweak: added spans/classes around item name in cart and on order page    
-tweak: gateways using overlays instead of redirects will now also save user session data entered in order page  
+* added: option to not install default menu items, categories and/or pages  by defining WPPIZZA_NO_DEFAULTS (no menu items, categories, pages), WPPIZZA_NO_DEFAULT_ITEMS (no menu items, categories) and/or WPPIZZA_NO_DEFAULT_PAGES (no pages) constants in wp-config.php  
+* added: more filter hooks in cart in various places  
+* fix: unclosed div element in wppizza-order.php  
+* fix: removed some more possible php notices under certain circumstances  
+* tweak: some minor css tweaks in cart  
+* tweak: some minor js tweaks (plus adding id to wrapper span) when using add_item_to_cart_button shortcode  
+* tweak: added spans/classes around item name in cart and on order page    
+* tweak: gateways using overlays instead of redirects will now also save user session data entered in order page  
 7th April 2015  
 
 2.11.8.9  
@@ -172,93 +178,8 @@ tweak: gateways using overlays instead of redirects will now also save user sess
 10th March 2015  
 
 
-2.11.7.13  
-* added: more currencies / alternative currency displays  
-* added: filter to currencies  
-* fix: entities in item sizes were not decoded in plaintext emails   
-1st March 2015  
-
-2.11.7.12  
-* added: optionally set order history polling to be active on page load (and allow timer to be other than 30 secs as default). [wppizza->settings : miscellaneous]  
-* tweak: some cart css tweaks for more theme compatibility  
-* added [internal]: additional methods in WPPIZZA_ORDER_DETAILS class (wppizza.order.details.inc.php)  
-19th February 2015  
-
-2.11.7.11  
-* fix: admin order history - accidentally inverted 2 variables in  wppizza.order.details.inc.php  
-13th February 2015  
-
-
-2.11.7.10
-* multisite: minor cosmetics error introduced in 2.11.7.9 (wppizza->settings -> multisite showed description for non available fields when not in parent site)  
-13th February 2015  
-
- 
-2.11.7.9 
-* internal: added more methods to WPPIZZA_ORDER_DETAILS to get variables/keys without needing an orderid  
-* multisite: "cart per site" (wppizza->settings) was only displayed for parent site when it should have been available for all sites  
-13th February 2015  
-
-
-2.11.7.8  
-* fix : eliminated PHP Notice:  Undefined index: gateway-selected  
-* tweak: moved "empty order table" and "delete wppizza posts and categories" to wppizza->tools allowing it to be used independently of each other  
-* added: allow menu items - added to order page via shortcodes for example (eg upsells) - to be added to order, reloading page if necessary  
-10th February 2015  
-  
-2.11.7.7 
-* fix: stopped iOS (iPhone, iPad etc) from clicking/adding things when scrolling  
-4th February 2015  
-  
-2.11.7.6 
-MINOR UPDATES  
-* tweak: added experimantal js (for development purposes only) - off by default  
-* added: a couple of filters for admin print order template (as per user request)  
-2nd February 2015  
-
-2.11.7.5  
-MINOR UPDATES  
-* tweak: show some more system info variables (admin tools)  
-* added: a couple of action hooks at end of email templates (as per user request)  
-2nd February 2015  
-
-
-2.11.7.4  
-* WPML: admin order settings : make sure original order page settings id gets used when translation does not exist (mainly for compatibility reasons with other non WPML plugins)   
-* WPML: some more method existance checking (namely "switch_lang") to perhaps get around some compatibility issues between WPML and other translation plugins (although non WPML are typically not really supported by the plugin, but worth the effort in a couple of places perhaps)  
-* internal: wppizza->tools : make sure wppizza vars shown are coming directly from db before having had the chance of being filtered somewhere   
-* tweak: show admin order history on load without having to click button  
-* tweak: option to set admin max order history results to other than 20   
-* added: more filters added to admin order history as well as passing order status to filters  
-31st January 2015  
-
-
-2.11.7.3  
-* WPML: eliminated some possible - legacy - phpnotices regarding additives  
-* added: option to always load all css/js on all pages (to deal with certain layouts that do not pass along page id)  
-19th January 2015  
-
-2.11.7.2  
-* multisite|internal: store and use blogid per item in session too for use if/when appropriate   
-18th January 2015  
-
-2.11.7.1  
-* fixed (possible) session handling error introduced in v 2.11.7  
-15th January 2015  
-
-2.11.7  
-* tweak: split admin global settings into sections  
-* tweak: added general wppizza-optm class to opening times output spans  
-* tweak: more meaningful filenames on reports export 
-* added: wrapper function wpizzaOpeningtimes() if wppizza options are not available (in multisite blogloop for example)  
-* multisite: remove multisite settings for single installs  
-* multisite: allow reporting for all subsites (in parent site only)  
-* multisite: allow order history for all subsites (in parent site only)  
-* multisite: order history print adds sitename for easier identification (in parent site only)   
-15th January 2015  
-
 2.11   
-* changelog 2.11 to <2.11.7 can be found in logs/changelog-2.11.txt  
+* changelog 2.11 to <=2.11.7 can be found in logs/changelog-2.11.txt  
 
 2.10   
 * changelog for version 2.10 can be found in logs/changelog-2.10.txt  

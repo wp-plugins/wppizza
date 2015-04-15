@@ -188,7 +188,7 @@
 /*tips/gratuities field and button NEW IN VERSION 2.8.4 to have the error/validation message in a sensible place we have to mess around with floats etc **/
 #wppizza-send-order #wppizza-ctips-wrap-outer{overflow:auto;}
 #wppizza-send-order #wppizza-ctips-wrap-inner{float:left}
-#wppizza-send-order #ctips{width:auto;float:right}
+#wppizza-send-order #ctips{width:auto;float:right;max-width:150px}
 #wppizza-send-order #wppizza-ctips-btn{margin:2px 1px;width:auto;min-width:0;height:auto !important; padding:5px 7px !important;line-height:100%;float:right}
 #wppizza-send-order #wppizza-ctips-wrap-inner label.error{display:block}
 

@@ -595,7 +595,7 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 		if($orderId && $orderhash){$wQuery=" hash='".$orderhash."' AND id='".$orderId."' ";}
 
 
-		$getOrderDetails = $wpdb->get_row("SELECT wp_user_id, id, hash, order_ini as order_details, customer_ini as customer_details, payment_status, transaction_id, transaction_errors FROM " . $wpdb->prefix . $this->pluginOrderTable . " WHERE ".$wQuery." ".$psQuery." ".$iniQuery." LIMIT 0,1 ");
+		$getOrderDetails = $wpdb->get_row("SELECT wp_user_id, id, hash, order_ini as order_details, customer_ini as customer_details, payment_status, transaction_id, transaction_details, transaction_errors FROM " . $wpdb->prefix . $this->pluginOrderTable . " WHERE ".$wQuery." ".$psQuery." ".$iniQuery." LIMIT 0,1 ");
 		if(is_object($getOrderDetails)){
 			/**unserialize order**/
 			$getOrderDetails->order_details=maybe_unserialize($getOrderDetails->order_details);
@@ -603,6 +603,8 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 			$getOrderDetails->customer_details=maybe_unserialize($getOrderDetails->customer_details);
 			/**unserialize any errors**/
 			$getOrderDetails->transaction_errors=maybe_unserialize($getOrderDetails->transaction_errors);
+			/**unserialize any errors**/
+			$getOrderDetails->transaction_details=maybe_unserialize($getOrderDetails->transaction_details);			
 			
 			/**return details**/
 			

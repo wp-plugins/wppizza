@@ -228,11 +228,11 @@ jQuery(document).ready(function($){
 
 
 		/**stop submitting if we are hitting enter after changing quantities and update those instead**/
-			spinnerElm.keydown(function(event) {
-				if(event.which == 13 || event.which == 35){
-					event.preventDefault();
-					$('.wppizza-update-order').trigger('click');
-				return false;
+		spinnerElm.keydown(function(event) {
+			if(event.which == 13 || event.which == 35){
+				event.preventDefault();
+				$('.wppizza-update-order').trigger('click');
+			return false;
 			}
 		});
 
@@ -551,7 +551,17 @@ jQuery(document).ready(function($){
 	*	[validate tips/gratuities]
 	*******************************/
 	/**current tip value set **/
-	var wppizzaCTipsCurr=$("#wppizza-send-order #ctips").val();
+	var wppizzaTipsField=$("#wppizza-send-order #ctips");
+	var wppizzaCTipsCurr=wppizzaTipsField.val();
+	/**stop submitting form if we are hitting enter on tip field and just apply tip**/
+	wppizzaTipsField.keydown(function(event) {
+		if(event.which == 13 || event.which == 35){
+			event.preventDefault();
+			$('#wppizza-ctips-btn').trigger('click');
+		return false;
+		}
+	});
+
 	/**click should work here even on iStupid as it's a button **/
 	$(document).on('click', '#wppizza-ctips-btn', function(e){
 		/*we only want to validate the tips, so lets igmore everythig else*/
