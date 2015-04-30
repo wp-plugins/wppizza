@@ -1,3 +1,4 @@
+<?php if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/ ?>
 <?php
 		echo'<div id="'.$this->pluginSlug.'-settings" class="wrap">';
 		echo"<h2>". $this->pluginName." ".__('Opening Times', $this->pluginLocale)."</h2>";

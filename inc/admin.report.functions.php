@@ -1,3 +1,4 @@
+<?php if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/ ?>
 <?php
 	function wppizza_report_dataset($options,$locale,$orderTable){
 

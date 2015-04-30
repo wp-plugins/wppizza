@@ -1,3 +1,4 @@
+<?php if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/ ?>
 <?php
 		echo'<div id="'.$this->pluginSlug.'-gateways" class="wrap">';
 		echo"<h2>". $this->pluginName." ".__('Gateways Settings', $this->pluginLocale)."</h2>";

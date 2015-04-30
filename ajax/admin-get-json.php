@@ -670,6 +670,7 @@ $output='';
 		}
 
 		$obj['totals']=__('total all orders', $this->pluginLocale).': '.$this->pluginOptions['order']['currency_symbol'].' '.wppizza_output_format_price($totalPriceAll).'';
+
 		print"".json_encode($obj)."";
 	exit();
 	}

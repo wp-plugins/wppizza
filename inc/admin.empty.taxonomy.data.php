@@ -1,3 +1,4 @@
+<?php if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/ ?>
 <?php
 $terms = get_terms(''.$this->pluginSlugCategoryTaxonomy.'', array('hide_empty' => false));
 

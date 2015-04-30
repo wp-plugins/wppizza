@@ -1,3 +1,4 @@
+<?php if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/ ?>
 <?php
 	/*admin only*/
 	add_submenu_page('edit.php?post_type='.$this->pluginSlug.'',$this->pluginName.' '.__('Manage Global Settings', $this->pluginLocale),__('Settings', $this->pluginLocale), 'wppizza_cap_settings', $this->pluginSlug.'-settings', array($this, 'admin_manage_settings'));

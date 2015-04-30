@@ -1,3 +1,4 @@
+<?php if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/ ?>
 <?php
 	$options = $this->pluginOptions;
 	$optionsSizes =wppizza_sizes_available($options['sizes']);

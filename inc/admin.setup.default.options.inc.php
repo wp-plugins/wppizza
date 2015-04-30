@@ -1,3 +1,4 @@
+<?php if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/ ?>
 <?php
 		/**only run on first install**/
 		if(isset($install_options) && $install_options==1){

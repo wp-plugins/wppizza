@@ -641,15 +641,29 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 				/***** admin order print by template now******/
 				if(	version_compare( $options['plugin_data']['version'], '2.11.6', '<' )){$update_options['plugin_data']['nag_notice']='2.11.6';}
 
-
 				/**update options**/
 				update_option($this->pluginSlug, $update_options );
 
 				/*update order table*/
 				require_once(WPPIZZA_PATH .'inc/admin.create.order.table.inc.php');
+				
+				/*reset session when updating plugin*/
+				$this->wppizza_clear_session();
 			}
 		}
 	}
+	/************************************************************************************
+		[clear session data - used when updating plugin]
+	************************************************************************************/	
+	function wppizza_clear_session(){
+		if(isset($_SESSION[$this->pluginSessionGlobal])){
+			unset($_SESSION[$this->pluginSessionGlobal]);
+		}
+		if(isset($_SESSION[$this->pluginSession])){
+			unset($_SESSION[$this->pluginSession]);
+		}		
+	}
+	
 	/************************************************************************************
 		[DMARCE NAG - ALWAYS LEAVE THIS]
 	************************************************************************************/
@@ -2049,6 +2063,27 @@ private function wppizza_admin_section_sizes($field,$k,$v=null,$optionInUse=null
 			add_filter( 'get_search_form', array( $searchvars, 'searchvars' ) );/**add hidden wppizza input elm**/
 			get_search_form();/*output - now altered - search form**/
 			remove_filter('get_search_form',array( $searchvars, 'searchvars' ));//** reset to original or we will always have the post_type appended to the serach form once it has been run**/
+			return;
+		}
+		
+		/*********************************************************
+			[additives]
+		*********************************************************/		
+		if($type=='additives'){
+			$options = $this->pluginOptions;
+			$additives=$options['additives'];
+			
+			if(is_array($additives) && count($additives)>0){
+				asort($additives);
+				
+				$str="<div class='wppizza_additives'>";
+				foreach($additives as $k=>$additive){
+					$str.="<span class='wppizza_additive_".$k." wppizza_additive'><span class='wppizza_additive_id'>".$k."</span><span class='wppizza_additive_name_".$k." wppizza_additive_name'>".$additive['name']."</span></span>";
+				}
+				$str.="</div>";
+				
+				echo $str;
+			}
 			return;
 		}
 }

@@ -1,3 +1,4 @@
+<?php if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/ ?>
 <?php
 		echo'<div id="'.$this->pluginSlug.'-settings" class="wrap wppizza-order-settings-wrap">';
 		echo"<h2>". $this->pluginName." ".__('Orders Setting', $this->pluginLocale)."</h2>";

@@ -1,3 +1,4 @@
+<?php if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/ ?>
 <?php
 global $wpdb;
 /*no backticks or apostrophies around fieldnames please**/

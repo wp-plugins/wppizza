@@ -1,3 +1,4 @@
+<?php if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/ ?>
 <?php
 	if(!isset($k)){
 		$val=array('date'=>'','open'=>'','close'=>'');

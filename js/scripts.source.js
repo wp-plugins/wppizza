@@ -408,7 +408,7 @@ jQuery(document).ready(function($){
 
 				wppizzaCartRefreshed(wppizza.funcCartRefr,response);
 
-			},'json').error(function(jqXHR, textStatus, errorThrown) {alert("error : " + errorThrown);console.log(jqXHR.responseText);$('.wppizza-order #wppizza-loading').remove();});
+			},'json').error(function(jqXHR, textStatus, errorThrown) {console.log("error : " + errorThrown);console.log(jqXHR.responseText);$('.wppizza-order #wppizza-loading').remove();});
 		}});
 
 	/***********************************************

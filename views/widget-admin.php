@@ -1,4 +1,8 @@
 <?php
+// Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) exit;
+?>
+<?php
 
     $instance = wp_parse_args(
         (array)$instance,$this->wppizza_default_widget_settings()

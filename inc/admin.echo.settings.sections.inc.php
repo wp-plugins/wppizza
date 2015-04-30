@@ -1,3 +1,4 @@
+<?php if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/ ?>
 <?php
 		register_setting($this->pluginSlug,$this->pluginSlug, array( $this, 'wppizza_admin_options_validate') );
 

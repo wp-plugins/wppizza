@@ -1,3 +1,4 @@
+<?php if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/ ?>
 <?php
 	$gateways=$this->wppizza_get_registered_gateways();
 	if(count($gateways)>0){

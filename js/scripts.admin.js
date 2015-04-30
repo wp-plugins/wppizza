@@ -453,6 +453,7 @@ jQuery(document).ready(function($){
 	/******************************
 	*	[show orders]
 	******************************/
+	var pollError=0;
 	$(document).on('click', '#history_get_orders', function(e){
 		e.preventDefault();
 		var limit=$('#history_orders_limit').val();
@@ -461,7 +462,15 @@ jQuery(document).ready(function($){
 			$('#wppizza_history_orders').html(response.orders);
 			$('#wppizza_history_totals').html(response.totals);
 			$('#wppizza-orders-polling').removeClass();
-		},'json').error(function(jqXHR, textStatus, errorThrown) {alert("error : " + errorThrown);});
+			pollError=0;
+		},'json').error(function(jqXHR, textStatus, errorThrown) {
+			pollError++;	
+			if(pollError>=5){
+				alert("error : " + errorThrown);
+			}else{
+				console.log("error : " + errorThrown);	
+			}
+		});
 	});
 	/******************************
 	*	[show orders on load too ]

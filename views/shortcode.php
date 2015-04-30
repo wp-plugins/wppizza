@@ -1,4 +1,8 @@
 <?php
+// Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) exit;
+?>
+<?php
 extract(shortcode_atts(array('type' => ''), $atts));
 
 /**********************************************
@@ -139,6 +143,19 @@ if($type=='orderhistory'){
 if($type=='openingtimes'){
 	$options = $this->pluginOptions;
 	$markup = wppizza_frontendOpeningTimes($options);
+}
+/**********************************************
+	[additives]
+	possible attributes:
+	type='additives' (required [str])
+	example: 		[wppizza type='additives']
+	returns additives in a html string
+**********************************************/
+if($type=='additives'){
+	ob_start();
+	$this->wppizza_include_shortcode_template($type,$atts);
+	$markup = ob_get_clean();
+	return $markup;
 }
 /**********************************************
 	[totals]

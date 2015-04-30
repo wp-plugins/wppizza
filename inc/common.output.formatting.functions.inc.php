@@ -1,3 +1,4 @@
+<?php if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/ ?>
 <?php
 	function wppizza_output_format_float($str,$type='price'){
 		if($type=='price'){

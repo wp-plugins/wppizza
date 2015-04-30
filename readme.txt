@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, pizzaria, pizzeria, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax, wpml
 Requires at least: PHP 5.3+, WP 3.3+ 
 Tested up to: 4.1.1
-Stable tag: 2.11.8.12
+Stable tag: 2.11.8.13
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -103,6 +103,16 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 
 == Changelog ==
+
+2.11.8.13  
+* tweak: clear session data when updating plugin to eliminate possible php notices or errors for already initialized sessions   
+* tweak: changed to a language agnostic menu item placeholder image  
+* tweak: log some possible ajax error to console, instead of alerting them  
+* tweak: order history polling failing silently for up to 5 times before throwing alert  
+* tweak: added some missing "!defined( 'ABSPATH' )" sanity checks (just to be doubly safe. though should not really be any issue not having it as in previous versions)  
+* added: [wppizza type="additives"] shortcode to display all additives somewhere if required. (no styling applied , but plenty of css classes available) 
+30th April 2015  
+
 
 2.11.8.12  
 * internal: also return transaction_details when using wppizza_gateway_get_order_details function  

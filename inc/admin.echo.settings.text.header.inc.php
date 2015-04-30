@@ -1,3 +1,4 @@
+<?php if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/ ?>
 <?php settings_errors(); ?>
 <?php
 		if($v['id']=='global'){

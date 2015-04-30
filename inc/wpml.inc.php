@@ -1,3 +1,4 @@
+<?php if ( ! defined( 'ABSPATH' ) ) exit;/*Exit if accessed directly*/ ?>
 <?php
 	/*no need to run this when no wpml or on wppizza first install*/
 	if($this->pluginOptions!=0) {
