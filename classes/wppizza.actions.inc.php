@@ -153,7 +153,13 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 			/*when saving custom post*/
 			add_action('save_post', array( $this, 'wppizza_admin_save_metaboxes'), 10, 2 );
 			/**sort menu item column in admin by name**/
-			add_filter( 'request', array( $this, 'wppizza_items_sort') );
+			add_filter('request', array( $this, 'wppizza_items_sort') );
+			/*add order column**/
+			add_action('manage_edit-wppizza_columns', array( $this, 'wppizza_new_wppizza_column'));
+			add_action('manage_wppizza_posts_custom_column',array( $this,'wppizza_show_order_column'));
+			add_filter('manage_edit-wppizza_sortable_columns',array( $this,'wppizza_order_column_register_sortable'));//currently not in use
+			
+			
 			/**registration fields***/
 			add_action( 'show_user_profile', array( $this, 'wppizza_user_info') );
 			add_action( 'edit_user_profile', array( $this, 'wppizza_user_info') );
@@ -818,7 +824,57 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 		}
 	return $request;
 	}
-
+	/*******************************************************
+		[show order column in wppizza menu table]
+	******************************************************/
+	function wppizza_new_wppizza_column($header_text_columns) {
+		$header_text_columns['wppizza-prices'] = __('Prices', $this->pluginLocale);
+		
+		//ignore for now
+		//$header_text_columns['wppizza-menu_order'] = __('Order', $this->pluginLocale);
+  		
+  		return $header_text_columns;
+	}
+	/**
+	* show custom order column values
+	*/
+	function wppizza_show_order_column($name){
+	  global $post;
+	
+	  switch ($name) {
+		//ignore for now
+		//	    case 'wppizza-menu_order':
+		//	      $order = $post->menu_order;
+		//	      echo $order;
+		//	      break;
+	      
+	     case 'wppizza-prices': 
+	     	$meta=get_post_meta($post->ID, WPPIZZA_POST_TYPE, true );
+	     	$sizes=$this->pluginOptions['sizes'][$meta['sizes']];
+	     	$str='';
+	     	if(is_array($sizes)){
+	      		$str.='<table><tr>';
+	      		foreach($sizes as $k=>$s){
+	      			$str.='<td>'.$s['lbl'].'<br />'.$meta['prices'][$k].'</td>' ;
+	      		}
+	      		$str.='</tr></table>';
+     		}
+	      
+	      echo $str;
+	     break;
+	   default:
+	      break;
+	   }
+	}	
+	/**
+	* 	make column sortable /  not in use / ignored
+	*	ignore for now
+	*/
+	function wppizza_order_column_register_sortable($columns){
+	  //$columns['wppizza-menu_order'] = 'menu_order';
+	  //$columns['prices'] = 'prices';
+	  return $columns;
+	}	
 	/*****************************************************
 		[save sortorder when creating or deleting, categories]
 	*****************************************************/
@@ -2225,6 +2281,7 @@ public function wppizza_require_common_input_validation_functions(){
 		register_post_type( $this->pluginSlug, $args );
 	}
 
+
 	/*******************************************************
 		[register taxonomy + taxonomy related functions]
 	******************************************************/
@@ -2404,7 +2461,7 @@ public function wppizza_require_common_input_validation_functions(){
     		$args['wppizza']=false;
     		$args[WPPIZZA_SINGLE_PERMALINK_VAR]=''.$slug.'';//'.$slug.'
     		/**amend permalink**/
-    		return add_query_arg($args, $url);
+    		return esc_url_raw(add_query_arg($args, $url));
 		}else{
 			return	$url;
 		}
@@ -3141,7 +3198,7 @@ public function wppizza_require_common_input_validation_functions(){
 			}
 			if($multiTaxonomy){
 				$params = array( 'c' => $setTaxonomy );//$setTaxonomy//$categoryId
-				$permalink = add_query_arg( $params, $permalink );
+				$permalink = esc_url_raw(add_query_arg( $params, $permalink ));
 			}
 		}
 		return $permalink;
@@ -3723,7 +3780,7 @@ function wppizza_cat_parents($options, $blogid, $id, $separator =' &raquo; ', $p
 
 		echo'<div class="wppizza-history-pagination-wrap">';
 		if($page_cur>1){
-			$link= add_query_arg(array('pg' => ($page_cur-1)), $currentPageLink );
+			$link= esc_url_raw(add_query_arg(array('pg' => ($page_cur-1)), $currentPageLink ));
 			echo '<a href="'.$link.'" class="wppizza-history-pagination-txt">'.__('Previous').'</a>';
 		}else{
 			echo '<a class="wppizza-history-pagination-txt-disabled" disabled="disabled">'.__('Previous').'</a>';
@@ -3733,13 +3790,13 @@ function wppizza_cat_parents($options, $blogid, $id, $separator =' &raquo; ', $p
 			if($page_cur==$i){
 				echo '<a href="javascript:void(0)" class="wppizza-history-pagination-selected">'.$i.'</a>';
 			}else{
-				$link= add_query_arg(array('pg' => $i), $currentPageLink );
+				$link= esc_url_raw(add_query_arg(array('pg' => $i), $currentPageLink ));
 				echo '<a href="'.$link.'" class="wppizza-history-pagination">'.$i.'</a>';
 			}
 		}
 
 		if($page_cur<$total_page){
-			$link= add_query_arg(array('pg' => ($page_cur+1)), $currentPageLink );
+			$link= esc_url_raw(add_query_arg(array('pg' => ($page_cur+1)), $currentPageLink ));
 			echo '<a href="'.$link.'" class="wppizza-history-pagination-txt">'.__('Next').'</a>';
 		}else{
 			echo '<a class="wppizza-history-pagination-txt-disabled" disabled="disabled">'.__('Next').'</a>';

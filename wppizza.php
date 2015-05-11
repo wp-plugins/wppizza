@@ -5,7 +5,7 @@ Description: Maintain your restaurant menu online and accept cash on delivery or
 Author: ollybach
 Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Author URI: https://www.wp-pizza.com
-Version: 2.11.8.13
+Version: 2.11.8.14
 License:
 
   Copyright 2012 ollybach (dev@wp-pizza.com)
@@ -36,7 +36,7 @@ to change the variable (in case there are namespace clashes or just if one prefe
 if(!defined('WPPIZZA_SINGLE_PERMALINK_VAR')){
 	define('WPPIZZA_SINGLE_PERMALINK_VAR', 'menu_item');
 }
-define('WPPIZZA_VERSION', '2.11.8.13');
+define('WPPIZZA_VERSION', '2.11.8.14');
 define('WPPIZZA_CLASS', 'WPPizza');
 define('WPPIZZA_SLUG', 'wppizza');/*DO NOT EVEN THINK ABOUT CHANGING THIS*/
 define('WPPIZZA_LOCALE', 'wppizza-locale');
@@ -122,14 +122,14 @@ class WPPizza extends WP_Widget {
 		switch_to_blog(BLOG_ID_CURRENT_SITE);
 			$wppOptions=get_option('wppizza');
 			if(!$wppOptions['plugin_data']['wp_multisite_session_per_site']){
-				$multisession=false;	
+				$multisession=false;
 			}
 		restore_current_blog();
-		global $blog_id;		
+		global $blog_id;
 		if($multisession){
 			$this->pluginSession=$this->pluginSlug.''.$blog_id;
 		}else{
-			$this->pluginSession=$this->pluginSlug;	
+			$this->pluginSession=$this->pluginSlug;
 		}
 	}else{
 		$this->pluginSession=$this->pluginSlug;
@@ -291,12 +291,12 @@ class WPPizza extends WP_Widget {
 				unset($_SESSION[$this->pluginSessionGlobal]['userdata']['gateway']);
 			}
 			$selectedGateway=!empty($params['wppizza-gateway']) ? strtoupper(wppizza_validate_string($params['wppizza-gateway'])) : '';
-			
+
 			/*reset session if not empty*/
 			if($selectedGateway!=''){
 				$_SESSION[$this->pluginSessionGlobal]['userdata']['gateway']=$selectedGateway;
 			}
-		
+
 			/**allow filtering of session data**/
 			$_SESSION[$this->pluginSessionGlobal]['userdata'] = apply_filters('wppizza_filter_sessionise_userdata', $_SESSION[$this->pluginSessionGlobal]['userdata'],$params);
 

@@ -148,6 +148,12 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 		$displayAsDropdown=$this->pluginOptions['gateways']['gateway_select_as_dropdown'];
 		$selectLabel=$this->pluginOptions['gateways']['gateway_select_label'];
 		$enabledGateways=$this->pluginGateways;
+		
+		
+		/***allow filtering in frontend output**/
+		$enabledGateways = apply_filters('wppizza_filter_gateways_available', $enabledGateways);	
+		
+		/**loop and print**/
 		if(count($enabledGateways)>0){
 			/**display choice of more than one**/
 			if(count($enabledGateways)>1){
@@ -595,7 +601,7 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 		if($orderId && $orderhash){$wQuery=" hash='".$orderhash."' AND id='".$orderId."' ";}
 
 
-		$getOrderDetails = $wpdb->get_row("SELECT wp_user_id, id, hash, order_ini as order_details, customer_ini as customer_details, payment_status, transaction_id, transaction_details, transaction_errors FROM " . $wpdb->prefix . $this->pluginOrderTable . " WHERE ".$wQuery." ".$psQuery." ".$iniQuery." LIMIT 0,1 ");
+		$getOrderDetails = $wpdb->get_row("SELECT id, wp_user_id, order_date, hash, order_ini as order_details, customer_ini as customer_details, payment_status, transaction_id, transaction_details, transaction_errors FROM " . $wpdb->prefix . $this->pluginOrderTable . " WHERE ".$wQuery." ".$psQuery." ".$iniQuery." LIMIT 0,1 ");
 		if(is_object($getOrderDetails)){
 			/**unserialize order**/
 			$getOrderDetails->order_details=maybe_unserialize($getOrderDetails->order_details);

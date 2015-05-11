@@ -365,6 +365,8 @@
 				'empty_cart_button' => false,
 				'prettyPhoto' => false,
 				'prettyPhotoStyle' => 'pp_default',
+				'items_sort_orderby' => 'menu_order',
+				'items_sort_order' => 'ASC',
 				'items_group_sort_print_by_category' => false,
 				'items_category_hierarchy' => 'full',
 				'items_category_hierarchy_cart' => 'parent',

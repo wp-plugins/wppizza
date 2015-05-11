@@ -126,6 +126,10 @@
 			$options['layout']['prettyPhotoStyle']=wppizza_validate_string($input['layout']['prettyPhotoStyle']);
 			$options['layout']['empty_cart_button'] = !empty($input['layout']['empty_cart_button']) ? true : false;
 			$options['layout']['items_group_sort_print_by_category'] = !empty($input['layout']['items_group_sort_print_by_category']) ? true : false;
+			
+			$options['layout']['items_sort_orderby'] = (in_array($input['layout']['items_sort_orderby'],array('menu_order','title','ID','date'))) ? $input['layout']['items_sort_orderby'] : 'menu_order';
+			
+			$options['layout']['items_sort_order'] = (in_array($input['layout']['items_sort_order'],array('ASC','DESC'))) ? $input['layout']['items_sort_order'] : 'ASC';
 			$options['layout']['items_category_hierarchy'] = preg_replace("/[^a-z]/","",$input['layout']['items_category_hierarchy']);
 			$options['layout']['items_category_hierarchy_cart'] = preg_replace("/[^a-z]/","",$input['layout']['items_category_hierarchy_cart']);
 			$options['layout']['items_category_separator']=wppizza_validate_string($input['layout']['items_category_separator']);

@@ -16,6 +16,10 @@
 .wppizza_img_placeholder{width:75px;height:75px;background:url('img/no_image.png');margin:3px auto}
 
 /*******************
+	[menu item list admin order]
+********************/
+#wppizza-menu_order{width:5%}
+/*******************
 	[metaboxes]
 ********************/
 .wppizza-meta-label{float:left;min-width:165px;line-height:200%}

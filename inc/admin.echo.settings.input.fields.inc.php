@@ -2,7 +2,7 @@
 <?php
 $options = $this->pluginOptions;
 	if($options!=0){
-		
+
 	global $blog_id;
 
 	$optionInUse=wppizza_options_in_use();//outputs an array $arr=array(['sizes']=>array(),['additives']=>array());
@@ -32,14 +32,14 @@ $options = $this->pluginOptions;
 				echo "<input id='admin_order_history_polling_time' name='".$this->pluginSlug."[plugin_data][admin_order_history_polling_time]' size='2' type='text'  value='{$options['plugin_data']['admin_order_history_polling_time']}' />";
 				echo" <span class='description'>".__('default polling time [in seconds]', $this->pluginLocale)."</span>";
 			}
-			
+
 			/**only displayed in multisite installs**/
 			if($field=='wp_multisite_session_per_site'){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[plugin_data][".$field."]' type='checkbox'  ". checked($options['plugin_data'][$field],true,false)." value='1' />";
 				echo" <span class='description'>".__('Set cart contents and order on a per site basis when using subdirectories. This has no effect/relevance when there\'s no multisite setup or using different domains per site on the network. Chances are that you want this on when you have a multisite/network install.', $this->pluginLocale)."</span>";
 				echo"<br /><span class='description' style='color:red'>".__('THERE ARE ONLY VERY FEW SECENARIOS WHERE YOU MIGHT WANT THIS OFF', $this->pluginLocale)."</span>";
 			}
-			
+
 			/**only displayed in multisite installs and on parent site**/
 			if($field=='wp_multisite_reports_all_sites'){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[plugin_data][".$field."]' type='checkbox'  ". checked($options['plugin_data'][$field],true,false)." value='1' />";
@@ -53,17 +53,17 @@ $options = $this->pluginOptions;
 				echo" <span class='description'>".__('check to have order history to use all orders of all child sites', $this->pluginLocale)."</span>";
 				echo"<br /><span><b>".__('only applicable in parent site\'s order history. order history in child sites will only ever show values based on that sites orders', $this->pluginLocale)."</b></span>";
 				echo"<br /><span class='description' style='color:red'>".__('NOTE: THIS MIGHT SLOW THINGS DOWN IN THE ADMIN ORDER HISTORY PAGE OF YOUR MAIN/PARENT SITE CONSIDERABLY', $this->pluginLocale)."</span>";
-				
+
 				echo"<br />";
 				echo"<br /><strong>".__('Order history print options', $this->pluginLocale)."</strong>";
 				echo"<br />";
 				echo "<input id='wp_multisite_order_history_print_header_from_child' name='".$this->pluginSlug."[plugin_data][wp_multisite_order_history_print][header_from_child]' type='checkbox'  ". checked(!empty($options['plugin_data']['wp_multisite_order_history_print']['header_from_child']),true,false)." value='1' />";
 				echo" <span class='description'>".__('use header name/address of site <b>where the order was made</b> (set in localization : Print Order Admin - [Header] | Print Order Admin - [Address] <b>of that site</b>)', $this->pluginLocale)."</span>";
-				
+
 				echo"<br />";
 				echo "<input id='wp_multisite_order_history_print_multisite_info' name='".$this->pluginSlug."[plugin_data][wp_multisite_order_history_print][multisite_info]' type='checkbox'  ". checked(!empty($options['plugin_data']['wp_multisite_order_history_print']['multisite_info']),true,false)." value='1' />";
 				echo" <span class='description'>".__('add small display of order site\'s name if different from name in header [e.g if header displays parent name/address, but order was made at child site]', $this->pluginLocale)."</span>";
-				
+
 			}
 
 			if($field=='using_cache_plugin'){
@@ -178,7 +178,18 @@ $options = $this->pluginOptions;
 				echo "".__('on right', $this->pluginLocale)." <input id='".$field."' name='".$this->pluginSlug."[layout][".$field."]' type='radio'  ".checked($options['layout'][$field],2,false)." value='2' />";
 			}
 
-
+			if($field=='items_sort_orderby'){
+				echo "<select name='".$this->pluginSlug."[layout][".$field."]' />";
+						echo"<option value='menu_order' ".selected($options['layout'][$field],"menu_order",false).">".__('Default (set order attribute)', $this->pluginLocale)."</option>";
+						echo"<option value='title' ".selected($options['layout'][$field],"title",false).">".__('Title', $this->pluginLocale)."</option>";
+						echo"<option value='ID' ".selected($options['layout'][$field],"ID",false).">".__('ID', $this->pluginLocale)."</option>";
+						echo"<option value='date' ".selected($options['layout'][$field],"date",false).">".__('Date', $this->pluginLocale)."</option>";
+				echo "</select>";
+				echo "<select name='".$this->pluginSlug."[layout][items_sort_order]' />";
+						echo"<option value='ASC' ".selected($options['layout']['items_sort_order'],"ASC",false).">".__('Ascending', $this->pluginLocale)."</option>";
+						echo"<option value='DESC' ".selected($options['layout']['items_sort_order'],"DESC",false).">".__('Descending', $this->pluginLocale)."</option>";
+				echo "</select>";
+			}
 			if($field=='items_group_sort_print_by_category'){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[layout][".$field."]' type='checkbox'  ". checked($options['layout'][$field],true,false)." value='1' />";
 				echo" <span class='description'>".__('displays categories in cart, order page and emails', $this->pluginLocale)."</span>";
@@ -394,11 +405,11 @@ $options = $this->pluginOptions;
 				echo" <span>".__('always show minicart, even if main cart is in view', $this->pluginLocale)."</span>";
 				echo"<br />";
 				echo "<input name='".$this->pluginSlug."[layout][".$field."]' size='2' type='text'  value='{$options['layout'][$field]}' />";
-				echo" <span>".__('max browser width up to which the minicart will be shown. useful for themes that, under a certain browser window width, change to a responsive design that moves elements to different places. [in px, 0 to ignore]', $this->pluginLocale)."</span>";			
+				echo" <span>".__('max browser width up to which the minicart will be shown. useful for themes that, under a certain browser window width, change to a responsive design that moves elements to different places. [in px, 0 to ignore]', $this->pluginLocale)."</span>";
 				echo"<br />";
 				echo "<input name='".$this->pluginSlug."[layout][minicart_elm_padding_top]' size='2' type='text'  value='{$options['layout']['minicart_elm_padding_top']}' />";
 				echo" <span>".__('add additional top padding to body element if small cart is displayed. [in px, 0 to ignore]', $this->pluginLocale)."</span>";
-				
+
 				echo"<hr />";
 				echo"<hr />";
 				echo "<input name='".$this->pluginSlug."[layout][minicart_add_to_element]' size='20' type='text'  value='{$options['layout']['minicart_add_to_element']}' />";
@@ -406,11 +417,11 @@ $options = $this->pluginOptions;
 				echo"<br /><span class='description'>".__('use jQuery selectors, such as #my-elm-id or .my_elm_class etc. You might have to use additional css declarations for your theme.', $this->pluginLocale)."</span>";
 				echo"<br />";
 				echo "<input name='".$this->pluginSlug."[layout][minicart_elm_padding_selector]' size='20' type='text'  value='{$options['layout']['minicart_elm_padding_selector']}' />";
-				echo" <span>".__('add above set padding to another element *instead* of the body tag (use jQuery selectors, such as #my-elm-id or .my_elm_class etc)', $this->pluginLocale)."</span>";				
+				echo" <span>".__('add above set padding to another element *instead* of the body tag (use jQuery selectors, such as #my-elm-id or .my_elm_class etc)', $this->pluginLocale)."</span>";
 
 
 			}
-			
+
 			if($field=='opening_times_standard'){
 				echo"<div id='wppizza_".$field."'>";
 				foreach(wppizza_days() as $k=>$v){

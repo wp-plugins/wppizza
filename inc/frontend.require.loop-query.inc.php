@@ -203,8 +203,8 @@ $headerclassesh1=implode(" ",$headerClassH1);
 				'include_children' => false
 			)
 		),
-		'orderby'=>'menu_order',
-		'order'=>'ASC'
+		'orderby'=>''.$options['layout']['items_sort_orderby'].'',
+		'order'=>''.$options['layout']['items_sort_order'].''
 	);
 
 	/**new in version 2.5. currenly used to display single posts***/
