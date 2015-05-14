@@ -24,14 +24,15 @@ class WPPIZZA_EDD_SL{
 
 	/***********************************************
 	*
-	*	[add edd sl updater class tooo gateways]
+	*	[add edd sl updater class too gateways]
 	*
 	***********************************************/
-	function gateway_edd_updater($gwEddLicenseKey,$gwEddUrl,$gwEddVersion,$gwEddName){
+	function gateway_edd_updater($gwEddLicenseKey, $gwEddUrl, $gwEddVersion, $gwEddName, $gatewaypluginpath=false, $author='ollybach'){
 		/*include class*/
-		if( !class_exists( 'WPPIZZA_EDD_SL_PLUGIN_UPDATER' ) ) {
-			require_once(WPPIZZA_PATH.'classes/wppizza.edd.plugin.updater.inc.php');
+		if( !class_exists( 'WPPIZZA_EDD_SL_UPDATER' ) ) {
+			require_once(WPPIZZA_PATH.'classes/wppizza.edd.plugin.updater.1.6.php');
 		}
+
 		/*******
 		passing along array of options as opposed to single value (as it might still be undefined before saving the first time)
 		also check that we are passing the whole options array for legacy / old gateways that only pass on GatewayEDDLicense array.
@@ -40,16 +41,66 @@ class WPPIZZA_EDD_SL{
 		if(isset($gwEddLicenseKey['GatewayEDDLicense'])){
 			$gwEddLicenseKey=$gwEddLicenseKey['GatewayEDDLicense'];
 		}
-
 		/*retrieve our license key from the DB*/
 		$license_key=empty($gwEddLicenseKey) ? '' : $gwEddLicenseKey;
 
+
+		/*****************
+			fix pluginpath variable for EDD used in some gateways -
+			WILL BE OBSOLETE ONCE ALL AFFECTED GATEWAYS HAVE BEEN UPDATED TO HAVE THIS PARAMETER
+			(should be passed as __FILE__ in gateways)
+		*******************/
+		if(!$gatewaypluginpath){
+			$gatewaypluginpath=__FILE__;//ini var (although __FILE__ is actually wrong here )
+
+			/*make lowercase*/
+			$gwname=strtolower($gwEddName);
+
+			/*stripe*/
+			if (strpos($gwname,'stripe') !== false) {
+				$gatewaypluginpath='wppizza-gateway-stripe/wppizza-gateway-stripe.php';
+			}
+			if (strpos($gwname,'2checkout') !== false) {
+				$gatewaypluginpath='wppizza-gateway-2checkout/wppizza-gateway-2checkout.php';
+			}
+			if (strpos($gwname,'authorize') !== false) {
+				$gatewaypluginpath='wppizza-gateway-authorize.net/wppizza-gateway-authorize.net.php';
+			}
+			if (strpos($gwname,'cardsave') !== false) {
+				$gatewaypluginpath='wppizza-gateway-cardsave/wppizza-gateway-cardsave.php';
+			}
+			if (strpos($gwname,'epay') !== false) {
+				$gatewaypluginpath='wppizza-gateway-epay.dk/wppizza-gateway-epay.dk.php';
+			}
+			if (strpos($gwname,'epdq') !== false) {
+				$gatewaypluginpath='wppizza-gateway-epdq/wppizza-gateway-epdq.php';
+			}
+			if (strpos($gwname,'realex') !== false) {
+				$gatewaypluginpath='wppizza-gateway-realex/wppizza-gateway-realex.php';
+			}
+			if (strpos($gwname,'saferpay') !== false) {
+				$gatewaypluginpath='wppizza-gateway-saferpay/wppizza-gateway-saferpay.php';
+			}
+			if (strpos($gwname,'sagepay') !== false) {
+				$gatewaypluginpath='wppizza-gateway-sagepay/wppizza-gateway-sagepay.php';
+			}
+			if (strpos($gwname,'sisow') !== false) {
+				$gatewaypluginpath='wppizza-gateway-sisow/wppizza-gateway-sisow.php';
+			}
+			if (strpos($gwname,'sofort') !== false) {
+				$gatewaypluginpath='wppizza-gateway-stripe/wppizza-gateway-stripe.php';
+			}
+		}
+
+
 		/* setup the updater */
-		$edd_updater = new WPPIZZA_EDD_SL_PLUGIN_UPDATER( $gwEddUrl, __FILE__, array(
+		$edd_updater = new WPPIZZA_EDD_SL_UPDATER( $gwEddUrl, $gatewaypluginpath , array(
 			'version'		=> $gwEddVersion, 		// current version number
 			'license'		=> $license_key, 	// license key (used get_option above to retrieve from DB)
 			'item_name'		=> $gwEddName, 	// name of this plugin
-			'author'		=> 'ollybach'  // author of this plugin
+			'author'		=> $author,  // author of this plugin
+			'url'           => home_url(),//added
+			'plugin'        => $gatewaypluginpath //added to eliminate php notice on admin plugins screen if missing 
 			)
 		);
 	}
@@ -189,9 +240,9 @@ class WPPIZZA_EDD_SL{
 			$output.='<span style="color:red;"> '. __('License in-active', WPPIZZA_LOCALE).' ['.$status.']</span>';
 		}
 		$output.='<br/>'.__('Please note: entering and activating the license is optional, but if you choose not to do so, you will not be informed of any future bugfixes and/or updates.', WPPIZZA_LOCALE).'<br />';
-		
+
 		if($echo){
-			echo $output;	
+			echo $output;
 		}else{
 			return $output;
 		}

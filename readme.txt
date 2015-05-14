@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, pizzaria, pizzeria, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax, wpml
 Requires at least: PHP 5.3+, WP 3.3+ 
 Tested up to: 4.2.2
-Stable tag: 2.11.8.14
+Stable tag: 2.11.8.15
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -103,6 +103,11 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 
 == Changelog ==
+
+2.11.8.15  
+* internal: updated EDD updater (should make some external gateway update notifications more reliable)   
+14th May 2015  
+
 
 2.11.8.14  
 * added: class (WPPIZZA_USER_DETAILS) to get order details for a specific logged in user (as yet unused)  

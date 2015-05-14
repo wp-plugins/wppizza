@@ -295,6 +295,18 @@ class WPPIZZA_EDD_SL_UPDATER {
 
         if ( ! is_wp_error( $request ) ) {
             $request = json_decode( wp_remote_retrieve_body( $request ) );
+
+			/************************************************************
+				added for some wppizza gateways (if necessary)
+				avoid phpnotice index:plugin in admin plugins.php if we can
+				from $api_params['plugin'] if available/sent
+			*************************************************************/
+			if(empty($request->plugin)){
+				$request->plugin=	!empty($api_params['plugin']) ? $api_params['plugin'] : '';
+			}
+			/************************************************************
+				[end edit]
+			************************************************************/
         }
 
         if ( $request && isset( $request->sections ) ) {
@@ -302,6 +314,9 @@ class WPPIZZA_EDD_SL_UPDATER {
         } else {
             $request = false;
         }
+
+
+
 
         return $request;
     }
