@@ -11,7 +11,7 @@
 	or - if your theme supports it - add your custom css wherever appropriate
 */
 /**get / set headers, grid variables etc **/
-require(WPPIZZA_PATH.'inc/frontend.require.grid-css.inc.php');
+require('../inc/frontend.require.grid-css.inc.php');
 ?>
 /****************************************************************************************
 *
