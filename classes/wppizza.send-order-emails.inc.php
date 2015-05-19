@@ -210,7 +210,7 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 				foreach($cDetails as $k=>$v){
 					/*****default input fields of this plugin*****/
 					if(isset($protectedKeys[$k])){
-						$wppizzaEmailCustomerDetails[]=array('label'=>$protectedKeys[$k]['lbl'],'value'=>$cDetails[$k],'type'=>$protectedKeys[$k]['type']);
+						$wppizzaEmailCustomerDetails[]=array('label'=>$protectedKeys[$k]['lbl'],'value'=>$cDetails[$k],'type'=>$protectedKeys[$k]['type'],'key'=>$k);
 					}
 					/**********************************************************************************************************
 					*
@@ -231,7 +231,7 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 					**********************************************************************/
 					if(!isset($protectedKeys[$k])){
 						if(is_array($v) && isset($v['label']) && isset($v['value']) && !isset($protectedKeys[$k]) ){
-							$wppizzaEmailCustomerDetails[]=array('label'=>$v['label'],'value'=>$v['value'],'type'=>'text');
+							$wppizzaEmailCustomerDetails[]=array('label'=>$v['label'],'value'=>$v['value'],'type'=>'text', 'key'=>$k);
 						}
 					}
 				}

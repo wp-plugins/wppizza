@@ -226,6 +226,19 @@ jQuery(document).ready(function($){
 
 		}
 	});
+
+	/******************************
+	*	[chaging to grid layout - onchange]
+	******************************/
+	$(document).on('change', '#wppizza_layout_style', function(e){
+		var val=$(this).val();
+		if(val=='grid'){
+			$('#wppizza-style-grid').css('display', 'block');
+		}else{
+			$('#wppizza-style-grid').css('display', 'none');
+		}
+	});
+
 	/*****************************
 	*	[remove an option]
 	*****************************/
@@ -271,7 +284,7 @@ jQuery(document).ready(function($){
 		jQuery.post(ajaxurl , {action :'wppizza_admin_json',vars:{'field':'get-php-vars'}}, function(res) {
 			elm.html(res);
 		},'html').error(function(jqXHR, textStatus, errorThrown) {alert("error : " + errorThrown);});
-	});	
+	});
     /*******************************
 	*	[chosen]
 	*******************************/
@@ -464,20 +477,20 @@ jQuery(document).ready(function($){
 			$('#wppizza-orders-polling').removeClass();
 			pollError=0;
 		},'json').error(function(jqXHR, textStatus, errorThrown) {
-			pollError++;	
+			pollError++;
 			if(pollError>=5){
 				alert("error : " + errorThrown);
 			}else{
-				console.log("error : " + errorThrown);	
+				console.log("error : " + errorThrown);
 			}
 		});
 	});
 	/******************************
 	*	[show orders on load too ]
-	******************************/	
+	******************************/
 	var triggerTarget=$('#history_get_orders');
 	triggerTarget.trigger('click');
-	
+
 	/******************************
 	*	[get total of all orders]
 	******************************/

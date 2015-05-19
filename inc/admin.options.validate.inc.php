@@ -40,16 +40,16 @@
 			$options['plugin_data']['wp_multisite_session_per_site'] = !empty($input['plugin_data']['wp_multisite_session_per_site']) ? true : false;
 			$options['plugin_data']['wp_multisite_reports_all_sites'] = !empty($input['plugin_data']['wp_multisite_reports_all_sites']) ? true : false;
 			$options['plugin_data']['wp_multisite_order_history_all_sites'] = !empty($input['plugin_data']['wp_multisite_order_history_all_sites']) ? true : false;
-			
+
 			/**save as array so - in future - we can enable / disable parts with checkboxes etc without having to use filters or editing templates*/
 			$options['plugin_data']['wp_multisite_order_history_print'] =array();//default
 			if(is_multisite()){
 				$options['plugin_data']['wp_multisite_order_history_print']['header_from_child']  = !empty($input['plugin_data']['wp_multisite_order_history_print']['header_from_child']) ? true : false;
 				$options['plugin_data']['wp_multisite_order_history_print']['multisite_info']  = !empty($input['plugin_data']['wp_multisite_order_history_print']['multisite_info']) ? true : false;
 			}
-			
-			
-			
+
+
+
 			/*if not multisite use defaults*/
 			if(!is_multisite()){
 				$options['plugin_data']['wp_multisite_session_per_site'] =true;
@@ -107,6 +107,9 @@
 			$options['layout']['css_priority'] = wppizza_validate_int_only($input['layout']['css_priority']);
 			$options['layout']['hide_decimals'] = !empty($input['layout']['hide_decimals']) ? true : false;
 			$options['layout']['style'] = wppizza_validate_alpha_only($input['layout']['style']);
+			$options['layout']['style_grid_columns'] = ((int)$input['layout']['style_grid_columns']>0) ? (int)$input['layout']['style_grid_columns'] : 1;
+			$options['layout']['style_grid_margins'] = (float)$input['layout']['style_grid_margins'];
+			$options['layout']['style_grid_full_width'] = ((int)$input['layout']['style_grid_full_width']>0) ? (int)$input['layout']['style_grid_full_width'] : 480;
 			$options['layout']['placeholder_img'] = !empty($input['layout']['placeholder_img']) ? true : false;
 			$options['layout']['suppress_loop_headers'] = !empty($input['layout']['suppress_loop_headers']) ? true : false;
 			$options['layout']['hide_cart_icon'] = !empty($input['layout']['hide_cart_icon']) ? true : false;
@@ -126,9 +129,7 @@
 			$options['layout']['prettyPhotoStyle']=wppizza_validate_string($input['layout']['prettyPhotoStyle']);
 			$options['layout']['empty_cart_button'] = !empty($input['layout']['empty_cart_button']) ? true : false;
 			$options['layout']['items_group_sort_print_by_category'] = !empty($input['layout']['items_group_sort_print_by_category']) ? true : false;
-			
 			$options['layout']['items_sort_orderby'] = (in_array($input['layout']['items_sort_orderby'],array('menu_order','title','ID','date'))) ? $input['layout']['items_sort_orderby'] : 'menu_order';
-			
 			$options['layout']['items_sort_order'] = (in_array($input['layout']['items_sort_order'],array('ASC','DESC'))) ? $input['layout']['items_sort_order'] : 'ASC';
 			$options['layout']['items_category_hierarchy'] = preg_replace("/[^a-z]/","",$input['layout']['items_category_hierarchy']);
 			$options['layout']['items_category_hierarchy_cart'] = preg_replace("/[^a-z]/","",$input['layout']['items_category_hierarchy_cart']);
@@ -144,15 +145,15 @@
 			$options['layout']['minicart_max_width_active']=wppizza_validate_int_only($input['layout']['minicart_max_width_active']);
 			$options['layout']['minicart_elm_padding_top']=wppizza_validate_int_only($input['layout']['minicart_elm_padding_top']);
 			$options['layout']['minicart_add_to_element']=preg_replace("/[^a-zA-Z0-9#>\-_\., ]/","",$input['layout']['minicart_add_to_element']);
-			$options['layout']['minicart_elm_padding_selector']=preg_replace("/[^a-zA-Z0-9#>\-_\., ]/","",$input['layout']['minicart_elm_padding_selector']);			
+			$options['layout']['minicart_elm_padding_selector']=preg_replace("/[^a-zA-Z0-9#>\-_\., ]/","",$input['layout']['minicart_elm_padding_selector']);
 			$options['layout']['minicart_always_shown'] = !empty($input['layout']['minicart_always_shown']) ? true : false;
-			$options['layout']['minicart_viewcart'] = !empty($input['layout']['minicart_viewcart']) ? true : false;			
+			$options['layout']['minicart_viewcart'] = !empty($input['layout']['minicart_viewcart']) ? true : false;
 			$options['opening_times_format']['hour']=wppizza_validate_string($input['opening_times_format']['hour']);
 			$options['opening_times_format']['separator']=wppizza_validate_string($input['opening_times_format']['separator']);
 			$options['opening_times_format']['minute']=wppizza_validate_string($input['opening_times_format']['minute']);
 			$options['opening_times_format']['ampm']=wppizza_validate_string($input['opening_times_format']['ampm']);
-			
-			
+
+
 		}
 		/**validate opening_times settings***/
 		if(isset($_POST[''.$this->pluginSlug.'_opening_times'])){

@@ -211,4 +211,25 @@ $headerclassesh1=implode(" ",$headerClassH1);
 	$args = apply_filters('wppizza_filter_loop', $args);
 	/**execute query**/
 	$the_query = new WP_Query( $args );
+
+
+	/***********************************
+
+		create (set add) required variables
+		for grid based layout
+
+	************************************/
+	/***set/add grid variables**/
+	if($options['layout']['style']==='grid'){
+
+		/*columns per row in grid*/
+		$options['grid']['columns']=$options['layout']['style_grid_columns'];
+
+		/*required article dummies*/
+		$dummies=$options['grid']['columns']-($the_query->post_count%$options['grid']['columns']);
+		$options['grid']['dummies']=($dummies<$options['grid']['columns']) ? $dummies : 0 ;
+
+		/*required sections*/
+		$options['grid']['sections']=ceil($the_query->post_count/$options['grid']['columns'])-1;
+	}
 ?>

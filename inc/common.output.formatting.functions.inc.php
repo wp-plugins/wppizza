@@ -481,6 +481,61 @@ function wpizza_days_concat( Array $days ){
 return $output;
 }
 
+
+/****************************************************************************
+	check if a timestamp is between todays todays opening and closing time 
+	(business days could cross midnight)
+	php >=5.3
+
+	@$timestamp (int)
+	@return bool
+****************************************************************************/
+function wppizza_is_current_businessday($timestamp,$timestampcurrent=false){
+	/*php 3,3+ needed for DateTime function*/
+	if( version_compare( PHP_VERSION, '5.3', '<' )) {return true;}
+	/**ini as true*/
+	$isCurrentBusinessday=true;
+	/*no timetamp set, set current - default but changeable if needed for some reason*/
+	if(!$timestampcurrent){
+		$timestampcurrent=current_time('timestamp');
+	}
+	/*get options*/
+	$options=get_option('wppizza');	
+	$standard=$options['opening_times_standard'];
+	$custom=$options['opening_times_custom'];
+	
+	/*get standard opening/closing times of current day*/
+	foreach($standard as $k=>$stdTime){
+		$open = DateTime::createFromFormat('H:i', $stdTime['open'])->getTimestamp();
+		$close = DateTime::createFromFormat('H:i', $stdTime['close'])->getTimestamp();
+		/*closed<open=>add a day*/
+		if($close<$open){
+			$close = strtotime('+1 day', $close); 	
+		}
+		if($timestampcurrent<=$close && $timestampcurrent>=$open){
+			$currentbusinessday=array('open'=>$open,'close'=>$close);
+			break;	
+		}
+	}
+	/*get opening/closing times of current day if set*/	
+	if(!empty($custom)){
+	foreach($custom['date'] as $k=>$cstDate){
+		$open = DateTime::createFromFormat('Y-m-d H:i', ''.$cstDate.' '.$custom['open'][$k].'')->getTimestamp();
+		$close = DateTime::createFromFormat('Y-m-d H:i', ''.$cstDate.' '.$custom['close'][$k].'')->getTimestamp();
+		/*closed<open=>add a day*/
+		if($close<$open){
+			$close = strtotime('+1 day', $close); 	
+		}
+		if($timestampcurrent<=$close && $timestampcurrent>=$open){
+			$currentbusinessday=array('open'=>$open,'close'=>$close);
+			break;	
+		}		
+	}}
+	if($timestamp<$currentbusinessday || $timestamp>$currentbusinessday){
+		$isCurrentBusinessday=false;
+	}
+	return $isCurrentBusinessday;
+}
 /**are we currntly open ?*/
 function wpizza_are_we_open($standard,$custom,$breaks){
 	$serverTime=current_time('timestamp');
@@ -649,7 +704,8 @@ function wppizza_days(){
 *********************************************************/
 function wppizza_public_styles($selected=''){
 	$items['default']=__('Default', WPPIZZA_LOCALE);
-	$items['responsive']=__('Responsive [Experimental]', WPPIZZA_LOCALE);
+	$items['responsive']=__('Responsive', WPPIZZA_LOCALE);
+	$items['grid']=__('Grid [Experimental]', WPPIZZA_LOCALE);
     foreach($items as $key=>$val){
     	if($key==$selected){$d=' selected="selected"';}else{$d='';}
 		$options[]=array('selected'=>''.$d.'','value'=>''.$val.'','id'=>''.$key.'');

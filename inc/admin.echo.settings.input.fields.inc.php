@@ -247,11 +247,25 @@ $options = $this->pluginOptions;
 				echo "<input name='".$this->pluginSlug."[layout][".$field."]' size='2' type='text'  value='{$options['layout'][$field]}' />";
 			}
 			if($field=='style'){
-				echo "<select name='".$this->pluginSlug."[layout][".$field."]' />";
+				echo "<select id='".$this->pluginSlug."_layout_".$field."' name='".$this->pluginSlug."[layout][".$field."]' />";
 					foreach(wppizza_public_styles($options['layout'][$field]) as $k=>$v){
 						echo"<option value='".$v['id']."' ".$v['selected'].">".$v['value']."</option>";
 					}
 				echo "</select>";
+
+				$gridOptionsShow=($options['layout'][$field]=='grid') ? 'block' : 'none' ;
+				echo"<div id='".$this->pluginSlug."-".$field."-grid' style='display:".$gridOptionsShow."'>";
+				echo "<input id='' name='".$this->pluginSlug."[layout][style_grid_columns]' size='4' type='text' value='{$options['layout']['style_grid_columns']}' />";
+				echo" <span>".__('How many columns per row [minimum 1]', $this->pluginLocale)."</span>";
+				echo"<br />";
+				echo "<input id='' name='".$this->pluginSlug."[layout][style_grid_margins]' size='4' type='text' value='{$options['layout']['style_grid_margins']}' />";
+				echo" <span>".__('margins between columns [in %]', $this->pluginLocale)."</span>";
+				echo"<br />";
+				echo "<input id='' name='".$this->pluginSlug."[layout][style_grid_full_width]' size='4' type='text' value='{$options['layout']['style_grid_full_width']}' />";
+				echo" <span>".__('maximum browser width for layout to revert to 1 column per row [in px] - (for mobile / small screen devices)', $this->pluginLocale)."</span>";
+				echo"<br /><br />";
+				echo" <span class='description' >".__('you will probably have to tweak the above to work with your theme and/or add some custom css. make sure to check things with different browsers', $this->pluginLocale)."</span>";
+				echo"</div>";
 			}
 
 

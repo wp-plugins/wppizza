@@ -70,7 +70,7 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 
 
 			/**set possibly missing vars if using templates **/
-			add_filter('wppizza_loop_top', array( $this,'wppizza_loop_include_vars'), 1 );
+			add_filter('wppizza_loop_top', array( $this,'wppizza_loop_include_vars'), 1);
 
 
 			/***use loop for single post***/
@@ -2619,7 +2619,7 @@ public function wppizza_require_common_input_validation_functions(){
 				$options['additives']=$mapAdditives;
 				/*******re-map additives inside loop too **************************/
 				add_filter('wppizza_filter_loop_meta', array( $this, 'wppizza_additives_remap'),10,1);
-		}
+		}		
 		return $options;
 	}
     /*****************************************************
@@ -2789,13 +2789,34 @@ public function wppizza_require_common_input_validation_functions(){
     		css
     	**************/
 		if($options['layout']['include_css']){
+			/*gridbased ?*/
+			$doGridCss=false;
+			if($options['layout']['style']==='grid'){
+				/**load responsive css plus grid css which only overwrites needed declarations*/
+				$options['layout']['style']='responsive';
+				/**set flag**/
+				$doGridCss=true;
+			}
 			if (file_exists( $this->pluginTemplateDir . '/wppizza-'.$options['layout']['style'].'.css')){
-			/**copy stylesheet to template directory to keep settings**/
-			wp_register_style($this->pluginSlug, $this->pluginTemplateUri.'/wppizza-'.$options['layout']['style'].'.css', array(), $this->pluginVersion);
+				/**copy stylesheet to template directory to keep settings**/
+				wp_register_style($this->pluginSlug, $this->pluginTemplateUri.'/wppizza-'.$options['layout']['style'].'.css', array(), $this->pluginVersion);
 			}else{
-			wp_register_style($this->pluginSlug, plugins_url( 'css/wppizza-'.$options['layout']['style'].'.css', $this->pluginPath ), array(), $this->pluginVersion);
+				wp_register_style($this->pluginSlug, plugins_url( 'css/wppizza-'.$options['layout']['style'].'.css', $this->pluginPath ), array(), $this->pluginVersion);
 			}
 			wp_enqueue_style($this->pluginSlug);
+			
+			/**load grid css if required**/
+			if($doGridCss){
+				/*grid based layouts set parameters - using php to calculate within css*/
+				$gridParameters='?grid='.$options['layout']['style_grid_columns'].'-'.$options['layout']['style_grid_margins'].'-'.$options['layout']['style_grid_full_width'].'';
+				if (file_exists( $this->pluginTemplateDir . '/wppizza-grid.css')){
+					/**copy stylesheet to template directory to keep settings**/
+					wp_register_style($this->pluginSlug.'-grid', $this->pluginTemplateUri.'/wppizza-grid.css.php'.$gridParameters, array($this->pluginSlug), $this->pluginVersion);
+				}else{
+					wp_register_style($this->pluginSlug.'-grid', plugins_url( 'css/wppizza-grid.css.php'.$gridParameters, $this->pluginPath ), array($this->pluginSlug), $this->pluginVersion);
+				}
+				wp_enqueue_style($this->pluginSlug.'-grid');
+			}
 		}
 
 		/**pretty photo css**/
