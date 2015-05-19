@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, pizzaria, pizzeria, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax, wpml
 Requires at least: PHP 5.3+, WP 3.3+ 
 Tested up to: 4.2.2
-Stable tag: 2.11.8.18
+Stable tag: 2.11.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -103,6 +103,13 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 
 == Changelog ==
+
+2.11.9  
+* updated: chosen js library  
+* updated: timepicker js library    
+* updated: jquery validation js library    
+* updated: flot js library    
+19th May 2015  
 
 2.11.8.18  
 * fix/security: update pretty photo library to v3.1.6  
@@ -220,13 +227,7 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 
 2.11   
-* changelog 2.11 to <=2.11.7 can be found in logs/changelog-2.11.txt  
-
-2.10   
-* changelog for version 2.10 can be found in logs/changelog-2.10.txt  
-
-1.0 - 2.9.4.6  
-* previous changes can be found in logs/changelog-1.0-2.9.4.6.txt  
+* changelogs <=2.11.7 can be found in /logs  
 
 
 == Frequently Asked Questions ==
