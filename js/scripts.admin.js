@@ -430,6 +430,7 @@ jQuery(document).ready(function($){
 		jQuery.post(ajaxurl , {action :'wppizza_admin_json',vars:{'field':'delete_order','ordId':orderId,'blogid':blogid,}}, function(response) {
 			alert(response);
 			self.closest('tr').empty().remove();
+			$('#wppizza-order-failed-'+key+'').empty().remove();
 			$('#wppizza-order-notes-tr-'+key+'').empty().remove();
 			$('#wppizza-order-has-notes-tr-'+key+'').empty().remove();
 		},'html').error(function(jqXHR, textStatus, errorThrown) {alert("error : " + errorThrown);});
@@ -512,5 +513,12 @@ jQuery(document).ready(function($){
 			alert(response);
 		},'html').error(function(jqXHR, textStatus, errorThrown) {alert("error : " + errorThrown);});
 	});
-
+	/*****************************
+	*	[toggle failed order details order notes]
+	*****************************/
+	$(document).on('click', '.wppizza-order-failed-toggle-details', function(e){
+		var self=$(this);
+		var key=self.attr('id').split("-").pop(-1);
+		$('#wppizza-order-failed-details-'+key+'').toggle();
+	});
 })

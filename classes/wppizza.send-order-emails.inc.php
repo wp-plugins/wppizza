@@ -703,16 +703,15 @@ if (!class_exists( 'WPPizza' ) ) {return;}
 			}
 			$output='';
 			/***successfully sent***/
-			if(isset($mailResults['status'])){
+			if(isset($mailResults['status']) && empty($mailResults['error'])){
 				$output.="<div class='mailSuccess'><h1>".$this->pluginOptions['localization']['thank_you']['lbl']."</h1>".nl2br($this->pluginOptions['localization']['thank_you_p']['lbl'])."</div>";
 				$output.=$this->gateway_order_on_thankyou_process($orderId,$this->pluginOptions);
 				$this->wppizza_unset_cart();
 			}
 			/***mail sending error or transaction already processes -> show error***/
 			if(!($mailResults['status']) || !isset($mailResults['status'])  ){
-				$output="<p class='mailError'>".$this->pluginOptions['localization']['thank_you_error']['lbl']."</p>";
-				$output.="<p class='mailError'>".$mailResults['mailer'].": ".print_r($mailResults['error'],true)."</p>";
-
+				$output="<p class='wppizza-mail-error'>".$this->pluginOptions['localization']['thank_you_error']['lbl']."</p>";
+				$output.="<p class='wppizza-mail-error'>".$mailResults['mailer'].": ".print_r($mailResults['error'],true)."</p>";
 			}
 		return $output;
 		}

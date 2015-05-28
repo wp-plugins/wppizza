@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/wppizza/
 Tags: pizza, restaurant, pizzaria, pizzeria, restaurant menu, ecommerce, e-commerce, commerce, wordpress ecommerce, store, shop, sales, shopping, cart, order online, cash on delivery, multilingual, checkout, configurable, variable, widgets, shipping, tax, wpml
 Requires at least: PHP 5.3+, WP 3.3+ 
 Tested up to: 4.2.2
-Stable tag: 2.11.9
+Stable tag: 2.11.10
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -103,6 +103,22 @@ if you do wish to use any icon from this set commercially, please follow <a href
 
 
 == Changelog ==
+
+2.11.10  
+* fix: changed datatype on order_in and order_details columns of orders table from TEXT to MEDIUMTEXT to allow for very very large orders  
+* fix: order page still allowed checkout even if minimum order was not reached (if only one gateway enabled)  
+* fix: bulkedit was broken since 2.11.8.14 for status / comments / author  
+* fix: currency symbols in order info under cart not moving when set to be displayed on right  
+* fix: wrong (pickup) message shown when minimum order not reached for delivery  
+* tweak: some admin css tweaks  
+* tweak: capture user agent, remote address and referrer in db as user_data  
+* tweak: order_update timstamp in db now set according to WP timezone set (instead of - perhaps incorrectly set - php timezone)  
+* tweak: cart does not get unset anymore when there's a mail() error 
+* tweak: some minor css tweaks (added a bit of styling to mail() error output) 
+* tweak: eliminated some more possible php notices  
+* added: debug option to enable error reporting in ajax if necessary  
+* added: option to show failed orders in order history (enable in wppizza->settings => miscellaneous) 
+28th May 2015  
 
 2.11.9  
 * updated: chosen js library  

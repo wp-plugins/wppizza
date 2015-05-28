@@ -24,6 +24,9 @@ $options = $this->pluginOptions;
 			if($field=='admin_order_history_max_results'){
 				echo "<input id='".$field."' name='".$this->pluginSlug."[plugin_data][".$field."]' size='2' type='text'  value='{$options['plugin_data']['admin_order_history_max_results']}' />";
 				echo" <span class='description'>".__('default number of results to show in admin order history', $this->pluginLocale)."</span>";
+				echo"<br />";
+				echo" <input id='".$field."' name='".$this->pluginSlug."[plugin_data][admin_order_history_include_failed]' type='checkbox'  ". checked($options['plugin_data']['admin_order_history_include_failed'],true,false)." value='1' />";
+				echo" <span class='description'>".__('also include failed orders in order history', $this->pluginLocale)."</span>";
 			}
 
 			if($field=='admin_order_history_polling_auto'){
@@ -1087,7 +1090,22 @@ $options = $this->pluginOptions;
 						echo"<br /><input id='empty_category_and_items_delete_attachments' name='".$this->pluginSlug."[maintenance][delete_attachments]' type='checkbox'  value='1' />";
 						echo" ".__('delete images too', $this->pluginLocale)."";
 					echo"</div>";
-
+					
+					/*****************************
+					*
+					*	MISC TOOLS
+					*
+					****************************/
+					/*insert hidden field to know we are submitting tools , even if all checkboxes unchecked*/
+					echo"<input name='".$this->pluginSlug."[".$field."]' type='hidden'  value='1' />";
+					/*debug*/
+					echo"<div class='wppizza_option'>";
+						echo"<input id='wppizza_debug' name='".$this->pluginSlug."[".$field."][debug]' type='checkbox' ". checked($options[$field]['debug'],true,false)." value='1' />";
+						echo" <b>".__('Debug', $this->pluginLocale)."</b>";
+						echo" <span class='description'>".__('should be *OFF* unless asked to enable', $this->pluginLocale)."</span>";
+					echo"</div>";
+					
+					
 				echo"</div>";
 				}
 

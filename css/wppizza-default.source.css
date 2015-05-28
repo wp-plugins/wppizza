@@ -223,7 +223,7 @@ fieldset.wppizza-ff>input, fieldset.wppizza-ff>select, fieldset.wppizza-ff>texta
 **************************************************/
 #wppizza-user-register-info{display:none;font-size:80%}
 #wppizza-user-register-info>.wppizza-login-error{font-size:120%}
-.wppizza-login-error{border-left: 4px solid #dd3d36;padding:5px;margin:5px;}
+.wppizza-login-error,.wppizza-mail-error{border-left: 4px solid #dd3d36;padding:5px;margin:5px;}
 #wppizza-user-login{overflow:auto;}
 #wppizza-user-login-action{border:1px dotted #CECECE;padding:5px;position:relative}
 #wppizza-login-frm{overflow:auto;}

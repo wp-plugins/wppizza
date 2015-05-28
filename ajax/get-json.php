@@ -1,5 +1,4 @@
 <?php
-error_reporting(0);
 if(!defined('DOING_AJAX') || !DOING_AJAX){
 	header('HTTP/1.0 400 Bad Request', true, 400);
 	print"you cannot call this script directly";
@@ -11,6 +10,12 @@ if(!defined('DOING_AJAX') || !DOING_AJAX){
 /******************************************/
 $options=$this->pluginOptions;
 global $blog_id;
+/******************************************
+	[supress errors unless debug]
+******************************************/
+if(empty($options['tools']['debug'])){
+	error_reporting(0);
+}
 /***************************************************************
 *
 *
@@ -556,7 +561,7 @@ if(isset($_POST['vars']['type']) && $_POST['vars']['type']=='sendorder'){
 			$transactionDetails=__('SUCCESS',$this->pluginLocale);
 		}else{
 			$mailSent='N';
-			$mailError=serialize($mailResults['error']);
+			$mailError=esc_sql(maybe_serialize($mailResults['error']));
 			$paymentStatus='FAILED';
 			$transactionDetails=__('FAILED: Sending of Mail Failed',$this->pluginLocale);
 		}

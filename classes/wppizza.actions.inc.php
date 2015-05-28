@@ -840,30 +840,31 @@ class WPPIZZA_ACTIONS extends WPPIZZA {
 	*/
 	function wppizza_show_order_column($name){
 	  global $post;
-	
-	  switch ($name) {
+
+	  switch($name){
+
 		//ignore for now
-		//	    case 'wppizza-menu_order':
-		//	      $order = $post->menu_order;
-		//	      echo $order;
-		//	      break;
-	      
-	     case 'wppizza-prices': 
+		//case 'wppizza-menu_order':
+	    // 	$order = $post->menu_order;
+	    // 	echo $order;
+		//break;
+
+		case 'wppizza-prices':
 	     	$meta=get_post_meta($post->ID, WPPIZZA_POST_TYPE, true );
 	     	$sizes=$this->pluginOptions['sizes'][$meta['sizes']];
 	     	$str='';
 	     	if(is_array($sizes)){
-	      		$str.='<table><tr>';
+	     		/*do not use tables here or bulk edit won't work - no , dunno either why*/
+	      		$str.='<div class="wppizza-prices-column">';
 	      		foreach($sizes as $k=>$s){
-	      			$str.='<td>'.$s['lbl'].'<br />'.$meta['prices'][$k].'</td>' ;
+	      			$str.='<span>'.$s['lbl'].'<br />'.$meta['prices'][$k].'</span>' ;
 	      		}
-	      		$str.='</tr></table>';
+	      		$str.='</div>';
      		}
-	      
-	      echo $str;
-	     break;
-	   default:
-	      break;
+			echo $str;
+		break;
+		default:
+		break;
 	   }
 	}	
 	/**
@@ -2909,7 +2910,7 @@ public function wppizza_require_common_input_validation_functions(){
 				$options['order']['orderpage']=icl_object_id($options['order']['orderpage'],'page');
 			}			
 			/**set flag that we are on order page to not do any redirection for example**/
-			if($post->ID==$options['order']['orderpage']){
+			if(is_object($post) && $post->ID==$options['order']['orderpage']){
 				$localized_array['isCheckout']=1;
 			}
 		

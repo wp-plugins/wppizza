@@ -102,14 +102,17 @@ $htmlEmailStyle = apply_filters('wppizza_filter_html_email_style', $htmlEmailSty
 /**********************************************************
 
 	[customer details loop of all submitted fields]
-	
+
 ***********************************************************/
 ?>
 					<tr><td colspan="2">
 						<table width="100%" cellpadding="0" cellspacing="0" >
-<?php 	foreach($customer_details_array as $k=>$v){ ?>
+<?php
+	if(isset($customer_details_array) && is_array($customer_details_array)){/*a bit overkill as it should never not be the case, but no harm done*/
+		foreach($customer_details_array as $k=>$v){
+?>
 							<tr><td style="<?php echo $htmlEmailStyle['mailPadding']['2x15'] ?>;vertical-align:top;white-space:nowrap"><?php echo $v['label']; ?></td><td><?php echo $v['value']; ?></td></tr>
-<?php } ?>
+<?php }} ?>
 						</table>
 					</td></tr>
 					<tr><td colspan="2" style="<?php echo $htmlEmailStyle['mailDivider'] ?>">&nbsp;</td></tr><?php /*add devider**/ ?>
@@ -193,11 +196,11 @@ $htmlEmailStyle = apply_filters('wppizza_filter_html_email_style', $htmlEmailSty
 		<?php if(isset($order_summary['taxes_included'])){ ?>
 							<tr><td style="<?php echo $htmlEmailStyle['mailPadding']['0x5'] ?>"><?php echo $order_summary['taxes_included']['label']; ?></td><td><?php echo $currency_left.''.$order_summary['taxes_included']['price'].''.$currency_right; ?></td></tr>
 		<?php } ?>
-		
+
 		<?php
 			/**added 2.11.2.4*/
 			do_action('wppizza_emailhtml_before_totals',$order_summary,$order_items,$htmlEmailStyle);
-		?>		
+		?>
 
 		<?php /*add devider**/ ?>
 							<tr><td colspan="2" style="<?php echo $htmlEmailStyle['mailDivider'] ?>">&nbsp;</td></tr>

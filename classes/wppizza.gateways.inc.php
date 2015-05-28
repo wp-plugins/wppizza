@@ -145,6 +145,15 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 
 	/**display choices***/
 	function wppizza_choose_gateway(){
+		
+		/***do not offer any gateway choice if no checkout allowed due to minimum order not reached or whatnot**/
+		$currentorder=wppizza_order_summary($_SESSION[$this->pluginSession],$this->pluginOptions , 'chooseGateway' );
+		if($currentorder['nocheckout']!=''){
+			echo'<div class="wppizza-order-nocheckout">'.$currentorder['nocheckout'].'</div>';
+			return;
+		}		
+		
+		
 		$displayAsDropdown=$this->pluginOptions['gateways']['gateway_select_as_dropdown'];
 		$selectLabel=$this->pluginOptions['gateways']['gateway_select_label'];
 		$enabledGateways=$this->pluginGateways;
@@ -260,12 +269,8 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 		if(!$lbl){
 			$lbl=$this->pluginOptions['localization']['send_order']['lbl'];	
 		}
-		$cart=wppizza_order_summary($_SESSION[$this->pluginSession],$this->pluginOptions , 'gatewaybuttons' );
-		if($cart['nocheckout']!=''){
-			$standardButton='<div class="wppizza-order-nocheckout">'.$cart['nocheckout'].'</div>';
-		}else{
-			$standardButton='<input class="submit wppizza-ordernow" type="submit" style="display:block" value="'.$lbl.'" />';
-		}
+		$standardButton='<input class="submit wppizza-ordernow" type="submit" style="display:block" value="'.$lbl.'" />';
+
 		return $standardButton;
 	}
 	/***********************************************
@@ -455,7 +460,18 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 		global $wpdb,$current_user;
 		get_currentuserinfo();
 		//$wpdb->hide_errors();
-		$wpdb->query( $wpdb->prepare( "INSERT INTO ".$wpdb->prefix . $this->pluginOrderTable." ( wp_user_id, hash, order_ini, payment_status )VALUES ( %s, %s, %s , %s )", array($current_user->ID, $this->gatewayOrderDetails['hash'], $this->gatewayOrderDetails['order_ini'],'INITIALIZED')));
+		
+		$userData=array();
+		$userData['HTTP_USER_AGENT']=!empty($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '--n/a--';
+		$userData['REMOTE_ADDR']=!empty($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '--n/a--';
+		$userData['HTTP_REFERER']=!empty($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '--n/a--';
+		
+		/**filter if someone wants it **/
+		$userData=apply_filters('wppizza_filter_userdata_to_db', $userData);
+		$userData=maybe_serialize($userData);
+		
+		
+		$wpdb->query( $wpdb->prepare( "INSERT INTO ".$wpdb->prefix . $this->pluginOrderTable." ( wp_user_id, hash, order_ini, payment_status, user_data ) VALUES ( %s, %s, %s, %s, %s )", array($current_user->ID, $this->gatewayOrderDetails['hash'], $this->gatewayOrderDetails['order_ini'], 'INITIALIZED', $userData )));
 		$this->gatewayOrderId=$wpdb->insert_id;
 	}
 	/*some action hooks to do somthing with the order details that have been  inserted into db**/
@@ -1049,7 +1065,7 @@ class WPPIZZA_GATEWAYS extends WPPIZZA {
 		//$dbupd['transaction_details']	=	esc_sql(serialize($gatewayReply));
 		$dbupd['transaction_errors']	=	'';
 		$dbupd['mail_sent']				=	!empty($mailResults['status']) ? 'Y' : 'N';
-		$dbupd['mail_error']			=	!empty($mailResults['error']) ? esc_sql($mailResults['error']) : '';
+		$dbupd['mail_error']			=	!empty($mailResults['error']) ? esc_sql(maybe_serialize($mailResults['error'])) : '';
 
 		$fields='';
 		$i=0;
